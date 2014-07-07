@@ -1,8 +1,0 @@
-name: UHPlugin
-main: me.azenet.UHPlugin.UHPlugin
-version: 0.1
-
-commands:
-   uh:
-      description: Ultra Harcore
-      usage: /uh <subcommand>
