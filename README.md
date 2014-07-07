@@ -1,7 +1,7 @@
 Plugin KTP
 ==========
 
-C'est très la source. Se compile avec Maven.
+C'est très la source.
 
 Licence
 =======
