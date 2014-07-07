@@ -87,7 +87,9 @@ public class UHPluginListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerPickupItem(PlayerPickupItemEvent ev) {
-		if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) ev.setCancelled(true);
+		if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
+			ev.setCancelled(true);
+		}
 		p.updatePlayerListName(ev.getPlayer());
 	}
 	
@@ -148,24 +150,6 @@ public class UHPluginListener implements Listener {
 		
 		if (x < limitXInf || x > limitXSup || z < limitZInf || z > limitZSup) {
 			ev.setCancelled(true);
-		}
-	}	
-
-	@EventHandler
-	public void onInventoryClick(InventoryClickEvent ev) {
-		if (ev.getInventory().getName().equals("- Teams -")) {
-			Player pl = (Player) ev.getWhoClicked();
-			ev.setCancelled(true);
-			if (ev.getCurrentItem().getType() == Material.DIAMOND) {
-				pl.closeInventory();
-				p.getConversationFactory("teamPrompt").buildConversation(pl).begin();
-			} else if (ev.getCurrentItem().getType() == Material.BEACON) {
-				pl.closeInventory();
-				Conversation c = p.getConversationFactory("playerPrompt").buildConversation(pl);
-				c.getContext().setSessionData("nomTeam", ChatColor.stripColor(ev.getCurrentItem().getItemMeta().getDisplayName()));
-				c.getContext().setSessionData("color", p.getTeam(ChatColor.stripColor(ev.getCurrentItem().getItemMeta().getDisplayName())).getChatColor());
-				c.begin();
-			}
 		}
 	}
 	
@@ -280,7 +264,7 @@ public class UHPluginListener implements Listener {
 					Double calc = pl.getLocation().distance(pl2.getLocation());
 					if (calc > 1 && calc < distance) {
 						distance = calc;
-						if (pl2 != pl && !this.p.inSameTeam(pl, pl2)) nearest = pl2.getPlayer();
+						if (pl2 != pl && !this.p.getTeamManager().inSameTeam(pl, pl2)) nearest = pl2.getPlayer();
 					}
 				} catch (Exception e) {}
 			}

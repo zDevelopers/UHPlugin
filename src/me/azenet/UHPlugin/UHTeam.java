@@ -42,9 +42,14 @@ public class UHTeam {
 		return players;
 	}
 
-	public void addPlayer(Player playerExact) {
-		players.add(playerExact);
-		plugin.getScoreboard().getTeam(this.name).addPlayer(playerExact);
+	public void addPlayer(Player player) {
+		players.add(player);
+		plugin.getScoreboard().getTeam(this.name).addPlayer(player);
+	}
+	
+	public void removePlayer(Player player) {
+		players.remove(player);
+		plugin.getScoreboard().getTeam(this.name).removePlayer(player);
 	}
 
 	public void teleportTo(Location lo) {

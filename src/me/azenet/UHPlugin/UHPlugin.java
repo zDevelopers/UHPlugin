@@ -37,7 +37,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-public final class UHPlugin extends JavaPlugin implements ConversationAbandonedListener {
+public final class UHPlugin extends JavaPlugin {
 
 	private Logger logger = null;
 	private LinkedList<Location> loc = new LinkedList<Location>();
@@ -53,8 +53,8 @@ public final class UHPlugin extends JavaPlugin implements ConversationAbandonedL
 	private String sbobjname = "KTP";
 	private Boolean damageIsOn = false;
 	private ArrayList<UHTeam> teams = new ArrayList<UHTeam>();
+	private UHTeamManager teamManager = null;
 	private HashMap<String, ConversationFactory> cfs = new HashMap<String, ConversationFactory>();
-	private UHPrompts uhp = null;
 	private HashSet<String> deadPlayers = new HashSet<String>();
 	
 	@Override
@@ -80,10 +80,16 @@ public final class UHPlugin extends JavaPlugin implements ConversationAbandonedL
 			}
 			
 		}
-		uhp = new UHPrompts(this);
+		
 		logger = Bukkit.getLogger();
 		logger.info("UHPlugin loaded");
 		random = new Random();
+		
+		teamManager = new UHTeamManager(this);
+		
+		UHPluginCommand commandExecutor = new UHPluginCommand(this);
+		getCommand("uh").setExecutor(commandExecutor);
+		
 		
 		goldenMelon = new ShapelessRecipe(new ItemStack(Material.SPECKLED_MELON));
 		goldenMelon.addIngredient(1, Material.GOLD_BLOCK);
@@ -115,22 +121,6 @@ public final class UHPlugin extends JavaPlugin implements ConversationAbandonedL
 		getServer().getWorlds().get(0).setTime(6000L);
 		getServer().getWorlds().get(0).setStorm(false);
 		getServer().getWorlds().get(0).setDifficulty(Difficulty.HARD);
-		
-		cfs.put("teamPrompt", new ConversationFactory(this)
-		.withModality(true)
-		.withFirstPrompt(uhp.getTNP())
-		.withEscapeSequence("/cancel")
-		.thatExcludesNonPlayersWithMessage("Il faut être un joueur ingame.")
-		.withLocalEcho(false)
-		.addConversationAbandonedListener(this));
-		
-		cfs.put("playerPrompt", new ConversationFactory(this)
-		.withModality(true)
-		.withFirstPrompt(uhp.getPP())
-		.withEscapeSequence("/cancel")
-		.thatExcludesNonPlayersWithMessage("Il faut être un joueur ingame.")
-		.withLocalEcho(false)
-		.addConversationAbandonedListener(this));
 	}
 	
 	
@@ -160,6 +150,10 @@ public final class UHPlugin extends JavaPlugin implements ConversationAbandonedL
 		obj.getScore(Bukkit.getOfflinePlayer("")).setScore(2);
 		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+formatter.format(this.minutesLeft)+ChatColor.GRAY+":"+ChatColor.WHITE+formatter.format(this.secondsLeft))).setScore(1);
 	}
+	
+	public void startGame() {
+		// TODO
+	}
 
 	private ArrayList<UHTeam> getAliveTeams() {
 		ArrayList<UHTeam> aliveTeams = new ArrayList<UHTeam>();
@@ -175,7 +169,8 @@ public final class UHPlugin extends JavaPlugin implements ConversationAbandonedL
 	public void onDisable() {
 		logger.info("UHPlugin unloaded");
 	}
-	
+
+	/*
 	public boolean onCommand(final CommandSender s, Command c, String l, String[] a) {
 		if (c.getName().equalsIgnoreCase("uh")) {
 			if (!(s instanceof Player)) {
@@ -183,7 +178,8 @@ public final class UHPlugin extends JavaPlugin implements ConversationAbandonedL
 				return true;
 			}
 			Player pl = (Player)s;
-			if (!pl.isOp()) {
+			if (!pl.isOp()) {// TODO Auto-generated method stub
+
 				pl.sendMessage(ChatColor.RED+"Lolnope.");
 				return true;
 			}
@@ -267,12 +263,6 @@ public final class UHPlugin extends JavaPlugin implements ConversationAbandonedL
 				Bukkit.getServer().broadcastMessage(ChatColor.GREEN+"--- GO ---");
 				this.gameRunning = true;
 				return true;
-			} else if (a[0].equalsIgnoreCase("shift")) {
-				Bukkit.getServer().broadcastMessage(ChatColor.AQUA+"-------- Fin episode "+episode+" [forcé par "+s.getName()+"] --------");
-				shiftEpisode();
-				this.minutesLeft = getEpisodeLength();
-				this.secondsLeft = 0;
-				return true;
 			} else if (a[0].equalsIgnoreCase("team")) {
 				Inventory iv = this.getServer().createInventory(pl, 54, "- Teams -");
 				Integer slot = 0;
@@ -299,105 +289,63 @@ public final class UHPlugin extends JavaPlugin implements ConversationAbandonedL
 				
 				pl.openInventory(iv);
 				return true;
-//			} else if (a[0].equalsIgnoreCase("newteam")) {
-//				if (a.length != 4) {
-//					pl.sendMessage(ChatColor.RED+"Usage: /uh newteam nom couleur nom nomAffiché");
-//					return true;
-//				}
-//				if (a[1].length() > 16) {
-//					pl.sendMessage(ChatColor.RED+"Le nom de la team ne doit pas faire plus de 16 chars");
-//					return true;
-//				}
-//				if (a[3].length() > 32) {
-//					pl.sendMessage(ChatColor.RED+"Le nom affiché de la team ne doit pas faire plus de 32 chars");
-//				}
-//				ChatColor cc;
-//				try {
-//					cc = ChatColor.valueOf(a[2].toUpperCase());
-//				} catch (IllegalArgumentException e) {
-//					pl.sendMessage(ChatColor.RED+"La couleur est invalide.");
-//					return true;
-//				}
-//				teams.add(new UHTeam(a[1], a[3], cc, this));
-//				pl.sendMessage(ChatColor.GREEN+"Team créée. Utilisez /uh playertoteam "+a[1]+" nomjoueur pour y ajouter des joueurs.");
-//				return true;
-//			} else if (a[0].equalsIgnoreCase("playertoteam")) {
-//				if (a.length != 3) {
-//					pl.sendMessage(ChatColor.RED+"Usage: /uh playertoteam nomteam nomjoueur");
-//					return true;
-//				}
-//				UHTeam t = getTeam(a[1]);
-//				if (t == null) {
-//					pl.sendMessage(ChatColor.RED+"Team inexistante. /uh teams pour voir les teams");
-//					return true;
-//				}
-//				if (Bukkit.getPlayerExact(a[2]) == null) {
-//					pl.sendMessage(ChatColor.RED+"Le joueur est introuvable. (Il doit être connecté.)");
-//					return true;
-//				}
-//				t.addPlayer(Bukkit.getPlayerExact(a[2]));
-//				pl.sendMessage(ChatColor.GREEN+Bukkit.getPlayerExact(a[2]).getName()+" ajouté à la team "+a[1]+".");
-//				return true;
-//			} else if (a[0].equalsIgnoreCase("teams")) {
-//				for (UHTeam t : teams) {
-//					pl.sendMessage(ChatColor.DARK_GRAY+"- "+ChatColor.AQUA+t.getName()+ChatColor.DARK_GRAY+" ["+ChatColor.GRAY+t.getDisplayName()+ChatColor.DARK_GRAY+"] - "+ChatColor.GRAY+t.getPlayers().size()+ChatColor.DARK_GRAY+" joueurs");
-//				}
-//				return true;
-			} else if (a[0].equalsIgnoreCase("addspawn")) {
-				addLocation(pl.getLocation().getBlockX(), pl.getLocation().getBlockZ());
-				pl.sendMessage(ChatColor.DARK_GRAY+"Position ajoutée: "+ChatColor.GRAY+pl.getLocation().getBlockX()+","+pl.getLocation().getBlockZ());
-				return true;
-			} else if (a[0].equalsIgnoreCase("generateWalls")) {
-				pl.sendMessage(ChatColor.GRAY+"Génération en cours...");
-				try {
-					Integer halfMapSize = (int) Math.floor(this.getConfig().getInt("map.size")/2);
-					Integer wallHeight = this.getConfig().getInt("map.wall.height");
-					Material wallBlock = Material.getMaterial(this.getConfig().getInt("map.wall.block"));
-					World w = pl.getWorld();
-					
-					Location spawn = w.getSpawnLocation();
-					Integer limitXInf = spawn.add(-halfMapSize, 0, 0).getBlockX();
-					
-					spawn = w.getSpawnLocation();
-					Integer limitXSup = spawn.add(halfMapSize, 0, 0).getBlockX();
-					
-					spawn = w.getSpawnLocation();
-					Integer limitZInf = spawn.add(0, 0, -halfMapSize).getBlockZ();
-					
-					spawn = w.getSpawnLocation();
-					Integer limitZSup = spawn.add(0, 0, halfMapSize).getBlockZ();
-					
-					for (Integer x = limitXInf; x <= limitXSup; x++) {
-						w.getBlockAt(x, 1, limitZInf).setType(Material.BEDROCK);
-						w.getBlockAt(x, 1, limitZSup).setType(Material.BEDROCK);
-						for (Integer y = 2; y <= wallHeight; y++) {
-							w.getBlockAt(x, y, limitZInf).setType(wallBlock);
-							w.getBlockAt(x, y, limitZSup).setType(wallBlock);
-						}
-					} 
-					
-					for (Integer z = limitZInf; z <= limitZSup; z++) {
-						w.getBlockAt(limitXInf, 1, z).setType(Material.BEDROCK);
-						w.getBlockAt(limitXSup, 1, z).setType(Material.BEDROCK);
-						for (Integer y = 2; y <= wallHeight; y++) {
-							w.getBlockAt(limitXInf, y, z).setType(wallBlock);
-							w.getBlockAt(limitXSup, y, z).setType(wallBlock);
-						}
-					} 
-				} catch (Exception e) {
-					e.printStackTrace();
-					pl.sendMessage(ChatColor.RED+"Echec génération. Voir console pour détails.");
-					return true;
-				}
-				pl.sendMessage(ChatColor.GRAY+"Génération terminée.");
-				return true;
 			}
 		}
 		return false;
 	}
+	*/
 	
-	public void shiftEpisode() {
+	
+	/**
+	 * Generate the walls around the map.
+	 * 
+	 * @throws Exception
+	 */
+	public void generateWalls(World w) {
+		Integer halfMapSize = (int) Math.floor(this.getConfig().getInt("map.size")/2);
+		Integer wallHeight = this.getConfig().getInt("map.wall.height");
+		Material wallBlock = Material.getMaterial(this.getConfig().getInt("map.wall.block"));
+		
+		Location spawn = w.getSpawnLocation();
+		Integer limitXInf = spawn.add(-halfMapSize, 0, 0).getBlockX();
+		
+		spawn = w.getSpawnLocation();
+		Integer limitXSup = spawn.add(halfMapSize, 0, 0).getBlockX();
+		
+		spawn = w.getSpawnLocation();
+		Integer limitZInf = spawn.add(0, 0, -halfMapSize).getBlockZ();
+		
+		spawn = w.getSpawnLocation();
+		Integer limitZSup = spawn.add(0, 0, halfMapSize).getBlockZ();
+		
+		for (Integer x = limitXInf; x <= limitXSup; x++) {
+			w.getBlockAt(x, 1, limitZInf).setType(Material.BEDROCK);
+			w.getBlockAt(x, 1, limitZSup).setType(Material.BEDROCK);
+			for (Integer y = 2; y <= wallHeight; y++) {
+				w.getBlockAt(x, y, limitZInf).setType(wallBlock);
+				w.getBlockAt(x, y, limitZSup).setType(wallBlock);
+			}
+		} 
+		
+		for (Integer z = limitZInf; z <= limitZSup; z++) {
+			w.getBlockAt(limitXInf, 1, z).setType(Material.BEDROCK);
+			w.getBlockAt(limitXSup, 1, z).setType(Material.BEDROCK);
+			for (Integer y = 2; y <= wallHeight; y++) {
+				w.getBlockAt(limitXInf, y, z).setType(wallBlock);
+				w.getBlockAt(limitXSup, y, z).setType(wallBlock);
+			}
+		}
+	}
+	
+	
+	public void shiftEpisode(Player shifter) {
+		Bukkit.getServer().broadcastMessage(ChatColor.AQUA+"-------- Fin episode "+episode+" [forcé par "+shifter.getName()+"] --------");
 		this.episode++;
+		this.minutesLeft = getEpisodeLength();
+		this.secondsLeft = 0;
+	}
+	public void shiftEpisode() {
+		shiftEpisode((Player) Bukkit.getOfflinePlayer("la console"));
 	}
 	
 	public boolean isGameRunning() {
@@ -429,41 +377,12 @@ public final class UHPlugin extends JavaPlugin implements ConversationAbandonedL
 		return sb;
 	}
 	
-	public UHTeam getTeam(String name) {
-		for(UHTeam t : teams) {
-			if (t.getName().equalsIgnoreCase(name)) return t;
-		}
-		return null;
-	}
-
-	public UHTeam getTeamForPlayer(Player p) {
-		for(UHTeam t : teams) {
-			if (t.getPlayers().contains(p)) return t;
-		}
-		return null;
+	public UHTeamManager getTeamManager() {
+		return teamManager;
 	}
 	
 	public Integer getEpisodeLength() {
 		return this.getConfig().getInt("episodeLength");
-	}
-
-	@Override
-	public void conversationAbandoned(ConversationAbandonedEvent abandonedEvent) {
-		if (!abandonedEvent.gracefulExit()) {
-			abandonedEvent.getContext().getForWhom().sendRawMessage(ChatColor.RED+"Abandonné par "+abandonedEvent.getCanceller().getClass().getName());
-		}		
-	}
-	
-	public boolean createTeam(String name, ChatColor color) {
-		if (teams.size() <= 50) {
-			teams.add(new UHTeam(name, name, color, this));
-			return true;
-		}
-		return false;
-	}
-	public ConversationFactory getConversationFactory(String string) {
-		if (cfs.containsKey(string)) return cfs.get(string);
-		return null;
 	}
 	
 	public boolean isPlayerDead(String name) {
@@ -477,10 +396,5 @@ public final class UHPlugin extends JavaPlugin implements ConversationAbandonedL
 	public String getScoreboardName() {
 		String s = this.getConfig().getString("scoreboard", "Kill The Patrick");
 		return s.substring(0, Math.min(s.length(), 16));
-	}
-
-
-	public boolean inSameTeam(Player pl, Player pl2) {
-		return (getTeamForPlayer(pl).equals(getTeamForPlayer(pl2)));
 	}
 }
