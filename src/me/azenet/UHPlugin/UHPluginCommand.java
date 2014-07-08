@@ -243,8 +243,13 @@ public class UHPluginCommand implements CommandExecutor {
 						sender.sendMessage(ce + "Unable to add the team, check the color name.");
 					}
 					else {
-						tm.addTeam(color, args[2]);
-						sender.sendMessage(cs + "Team " + args[2] + " added.");
+						try {
+							tm.addTeam(color, args[2].toLowerCase());
+						}
+						catch(IllegalArgumentException e) {
+							sender.sendMessage(ce + "This team already exists.");
+						}
+						sender.sendMessage(cs + "Team " + color + args[2] + cs + " added.");
 					}
 				
 				}
@@ -259,8 +264,14 @@ public class UHPluginCommand implements CommandExecutor {
 						sender.sendMessage(ce + "Unable to add the team, because the name is too long (max 16 characters).");
 					}
 					else {
-						tm.addTeam(color, args[3]);
-						sender.sendMessage(cs + "Team " + args[3] + " (" + args[2] + ") added.");
+						try {
+							tm.addTeam(color, args[3].toLowerCase());
+						}
+						catch(IllegalArgumentException e) {
+							sender.sendMessage(ce + "This team already exists.");
+							return;
+						}
+						sender.sendMessage(cs + "Team " + args[3] + " (" + color + args[2] + cs + ") added.");
 					}
 					
 				}
@@ -272,7 +283,7 @@ public class UHPluginCommand implements CommandExecutor {
 			
 			else if(subcommand.equalsIgnoreCase("remove")) {
 				if(args.length == 3) { // /uh team remove <teamName>
-					if(!tm.removeTeam(args[2])) {
+					if(!tm.removeTeam(args[2].toLowerCase())) {
 						sender.sendMessage(ce + "This team does not exists.");
 					}
 					else {
@@ -324,7 +335,16 @@ public class UHPluginCommand implements CommandExecutor {
 			
 			
 			else if(subcommand.equalsIgnoreCase("list")) {
-				// TODO
+				if(tm.getTeams().size() == 0) {
+					sender.sendMessage(ce + "There isn't any team to show.");
+					return;
+				}
+				for(final UHTeam team : tm.getTeams()) {
+					sender.sendMessage(team.getChatColor() + team.getName() + ChatColor.WHITE + " - " + ((Integer) team.getPlayers().size()).toString() + " players");
+					for(final Player player : team.getPlayers()) {
+						sender.sendMessage(ChatColor.LIGHT_PURPLE + " - " + player.getName());
+					}
+				}
 			}
 			
 			else if(subcommand.equalsIgnoreCase("reset")) {

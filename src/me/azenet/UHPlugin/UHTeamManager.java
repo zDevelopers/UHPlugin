@@ -24,7 +24,7 @@ public class UHTeamManager {
 	 * @return boolean Success.
 	 */
 	public void addTeam(ChatColor color, String name) {	
-		teams.add(new UHTeam(name, name, null, p));
+		teams.add(new UHTeam(name, name, color, p));
 	}
 	
 	/**
