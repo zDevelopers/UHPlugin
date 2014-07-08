@@ -32,6 +32,8 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -211,6 +213,7 @@ public class UHPluginListener implements Listener {
 	public void onEntityDamage(final EntityDamageEvent ev) {
 		if (ev.getEntity() instanceof Player) {
 			if (!p.getGameManager().isTakingDamage()) ev.setCancelled(true);
+			
 			Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
 				
 				@Override
@@ -218,6 +221,20 @@ public class UHPluginListener implements Listener {
 					p.getGameManager().updatePlayerListName((Player)ev.getEntity());
 				}
 			}, 1L);
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerTeleport(final PlayerTeleportEvent ev) {
+		if(p.getConfig().getBoolean("gameplay-change.disableEnderpearlsDamages")) {
+			Player player = ev.getPlayer();
+			TeleportCause cause = ev.getCause();
+			Location target = ev.getTo();
+			
+			if(cause == TeleportCause.ENDER_PEARL) {
+				ev.setCancelled(true);
+				player.teleport(target);
+			}
 		}
 	}
 	
