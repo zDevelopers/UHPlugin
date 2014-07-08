@@ -54,12 +54,12 @@ public class UHPluginListener implements Listener {
 		for (Player pp : ps) {
 			pp.playSound(pp.getLocation(), Sound.WITHER_SPAWN, 1F, 1F);
 		}
-		this.p.addDead(ev.getEntity().getName());
+		this.p.getGameManager().addDead(ev.getEntity().getName());
 		Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
 			
 			@Override
 			public void run() {
-				p.setLife((Player)ev.getEntity(), 0);
+				p.getGameManager().setLifeInScoreboard((Player)ev.getEntity(), 0);
 			}
 		}, 1L);
 		if (this.p.getConfig().getBoolean("kick-on-death.kick", true)) {
@@ -90,12 +90,12 @@ public class UHPluginListener implements Listener {
 		if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
 			ev.setCancelled(true);
 		}
-		p.updatePlayerListName(ev.getPlayer());
+		p.getGameManager().updatePlayerListName(ev.getPlayer());
 	}
 	
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent ev) {
-		if (this.p.isPlayerDead(ev.getPlayer().getName()) && !this.p.getConfig().getBoolean("allow-reconnect", true)) {
+		if (this.p.getGameManager().isPlayerDead(ev.getPlayer().getName()) && !this.p.getConfig().getBoolean("allow-reconnect", true)) {
 			ev.setResult(Result.KICK_OTHER);
 			ev.setKickMessage("Vous êtes mort !");
 		}
@@ -103,29 +103,29 @@ public class UHPluginListener implements Listener {
 		
 	@EventHandler
 	public void onPlayerJoin(final PlayerJoinEvent ev) {
-		if (!this.p.isGameRunning()) {
+		if (!this.p.getGameManager().isGameRunning()) {
 			ev.getPlayer().setGameMode(GameMode.CREATIVE);
 			Location l = ev.getPlayer().getWorld().getSpawnLocation();
 			ev.getPlayer().teleport(l.add(0,1,0));
 		}
-		p.addToScoreboard(ev.getPlayer());
+		p.getGameManager().addToScoreboard(ev.getPlayer());
 		Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
 			
 			@Override
 			public void run() {
-				p.updatePlayerListName(ev.getPlayer());
+				p.getGameManager().updatePlayerListName(ev.getPlayer());
 			}
 		}, 1L);
 	}
 	
 	@EventHandler
 	public void onBlockBreakEvent(final BlockBreakEvent ev) {
-		if (!this.p.isGameRunning()) ev.setCancelled(true);
+		if (!this.p.getGameManager().isGameRunning()) ev.setCancelled(true);
 	}
 	
 	@EventHandler
 	public void onBlockPlaceEvent(final BlockPlaceEvent ev) {
-		if (!this.p.isGameRunning()) ev.setCancelled(true);
+		if (!this.p.getGameManager().isGameRunning()) ev.setCancelled(true);
 	}
 	
 	@EventHandler
@@ -210,12 +210,12 @@ public class UHPluginListener implements Listener {
 	@EventHandler
 	public void onEntityDamage(final EntityDamageEvent ev) {
 		if (ev.getEntity() instanceof Player) {
-			if (!p.isTakingDamage()) ev.setCancelled(true);
+			if (!p.getGameManager().isTakingDamage()) ev.setCancelled(true);
 			Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
 				
 				@Override
 				public void run() {
-					p.updatePlayerListName((Player)ev.getEntity());
+					p.getGameManager().updatePlayerListName((Player)ev.getEntity());
 				}
 			}, 1L);
 		}
@@ -229,7 +229,7 @@ public class UHPluginListener implements Listener {
 				
 				@Override
 				public void run() {
-					p.updatePlayerListName((Player)ev.getEntity());
+					p.getGameManager().updatePlayerListName((Player)ev.getEntity());
 				}
 			}, 1L);
 		}
@@ -245,7 +245,7 @@ public class UHPluginListener implements Listener {
 				if (is != null && is.getType() == Material.ROTTEN_FLESH) {
 					p.getLogger().info(""+is.getAmount());
 					if (is.getAmount() != 1) is.setAmount(is.getAmount()-1);
-					else { p.getLogger().info("lol"); pl.getInventory().removeItem(is); }
+					else { pl.getInventory().removeItem(is); }
 					pl.updateInventory();
 					foundRottenFlesh = true;
 					break;

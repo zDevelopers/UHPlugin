@@ -40,26 +40,30 @@ import org.bukkit.scoreboard.Scoreboard;
 public final class UHPlugin extends JavaPlugin {
 
 	private Logger logger = null;
-	private LinkedList<Location> loc = new LinkedList<Location>();
-	private Random random = null;
 	private ShapelessRecipe goldenMelon = null;
 	private ShapedRecipe compass = null;
-	private Integer episode = 0;
-	private Boolean gameRunning = false;
 	private Scoreboard sb = null;
-	private Integer minutesLeft = 0;
-	private Integer secondsLeft = 0;
-	private NumberFormat formatter = new DecimalFormat("00");
-	private String sbobjname = "KTP";
-	private Boolean damageIsOn = false;
-	private ArrayList<UHTeam> teams = new ArrayList<UHTeam>();
 	private UHTeamManager teamManager = null;
-	private HashSet<String> deadPlayers = new HashSet<String>();
+	private UHGameManager gameManager = null;
 	
 	@Override
 	public void onEnable() {
 		this.saveDefaultConfig();
-		 
+		
+		logger = Bukkit.getLogger();
+		teamManager = new UHTeamManager(this);
+		gameManager = new UHGameManager(this);
+		
+		getCommand("uh").setExecutor(new UHPluginCommand(this));
+		getServer().getPluginManager().registerEvents(new UHPluginListener(this), this);
+		
+		addRecipes();
+		
+		gameManager.initScoreboard();
+		gameManager.setMatchInfo();
+		gameManager.initEnvironment();
+		
+		
 		File positions = new File("plugins/UHPlugin/positions.txt");
 		if (positions.exists()) {
 			BufferedReader br = null;
@@ -69,7 +73,7 @@ public final class UHPlugin extends JavaPlugin {
 				while ((line = br.readLine()) != null) {
 					String[] l = line.split(",");
 					getLogger().info("Adding position "+Integer.parseInt(l[0])+","+Integer.parseInt(l[1])+" from positions.txt");
-					addLocation(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
+					gameManager.addLocation(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -80,22 +84,20 @@ public final class UHPlugin extends JavaPlugin {
 			
 		}
 		
-		logger = Bukkit.getLogger();
 		logger.info("UHPlugin loaded");
-		random = new Random();
-		
-		teamManager = new UHTeamManager(this);
-		
-		UHPluginCommand commandExecutor = new UHPluginCommand(this);
-		getCommand("uh").setExecutor(commandExecutor);
-		
-		
+	}
+	
+	public void addRecipes() {
+		// Golden melon: gold block + melon
 		goldenMelon = new ShapelessRecipe(new ItemStack(Material.SPECKLED_MELON));
 		goldenMelon.addIngredient(1, Material.GOLD_BLOCK);
 		goldenMelon.addIngredient(1, Material.MELON);
 		this.getServer().addRecipe(goldenMelon);
 		
 		if (getConfig().getBoolean("compass")) {
+			// Compass: redstone in center;
+			// then from the top, clockwise, iron, spider eye, iron, rotten flesh, iron, bone, iron, gun powder. 
+			
 			compass = new ShapedRecipe(new ItemStack(Material.COMPASS));
 			compass.shape(new String[] {"CIE", "IRI", "BIF"});
 			compass.setIngredient('I', Material.IRON_INGOT);
@@ -104,195 +106,15 @@ public final class UHPlugin extends JavaPlugin {
 			compass.setIngredient('E', Material.SPIDER_EYE);
 			compass.setIngredient('B', Material.BONE);
 			compass.setIngredient('F', Material.ROTTEN_FLESH);
+			
 			this.getServer().addRecipe(compass);
 		}
-		
-		getServer().getPluginManager().registerEvents(new UHPluginListener(this), this);
-		
-		sb = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-		Objective obj = sb.registerNewObjective("Vie", "dummy");
-		obj.setDisplayName("Vie");
-		obj.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-		
-		setMatchInfo();
-		
-		getServer().getWorlds().get(0).setGameRuleValue("doDaylightCycle", "false");
-		getServer().getWorlds().get(0).setTime(6000L);
-		getServer().getWorlds().get(0).setStorm(false);
-		getServer().getWorlds().get(0).setDifficulty(Difficulty.HARD);
-	}
-	
-	
-	public void addLocation(int x, int z) {
-		loc.add(new Location(getServer().getWorlds().get(0), x, getServer().getWorlds().get(0).getHighestBlockYAt(x,z)+120, z));
-	}
-	
-	public void setMatchInfo() {
-		Objective obj = null;
-		try {
-			obj = sb.getObjective(sbobjname);
-			obj.setDisplaySlot(null);
-			obj.unregister();
-		} catch (Exception e) {
-			
-		}
-		Random r = new Random();
-		sbobjname = "KTP"+r.nextInt(10000000);
-		obj = sb.registerNewObjective(sbobjname, "dummy");
-		obj = sb.getObjective(sbobjname);
-
-		obj.setDisplayName(this.getScoreboardName());
-		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY+"Episode "+ChatColor.WHITE+episode)).setScore(5);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+Bukkit.getServer().getOnlinePlayers().length+ChatColor.GRAY+" joueurs")).setScore(4);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+getAliveTeams().size()+ChatColor.GRAY+" teams")).setScore(3);
-		obj.getScore(Bukkit.getOfflinePlayer("")).setScore(2);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+formatter.format(this.minutesLeft)+ChatColor.GRAY+":"+ChatColor.WHITE+formatter.format(this.secondsLeft))).setScore(1);
-	}
-	
-	public void startGame() {
-		// TODO
-	}
-
-	private ArrayList<UHTeam> getAliveTeams() {
-		ArrayList<UHTeam> aliveTeams = new ArrayList<UHTeam>();
-		for (UHTeam t : teams) {
-			for (Player p : t.getPlayers()) {
-				if (p.isOnline() && !aliveTeams.contains(t)) aliveTeams.add(t);
-			}
-		}
-		return aliveTeams;
 	}
 
 	@Override
 	public void onDisable() {
 		logger.info("UHPlugin unloaded");
 	}
-
-	/*
-	public boolean onCommand(final CommandSender s, Command c, String l, String[] a) {
-		if (c.getName().equalsIgnoreCase("uh")) {
-			if (!(s instanceof Player)) {
-				s.sendMessage(ChatColor.RED+"Vous devez être un joueur");
-				return true;
-			}
-			Player pl = (Player)s;
-			if (!pl.isOp()) {// TODO Auto-generated method stub
-
-				pl.sendMessage(ChatColor.RED+"Lolnope.");
-				return true;
-			}
-			if (a.length == 0) {
-				pl.sendMessage("Usage : /uh <start|shift|team|addspawn|generatewalls>");
-				return true;
-			}
-			if (a[0].equalsIgnoreCase("start")) {
-				if (teams.size() == 0) {
-					for (Player p : getServer().getOnlinePlayers()) {
-						UHTeam uht = new UHTeam(p.getName(), p.getName(), ChatColor.WHITE, this);
-						uht.addPlayer(p);
-						teams.add(uht);
-					}
-				}
-				if (loc.size() < teams.size()) {
-					s.sendMessage(ChatColor.RED+"Pas assez de positions de TP");
-					return true;
-				}
-				LinkedList<Location> unusedTP = loc;
-				for (final UHTeam t : teams) {
-					final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
-					Bukkit.getScheduler().runTaskLater(this, new BukkitRunnable() {
-
-						@Override
-						public void run() {
-							t.teleportTo(lo);
-							for (Player p : t.getPlayers()) {
-								p.setGameMode(GameMode.SURVIVAL);
-								p.setHealth(20);
-								p.setFoodLevel(20);
-								p.setExhaustion(5F);
-								p.getInventory().clear();
-								p.getInventory().setArmorContents(new ItemStack[] {new ItemStack(Material.AIR), new ItemStack(Material.AIR), 
-										new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
-								p.setExp(0L+0F);
-								p.setLevel(0);
-								p.closeInventory();
-								p.getActivePotionEffects().clear();
-								p.setCompassTarget(lo);
-								setLife(p, 20);
-							}
-						}
-					}, 10L);
-					
-					unusedTP.remove(lo);
-				}
-				Bukkit.getScheduler().runTaskLater(this, new BukkitRunnable() {
-
-					@Override
-					public void run() {
-						damageIsOn = true;
-					}
-				}, 600L);
-				World w = Bukkit.getOnlinePlayers()[0].getWorld();
-				w.setGameRuleValue("doDaylightCycle", ((Boolean)getConfig().getBoolean("daylightCycle.do")).toString());
-				w.setTime(getConfig().getLong("daylightCycle.time"));
-				w.setStorm(false);
-				w.setDifficulty(Difficulty.HARD);
-				this.episode = 1;
-				this.minutesLeft = getEpisodeLength();
-				this.secondsLeft = 0;
-				Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new BukkitRunnable() {
-					@Override
-					public void run() {
-						setMatchInfo();
-						secondsLeft--;
-						if (secondsLeft == -1) {
-							minutesLeft--;
-							secondsLeft = 59;
-						}
-						if (minutesLeft == -1) {
-							minutesLeft = getEpisodeLength();
-							secondsLeft = 0;
-							Bukkit.getServer().broadcastMessage(ChatColor.AQUA+"-------- Fin episode "+episode+" --------");
-							shiftEpisode();
-						}
-					} 
-				}, 20L, 20L);
-				
-				Bukkit.getServer().broadcastMessage(ChatColor.GREEN+"--- GO ---");
-				this.gameRunning = true;
-				return true;
-			} else if (a[0].equalsIgnoreCase("team")) {
-				Inventory iv = this.getServer().createInventory(pl, 54, "- Teams -");
-				Integer slot = 0;
-				ItemStack is = null;
-				for (UHTeam t : teams) {
-					is = new ItemStack(Material.BEACON, t.getPlayers().size());
-					ItemMeta im = is.getItemMeta();
-					im.setDisplayName(t.getChatColor()+t.getDisplayName());
-					ArrayList<String> lore = new ArrayList<String>();
-					for (Player p : t.getPlayers()) {
-						lore.add("- "+p.getDisplayName());
-					}
-					im.setLore(lore);
-					is.setItemMeta(im);
-					iv.setItem(slot, is);
-					slot++;
-				}
-				
-				ItemStack is2 = new ItemStack(Material.DIAMOND);
-				ItemMeta im2 = is2.getItemMeta();
-				im2.setDisplayName(ChatColor.AQUA+""+ChatColor.ITALIC+"Créer une team");
-				is2.setItemMeta(im2);
-				iv.setItem(53, is2);
-				
-				pl.openInventory(iv);
-				return true;
-			}
-		}
-		return false;
-	}
-	*/
 	
 	
 	/**
@@ -336,64 +158,12 @@ public final class UHPlugin extends JavaPlugin {
 		}
 	}
 	
-	
-	public void shiftEpisode(Player shifter) {
-		Bukkit.getServer().broadcastMessage(ChatColor.AQUA+"-------- Fin episode "+episode+" [forcé par "+shifter.getName()+"] --------");
-		this.episode++;
-		this.minutesLeft = getEpisodeLength();
-		this.secondsLeft = 0;
-	}
-	public void shiftEpisode() {
-		shiftEpisode((Player) Bukkit.getOfflinePlayer("la console"));
-	}
-	
-	public boolean isGameRunning() {
-		return this.gameRunning;
-	}
-
-	public void updatePlayerListName(Player p) {
-		p.setScoreboard(sb);
-		Integer he = (int) Math.ceil(((Damageable) p).getHealth());
-		sb.getObjective("Vie").getScore(p).setScore(he);
-	}
-
-	public void addToScoreboard(Player player) {
-		player.setScoreboard(sb);
-		sb.getObjective("Vie").getScore(player).setScore(0);
-		this.updatePlayerListName(player);
-	}
-
-	public void setLife(Player entity, int i) {
-		entity.setScoreboard(sb);
-		sb.getObjective("Vie").getScore(entity).setScore(i);
-	}
-
-	public boolean isTakingDamage() {
-		return damageIsOn;
-	}
-	
-	public Scoreboard getScoreboard() {
-		return sb;
-	}
-	
 	public UHTeamManager getTeamManager() {
 		return teamManager;
 	}
 	
-	public Integer getEpisodeLength() {
-		return this.getConfig().getInt("episodeLength");
+	public UHGameManager getGameManager() {
+		return gameManager;
 	}
 	
-	public boolean isPlayerDead(String name) {
-		return deadPlayers.contains(name);
-	}
-	
-	public void addDead(String name) {
-		deadPlayers.add(name);
-	}
-	
-	public String getScoreboardName() {
-		String s = this.getConfig().getString("scoreboard", "Kill The Patrick");
-		return s.substring(0, Math.min(s.length(), 16));
-	}
 }

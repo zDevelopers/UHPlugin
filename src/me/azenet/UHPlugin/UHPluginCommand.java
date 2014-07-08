@@ -127,7 +127,8 @@ public class UHPluginCommand implements CommandExecutor {
 			unauthorized(sender, command);
 			return;
 		}
-		p.startGame();
+		
+		p.getGameManager().start(sender);
 	}
 	
 	/**
@@ -188,7 +189,7 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 			else {
 				Player pl = (Player) sender; // Just a way to avoid casts everywhere.
-				p.addLocation(pl.getLocation().getBlockX(), pl.getLocation().getBlockZ());
+				p.getGameManager().addLocation(pl.getLocation().getBlockX(), pl.getLocation().getBlockZ());
 				sender.sendMessage(cs + "Spawn added: " + pl.getLocation().getBlockX() + "," + pl.getLocation().getBlockZ());
 			}
 		}
@@ -196,7 +197,7 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(ce + "You need to specify two coordinates.");
 		}
 		else {
-			p.addLocation(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+			p.getGameManager().addLocation(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 			sender.sendMessage(cs + "Spawn added: " + args[1] + "," + args[2]);
 		}
 		
@@ -352,12 +353,12 @@ public class UHPluginCommand implements CommandExecutor {
 			return;
 		}
 		
-		if(p.isGameRunning()) {
+		if(p.getGameManager().isGameRunning()) {
 			if(sender instanceof Player) {
-				p.shiftEpisode((Player) sender);
+				p.getGameManager().shiftEpisode((Player) sender);
 			}
 			else {
-				p.shiftEpisode();
+				p.getGameManager().shiftEpisode();
 			}
 		}
 		else {

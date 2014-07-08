@@ -21,7 +21,7 @@ public class UHTeam {
 		this.color = color;
 		this.plugin = plugin;
 		
-		Scoreboard sb = this.plugin.getScoreboard();
+		Scoreboard sb = this.plugin.getGameManager().getScoreboard();
 		sb.registerNewTeam(this.name);
 	
 		Team t = sb.getTeam(this.name);
@@ -44,12 +44,12 @@ public class UHTeam {
 
 	public void addPlayer(Player player) {
 		players.add(player);
-		plugin.getScoreboard().getTeam(this.name).addPlayer(player);
+		plugin.getGameManager().getScoreboard().getTeam(this.name).addPlayer(player);
 	}
 	
 	public void removePlayer(Player player) {
 		players.remove(player);
-		plugin.getScoreboard().getTeam(this.name).removePlayer(player);
+		plugin.getGameManager().getScoreboard().getTeam(this.name).removePlayer(player);
 	}
 
 	public void teleportTo(Location lo) {
