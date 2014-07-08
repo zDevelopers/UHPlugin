@@ -54,7 +54,6 @@ public final class UHPlugin extends JavaPlugin {
 	private Boolean damageIsOn = false;
 	private ArrayList<UHTeam> teams = new ArrayList<UHTeam>();
 	private UHTeamManager teamManager = null;
-	private HashMap<String, ConversationFactory> cfs = new HashMap<String, ConversationFactory>();
 	private HashSet<String> deadPlayers = new HashSet<String>();
 	
 	@Override
