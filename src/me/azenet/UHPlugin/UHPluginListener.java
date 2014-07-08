@@ -1,6 +1,7 @@
 package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -34,8 +36,9 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -46,6 +49,19 @@ public class UHPluginListener implements Listener {
 	public UHPluginListener(UHPlugin p) {
 		this.p = p;
 	}
+	
+	
+	/**
+	 * Used to:
+	 *  - play the death sound;
+	 *  - update the scoreboard;
+	 *  - kick the player (if needed);
+	 *  - broadcast a team-death message (if needed);
+	 *  - increase visibility of the death message (if needed);
+	 *  - drop the skull of the dead player (if needed).
+	 *  
+	 * @param ev
+	 */
 	
 	@EventHandler
 	public void onPlayerDeath(final PlayerDeathEvent ev) {
@@ -118,6 +134,12 @@ public class UHPluginListener implements Listener {
 
 	}
 	
+	
+	/**
+	 * Used to prevent the user to get a ghast tear, if forbidden by the config.
+	 * 
+	 * @param ev
+	 */
 	@EventHandler
 	public void onPlayerPickupItem(PlayerPickupItemEvent ev) {
 		if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL) && p.getConfig().getBoolean("gameplay-changes.replaceGhastTearsWithGold")) {
@@ -126,6 +148,13 @@ public class UHPluginListener implements Listener {
 		p.getGameManager().updatePlayerListName(ev.getPlayer());
 	}
 	
+	
+	
+	/**
+	 * Used to prevent the player to login after his death (if needed).
+	 * 
+	 * @param ev
+	 */
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent ev) {
 		if (this.p.getGameManager().isPlayerDead(ev.getPlayer().getName()) && !this.p.getConfig().getBoolean("kick-on-death.allow-reconnect", true)) {
@@ -133,7 +162,14 @@ public class UHPluginListener implements Listener {
 			ev.setKickMessage("Vous êtes mort !");
 		}
 	}
-		
+	
+	/**
+	 * Used to:
+	 *  - change the gamemode of the player, if the game is not running;
+	 *  - teleport the player to the spawn, if the game is not running;
+	 *  - update the scoreboard.
+	 * @param ev
+	 */
 	@EventHandler
 	public void onPlayerJoin(final PlayerJoinEvent ev) {
 		if (!this.p.getGameManager().isGameRunning()) {
@@ -151,16 +187,34 @@ public class UHPluginListener implements Listener {
 		}, 1L);
 	}
 	
+	
+	/**
+	 * Used to prevent players from breaking blocks if the game is not currently running.
+	 * 
+	 * @param ev
+	 */
 	@EventHandler
 	public void onBlockBreakEvent(final BlockBreakEvent ev) {
 		if (!this.p.getGameManager().isGameRunning()) ev.setCancelled(true);
 	}
 	
+	/**
+	 * Used to prevent players from placing blocks if the game is not currently running.
+	 * 
+	 * @param ev
+	 */
 	@EventHandler
 	public void onBlockPlaceEvent(final BlockPlaceEvent ev) {
 		if (!this.p.getGameManager().isGameRunning()) ev.setCancelled(true);
 	}
 	
+	/**
+	 * Used to prevent the player to go outside the border.$
+	 * TODO improve this by replacing the onPlayerMoveEvent by a regular check, or by
+	 * using the WorldBorder API.
+	 * 
+	 * @param ev
+	 */
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent ev) {
 		Location l = ev.getTo();
@@ -186,41 +240,77 @@ public class UHPluginListener implements Listener {
 		}
 	}
 	
+	
+	/**
+	 * Used to:
+	 *  - prevent items to be crafted;
+	 *  - add a lure to the golden apples crafted from a head.
+	 * @param pce
+	 */
 	@EventHandler
-	public void onCraftItem(CraftItemEvent ev) {
-		try {
-			if (ev.getRecipe() instanceof ShapedRecipe) {
-				ShapedRecipe r = (ShapedRecipe)ev.getRecipe();
-				String item = "la boussole";
-				Boolean isCompassValid = false;
-				for (Map.Entry<Character, ItemStack> e : r.getIngredientMap().entrySet()) {
-					if (r.getResult().getType() == Material.GOLDEN_APPLE && e != null && e.getValue() != null && e.getValue().getType() == Material.GOLD_NUGGET) { //gotta cancel
-						item = "la pomme d'or";
-						ev.setCancelled(true);
-					} else if (r.getResult().getType() == Material.COMPASS && e != null && e.getValue() != null && e.getValue().getType() == Material.BONE) {
-						isCompassValid = true;
+	public void onPreCraftEvent(PrepareItemCraftEvent ev) {
+		Recipe recipe = ev.getRecipe();
+		
+		if(recipe == null) {
+			return;
+		}
+		
+		/** Prevent items to be crafted **/
+		
+		// Original recipes, for comparison
+		ShapedRecipe originalCompass = new ShapedRecipe(new ItemStack(Material.COMPASS));
+		originalCompass.shape(new String[] {" I ", "IRI", " I "});
+		originalCompass.setIngredient('I', Material.IRON_INGOT);
+		originalCompass.setIngredient('R', Material.REDSTONE);
+		
+		ShapedRecipe originalGoldenMelon = new ShapedRecipe(new ItemStack(Material.SPECKLED_MELON));
+		originalGoldenMelon.shape(new String[] {"GGG", "GMG", "GGG"});
+		originalGoldenMelon.setIngredient('G', Material.GOLD_NUGGET);
+		originalGoldenMelon.setIngredient('M', Material.MELON);
+		
+		// Compass
+		if(p.getConfig().getBoolean("gameplay-changes.compass") && RecipeUtil.areSimilar(recipe, originalCompass)) {
+			ev.getInventory().setResult(new ItemStack(Material.AIR));
+		}
+		
+		// Golden melon
+		if(p.getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock") && RecipeUtil.areSimilar(recipe, originalGoldenMelon)) {
+			ev.getInventory().setResult(new ItemStack(Material.AIR));
+		}
+		
+		
+		/** Add a lore to the golden apples crafted from a head **/
+		
+		if(p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do") && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.addLore") && (RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromHead")) || RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromWitherHead")))) {	   	
+			ItemStack result = ev.getInventory().getResult();
+			ItemMeta meta = result.getItemMeta();
+			
+			// Lookup for the head in the recipe
+			String name = "a malignant monster";
+			for(ItemStack item : ev.getInventory().getContents()) {
+				if(item.getType() == Material.SKULL_ITEM && item.getDurability() == (short) SkullType.PLAYER.ordinal()) { // An human head
+					SkullMeta sm = (SkullMeta) item.getItemMeta();
+					if(sm.hasOwner()) { // An human head
+						name = sm.getOwner();
 					}
+					break;
 				}
-				if (!p.getConfig().getBoolean("gameplay-changes.compass")) isCompassValid = true;
-				if (!isCompassValid && r.getResult().getType() == Material.COMPASS) ev.setCancelled(true);
-				if (ev.isCancelled()) ((Player) ev.getWhoClicked()).sendMessage(ChatColor.RED+"Vous ne pouvez pas crafter "+item+" comme ceci");
-			} else if (ev.getRecipe() instanceof ShapelessRecipe) {
-				ShapelessRecipe r = (ShapelessRecipe) ev.getRecipe();
-				String item = "";
-				for (ItemStack i : r.getIngredientList()) {
-					if (i.getType() == Material.GOLD_NUGGET && r.getResult().getType() == Material.SPECKLED_MELON && p.getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock")) { //gotta cancel
-						item = "le melon scintillant";
-						ev.setCancelled(true);
-					}
-				}
-				if (ev.isCancelled()) ((Player) ev.getWhoClicked()).sendMessage(ChatColor.RED+"Vous ne pouvez pas crafter "+item+" comme ceci");
 			}
-		} catch (Exception e) {
-			Bukkit.getLogger().warning(ChatColor.RED+"Erreur dans le craft");
-			e.printStackTrace();
+			
+			List<String> lore = Arrays.asList("Made from the fallen head", "of " + name);
+			meta.setLore(lore);
+			
+			result.setItemMeta(meta);
+			ev.getInventory().setResult(result);
 		}
 	}
 	
+	
+	/**
+	 * Used to disable ghast tears (if needed).
+	 * 
+	 * @param ev
+	 */
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent ev) {
 		if (ev.getEntity() instanceof Ghast && p.getConfig().getBoolean("gameplay-changes.replaceGhastTearsWithGold")) {
@@ -239,7 +329,12 @@ public class UHPluginListener implements Listener {
 		}
 	}
 
-
+	
+	/**
+	 * Used to update the scoreboard.
+	 * 
+	 * @param ev
+	 */
 	@EventHandler
 	public void onEntityDamage(final EntityDamageEvent ev) {
 		if (ev.getEntity() instanceof Player) {
@@ -255,6 +350,11 @@ public class UHPluginListener implements Listener {
 		}
 	}
 	
+	/**
+	 * Used to disable enderpearl damages (if needed)
+	 * 
+	 * @param ev
+	 */
 	@EventHandler
 	public void onPlayerTeleport(final PlayerTeleportEvent ev) {
 		if(p.getConfig().getBoolean("gameplay-change.disableEnderpearlsDamages")) {
@@ -269,6 +369,11 @@ public class UHPluginListener implements Listener {
 		}
 	}
 	
+	/**
+	 * Used to prevent the life to be gained with food.
+	 * 
+	 * @param ev
+	 */
 	@EventHandler
 	public void onEntityRegainHealth(final EntityRegainHealthEvent ev) {
 		if (ev.getRegainReason() == RegainReason.SATIATED) ev.setCancelled(true);
@@ -283,6 +388,12 @@ public class UHPluginListener implements Listener {
 		}
 	}
 	
+	
+	/**
+	 * Used to update the compass.
+	 * 
+	 * @param ev
+	 */
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent ev) {

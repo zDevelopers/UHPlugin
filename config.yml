@@ -10,7 +10,7 @@ daylightCycle:
     do: false
     time: 6000  # Initial time (or game time if the daylight cycle is disabled) in ticks. 6000 = noon.
 
-scoreboard: Kill The Patrick
+scoreboard: Kill the Patrick
 
 kick-on-death:
     kick: true
@@ -19,14 +19,22 @@ kick-on-death:
 
 death-messages:
     notifyIfTeamHasFallen: true
-    deathMessagesPrefix: "§6§l"  # Use this to increase visibility of death messages.
-    teamDeathMessagePrefix: "§6§l"
+    deathMessagesPrefix: "§6"  # Use this to increase visibility of death messages.
+    teamDeathMessagesPrefix: "§6"
 
 gameplay-changes:
     weather: true
     
     replaceGhastTearsWithGold: true
     craftGoldenMelonWithGoldBlock: true
+    
+    craftGoldenAppleFromHead:
+        do: true
+        doFromWither: true
+        craftNotchApple: false
+        addLore: true
+        numberCrafted: 3
+    
     
     disableEnderpearlsDamages: true
     

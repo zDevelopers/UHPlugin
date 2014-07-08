@@ -88,11 +88,11 @@ public class UHGameManager {
 
 		obj.setDisplayName(this.getScoreboardName());
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY+"Episode "+ChatColor.WHITE+episode)).setScore(336);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+alivePlayers.size()+ChatColor.GRAY+" joueurs")).setScore(168);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+getAliveTeams().size()+ChatColor.GRAY+" teams")).setScore(84);
-		obj.getScore(Bukkit.getOfflinePlayer("")).setScore(42);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+formatter.format(this.minutesLeft)+ChatColor.GRAY+":"+ChatColor.WHITE+formatter.format(this.secondsLeft))).setScore(21);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY+"Episode "+ChatColor.WHITE+episode)).setScore(5);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+alivePlayers.size()+ChatColor.GRAY+" joueurs")).setScore(4);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+getAliveTeams().size()+ChatColor.GRAY+" teams")).setScore(3);
+		obj.getScore(Bukkit.getOfflinePlayer("")).setScore(2);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+formatter.format(this.minutesLeft)+ChatColor.GRAY+":"+ChatColor.WHITE+formatter.format(this.secondsLeft))).setScore(1);
 	}
 	
 	public Scoreboard getScoreboard() {
@@ -301,5 +301,4 @@ public class UHGameManager {
 		}
 		return aliveTeams;
 	}
-	
 }

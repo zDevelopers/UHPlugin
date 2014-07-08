@@ -8,8 +8,10 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.SkullType;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +21,8 @@ public final class UHPlugin extends JavaPlugin {
 	private Logger logger = null;
 	private ShapelessRecipe goldenMelon = null;
 	private ShapedRecipe compass = null;
+	private ShapedRecipe goldenAppleFromHead = null;
+	private ShapedRecipe goldenAppleFromWitherHead = null;
 	private UHTeamManager teamManager = null;
 	private UHGameManager gameManager = null;
 	
@@ -64,6 +68,36 @@ public final class UHPlugin extends JavaPlugin {
 	}
 	
 	public void addRecipes() {
+		if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do")) {
+			// Golden apple (or notch apple): head in the center and 8 gold ingots.
+			
+			short damage = 0;
+			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.craftNotchApple")) {
+				damage = 1;
+			}
+			
+			goldenAppleFromHead = new ShapedRecipe(new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.numberCrafted", 1), damage));
+			
+			goldenAppleFromHead.shape("GGG", "GHG", "GGG");
+			goldenAppleFromHead.setIngredient('G', Material.GOLD_INGOT);
+			goldenAppleFromHead.setIngredient('H', Material.SKULL_ITEM, SkullType.PLAYER.ordinal()); // TODO: deprecated, but no alternative found...
+			
+			this.getServer().addRecipe(goldenAppleFromHead);
+			
+			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.doFromWither")) {
+				goldenAppleFromWitherHead = new ShapedRecipe(new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.numberCrafted", 1), damage));
+				
+				goldenAppleFromWitherHead.shape("GGG", "GHG", "GGG");
+				goldenAppleFromWitherHead.setIngredient('G', Material.GOLD_INGOT);
+				goldenAppleFromWitherHead.setIngredient('H', Material.SKULL_ITEM, SkullType.WITHER.ordinal()); // TODO: deprecated, but no alternative found...
+				
+				this.getServer().addRecipe(goldenAppleFromWitherHead);
+
+			}
+			
+			logger.info("Added new recipes for golden apple.");
+		}
+		
 		if(getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock")) {
 			// Golden melon: gold block + melon
 			
@@ -91,6 +125,20 @@ public final class UHPlugin extends JavaPlugin {
 			this.getServer().addRecipe(compass);
 			logger.info("Added new recipe for compass.");
 		}
+	}
+	
+	public Recipe getRecipe(String name) {
+		switch(name) {
+			case "goldenAppleFromHead":
+				return this.goldenAppleFromHead;
+			case "goldenAppleFromWitherHead":
+				return this.goldenAppleFromWitherHead;
+			case "goldenMelon":
+				return this.goldenMelon;
+			case "compass":
+				return this.compass;
+		}
+		throw new IllegalArgumentException("Unknow recipe");
 	}
 
 	@Override
