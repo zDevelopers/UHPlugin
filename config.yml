@@ -19,6 +19,8 @@ kick-on-death:
 
 death-messages:
     notifyIfTeamHasFallen: true
+    deathMessagesPrefix: "§6§l"  # Use this to increase visibility of death messages.
+    teamDeathMessagePrefix: "§6§l"
 
 gameplay-changes:
     weather: true

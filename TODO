@@ -15,9 +15,9 @@
 	/uh start slow go : démarre, défreeze, active les mobs, donne l'immunité pour 30s
 - Autocomplétion des commandes
 - [OK] Permissions
-- Option pour annuler les dégâts des ender pearls
+- [OK] Option pour annuler les dégâts des ender pearls
 - Option pour annuler le spawn des sorcières (non utilisée par moi mais peut être utile)
-- Mettre les restrictions en option (notamment celle des potions II, des ghasts qui ne dropent pas des larmes)
+- [PARTIAL] Mettre les restrictions en option (notamment celle des potions II, des ghasts qui ne dropent pas des larmes)
 - [PARTIAL] Corriger le bug d'affichage des joueurs vivants (actuellement compte les joueurs en ligne, pas uniquement les vivants)
 	→ [DONE] Liste des joueurs vivants
 	→ [TODO] /uh revive <player> pour reprendre en compte un joueur

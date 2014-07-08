@@ -11,7 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.Sound;
-import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,13 +24,12 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -100,7 +98,7 @@ public class UHPluginListener implements Listener {
 		}
 		
 		// Send a team-death message if needed.
-		if(p.getConfig().getBoolean("death-messages.notifyIfTeamHasFallen")) {
+		if(p.getConfig().getBoolean("death-messages.notifyIfTeamHasFallen", false)) {
 			UHTeam team = p.getTeamManager().getTeamForPlayer(ev.getEntity());
 			boolean isAliveTeam = false;
 			
@@ -112,9 +110,11 @@ public class UHPluginListener implements Listener {
 			}
 			
 			if(!isAliveTeam) {
-				p.getServer().broadcastMessage(ChatColor.GOLD + "The team " + team.getChatColor() + team.getDisplayName() + ChatColor.GOLD + " has fallen!");
+				p.getServer().broadcastMessage(p.getConfig().getString("death-messages.teamDeathMessagesPrefix", "") + "The team " + ChatColor.RESET + team.getChatColor() + team.getDisplayName() + ChatColor.RESET + p.getConfig().getString("death-messages.teamDeathMessagesPrefix", "") + " has fallen!");
 			}
 		}
+		
+		ev.setDeathMessage(p.getConfig().getString("death-messages.deathMessagesPrefix", "") + ev.getDeathMessage());
 
 	}
 	
