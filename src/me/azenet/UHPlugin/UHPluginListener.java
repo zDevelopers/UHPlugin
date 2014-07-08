@@ -95,7 +95,7 @@ public class UHPluginListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent ev) {
-		if (this.p.getGameManager().isPlayerDead(ev.getPlayer().getName()) && !this.p.getConfig().getBoolean("allow-reconnect", true)) {
+		if (this.p.getGameManager().isPlayerDead(ev.getPlayer().getName()) && !this.p.getConfig().getBoolean("kick-on-death.allow-reconnect", true)) {
 			ev.setResult(Result.KICK_OTHER);
 			ev.setKickMessage("Vous êtes mort !");
 		}
@@ -168,14 +168,14 @@ public class UHPluginListener implements Listener {
 						isCompassValid = true;
 					}
 				}
-				if (!p.getConfig().getBoolean("compass")) isCompassValid = true;
+				if (!p.getConfig().getBoolean("gameplay-changes.compass")) isCompassValid = true;
 				if (!isCompassValid && r.getResult().getType() == Material.COMPASS) ev.setCancelled(true);
 				if (ev.isCancelled()) ((Player) ev.getWhoClicked()).sendMessage(ChatColor.RED+"Vous ne pouvez pas crafter "+item+" comme ceci");
 			} else if (ev.getRecipe() instanceof ShapelessRecipe) {
 				ShapelessRecipe r = (ShapelessRecipe) ev.getRecipe();
 				String item = "";
 				for (ItemStack i : r.getIngredientList()) {
-					if (i.getType() == Material.GOLD_NUGGET && r.getResult().getType() == Material.SPECKLED_MELON) { //gotta cancel
+					if (i.getType() == Material.GOLD_NUGGET && r.getResult().getType() == Material.SPECKLED_MELON && p.getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock")) { //gotta cancel
 						item = "le melon scintillant";
 						ev.setCancelled(true);
 					}
@@ -190,10 +190,10 @@ public class UHPluginListener implements Listener {
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent ev) {
-		if (ev.getEntity() instanceof Ghast) {
+		if (ev.getEntity() instanceof Ghast && p.getConfig().getBoolean("gameplay-changes.replaceGhastTearsWithGold")) {
 			Bukkit.getLogger().info("Modifying drops for Ghast");
 			List<ItemStack> drops = new ArrayList<ItemStack>(ev.getDrops());
-			ev.getDrops().clear();
+			ev.getDrops().clear(); 
 			for (ItemStack i : drops) {
 				if (i.getType() == Material.GHAST_TEAR) {
 					Bukkit.getLogger().info("Added "+i.getAmount()+" ghast tear(s)");
@@ -238,7 +238,7 @@ public class UHPluginListener implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent ev) {
-		if ((ev.getAction() == Action.RIGHT_CLICK_AIR || ev.getAction() == Action.RIGHT_CLICK_BLOCK) && ev.getPlayer().getItemInHand().getType() == Material.COMPASS && p.getConfig().getBoolean("compass")) {
+		if ((ev.getAction() == Action.RIGHT_CLICK_AIR || ev.getAction() == Action.RIGHT_CLICK_BLOCK) && ev.getPlayer().getItemInHand().getType() == Material.COMPASS && p.getConfig().getBoolean("gameplay-changes.compass")) {
 			Player pl = ev.getPlayer();
 			Boolean foundRottenFlesh = false;
 			for (ItemStack is : pl.getInventory().getContents()) {
@@ -279,7 +279,7 @@ public class UHPluginListener implements Listener {
 	
 	@EventHandler
 	public void onWeatherChange(WeatherChangeEvent ev) {
-		if (!p.getConfig().getBoolean("weather")) {
+		if (!p.getConfig().getBoolean("gameplay-changes.weather")) {
 			ev.setCancelled(true);
 		}
 	}

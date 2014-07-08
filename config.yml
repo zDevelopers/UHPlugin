@@ -1,16 +1,26 @@
-episodeLength: 20
-compass: true
-weather: false
+episodeLength: 20  # minutes
+
 map:
     size: 2000
     wall:
         height: 128
         block: 7
+
 daylightCycle:
     do: false
-    time: 6000
-allow-reconnect: true
+    time: 6000  # Initial time (or game time if the daylight cycle is disabled) in ticks. 6000 = noon.
+
 scoreboard: Kill The Patrick
+
 kick-on-death:
     kick: true
     time: 30
+    allow-reconnect: true
+
+gameplay-changes:
+    weather: true
+    replaceGhastTearsWithGold: true
+    craftGoldenMelonWithGoldBlock: true
+    # If true a compass will show the nearest player, and the craft will be different.
+    # Else, the craft will be standard and the compass will show the spawn point of the team/player (not the world spawn point).
+    compass: true

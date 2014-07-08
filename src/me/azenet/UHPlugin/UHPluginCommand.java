@@ -15,6 +15,8 @@ public class UHPluginCommand implements CommandExecutor {
 	private ChatColor ci = ChatColor.WHITE; // info
 	private ChatColor cc = ChatColor.GOLD; // command
 	private ChatColor cs = ChatColor.DARK_GRAY; // success message
+	private ChatColor cst = ChatColor.DARK_GRAY; // status
+
 	
 	public UHPluginCommand(UHPlugin p) {
 		this.p = p;
@@ -146,14 +148,19 @@ public class UHPluginCommand implements CommandExecutor {
 			return;
 		}
 		
-		if(!(sender instanceof Player)) {
-			sender.sendMessage(ce + "This command must be executed by a player.");
-			return;
+		sender.sendMessage(cst + "Generating the walls...");
+		
+		World world = null;
+		
+		if(sender instanceof Player) {
+			world = ((Player) sender).getWorld();
+		}
+		else {
+			world = p.getServer().getWorlds().get(0);
+			sender.sendMessage(ci + "From the console, generating the walls of the default world, " + world.getName());
 		}
 		
-		sender.sendMessage(cs + "Generating the walls...");
 		
-		World world = ((Player) sender).getWorld();;
 		try {
 			p.generateWalls(world);
 		}
@@ -162,7 +169,7 @@ public class UHPluginCommand implements CommandExecutor {
 			e.printStackTrace();
 		}
 		
-		sender.sendMessage(cs + "Generation done.");
+		sender.sendMessage(cst + "Generation done.");
 	}
 
 	/**
@@ -184,7 +191,7 @@ public class UHPluginCommand implements CommandExecutor {
 		if(args.length == 1) { // No coordinates given.
 			if(!(sender instanceof Player)) {
 				sender.sendMessage(ce + "Yo need to specify the coordinates from the console.");
-				sender.sendMessage(ce + "Usage: /uh addspawn x z");
+				sender.sendMessage(ce + "Usage: /uh addspawn <x> <z>");
 				return;
 			}
 			else {
@@ -195,6 +202,7 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		else if(args.length == 2) { // Two coordinates needed!
 			sender.sendMessage(ce + "You need to specify two coordinates.");
+			sender.sendMessage(ce + "Usage: /uh addspawn <x> <z>");
 		}
 		else {
 			p.getGameManager().addLocation(Integer.parseInt(args[1]), Integer.parseInt(args[2]));

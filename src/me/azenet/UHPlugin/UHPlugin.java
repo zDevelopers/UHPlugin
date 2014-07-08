@@ -20,7 +20,6 @@ public final class UHPlugin extends JavaPlugin {
 	private Logger logger = null;
 	private ShapelessRecipe goldenMelon = null;
 	private ShapedRecipe compass = null;
-	private Scoreboard sb = null;
 	private UHTeamManager teamManager = null;
 	private UHGameManager gameManager = null;
 	
@@ -66,15 +65,20 @@ public final class UHPlugin extends JavaPlugin {
 	}
 	
 	public void addRecipes() {
-		// Golden melon: gold block + melon
-		goldenMelon = new ShapelessRecipe(new ItemStack(Material.SPECKLED_MELON));
-		goldenMelon.addIngredient(1, Material.GOLD_BLOCK);
-		goldenMelon.addIngredient(1, Material.MELON);
-		this.getServer().addRecipe(goldenMelon);
+		if(getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock")) {
+			// Golden melon: gold block + melon
+			
+			goldenMelon = new ShapelessRecipe(new ItemStack(Material.SPECKLED_MELON));
+			goldenMelon.addIngredient(1, Material.GOLD_BLOCK);
+			goldenMelon.addIngredient(1, Material.MELON);
+			
+			this.getServer().addRecipe(goldenMelon);
+			logger.info("Added new recipe for golden melon.");
+		}
 		
-		if (getConfig().getBoolean("compass")) {
+		if (getConfig().getBoolean("gameplay-changes.compass")) {
 			// Compass: redstone in center;
-			// then from the top, clockwise, iron, spider eye, iron, rotten flesh, iron, bone, iron, gun powder. 
+			// then from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gun powder. 
 			
 			compass = new ShapedRecipe(new ItemStack(Material.COMPASS));
 			compass.shape(new String[] {"CIE", "IRI", "BIF"});
@@ -86,6 +90,7 @@ public final class UHPlugin extends JavaPlugin {
 			compass.setIngredient('F', Material.ROTTEN_FLESH);
 			
 			this.getServer().addRecipe(compass);
+			logger.info("Added new recipe for compass.");
 		}
 	}
 
