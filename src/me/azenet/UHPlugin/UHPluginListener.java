@@ -51,12 +51,22 @@ public class UHPluginListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerDeath(final PlayerDeathEvent ev) {
-		Location l = ev.getEntity().getLocation();
+		// This needs to be executed only if the player die as a player, not a spectator.
+		// Also, the game needs to be started.
+		if(p.getGameManager().isPlayerDead(ev.getEntity().getName()) || !p.getGameManager().isGameRunning()) {
+			return;
+		}
+		
+		// Plays sound.
 		Player[] ps = Bukkit.getServer().getOnlinePlayers();
 		for (Player pp : ps) {
 			pp.playSound(pp.getLocation(), Sound.WITHER_SPAWN, 1F, 1F);
 		}
+		
+		// Removes the player from the alive players.
 		this.p.getGameManager().addDead(ev.getEntity().getName());
+		
+		// Updates the scoreboard.
 		Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
 			
 			@Override
@@ -64,6 +74,8 @@ public class UHPluginListener implements Listener {
 				p.getGameManager().setLifeInScoreboard((Player)ev.getEntity(), 0);
 			}
 		}, 1L);
+		
+		// Kicks the player if needed.
 		if (this.p.getConfig().getBoolean("kick-on-death.kick", true)) {
 			Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
 				
@@ -74,6 +86,8 @@ public class UHPluginListener implements Listener {
 			}, 20L*this.p.getConfig().getInt("kick-on-death.time", 30));
 		}
 		
+		// Drops the skull of the player.
+		Location l = ev.getEntity().getLocation();
 		try { 
 			ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
 			SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
@@ -84,12 +98,29 @@ public class UHPluginListener implements Listener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		// Send a team-death message if needed.
+		if(p.getConfig().getBoolean("death-messages.notifyIfTeamHasFallen")) {
+			UHTeam team = p.getTeamManager().getTeamForPlayer(ev.getEntity());
+			boolean isAliveTeam = false;
+			
+			for(Player player : team.getPlayers()) {
+				if(!p.getGameManager().isPlayerDead(player.getName())) {
+					isAliveTeam = true;
+					break;
+				}
+			}
+			
+			if(!isAliveTeam) {
+				p.getServer().broadcastMessage(ChatColor.GOLD + "The team " + team.getChatColor() + team.getDisplayName() + ChatColor.GOLD + " has fallen!");
+			}
+		}
 
 	}
 	
 	@EventHandler
 	public void onPlayerPickupItem(PlayerPickupItemEvent ev) {
-		if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
+		if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL) && p.getConfig().getBoolean("gameplay-changes.replaceGhastTearsWithGold")) {
 			ev.setCancelled(true);
 		}
 		p.getGameManager().updatePlayerListName(ev.getPlayer());

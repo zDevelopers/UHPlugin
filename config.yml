@@ -17,6 +17,9 @@ kick-on-death:
     time: 30
     allow-reconnect: true
 
+death-messages:
+    notifyIfTeamHasFallen: true
+
 gameplay-changes:
     weather: true
     
