@@ -27,19 +27,22 @@ public class UHGameManager {
 	
 	private UHPlugin p = null;
 	private UHTeamManager tm = null;
+	private Scoreboard sb = null;
+
+	private Random random = null;
+	
+	private String sbobjname = "KTP";
+	private NumberFormat formatter = new DecimalFormat("00");
+	private Boolean damageIsOn = false;
 
 	private LinkedList<Location> loc = new LinkedList<Location>();
-	private Random random = null;
-	private Integer episode = 0;
-	private Boolean gameRunning = false;
-	private Scoreboard sb = null;
-	private Integer minutesLeft = 0;
-	private Integer secondsLeft = 0;
-	private NumberFormat formatter = new DecimalFormat("00");
-	private String sbobjname = "KTP";
-	private Boolean damageIsOn = false;
 	private ArrayList<UHTeam> teams = new ArrayList<UHTeam>();
 	private HashSet<String> alivePlayers = new HashSet<String>();
+	
+	private Boolean gameRunning = false;
+	private Integer episode = 0;
+	private Integer minutesLeft = 0;
+	private Integer secondsLeft = 0;
 	
 	
 	public UHGameManager(UHPlugin plugin) {
@@ -202,9 +205,6 @@ public class UHGameManager {
 					secondsLeft = 59;
 				}
 				if (minutesLeft == -1) {
-					minutesLeft = getEpisodeLength();
-					secondsLeft = 0;
-					Bukkit.getServer().broadcastMessage(ChatColor.AQUA+"-------- Fin episode "+episode+" --------");
 					shiftEpisode();
 				}
 			} 
@@ -234,20 +234,26 @@ public class UHGameManager {
 	/**
 	 * Shifts an episode.
 	 * 
-	 * @param shifter The player who shifts the episode.
+	 * @param shifter The player who shifts the episode, an empty string if the episode is shifted because the timer is up.
 	 */
-	public void shiftEpisode(Player shifter) {
-		Bukkit.getServer().broadcastMessage(ChatColor.AQUA+"-------- Fin episode "+episode+" [forcé par "+shifter.getName()+"] --------");
+	public void shiftEpisode(String shifter) {
+		String message = ChatColor.AQUA + "-------- Fin de l'épisode " + episode;
+		if(!shifter.equals("")) {
+			message += " [forcé par " + shifter + "]";
+		}
+		message += " --------";
+		p.getServer().broadcastMessage(message);
+		
 		this.episode++;
 		this.minutesLeft = getEpisodeLength();
 		this.secondsLeft = 0;
 	}
 	
 	/**
-	 * Shift an episode from the console.
+	 * Shift an episode because the timer is up.
 	 */
 	public void shiftEpisode() {
-		shiftEpisode((Player) Bukkit.getOfflinePlayer("la console"));
+		shiftEpisode("");
 	}
 
 	

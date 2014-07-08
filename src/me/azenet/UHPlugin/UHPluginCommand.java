@@ -200,7 +200,6 @@ public class UHPluginCommand implements CommandExecutor {
 			p.getGameManager().addLocation(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 			sender.sendMessage(cs + "Spawn added: " + args[1] + "," + args[2]);
 		}
-		
 	}
 	
 	/**
@@ -355,10 +354,10 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		if(p.getGameManager().isGameRunning()) {
 			if(sender instanceof Player) {
-				p.getGameManager().shiftEpisode((Player) sender);
+				p.getGameManager().shiftEpisode((((Player) sender).getName()));
 			}
 			else {
-				p.getGameManager().shiftEpisode();
+				p.getGameManager().shiftEpisode("la console");
 			}
 		}
 		else {
