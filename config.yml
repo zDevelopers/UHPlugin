@@ -33,7 +33,9 @@ gameplay-changes:
         doFromWither: true
         craftNotchApple: false
         addLore: true
-        numberCrafted: 3
+        numberCrafted:
+            fromPlayer: 3
+            fromWither: 1
     
     
     disableEnderpearlsDamages: true
