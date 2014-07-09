@@ -142,9 +142,9 @@ public class UHGameManager {
 	
 	/**
 	 * Starts the game.
-	 *  - Teleport the teams
-	 *  - Change the gamemode, reset the life, clear inventories, etc.
-	 *  - Launch the timer
+	 *  - Teleports the teams
+	 *  - Changes the gamemode, reset the life, clear inventories, etc.
+	 *  - Launches the timer
 	 */
 	public void start(CommandSender sender) {
 		// We adds all the connected players to a list of alive players.
@@ -251,7 +251,9 @@ public class UHGameManager {
 	
 	public void updateAliveCounters() {
 		this.alivePlayersCount = alivePlayers.size();
-		this.aliveTeamsCount = this.getAliveTeams().size();
+		this.aliveTeamsCount = getAliveTeams().size();
+		
+		this.setMatchInfo();
 	}
 	
 	/**

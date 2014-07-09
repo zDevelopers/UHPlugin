@@ -30,7 +30,7 @@ public class TeamStartTask extends BukkitRunnable {
 			player.setGameMode(GameMode.SURVIVAL);
 			player.setHealth(20);
 			player.setFoodLevel(20);
-			player.setExhaustion(5F);
+			player.setSaturation(14);
 			player.getInventory().clear();
 			player.getInventory().setArmorContents(new ItemStack[] {new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
 			player.setExp(0L+0F);

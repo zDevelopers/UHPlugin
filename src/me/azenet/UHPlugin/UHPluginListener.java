@@ -20,8 +20,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -177,6 +179,9 @@ public class UHPluginListener implements Listener {
 			ev.getPlayer().setGameMode(GameMode.CREATIVE);
 			Location l = ev.getPlayer().getWorld().getSpawnLocation();
 			ev.getPlayer().teleport(l.add(0,1,0));
+			
+			ev.getPlayer().setFoodLevel(20);
+			ev.getPlayer().setSaturation(14);
 		}
 		p.getGameManager().addToScoreboard(ev.getPlayer());
 		Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
@@ -386,6 +391,21 @@ public class UHPluginListener implements Listener {
 					p.getGameManager().updatePlayerListName((Player)ev.getEntity());
 				}
 			}, 1L);
+		}
+	}
+	
+	/**
+	 * Used to prevent the food level from dropping if the game has not started.
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onFoodUpdate(FoodLevelChangeEvent ev) {
+		if(!p.getGameManager().isGameRunning()) {
+			((Player) ev.getEntity()).setFoodLevel(20);
+			((Player) ev.getEntity()).setSaturation(14);
+
+			ev.setCancelled(true);
 		}
 	}
 	

@@ -92,7 +92,6 @@ public final class UHPlugin extends JavaPlugin {
 				goldenAppleFromWitherHead.setIngredient('H', Material.SKULL_ITEM, SkullType.WITHER.ordinal()); // TODO: deprecated, but no alternative found...
 				
 				this.getServer().addRecipe(goldenAppleFromWitherHead);
-
 			}
 			
 			logger.info("Added new recipes for golden apple.");
