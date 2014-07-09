@@ -7,18 +7,19 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
 
+import me.azenet.UHPlugin.task.TeamStartTask;
+import me.azenet.UHPlugin.task.UpdateTimerTask;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -39,10 +40,17 @@ public class UHGameManager {
 	private ArrayList<UHTeam> teams = new ArrayList<UHTeam>();
 	private HashSet<String> alivePlayers = new HashSet<String>();
 	
+	private Integer alivePlayersCount = 0;
+	private Integer aliveTeamsCount = 0;
+	
+	private Boolean gameWithTeams = true;
+	
 	private Boolean gameRunning = false;
 	private Integer episode = 0;
 	private Integer minutesLeft = 0;
 	private Integer secondsLeft = 0;
+	
+	private BukkitTask updateTimerTask = null;
 	
 	
 	public UHGameManager(UHPlugin plugin) {
@@ -78,9 +86,9 @@ public class UHGameManager {
 			obj = sb.getObjective(sbobjname);
 			obj.setDisplaySlot(null);
 			obj.unregister();
-		} catch (Exception e) {
-			
 		}
+		catch (Exception e) { }
+		
 		Random r = new Random();
 		sbobjname = "KTP"+r.nextInt(10000000);
 		obj = sb.registerNewObjective(sbobjname, "dummy");
@@ -88,9 +96,14 @@ public class UHGameManager {
 
 		obj.setDisplayName(this.getScoreboardName());
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+		
 		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY+"Episode "+ChatColor.WHITE+episode)).setScore(5);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+alivePlayers.size()+ChatColor.GRAY+" joueurs")).setScore(4);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+getAliveTeams().size()+ChatColor.GRAY+" teams")).setScore(3);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+alivePlayersCount+ChatColor.GRAY+" joueurs")).setScore(4);
+		
+		if(this.gameWithTeams) {
+			obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+aliveTeamsCount+ChatColor.GRAY+" équipes")).setScore(3);
+		}
+		
 		obj.getScore(Bukkit.getOfflinePlayer("")).setScore(2);
 		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+formatter.format(this.minutesLeft)+ChatColor.GRAY+":"+ChatColor.WHITE+formatter.format(this.secondsLeft))).setScore(1);
 	}
@@ -100,7 +113,7 @@ public class UHGameManager {
 	}
 	
 	public String getScoreboardName() {
-		String s = p.getConfig().getString("scoreboard", "Kill The Patrick");
+		String s = p.getConfig().getString("scoreboard", "Kill the Patrick");
 		return s.substring(0, Math.min(s.length(), 16));
 	}
 	
@@ -139,88 +152,83 @@ public class UHGameManager {
 		for(final Player player : p.getServer().getOnlinePlayers()) {
 			alivePlayers.add(player.getName());
 		}
+		this.alivePlayersCount = alivePlayers.size();
 		
 		// No team? We creates a team per player.
-		if(tm.getTeams().size() == 0) { 
+		if(tm.getTeams().size() == 0) {
+			this.gameWithTeams = false;
+			
 			for(final Player player : p.getServer().getOnlinePlayers()) {
 				UHTeam team = new UHTeam(player.getName(), player.getName(), ChatColor.WHITE, this.p);
 				team.addPlayer(player);
 				tm.addTeam(team);
 			}
 		}
+		// With teams? We adds players without teams to a solo team.
+		else {
+			this.gameWithTeams = true;
+			
+			for(final Player player : p.getServer().getOnlinePlayers()) {
+				if(tm.getTeamForPlayer(player) == null) {
+					UHTeam team = new UHTeam(player.getName(), player.getName(), ChatColor.WHITE, this.p);
+					team.addPlayer(player);
+					tm.addTeam(team);
+				}
+			}
+		}
+		
+		this.aliveTeamsCount = tm.getTeams().size();
+		
+		p.getLogger().info("[start] " + aliveTeamsCount + " teams");
+		p.getLogger().info("[start] " + alivePlayersCount + " players");
 		
 		if(loc.size() < tm.getTeams().size()) {
 			sender.sendMessage(ChatColor.RED + "Unable to start the game: not enough teleportation spots.");
 			return;
 		}
 		
+		
 		LinkedList<Location> unusedTP = loc;
-		for (final UHTeam t : teams) {
+		for (final UHTeam t : tm.getTeams()) {
 			final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
-			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
-
-				@Override
-				public void run() {
-					t.teleportTo(lo);
-					for (Player player : t.getPlayers()) {
-						player.setGameMode(GameMode.SURVIVAL);
-						player.setHealth(20);
-						player.setFoodLevel(20);
-						player.setExhaustion(5F);
-						player.getInventory().clear();
-						player.getInventory().setArmorContents(new ItemStack[] {new ItemStack(Material.AIR), new ItemStack(Material.AIR), 
-								new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
-						player.setExp(0L+0F);
-						player.setLevel(0);
-						player.closeInventory();
-						player.getActivePotionEffects().clear();
-						player.setCompassTarget(lo);
-						setLifeInScoreboard(player, 20);
-					}
-				}
-			}, 10L);
+			
+			p.getLogger().info("[start] Launching TP for team " + t.getName());
+			
+			BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo);
+			teamStartTask.runTaskLater(p, 10L);
 			
 			unusedTP.remove(lo);
 		}
 		
 		World w = p.getServer().getWorlds().get(0);
 		
-		w.setGameRuleValue("doDaylightCycle", ((Boolean)p.getConfig().getBoolean("daylightCycle.do")).toString());
-		w.setGameRuleValue("keepInventory", ((Boolean)false).toString()); // Just in case...
+		w.setGameRuleValue("doDaylightCycle", ((Boolean) p.getConfig().getBoolean("daylightCycle.do")).toString());
+		w.setGameRuleValue("keepInventory", ((Boolean) false).toString()); // Just in case...
 		
 		w.setTime(p.getConfig().getLong("daylightCycle.time"));
 		w.setStorm(false);
 		w.setDifficulty(Difficulty.HARD);
+		
 		this.episode = 1;
 		this.minutesLeft = getEpisodeLength();
 		this.secondsLeft = 0;
 		
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(p, new BukkitRunnable() {
-			@Override
-			public void run() {
-				setMatchInfo();
-				secondsLeft--;
-				if (secondsLeft == -1) {
-					minutesLeft--;
-					secondsLeft = 59;
-				}
-				if (minutesLeft == -1) {
-					shiftEpisode();
-				}
-			} 
-		}, 20L, 20L);
+		BukkitRunnable updateTimer = new UpdateTimerTask(p);
+		this.updateTimerTask = updateTimer.runTaskTimer(p, 20L, 20L);
+		
+		p.getLogger().info("[start] UpdateTimer task launched");
 		
 		
 		// 30 seconds later, damages are enabled.
 		Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
-
 			@Override
 			public void run() {
 				damageIsOn = true;
+				p.getLogger().info("[start] Immunity ended.");
 			}
 		}, 600L);
 		
-		Bukkit.getServer().broadcastMessage(ChatColor.GREEN+"--- GO ---");
+		Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "--- GO ---");
 		this.gameRunning = true;
 	}
 	
@@ -230,6 +238,21 @@ public class UHGameManager {
 	
 	
 	
+	public void updateTimer() {
+		secondsLeft--;
+		if (secondsLeft == -1) {
+			minutesLeft--;
+			secondsLeft = 59;
+		}
+		if (minutesLeft == -1) {
+			shiftEpisode();
+		}
+	}
+	
+	public void updateAliveCounters() {
+		this.alivePlayersCount = alivePlayers.size();
+		this.aliveTeamsCount = this.getAliveTeams().size();
+	}
 	
 	/**
 	 * Shifts an episode.

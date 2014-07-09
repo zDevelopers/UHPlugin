@@ -24,7 +24,7 @@
 - Enregistrer périodiquement les positions des joueurs pour pouvoir faire /uh revive et les re-TP même en cas de solo (quid des morts dans la lave ? Donner 30 sec d'invulnérabilité au joueur en question ?)
 - Ne pas couper le titre du jeu (actuellement coupé à 16 caractères) si possible.
 - [OK] Corriger le bug d'arrondi des cœurs.
-- Remplacer « team » par « équipe ». PARTOUT.
+- [OK] Remplacer « team » par « équipe ». PARTOUT.
 - Ne pas perdre de la faim avant le début du jeu.
 - Les OPs peuvent placer des blocs même avant le début
 - [PARTIAL] Commenter le code

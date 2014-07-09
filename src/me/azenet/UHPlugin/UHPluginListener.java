@@ -3,7 +3,6 @@ package me.azenet.UHPlugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,7 +23,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -58,7 +56,8 @@ public class UHPluginListener implements Listener {
 	 *  - kick the player (if needed);
 	 *  - broadcast a team-death message (if needed);
 	 *  - increase visibility of the death message (if needed);
-	 *  - drop the skull of the dead player (if needed).
+	 *  - drop the skull of the dead player (if needed);
+	 *  - update the number of alive players/teams.
 	 *  
 	 * @param ev
 	 */
@@ -113,7 +112,7 @@ public class UHPluginListener implements Listener {
 			e.printStackTrace();
 		}
 		
-		// Send a team-death message if needed.
+		// Sends a team-death message if needed.
 		if(p.getConfig().getBoolean("death-messages.notifyIfTeamHasFallen", false)) {
 			UHTeam team = p.getTeamManager().getTeamForPlayer(ev.getEntity());
 			boolean isAliveTeam = false;
@@ -131,7 +130,9 @@ public class UHPluginListener implements Listener {
 		}
 		
 		ev.setDeathMessage(p.getConfig().getString("death-messages.deathMessagesPrefix", "") + ev.getDeathMessage());
-
+		
+		// Updates the number of alive players/teams
+		p.getGameManager().updateAliveCounters();
 	}
 	
 	
