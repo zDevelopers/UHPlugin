@@ -358,7 +358,7 @@ public class UHPluginListener implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerTeleport(final PlayerTeleportEvent ev) {
-		if(p.getConfig().getBoolean("gameplay-change.disableEnderpearlsDamages")) {
+		if(p.getConfig().getBoolean("gameplay-changes.disableEnderpearlsDamages")) {
 			Player player = ev.getPlayer();
 			TeleportCause cause = ev.getCause();
 			Location target = ev.getTo();
