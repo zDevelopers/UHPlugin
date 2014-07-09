@@ -53,6 +53,14 @@ public class UHPluginCommand implements CommandExecutor {
 			doGenerateWalls(sender, command, label, args);
 			return true;
 		}
+		else if(args[0].equalsIgnoreCase("heal")) {
+			doHeal(sender, command, label, args);
+			return true;
+		}
+		else if(args[0].equalsIgnoreCase("healall")) {
+			doHealAll(sender, command, label, args);
+			return true;
+		}
 		
 		else {
 			help(sender, true);
@@ -69,16 +77,21 @@ public class UHPluginCommand implements CommandExecutor {
 	private void help(CommandSender sender, boolean error) {
 		if(error) {
 			sender.sendMessage(ce + "This subcommand does not exists.");
-			sender.sendMessage("");
 		}
-		sender.sendMessage(ci + "Available subcommands:");
-		sender.sendMessage(cc + "/uh start " + ci + ": launchs the game");
-		sender.sendMessage(cc + "/uh shift " + ci + ": shifts an episode");
-		sender.sendMessage(cc + "/uh team " + ci + ": manages the teams (execute /uh team for more details)");
-		sender.sendMessage(cc + "/uh addspawn " + ci + ": adds a spawn point for a team or a player, at the current location of the sender");
-		sender.sendMessage(cc + "/uh addspawn <x> <z> " + ci + ": adds a spawn point for a team or a player, at the provided coordinates");
-		sender.sendMessage(cc + "/uh generatewalls " + ci + ": generates the walls according to the configuration");
+		sender.sendMessage(ci + "Available subcommands are listed below.");
 		sender.sendMessage("");
+		sender.sendMessage(ChatColor.GRAY + "------ Game-related commands ------");
+		sender.sendMessage(cc + "/uh start " + ci + ": launchs the game.");
+		sender.sendMessage(cc + "/uh shift " + ci + ": shifts an episode.");
+		sender.sendMessage(cc + "/uh team " + ci + ": manages the teams (execute /uh team for more details).");
+		sender.sendMessage(cc + "/uh addspawn " + ci + ": adds a spawn point for a team or a player, at the current location of the sender.");
+		sender.sendMessage(cc + "/uh addspawn <x> <z> " + ci + ": adds a spawn point for a team or a player, at the provided coordinates.");
+		sender.sendMessage(cc + "/uh generatewalls " + ci + ": generates the walls according to the configuration.");
+		sender.sendMessage("");
+		sender.sendMessage(ChatColor.GRAY + "------ Bugs-related commands ------");
+		sender.sendMessage(cc + "/uh heal <player> [half-hearts=20] " + ci + ": heals a player to the number of half-hearts provided, or to 20 without the last argument.");
+		sender.sendMessage(cc + "/uh healall [half-hearts=20] " + ci + ": heals all players instead of only one.");
+		
 		sender.sendMessage(ChatColor.DARK_GRAY + "Tip: you can put one coordinate per line, following the format “x,y” in a “plugins/UHPlugin/positions.txt” file instead of using /uh addspawn each time.");
 	}
 	
@@ -390,6 +403,98 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		else {
 			sender.sendMessage(ce + "You can't shift the current episode because the game is not started.");
+		}
+	}
+	
+	
+	/**
+	 * This command heals a player.
+	 * Usage: /uh heal <player> <half-hearts>
+	 * 
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void doHeal(CommandSender sender, Command command, String label, String[] args) {
+		if(!isAllowed(sender, "heal")) {
+			unauthorized(sender, command);
+			return;
+		}
+		if(args.length < 2 || args.length > 3) {
+			sender.sendMessage(ce + "Usage: /uh heal <player> [number of half-hearts = 20]");
+			return;
+		}
+		
+		Player player = p.getServer().getPlayer(args[1]);
+		if(player == null) {
+			sender.sendMessage(ce + "The player " + args[1] + " is not online.");
+			return;
+		}
+		
+		double health = 0D;
+		
+		if(args.length == 2) { // /uh heal <player> : full life for player.
+			health = 20D;
+		}
+		else { // /uh heal <player> <hearts>
+			try {
+				health = Double.parseDouble(args[2]);
+			}
+			catch(NumberFormatException e) {
+				sender.sendMessage(ce + "Hey, this is not a number of half-hearts. It's a text. Pfff.");
+				return;
+			}
+			
+			if(health <= 0D) {
+				sender.sendMessage(ce + "You can't kill a player with this command, to avoid typo fails.");
+				return;
+			}
+			else if(health > 20D) {
+				health = 20D;
+			}
+		}
+		
+		player.setHealth(health);
+		p.getGameManager().updatePlayerListName(player);
+	}
+	
+	/**
+	 * This command heals all players.
+	 * Usage: /uh healall <half-hearts>
+	 * 
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void doHealAll(CommandSender sender, Command command, String label, String[] args) {
+		if(!isAllowed(sender, "healall")) {
+			unauthorized(sender, command);
+			return;
+		}
+		
+		String healthArg = null;
+		if(args.length == 1) {
+			healthArg = "20";
+		}
+		else {
+			healthArg = args[1];
+		}
+		
+		try {
+			if(Double.parseDouble(healthArg) <= 0D) {
+				sender.sendMessage(ce + "Serial killer!");
+				return;
+			}
+		}
+		catch(NumberFormatException e) { } // See this.doHeal(..) .
+		
+		for(final Player player : p.getServer().getOnlinePlayers()) {
+			String[] argsToHeal = {"heal", player.getName(), healthArg};
+			doHeal(sender, command, label, argsToHeal);
 		}
 	}
 	

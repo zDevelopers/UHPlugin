@@ -10,6 +10,7 @@
 	[OK] /uh team removeplayer <joueur>
 	/uh heal <joueur> <nombre de cœurs=20>
 	/uh hellall <cœurs>
+
 	/uh resurrect <player>
 	/uh tpback <player>
 - Désactiver le spawn de mobs nocifs avant le début de la partie
