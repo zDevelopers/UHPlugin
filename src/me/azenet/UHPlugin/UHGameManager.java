@@ -69,7 +69,7 @@ public class UHGameManager {
 		p.getServer().getWorlds().get(0).setGameRuleValue("doDaylightCycle", "false");
 		p.getServer().getWorlds().get(0).setTime(6000L);
 		p.getServer().getWorlds().get(0).setStorm(false);
-		p.getServer().getWorlds().get(0).setDifficulty(Difficulty.HARD);
+		p.getServer().getWorlds().get(0).setDifficulty(Difficulty.PEACEFUL);
 	}
 	
 	public void initScoreboard() {

@@ -12,7 +12,7 @@
 	[OK] /uh hellall <cœurs>
 	[OK] /uh resurrect <player>
 	/uh tpback <player>
-- Désactiver le spawn de mobs nocifs avant le début de la partie
+- [OK] Désactiver le spawn de mobs nocifs avant le début de la partie
 - Ajouter un mode de démarrage progressif : 
 	/uh start slow : freeze les joueurs et TP les équipes progressivement, les joueurs ont le fly et restent en l'air
 	/uh start slow go : démarre, défreeze, active les mobs, donne l'immunité pour 30s
