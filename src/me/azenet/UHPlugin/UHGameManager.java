@@ -37,7 +37,6 @@ public class UHGameManager {
 	private Boolean damageIsOn = false;
 
 	private LinkedList<Location> loc = new LinkedList<Location>();
-	private ArrayList<UHTeam> teams = new ArrayList<UHTeam>();
 	private HashSet<String> alivePlayers = new HashSet<String>();
 	
 	private Integer alivePlayersCount = 0;
@@ -337,7 +336,7 @@ public class UHGameManager {
 
 	private ArrayList<UHTeam> getAliveTeams() {
 		ArrayList<UHTeam> aliveTeams = new ArrayList<UHTeam>();
-		for (UHTeam t : teams) {
+		for (UHTeam t : tm.getTeams()) {
 			for (Player p : t.getPlayers()) {
 				if (p.isOnline() && !aliveTeams.contains(t)) aliveTeams.add(t);
 			}
