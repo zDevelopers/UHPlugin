@@ -29,8 +29,9 @@ gameplay-changes:
     craftGoldenMelonWithGoldBlock: true
     
     craftGoldenAppleFromHead:
-        do: true
-        doFromWither: true
+        do: 
+            fromHuman: true
+            fromWither: true
         craftNotchApple: false
         addLore: true
         numberCrafted:

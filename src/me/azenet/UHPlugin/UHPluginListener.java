@@ -223,7 +223,7 @@ public class UHPluginListener implements Listener {
 	}
 	
 	/**
-	 * Used to prevent the player to go outside the border.$
+	 * Used to prevent the player to go outside the border.
 	 * TODO improve this by replacing the onPlayerMoveEvent by a regular check, or by
 	 * using the WorldBorder API.
 	 * 
@@ -295,7 +295,7 @@ public class UHPluginListener implements Listener {
 		
 		/** Add a lore to the golden apples crafted from a head **/
 		
-		if(p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do") && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.addLore") && (RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromHead")) || RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromWitherHead")))) {	   	
+		if((p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do.fromHuman") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do.fromWither")) && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.addLore") && (RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromHead")) || RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromWitherHead")))) {	   	
 			ItemStack result = ev.getInventory().getResult();
 			ItemMeta meta = result.getItemMeta();
 			

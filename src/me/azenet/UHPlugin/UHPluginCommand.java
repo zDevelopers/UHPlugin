@@ -14,8 +14,8 @@ public class UHPluginCommand implements CommandExecutor {
 	private ChatColor ce = ChatColor.RED; // error
 	private ChatColor ci = ChatColor.WHITE; // info
 	private ChatColor cc = ChatColor.GOLD; // command
-	private ChatColor cs = ChatColor.DARK_GRAY; // success message
-	private ChatColor cst = ChatColor.DARK_GRAY; // status
+	private ChatColor cs = ChatColor.GREEN; // success message
+	private ChatColor cst = ChatColor.GRAY; // status
 
 	
 	public UHPluginCommand(UHPlugin p) {
