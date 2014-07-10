@@ -1,5 +1,7 @@
 package me.azenet.UHPlugin;
 
+import java.util.ArrayList;
+
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -16,10 +18,29 @@ public class UHPluginCommand implements CommandExecutor {
 	private ChatColor cc = ChatColor.GOLD; // command
 	private ChatColor cs = ChatColor.GREEN; // success message
 	private ChatColor cst = ChatColor.GRAY; // status
-
 	
+	private ArrayList<String> commands = new ArrayList<String>();
+	private ArrayList<String> teamCommands = new ArrayList<String>();
+
+
 	public UHPluginCommand(UHPlugin p) {
 		this.p = p;
+		
+		commands.add("start");
+		commands.add("shift");
+		commands.add("team");
+		commands.add("addspawn");
+		commands.add("generatewalls");
+		commands.add("heal");
+		commands.add("healall");
+		commands.add("resurrect");
+		
+		teamCommands.add("add");
+		teamCommands.add("remove");
+		teamCommands.add("addplayer");
+		teamCommands.add("removeplayer");
+		teamCommands.add("list");
+		teamCommands.add("reset");
 	}
 
 	@Override
@@ -532,6 +553,17 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		p.getGameManager().resurrect(player);
 		
+	}
+	
+	
+	
+	
+	public ArrayList<String> getCommands() {
+		return commands;
+	}
+
+	public ArrayList<String> getTeamCommands() {
+		return teamCommands;
 	}
 	
 }

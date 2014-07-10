@@ -26,7 +26,8 @@ public final class UHPlugin extends JavaPlugin {
 	private ShapelessRecipe goldenAppleLoreRemover = null;
 	private UHTeamManager teamManager = null;
 	private UHGameManager gameManager = null;
-	
+	private UHPluginCommand commandManager = null;
+
 	@Override
 	public void onEnable() {
 		this.saveDefaultConfig();
@@ -35,7 +36,10 @@ public final class UHPlugin extends JavaPlugin {
 		teamManager = new UHTeamManager(this);
 		gameManager = new UHGameManager(this);
 		
-		getCommand("uh").setExecutor(new UHPluginCommand(this));
+		commandManager = new UHPluginCommand(this);
+		getCommand("uh").setExecutor(commandManager);
+		getCommand("uh").setTabCompleter(new UHTabCompleter(this));
+		
 		getServer().getPluginManager().registerEvents(new UHPluginListener(this), this);
 		
 		addRecipes();
@@ -205,4 +209,7 @@ public final class UHPlugin extends JavaPlugin {
 		return gameManager;
 	}
 	
+	public UHPluginCommand getCommandManager() {
+		return commandManager;
+	}
 }
