@@ -20,7 +20,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
@@ -337,7 +336,9 @@ public class UHPluginListener implements Listener {
 
 	
 	/**
-	 * Used to update the scoreboard.
+	 * Used to:
+	 *  - update the scoreboard;
+	 *  - disable any damages if the game has not started.
 	 * 
 	 * @param ev
 	 */

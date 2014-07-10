@@ -282,7 +282,25 @@ public class UHGameManager {
 	}
 
 	
-	
+	/**
+	 * Resurrect a player
+	 * 
+	 * @param player
+	 * @return true if the player was dead, false otherwise.
+	 */
+	public boolean resurrect(Player player) {
+		if(!this.isPlayerDead(player.getName())) {
+			return false;
+		}
+		
+		this.alivePlayers.add(player.getName());
+		this.updateAliveCounters();
+		this.updatePlayerListName(player);
+		
+		this.p.getServer().broadcastMessage(ChatColor.GOLD + player.getName() + " returned from the dead!");
+		
+		return true;
+	}
 	
 	
 	

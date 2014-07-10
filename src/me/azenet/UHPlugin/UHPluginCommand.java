@@ -61,6 +61,10 @@ public class UHPluginCommand implements CommandExecutor {
 			doHealAll(sender, command, label, args);
 			return true;
 		}
+		else if(args[0].equalsIgnoreCase("resurrect")) {
+			doResurrect(sender, command, label, args);
+			return true;
+		}
 		
 		else {
 			help(sender, true);
@@ -91,8 +95,9 @@ public class UHPluginCommand implements CommandExecutor {
 		sender.sendMessage(ChatColor.GRAY + "------ Bugs-related commands ------");
 		sender.sendMessage(cc + "/uh heal <player> [half-hearts=20] " + ci + ": heals a player to the number of half-hearts provided, or to 20 without the last argument.");
 		sender.sendMessage(cc + "/uh healall [half-hearts=20] " + ci + ": heals all players instead of only one.");
-		
-		sender.sendMessage(ChatColor.DARK_GRAY + "Tip: you can put one coordinate per line, following the format “x,y” in a “plugins/UHPlugin/positions.txt” file instead of using /uh addspawn each time.");
+		sender.sendMessage(cc + "/uh resurrect <player> " + ci + ": resurrects a player.");
+		sender.sendMessage("");
+		sender.sendMessage(ChatColor.GRAY + "Tip: you can put one coordinate per line, following the format “x,y” in a “plugins/UHPlugin/positions.txt” file instead of using /uh addspawn each time.");
 	}
 	
 	/**
@@ -496,6 +501,37 @@ public class UHPluginCommand implements CommandExecutor {
 			String[] argsToHeal = {"heal", player.getName(), healthArg};
 			doHeal(sender, command, label, argsToHeal);
 		}
+	}
+	
+	
+	/**
+	 * This command resurrect a player.
+	 * Usage: /uh resurrect <player>
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void doResurrect(CommandSender sender, Command command, String label, String[] args) {
+		if(!isAllowed(sender, "resurrect")) {
+			unauthorized(sender, command);
+			return;
+		}
+		
+		if(args.length != 2) {
+			sender.sendMessage(ce + "Usage: /uh resurrect <player>");
+			return;
+		}
+		
+		Player player = p.getServer().getPlayer(args[1]);
+		if(player == null) {
+			sender.sendMessage(ce + "The player " + args[1] + " is not online.");
+			return;
+		}
+		
+		p.getGameManager().resurrect(player);
+		
 	}
 	
 }
