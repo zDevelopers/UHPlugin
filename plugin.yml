@@ -4,5 +4,46 @@ version: 0.1
 
 commands:
    uh:
-      description: Ultra Harcore
+      description: Ultra Harcore base command
       usage: /uh <subcommand>
+
+permissions:
+    uh.*:
+        description: Gives access to all Ultra Hardcore commands.
+        children:
+            uh.build: true
+            uh.start: true
+            uh.shift: true
+            uh.team: true
+            uh.addspawn: true
+            uh.generatewalls: true
+            uh.heal: true
+            uh.healall: true
+            uh.resurrect: true
+    uh.build:
+        description: Allows an user to build before the beginning of the game
+        default: op
+    uh.start:
+        description: Allows an user to start the game with /uh start
+        default: op
+    uh.shift:
+        description: Allows an user to shift an episode using /uh shift
+        default: op
+    uh.team:
+        description: Allows an user to manage the teams with /uh team *
+        default: op
+    uh.addspawn:
+        description: Allows an user to add a spawn point
+        default: op
+    uh.generatewalls:
+        description: Allows an user to generate the walls around the map
+        default: op
+    uh.heal:
+        description: Allows an user to heal a player using /uh heal <player> [half-hearts]
+        default: op
+    uh.healall:
+        description: Allows an user to heal ALL players using /uh healall [half-hearts]
+        default: op
+    uh.resurrect:
+        description: Allows an user to resurrect an other player with /uh resurrect <player>
+        default: op

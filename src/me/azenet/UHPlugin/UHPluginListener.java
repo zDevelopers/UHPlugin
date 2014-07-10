@@ -205,7 +205,9 @@ public class UHPluginListener implements Listener {
 	 */
 	@EventHandler
 	public void onBlockBreakEvent(final BlockBreakEvent ev) {
-		if (!this.p.getGameManager().isGameRunning()) ev.setCancelled(true);
+		if (!this.p.getGameManager().isGameRunning() && !((Player)ev.getPlayer()).hasPermission("uh.build")) {
+			ev.setCancelled(true);
+		}
 	}
 	
 	/**
@@ -215,7 +217,9 @@ public class UHPluginListener implements Listener {
 	 */
 	@EventHandler
 	public void onBlockPlaceEvent(final BlockPlaceEvent ev) {
-		if (!this.p.getGameManager().isGameRunning()) ev.setCancelled(true);
+		if (!this.p.getGameManager().isGameRunning() && !((Player)ev.getPlayer()).hasPermission("uh.build")) {
+			ev.setCancelled(true);
+		}
 	}
 	
 	/**
