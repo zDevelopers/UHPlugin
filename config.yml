@@ -44,3 +44,18 @@ gameplay-changes:
     # If true a compass will show the nearest player, and the craft will be different.
     # Else, the craft will be standard and the compass will show the spawn point of the team/player (not the world spawn point).
     compass: true
+
+
+
+# Use this to set the spawnpoints of the teams (or the players)
+# You can also use the command /uh addspawn (see /uh for documentation) to add temporary spawn points.
+# (The spawn points added through /uh addspawn are deleted when the server is stopped.)
+#
+# Format:
+#     - x,z
+#     - x,z
+#     - etc.
+
+spawnpoints:
+    -
+ 

@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -49,25 +50,24 @@ public final class UHPlugin extends JavaPlugin {
 		gameManager.setMatchInfo();
 		gameManager.initEnvironment();
 		
+		// In case of reload
+		for(Player player : getServer().getOnlinePlayers()) {
+			gameManager.setScoreboardForPlayer(player);
+		}
 		
-		File positions = new File("plugins/UHPlugin/positions.txt");
-		if (positions.exists()) {
-			BufferedReader br = null;
-			try {
-				br = new BufferedReader(new FileReader(positions));
-				String line;
-				while ((line = br.readLine()) != null) {
-					String[] l = line.split(",");
-					getLogger().info("Adding position "+Integer.parseInt(l[0])+","+Integer.parseInt(l[1])+" from positions.txt");
-					gameManager.addLocation(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
+		// Import spawnpoints from config
+		if(getConfig().getList("spawnpoints") != null) {
+			for(Object position : getConfig().getList("spawnpoints")) {
+				if(position instanceof String && position != null) {
+					String[] coords = ((String) position).split(",");
+					try {
+						gameManager.addLocation(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+						getLogger().info("Spawn point " + Integer.parseInt(coords[0]) + "," + Integer.parseInt(coords[1]) + " added from the config file.");
+					} catch(Exception e) { // Not an integer or not enough coords
+						getLogger().warning("Invalid spawn point set in config: " + ((String) position));
+					}
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				try { if (br != null) br.close(); }
-				catch (Exception e) { e.printStackTrace(); } //c tré l'inline
 			}
-			
 		}
 		
 		logger.info("UHPlugin loaded");

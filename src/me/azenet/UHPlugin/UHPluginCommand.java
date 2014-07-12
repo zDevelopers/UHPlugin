@@ -108,7 +108,8 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(ce + "This subcommand does not exists.");
 		}
 		
-		sender.sendMessage(ci + "Available subcommands are listed below. Legend: " + cc + "/uh command <required> [optional=default]" + ci + ".");
+		sender.sendMessage(ci + "Available subcommands are listed below.");
+		sender.sendMessage(ci + "Legend: " + cc + "/uh command <required> [optional=default]" + ci + ".");
 		sender.sendMessage(ChatColor.GRAY + "------ Game-related commands ------");
 		sender.sendMessage(cc + "/uh start " + ci + ": launchs the game.");
 		sender.sendMessage(cc + "/uh shift " + ci + ": shifts an episode.");
@@ -120,7 +121,6 @@ public class UHPluginCommand implements CommandExecutor {
 		sender.sendMessage(cc + "/uh heal <player> [half-hearts=20] " + ci + ": heals a player to the number of half-hearts provided (default 20).");
 		sender.sendMessage(cc + "/uh healall [half-hearts=20] " + ci + ": heals all players instead of only one.");
 		sender.sendMessage(cc + "/uh resurrect <player> " + ci + ": resurrects a player.");
-		sender.sendMessage(ChatColor.GRAY + "Tip: you can put one coordinate per line, following the format “x,y” in a “plugins/UHPlugin/positions.txt” file instead of using /uh addspawn each time.");
 	}
 	
 	/**
