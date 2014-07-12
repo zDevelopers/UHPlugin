@@ -4,7 +4,7 @@ map:
     size: 2000
     wall:
         height: 128
-        block: 7
+        block: BEDROCK
 
 daylightCycle:
     do: false

@@ -195,7 +195,11 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		
 		try {
-			p.generateWalls(world);
+			Boolean success = p.generateWalls(world);
+			
+			if(!success) {
+				sender.sendMessage(ce + "Unable to generate the wall: the block set in the config is not valid.");
+			}
 		}
 		catch(Exception e) {
 			sender.sendMessage(ce + "An error occured, see console for details.");

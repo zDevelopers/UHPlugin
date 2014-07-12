@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -166,10 +167,15 @@ public final class UHPlugin extends JavaPlugin {
 	 * 
 	 * @throws Exception
 	 */
-	public void generateWalls(World w) {
+	public boolean generateWalls(World w) {
 		Integer halfMapSize = (int) Math.floor(this.getConfig().getInt("map.size")/2);
 		Integer wallHeight = this.getConfig().getInt("map.wall.height");
-		Material wallBlock = Material.getMaterial(this.getConfig().getInt("map.wall.block"));
+		Material wallBlock = Material.getMaterial(this.getConfig().getString("map.wall.block").toUpperCase());
+		
+		if(wallBlock == null || !wallBlock.isSolid()) {
+			logger.severe("Unable to build the wall, the block set in the config file is invalid.");
+			return false;
+		}
 		
 		Location spawn = w.getSpawnLocation();
 		Integer limitXInf = spawn.add(-halfMapSize, 0, 0).getBlockX();
@@ -200,6 +206,8 @@ public final class UHPlugin extends JavaPlugin {
 				w.getBlockAt(limitXSup, y, z).setType(wallBlock);
 			}
 		}
+		
+		return true;
 	}
 	
 	public UHTeamManager getTeamManager() {
