@@ -1,7 +1,10 @@
 package me.azenet.UHPlugin;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -43,6 +46,7 @@ public class UHPluginCommand implements CommandExecutor {
 		teamCommands.add("reset");
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!command.getName().equalsIgnoreCase("uh")) {
@@ -54,42 +58,40 @@ public class UHPluginCommand implements CommandExecutor {
 			return true;
 		}
 		
-		if(args[0].equalsIgnoreCase("start")) {
-			doStart(sender, command, label, args);
-			return true;
-		}
-		else if(args[0].equalsIgnoreCase("shift")) {
-			doShift(sender, command, label, args);
-			return true;
-		}
-		else if(args[0].equalsIgnoreCase("team")) {
-			doTeam(sender, command, label, args);
-			return true;
-		}
-		else if(args[0].equalsIgnoreCase("addspawn")) {
-			doAddSpawn(sender, command, label, args);
-			return true;
-		}
-		else if(args[0].equalsIgnoreCase("generatewalls")) {
-			doGenerateWalls(sender, command, label, args);
-			return true;
-		}
-		else if(args[0].equalsIgnoreCase("heal")) {
-			doHeal(sender, command, label, args);
-			return true;
-		}
-		else if(args[0].equalsIgnoreCase("healall")) {
-			doHealAll(sender, command, label, args);
-			return true;
-		}
-		else if(args[0].equalsIgnoreCase("resurrect")) {
-			doResurrect(sender, command, label, args);
+		String subcommandName = args[0].toLowerCase();
+		
+		// First: subcommand existence.
+		if(!this.commands.contains(subcommandName)) {
+			help(sender, true);
 			return true;
 		}
 		
-		else {
+		// Second: is the sender allowed?
+		if(!isAllowed(sender, subcommandName)) {
+			unauthorized(sender, command);
+			return true;
+		}
+		
+		// Third: instantiation
+		try {
+			Class<? extends UHPluginCommand> cl = this.getClass();
+			Class[] parametersTypes = new Class[]{CommandSender.class, Command.class, String.class, String[].class};
+			
+			Method doMethod = cl.getDeclaredMethod("do" + WordUtils.capitalize(subcommandName), parametersTypes);
+			
+			doMethod.invoke(this, new Object[]{sender, command, label, args});
+			
+			return true;
+			
+		} catch (NoSuchMethodException e) {
+			// Unknown method => unknown subcommand.
 			help(sender, true);
 			return true;
+			
+		} catch(SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			sender.sendMessage(ce + "An error occured, see console for details. This is probably a bug.");
+			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -100,11 +102,13 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param error True if the help is printed because the used typed an unknown command.
 	 */
 	private void help(CommandSender sender, boolean error) {
+		sender.sendMessage(ChatColor.YELLOW + p.getDescription().getDescription() + " - version " + p.getDescription().getVersion());
+		
 		if(error) {
 			sender.sendMessage(ce + "This subcommand does not exists.");
 		}
-		sender.sendMessage(ci + "Available subcommands are listed below.");
-		sender.sendMessage("");
+		
+		sender.sendMessage(ci + "Available subcommands are listed below. Legend: " + cc + "/uh command <required> [optional=default]" + ci + ".");
 		sender.sendMessage(ChatColor.GRAY + "------ Game-related commands ------");
 		sender.sendMessage(cc + "/uh start " + ci + ": launchs the game.");
 		sender.sendMessage(cc + "/uh shift " + ci + ": shifts an episode.");
@@ -112,12 +116,10 @@ public class UHPluginCommand implements CommandExecutor {
 		sender.sendMessage(cc + "/uh addspawn " + ci + ": adds a spawn point for a team or a player, at the current location of the sender.");
 		sender.sendMessage(cc + "/uh addspawn <x> <z> " + ci + ": adds a spawn point for a team or a player, at the provided coordinates.");
 		sender.sendMessage(cc + "/uh generatewalls " + ci + ": generates the walls according to the configuration.");
-		sender.sendMessage("");
 		sender.sendMessage(ChatColor.GRAY + "------ Bugs-related commands ------");
-		sender.sendMessage(cc + "/uh heal <player> [half-hearts=20] " + ci + ": heals a player to the number of half-hearts provided, or to 20 without the last argument.");
+		sender.sendMessage(cc + "/uh heal <player> [half-hearts=20] " + ci + ": heals a player to the number of half-hearts provided (default 20).");
 		sender.sendMessage(cc + "/uh healall [half-hearts=20] " + ci + ": heals all players instead of only one.");
 		sender.sendMessage(cc + "/uh resurrect <player> " + ci + ": resurrects a player.");
-		sender.sendMessage("");
 		sender.sendMessage(ChatColor.GRAY + "Tip: you can put one coordinate per line, following the format “x,y” in a “plugins/UHPlugin/positions.txt” file instead of using /uh addspawn each time.");
 	}
 	
@@ -163,12 +165,8 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param label
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	private void doStart(CommandSender sender, Command command, String label, String[] args) {
-		if(!isAllowed(sender, "start")) {
-			unauthorized(sender, command);
-			return;
-		}
-		
 		p.getGameManager().start(sender);
 	}
 	
@@ -181,12 +179,8 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param label
 	 * @param args
 	 */
-	private void doGenerateWalls(CommandSender sender, Command command, String label, String[] args) {
-		if(!isAllowed(sender, "generatewalls")) {
-			unauthorized(sender, command);
-			return;
-		}
-		
+	@SuppressWarnings("unused")
+	private void doGeneratewalls(CommandSender sender, Command command, String label, String[] args) {	
 		sender.sendMessage(cst + "Generating the walls...");
 		
 		World world = null;
@@ -221,12 +215,8 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param label
 	 * @param args
 	 */
-	private void doAddSpawn(CommandSender sender, Command command, String label, String[] args) {
-		if(!isAllowed(sender, "addspawn")) {
-			unauthorized(sender, command);
-			return;
-		}
-		
+	@SuppressWarnings("unused")
+	private void doAddspawn(CommandSender sender, Command command, String label, String[] args) {	
 		if(args.length == 1) { // No coordinates given.
 			if(!(sender instanceof Player)) {
 				sender.sendMessage(ce + "Yo need to specify the coordinates from the console.");
@@ -259,12 +249,8 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param label
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	private void doTeam(CommandSender sender, Command command, String label, String[] args) {
-		if(!isAllowed(sender, "team")) {
-			unauthorized(sender, command);
-			return;
-		}
-		
 		if(args.length == 1) { // No action provided: doc
 			sender.sendMessage(ce + "You need to provide an action.");
 			sender.sendMessage("");
@@ -413,12 +399,8 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param label
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	private void doShift(CommandSender sender, Command command, String label, String[] args) {
-		if(!isAllowed(sender, "shift")) {
-			unauthorized(sender, command);
-			return;
-		}
-		
 		if(p.getGameManager().isGameRunning()) {
 			if(sender instanceof Player) {
 				p.getGameManager().shiftEpisode((((Player) sender).getName()));
@@ -444,10 +426,6 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param args
 	 */
 	private void doHeal(CommandSender sender, Command command, String label, String[] args) {
-		if(!isAllowed(sender, "heal")) {
-			unauthorized(sender, command);
-			return;
-		}
 		if(args.length < 2 || args.length > 3) {
 			sender.sendMessage(ce + "Usage: /uh heal <player> [number of half-hearts = 20]");
 			return;
@@ -496,12 +474,8 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param label
 	 * @param args
 	 */
-	private void doHealAll(CommandSender sender, Command command, String label, String[] args) {
-		if(!isAllowed(sender, "healall")) {
-			unauthorized(sender, command);
-			return;
-		}
-		
+	@SuppressWarnings("unused")
+	private void doHealall(CommandSender sender, Command command, String label, String[] args) {
 		String healthArg = null;
 		if(args.length == 1) {
 			healthArg = "20";
@@ -534,12 +508,8 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param label
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	private void doResurrect(CommandSender sender, Command command, String label, String[] args) {
-		if(!isAllowed(sender, "resurrect")) {
-			unauthorized(sender, command);
-			return;
-		}
-		
 		if(args.length != 2) {
 			sender.sendMessage(ce + "Usage: /uh resurrect <player>");
 			return;

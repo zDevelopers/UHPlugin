@@ -1,11 +1,14 @@
 name: UHPlugin
+description: Ultra Hardcore plugin
 main: me.azenet.UHPlugin.UHPlugin
-version: 0.1
+version: 0.3 §cdev§r
+author: "Amaury Carrade"
+authors: [azenet]
 
 commands:
    uh:
       description: Ultra Harcore base command
-      usage: /uh <subcommand>
+      usage: /uh <subcommand> - see /uh for available subcommands.
 
 permissions:
     uh.*:
