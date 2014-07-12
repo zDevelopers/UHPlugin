@@ -80,15 +80,6 @@ public class UHPluginListener implements Listener {
 		// Removes the player from the alive players.
 		this.p.getGameManager().addDead(ev.getEntity().getName());
 		
-		// Updates the scoreboard.
-		Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
-			
-			@Override
-			public void run() {
-				p.getGameManager().setLifeInScoreboard((Player)ev.getEntity(), 0);
-			}
-		}, 1L);
-		
 		// Kicks the player if needed.
 		if (this.p.getConfig().getBoolean("kick-on-death.kick", true)) {
 			Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
@@ -152,7 +143,6 @@ public class UHPluginListener implements Listener {
 		if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL) && p.getConfig().getBoolean("gameplay-changes.replaceGhastTearsWithGold")) {
 			ev.setCancelled(true);
 		}
-		p.getGameManager().updatePlayerListName(ev.getPlayer());
 	}
 	
 	
@@ -187,14 +177,8 @@ public class UHPluginListener implements Listener {
 			ev.getPlayer().setFoodLevel(20);
 			ev.getPlayer().setSaturation(14);
 		}
-		p.getGameManager().addToScoreboard(ev.getPlayer());
-		Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
-			
-			@Override
-			public void run() {
-				p.getGameManager().updatePlayerListName(ev.getPlayer());
-			}
-		}, 1L);
+		
+		p.getGameManager().setScoreboardForPlayer(ev.getPlayer());
 	}
 	
 	
@@ -345,9 +329,7 @@ public class UHPluginListener implements Listener {
 
 	
 	/**
-	 * Used to:
-	 *  - update the scoreboard;
-	 *  - disable any damages if the game has not started.
+	 * Used to disable any damages if the game has not started.
 	 * 
 	 * @param ev
 	 */
@@ -355,14 +337,6 @@ public class UHPluginListener implements Listener {
 	public void onEntityDamage(final EntityDamageEvent ev) {
 		if (ev.getEntity() instanceof Player) {
 			if (!p.getGameManager().isTakingDamage()) ev.setCancelled(true);
-			
-			Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
-				
-				@Override
-				public void run() {
-					p.getGameManager().updatePlayerListName((Player)ev.getEntity());
-				}
-			}, 1L);
 		}
 	}
 	
@@ -393,15 +367,6 @@ public class UHPluginListener implements Listener {
 	@EventHandler
 	public void onEntityRegainHealth(final EntityRegainHealthEvent ev) {
 		if (ev.getRegainReason() == RegainReason.SATIATED) ev.setCancelled(true);
-		if (ev.getEntity() instanceof Player) {
-			Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
-				
-				@Override
-				public void run() {
-					p.getGameManager().updatePlayerListName((Player)ev.getEntity());
-				}
-			}, 1L);
-		}
 	}
 	
 	/**

@@ -461,7 +461,6 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		
 		player.setHealth(health);
-		p.getGameManager().updatePlayerListName(player);
 	}
 	
 	/**
