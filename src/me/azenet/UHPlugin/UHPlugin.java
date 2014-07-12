@@ -72,6 +72,7 @@ public final class UHPlugin extends JavaPlugin {
 		logger.info("UHPlugin loaded");
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void addRecipes() {
 		if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do.fromHuman") || getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do.fromWither")) {
 			// Golden apple (or notch apple): head in the center and 8 gold ingots.

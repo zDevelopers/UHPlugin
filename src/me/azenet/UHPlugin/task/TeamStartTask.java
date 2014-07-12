@@ -38,8 +38,6 @@ public class TeamStartTask extends BukkitRunnable {
 			player.closeInventory();
 			player.getActivePotionEffects().clear();
 			player.setCompassTarget(startPoint);
-			
-			p.getGameManager().setLifeInScoreboard(player, 20);
 		}
 	}
 

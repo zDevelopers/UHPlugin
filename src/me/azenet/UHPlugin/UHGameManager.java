@@ -16,10 +16,9 @@ import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.Criterias;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -49,8 +48,6 @@ public class UHGameManager {
 	private Integer minutesLeft = 0;
 	private Integer secondsLeft = 0;
 	
-	private BukkitTask updateTimerTask = null;
-	
 	
 	public UHGameManager(UHPlugin plugin) {
 		this.p = plugin;
@@ -74,7 +71,7 @@ public class UHGameManager {
 	
 	public void initScoreboard() {
 		sb = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-		Objective obj = sb.registerNewObjective("Vie", "dummy");
+		Objective obj = sb.registerNewObjective("Vie", Criterias.HEALTH);
 		obj.setDisplayName("Vie");
 		obj.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 	}
@@ -96,15 +93,15 @@ public class UHGameManager {
 		obj.setDisplayName(this.getScoreboardName());
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY+"Episode "+ChatColor.WHITE+episode)).setScore(5);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+alivePlayersCount+ChatColor.GRAY+" joueurs")).setScore(4);
+		obj.getScore(ChatColor.GRAY + "Épisode " + ChatColor.WHITE + episode).setScore(5);
+		obj.getScore(ChatColor.WHITE+""+alivePlayersCount+ChatColor.GRAY+" joueurs").setScore(4);
 		
 		if(this.gameWithTeams) {
-			obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+""+aliveTeamsCount+ChatColor.GRAY+" équipes")).setScore(3);
+			obj.getScore(ChatColor.WHITE+""+aliveTeamsCount+ChatColor.GRAY+" équipes").setScore(3);
 		}
 		
-		obj.getScore(Bukkit.getOfflinePlayer("")).setScore(2);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE+formatter.format(this.minutesLeft)+ChatColor.GRAY+":"+ChatColor.WHITE+formatter.format(this.secondsLeft))).setScore(1);
+		obj.getScore("").setScore(2);
+		obj.getScore(ChatColor.WHITE+formatter.format(this.minutesLeft)+ChatColor.GRAY+":"+ChatColor.WHITE+formatter.format(this.secondsLeft)).setScore(1);
 	}
 	
 	public Scoreboard getScoreboard() {
@@ -116,21 +113,8 @@ public class UHGameManager {
 		return s.substring(0, Math.min(s.length(), 16));
 	}
 	
-	public void updatePlayerListName(Player p) {
+	public void setScoreboardForPlayer(Player p) {
 		p.setScoreboard(sb);
-		Integer he = (int) Math.ceil(((Damageable) p).getHealth());
-		sb.getObjective("Vie").getScore(p).setScore(he);
-	}
-
-	public void addToScoreboard(Player player) {
-		player.setScoreboard(sb);
-		sb.getObjective("Vie").getScore(player).setScore(0);
-		this.updatePlayerListName(player);
-	}
-
-	public void setLifeInScoreboard(Player entity, int i) {
-		entity.setScoreboard(sb);
-		sb.getObjective("Vie").getScore(entity).setScore(i);
 	}
 	
 	
@@ -213,7 +197,7 @@ public class UHGameManager {
 		this.secondsLeft = 0;
 		
 		BukkitRunnable updateTimer = new UpdateTimerTask(p);
-		this.updateTimerTask = updateTimer.runTaskTimer(p, 20L, 20L);
+		updateTimer.runTaskTimer(p, 20L, 20L);
 		
 		p.getLogger().info("[start] UpdateTimer task launched");
 		
@@ -294,7 +278,6 @@ public class UHGameManager {
 		
 		this.alivePlayers.add(player.getName());
 		this.updateAliveCounters();
-		this.updatePlayerListName(player);
 		
 		this.p.getServer().broadcastMessage(ChatColor.GOLD + player.getName() + " returned from the dead!");
 		
