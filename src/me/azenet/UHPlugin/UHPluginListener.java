@@ -207,7 +207,10 @@ public class UHPluginListener implements Listener {
 	}
 	
 	/**
-	 * Used to prevent the player to go outside the border.
+	 * Used to:
+	 *  - prevent the player to go outside the border;
+	 *  - freeze the players during the (slow) start.
+	 * 
 	 * TODO improve this by replacing the onPlayerMoveEvent by a regular check, or by
 	 * using the WorldBorder API.
 	 * 
@@ -215,6 +218,10 @@ public class UHPluginListener implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent ev) {
+		if(p.getGameManager().getSlowStartInProgress()) {
+			ev.setCancelled(true);
+		}
+		
 		Location l = ev.getTo();
 		Integer mapSize = p.getConfig().getInt("map.size");
 		Integer halfMapSize = (int) Math.floor(mapSize/2);

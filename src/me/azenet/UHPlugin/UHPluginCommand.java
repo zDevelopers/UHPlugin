@@ -111,7 +111,8 @@ public class UHPluginCommand implements CommandExecutor {
 		sender.sendMessage(ci + "Available subcommands are listed below.");
 		sender.sendMessage(ci + "Legend: " + cc + "/uh command <required> [optional=default]" + ci + ".");
 		sender.sendMessage(ChatColor.GRAY + "------ Game-related commands ------");
-		sender.sendMessage(cc + "/uh start " + ci + ": launchs the game.");
+		sender.sendMessage(cc + "/uh start " + ci + ": launches the game.");
+		sender.sendMessage(cc + "/uh start slow " + ci + ": launches the game slowly, in two steps, for smaller servers.");
 		sender.sendMessage(cc + "/uh shift " + ci + ": shifts an episode.");
 		sender.sendMessage(cc + "/uh team " + ci + ": manages the teams (execute /uh team for more details).");
 		sender.sendMessage(cc + "/uh addspawn " + ci + ": adds a spawn point for a team or a player, at the current location of the sender.");
@@ -158,7 +159,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command starts the game.
-	 * Usage: /uh start
+	 * Usage: /uh start [slow]
 	 * 
 	 * @param sender
 	 * @param command
@@ -167,7 +168,27 @@ public class UHPluginCommand implements CommandExecutor {
 	 */
 	@SuppressWarnings("unused")
 	private void doStart(CommandSender sender, Command command, String label, String[] args) {
-		p.getGameManager().start(sender);
+		
+		if(args.length == 1) { // /uh start (standard mode)
+			try {
+				p.getGameManager().start(sender, false);
+			} catch(RuntimeException e) {
+				sender.sendMessage(ce + "The game is already started! Reload or restart the server to restart the game.");
+			}
+		}
+		else if(args.length == 2 && args[1].equalsIgnoreCase("slow")) { // /uh start slow
+			try {
+				p.getGameManager().start(sender, true);
+			} catch(RuntimeException e) {
+				sender.sendMessage(ce + "The game is already started! Reload or restart the server to restart the game.");
+			}
+		}
+		else if(args.length == 3 && args[1].equalsIgnoreCase("slow") && args[2].equalsIgnoreCase("go")) { // /uh start slow go
+			p.getGameManager().finalizeStartSlow(sender);
+		}
+		else {
+			sender.sendMessage(ce + "Syntax error. Usage: /uh start [slow] or /uh start slow go.");
+		}
 	}
 	
 	/**

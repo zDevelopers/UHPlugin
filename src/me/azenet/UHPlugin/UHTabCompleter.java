@@ -76,10 +76,23 @@ public class UHTabCompleter implements TabCompleter {
 					}
 					
 					return getAutocompleteSuggestions(args[2].toLowerCase(), teamNames);
-				}
-				
+				}	
+			}
+		}
+		
+		/** Autocompletion for /uh start **/
+		else if(args[0].equalsIgnoreCase("start")) {
+			ArrayList<String> commandSuggested = new ArrayList<String>();
+			
+			if(args.length == 2) { // /uh start <?>
+				commandSuggested.add("slow");
+				return this.getAutocompleteSuggestions(args[1].toLowerCase(), commandSuggested);
 			}
 			
+			else if(args.length == 3 && args[1].equalsIgnoreCase("slow")) { // /uh start slow <?>
+				commandSuggested.add("go");
+				return this.getAutocompleteSuggestions(args[2].toLowerCase(), commandSuggested);
+			}
 		}
 		
 		return null;

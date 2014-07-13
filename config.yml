@@ -45,7 +45,8 @@ gameplay-changes:
     # Else, the craft will be standard and the compass will show the spawn point of the team/player (not the world spawn point).
     compass: true
 
-
+slow-start:
+    delayBetweedTP: 3  # in seconds
 
 # Use this to set the spawnpoints of the teams (or the players)
 # You can also use the command /uh addspawn (see /uh for documentation) to add temporary spawn points.

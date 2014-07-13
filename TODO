@@ -13,7 +13,7 @@
 	[OK] /uh resurrect <player>
 	/uh tpback <player>
 - [OK] Désactiver le spawn de mobs nocifs avant le début de la partie
-- Ajouter un mode de démarrage progressif : 
+- [OK] Ajouter un mode de démarrage progressif : 
 	/uh start slow : freeze les joueurs et TP les équipes progressivement, les joueurs ont le fly et restent en l'air
 	/uh start slow go : démarre, défreeze, active les mobs, donne l'immunité pour 30s
 - [OK] Autocomplétion des commandes
@@ -23,7 +23,7 @@
 - [PARTIAL] Mettre les restrictions en option (notamment celle des potions II, des ghasts qui ne dropent pas des larmes)
 - [PARTIAL] Corriger le bug d'affichage des joueurs vivants (actuellement compte les joueurs en ligne, pas uniquement les vivants)
 	→ [OK] Liste des joueurs vivants
-	→ [OK+BUG] /uh revive <player> pour reprendre en compte un joueur
+	→ [OK+BUG] /uh resurrect <player> pour reprendre en compte un joueur
 - Enregistrer périodiquement les positions des joueurs pour pouvoir faire /uh revive et les re-TP même en cas de solo (quid des morts dans la lave ? Donner 30 sec d'invulnérabilité au joueur en question ?)
 - Ne pas couper le titre du jeu (actuellement coupé à 16 caractères) si possible.
 - [OK] Corriger le bug d'arrondi des cœurs.
