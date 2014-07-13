@@ -1,5 +1,5 @@
 - Synchroniser l'horloge des épisodes avec une vraie horloge (évite le décalage à cause du lag).
-- Prendre en compte les cœurs d'absorption en cas de pommes d'or.
+- [OK] Prendre en compte les cœurs d'absorption en cas de pommes d'or.
 - Optimiser la vérification de position des joueurs (ou se reposer uniquement sur WorldBorder, via son API).
 - Mettre à jour le code pour considérer les UUID (si besoin est).
 - [Supprimée] Mettre à jour le code : l'interface de gestion des équipes ne marche pas en 1.7.9. (Ou suppression ? Elle est jolie mais peu efficace en pratique.)

@@ -21,13 +21,14 @@ public class UHTeam {
 		this.color = color;
 		this.plugin = plugin;
 		
-		Scoreboard sb = this.plugin.getGameManager().getScoreboard();
+		Scoreboard sb = this.plugin.getGameManager().getScoreboardManager().getScoreboard();
 		sb.registerNewTeam(this.name);
 	
 		Team t = sb.getTeam(this.name);
 		t.setDisplayName(this.displayName);
 		t.setCanSeeFriendlyInvisibles(true);
-		t.setPrefix(this.color+"");
+		t.setAllowFriendlyFire(true);
+		t.setPrefix(this.color + "");
 	}
 	
 	public String getName() {
@@ -44,12 +45,12 @@ public class UHTeam {
 
 	public void addPlayer(Player player) {
 		players.add(player);
-		plugin.getGameManager().getScoreboard().getTeam(this.name).addPlayer(player);
+		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).addPlayer(player);
 	}
 	
 	public void removePlayer(Player player) {
 		players.remove(player);
-		plugin.getGameManager().getScoreboard().getTeam(this.name).removePlayer(player);
+		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).removePlayer(player);
 	}
 
 	public void teleportTo(Location lo) {

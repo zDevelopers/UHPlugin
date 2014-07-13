@@ -1,7 +1,5 @@
 package me.azenet.UHPlugin;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,22 +16,15 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.Criterias;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
 
 public class UHGameManager {
 	
 	private UHPlugin p = null;
 	private UHTeamManager tm = null;
-	private Scoreboard sb = null;
-
 	private Random random = null;
 	
-	private String sbobjname = "KTP";
-	private NumberFormat formatter = new DecimalFormat("00");
 	private Boolean damageIsOn = false;
+	private UHScoreboardManager scoreboardManager = null;
 
 	private LinkedList<Location> loc = new LinkedList<Location>();
 	private HashSet<String> alivePlayers = new HashSet<String>();
@@ -53,15 +44,10 @@ public class UHGameManager {
 		this.p = plugin;
 		this.tm = plugin.getTeamManager();
 		
-		random = new Random();
+		this.random = new Random();
 	}
 
-	
-	
-	
-	
-	
-	
+
 	public void initEnvironment() {
 		p.getServer().getWorlds().get(0).setGameRuleValue("doDaylightCycle", "false");
 		p.getServer().getWorlds().get(0).setTime(6000L);
@@ -70,59 +56,14 @@ public class UHGameManager {
 	}
 	
 	public void initScoreboard() {
-		sb = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-		Objective obj = sb.registerNewObjective("Vie", Criterias.HEALTH);
-		obj.setDisplayName("Vie");
-		obj.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+		// Strange: if the scoreboard manager is instanced in the constructor, when the
+		// scoreboard manager try to get the game manager through UHPlugin.getGameManager(),
+		// the value returned is "null"...
+		// This is why we initializes the scoreboard manager later, in this method.
+		this.scoreboardManager = new UHScoreboardManager(p);
 	}
-	
-	public void setMatchInfo() {
-		Objective obj = null;
-		try {
-			obj = sb.getObjective(sbobjname);
-			obj.setDisplaySlot(null);
-			obj.unregister();
-		}
-		catch (Exception e) { }
-		
-		Random r = new Random();
-		sbobjname = "KTP"+r.nextInt(10000000);
-		obj = sb.registerNewObjective(sbobjname, "dummy");
-		obj = sb.getObjective(sbobjname);
 
-		obj.setDisplayName(this.getScoreboardName());
-		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-		
-		obj.getScore(ChatColor.GRAY + "Épisode " + ChatColor.WHITE + episode).setScore(5);
-		obj.getScore(ChatColor.WHITE+""+alivePlayersCount+ChatColor.GRAY+" joueurs").setScore(4);
-		
-		if(this.gameWithTeams) {
-			obj.getScore(ChatColor.WHITE+""+aliveTeamsCount+ChatColor.GRAY+" équipes").setScore(3);
-		}
-		
-		obj.getScore("").setScore(2);
-		obj.getScore(ChatColor.WHITE+formatter.format(this.minutesLeft)+ChatColor.GRAY+":"+ChatColor.WHITE+formatter.format(this.secondsLeft)).setScore(1);
-	}
-	
-	public Scoreboard getScoreboard() {
-		return sb;
-	}
-	
-	public String getScoreboardName() {
-		String s = p.getConfig().getString("scoreboard", "Kill the Patrick");
-		return s.substring(0, Math.min(s.length(), 16));
-	}
-	
-	public void setScoreboardForPlayer(Player p) {
-		p.setScoreboard(sb);
-	}
-	
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * Starts the game.
 	 *  - Teleports the teams
@@ -175,8 +116,6 @@ public class UHGameManager {
 		for (final UHTeam t : tm.getTeams()) {
 			final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
 			
-			p.getLogger().info("[start] Launching TP for team " + t.getName());
-			
 			BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo);
 			teamStartTask.runTaskLater(p, 10L);
 			
@@ -199,15 +138,13 @@ public class UHGameManager {
 		BukkitRunnable updateTimer = new UpdateTimerTask(p);
 		updateTimer.runTaskTimer(p, 20L, 20L);
 		
-		p.getLogger().info("[start] UpdateTimer task launched");
-		
 		
 		// 30 seconds later, damages are enabled.
 		Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 			@Override
 			public void run() {
 				damageIsOn = true;
-				p.getLogger().info("[start] Immunity ended.");
+				p.getLogger().info("Immunity ended.");
 			}
 		}, 600L);
 		
@@ -236,7 +173,7 @@ public class UHGameManager {
 		this.alivePlayersCount = alivePlayers.size();
 		this.aliveTeamsCount = getAliveTeams().size();
 		
-		this.setMatchInfo();
+		this.scoreboardManager.updateScoreboard();
 	}
 	
 	/**
@@ -286,23 +223,17 @@ public class UHGameManager {
 	
 	
 	
-	
-	/**
-	 * Is the game launched?
-	 * 
-	 * @return True if the game is running.
-	 */
-	public boolean isGameRunning() {
-		return this.gameRunning;
-	}
-	
-	
-	public Integer getEpisodeLength() {
-		return p.getConfig().getInt("episodeLength");
-	}
-	
+		
 	public void addLocation(int x, int z) {
 		loc.add(new Location(p.getServer().getWorlds().get(0), x, p.getServer().getWorlds().get(0).getHighestBlockYAt(x,z)+120, z));
+	}
+	
+	public boolean isGameRunning() {
+		return gameRunning;
+	}
+	
+	public boolean isGameWithTeams() {
+		return gameWithTeams;
 	}
 	
 	public boolean isTakingDamage() {
@@ -325,5 +256,33 @@ public class UHGameManager {
 			}
 		}
 		return aliveTeams;
+	}
+
+	public UHScoreboardManager getScoreboardManager() {
+		return scoreboardManager;
+	}
+	
+	public Integer getEpisodeLength() {
+		return p.getConfig().getInt("episodeLength");
+	}
+
+	public Integer getAlivePlayersCount() {
+		return alivePlayersCount;
+	}
+
+	public Integer getAliveTeamsCount() {
+		return aliveTeamsCount;
+	}
+
+	public Integer getEpisode() {
+		return episode;
+	}
+
+	public Integer getMinutesLeft() {
+		return minutesLeft;
+	}
+
+	public Integer getSecondsLeft() {
+		return secondsLeft;
 	}
 }

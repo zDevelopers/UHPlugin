@@ -1,8 +1,5 @@
 package me.azenet.UHPlugin;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -10,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -46,13 +42,12 @@ public final class UHPlugin extends JavaPlugin {
 		
 		addRecipes();
 		
-		gameManager.initScoreboard();
-		gameManager.setMatchInfo();
 		gameManager.initEnvironment();
+		gameManager.initScoreboard();
 		
 		// In case of reload
 		for(Player player : getServer().getOnlinePlayers()) {
-			gameManager.setScoreboardForPlayer(player);
+			gameManager.getScoreboardManager().setScoreboardForPlayer(player);
 		}
 		
 		// Import spawnpoints from config

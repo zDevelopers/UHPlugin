@@ -178,7 +178,7 @@ public class UHPluginListener implements Listener {
 			ev.getPlayer().setSaturation(14);
 		}
 		
-		p.getGameManager().setScoreboardForPlayer(ev.getPlayer());
+		p.getGameManager().getScoreboardManager().setScoreboardForPlayer(ev.getPlayer());
 	}
 	
 	
