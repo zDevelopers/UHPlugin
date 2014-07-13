@@ -21,7 +21,7 @@ public class UHTeamManager {
 	 * 
 	 * @param color The color. This must be a valid Minecraft color name.
 	 * @param name The name of the team.
-	 * @return boolean Success.
+	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */
 	public void addTeam(ChatColor color, String name) {	
 		teams.add(new UHTeam(name, name, color, p));
@@ -31,6 +31,7 @@ public class UHTeamManager {
 	 * Adds a team from an UHTeam object.
 	 * 
 	 * @param UHTeam team The team.
+	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */
 	public void addTeam(UHTeam team) {
 		teams.add(team);
@@ -52,11 +53,17 @@ public class UHTeamManager {
 	 * 
 	 * @param teamName The team in which we add the player.
 	 * @param player The player to add.
+	 * @throws IllegalArgumentException if the team does not exists.
 	 */
 	public void addPlayerToTeam(String teamName, Player player) {
 		removePlayerFromTeam(player);
 		
 		UHTeam team = getTeam(teamName);
+		
+		if(team == null) {
+			throw new IllegalArgumentException("This team, " + teamName + ", does not exists!");
+		}
+		
 		team.addPlayer(player);
 	}
 

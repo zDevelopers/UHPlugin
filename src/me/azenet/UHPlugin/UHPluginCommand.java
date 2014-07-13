@@ -342,7 +342,12 @@ public class UHPluginCommand implements CommandExecutor {
 						sender.sendMessage(ce + "Unable to add the player " + args[3] + " to the team " + args[2] + ". The player must be connected.");
 					}
 					else {
-						tm.addPlayerToTeam(args[2], player);
+						try {
+							tm.addPlayerToTeam(args[2], player);
+						} catch(IllegalArgumentException e) {
+							sender.sendMessage(ce + "The team " + args[2] + " does not exists!");
+							return;
+						}
 						sender.sendMessage(cs + "The player " + args[3] + " was successfully added to the team " + args[2] + ".");
 					}
 				}
