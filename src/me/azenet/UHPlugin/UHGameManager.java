@@ -171,7 +171,7 @@ public class UHGameManager {
 			
 			LinkedList<Location> unusedTP = loc;
 			teamsTeleported = 1;
-			Integer delayBetweenTP = p.getConfig().getInt("slow-start.delayBetweedTP");
+			Integer delayBetweenTP = p.getConfig().getInt("slow-start.delayBetweenTP");
 			
 			for (final UHTeam t : tm.getTeams()) {
 				final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));

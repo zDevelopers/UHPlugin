@@ -46,7 +46,7 @@ gameplay-changes:
     compass: true
 
 slow-start:
-    delayBetweedTP: 3  # in seconds
+    delayBetweenTP: 3  # in seconds
 
 # Use this to set the spawnpoints of the teams (or the players)
 # You can also use the command /uh addspawn (see /uh for documentation) to add temporary spawn points.
