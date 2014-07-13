@@ -45,7 +45,7 @@ public class TeamStartTask extends BukkitRunnable {
 				player.setFlying(true);
 			}
 			
-			player.setHealth(20);
+			player.setHealth(20D);
 			player.setFoodLevel(20);
 			player.setSaturation(14);
 			player.getInventory().clear();

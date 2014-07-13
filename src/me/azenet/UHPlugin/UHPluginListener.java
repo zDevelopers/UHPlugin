@@ -176,6 +176,10 @@ public class UHPluginListener implements Listener {
 			
 			ev.getPlayer().setFoodLevel(20);
 			ev.getPlayer().setSaturation(14);
+			
+			// Used to update the "health" objective, to avoid a null one.
+			ev.getPlayer().setHealth(19D);
+			ev.getPlayer().setHealth(20D);
 		}
 		
 		p.getGameManager().getScoreboardManager().setScoreboardForPlayer(ev.getPlayer());
