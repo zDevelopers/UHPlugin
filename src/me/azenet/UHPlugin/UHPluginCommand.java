@@ -402,10 +402,23 @@ public class UHPluginCommand implements CommandExecutor {
 					sender.sendMessage(ce + "There isn't any team to show.");
 					return;
 				}
+				
+				ChatColor lc = ChatColor.LIGHT_PURPLE; // List color
+				
 				for(final UHTeam team : tm.getTeams()) {
 					sender.sendMessage(team.getChatColor() + team.getName() + ChatColor.WHITE + " - " + ((Integer) team.getPlayers().size()).toString() + " players");
 					for(final Player player : team.getPlayers()) {
-						sender.sendMessage(ChatColor.LIGHT_PURPLE + " - " + player.getName());
+						if(!p.getGameManager().isGameRunning()) {
+							sender.sendMessage(lc + " - " + player.getName());
+						}
+						else {
+							if(p.getGameManager().isPlayerDead(player.getName())) {
+								sender.sendMessage(lc + " - " + player.getName() + " (" + ChatColor.RED + "dead" + lc + ")");
+							}
+							else {
+								sender.sendMessage(lc + " - " + player.getName() + " (" + ChatColor.GREEN + "alive" + lc + ")");
+							}
+						}
 					}
 				}
 			}
