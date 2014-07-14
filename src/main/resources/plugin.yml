@@ -5,6 +5,9 @@ version: 0.3 §cdev§r
 author: "Amaury Carrade"
 authors: [azenet]
 
+softdepend:
+  - WorldBorder
+
 commands:
    uh:
       description: Ultra Harcore base command

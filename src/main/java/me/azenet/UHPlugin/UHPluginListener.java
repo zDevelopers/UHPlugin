@@ -183,6 +183,13 @@ public class UHPluginListener implements Listener {
 		}
 		
 		p.getGameManager().getScoreboardManager().setScoreboardForPlayer(ev.getPlayer());
+		
+		// A warning to the administrators if WorldBorder is not present.
+		if(ev.getPlayer().hasPermission("uh.*") && !p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
+			ev.getPlayer().sendMessage(ChatColor.RED + "WorldBorder is not installed, you should use it with the Ultra Hardcore plugin.");
+			ev.getPlayer().sendMessage(ChatColor.GRAY + "Why? Optimized border check, pregenerated world (fill)... Also, the border can be reduced during the game.");
+			ev.getPlayer().sendMessage(ChatColor.GRAY + "It's as simple as putting the WorldBorder jar inside the plugins directory, UHPlugin will automatically configure it.");
+		}
 	}
 	
 	
@@ -215,9 +222,6 @@ public class UHPluginListener implements Listener {
 	 *  - prevent the player to go outside the border;
 	 *  - freeze the players during the (slow) start.
 	 * 
-	 * TODO improve this by replacing the onPlayerMoveEvent by a regular check, or by
-	 * using the WorldBorder API.
-	 * 
 	 * @param ev
 	 */
 	@EventHandler
@@ -226,26 +230,28 @@ public class UHPluginListener implements Listener {
 			ev.setCancelled(true);
 		}
 		
-		Location l = ev.getTo();
-		Integer mapSize = p.getConfig().getInt("map.size");
-		Integer halfMapSize = (int) Math.floor(mapSize/2);
-		Integer x = l.getBlockX();
-		Integer z = l.getBlockZ();
-		
-		Location spawn = ev.getPlayer().getWorld().getSpawnLocation();
-		Integer limitXInf = spawn.add(-halfMapSize, 0, 0).getBlockX();
-		
-		spawn = ev.getPlayer().getWorld().getSpawnLocation();
-		Integer limitXSup = spawn.add(halfMapSize, 0, 0).getBlockX();
-		
-		spawn = ev.getPlayer().getWorld().getSpawnLocation();
-		Integer limitZInf = spawn.add(0, 0, -halfMapSize).getBlockZ();
-		
-		spawn = ev.getPlayer().getWorld().getSpawnLocation();
-		Integer limitZSup = spawn.add(0, 0, halfMapSize).getBlockZ();
-		
-		if (x < limitXInf || x > limitXSup || z < limitZInf || z > limitZSup) {
-			ev.setCancelled(true);
+		if(!p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
+			Location l = ev.getTo();
+			Integer mapSize = p.getConfig().getInt("map.size");
+			Integer halfMapSize = (int) Math.floor(mapSize/2);
+			Integer x = l.getBlockX();
+			Integer z = l.getBlockZ();
+			
+			Location spawn = ev.getPlayer().getWorld().getSpawnLocation();
+			Integer limitXInf = spawn.add(-halfMapSize, 0, 0).getBlockX();
+			
+			spawn = ev.getPlayer().getWorld().getSpawnLocation();
+			Integer limitXSup = spawn.add(halfMapSize, 0, 0).getBlockX();
+			
+			spawn = ev.getPlayer().getWorld().getSpawnLocation();
+			Integer limitZInf = spawn.add(0, 0, -halfMapSize).getBlockZ();
+			
+			spawn = ev.getPlayer().getWorld().getSpawnLocation();
+			Integer limitZSup = spawn.add(0, 0, halfMapSize).getBlockZ();
+			
+			if (x < limitXInf || x > limitXSup || z < limitZInf || z > limitZSup) {
+				ev.setCancelled(true);
+			}
 		}
 	}
 	

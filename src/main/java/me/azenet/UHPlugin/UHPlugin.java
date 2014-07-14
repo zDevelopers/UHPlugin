@@ -25,6 +25,8 @@ public final class UHPlugin extends JavaPlugin {
 	private UHTeamManager teamManager = null;
 	private UHGameManager gameManager = null;
 	private UHPluginCommand commandManager = null;
+	
+	private UHWorldBorderIntegration wbintegration = null;
 
 	@Override
 	public void onEnable() {
@@ -33,6 +35,8 @@ public final class UHPlugin extends JavaPlugin {
 		logger = Bukkit.getLogger();
 		teamManager = new UHTeamManager(this);
 		gameManager = new UHGameManager(this);
+		
+		wbintegration = new UHWorldBorderIntegration(this);
 		
 		commandManager = new UHPluginCommand(this);
 		getCommand("uh").setExecutor(commandManager);
@@ -215,5 +219,9 @@ public final class UHPlugin extends JavaPlugin {
 	
 	public UHPluginCommand getCommandManager() {
 		return commandManager;
+	}
+	
+	public UHWorldBorderIntegration getWorldBorderIntegration() {
+		return wbintegration;
 	}
 }
