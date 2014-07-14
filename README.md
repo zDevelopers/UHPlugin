@@ -1,9 +1,9 @@
-Plugin KTP
-==========
+# Plugin KTP
 
 C'est très la source.
 
-Licence
-=======
+Documentation disponible via `/uh`.
+
+## Licence
 
 GPLv3. Voir le fichier LICENSE pour détails.
