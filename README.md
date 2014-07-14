@@ -2,7 +2,28 @@
 
 C'est très la source.
 
-Documentation disponible via `/uh`.
+[![Build Status](https://travis-ci.org/AmauryCarrade/KTP.svg?branch=master)](https://travis-ci.org/AmauryCarrade/KTP)
+
+## Documentation
+
+Documentation available via `/uh`.
+
+Legend: `/uh command <required> [optional=default]`.
+
+### Game-related commands
+ - `/uh start` : launches the game.
+ - `/uh start slow` : launches the game slowly, in two steps, for smaller servers.
+ - `/uh shift` : shifts an episode.
+ - `/uh team` : manages the teams (execute /uh team for more details).
+ - `/uh addspawn` : adds a spawn point for a team or a player, at the current location of the sender.
+ - `/uh addspawn <x> <z>` : adds a spawn point for a team or a player, at the provided coordinates.
+ - `/uh generatewalls` : generates the walls according to the configuration.
+
+### Bugs-related commands
+ - `/uh heal <player> [half-hearts=20]` : heals a player to the number of half-hearts provided (default 20).
+ - `/uh healall [half-hearts=20]` : heals all players instead of only one.
+ - `/uh resurrect <player>` : resurrects a player.
+
 
 ## Licence
 
