@@ -19,7 +19,7 @@ public class UHWorldBorderIntegration {
 		
 		Plugin wbTest = Bukkit.getServer().getPluginManager().getPlugin("WorldBorder");
 		if(wbTest == null || !wbTest.isEnabled()) {
-			p.getLogger().warning("WorldBorder is not present, integration disabled.");
+			p.getLogger().warning("WorldBorder is not present, so the integration was disabled.");
 			return;
 		}
 		
@@ -28,10 +28,12 @@ public class UHWorldBorderIntegration {
 		
 		try {
 			Class.forName("com.wimbli.WorldBorder.BorderData");
+			Class.forName("com.wimbli.WorldBorder.Config");
+			
 		}
 		catch(ClassNotFoundException e) {
 			p.getLogger().warning("WorldBorder is available, but the version you are using is too old.");
-			p.getLogger().warning("You should use WorldBorder 1.8.0 or later.");
+			p.getLogger().warning("This plugin is tested and works with WorldBorder 1.8.0 or later.");
 			
 			this.wb = null;
 			return;

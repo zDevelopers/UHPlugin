@@ -24,6 +24,13 @@ Legend: `/uh command <required> [optional=default]`.
  - `/uh healall [half-hearts=20]` : heals all players instead of only one.
  - `/uh resurrect <player>` : resurrects a player.
 
+### Permissions
+
+ - `uh.build`:  allows an user to build before the beginning of the game. Default: operator.
+ - `uh.<command>`: allows an user to use the command `/uh <command>`. Default: operator.
+
+If you don't want to bother with permissions, the operators can do anything; the non-ops, nothing.
+
 
 ## Licence
 
