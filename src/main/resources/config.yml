@@ -1,4 +1,6 @@
-episodeLength: 20  # minutes
+episodes:
+    length: 20  # minutes
+    syncTimer: true  # if true, the timer will be synchronized with a clock to avoid having long episodes because of lag
 
 map:
     size: 2000

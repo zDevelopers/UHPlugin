@@ -44,6 +44,8 @@ public class UHGameManager {
 	private Integer minutesLeft = 0;
 	private Integer secondsLeft = 0;
 	
+	private Long episodeStartTime = 0L;
+	
 	
 	public UHGameManager(UHPlugin plugin) {
 		this.p = plugin;
@@ -271,6 +273,7 @@ public class UHGameManager {
 	private void finalizeStart() {
 		Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "--- GO ---");
 		this.gameRunning = true;
+		this.episodeStartTime = System.currentTimeMillis();
 	}
 	
 	public Integer getTeamsTeleported() {
@@ -290,13 +293,28 @@ public class UHGameManager {
 	
 	
 	public void updateTimer() {
-		secondsLeft--;
-		if (secondsLeft == -1) {
-			minutesLeft--;
-			secondsLeft = 59;
+		if(p.getConfig().getBoolean("episodes.syncTimer")) {
+			long timeSinceStart = System.currentTimeMillis() - this.episodeStartTime;
+			long diffSeconds = timeSinceStart / 1000 % 60;
+			long diffMinutes = timeSinceStart / (60 * 1000) % 60;
+			
+			if(diffMinutes >= this.getEpisodeLength()) {
+				shiftEpisode();
+			}
+			else {
+				minutesLeft = (int) (this.getEpisodeLength() - diffMinutes) - 1;
+				secondsLeft = (int) (60 - diffSeconds) - 1;
+			}
 		}
-		if (minutesLeft == -1) {
-			shiftEpisode();
+		else {
+			secondsLeft--;
+			if (secondsLeft == -1) {
+				minutesLeft--;
+				secondsLeft = 59;
+			}
+			if (minutesLeft == -1) {
+				shiftEpisode();
+			}
 		}
 	}
 	
@@ -323,6 +341,8 @@ public class UHGameManager {
 		this.episode++;
 		this.minutesLeft = getEpisodeLength();
 		this.secondsLeft = 0;
+		
+		this.episodeStartTime = System.currentTimeMillis();
 	}
 	
 	/**
@@ -394,7 +414,7 @@ public class UHGameManager {
 	}
 	
 	public Integer getEpisodeLength() {
-		return p.getConfig().getInt("episodeLength");
+		return p.getConfig().getInt("episodes.length");
 	}
 
 	public Integer getAlivePlayersCount() {

@@ -54,9 +54,7 @@ public class UHWorldBorderIntegration {
 		
 		/** Overworld border **/
 		
-		World overworld = getOverworld();
-		p.getLogger().info(overworld.getName());
-		
+		World overworld = getOverworld();		
 		BorderData borderOverworld = wb.getWorldBorder(overworld.getName());
 		
 		if(borderOverworld == null) { // The border needs to be created from scratch
