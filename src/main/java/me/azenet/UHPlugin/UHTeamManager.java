@@ -117,7 +117,7 @@ public class UHTeamManager {
 	 */
 	public UHTeam getTeamForPlayer(Player p) {
 		for(UHTeam t : teams) {
-			if (t.getPlayers().contains(p)) return t;
+			if (t.containsPlayer(p)) return t;
 		}
 		return null;
 	}

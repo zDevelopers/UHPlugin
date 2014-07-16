@@ -52,6 +52,15 @@ public class UHTeam {
 		players.remove(player);
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).removePlayer(player);
 	}
+	
+	public boolean containsPlayer(Player player) {
+		for(Player playerInTeam : players) {
+			if(playerInTeam.getName().equalsIgnoreCase(player.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public void teleportTo(Location lo) {
 		for (Player p : players) {

@@ -106,7 +106,7 @@ public class UHPluginListener implements Listener {
 		
 		// Sends a team-death message if needed.
 		if(p.getConfig().getBoolean("death-messages.notifyIfTeamHasFallen", false)) {
-			UHTeam team = p.getTeamManager().getTeamForPlayer(ev.getEntity());
+			UHTeam team = p.getTeamManager().getTeamForPlayer((Player) ev.getEntity());
 			if(team != null) {
 				boolean isAliveTeam = false;
 				
@@ -120,9 +120,6 @@ public class UHPluginListener implements Listener {
 				if(!isAliveTeam) {
 					p.getServer().broadcastMessage(p.getConfig().getString("death-messages.teamDeathMessagesPrefix", "") + "The team " + ChatColor.RESET + team.getChatColor() + team.getDisplayName() + ChatColor.RESET + p.getConfig().getString("death-messages.teamDeathMessagesPrefix", "") + " has fallen!");
 				}
-			}
-			else {
-				p.getLogger().warning("Team null?!");
 			}
 		}
 		
@@ -144,7 +141,6 @@ public class UHPluginListener implements Listener {
 			ev.setCancelled(true);
 		}
 	}
-	
 	
 	
 	/**
