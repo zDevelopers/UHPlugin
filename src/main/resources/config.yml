@@ -24,6 +24,9 @@ death-messages:
     deathMessagesPrefix: "§6"  # Use this to increase visibility of death messages.
     teamDeathMessagesPrefix: "§6"
 
+# If true, the name of the players will be colorized according to the teams.
+colorizeChat: true
+
 gameplay-changes:
     weather: true
     

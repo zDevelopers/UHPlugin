@@ -46,11 +46,19 @@ public class UHTeam {
 	public void addPlayer(Player player) {
 		players.add(player);
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).addPlayer(player);
+		
+		if(plugin.getConfig().getBoolean("colorizeChat")) {
+			player.setDisplayName(this.color + player.getName() + ChatColor.RESET);
+		}
 	}
 	
 	public void removePlayer(Player player) {
 		players.remove(player);
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).removePlayer(player);
+		
+		if(plugin.getConfig().getBoolean("colorizeChat")) {
+			player.setDisplayName(ChatColor.WHITE + player.getName() + ChatColor.RESET);
+		}
 	}
 	
 	public boolean containsPlayer(Player player) {
