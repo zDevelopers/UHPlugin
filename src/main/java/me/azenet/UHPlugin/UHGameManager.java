@@ -35,7 +35,6 @@ public class UHGameManager {
 	private Boolean gameWithTeams = true;
 	
 	// Used for the slow start.
-	private Integer teamsTeleported = 0;
 	private Boolean slowStartInProgress = false;
 	private Boolean slowStartTPFinished = false;
 	
@@ -172,19 +171,17 @@ public class UHGameManager {
 			// TP
 			
 			LinkedList<Location> unusedTP = loc;
-			teamsTeleported = 1;
+			Integer teamsTeleported = 1;
 			Integer delayBetweenTP = p.getConfig().getInt("slow-start.delayBetweenTP");
 			
 			for (final UHTeam t : tm.getTeams()) {
 				final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
 				
-				BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo, true, sender);
+				BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo, true, sender, teamsTeleported);
 				teamStartTask.runTaskLater(p, 20L * teamsTeleported * delayBetweenTP);
 				
-				// In case of equality, all the teams are teleported.
-				if(teamsTeleported < aliveTeamsCount) {
-					teamsTeleported++;
-				}
+				teamsTeleported++;
+
 				
 				unusedTP.remove(lo);
 			}
@@ -249,6 +246,8 @@ public class UHGameManager {
 		this.minutesLeft = getEpisodeLength();
 		this.secondsLeft = 0;
 		
+		this.episodeStartTime = System.currentTimeMillis();
+		
 		BukkitRunnable updateTimer = new UpdateTimerTask(p);
 		updateTimer.runTaskTimer(p, 20L, 20L);
 	}
@@ -273,11 +272,6 @@ public class UHGameManager {
 	private void finalizeStart() {
 		Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "--- GO ---");
 		this.gameRunning = true;
-		this.episodeStartTime = System.currentTimeMillis();
-	}
-	
-	public Integer getTeamsTeleported() {
-		return this.teamsTeleported;
 	}
 	
 	public Boolean getSlowStartInProgress() {

@@ -19,6 +19,7 @@ public class TeamStartTask extends BukkitRunnable {
 	private Location startPoint = null;
 	private Boolean slow = false;
 	private CommandSender sender = null;
+	private Integer teamsTeleported = 0;
 	
 	public TeamStartTask(UHPlugin p, UHTeam team, Location startPoint) {
 		this.p = p;
@@ -26,17 +27,19 @@ public class TeamStartTask extends BukkitRunnable {
 		this.startPoint = startPoint;
 	}
 	
-	public TeamStartTask(UHPlugin p, UHTeam team, Location startPoint, Boolean slow, CommandSender sender) {
+	public TeamStartTask(UHPlugin p, UHTeam team, Location startPoint, Boolean slow, CommandSender sender, Integer teamsTeleported) {
 		this.p = p;
 		this.team = team;
 		this.startPoint = startPoint;
 		this.slow = slow;
 		this.sender = sender;
+		this.teamsTeleported = teamsTeleported;
 	}
 	
 	@Override
 	public void run() {
 		team.teleportTo(startPoint);
+		
 		for (Player player : team.getPlayers()) {
 			player.setGameMode(GameMode.SURVIVAL);
 			
@@ -62,7 +65,7 @@ public class TeamStartTask extends BukkitRunnable {
 				sender.sendMessage(ChatColor.GRAY + "Team " + team.getChatColor() + team.getName() + ChatColor.GRAY + " teleported.");
 			} catch(NullPointerException e) { }
 			
-			if(p.getGameManager().getAliveTeamsCount() == p.getGameManager().getTeamsTeleported()) {
+			if(p.getGameManager().getAliveTeamsCount() == this.teamsTeleported) {
 				p.getGameManager().setSlowStartTPFinished(true);
 				
 				try {
@@ -71,7 +74,5 @@ public class TeamStartTask extends BukkitRunnable {
 				} catch(NullPointerException e) { }
 			}
 		}
-		
 	}
-
 }
