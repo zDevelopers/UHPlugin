@@ -2,7 +2,6 @@ package me.azenet.UHPlugin;
 
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,7 +32,7 @@ public final class UHPlugin extends JavaPlugin {
 	public void onEnable() {
 		this.saveDefaultConfig();
 		
-		logger = Bukkit.getLogger();
+		logger = this.getLogger();
 		teamManager = new UHTeamManager(this);
 		gameManager = new UHGameManager(this);
 		

@@ -96,7 +96,7 @@ public class UHPluginCommand implements CommandExecutor {
 	}
 
 	/**
-	 * Print the help.
+	 * Prints the help.
 	 * 
 	 * @param sender
 	 * @param error True if the help is printed because the used typed an unknown command.
@@ -148,7 +148,7 @@ public class UHPluginCommand implements CommandExecutor {
 	}
 	
 	/**
-	 * This method send a message to a player who try to use a command without the permission.
+	 * This method sends a message to a player who try to use a command without the permission.
 	 * 
 	 * @param sender
 	 * @param command
@@ -278,7 +278,6 @@ public class UHPluginCommand implements CommandExecutor {
 	private void doTeam(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // No action provided: doc
 			sender.sendMessage(ce + "You need to provide an action.");
-			sender.sendMessage("");
 			sender.sendMessage(ci + "Available options are listed below.");
 			sender.sendMessage(cc + "/uh team add <color> " + ci + ": adds a team with the provided color.");
 			sender.sendMessage(cc + "/uh team add <color> <name> " + ci + ": adds a named team with the provided name and color. Usefull if you need more than 16 teams.");
@@ -542,7 +541,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	
 	/**
-	 * This command resurrect a player.
+	 * This command resurrects a player.
 	 * Usage: /uh resurrect <player>
 	 * 
 	 * @param sender
