@@ -3,6 +3,7 @@ package me.azenet.UHPlugin;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
@@ -64,6 +65,32 @@ public final class UHPlugin extends JavaPlugin {
 						getLogger().info("Spawn point " + Integer.parseInt(coords[0]) + "," + Integer.parseInt(coords[1]) + " added from the config file.");
 					} catch(Exception e) { // Not an integer or not enough coords
 						getLogger().warning("Invalid spawn point set in config: " + ((String) position));
+					}
+				}
+			}
+		}
+		
+		// Import teams from config
+		if(getConfig().getList("teams") != null) {
+			for(Object teamRaw : getConfig().getList("teams")) {
+				if(teamRaw instanceof String && teamRaw != null) {
+					String[] teamRawSeparated = ((String) teamRaw).split(",");
+					ChatColor color = this.teamManager.getChatColorByName(teamRawSeparated[0]);
+					if(color == null) {
+						getLogger().warning("Invalid team set in config: " + ((String) teamRaw));
+					}
+					else {
+						if(teamRawSeparated.length == 2) { // "color,name"
+							this.teamManager.addTeam(color, teamRawSeparated[1]);
+							getLogger().info("Team " + teamRawSeparated[1] + " (" + teamRawSeparated[0] + ") added from the config file.");
+						}
+						else if(teamRawSeparated.length == 1) { // "color"
+							this.teamManager.addTeam(color, teamRawSeparated[0]);
+							getLogger().info("Team " + teamRawSeparated[0] + " added from the config file.");
+						}
+						else {
+							getLogger().warning("Invalid team set in config: " + ((String) teamRaw));
+						}
 					}
 				}
 			}
