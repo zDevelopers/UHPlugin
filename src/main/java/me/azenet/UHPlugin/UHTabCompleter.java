@@ -13,6 +13,7 @@ public class UHTabCompleter implements TabCompleter {
 	
 	private ArrayList<String> commands = null;
 	private ArrayList<String> teamCommands = null;
+	private ArrayList<String> specCommands = null;
 
 	private ArrayList<String> colors = new ArrayList<String>();
 	
@@ -22,6 +23,7 @@ public class UHTabCompleter implements TabCompleter {
 		
 		this.commands = p.getCommandManager().getCommands();
 		this.teamCommands = p.getCommandManager().getTeamCommands();
+		this.specCommands = p.getCommandManager().getSpecCommands();
 		
 		this.colors.add("aqua");
 		this.colors.add("black");
@@ -48,14 +50,12 @@ public class UHTabCompleter implements TabCompleter {
 		}
 		
 		/** Autocompletion for subcommands **/
-		
 		if(args.length == 1) {
 			return getAutocompleteSuggestions(args[0].toLowerCase(), this.commands);
 		}
 		
 		/** Autocompletion for /uh team **/
 		// The player names autocomplete is handled by Bukkit.
-		
 		if(args[0].equalsIgnoreCase("team")) {
 			
 			// /uh team <?>
@@ -74,9 +74,29 @@ public class UHTabCompleter implements TabCompleter {
 					for(UHTeam team : this.p.getTeamManager().getTeams()) {
 						teamNames.add(team.getName());
 					}
-					
 					return getAutocompleteSuggestions(args[2].toLowerCase(), teamNames);
 				}	
+			}
+		}
+		
+		/** Autocompletion for /uh spec **/
+		else if(args[0].equalsIgnoreCase("spec")) {
+			
+			// /uh spec <?>
+			if(args.length == 2) {
+				return getAutocompleteSuggestions(args[1].toLowerCase(), this.specCommands);
+			}
+			
+			if(args.length == 3) {
+				
+				if(args[1].equalsIgnoreCase("remove")) { // /uh spec remove <?>: autocompletion for spectators only (not all players)
+					ArrayList<String> spectatorsList = new ArrayList<String>();
+					for(String spectator : p.getGameManager().getSpectators()) {
+						spectatorsList.add(spectator);
+					}
+					return this.getAutocompleteSuggestions(args[2].toLowerCase(), spectatorsList);
+				}
+				
 			}
 		}
 		

@@ -28,6 +28,7 @@ public class UHGameManager {
 
 	private LinkedList<Location> loc = new LinkedList<Location>();
 	private HashSet<String> alivePlayers = new HashSet<String>();
+	private HashSet<String> spectators = new HashSet<String>();
 	
 	private Integer alivePlayersCount = 0;
 	private Integer aliveTeamsCount = 0;
@@ -92,10 +93,12 @@ public class UHGameManager {
 		
 		/** Initialization of the players and the teams **/
 		
-		// We adds all the connected players to a list of alive players.
+		// We adds all the connected players (excepted spectators) to a list of alive players.
 		alivePlayers.clear();
 		for(final Player player : p.getServer().getOnlinePlayers()) {
-			alivePlayers.add(player.getName());
+			if(!spectators.contains(player.getName())) {
+				alivePlayers.add(player.getName());
+			}
 		}
 		this.alivePlayersCount = alivePlayers.size();
 		
@@ -105,9 +108,11 @@ public class UHGameManager {
 			this.gameWithTeams = false;
 			
 			for(final Player player : p.getServer().getOnlinePlayers()) {
-				UHTeam team = new UHTeam(player.getName(), player.getName(), ChatColor.WHITE, this.p);
-				team.addPlayer(player);
-				tm.addTeam(team);
+				if(!spectators.contains(player.getName())) {
+					UHTeam team = new UHTeam(player.getName(), player.getName(), ChatColor.WHITE, this.p);
+					team.addPlayer(player);
+					tm.addTeam(team);
+				}
 			}
 		}
 		// With teams? We adds players without teams to a solo team.
@@ -115,7 +120,7 @@ public class UHGameManager {
 			this.gameWithTeams = true;
 			
 			for(final Player player : p.getServer().getOnlinePlayers()) {
-				if(tm.getTeamForPlayer(player) == null) {
+				if(tm.getTeamForPlayer(player) == null && !spectators.contains(player.getName())) {
 					UHTeam team = new UHTeam(player.getName(), player.getName(), ChatColor.WHITE, this.p);
 					team.addPlayer(player);
 					tm.addTeam(team);
@@ -128,7 +133,6 @@ public class UHGameManager {
 		
 		p.getLogger().info("[start] " + aliveTeamsCount + " teams");
 		p.getLogger().info("[start] " + alivePlayersCount + " players");
-		p.getLogger().info("[start] With teams: " + gameWithTeams.toString());
 		
 		if(loc.size() < tm.getTeams().size()) {
 			sender.sendMessage(ChatColor.RED + "Unable to start the game: not enough teleportation spots.");
@@ -368,8 +372,31 @@ public class UHGameManager {
 	}
 	
 	
+	/**
+	 * Adds a spectator. When the game is started, spectators are ignored.
+	 * 
+	 * @param player The player to register as a spectator.
+	 */
+	public void addSpectator(Player player) {
+		spectators.add(player.getName());
+		tm.removePlayerFromTeam(player);
+	}
 	
-		
+	public void removeSpectator(Player player) {
+		spectators.remove(player.getName());
+	}
+	
+	public HashSet<String> getSpectators() {
+		return spectators;
+	}
+	
+	
+	/**
+	 * Adds a spawn point.
+	 * 
+	 * @param x
+	 * @param z
+	 */
 	public void addLocation(int x, int z) {
 		loc.add(new Location(p.getServer().getWorlds().get(0), x, p.getServer().getWorlds().get(0).getHighestBlockYAt(x,z)+120, z));
 	}

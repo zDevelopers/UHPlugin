@@ -10,8 +10,8 @@ public class UHWallGenerator {
 	private UHPlugin p = null;
 	private World w = null;
 	
-	Material wallBlockAir = null;
-	Material wallBlockSolid = null;
+	private Material wallBlockAir = null;
+	private Material wallBlockSolid = null;
 	
 	public UHWallGenerator(UHPlugin p, World w) {
 		this.p = p;
@@ -60,6 +60,7 @@ public class UHWallGenerator {
 		for (Integer z = limitZInf; z <= limitZSup; z++) {
 			w.getBlockAt(limitXInf, 1, z).setType(Material.BEDROCK);
 			w.getBlockAt(limitXSup, 1, z).setType(Material.BEDROCK);
+			
 			for (Integer y = 2; y <= wallHeight; y++) {
 				setBlock(w.getBlockAt(limitXInf, y, z), WallPosition.WEST);
 				setBlock(w.getBlockAt(limitXSup, y, z), WallPosition.EAST);

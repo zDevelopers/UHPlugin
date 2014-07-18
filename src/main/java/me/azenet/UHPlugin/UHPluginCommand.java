@@ -3,6 +3,7 @@ package me.azenet.UHPlugin;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
@@ -24,6 +25,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	private ArrayList<String> commands = new ArrayList<String>();
 	private ArrayList<String> teamCommands = new ArrayList<String>();
+	private ArrayList<String> specCommands = new ArrayList<String>();
 
 
 	public UHPluginCommand(UHPlugin p) {
@@ -37,6 +39,7 @@ public class UHPluginCommand implements CommandExecutor {
 		commands.add("heal");
 		commands.add("healall");
 		commands.add("resurrect");
+		commands.add("spec");
 		
 		teamCommands.add("add");
 		teamCommands.add("remove");
@@ -44,6 +47,10 @@ public class UHPluginCommand implements CommandExecutor {
 		teamCommands.add("removeplayer");
 		teamCommands.add("list");
 		teamCommands.add("reset");
+		
+		specCommands.add("add");
+		specCommands.add("remove");
+		specCommands.add("list");
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -567,6 +574,75 @@ public class UHPluginCommand implements CommandExecutor {
 	}
 	
 	
+	/**
+	 * This command manages spectators (aka ignored players).
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doSpec(CommandSender sender, Command command, String label, String[] args) {
+		if(args.length == 1) { // /uh spec
+			sender.sendMessage(ce + "You need to provide an action.");
+			sender.sendMessage(ci + "Available options are listed below.");
+			sender.sendMessage(ce + "Please note" + ci + ": for UHPlugin, a spectator is an ignored player. This does not adds a teleportation menu, or a fly/invisibility.");
+			sender.sendMessage(cc + "/uh spec add <player> " + ci + ": adds a spectator.");
+			sender.sendMessage(cc + "/uh spec remove <player> " + ci + ": removes a spectator.");
+			sender.sendMessage(cc + "/uh spec list " + ci + ": list the spectators.");
+		}
+		else {
+			String subcommand = args[1];
+			
+			if(subcommand.equalsIgnoreCase("add")) {
+				if(args.length == 2) { // /uh spec add
+					sender.sendMessage(ce + "Syntax error, see /uh spec.");
+				}
+				else { // /uh spec add <player>
+					Player newSpectator = p.getServer().getPlayer(args[2]);
+					if(newSpectator == null) {
+						sender.sendMessage(ce + "The player " + args[2] + " is not online.");
+					}
+					else {
+						p.getGameManager().addSpectator(newSpectator);
+						sender.sendMessage(cs + args[2] + " is now a spectator.");
+					}
+				}
+			}
+			
+			else if(subcommand.equalsIgnoreCase("remove")) {
+				if(args.length == 2) { // /uh spec remove
+					sender.sendMessage(ce + "Syntax error, see /uh spec.");
+				}
+				else { // /uh spec remove <player>
+					Player oldSpectator = p.getServer().getPlayer(args[2]);
+					if(oldSpectator == null) {
+						sender.sendMessage(ce + "The player " + args[2] + " is not online.");
+					}
+					else {
+						p.getGameManager().removeSpectator(oldSpectator);
+						sender.sendMessage(cs + args[2] + " is now a player.");
+					}
+				}
+			}
+			
+			else if(subcommand.equalsIgnoreCase("list")) {
+				HashSet<String> spectators = p.getGameManager().getSpectators();
+				if(spectators.size() == 0) {
+					sender.sendMessage(ce + "There is not any spectator to list.");
+				}
+				else {
+					sender.sendMessage(ci + String.valueOf(spectators.size()) + " registrered spectator(s).");
+					for(String spectator : spectators) {
+						sender.sendMessage(ChatColor.LIGHT_PURPLE + " - " + spectator);
+					}
+				}
+			}
+		}
+	}
+	
+	
 	
 	
 	public ArrayList<String> getCommands() {
@@ -575,6 +651,10 @@ public class UHPluginCommand implements CommandExecutor {
 
 	public ArrayList<String> getTeamCommands() {
 		return teamCommands;
+	}
+	
+	public ArrayList<String> getSpecCommands() {
+		return specCommands;
 	}
 	
 }
