@@ -117,15 +117,16 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		sender.sendMessage(ci + "Available subcommands are listed below.");
 		sender.sendMessage(ci + "Legend: " + cc + "/uh command <required> [optional=default]" + ci + ".");
-		sender.sendMessage(ChatColor.GRAY + "------ Game-related commands ------");
+		sender.sendMessage(ChatColor.AQUA + "------ Game-related commands ------");
 		sender.sendMessage(cc + "/uh start " + ci + ": launches the game.");
 		sender.sendMessage(cc + "/uh start slow " + ci + ": launches the game slowly, in two steps, for smaller servers.");
 		sender.sendMessage(cc + "/uh shift " + ci + ": shifts an episode.");
-		sender.sendMessage(cc + "/uh team " + ci + ": manages the teams (execute /uh team for more details).");
+		sender.sendMessage(cc + "/uh team " + ci + ": manages the teams. Execute /uh team for details.");
 		sender.sendMessage(cc + "/uh addspawn " + ci + ": adds a spawn point for a team or a player, at the current location of the sender.");
 		sender.sendMessage(cc + "/uh addspawn <x> <z> " + ci + ": adds a spawn point for a team or a player, at the provided coordinates.");
+		sender.sendMessage(cc + "/uh spec " + ci + ": manages the spectators. Execute /uh spec for details.");
 		sender.sendMessage(cc + "/uh generatewalls " + ci + ": generates the walls according to the configuration.");
-		sender.sendMessage(ChatColor.GRAY + "------ Bugs-related commands ------");
+		sender.sendMessage(ChatColor.AQUA + "------ Bugs-related commands ------");
 		sender.sendMessage(cc + "/uh heal <player> [half-hearts=20] " + ci + ": heals a player to the number of half-hearts provided (default 20).");
 		sender.sendMessage(cc + "/uh healall [half-hearts=20] " + ci + ": heals all players instead of only one.");
 		sender.sendMessage(cc + "/uh resurrect <player> " + ci + ": resurrects a player.");
@@ -284,7 +285,6 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doTeam(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // No action provided: doc
-			sender.sendMessage(ce + "You need to provide an action.");
 			sender.sendMessage(ci + "Available options are listed below.");
 			sender.sendMessage(cc + "/uh team add <color> " + ci + ": adds a team with the provided color.");
 			sender.sendMessage(cc + "/uh team add <color> <name> " + ci + ": adds a named team with the provided name and color. Usefull if you need more than 16 teams.");
@@ -585,9 +585,8 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doSpec(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // /uh spec
-			sender.sendMessage(ce + "You need to provide an action.");
 			sender.sendMessage(ci + "Available options are listed below.");
-			sender.sendMessage(ce + "Please note" + ci + ": for UHPlugin, a spectator is an ignored player. This does not adds a teleportation menu, or a fly/invisibility.");
+			sender.sendMessage(ce + "Please note" + ci + ": for UHPlugin, a spectator is " + ChatColor.ITALIC + "only" + ci + " an ignored player.");
 			sender.sendMessage(cc + "/uh spec add <player> " + ci + ": adds a spectator.");
 			sender.sendMessage(cc + "/uh spec remove <player> " + ci + ": removes a spectator.");
 			sender.sendMessage(cc + "/uh spec list " + ci + ": list the spectators.");
