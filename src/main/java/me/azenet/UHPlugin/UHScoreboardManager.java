@@ -6,6 +6,7 @@ import java.text.NumberFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Criterias;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -62,6 +63,9 @@ public class UHScoreboardManager {
 		Objective healthObjective = this.sb.registerNewObjective("Health", Criterias.HEALTH);
 		healthObjective.setDisplayName("Health");
 		healthObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+		
+		// Sometime the health is initialized to 0. This is used to fix this.
+		updateHealthScore();
 	}
 	
 	public void updateScoreboard() {
@@ -126,6 +130,25 @@ public class UHScoreboardManager {
 	 */
 	private String getTimerText(Integer minutes, Integer seconds) {
 		return ChatColor.WHITE + formatter.format(minutes) + ChatColor.GRAY + ":" + ChatColor.WHITE + formatter.format(seconds);
+	}
+	
+	public void updateHealthScore() {
+		for(final Player player : p.getServer().getOnlinePlayers()) {
+			updateHealthScore(player);
+		}
+	}
+	
+	public void updateHealthScore(final Player player) {
+		if(player.getHealth() != 1D) {
+			player.setHealth(player.getHealth() - 1);
+			
+			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+				@Override
+				public void run() {
+					player.setHealth(player.getHealth() + 1);
+				}
+			}, 1L);
+		}
 	}
 	
 	/**
