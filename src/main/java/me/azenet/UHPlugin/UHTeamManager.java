@@ -84,6 +84,11 @@ public class UHTeamManager {
 	 * Removes all teams.
 	 */
 	public void reset() {
+		// 1: scoreboard reset
+		for(UHTeam team : teams) {
+			team.deleteTeam();
+		}
+		// 2: internal list reset
 		teams = new ArrayList<UHTeam>();
 	}
 	

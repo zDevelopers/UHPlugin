@@ -63,6 +63,19 @@ public class UHTeam {
 		}
 	}
 	
+	public void deleteTeam() {
+		updatePlayerObjects();
+		
+		// We removes the players from the team (scoreboard team too)
+		for(Player player : players) {
+			removePlayer(player);
+		}
+		
+		// Then the scoreboard team is deleted.
+		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).unregister();
+		
+	}
+	
 	public boolean containsPlayer(Player player) {
 		for(Player playerInTeam : players) {
 			if(playerInTeam.getName().equalsIgnoreCase(player.getName())) {
