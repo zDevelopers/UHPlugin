@@ -40,6 +40,7 @@ public class UHTeam {
 	}
 	
 	public ArrayList<Player> getPlayers() {
+		updatePlayerObjects();
 		return players;
 	}
 
@@ -53,6 +54,7 @@ public class UHTeam {
 	}
 	
 	public void removePlayer(Player player) {
+		updatePlayerObjects();
 		players.remove(player);
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).removePlayer(player);
 		
@@ -71,6 +73,7 @@ public class UHTeam {
 	}
 
 	public void teleportTo(Location lo) {
+		updatePlayerObjects();
 		for (Player p : players) {
 			p.teleport(lo);
 		}
@@ -78,5 +81,19 @@ public class UHTeam {
 
 	public ChatColor getChatColor() {
 		return color;
+	}
+	
+	/**
+	 * Used to handle the deconnection of a player.
+	 * This will reload the Player objects, this is absolutely vital to teleport players
+	 * deco/reconnected.
+	 */
+	private void updatePlayerObjects() {
+		ArrayList<Player> playersCopy = (ArrayList<Player>) players.clone();
+		players = new ArrayList<Player>();
+		
+		for(Player player : playersCopy) {
+			players.add(plugin.getServer().getPlayer(player.getName()));
+		}
 	}
 }

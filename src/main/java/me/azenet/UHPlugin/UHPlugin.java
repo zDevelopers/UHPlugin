@@ -22,6 +22,7 @@ public final class UHPlugin extends JavaPlugin {
 	private ShapedRecipe goldenAppleFromHead = null;
 	private ShapedRecipe goldenAppleFromWitherHead = null;
 	private ShapelessRecipe goldenAppleLoreRemover = null;
+	
 	private UHTeamManager teamManager = null;
 	private UHGameManager gameManager = null;
 	private UHPluginCommand commandManager = null;
@@ -179,11 +180,6 @@ public final class UHPlugin extends JavaPlugin {
 				return this.compass;
 		}
 		throw new IllegalArgumentException("Unknow recipe");
-	}
-
-	@Override
-	public void onDisable() {
-		logger.info("UHPlugin unloaded");
 	}
 	
 	

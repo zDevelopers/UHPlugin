@@ -557,7 +557,7 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		
 		Player player = p.getServer().getPlayer(args[1]);
-		if(player == null) {
+		if(!player.isOnline()) {
 			sender.sendMessage(ce + "The player " + args[1] + " is not online.");
 			return;
 		}
