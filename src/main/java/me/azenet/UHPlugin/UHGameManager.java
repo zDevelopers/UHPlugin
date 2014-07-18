@@ -128,6 +128,7 @@ public class UHGameManager {
 		
 		p.getLogger().info("[start] " + aliveTeamsCount + " teams");
 		p.getLogger().info("[start] " + alivePlayersCount + " players");
+		p.getLogger().info("[start] With teams: " + gameWithTeams.toString());
 		
 		if(loc.size() < tm.getTeams().size()) {
 			sender.sendMessage(ChatColor.RED + "Unable to start the game: not enough teleportation spots.");

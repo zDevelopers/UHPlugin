@@ -87,7 +87,9 @@ public class UHScoreboardManager {
 			oldAlivePlayersCount = alivePlayersCount;
 		}
 		
-		if(gm.isGameWithTeams() && !aliveTeamsCount.equals(oldAliveTeamsCount)) {
+		// This is displayed when the game is running to avoid a special case used to remove it
+		// if the game is without teams.
+		if(gm.isGameRunning() && gm.isGameWithTeams() && !aliveTeamsCount.equals(oldAliveTeamsCount)) {
 			sb.resetScores(getText("teams", oldAliveTeamsCount));
 			objective.getScore(getText("teams", aliveTeamsCount)).setScore(3);
 			oldAliveTeamsCount = aliveTeamsCount;
