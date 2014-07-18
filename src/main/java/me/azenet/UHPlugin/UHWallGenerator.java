@@ -87,7 +87,7 @@ public class UHWallGenerator {
 		// We set the block according to the block near it inside the border.
 		else {
 			Material innerMaterial = getInnerBlock(block, position).getType();
-			if(innerMaterial.isTransparent() || innerMaterial.equals(Material.WATER)) {
+			if(innerMaterial.isTransparent() || innerMaterial.equals(Material.WATER) || innerMaterial.equals(Material.STATIONARY_WATER)) {
 				block.setType(wallBlockAir);
 			}
 			else {
@@ -107,7 +107,7 @@ public class UHWallGenerator {
 				|| blockType.equals(Material.LEAVES) || blockType.equals(Material.LEAVES_2) 
 				|| blockType.equals(Material.LOG) || blockType.equals(Material.LOG_2)
 				|| blockType.equals(Material.CHEST) || blockType.equals(Material.TRAPPED_CHEST)
-				|| blockType.equals(Material.WATER)) {
+				|| blockType.equals(Material.WATER) || blockType.equals(Material.STATIONARY_WATER)) {
 			return true;
 		}
 		return false;
