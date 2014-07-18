@@ -3,10 +3,8 @@ package me.azenet.UHPlugin;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -180,55 +178,6 @@ public final class UHPlugin extends JavaPlugin {
 				return this.compass;
 		}
 		throw new IllegalArgumentException("Unknow recipe");
-	}
-	
-	
-	/**
-	 * Generate the walls around the map.
-	 * 
-	 * @throws Exception
-	 */
-	public boolean generateWalls(World w) {
-		Integer halfMapSize = (int) Math.floor(this.getConfig().getInt("map.size")/2);
-		Integer wallHeight = this.getConfig().getInt("map.wall.height");
-		Material wallBlock = Material.getMaterial(this.getConfig().getString("map.wall.block").toUpperCase());
-		
-		if(wallBlock == null || !wallBlock.isSolid()) {
-			logger.severe("Unable to build the wall, the block set in the config file is invalid.");
-			return false;
-		}
-		
-		Location spawn = w.getSpawnLocation();
-		Integer limitXInf = spawn.add(-halfMapSize, 0, 0).getBlockX();
-		
-		spawn = w.getSpawnLocation();
-		Integer limitXSup = spawn.add(halfMapSize, 0, 0).getBlockX();
-		
-		spawn = w.getSpawnLocation();
-		Integer limitZInf = spawn.add(0, 0, -halfMapSize).getBlockZ();
-		
-		spawn = w.getSpawnLocation();
-		Integer limitZSup = spawn.add(0, 0, halfMapSize).getBlockZ();
-		
-		for (Integer x = limitXInf; x <= limitXSup; x++) {
-			w.getBlockAt(x, 1, limitZInf).setType(Material.BEDROCK);
-			w.getBlockAt(x, 1, limitZSup).setType(Material.BEDROCK);
-			for (Integer y = 2; y <= wallHeight; y++) {
-				w.getBlockAt(x, y, limitZInf).setType(wallBlock);
-				w.getBlockAt(x, y, limitZSup).setType(wallBlock);
-			}
-		} 
-		
-		for (Integer z = limitZInf; z <= limitZSup; z++) {
-			w.getBlockAt(limitXInf, 1, z).setType(Material.BEDROCK);
-			w.getBlockAt(limitXSup, 1, z).setType(Material.BEDROCK);
-			for (Integer y = 2; y <= wallHeight; y++) {
-				w.getBlockAt(limitXInf, y, z).setType(wallBlock);
-				w.getBlockAt(limitXSup, y, z).setType(wallBlock);
-			}
-		}
-		
-		return true;
 	}
 	
 	public UHTeamManager getTeamManager() {

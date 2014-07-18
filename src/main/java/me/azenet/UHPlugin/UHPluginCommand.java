@@ -214,12 +214,12 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(ci + "From the console, generating the walls of the default world, " + world.getName());
 		}
 		
-		
 		try {
-			Boolean success = p.generateWalls(world);
+			UHWallGenerator wallGenerator = new UHWallGenerator(this.p, world);
+			Boolean success = wallGenerator.build();
 			
 			if(!success) {
-				sender.sendMessage(ce + "Unable to generate the wall: the block set in the config is not valid.");
+				sender.sendMessage(ce + "Unable to generate the wall: see logs for details. The blocks set in the config are probably invalid.");
 			}
 		}
 		catch(Exception e) {

@@ -6,7 +6,11 @@ map:
     size: 2000
     wall:
         height: 128
-        block: BEDROCK
+        block:
+            # The replaceAir block will be placed where there where some transparent blocks or trees before.
+            # The replaceSolid one, where there was an other kind of block.
+            replaceAir: GLASS
+            replaceSolid: BEDROCK
 
 daylightCycle:
     do: false
