@@ -84,7 +84,7 @@ public class UHTeamManager {
 	 * Removes all teams.
 	 */
 	public void reset() {
-		teams = null;
+		teams = new ArrayList<UHTeam>();
 	}
 	
 	/**
