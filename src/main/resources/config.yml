@@ -38,14 +38,16 @@ gameplay-changes:
     craftGoldenMelonWithGoldBlock: true
     
     craftGoldenAppleFromHead:
-        do: 
-            fromHuman: true
-            fromWither: true
-        craftNotchApple: false
-        addLore: true
-        numberCrafted:
-            fromPlayer: 3
-            fromWither: 1
+        fromHuman:
+            do: true
+            numberCrafted: 3
+            addLore: true
+            craftNotchApple: false
+        fromWither:
+            do: true
+            numberCrafted: 1
+            addLore: true
+            craftNotchApple: false
     
     
     disableEnderpearlsDamages: true

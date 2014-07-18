@@ -265,7 +265,7 @@ public class UHPluginListener implements Listener {
 			return;
 		}
 		
-		/** Prevent items to be crafted **/
+		/** Prevents items to be crafted **/
 		
 		// Original recipes, for comparison
 		ShapedRecipe originalCompass = new ShapedRecipe(new ItemStack(Material.COMPASS));
@@ -289,26 +289,36 @@ public class UHPluginListener implements Listener {
 		}
 		
 		
-		/** Add a lore to the golden apples crafted from a head **/
+		/** Adds a lore to the golden apples crafted from a head **/
 		
-		if((p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do.fromHuman") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do.fromWither")) && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.addLore") && (RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromHead")) || RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromWitherHead")))) {	   	
+		if((p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.do") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.do")) 
+				&& (p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore")) 
+				&& (RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromHead")) || RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromWitherHead")))) {	   	
+			
 			ItemStack result = ev.getInventory().getResult();
 			ItemMeta meta = result.getItemMeta();
 			
 			// Lookup for the head in the recipe
 			String name = "a malignant monster";
+			Boolean wither = true;
 			for(ItemStack item : ev.getInventory().getContents()) {
 				if(item.getType() == Material.SKULL_ITEM && item.getDurability() == (short) SkullType.PLAYER.ordinal()) { // An human head
 					SkullMeta sm = (SkullMeta) item.getItemMeta();
 					if(sm.hasOwner()) { // An human head
 						name = sm.getOwner();
+						wither = false;
 					}
 					break;
 				}
 			}
 			
-			List<String> lore = Arrays.asList("Made from the fallen head", "of " + name);
-			meta.setLore(lore);
+			if((wither && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore"))
+					|| (!wither && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore"))) {
+			
+				List<String> lore = Arrays.asList("Made from the fallen head", "of " + name);
+				meta.setLore(lore);
+			
+			}
 			
 			result.setItemMeta(meta);
 			ev.getInventory().setResult(result);
@@ -317,22 +327,19 @@ public class UHPluginListener implements Listener {
 	
 	
 	/**
-	 * Used to disable ghast tears (if needed).
+	 * Used to replace ghast tears with gold (if needed).
 	 * 
 	 * @param ev
 	 */
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent ev) {
 		if (ev.getEntity() instanceof Ghast && p.getConfig().getBoolean("gameplay-changes.replaceGhastTearsWithGold")) {
-			Bukkit.getLogger().info("Modifying drops for Ghast");
 			List<ItemStack> drops = new ArrayList<ItemStack>(ev.getDrops());
 			ev.getDrops().clear(); 
 			for (ItemStack i : drops) {
 				if (i.getType() == Material.GHAST_TEAR) {
-					Bukkit.getLogger().info("Added "+i.getAmount()+" ghast tear(s)");
 					ev.getDrops().add(new ItemStack(Material.GOLD_INGOT,i.getAmount()));
 				} else {
-					Bukkit.getLogger().info("Added "+i.getAmount()+" "+i.getType().toString());
 					ev.getDrops().add(i);
 				}
 			}

@@ -99,16 +99,17 @@ public final class UHPlugin extends JavaPlugin {
 	
 	@SuppressWarnings("deprecation")
 	public void addRecipes() {
-		if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do.fromHuman") || getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do.fromWither")) {
+		if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.do") || getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.do")) {
 			// Golden apple (or notch apple): head in the center and 8 gold ingots.
 			
+			/** From human head **/
 			short damage = 0;
-			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.craftNotchApple")) {
+			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.craftNotchApple")) {
 				damage = 1;
 			}
 			
 			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do.fromHuman")) {
-				goldenAppleFromHead = new ShapedRecipe(new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.numberCrafted.fromPlayer", 1), damage));
+				goldenAppleFromHead = new ShapedRecipe(new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromHuman.numberCrafted", 1), damage));
 				
 				goldenAppleFromHead.shape("GGG", "GHG", "GGG");
 				goldenAppleFromHead.setIngredient('G', Material.GOLD_INGOT);
@@ -117,8 +118,14 @@ public final class UHPlugin extends JavaPlugin {
 				this.getServer().addRecipe(goldenAppleFromHead);
 			}
 			
-			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do.fromWither")) {
-				goldenAppleFromWitherHead = new ShapedRecipe(new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.numberCrafted.fromWither", 1), damage));
+			/** From wither head **/
+			damage = 0;
+			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.craftNotchApple")) {
+				damage = 1;
+			}
+			
+			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.do")) {
+				goldenAppleFromWitherHead = new ShapedRecipe(new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromWither.numberCrafted", 1), damage));
 				
 				goldenAppleFromWitherHead.shape("GGG", "GHG", "GGG");
 				goldenAppleFromWitherHead.setIngredient('G', Material.GOLD_INGOT);
@@ -127,7 +134,8 @@ public final class UHPlugin extends JavaPlugin {
 				this.getServer().addRecipe(goldenAppleFromWitherHead);
 			}
 			
-			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.addLore")) {
+			/** Craft to remove the lore **/
+			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore") || getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore")) {
 				goldenAppleLoreRemover = new ShapelessRecipe(new ItemStack(Material.GOLDEN_APPLE, 1, damage));
 				goldenAppleLoreRemover.addIngredient(Material.GOLDEN_APPLE);
 			
