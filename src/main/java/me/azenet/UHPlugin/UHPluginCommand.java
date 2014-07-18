@@ -412,10 +412,10 @@ public class UHPluginCommand implements CommandExecutor {
 						}
 						else {
 							if(p.getGameManager().isPlayerDead(player.getName())) {
-								sender.sendMessage(lc + " - " + player.getName() + " (" + ChatColor.RED + "dead" + lc + ")");
+								sender.sendMessage(lc + " - " + player.getName() + ci + " (" + ChatColor.RED + "dead" + ci + ")");
 							}
 							else {
-								sender.sendMessage(lc + " - " + player.getName() + " (" + ChatColor.GREEN + "alive" + lc + ")");
+								sender.sendMessage(lc + " - " + player.getName() + ci + " (" + ChatColor.GREEN + "alive" + ci + ")");
 							}
 						}
 					}
