@@ -1,5 +1,7 @@
 package me.azenet.UHPlugin.integration;
 
+import me.azenet.UHPlugin.UHPlugin;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 

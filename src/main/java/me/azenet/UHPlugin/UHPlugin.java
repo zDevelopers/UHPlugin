@@ -2,6 +2,9 @@ package me.azenet.UHPlugin;
 
 import java.util.logging.Logger;
 
+import me.azenet.UHPlugin.integration.UHSpectatorPlusIntegration;
+import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
