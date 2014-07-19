@@ -16,6 +16,7 @@ daylightCycle:
     do: false
     time: 6000  # Initial time (or game time if the daylight cycle is disabled) in ticks. 6000 = noon.
 
+# The title of the scoreboard
 scoreboard: Kill the Patrick
 
 kick-on-death:
@@ -32,7 +33,7 @@ death-messages:
 colorizeChat: true
 
 gameplay-changes:
-    weather: true
+    weather: true  # If false, the “bad” weather (rain, thunder) is disabled.
     
     replaceGhastTearsWithGold: true
     craftGoldenMelonWithGoldBlock: true

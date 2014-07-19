@@ -4,6 +4,82 @@ C'est très la source.
 
 [![Build Status](https://travis-ci.org/AmauryCarrade/KTP.svg?branch=master)](https://travis-ci.org/AmauryCarrade/KTP)
 
+## Features
+
+ - **Manages an UHC match.**
+ - Cancels any regeneration by food (just like `/gamerule naturalRegeneration false`).
+ - **Manages teams**
+    - Creation/deletion of colored teams, with or without name.
+    - Players can be added to a team, or not (solo mode supported).
+    - The names of the players can be colored according to the team in the chat.
+    - The teams can be registered in the config file, in game, or both.
+    - The friendly fire is enabled, as well as the « can see friendly invisible » option.
+    - The teams are managed through commands (to allow the use of command blocks).
+ - **Automatic teleportation** of the players
+    - Manual teleportation spots set in the config, in game, or both.
+    - Automatic set of teleportation spots is not supported.
+    - The teams (or players, if solo) are automatically teleported to a random teleportation spot.
+    - Two teleportation modes available:
+       -  a “direct” one, all players are teleported in the same time;
+       - a “slow” one, the teams are teleported with a delay, and the game is launched after; useful for smaller servers.
+    - The players state is reset when they are teleported: inventory cleaned, max food and health, no XP, no potion effects...
+    - Some players can be marked as “spectators”: they are not teleported and not counted as a player.
+    - Before the teleportation:
+       - players can't build in the world (except with a permission/op mode);
+       - the time is frozen at noon;
+       - the mobs don't spawn;
+       - the players can't be damaged.
+    - After the teleportation:
+       - 30 seconds after, the players can be damaged, before they are invulnerable. 
+ - **Displayed match info** with a custom title
+    - Shows the number of the episode and the number of alive players/teams.
+    - Shows the time left in the current episode.
+ - The health of the players is displayed in the `Tab` list.
+ - **Episodes management**
+    - Configurable duration of an episode.
+    - A timer is displayed on the left of the player's screen.
+    - The timer can be synchronized with a clock (enabled by default, avoid long episodes due to the lag) or simply decremented every second.
+    - The end of an episode is broadcast in the chat to all players.
+    - An episode can be shifted using `/uh shift`.
+ - **Wall generator included**
+    - Generates a wall around the map following the size of the map set in the config file, centered on the world' spawn point.
+    - The generated wall is made of two blocks: one replaces the “air-like” blocks and the trees, and the other replaces solid blocks. This is useful to have a glass wall without light gaps in the caverns.
+    - The players are blocked inside the wall, even if the wall is broken or not generated.
+       - If WorldBorder is present, it is automatically configured.
+       - Else, the plugin will check itself if a player is outside the border (not recommended, use WorldBorder if possible!).
+ - **Gameplay tweaks** (all optional, see configuration file)
+    - The golden melon is crafted using a gold block instead of eight gold nuggets.
+    - When a player die, his head is dropped; this head can be used to craft a golden apple.
+       - The craft is the same as the normal golden apple, with a head instead of an apple.
+       - You can configure the number of apples crafted, the type (normal or Notch apple), and if a lore is added (saying “Crafted from the fallen head of *ThePlayer*”).
+       - You can also do the same for wither heads.
+    - The enderpearl damages can be removed.
+    - The ghast tears can be replaced by gold, to make Regeneration potions uncraftable.
+    - The compass behavior can be changed.
+       - New craft: redstone in center; then from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gunpowder.
+       - If a player right-click with a compass, the compass shows the nearest player (team excluded).
+       - This consumes a rotten flesh.
+    - The time can be frozen to any hour (eternal day/night), or not.
+    - The “bad” weather (rain, thunder) can be disabled.
+ - The players can be kiked (and eventually banned) after their death, with a configurable delay.
+ - The death messages can be more visible (format can be set in the config, including color).
+ - A team-death message can be sent when an entire team is dead.
+ - **Some commands can handle bugs** (like lag)
+    - `/uh heal <player> [half-hearts=20]` to heal a player to the exact number of hearts given. Avoid trying to find the good health effect level/duration, the id of the effect, etc.
+    - `/uh healall [half-hearts=20]`: the same, for all players, because Bukkit does not allow the use of the @a selector out of a command block.
+    - You cannot kill a player with these commands.
+    - With `/uh resurrect <player>`, you can resurrect (and deban, if he was banned) a player killed by lag (or other bug). This command does NOT teleport back the player (this feature is planned).
+ - The commands can be accessed using permissions (see subsection below).
+ - Autocompletion everywhere.
+ - For developers:
+    - the game can be controlled through the GameManager (`UHPlugin.getGameManager()`); 
+    - the teams, using the TeamManager (`UHPlugin.getTeamManager()`);
+    - the scoreboard, using the... ScoreboardManager, yes (`UHPlugin.getScoreboardManager()`);
+    - the wall generator, using the `UHWallGenerator` class.
+ - Compatible with Bukkit 1.7.9+.
+ - Lightweight (as much as possible).
+
+
 ## Documentation
 
 Documentation available via `/uh`.

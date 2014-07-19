@@ -158,7 +158,7 @@ public final class UHPlugin extends JavaPlugin {
 		
 		if (getConfig().getBoolean("gameplay-changes.compass")) {
 			// Compass: redstone in center;
-			// then from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gun powder. 
+			// then from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gunpowder. 
 			
 			compass = new ShapedRecipe(new ItemStack(Material.COMPASS));
 			compass.shape(new String[] {"CIE", "IRI", "BIF"});
