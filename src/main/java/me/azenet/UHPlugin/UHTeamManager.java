@@ -93,6 +93,26 @@ public class UHTeamManager {
 	}
 	
 	/**
+	 * Sets the correct display name of a player, according to his team.
+	 * 
+	 * @param player
+	 */
+	public void colorizePlayer(Player player) {
+		if(!p.getConfig().getBoolean("colorizeChat")) {
+			return;
+		}
+		
+		UHTeam team = getTeamForPlayer(player);
+		
+		if(team == null) {
+			player.setDisplayName(ChatColor.WHITE + player.getName() + ChatColor.RESET);
+		}
+		else {
+			player.setDisplayName(team.getChatColor() + player.getName() + ChatColor.RESET);
+		}
+	}
+	
+	/**
 	 * Returns all the teams.
 	 * 
 	 * @return The teams.

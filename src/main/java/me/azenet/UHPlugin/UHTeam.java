@@ -48,9 +48,7 @@ public class UHTeam {
 		players.add(player);
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).addPlayer(player);
 		
-		if(plugin.getConfig().getBoolean("colorizeChat")) {
-			player.setDisplayName(this.color + player.getName() + ChatColor.RESET);
-		}
+		plugin.getTeamManager().colorizePlayer(player);
 	}
 	
 	public void removePlayer(Player player) {
@@ -58,9 +56,7 @@ public class UHTeam {
 		players.remove(player);
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).removePlayer(player);
 		
-		if(plugin.getConfig().getBoolean("colorizeChat")) {
-			player.setDisplayName(ChatColor.WHITE + player.getName() + ChatColor.RESET);
-		}
+		plugin.getTeamManager().colorizePlayer(player);
 	}
 	
 	public void deleteTeam() {

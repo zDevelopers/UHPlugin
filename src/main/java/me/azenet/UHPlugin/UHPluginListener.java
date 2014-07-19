@@ -177,7 +177,11 @@ public class UHPluginListener implements Listener {
 			p.getGameManager().getScoreboardManager().updateHealthScore(ev.getPlayer());
 		}
 		
+		// Mainly useful on the first join.
 		p.getGameManager().getScoreboardManager().setScoreboardForPlayer(ev.getPlayer());
+		
+		// The display name is reset when the player log off.
+		p.getTeamManager().colorizePlayer(ev.getPlayer());
 		
 		// A warning to the administrators if WorldBorder is not present.
 		if(ev.getPlayer().hasPermission("uh.*") && !p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
