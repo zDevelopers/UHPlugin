@@ -41,6 +41,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.pgcraft.spectatorplus.SpectateAPI;
+
 public class UHPluginListener implements Listener {
 
 	UHPlugin p = null;
@@ -166,7 +168,6 @@ public class UHPluginListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(final PlayerJoinEvent ev) {
 		if (!this.p.getGameManager().isGameRunning()) {
-			ev.getPlayer().setGameMode(GameMode.CREATIVE);
 			Location l = ev.getPlayer().getWorld().getSpawnLocation();
 			ev.getPlayer().teleport(l.add(0,1,0));
 			
@@ -175,6 +176,13 @@ public class UHPluginListener implements Listener {
 			
 			// Used to update the "health" objective, to avoid a null one.
 			p.getGameManager().getScoreboardManager().updateHealthScore(ev.getPlayer());
+			
+			// Disable the spectator mode if the game is not started.
+			if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
+				p.getSpectatorPlusIntegration().getSPAPI().setSpectating(ev.getPlayer(), false);
+			}
+
+			ev.getPlayer().setGameMode(GameMode.CREATIVE);
 		}
 		
 		// Mainly useful on the first join.
@@ -183,11 +191,19 @@ public class UHPluginListener implements Listener {
 		// The display name is reset when the player log off.
 		p.getTeamManager().colorizePlayer(ev.getPlayer());
 		
-		// A warning to the administrators if WorldBorder is not present.
-		if(ev.getPlayer().hasPermission("uh.*") && !p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
-			ev.getPlayer().sendMessage(ChatColor.RED + "WorldBorder is not installed, you should use it with the Ultra Hardcore plugin.");
-			ev.getPlayer().sendMessage(ChatColor.GRAY + "Why? Optimized border check, pregenerated world (fill)... Also, the border can be reduced during the game.");
-			ev.getPlayer().sendMessage(ChatColor.GRAY + "It's as simple as putting the WorldBorder jar inside the plugins directory, UHPlugin will automatically configure it.");
+		if(!p.getGameManager().isGameRunning()) {
+			// A warning to the administrators if WorldBorder is not present.
+			if(ev.getPlayer().hasPermission("uh.*") && !p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
+				ev.getPlayer().sendMessage(ChatColor.RED + "WorldBorder is not installed, you should use it with the Ultra Hardcore plugin.");
+				ev.getPlayer().sendMessage(ChatColor.GRAY + "Why? Optimized border check, pregenerated world (fill)... Also, the border can be reduced during the game.");
+				ev.getPlayer().sendMessage(ChatColor.GRAY + "It's as simple as putting the WorldBorder jar inside the plugins directory, UHPlugin will automatically configure it.");
+			}
+			
+			// The same for SpectatorPlus
+			if(ev.getPlayer().hasPermission("uh.*") && !p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
+				ev.getPlayer().sendMessage(ChatColor.RED + "SpectatorPlus is not installed, you should use it with the Ultra Hardcore plugin.");
+				ev.getPlayer().sendMessage(ChatColor.GRAY + "Just install the plugin, and UHPlugin will configure it automatically.");
+			}
 		}
 	}
 	

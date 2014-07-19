@@ -2,6 +2,7 @@ package me.azenet.UHPlugin;
 
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
@@ -11,6 +12,8 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.pgcraft.spectatorplus.SpectateAPI;
 
 public final class UHPlugin extends JavaPlugin {
 
@@ -26,6 +29,7 @@ public final class UHPlugin extends JavaPlugin {
 	private UHPluginCommand commandManager = null;
 	
 	private UHWorldBorderIntegration wbintegration = null;
+	private UHSpectatorPlusIntegration spintegration = null;
 
 	@Override
 	public void onEnable() {
@@ -36,6 +40,7 @@ public final class UHPlugin extends JavaPlugin {
 		gameManager = new UHGameManager(this);
 		
 		wbintegration = new UHWorldBorderIntegration(this);
+		spintegration = new UHSpectatorPlusIntegration(this);
 		
 		commandManager = new UHPluginCommand(this);
 		getCommand("uh").setExecutor(commandManager);
@@ -202,5 +207,9 @@ public final class UHPlugin extends JavaPlugin {
 	
 	public UHWorldBorderIntegration getWorldBorderIntegration() {
 		return wbintegration;
+	}
+	
+	public UHSpectatorPlusIntegration getSpectatorPlusIntegration() {
+		return spintegration;
 	}
 }

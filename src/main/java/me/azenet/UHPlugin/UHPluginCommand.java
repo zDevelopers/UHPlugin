@@ -586,7 +586,9 @@ public class UHPluginCommand implements CommandExecutor {
 	private void doSpec(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // /uh spec
 			sender.sendMessage(ci + "Available options are listed below.");
-			sender.sendMessage(ce + "Please note" + ci + ": for UHPlugin, a spectator is " + ChatColor.ITALIC + "only" + ci + " an ignored player.");
+			if(!p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
+				sender.sendMessage(ce + "Please note" + ci + ": because SpectatorPlus is not present, a spectator is " + ChatColor.ITALIC + "only" + ci + " an ignored player.");
+			}
 			sender.sendMessage(cc + "/uh spec add <player> " + ci + ": adds a spectator.");
 			sender.sendMessage(cc + "/uh spec remove <player> " + ci + ": removes a spectator.");
 			sender.sendMessage(cc + "/uh spec list " + ci + ": list the spectators.");
@@ -633,6 +635,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				else {
 					sender.sendMessage(ci + String.valueOf(spectators.size()) + " registrered spectator(s).");
+					sender.sendMessage(ci + "This count includes only the initial spectators.");
 					for(String spectator : spectators) {
 						sender.sendMessage(ChatColor.LIGHT_PURPLE + " - " + spectator);
 					}

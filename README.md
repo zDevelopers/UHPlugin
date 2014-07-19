@@ -44,6 +44,7 @@ C'est très la source.
  - **Wall generator included**
     - Generates a wall around the map following the size of the map set in the config file, centered on the world' spawn point.
     - The generated wall is made of two blocks: one replaces the “air-like” blocks and the trees, and the other replaces solid blocks. This is useful to have a glass wall without light gaps in the caverns.
+       - Illustrations: [viewed from the surface](http://amaury.carrade.eu/files/2014-07-18_22.09.54.png), [in a cave](http://amaury.carrade.eu/files/2014-07-18_21.55.40.png), using the default configuration.
     - The players are blocked inside the wall, even if the wall is broken or not generated.
        - If WorldBorder is present, it is automatically configured.
        - Else, the plugin will check itself if a player is outside the border (not recommended, use WorldBorder if possible!).
@@ -71,6 +72,7 @@ C'est très la source.
     - With `/uh resurrect <player>`, you can resurrect (and deban, if he was banned) a player killed by lag (or other bug). This command does NOT teleport back the player (this feature is planned).
  - The commands can be accessed using permissions (see subsection below).
  - Autocompletion everywhere.
+ - Integration of SpectatorPlus for the management of the spectators, if the plugin is present.
  - For developers:
     - the game can be controlled through the GameManager (`UHPlugin.getGameManager()`); 
     - the teams, using the TeamManager (`UHPlugin.getTeamManager()`);

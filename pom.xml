@@ -45,5 +45,12 @@
         <scope>system</scope>
     	<systemPath>${basedir}/lib/WorldBorder.jar</systemPath>
     </dependency>
+    <dependency>
+    	<groupId>com.pgcraft.spectatorplus</groupId>
+    	<artifactId>SpectatorPlus</artifactId>
+    	<version>1.9.1</version>
+        <scope>system</scope>
+    	<systemPath>${basedir}/lib/SpectatorPlus.jar</systemPath>
+    </dependency>
   </dependencies>
 </project>

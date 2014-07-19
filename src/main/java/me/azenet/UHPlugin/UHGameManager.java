@@ -94,10 +94,20 @@ public class UHGameManager {
 		/** Initialization of the players and the teams **/
 		
 		// We adds all the connected players (excepted spectators) to a list of alive players.
+		// Also, the spectator mode is enabled/disabled if needed.
 		alivePlayers.clear();
 		for(final Player player : p.getServer().getOnlinePlayers()) {
 			if(!spectators.contains(player.getName())) {
 				alivePlayers.add(player.getName());
+				
+				if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
+					p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, false);
+				}
+			}
+			else {
+				if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
+					p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, true);
+				}
 			}
 		}
 		this.alivePlayersCount = alivePlayers.size();
@@ -366,6 +376,10 @@ public class UHGameManager {
 		this.alivePlayers.add(player.getName());
 		this.updateAliveCounters();
 		
+		if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
+			p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, false);
+		}
+		
 		this.p.getServer().broadcastMessage(ChatColor.GOLD + player.getName() + " returned from the dead!");
 		
 		return true;
@@ -373,7 +387,8 @@ public class UHGameManager {
 	
 	
 	/**
-	 * Adds a spectator. When the game is started, spectators are ignored.
+	 * Adds a spectator. When the game is started, spectators are ignored 
+	 * and the spectator mode is enabled if SpectatorPlus is present.
 	 * 
 	 * @param player The player to register as a spectator.
 	 */
