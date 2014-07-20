@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.Sound;
 import org.bukkit.entity.Ghast;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,6 +25,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -34,14 +36,13 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import com.pgcraft.spectatorplus.SpectateAPI;
 
 public class UHPluginListener implements Listener {
 
@@ -345,6 +346,32 @@ public class UHPluginListener implements Listener {
 		}
 	}
 	
+	/**
+	 * Used to disable power-II potions.
+	 * 
+	 * TODO find a better way to do this, by simulating the same behavior as when the player
+	 * tries to brew a potion that doesn't exists.
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onBrew(BrewEvent ev) {
+		if(p.getConfig().getBoolean("gameplay-changes.disableLevelIIPotions")) {
+			BrewerInventory brewerContent = ev.getContents();
+			ItemStack brewerInvContent = brewerContent.getIngredient();
+			
+			if(brewerInvContent.getType().equals(Material.GLOWSTONE_DUST)) {
+				
+				ev.setCancelled(true);
+				
+				for(HumanEntity player : brewerContent.getViewers()) {
+					if(player instanceof Player) {
+						((Player) player).sendMessage(ChatColor.RED + "These potions are disabled!");
+					}
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Used to replace ghast tears with gold (if needed).

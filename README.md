@@ -56,6 +56,7 @@ C'est très la source.
        - You can also do the same for wither heads.
     - The enderpearl damages can be removed.
     - The ghast tears can be replaced by gold, to make Regeneration potions uncraftable.
+    - The level-II potions can be disabled.
     - The compass behavior can be changed.
        - New craft: redstone in center; then from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gunpowder.
        - If a player right-click with a compass, the compass shows the nearest player (team excluded).

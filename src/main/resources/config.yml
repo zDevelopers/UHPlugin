@@ -53,6 +53,8 @@ gameplay-changes:
     
     disableEnderpearlsDamages: true
     
+    disableLevelIIPotions: false
+    
     # If true a compass will show the nearest player, and the craft will be different.
     # Else, the craft will be standard and the compass will show the spawn point of the team/player (not the world spawn point).
     compass: true
