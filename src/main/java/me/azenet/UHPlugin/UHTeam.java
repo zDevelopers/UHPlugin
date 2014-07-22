@@ -102,7 +102,13 @@ public class UHTeam {
 		players = new ArrayList<Player>();
 		
 		for(Player player : playersCopy) {
-			players.add(plugin.getServer().getPlayer(player.getName()));
+			Player playerFromServer = plugin.getServer().getPlayer(player.getName());
+			if(playerFromServer != null) {
+				players.add(playerFromServer);
+			}
+			else {
+				players.add(player);
+			}
 		}
 	}
 }
