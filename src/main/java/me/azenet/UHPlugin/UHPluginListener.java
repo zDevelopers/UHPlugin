@@ -62,7 +62,8 @@ public class UHPluginListener implements Listener {
 	 *  - increase visibility of the death message (if needed);
 	 *  - drop the skull of the dead player (if needed);
 	 *  - update the number of alive players/teams;
-	 *  - saves the location of the death of the player, to allow a teleportation later.
+	 *  - save the location of the death of the player, to allow a teleportation later;
+	 *  - show the death location on the dynmap (if needed)
 	 *  
 	 * @param ev
 	 */
@@ -134,6 +135,9 @@ public class UHPluginListener implements Listener {
 		
 		// Saves the location of the death
 		p.getGameManager().addDeathLocation(ev.getEntity(), ev.getEntity().getLocation());
+		
+		// Shows the death location on the dynmap
+		p.getDynmapIntegration().showDeathLocation(ev.getEntity());
 	}
 	
 	

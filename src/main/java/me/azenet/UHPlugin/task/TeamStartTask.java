@@ -60,6 +60,8 @@ public class TeamStartTask extends BukkitRunnable {
 			player.setCompassTarget(startPoint);
 		}
 		
+		p.getDynmapIntegration().showSpawnLocation(team, startPoint);
+		
 		if(slow) {
 			try {
 				sender.sendMessage(ChatColor.GRAY + "Team " + team.getChatColor() + team.getName() + ChatColor.GRAY + " teleported.");

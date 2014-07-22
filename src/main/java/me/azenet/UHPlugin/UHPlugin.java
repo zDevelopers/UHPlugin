@@ -2,6 +2,7 @@ package me.azenet.UHPlugin;
 
 import java.util.logging.Logger;
 
+import me.azenet.UHPlugin.integration.UHDynmapIntegration;
 import me.azenet.UHPlugin.integration.UHSpectatorPlusIntegration;
 import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
 
@@ -30,6 +31,7 @@ public final class UHPlugin extends JavaPlugin {
 	
 	private UHWorldBorderIntegration wbintegration = null;
 	private UHSpectatorPlusIntegration spintegration = null;
+	private UHDynmapIntegration dynmapintegration = null;
 
 	@Override
 	public void onEnable() {
@@ -41,6 +43,7 @@ public final class UHPlugin extends JavaPlugin {
 		
 		wbintegration = new UHWorldBorderIntegration(this);
 		spintegration = new UHSpectatorPlusIntegration(this);
+		dynmapintegration = new UHDynmapIntegration(this);
 		
 		commandManager = new UHPluginCommand(this);
 		getCommand("uh").setExecutor(commandManager);
@@ -211,5 +214,9 @@ public final class UHPlugin extends JavaPlugin {
 	
 	public UHSpectatorPlusIntegration getSpectatorPlusIntegration() {
 		return spintegration;
+	}
+	
+	public UHDynmapIntegration getDynmapIntegration() {
+		return dynmapintegration;
 	}
 }

@@ -606,11 +606,11 @@ public class UHPluginCommand implements CommandExecutor {
 		Location deathLocation = p.getGameManager().getDeathLocation(player);
 		
 		if(args.length >= 3 && args[2].equalsIgnoreCase("force")) {
-			p.getGameManager().safeTP(player, deathLocation, true);
+			UHUtils.safeTP(player, deathLocation, true);
 			sender.sendMessage(cs + "The player " + args[1] + " was teleported back.");
 			p.getGameManager().removeDeathLocation(player);
 		}
-		else if(p.getGameManager().safeTP(player, deathLocation)) {
+		else if(UHUtils.safeTP(player, deathLocation)) {
 			sender.sendMessage(cs + "The player " + args[1] + " was teleported back.");
 			p.getGameManager().removeDeathLocation(player);
 		}

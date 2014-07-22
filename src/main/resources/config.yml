@@ -62,6 +62,10 @@ gameplay-changes:
 slow-start:
     delayBetweenTP: 3  # in seconds
 
+dynmap:
+    showSpawnLocations: false
+    showDeathLocations: false
+
 # Use this to set the spawnpoints of the teams (or the players)
 # You can also use the command /uh addspawn (see /uh for documentation) to add temporary spawn points.
 # (The spawn points added through /uh addspawn are deleted when the server is stopped.)
