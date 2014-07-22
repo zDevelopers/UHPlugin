@@ -115,6 +115,15 @@ public class UHTabCompleter implements TabCompleter {
 			}
 		}
 		
+		/** Autocompletion for /uh tpback **/
+		else if(args[0].equalsIgnoreCase("tpback")) {
+			if(args.length == 3) { // /uh tpback <player> <?=force>
+				ArrayList<String> tpBackSuggest = new ArrayList<String>();
+				tpBackSuggest.add("force");
+				return this.getAutocompleteSuggestions(args[2].toLowerCase(), tpBackSuggest);
+			}
+		}
+		
 		return null;
 	}
 	

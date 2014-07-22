@@ -70,7 +70,8 @@ C'est très la source.
     - `/uh heal <player> [half-hearts=20]` to heal a player to the exact number of hearts given. Avoid trying to find the good health effect level/duration, the id of the effect, etc.
     - `/uh healall [half-hearts=20]`: the same, for all players, because Bukkit does not allow the use of the @a selector out of a command block.
     - You cannot kill a player with these commands.
-    - With `/uh resurrect <player>`, you can resurrect (and deban, if he was banned) a player killed by lag (or other bug). This command does NOT teleport back the player (this feature is planned).
+    - With `/uh resurrect <player>`, you can resurrect (and deban, if he was banned) a player killed by lag (or other bug).
+    - With `/uh tpback <player>`, you can teleport a player back to his death location.
  - The commands can be accessed using permissions (see subsection below).
  - Autocompletion everywhere.
  - Integration of SpectatorPlus for the management of the spectators, if the plugin is present.

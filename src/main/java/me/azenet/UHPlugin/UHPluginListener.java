@@ -61,7 +61,8 @@ public class UHPluginListener implements Listener {
 	 *  - broadcast a team-death message (if needed);
 	 *  - increase visibility of the death message (if needed);
 	 *  - drop the skull of the dead player (if needed);
-	 *  - update the number of alive players/teams.
+	 *  - update the number of alive players/teams;
+	 *  - saves the location of the death of the player, to allow a teleportation later.
 	 *  
 	 * @param ev
 	 */
@@ -130,6 +131,9 @@ public class UHPluginListener implements Listener {
 		
 		// Updates the number of alive players/teams
 		p.getGameManager().updateAliveCounters();
+		
+		// Saves the location of the death
+		p.getGameManager().addDeathLocation(ev.getEntity(), ev.getEntity().getLocation());
 	}
 	
 	

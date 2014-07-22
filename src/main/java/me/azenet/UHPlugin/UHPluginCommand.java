@@ -7,6 +7,7 @@ import java.util.HashSet;
 
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,6 +40,7 @@ public class UHPluginCommand implements CommandExecutor {
 		commands.add("heal");
 		commands.add("healall");
 		commands.add("resurrect");
+		commands.add("tpback");
 		commands.add("spec");
 		
 		teamCommands.add("add");
@@ -130,6 +132,7 @@ public class UHPluginCommand implements CommandExecutor {
 		sender.sendMessage(cc + "/uh heal <player> [half-hearts=20] " + ci + ": heals a player to the number of half-hearts provided (default 20).");
 		sender.sendMessage(cc + "/uh healall [half-hearts=20] " + ci + ": heals all players instead of only one.");
 		sender.sendMessage(cc + "/uh resurrect <player> " + ci + ": resurrects a player.");
+		sender.sendMessage(cc + "/uh tpback <player> [force]" + ci + ": safely teleports back a player to his death location.");
 	}
 	
 	/**
@@ -481,7 +484,7 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		
 		Player player = p.getServer().getPlayer(args[1]);
-		if(player == null) {
+		if(player == null || !player.isOnline()) {
 			sender.sendMessage(ce + "The player " + args[1] + " is not online.");
 			return;
 		}
@@ -564,13 +567,57 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		
 		Player player = p.getServer().getPlayer(args[1]);
-		if(!player.isOnline()) {
+		if(player == null || !player.isOnline()) {
 			sender.sendMessage(ce + "The player " + args[1] + " is not online.");
 			return;
 		}
 		
 		p.getGameManager().resurrect(player);
 		
+	}
+	
+	/**
+	 * This command safely teleports back a player to his death location.
+	 * Usage: /uh tpback <player>
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doTpback(CommandSender sender, Command command, String label, String[] args) {
+		if(args.length < 2) {
+			sender.sendMessage(ce + "Usage: /uh tpback <player> [force]");
+			return;
+		}
+		
+		Player player = p.getServer().getPlayer(args[1]);
+		if(player == null || !player.isOnline()) {
+			sender.sendMessage(ce + "The player " + args[1] + " is not online.");
+			return;
+		}
+		else if(!p.getGameManager().hasDeathLocation(player)) {
+			sender.sendMessage(ce + "No death location available for the player " + args[1] + ".");
+			return;
+		}
+		
+		
+		Location deathLocation = p.getGameManager().getDeathLocation(player);
+		
+		if(args.length >= 3 && args[2].equalsIgnoreCase("force")) {
+			p.getGameManager().safeTP(player, deathLocation, true);
+			sender.sendMessage(cs + "The player " + args[1] + " was teleported back.");
+			p.getGameManager().removeDeathLocation(player);
+		}
+		else if(p.getGameManager().safeTP(player, deathLocation)) {
+			sender.sendMessage(cs + "The player " + args[1] + " was teleported back.");
+			p.getGameManager().removeDeathLocation(player);
+		}
+		else {
+			sender.sendMessage(ce + "The player " + args[1] + " was NOT teleported back because no safe spot was found.");
+			sender.sendMessage(ci + "Use " + cc + "/uh tpback " + args[1] + " force" + ci + " to teleport the player regardess this point.");
+		}
 	}
 	
 	
