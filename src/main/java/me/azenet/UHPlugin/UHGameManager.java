@@ -432,7 +432,7 @@ public class UHGameManager {
 	}
 	
 	/**
-	 * The thinks that have to be done in order to resurrect the players
+	 * The things that have to be done in order to resurrect the players
 	 * and that need the player to be online.
 	 * 
 	 * @param player The player to resurrect
