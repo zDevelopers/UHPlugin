@@ -171,7 +171,9 @@ public class UHPluginListener implements Listener {
 	 * Used to:
 	 *  - change the gamemode of the player, if the game is not running;
 	 *  - teleport the player to the spawn, if the game is not running;
-	 *  - update the scoreboard.
+	 *  - update the scoreboard;
+	 *  - resurrect a player (if the player was offline).
+	 * 
 	 * @param ev
 	 */
 	@EventHandler
@@ -200,19 +202,25 @@ public class UHPluginListener implements Listener {
 		// The display name is reset when the player log off.
 		p.getTeamManager().colorizePlayer(ev.getPlayer());
 		
-		if(!p.getGameManager().isGameRunning()) {
+		if(!p.getGameManager().isGameRunning() && ev.getPlayer().hasPermission("uh.*")) {
 			// A warning to the administrators if WorldBorder is not present.
-			if(ev.getPlayer().hasPermission("uh.*") && !p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
+			if(!p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
 				ev.getPlayer().sendMessage(ChatColor.RED + "WorldBorder is not installed, you should use it with the Ultra Hardcore plugin.");
 				ev.getPlayer().sendMessage(ChatColor.GRAY + "Why? Optimized border check, pregenerated world (fill)... Also, the border can be reduced during the game.");
 				ev.getPlayer().sendMessage(ChatColor.GRAY + "It's as simple as putting the WorldBorder jar inside the plugins directory, UHPlugin will automatically configure it.");
 			}
 			
 			// The same for SpectatorPlus
-			if(ev.getPlayer().hasPermission("uh.*") && !p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
+			if(!p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
 				ev.getPlayer().sendMessage(ChatColor.RED + "SpectatorPlus is not installed, you should use it with the Ultra Hardcore plugin.");
 				ev.getPlayer().sendMessage(ChatColor.GRAY + "Just install the plugin, and UHPlugin will configure it automatically.");
 			}
+		}
+		
+		// If the player needs to be resurrected...
+		if(p.getGameManager().isDeadPlayersToBeResurrected(ev.getPlayer())) {
+			p.getGameManager().resurrectPlayerOnlineTask(ev.getPlayer());
+			p.getGameManager().markPlayerAsResurrected(ev.getPlayer());
 		}
 	}
 	

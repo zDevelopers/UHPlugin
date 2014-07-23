@@ -566,14 +566,22 @@ public class UHPluginCommand implements CommandExecutor {
 			return;
 		}
 		
+		boolean success = p.getGameManager().resurrect(args[1]);
+		
 		Player player = p.getServer().getPlayer(args[1]);
 		if(player == null || !player.isOnline()) {
-			sender.sendMessage(ce + "The player " + args[1] + " is not online.");
-			return;
+			if(!success) { // Player does not exists or is nod dead.
+				sender.sendMessage(ce + "This player is not playing or dead!");
+			}
+			else { // Resurrected
+				sender.sendMessage(cs + "Because " + args[1] + " is offline, he will be resurrected when he logins. If he was, he is no longer banned.");
+			}
 		}
-		
-		p.getGameManager().resurrect(player);
-		
+		else {
+			if(!success) { // The player is not dead
+				sender.sendMessage(ce + args[1] + " is not dead!");
+			}
+		}
 	}
 	
 	/**

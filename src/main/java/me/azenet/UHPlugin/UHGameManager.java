@@ -31,9 +31,12 @@ public class UHGameManager {
 	private UHScoreboardManager scoreboardManager = null;
 
 	private LinkedList<Location> loc = new LinkedList<Location>();
+	private HashSet<String> players = new HashSet<String>();
 	private HashSet<String> alivePlayers = new HashSet<String>();
 	private HashSet<String> spectators = new HashSet<String>();
 	private Map<String,Location> deathLocations = new HashMap<String,Location>();
+
+	private HashSet<String> deadPlayersToBeResurrected = new HashSet<String>();
 	
 	private Integer alivePlayersCount = 0;
 	private Integer aliveTeamsCount = 0;
@@ -115,7 +118,12 @@ public class UHGameManager {
 				}
 			}
 		}
+		
 		this.alivePlayersCount = alivePlayers.size();
+		
+		// The names of the players is stored for later use
+		// Used in the resurrectOffline method, to check if a player was really a player or not.
+		this.players = (HashSet<String>) alivePlayers.clone();
 		
 		
 		// No team? We creates a team per player.
@@ -365,7 +373,41 @@ public class UHGameManager {
 	public void shiftEpisode() {
 		shiftEpisode("");
 	}
-
+	
+	
+	/**
+	 * Resurrects an offline player.
+	 * The tasks that needed to be executed when the player is online are delayed
+	 * and executed when the player joins.
+	 * 
+	 * @param playerName The name of the player to resurrect
+	 * @return true if the player was dead, false otherwise.
+	 */
+	public boolean resurrect(String playerName) {
+		if(!this.isPlayerDead(playerName)) {
+			return false;
+		}
+		
+		Player playerOnline = Bukkit.getPlayer(playerName);
+		if(playerOnline != null) {
+			return resurrectOnline(playerOnline);
+		}
+		else {
+			// We checks if the player was a player
+			if(!this.players.contains(playerName)) {
+				return false;
+			}
+		}
+		
+		// So, now, we are sure that the player is really offline.
+		this.alivePlayers.add(playerName);
+		this.updateAliveCounters();
+		
+		// The task needed to be executed will be executed when the player join.
+		this.deadPlayersToBeResurrected.add(playerName);
+		
+		return true;
+	}
 	
 	/**
 	 * Resurrect a player
@@ -373,24 +415,60 @@ public class UHGameManager {
 	 * @param player
 	 * @return true if the player was dead, false otherwise.
 	 */
-	public boolean resurrect(Player player) {
-		if(!this.isPlayerDead(player.getName())) {
-			return false;
-		}
+	private boolean resurrectOnline(Player player) {
 		
+		// We registers the user as an alive player.
 		this.alivePlayers.add(player.getName());
 		this.updateAliveCounters();
 		
+		// This method can be used to add a player after the game has started.
+		if(!players.contains(player.getName())) {
+			players.add(player.getName());
+		}
+		
+		this.resurrectPlayerOnlineTask(player);
+		
+		return true;
+	}
+	
+	/**
+	 * The thinks that have to be done in order to resurrect the players
+	 * and that need the player to be online.
+	 * 
+	 * @param player The player to resurrect
+	 */
+	public void resurrectPlayerOnlineTask(Player player) {
+		// Spectator disabled
 		if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
 			p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, false);
 		}
 		
+		// Death point hided in the dynmap
 		p.getDynmapIntegration().hideDeathLocation(player);
 		
+		// All players are notified
 		this.p.getServer().broadcastMessage(ChatColor.GOLD + player.getName() + " returned from the dead!");
-		
-		return true;
 	}
+	
+	/**
+	 * Returns true if a player need to be resurrected.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public boolean isDeadPlayersToBeResurrected(Player player) {
+		return deadPlayersToBeResurrected.contains(player.getName());
+	}
+	
+	/**
+	 * Register a player as resurrected.
+	 * 
+	 * @param player
+	 */
+	public void markPlayerAsResurrected(Player player) {
+		deadPlayersToBeResurrected.remove(player.getName());
+	}
+	
 	
 	/**
 	 * This method saves the location of the death of a player.

@@ -8,6 +8,7 @@ authors: [azenet]
 softdepend:
   - WorldBorder
   - SpectatorPlus
+  - dynmap
 
 commands:
    uh:
@@ -26,7 +27,9 @@ permissions:
             uh.generatewalls: true
             uh.heal: true
             uh.healall: true
+            uh.tpback: true
             uh.resurrect: true
+            uh.spec: true
     uh.build:
         description: Allows an user to build before the beginning of the game
         default: op
@@ -53,4 +56,10 @@ permissions:
         default: op
     uh.resurrect:
         description: Allows an user to resurrect an other player with /uh resurrect <player>
+        default: op
+    uh.tpback:
+        description: Allows an user to teleport back a player to his spawn point with /uh tpback <player> [force]
+        default: op
+    uh.spec:
+        description: Alows an user to manage spectators using /uh spec *
         default: op

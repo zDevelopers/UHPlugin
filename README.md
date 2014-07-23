@@ -60,7 +60,7 @@ C'est très la source.
          ![Craft golden Apple from human](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GoldenAppleFromHuman.png)
        - You can configure the number of apples crafted, the type (normal or Notch apple), and if a lore is added (saying “Made from the fallen head of *ThePlayer*”).  
          ![Lure of a golden apple crafted from a Wither](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_LoreGoldenApple.png)
-       - You can also do the same for wither heads.  
+       - You can also do the same from wither heads.  
          ![Craft from a wither head](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GoldenAppleFromWither.png)
        - There is a way to remove the lore (because two golden apple with a different lore are not stackable), either in the config (lore not added) or using a craft:  
          ![Craft - Lore removal](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_LoreGoldenAppleRemoval.png)
@@ -119,6 +119,7 @@ Legend: `/uh command <required> [optional=default]`.
  - `/uh heal <player> [half-hearts=20]` : heals a player to the number of half-hearts provided (default 20).
  - `/uh healall [half-hearts=20]` : heals all players instead of only one.
  - `/uh resurrect <player>` : resurrects a player.
+ - `/uh tpback <player> [force]` : safely teleports back a player to his death point.
 
 ### Permissions
 
