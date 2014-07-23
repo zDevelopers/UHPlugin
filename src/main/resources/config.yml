@@ -31,6 +31,8 @@ death:
     head:
         drop: true
         pvpOnly: false
+    give-xp:
+        levels: 2  # set to 0 to disable
 
 # If true, the name of the players will be colorized according to the teams.
 colorizeChat: true

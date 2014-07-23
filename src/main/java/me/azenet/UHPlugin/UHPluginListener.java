@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -63,7 +64,8 @@ public class UHPluginListener implements Listener {
 	 *  - drop the skull of the dead player (if needed);
 	 *  - update the number of alive players/teams;
 	 *  - save the location of the death of the player, to allow a teleportation later;
-	 *  - show the death location on the dynmap (if needed)
+	 *  - show the death location on the dynmap (if needed);
+	 *  - give XP to the killer (if needed).
 	 *  
 	 * @param ev
 	 */
@@ -114,6 +116,14 @@ public class UHPluginListener implements Listener {
 			}
 		}
 		
+		// Give XP to the killer (if needed)
+		if(p.getConfig().getInt("death.give-xp.levels") > 0) {
+			Entity killer = ev.getEntity().getKiller();
+			if(killer != null && killer instanceof Player) {
+				((Player) killer).giveExpLevels(p.getConfig().getInt("death.give-xp.levels"));
+			}
+		}
+		
 		// Sends a team-death message if needed.
 		if(p.getConfig().getBoolean("death.messages.notifyIfTeamHasFallen", false)) {
 			UHTeam team = p.getTeamManager().getTeamForPlayer((Player) ev.getEntity());
@@ -133,6 +143,7 @@ public class UHPluginListener implements Listener {
 			}
 		}
 		
+		// Customizes the death message
 		ev.setDeathMessage(p.getConfig().getString("death.messages.deathMessagesPrefix", "") + ev.getDeathMessage());
 		
 		// Updates the number of alive players/teams
