@@ -33,7 +33,8 @@ C'est très la source.
        - 30 seconds after, the players can be damaged, before they are invulnerable. 
  - **Displayed match info** with a custom title
     - Shows the number of the episode and the number of alive players/teams.
-    - Shows the time left in the current episode.
+    - Shows the time left in the current episode.  
+      ![Scoreboard](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Scoreboard.png)
  - The health of the players is displayed in the `Tab` list.
  - **Episodes management**
     - Configurable duration of an episode.
@@ -44,21 +45,31 @@ C'est très la source.
  - **Wall generator included**
     - Generates a wall around the map following the size of the map set in the config file, centered on the world' spawn point.
     - The generated wall is made of two blocks: one replaces the “air-like” blocks and the trees, and the other replaces solid blocks. This is useful to have a glass wall without light gaps in the caverns.
-       - Illustrations: [viewed from the surface](http://amaury.carrade.eu/files/2014-07-18_22.09.54.png), [in a cave](http://amaury.carrade.eu/files/2014-07-18_21.55.40.png), using the default configuration.
+       - Illustrations:  
+         ![viewed from the surface](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Wall_Surface.png)  
+         ![in a cave](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Wall_Cave.png)  
+         (using the default configuration).
     - The players are blocked inside the wall, even if the wall is broken or not generated.
        - If WorldBorder is present, it is automatically configured.
        - Else, the plugin will check itself if a player is outside the border (not recommended, use WorldBorder if possible!).
  - **Gameplay tweaks** (all optional, see configuration file)
-    - The golden melon is crafted using a gold block instead of eight gold nuggets.
+    - The golden melon is crafted using a gold block instead of eight gold nuggets.  
+       ![Craft golden melon](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GlisteringMelon.png)
     - When a player die, his head is dropped; this head can be used to craft a golden apple.
-       - The craft is the same as the normal golden apple, with a head instead of an apple.
-       - You can configure the number of apples crafted, the type (normal or Notch apple), and if a lore is added (saying “Crafted from the fallen head of *ThePlayer*”).
-       - You can also do the same for wither heads.
+       - The craft is the same as the normal golden apple, with a head instead of an apple.  
+         ![Craft golden Apple from human](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GoldenAppleFromHuman.png)
+       - You can configure the number of apples crafted, the type (normal or Notch apple), and if a lore is added (saying “Made from the fallen head of *ThePlayer*”).  
+         ![Lure of a golden apple crafted from a Wither](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_LoreGoldenApple.png)
+       - You can also do the same for wither heads.  
+         ![Craft from a wither head](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GoldenAppleFromWither.png)
+       - There is a way to remove the lore (because two golden apple with a different lore are not stackable), either in the config (lore not added) or using a craft:  
+         ![Craft - Lore removal](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_LoreGoldenAppleRemoval.png)
     - The enderpearl damages can be removed.
     - The ghast tears can be replaced by gold, to make Regeneration potions uncraftable.
     - The level-II potions can be disabled.
     - The compass behavior can be changed.
-       - New craft: redstone in center; then from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gunpowder.
+       - New craft: redstone in center; then from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gunpowder.  
+         ![Craft for the special compass](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_Compass.png)
        - If a player right-click with a compass, the compass shows the nearest player (team excluded).
        - This consumes a rotten flesh.
     - The time can be frozen to any hour (eternal day/night), or not.
@@ -66,6 +77,11 @@ C'est très la source.
  - The players can be kiked (and eventually banned) after their death, with a configurable delay.
  - The death messages can be more visible (format can be set in the config, including color).
  - A team-death message can be sent when an entire team is dead.
+ - Integration of SpectatorPlus for the management of the spectators, if the plugin is present.
+ - **Dynmap integration**
+    - Can display the spawn points of the teams, using colored flags.
+    - Can display the death points of the players.  
+      ![Dynmap illustration](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Dynmap.png)
  - **Some commands can handle bugs** (like lag)
     - `/uh heal <player> [half-hearts=20]` to heal a player to the exact number of hearts given. Avoid trying to find the good health effect level/duration, the id of the effect, etc.
     - `/uh healall [half-hearts=20]`: the same, for all players, because Bukkit does not allow the use of the @a selector out of a command block.
@@ -74,7 +90,6 @@ C'est très la source.
     - With `/uh tpback <player>`, you can teleport a player back to his death location.
  - The commands can be accessed using permissions (see subsection below).
  - Autocompletion everywhere.
- - Integration of SpectatorPlus for the management of the spectators, if the plugin is present.
  - For developers:
     - the game can be controlled through the GameManager (`UHPlugin.getGameManager()`); 
     - the teams, using the TeamManager (`UHPlugin.getTeamManager()`);

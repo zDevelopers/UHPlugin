@@ -116,7 +116,7 @@ public final class UHPlugin extends JavaPlugin {
 				damage = 1;
 			}
 			
-			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.do.fromHuman")) {
+			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.do")) {
 				goldenAppleFromHead = new ShapedRecipe(new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromHuman.numberCrafted", 1), damage));
 				
 				goldenAppleFromHead.shape("GGG", "GHG", "GGG");

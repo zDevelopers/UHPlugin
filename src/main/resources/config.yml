@@ -63,8 +63,8 @@ slow-start:
     delayBetweenTP: 3  # in seconds
 
 dynmap:
-    showSpawnLocations: false
-    showDeathLocations: false
+    showSpawnLocations: true
+    showDeathLocations: true
 
 # Use this to set the spawnpoints of the teams (or the players)
 # You can also use the command /uh addspawn (see /uh for documentation) to add temporary spawn points.
