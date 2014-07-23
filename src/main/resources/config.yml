@@ -19,15 +19,18 @@ daylightCycle:
 # The title of the scoreboard
 scoreboard: Kill the Patrick
 
-kick-on-death:
-    kick: true
-    time: 30
-    allow-reconnect: true
-
-death-messages:
-    notifyIfTeamHasFallen: true
-    deathMessagesPrefix: "§6"  # Use this to increase visibility of death messages.
-    teamDeathMessagesPrefix: "§6"
+death:
+    messages:
+        notifyIfTeamHasFallen: true
+        deathMessagesPrefix: "§6"  # Use this to increase visibility of death messages.
+        teamDeathMessagesPrefix: "§6"
+    kick:
+        do: true
+        time: 30
+        allow-reconnect: true
+    head:
+        drop: true
+        pvpOnly: false
 
 # If true, the name of the players will be colorized according to the teams.
 colorizeChat: true

@@ -55,7 +55,7 @@ C'est très la source.
  - **Gameplay tweaks** (all optional, see configuration file)
     - The golden melon is crafted using a gold block instead of eight gold nuggets.  
        ![Craft golden melon](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GlisteringMelon.png)
-    - When a player die, his head is dropped; this head can be used to craft a golden apple.
+    - When a player die, his head is dropped (pvp-only flag available); this head can be used to craft a golden apple.
        - The craft is the same as the normal golden apple, with a head instead of an apple.  
          ![Craft golden Apple from human](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GoldenAppleFromHuman.png)
        - You can configure the number of apples crafted, the type (normal or Notch apple), and if a lore is added (saying “Made from the fallen head of *ThePlayer*”).  

@@ -86,31 +86,36 @@ public class UHPluginListener implements Listener {
 		this.p.getGameManager().addDead(ev.getEntity().getName());
 		
 		// Kicks the player if needed.
-		if (this.p.getConfig().getBoolean("kick-on-death.kick", true)) {
+		if (this.p.getConfig().getBoolean("death.kick.do", true)) {
 			Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
 				
 				@Override
 				public void run() {
 					ev.getEntity().kickPlayer("jayjay");
 				}
-			}, 20L*this.p.getConfig().getInt("kick-on-death.time", 30));
+			}, 20L*this.p.getConfig().getInt("death.kick.time", 30));
 		}
 		
 		// Drops the skull of the player.
-		Location l = ev.getEntity().getLocation();
-		try { 
-			ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
-			SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-			skullMeta.setOwner(((Player)ev.getEntity()).getName());
-			skullMeta.setDisplayName(ChatColor.RESET + ((Player)ev.getEntity()).getName());
-			skull.setItemMeta(skullMeta);
-			l.getWorld().dropItem(l, skull);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if(p.getConfig().getBoolean("death.head.drop")) {
+			if(!p.getConfig().getBoolean("death.head.pvpOnly")
+					|| (p.getConfig().getBoolean("death.head.pvpOnly") && ev.getEntity().getKiller() != null && ev.getEntity().getKiller() instanceof Player)) {
+				Location l = ev.getEntity().getLocation();
+				try { 
+					ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
+					SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+					skullMeta.setOwner(((Player)ev.getEntity()).getName());
+					skullMeta.setDisplayName(ChatColor.RESET + ((Player)ev.getEntity()).getName());
+					skull.setItemMeta(skullMeta);
+					l.getWorld().dropItem(l, skull);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		// Sends a team-death message if needed.
-		if(p.getConfig().getBoolean("death-messages.notifyIfTeamHasFallen", false)) {
+		if(p.getConfig().getBoolean("death.messages.notifyIfTeamHasFallen", false)) {
 			UHTeam team = p.getTeamManager().getTeamForPlayer((Player) ev.getEntity());
 			if(team != null) {
 				boolean isAliveTeam = false;
@@ -123,12 +128,12 @@ public class UHPluginListener implements Listener {
 				}
 				
 				if(!isAliveTeam) {
-					p.getServer().broadcastMessage(p.getConfig().getString("death-messages.teamDeathMessagesPrefix", "") + "The team " + ChatColor.RESET + team.getChatColor() + team.getDisplayName() + ChatColor.RESET + p.getConfig().getString("death-messages.teamDeathMessagesPrefix", "") + " has fallen!");
+					p.getServer().broadcastMessage(p.getConfig().getString("death.messages.teamDeathMessagesPrefix", "") + "The team " + ChatColor.RESET + team.getChatColor() + team.getDisplayName() + ChatColor.RESET + p.getConfig().getString("death.messages.teamDeathMessagesPrefix", "") + " has fallen!");
 				}
 			}
 		}
 		
-		ev.setDeathMessage(p.getConfig().getString("death-messages.deathMessagesPrefix", "") + ev.getDeathMessage());
+		ev.setDeathMessage(p.getConfig().getString("death.messages.deathMessagesPrefix", "") + ev.getDeathMessage());
 		
 		// Updates the number of alive players/teams
 		p.getGameManager().updateAliveCounters();
@@ -161,7 +166,7 @@ public class UHPluginListener implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent ev) {
-		if (this.p.getGameManager().isPlayerDead(ev.getPlayer().getName()) && !this.p.getConfig().getBoolean("kick-on-death.allow-reconnect", true)) {
+		if (this.p.getGameManager().isPlayerDead(ev.getPlayer().getName()) && !this.p.getConfig().getBoolean("death.kick.allow-reconnect", true)) {
 			ev.setResult(Result.KICK_OTHER);
 			ev.setKickMessage("Vous êtes mort !");
 		}
