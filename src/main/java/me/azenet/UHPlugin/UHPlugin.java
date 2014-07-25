@@ -2,6 +2,7 @@ package me.azenet.UHPlugin;
 
 import java.util.logging.Logger;
 
+import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.integration.UHDynmapIntegration;
 import me.azenet.UHPlugin.integration.UHSpectatorPlusIntegration;
 import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
@@ -32,12 +33,25 @@ public final class UHPlugin extends JavaPlugin {
 	private UHWorldBorderIntegration wbintegration = null;
 	private UHSpectatorPlusIntegration spintegration = null;
 	private UHDynmapIntegration dynmapintegration = null;
+	
+	private I18n i18n = null;
 
 	@Override
 	public void onEnable() {
 		this.saveDefaultConfig();
 		
 		logger = this.getLogger();
+		
+		if(getConfig().getString("lang") == null) {
+			i18n = new I18n(this);
+		}
+		else {
+			i18n = new I18n(this, getConfig().getString("lang"));
+		}
+		
+		logger.info(i18n.t("key1", "param"));
+		logger.info(i18n.t("key2"));
+		
 		teamManager = new UHTeamManager(this);
 		gameManager = new UHGameManager(this);
 		
