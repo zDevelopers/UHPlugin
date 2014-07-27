@@ -35,6 +35,7 @@ C'est très la source.
     - Shows the number of the episode and the number of alive players/teams.
     - Shows the time left in the current episode.  
       ![Scoreboard](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Scoreboard.png)
+    - You can choose what is displayed in the scoreboard, or disable it.
  - The health of the players is displayed in the `Tab` list.
  - **Episodes management**
     - Configurable duration of an episode.
@@ -42,6 +43,7 @@ C'est très la source.
     - The timer can be synchronized with a clock (enabled by default, avoid long episodes due to the lag) or simply decremented every second.
     - The end of an episode is broadcast in the chat to all players.
     - An episode can be shifted using `/uh shift`.
+    - You can disable this feature.
  - **Wall generator included**
     - Generates a wall around the map following the size of the map set in the config file, centered on the world' spawn point.
     - The generated wall is made of two blocks: one replaces the “air-like” blocks and the trees, and the other replaces solid blocks. This is useful to have a glass wall without light gaps in the caverns.
@@ -90,6 +92,7 @@ C'est très la source.
     - With `/uh tpback <player>`, you can teleport a player back to his death location.
  - The commands can be accessed using permissions (see subsection below).
  - Autocompletion everywhere.
+ - Fully translated into English and French.
  - For developers:
     - the game can be controlled through the GameManager (`UHPlugin.getGameManager()`); 
     - the teams, using the TeamManager (`UHPlugin.getTeamManager()`);
