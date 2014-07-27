@@ -49,21 +49,23 @@ public class UHScoreboardManager {
 		
 		
 		// Initialization of the scoreboard (match info in the sidebar)
-		try {
-			this.sb.clearSlot(DisplaySlot.SIDEBAR);
-			this.sb.getObjective(objectiveName).unregister();
-		} catch(NullPointerException | IllegalArgumentException e) { }
-		
-		this.objective = this.sb.registerNewObjective(objectiveName, "dummy");
-		this.objective.setDisplayName(getScoreboardName());
-		this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-		
-		// The "space" score needs to be set only one time, and only if the episodes are enabled.
-		if(p.getConfig().getBoolean("episodes.enable")) {
-			this.objective.getScore("").setScore(2);
+		if(p.getConfig().getBoolean("scoreboard.enabled")) {
+			try {
+				this.sb.clearSlot(DisplaySlot.SIDEBAR);
+				this.sb.getObjective(objectiveName).unregister();
+			} catch(NullPointerException | IllegalArgumentException e) { }
+			
+			this.objective = this.sb.registerNewObjective(objectiveName, "dummy");
+			this.objective.setDisplayName(getScoreboardName());
+			this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+			
+			// The "space" score needs to be set only one time, and only if the episodes/timer are enabled.
+			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
+				this.objective.getScore("").setScore(2);
+			}
+			
+			updateScoreboard();
 		}
-		
-		updateScoreboard();
 		
 		// Initialization of the scoreboard (health in players' list)
 		Objective healthObjective = this.sb.registerNewObjective("Health", Criterias.HEALTH);
@@ -75,38 +77,40 @@ public class UHScoreboardManager {
 	}
 	
 	public void updateScoreboard() {
-		Integer episode = gm.getEpisode();
-		Integer alivePlayersCount = gm.getAlivePlayersCount();
-		Integer aliveTeamsCount = gm.getAliveTeamsCount();
-		Integer minutesLeft = gm.getMinutesLeft();
-		Integer secondsLeft = gm.getSecondsLeft();
-		
-		if(!episode.equals(oldEpisode) && p.getConfig().getBoolean("episodes.enable")) {
-			sb.resetScores(getText("episode", oldEpisode));
-			objective.getScore(getText("episode", episode)).setScore(5);
-			oldEpisode = episode;
-		}
-		
-		if(!alivePlayersCount.equals(oldAlivePlayersCount)) {
-			sb.resetScores(getText("players", oldAlivePlayersCount));
-			objective.getScore(getText("players", alivePlayersCount)).setScore(4);
-			oldAlivePlayersCount = alivePlayersCount;
-		}
-		
-		// This is displayed when the game is running to avoid a special case used to remove it
-		// if the game is without teams.
-		if(gm.isGameRunning() && gm.isGameWithTeams() && !aliveTeamsCount.equals(oldAliveTeamsCount)) {
-			sb.resetScores(getText("teams", oldAliveTeamsCount));
-			objective.getScore(getText("teams", aliveTeamsCount)).setScore(3);
-			oldAliveTeamsCount = aliveTeamsCount;
-		}
-		
-		// The timer score is reset every time.
-		if(p.getConfig().getBoolean("episodes.enable")) {
-			sb.resetScores(getTimerText(oldMinutes, oldSeconds));
-			objective.getScore(getTimerText(minutesLeft, secondsLeft)).setScore(1);
-			oldMinutes = minutesLeft;
-			oldSeconds = secondsLeft;
+		if(p.getConfig().getBoolean("scoreboard.enabled")) {
+			Integer episode = gm.getEpisode();
+			Integer alivePlayersCount = gm.getAlivePlayersCount();
+			Integer aliveTeamsCount = gm.getAliveTeamsCount();
+			Integer minutesLeft = gm.getMinutesLeft();
+			Integer secondsLeft = gm.getSecondsLeft();
+			
+			if(!episode.equals(oldEpisode) && p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.episode")) {
+				sb.resetScores(getText("episode", oldEpisode));
+				objective.getScore(getText("episode", episode)).setScore(5);
+				oldEpisode = episode;
+			}
+			
+			if(!alivePlayersCount.equals(oldAlivePlayersCount) && p.getConfig().getBoolean("scoreboard.players")) {
+				sb.resetScores(getText("players", oldAlivePlayersCount));
+				objective.getScore(getText("players", alivePlayersCount)).setScore(4);
+				oldAlivePlayersCount = alivePlayersCount;
+			}
+			
+			// This is displayed when the game is running to avoid a special case used to remove it
+			// if the game is without teams.
+			if(gm.isGameRunning() && gm.isGameWithTeams() && !aliveTeamsCount.equals(oldAliveTeamsCount) && p.getConfig().getBoolean("scoreboard.teams")) {
+				sb.resetScores(getText("teams", oldAliveTeamsCount));
+				objective.getScore(getText("teams", aliveTeamsCount)).setScore(3);
+				oldAliveTeamsCount = aliveTeamsCount;
+			}
+			
+			// The timer score is reset every time.
+			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
+				sb.resetScores(getTimerText(oldMinutes, oldSeconds));
+				objective.getScore(getTimerText(minutesLeft, secondsLeft)).setScore(1);
+				oldMinutes = minutesLeft;
+				oldSeconds = secondsLeft;
+			}
 		}
 	}
 	
@@ -171,7 +175,7 @@ public class UHScoreboardManager {
 	}
 	
 	public String getScoreboardName() {
-		String s = p.getConfig().getString("scoreboard", "Kill the Patrick");
+		String s = p.getConfig().getString("scoreboard.title", "Kill the Patrick");
 		return s.substring(0, Math.min(s.length(), 16));
 	}
 	

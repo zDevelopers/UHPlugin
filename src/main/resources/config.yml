@@ -1,7 +1,7 @@
 lang: fr_FR
 
 episodes:
-    enable: true
+    enabled: true
     length: 20  # minutes
     syncTimer: true  # if true, the timer will be synchronized with a clock to avoid having long episodes because of lag
 
@@ -19,8 +19,14 @@ daylightCycle:
     do: false
     time: 6000  # Initial time (or game time if the daylight cycle is disabled) in ticks. 6000 = noon.
 
-# The title of the scoreboard
-scoreboard: Kill the Patrick
+
+scoreboard: 
+    title: Kill the Patrick
+    enabled: true
+    episode: true
+    players: true
+    teams: true
+    timer: true
 
 death:
     messages:

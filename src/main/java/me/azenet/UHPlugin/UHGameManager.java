@@ -81,7 +81,7 @@ public class UHGameManager {
 
 
 	/**
-	 * Starts the game, the standard way.
+	 * Starts the game.
 	 *  - Teleports the teams
 	 *  - Changes the gamemode, reset the life, clear inventories, etc.
 	 *  - Launches the timer
@@ -154,9 +154,6 @@ public class UHGameManager {
 		
 		
 		this.aliveTeamsCount = tm.getTeams().size();
-		
-		p.getLogger().info("[start] " + aliveTeamsCount + " teams");
-		p.getLogger().info("[start] " + alivePlayersCount + " players");
 		
 		if(loc.size() < tm.getTeams().size()) {
 			sender.sendMessage(i.t("start.notEnoughTP"));
@@ -318,7 +315,7 @@ public class UHGameManager {
 	
 	
 	public void updateTimer() {
-		if(p.getConfig().getBoolean("episodes.enable")) {
+		if(p.getConfig().getBoolean("episodes.enabled")) {
 			if(p.getConfig().getBoolean("episodes.syncTimer")) {
 				long timeSinceStart = System.currentTimeMillis() - this.episodeStartTime;
 				long diffSeconds = timeSinceStart / 1000 % 60;
@@ -358,20 +355,22 @@ public class UHGameManager {
 	 * @param shifter The player who shifts the episode, an empty string if the episode is shifted because the timer is up.
 	 */
 	public void shiftEpisode(String shifter) {
-		String message = null;
-		if(!shifter.equals("")) {
-			message = i.t("episodes.endForced", String.valueOf(episode), shifter);
+		if(p.getConfig().getBoolean("episodes.enabled")) {
+			String message = null;
+			if(!shifter.equals("")) {
+				message = i.t("episodes.endForced", String.valueOf(episode), shifter);
+			}
+			else {
+				message = i.t("episodes.end", String.valueOf(episode));
+			}
+			p.getServer().broadcastMessage(message);
+			
+			this.episode++;
+			this.minutesLeft = getEpisodeLength();
+			this.secondsLeft = 0;
+			
+			this.episodeStartTime = System.currentTimeMillis();
 		}
-		else {
-			message = i.t("episodes.end", String.valueOf(episode));
-		}
-		p.getServer().broadcastMessage(message);
-		
-		this.episode++;
-		this.minutesLeft = getEpisodeLength();
-		this.secondsLeft = 0;
-		
-		this.episodeStartTime = System.currentTimeMillis();
 	}
 	
 	/**

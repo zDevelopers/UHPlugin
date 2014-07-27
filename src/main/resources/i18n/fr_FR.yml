@@ -59,7 +59,7 @@ keys:
         specHelpList: "{cc}/uh spec list{ci}: liste les spectateurs."
     
     start:
-        aleady: "{ce}Le jeu est déjà démarré ! Rechargez ou redémarrez le serveur pour redémarrer."
+        already: "{ce}Le jeu est déjà démarré ! Rechargez ou redémarrez le serveur pour redémarrer."
         syntax: "{ce}Erreur de syntaxe. Utilisation : /uh start [slow] ou /uh start slow go."
         notEnoughTP: "{ce}Impossible de démarrer : pas assez de points de téléportation."
         teleportationInProgress: "{lightpurple}Téléportation en cours... Merci de patienter."

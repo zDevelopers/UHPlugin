@@ -59,7 +59,7 @@ keys:
         specHelpList: "{cc}/uh spec list{ci}: lists the spectators."
     
     start:
-        aleady: "{ce}The game is already started! Reload or restart the server to restart the game."
+        already: "{ce}The game is already started! Reload or restart the server to restart the game."
         syntax: "{ce}Syntax error. Usage: /uh start [slow] or /uh start slow go."
         notEnoughTP: "{ce}Unable to start the game: not enough teleportation spots."
         teleportationInProgress: "{lightpurple}Teleportation in progress... Please wait."
