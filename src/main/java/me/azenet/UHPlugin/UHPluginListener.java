@@ -152,6 +152,7 @@ public class UHPluginListener implements Listener {
 		
 		// Updates the number of alive players/teams
 		p.getGameManager().updateAliveCounters();
+		p.getGameManager().getScoreboardManager().updateScoreboard();
 		
 		// Saves the location of the death
 		p.getGameManager().addDeathLocation(ev.getEntity(), ev.getEntity().getLocation());

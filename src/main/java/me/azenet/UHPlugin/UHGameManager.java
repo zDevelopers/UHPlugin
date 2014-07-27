@@ -271,14 +271,16 @@ public class UHGameManager {
 	 * Launches the timer by launching the task that updates the scoreboard every second.
 	 */
 	private void startTimer() {
-		this.episode = 1;
-		this.minutesLeft = getEpisodeLength();
-		this.secondsLeft = 0;
-		
-		this.episodeStartTime = System.currentTimeMillis();
-		
-		BukkitRunnable updateTimer = new UpdateTimerTask(p);
-		updateTimer.runTaskTimer(p, 20L, 20L);
+		if(p.getConfig().getBoolean("episodes.enabled")) {
+			this.episode = 1;
+			this.minutesLeft = getEpisodeLength();
+			this.secondsLeft = 0;
+			
+			this.episodeStartTime = System.currentTimeMillis();
+			
+			BukkitRunnable updateTimer = new UpdateTimerTask(p);
+			updateTimer.runTaskTimer(p, 20L, 20L);
+		}
 	}
 	
 	/**
@@ -299,6 +301,7 @@ public class UHGameManager {
 	 */
 	private void finalizeStart() {
 		Bukkit.getServer().broadcastMessage(i.t("start.go"));
+		this.scoreboardManager.updateScoreboard();
 		this.gameRunning = true;
 	}
 	
@@ -315,27 +318,29 @@ public class UHGameManager {
 	
 	
 	public void updateTimer() {
-		if(p.getConfig().getBoolean("episodes.syncTimer")) {
-			long timeSinceStart = System.currentTimeMillis() - this.episodeStartTime;
-			long diffSeconds = timeSinceStart / 1000 % 60;
-			long diffMinutes = timeSinceStart / (60 * 1000) % 60;
-			
-			if(diffMinutes >= this.getEpisodeLength()) {
-				shiftEpisode();
+		if(p.getConfig().getBoolean("episodes.enable")) {
+			if(p.getConfig().getBoolean("episodes.syncTimer")) {
+				long timeSinceStart = System.currentTimeMillis() - this.episodeStartTime;
+				long diffSeconds = timeSinceStart / 1000 % 60;
+				long diffMinutes = timeSinceStart / (60 * 1000) % 60;
+				
+				if(diffMinutes >= this.getEpisodeLength()) {
+					shiftEpisode();
+				}
+				else {
+					minutesLeft = (int) (this.getEpisodeLength() - diffMinutes) - 1;
+					secondsLeft = (int) (60 - diffSeconds) - 1;
+				}
 			}
 			else {
-				minutesLeft = (int) (this.getEpisodeLength() - diffMinutes) - 1;
-				secondsLeft = (int) (60 - diffSeconds) - 1;
-			}
-		}
-		else {
-			secondsLeft--;
-			if (secondsLeft == -1) {
-				minutesLeft--;
-				secondsLeft = 59;
-			}
-			if (minutesLeft == -1) {
-				shiftEpisode();
+				secondsLeft--;
+				if (secondsLeft == -1) {
+					minutesLeft--;
+					secondsLeft = 59;
+				}
+				if (minutesLeft == -1) {
+					shiftEpisode();
+				}
 			}
 		}
 	}

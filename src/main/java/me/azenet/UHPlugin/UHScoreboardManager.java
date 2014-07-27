@@ -58,8 +58,10 @@ public class UHScoreboardManager {
 		this.objective.setDisplayName(getScoreboardName());
 		this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
-		// The "space" score needs to be set only one time.
-		this.objective.getScore("").setScore(2);
+		// The "space" score needs to be set only one time, and only if the episodes are enabled.
+		if(p.getConfig().getBoolean("episodes.enable")) {
+			this.objective.getScore("").setScore(2);
+		}
 		
 		updateScoreboard();
 		
@@ -79,7 +81,7 @@ public class UHScoreboardManager {
 		Integer minutesLeft = gm.getMinutesLeft();
 		Integer secondsLeft = gm.getSecondsLeft();
 		
-		if(!episode.equals(oldEpisode)) {
+		if(!episode.equals(oldEpisode) && p.getConfig().getBoolean("episodes.enable")) {
 			sb.resetScores(getText("episode", oldEpisode));
 			objective.getScore(getText("episode", episode)).setScore(5);
 			oldEpisode = episode;
@@ -100,10 +102,12 @@ public class UHScoreboardManager {
 		}
 		
 		// The timer score is reset every time.
-		sb.resetScores(getTimerText(oldMinutes, oldSeconds));
-		objective.getScore(getTimerText(minutesLeft, secondsLeft)).setScore(1);
-		oldMinutes = minutesLeft;
-		oldSeconds = secondsLeft;
+		if(p.getConfig().getBoolean("episodes.enable")) {
+			sb.resetScores(getTimerText(oldMinutes, oldSeconds));
+			objective.getScore(getTimerText(minutesLeft, secondsLeft)).setScore(1);
+			oldMinutes = minutesLeft;
+			oldSeconds = secondsLeft;
+		}
 	}
 	
 	/**
