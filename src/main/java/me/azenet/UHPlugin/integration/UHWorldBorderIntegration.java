@@ -48,7 +48,11 @@ public class UHWorldBorderIntegration {
 		p.getLogger().info("Successfully hooked into WorldBorder.");
 	}
 	
-	private void setupBorders() {
+	public void setupBorders() {
+		if(!isWBIntegrationEnabled()) {
+			return;
+		}
+		
 		/** General configuration **/
 		
 		Config.setPortalRedirection(true); // Because the nether is border-less.
@@ -68,7 +72,7 @@ public class UHWorldBorderIntegration {
 		borderOverworld.setX(overworld.getSpawnLocation().getX()); // A border centered on the spawn point
 		borderOverworld.setZ(overworld.getSpawnLocation().getZ());
 		
-		borderOverworld.setRadius((int) Math.floor(p.getConfig().getInt("map.size")/2));
+		borderOverworld.setRadius((int) Math.floor(p.getBorderManager().getCurrentBorderDiameter()/2));
 		
 		Config.setBorder(overworld.getName(), borderOverworld);
 		

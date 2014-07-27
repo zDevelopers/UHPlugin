@@ -14,6 +14,8 @@ map:
             # The replaceSolid one, where there was an other kind of block.
             replaceAir: GLASS
             replaceSolid: BEDROCK
+    border:
+        warningInterval: 90  # seconds
 
 daylightCycle:
     do: false

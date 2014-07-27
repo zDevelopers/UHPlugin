@@ -36,6 +36,7 @@ keys:
         helpAddspawnXZ: "{cc}/uh addspawn <x> <z> {ci}: adds a spawn point for a team or a player, at the provided coordinates."
         helpSpec: "{cc}/uh spec {ci}: manages the spectators. Execute /uh spec for details."
         helpWall: "{cc}/uh generatewalls {ci}: generates the walls according to the configuration."
+        helpBorder: "{cc}/uh border {ci}: manages borders. Execute /uh border for details."
         
         titleBugCmd: "{aqua}------ Bugs-related commands ------"
         helpHeal: "{cc}/uh heal <player> [half-hearts=20] {ci}: heals a player to the number of half-hearts provided (default 20)."
@@ -57,6 +58,14 @@ keys:
         specHelpAdd: "{cc}/uh spec add <player>{ci}: adds a spectator."
         specHelpRemove: "{cc}/uh spec remove <player>{ci}: removes a spectator."
         specHelpList: "{cc}/uh spec list{ci}: lists the spectators."
+        
+        borderHelpAvailable: "{ci}Available options are listed below."
+        borderHelpCurrent: "{cc}/uh border current{ci}: returns the current size of the map."
+        borderHelpSet: "{cc}/uh border set <diameter> [force]{ci}: change the size of the map. If force is not given, the operation will be canceled if there is a player outside the border."
+        borderHelpWarning: "{cc}/uh border warning <futureDiameter>{ci}: warns all players outside the given future diameter. It's just a notice, nothing else."
+        borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: cancels a previously-set warning."
+        borderHelpCheck: "{cc}/uh border check <diameter>{ci}: returns a list of the players outside the given border size."
+        
     
     start:
         already: "{ce}The game is already started! Reload or restart the server to restart the game."
@@ -196,3 +205,33 @@ keys:
             countSpectators: "{ci}{0} registered spectator(s)."
             countOnlyInitial: "{ci}This count includes only the initial spectators."
             itemSpec: "{lightpurple} - {0}"
+    
+    borders:
+        syntaxError: "{ce}Syntax error, see /uh border."
+        NaN: "{ce}“{0}” is not a number..."
+        
+        current: 
+            message: "{ci}The current map size is {0}*{0}."
+        
+        set:
+            playersOutsideCanceled: "{ce}Some players are outside the future border, so this operation was cancelled."
+            playersOutsideCanceledCmd: "{ci}Use {cc}/uh border set {0} force{ci} to resize the border regardless to this point."
+            playersOutsideCanceledWarnWorldBorder: "{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will be frozen!"
+            
+            broadcast: "{lightpurple}The size of the map is now {0}*{0}"
+        
+        warning:
+            canceled: "{cs}Warning canceled."
+            
+            set: "{cs}Future size saved. All players outside this future border will be warned every {0} seconds."
+            
+            message: "{ce}You are currently out of the future border of {0}*{0} blocks."
+            messageDistance: "{ci}You have {0} blocks to go before being inside."
+        
+        check:
+            allPlayersInside: "{cs}All players are inside the given border."
+            countPlayersOutside: "{ci}There are {0} players outside the given border."
+            
+            itemPlayerFar: "{lightpurple} - {red}{0}{ci} (far away from the border)"
+            itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (close to the border)"
+            itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (very close to the border)"

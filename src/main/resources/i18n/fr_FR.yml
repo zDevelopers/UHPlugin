@@ -36,6 +36,7 @@ keys:
         helpAddspawnXZ: "{cc}/uh addspawn <x> <z> {ci}: ajoute un point de démarrage pour une équipe ou un joueur, aux coordonnées données."
         helpSpec: "{cc}/uh spec {ci}: gère les spectateurs. Exécutez /uh spec pour plus de détails."
         helpWall: "{cc}/uh generatewalls {ci}: génère les murs suivant la configuration."
+        helpBorder: "{cc}/uh border {ci}: gère la bordure. Exécutez /uh border pour plus de détails."
         
         titleBugCmd: "{aqua}------ Commandes liées aux bugs ------"
         helpHeal: "{cc}/uh heal <player> [half-hearts=20] {ci}: change la vie d'un joueur avec le nombre de demi-coeurs donné (par défaut, 20)."
@@ -57,6 +58,13 @@ keys:
         specHelpAdd: "{cc}/uh spec add <player>{ci}: ajoute un spectateur."
         specHelpRemove: "{cc}/uh spec remove <player>{ci}: supprime un spectateur."
         specHelpList: "{cc}/uh spec list{ci}: liste les spectateurs."
+        
+        borderHelpAvailable: "{ci}Les options disponibles sont listées ci-dessous."
+        borderHelpCurrent: "{cc}/uh border current{ci}: retourne la taille actuelle de la carte."
+        borderHelpSet: "{cc}/uh border set <diameter> [force]{ci}: change la taille de la carte. Si le paramètre “force” n'est pas donné, l'opération sera annulée s'il existe des joueurs hors de la bordure."
+        borderHelpWarning: "{cc}/uh border warning <futureDiameter>{ci}: avertit tous les joueurs hors de la future bordure donnée. Ce n'est qu'un avertissement, rien de plus."
+        borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: annule un précédent avertissement."
+        borderHelpCheck: "{cc}/uh border check <diameter>{ci}: retourne la liste des joueurs hors de la bordure."
     
     start:
         already: "{ce}Le jeu est déjà démarré ! Rechargez ou redémarrez le serveur pour redémarrer."
@@ -196,3 +204,34 @@ keys:
             countSpectators: "{ci}{0} spectateur(s) enregistré(s)."
             countOnlyInitial: "{ci}Ce compte inclue uniquement les spectateurs initiaux."
             itemSpec: "{lightpurple} - {0}"
+    
+    borders:
+        syntaxError: "{ce}Erreur de syntaxe, consultez /uh border."
+        NaN: "{ce}“{0}” n'est pas un nombre..."
+        
+        current: 
+            message: "{ci}La taille actuelle de la carte est {0}*{0}."
+        
+        set:
+            playersOutsideCanceled: "{ce}Certains joueurs étant hors de cette nouvelle bordure, l'opération a été annulée."
+            playersOutsideCanceledCmd: "{ci}Utilisez {cc}/uh border set {0} force{ci} pour changer la taille de la carte malgré tout."
+            playersOutsideCanceledWarnWorldBorder: "{ce}ATTENTION: {ci}WorldBorder n'étant pas installé, les joueurs hors de la bordure seront immobilisés !"
+            
+            broadcast: "{lightpurple}La taille de la carte est désormais de {0}*{0}"
+        
+        warning:
+            canceled: "{cs}Avertissement annulé."
+            
+            set: "{cs}Future taille enregistrée. Les joueurs hors de la bordure vont être avertis toutes les {0} secondes."
+            
+            message: "{ce}Vous êtes hors de la future bordure de {0}*{0} blocs."
+            messageDistance: "{ci}Il vous reste {0} blocs à parcourir avant d'y être."
+        
+        check:
+            allPlayersInside: "{cs}Tous les joueurs sont à l'intérieur de cette bordure."
+            countPlayersOutside: "{ci}Il y a {0} joueurs hors de cette bordure."
+            
+            itemPlayerFar: "{lightpurple} - {red}{0}{ci} (loin de la bordure)"
+            itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (proche de la bordure)"
+            itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (très proche de la bordure)"
+

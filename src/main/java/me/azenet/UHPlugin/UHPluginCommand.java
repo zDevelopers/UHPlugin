@@ -20,15 +20,10 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	private UHPlugin p = null;
 	
-	private ChatColor ce = ChatColor.RED; // error
-	private ChatColor ci = ChatColor.WHITE; // info
-	private ChatColor cc = ChatColor.GOLD; // command
-	private ChatColor cs = ChatColor.GREEN; // success message
-	private ChatColor cst = ChatColor.GRAY; // status
-	
 	private ArrayList<String> commands = new ArrayList<String>();
 	private ArrayList<String> teamCommands = new ArrayList<String>();
 	private ArrayList<String> specCommands = new ArrayList<String>();
+	private ArrayList<String> borderCommands = new ArrayList<String>();
 	
 	private I18n i = null;
 
@@ -42,6 +37,7 @@ public class UHPluginCommand implements CommandExecutor {
 		commands.add("team");
 		commands.add("addspawn");
 		commands.add("generatewalls");
+		commands.add("border");
 		commands.add("heal");
 		commands.add("healall");
 		commands.add("resurrect");
@@ -58,6 +54,11 @@ public class UHPluginCommand implements CommandExecutor {
 		specCommands.add("add");
 		specCommands.add("remove");
 		specCommands.add("list");
+		
+		borderCommands.add("current");
+		borderCommands.add("set");
+		borderCommands.add("warning");
+		borderCommands.add("check");
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -134,6 +135,7 @@ public class UHPluginCommand implements CommandExecutor {
 		sender.sendMessage(i.t("cmd.helpAddspawnXZ"));
 		sender.sendMessage(i.t("cmd.helpSpec"));
 		sender.sendMessage(i.t("cmd.helpWall"));
+		sender.sendMessage(i.t("cmd.helpBorder"));
 		
 		sender.sendMessage(i.t("cmd.titleBugCmd"));
 		sender.sendMessage(i.t("cmd.helpHeal"));
@@ -710,6 +712,125 @@ public class UHPluginCommand implements CommandExecutor {
 	}
 	
 	
+	/**
+	 * This command manages borders (gets current, checks if players are out, sets a new size, warnings players
+	 * about the futur size).
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doBorder(CommandSender sender, Command command, String label, String[] args) {
+		if(args.length == 1) { // /uh border
+			sender.sendMessage(i.t("cmd.borderHelpAvailable"));
+			sender.sendMessage(i.t("cmd.borderHelpCurrent"));
+			sender.sendMessage(i.t("cmd.borderHelpSet"));
+			sender.sendMessage(i.t("cmd.borderHelpWarning"));
+			sender.sendMessage(i.t("cmd.borderHelpWarningCancel"));
+			sender.sendMessage(i.t("cmd.borderHelpCheck"));
+		}
+		else {
+			String subcommand = args[1];
+			
+			if(subcommand.equalsIgnoreCase("current")) { // /uh border current
+				sender.sendMessage(i.t("borders.current.message", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+			}
+			
+			else if(subcommand.equalsIgnoreCase("set")) { // /uh border set
+				if(args.length == 2) { // /uh border set
+					sender.sendMessage(i.t("borders.syntaxError"));					
+				}
+				else if(args.length == 3) { // /uh border set <?>
+					try {
+						Integer newDiameter = Integer.valueOf(args[2]);
+						
+						if(p.getBorderManager().getPlayersOutside(newDiameter).size() != 0) { // Some players are outside
+							sender.sendMessage(i.t("borders.set.playersOutsideCanceled"));
+							sender.sendMessage(i.t("borders.set.playersOutsideCanceledCmd", args[2]));
+							if(!p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
+								sender.sendMessage(i.t("borders.set.playersOutsideCanceledWarnWorldBorder"));
+							}
+						}
+						else {
+							p.getBorderManager().setCurrentBorderDiameter(newDiameter);
+							p.getServer().broadcastMessage(i.t("borders.set.broadcast", args[2]));
+						}
+						
+					} catch(NumberFormatException e) {
+						sender.sendMessage(i.t("borders.NaN", args[2]));
+					}
+				}
+				else if(args.length == 4 && args[3].equalsIgnoreCase("force")) { // /uh border set <?> force
+					try {
+						Integer newDiameter = Integer.valueOf(args[2]);
+						
+						p.getBorderManager().setCurrentBorderDiameter(newDiameter);
+						p.getServer().broadcastMessage(i.t("borders.set.broadcast", args[2]));
+						
+					} catch(NumberFormatException e) {
+						sender.sendMessage(i.t("borders.NaN", args[2]));
+					}
+				}
+			}
+			
+			else if(subcommand.equalsIgnoreCase("warning")) { // /uh border warning 
+				if(args.length == 2) { // /uh border warning
+					sender.sendMessage(i.t("borders.syntaxError"));					
+				}
+				else if(args[2].equalsIgnoreCase("cancel")) { // /uh border warning cancel
+					p.getBorderManager().cancelWarning();
+					sender.sendMessage(i.t("borders.warning.canceled"));
+				}
+				else { // /uh border warning <?>
+					try {
+						Integer warnDiameter = Integer.valueOf(args[2]);
+						p.getBorderManager().setWarningSize(warnDiameter);
+						sender.sendMessage(i.t("borders.warning.set", p.getConfig().getString("map.border.warningInterval", "90")));
+						
+					} catch(NumberFormatException e) {
+						sender.sendMessage(i.t("borders.NaN", args[2]));
+					}
+				}
+			}
+			else if(subcommand.equalsIgnoreCase("check")) {
+				if(args.length == 2) { // /uh border check
+					sender.sendMessage(i.t("borders.syntaxError"));					
+				}
+				else { // /uh border check <?>
+					try {
+						Integer checkDiameter = Integer.valueOf(args[2]);
+						HashSet<Player> playersOutside = p.getBorderManager().getPlayersOutside(checkDiameter);
+						
+						if(playersOutside.size() == 0) {
+							sender.sendMessage(i.t("borders.check.allPlayersInside"));
+						}
+						else {
+							sender.sendMessage(i.t("borders.check.countPlayersOutside", String.valueOf(playersOutside.size())));
+							for(Player player : p.getBorderManager().getPlayersOutside(checkDiameter)) {
+								int distance = p.getBorderManager().getDistanceToBorder(player.getLocation(), checkDiameter);
+								if(distance > 150) {
+									sender.sendMessage(i.t("borders.check.itemPlayerFar", player.getName()));
+								}
+								else if(distance > 25) {
+									sender.sendMessage(i.t("borders.check.itemPlayerClose", player.getName()));
+								}
+								else {
+									sender.sendMessage(i.t("borders.check.itemPlayerVeryClose", player.getName()));
+								}
+							}
+						}
+						
+					} catch(NumberFormatException e) {
+						sender.sendMessage(i.t("borders.NaN", args[2]));
+					}
+				}
+			}
+		}
+		
+	}
+	
 	
 	
 	public ArrayList<String> getCommands() {
@@ -722,5 +843,9 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	public ArrayList<String> getSpecCommands() {
 		return specCommands;
+	}
+	
+	public ArrayList<String> getBorderCommands() {
+		return borderCommands;
 	}
 }

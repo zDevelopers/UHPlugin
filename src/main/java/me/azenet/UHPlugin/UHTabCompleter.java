@@ -14,6 +14,7 @@ public class UHTabCompleter implements TabCompleter {
 	private ArrayList<String> commands = null;
 	private ArrayList<String> teamCommands = null;
 	private ArrayList<String> specCommands = null;
+	private ArrayList<String> borderCommands = null;
 
 	private ArrayList<String> colors = new ArrayList<String>();
 	
@@ -24,6 +25,7 @@ public class UHTabCompleter implements TabCompleter {
 		this.commands = p.getCommandManager().getCommands();
 		this.teamCommands = p.getCommandManager().getTeamCommands();
 		this.specCommands = p.getCommandManager().getSpecCommands();
+		this.borderCommands = p.getCommandManager().getBorderCommands();
 		
 		this.colors.add("aqua");
 		this.colors.add("black");
@@ -122,6 +124,28 @@ public class UHTabCompleter implements TabCompleter {
 				tpBackSuggest.add("force");
 				return this.getAutocompleteSuggestions(args[2].toLowerCase(), tpBackSuggest);
 			}
+		}
+		
+		/** Autocompletion for /uh border **/
+		else if(args[0].equalsIgnoreCase("border")) {
+			
+			// /uh border <?>
+			if(args.length == 2) {
+				return getAutocompleteSuggestions(args[1].toLowerCase(), this.borderCommands);
+			}
+			
+			else if(args[1].equalsIgnoreCase("warning") && args.length == 3) { // /uh border warning <?=cancel>
+				ArrayList<String> commandSuggested = new ArrayList<String>();
+				commandSuggested.add("cancel");
+				return this.getAutocompleteSuggestions(args[2].toLowerCase(), commandSuggested);
+			}
+			
+			else if(args[1].equalsIgnoreCase("set") && args.length == 4) { // /uh border set <diameter> <?=force>
+				ArrayList<String> commandSuggested = new ArrayList<String>();
+				commandSuggested.add("force");
+				return this.getAutocompleteSuggestions(args[3].toLowerCase(), commandSuggested);
+			}
+			
 		}
 		
 		return null;

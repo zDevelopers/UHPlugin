@@ -28,7 +28,7 @@ public class UHWallGenerator {
 	 * @throws Exception
 	 */
 	public boolean build() {
-		Integer halfMapSize = (int) Math.floor(p.getConfig().getInt("map.size")/2);
+		Integer halfMapSize = (int) Math.floor(p.getBorderManager().getCurrentBorderDiameter()/2);
 		Integer wallHeight = p.getConfig().getInt("map.wall.height");
 		
 		this.wallBlockAir = Material.matchMaterial(p.getConfig().getString("map.wall.block.replaceAir"));

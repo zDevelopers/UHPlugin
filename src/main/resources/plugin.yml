@@ -48,6 +48,9 @@ permissions:
     uh.generatewalls:
         description: Allows an user to generate the walls around the map
         default: op
+    uh.border:
+        description: Allows an user to manage the border using /uh border *
+        default: op
     uh.heal:
         description: Allows an user to heal a player using /uh heal <player> [half-hearts]
         default: op
@@ -61,5 +64,5 @@ permissions:
         description: Allows an user to teleport back a player to his spawn point with /uh tpback <player> [force]
         default: op
     uh.spec:
-        description: Alows an user to manage spectators using /uh spec *
+        description: Allows an user to manage spectators using /uh spec *
         default: op

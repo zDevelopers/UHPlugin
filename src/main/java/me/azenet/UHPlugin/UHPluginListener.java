@@ -284,25 +284,7 @@ public class UHPluginListener implements Listener {
 		}
 		
 		if(!p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
-			Location l = ev.getTo();
-			Integer mapSize = p.getConfig().getInt("map.size");
-			Integer halfMapSize = (int) Math.floor(mapSize/2);
-			Integer x = l.getBlockX();
-			Integer z = l.getBlockZ();
-			
-			Location spawn = ev.getPlayer().getWorld().getSpawnLocation();
-			Integer limitXInf = spawn.add(-halfMapSize, 0, 0).getBlockX();
-			
-			spawn = ev.getPlayer().getWorld().getSpawnLocation();
-			Integer limitXSup = spawn.add(halfMapSize, 0, 0).getBlockX();
-			
-			spawn = ev.getPlayer().getWorld().getSpawnLocation();
-			Integer limitZInf = spawn.add(0, 0, -halfMapSize).getBlockZ();
-			
-			spawn = ev.getPlayer().getWorld().getSpawnLocation();
-			Integer limitZSup = spawn.add(0, 0, halfMapSize).getBlockZ();
-			
-			if (x < limitXInf || x > limitXSup || z < limitZInf || z > limitZSup) {
+			if(!p.getBorderManager().isInsideBorder(ev.getTo())) {
 				ev.setCancelled(true);
 			}
 		}

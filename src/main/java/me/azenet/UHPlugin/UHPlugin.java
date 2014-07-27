@@ -29,6 +29,7 @@ public final class UHPlugin extends JavaPlugin {
 	private UHTeamManager teamManager = null;
 	private UHGameManager gameManager = null;
 	private UHPluginCommand commandManager = null;
+	private UHBorderManager borderManager = null;
 	
 	private UHWorldBorderIntegration wbintegration = null;
 	private UHSpectatorPlusIntegration spintegration = null;
@@ -51,6 +52,7 @@ public final class UHPlugin extends JavaPlugin {
 		
 		teamManager = new UHTeamManager(this);
 		gameManager = new UHGameManager(this);
+		borderManager = new UHBorderManager(this);
 		
 		wbintegration = new UHWorldBorderIntegration(this);
 		spintegration = new UHSpectatorPlusIntegration(this);
@@ -217,6 +219,10 @@ public final class UHPlugin extends JavaPlugin {
 	
 	public UHPluginCommand getCommandManager() {
 		return commandManager;
+	}
+	
+	public UHBorderManager getBorderManager() {
+		return borderManager;
 	}
 	
 	public UHWorldBorderIntegration getWorldBorderIntegration() {

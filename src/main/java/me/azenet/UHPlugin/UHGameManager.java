@@ -577,6 +577,10 @@ public class UHGameManager {
 		}
 		return aliveTeams;
 	}
+	
+	public HashSet<String> getAlivePlayers() {
+		return this.alivePlayers;
+	}
 
 	public UHScoreboardManager getScoreboardManager() {
 		return scoreboardManager;
