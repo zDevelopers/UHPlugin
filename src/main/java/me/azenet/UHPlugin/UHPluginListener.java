@@ -356,7 +356,7 @@ public class UHPluginListener implements Listener {
 			ItemMeta meta = result.getItemMeta();
 			
 			// Lookup for the head in the recipe
-			String name = i.t("craft.goldenApple.monsterName");
+			String name = "";
 			Boolean wither = true;
 			for(ItemStack item : ev.getInventory().getContents()) {
 				if(item.getType() == Material.SKULL_ITEM && item.getDurability() == (short) SkullType.PLAYER.ordinal()) { // An human head
@@ -371,8 +371,14 @@ public class UHPluginListener implements Listener {
 			
 			if((wither && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore"))
 					|| (!wither && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore"))) {
-			
-				List<String> lore = Arrays.asList(i.t("craft.goldenApple.loreLine1", name), i.t("craft.goldenApple.loreLine2",name));
+				
+				List<String> lore = null;
+				if(wither) {
+					lore = Arrays.asList(i.t("craft.goldenApple.loreLine1Monster"), i.t("craft.goldenApple.loreLine2Monster"));
+				}
+				else {
+					lore = Arrays.asList(i.t("craft.goldenApple.loreLine1Player", name), i.t("craft.goldenApple.loreLine2Player", name));
+				}
 				meta.setLore(lore);
 			
 			}

@@ -45,7 +45,7 @@ keys:
         
         teamHelpAvailable: "{ci}Available options are listed below."
         teamHelpAdd: "{cc}/uh team add <color> {ci}: adds a team with the provided color."
-        teamHelpAddName: "{cc}/uh team add <color> <name> {ci}: adds a named team with the provided name and color. Useful if you need more than 16 teams."
+        teamHelpAddName: "{cc}/uh team add <color> <name> {ci}: adds a named team with the provided name and color."
         teamHelpRemove: "{cc}/uh team remove <name> {ci}: removes a team"
         teamHelpAddplayer: "{cc}/uh team addplayer <teamName> <player> {ci}: adds a player inside the given team. The name of the team is it color, or the explicit name given."
         teamHelpRemoveplayer: "{cc}/uh team removeplayer <player> {ci}: removes a player from his team."
@@ -89,9 +89,11 @@ keys:
     
     craft:
         goldenApple:
-            loreLine1: "Made from the fallen head"
-            loreLine2: "of {0}"
-            monsterName: "a malignant monster"
+            loreLine1Player: "Made from the fallen head"
+            loreLine2Player: "of {0}"
+            loreLine1Monster: "Made from the fallen head"
+            loreLine2Monster: "of a malignant monster"
+    
     potions:
         disabled: "{ce}These potions are disabled!"
     
@@ -114,7 +116,7 @@ keys:
         done: "{cst}Generation done."
     
     addspawn:
-        errorCoords: "{ce}Yo need to specify the coordinates from the console."
+        errorCoords: "{ce}You need to specify the coordinates from the console."
         error2Coords: "{ce}You need to specify two coordinates."
         usage: "{ce}Usage: /uh addspawn <x> <z>"
         added: "{cs}Spawn added: {0},{1}"
@@ -194,4 +196,3 @@ keys:
             countSpectators: "{ci}{0} registered spectator(s)."
             countOnlyInitial: "{ci}This count includes only the initial spectators."
             itemSpec: "{lightpurple} - {0}"
-        

@@ -1,3 +1,198 @@
 author: "Amaury Carrade"
 keys:
-    key1: "Texte"
+    load:
+        spawnPointAdded: "Point de démarrage {0},{1} ajouté depuis le fichier de configuration."
+        invalidSpawnPoint: "Point de démarrage invalide dans la configuration : {0}"
+        teamAdded: "Équipe {0} ajoutée depuis le fichier de configuration."
+        namedTeamAdded: "Équipe {0} ({1}) ajoutée depuis le fichier de configuration."
+        invalidTeam: "Équipe invalide dans la configuration : {0}"
+        recipeApple: "Recettes des pommes d'or ajoutées."
+        recipeCompass: "Recette du compas ajoutée."
+        recipeMelon: "Recette du melon scintillant ajoutée."
+        loaded: "Plugin Ultra Hardcore chargé."
+        
+        WBNotInstalled1: "{ce}WorldBorder n'est pas installé, vous devriez l'utiliser avec le plugin Ultra Hardcore."
+        WBNotInstalled2: "{gray}Pourquoi ? Optimisation de la surveillance des bordures, pré-génération du monde (fill)... De plus, la bordure peut être réduite durant le jeu."
+        WBNotInstalled3: "{gray}Vous n'avez qu'à mettre le JAR de WorldBorder dans le dossier plugins, UHPlugin va automatiquement le configurer."
+        
+        SPNotInstalled1: "{ce}SpectatorPlus n'est pas installé, vous devriez l'utiliser avec le plugin Ultra Hardcore."
+        SPNotInstalled2: "{gray}Installez le plugin, et UHPlugin va automatiquement le configurer."
+        
+    cmd:
+        errorLoad: "{ce}Une erreur est survenue, consultez la console pour plus de détails. Il s'agit probablement d'un bug."
+        errorUnknown: "{ce}Cette commande n'existe pas."
+        errorUnauthorized: "{ce}lolnope"
+        
+        titleHelp: "{yellow}{0} - version {1}"
+        inviteHelp: "{ci}Les commandes disponibles sont listées ci-dessous."
+        legendHelp: "{ci}Légende: {cc}/uh command <requis> [optionnel=valeur par défaut]{ci}."
+        
+        titleGameCmd: "{aqua}------ Commandes liées au jeu ------"
+        helpStart: "{cc}/uh start {ci}: lance le jeu."
+        helpStartSlow: "{cc}/uh start slow {ci}: lance le jeu doucement, en deux étapes, pour les plus petits serveurs."
+        helpShift: "{cc}/uh shift {ci}: passe un épisode."
+        helpTeam: "{cc}/uh team {ci}: gère les équipes. Exécutez /uh team pour plus de détails."
+        helpAddspawn: "{cc}/uh addspawn {ci}: ajoute un point de démarrage pour une équipe ou un joueur, à la position de l'exécutant."
+        helpAddspawnXZ: "{cc}/uh addspawn <x> <z> {ci}: ajoute un point de démarrage pour une équipe ou un joueur, aux coordonnées données."
+        helpSpec: "{cc}/uh spec {ci}: gère les spectateurs. Exécutez /uh spec pour plus de détails."
+        helpWall: "{cc}/uh generatewalls {ci}: génère les murs suivant la configuration."
+        
+        titleBugCmd: "{aqua}------ Commandes liées aux bugs ------"
+        helpHeal: "{cc}/uh heal <player> [half-hearts=20] {ci}: change la vie d'un joueur avec le nombre de demi-coeurs donné (par défaut, 20)."
+        helpHealall: "{cc}/uh healall [half-hearts=20] {ci}: change la vie de tous les joueurs, et non d'un seul."
+        helpResurrect: "{cc}/uh resurrect <player> {ci}: fait revivre un joueur."
+        helpTpback: "{cc}/uh tpback <player> [force] {ci}: téléporte un joueur au lieu de sa mort en toute sécurité."
+        
+        teamHelpAvailable: "{ci}Les options disponibles sont listées ci-dessous."
+        teamHelpAdd: "{cc}/uh team add <color> {ci}: ajoute une équipe de la couleur donnée."
+        teamHelpAddName: "{cc}/uh team add <color> <name> {ci}: ajoute une équipe avec le nom et la couleur donnés."
+        teamHelpRemove: "{cc}/uh team remove <name> {ci}: supprime une équipe."
+        teamHelpAddplayer: "{cc}/uh team addplayer <teamName> <player> {ci}: ajoute un joueur dans l'équipe donnée. Le nom de l'équipe est sa couleur, ou le nom explicite donné."
+        teamHelpRemoveplayer: "{cc}/uh team removeplayer <player> {ci}: retire un joueur de son équipe."
+        teamHelpList: "{cc}/uh team list {ci}: liste toutes les équipes et leurs membres."
+        teamHelpReset: "{cc}/uh team reset {ci}: supprime toutes les équipes."
+        
+        specHelpAvailable: "{ci}Les options disponibles sont listées ci-dessous."
+        specHelpNoticeSpectatorPlusNotInstalled: "{ce}Attention{ci}: SpectatorPlus n'étant pas installé, un spectateur n'est qu'un joueur ignoré."
+        specHelpAdd: "{cc}/uh spec add <player>{ci}: ajoute un spectateur."
+        specHelpRemove: "{cc}/uh spec remove <player>{ci}: supprime un spectateur."
+        specHelpList: "{cc}/uh spec list{ci}: liste les spectateurs."
+    
+    start:
+        aleady: "{ce}Le jeu est déjà démarré ! Rechargez ou redémarrez le serveur pour redémarrer."
+        syntax: "{ce}Erreur de syntaxe. Utilisation : /uh start [slow] ou /uh start slow go."
+        notEnoughTP: "{ce}Impossible de démarrer : pas assez de points de téléportation."
+        teleportationInProgress: "{lightpurple}Téléportation en cours... Merci de patienter."
+        
+        startSlowBeforeStartSlowGo: "{ce}Veuillez exécuter {cc}/uh start slow{ce} avant."
+        startSlowWaitBeforeGo: "{ce}Veuillez patienter, les équipes sont en train d'être téléportées."
+        startSlowTeamTP: "{gray}Équipe {0}{gray} téléportée."
+        startSlowAllTeamsTP: "{cs}Toutes les équipes ont été téléportées."
+        startSlowAllTeamsTPCmd: "{gray}Utilisez {cc}/uh start slow go{gray} pour démarrer le jeu."
+        
+        go: "{green}--- GO ---"
+    
+    episodes:
+        end: "{aqua}-------- Fin de l'épisode {0} --------"
+        endForced: "{aqua}-------- Fin de l'épisode {0} [forcé par {1}] --------"
+    
+    scoreboard:
+        episode: "{gray}Épisode {white}{0}"
+        players: "{white}{0}{gray} joueurs"
+        teams: "{white}{0}{gray} équipes"
+        timer: "{white}{0}{gray}:{white}{1}"
+    
+    death:
+        kickMessage: "jayjay"
+        banMessage: "Vous êtes mort !"
+        teamHasFallen: "{0}L'équipe {1} est vaincue !"
+    
+    craft:
+        goldenApple:
+            loreLine1Player: "Fabriquée depuis la tête tranchée"
+            loreLine2Player: "de {0}"
+            loreLine1Monster: "Fabriquée depuis la tête tranchée"
+            loreLine2Monster: "d'un monstre maléfique"
+    
+    potions:
+        disabled: "{ce}Ces potions sont désactivées !"
+    
+    compass:
+        noRottenFlesh: "{gray}{italic}Vous n'avez pas de chair de zombie."
+        nothingFound: "{gray}{italic}Seul le silence comble votre requête."
+        success: "{gray}Le compas pointe désormais vers le joueur le plus proche."
+    
+    dynmap:
+        markerLabelDeath: "Ici disparu {0}"
+        markerLabelSpawn: "Lieu de démarrage de l'équipe {0}"
+        markerLabelSpawnNoTeam: "Lieu de démarrage de {0}"
+    
+    wall:
+        startGen: "{cst}Génération des murs en cours..."
+        consoleDefaultWorld: "{ci}Depuis la console, génération du mur du monde par défaut, {0}"
+        error: "{ce}Impossible de générer le mur: voir logs pour plus de détails. Les blocs configurés sont probablement invalide."
+        unknownError: "{ce}Une erreur s'est produite, consultez la console pour plus de détails."
+        blocksError: "Impossible de construire le mur, les blocs configurés sont invalides."
+        done: "{cst}Génération terminée."
+    
+    addspawn:
+        errorCoords: "{ce}Vous devez spécifier les coordonnées depuis la console."
+        error2Coords: "{ce}Vous devez spécifier deux coordonnées."
+        usage: "{ce}Utilisation : /uh addspawn <x> <z>"
+        added: "{cs}Point de démarrage ajouté : {0};{1}"
+    
+    team:
+        syntaxError: "{ce}Erreur de syntaxe, consultez /uh team."
+        unknownCommand: "{ce}Commande inconnue. Consultez /uh team pour obtenir la liste des commandes disponibles."
+        
+        add:
+            errorColor: "{ce}Impossible d'ajouter l'équipe. Vérifiez le nom de la couleur."
+            errorExists: "{ce}Cette équipe existe déjà."
+            added: "{cs}Équipe {0}{1}{cs} ajoutée."
+            nameTooLong: "{ce}Impossible d'ajouter l'équipe : le nom est trop long (maximum 16 caractères)."
+        
+        remove:
+            doesNotExists: "{ce}Cette équipe n'existe pas."
+            removed: "{cs}Équipe {0} supprimée."
+        
+        addplayer:
+            disconnected: "{ce}Impossible d'ajouter le joueur {0} dans l'équipe {1}. Le joueur doit être connecté."
+            success: "{cs}Le joueur {0} a été ajouté à l'équipe {1} avec succès."
+            doesNotExists: "{ce}Cette équipe n'existe pas."
+        
+        removeplayer:
+            disconnected: "{ce}Le joueur {0} est déconnecté !"
+            success: "{cs}Le joueur {0} a été retiré de son équipe avec succès."
+        
+        list:
+            nothing: "{ce}Il n'y a pas d'équipe à lister."
+            itemTeam: "{0}{1}{reset} - {2} joueurs"
+            itemPlayer: "{lightpurple} - {0}"
+            itemPlayerDead: "{lightpurple} - {0} {reset}({red}mort{reset})"
+            itemPlayerAlive: "{lightpurple} - {0} {reset}({green}vivant{reset})"
+        
+        reset:
+            success: "{cs}Toutes les équipes ont été supprimées."
+        
+    shift:
+        consoleName: "la console"
+        cantNotStarted: "{ce}Vous ne pouvez pas passer l'épisode actuel car le jeu n'a pas démarré."
+        
+    heal:
+        usage: "{ce}Utilisation : /uh heal <joueur> [nombre de demi-coeurs = 20]"
+        offline: "{ce}Ce joueur n'est pas connecté."
+        errorNaN: "{ce}Hey, ce n'est pas un nombre de demi-coeurs... C'est un texte... Pfff."
+        errorNoKill: "{ce}Vous ne pouvez pas tuer un joueur avec cette commande, pour éviter toute faute de frappe."
+        allErrorNoKill: "{ce}S'pèce de tueur en série !"
+    
+    resurrect:
+        usage: "{ce}Utilisation : /uh resurrect <joueur>"
+        unknownOrDead: "{ce}Je joueur ne joue pas ou n'est pas mort !"
+        offlineOk: "{cs}Comme {0} est déconnecté, il sera ressuscité dés qu'il se connectera. S'il l'était, il n'est plus banni."
+        notDead: "{ce}{0} n'est pas mort !"
+        broadcastMessage: "{gold}{0} est revenu d'entre les morts !"
+        
+    tpback:
+        usage: "{ce}Utilisation : /uh tpback <joueur> [force]"
+        offline: "{ce}Le joueur {0} n'est pas connecté."
+        noDeathLocation: "{ce}Pas de localisation de mort enregistrée pour le joueur {0}."
+        teleported: "{cs}Le joueur {0} a été téléporté là où il est mort."
+        notTeleportedNoSafeSpot: "{ce}Le joueur {0} n'a PAS été téléporté car aucun point de téléportation sûr n'a été trouvé."
+        notTeleportedNoSafeSpotCmd: "{ci}Utilisez {cc}/uh tpback {0} force{ci} pour le téléporter malgré tout."
+        
+    spectators:
+        syntaxError: "{ce}Erreur de syntaxe, consultez /uh spec."
+        unknownCommand: "{ce}Commande inconnue. Consultez /uh spec pour obtenir la liste des commandes."
+        offline: "{ce}Le joueur {0} n'est pas connecté."
+        
+        add:
+            success: "{cs}Le joueur {0} est désormais un spectateur."
+        
+        remove:
+            success: "{cs}Le joueur {0} est désormais un joueur."
+        
+        list:
+            nothing: "{ce}Il n'y a pas de spectateur à lister."
+            countSpectators: "{ci}{0} spectateur(s) enregistré(s)."
+            countOnlyInitial: "{ci}Ce compte inclue uniquement les spectateurs initiaux."
+            itemSpec: "{lightpurple} - {0}"
