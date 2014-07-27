@@ -49,9 +49,6 @@ public final class UHPlugin extends JavaPlugin {
 			i18n = new I18n(this, getConfig().getString("lang"));
 		}
 		
-		logger.info(i18n.t("key1", "param"));
-		logger.info(i18n.t("key2"));
-		
 		teamManager = new UHTeamManager(this);
 		gameManager = new UHGameManager(this);
 		
@@ -82,9 +79,9 @@ public final class UHPlugin extends JavaPlugin {
 					String[] coords = ((String) position).split(",");
 					try {
 						gameManager.addLocation(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
-						getLogger().info("Spawn point " + Integer.parseInt(coords[0]) + "," + Integer.parseInt(coords[1]) + " added from the config file.");
+						getLogger().info(i18n.t("load.spawnPointAdded", coords[0], coords[1]));
 					} catch(Exception e) { // Not an integer or not enough coords
-						getLogger().warning("Invalid spawn point set in config: " + ((String) position));
+						getLogger().warning(i18n.t("load.invalidSpawnPoint", (String) position));
 					}
 				}
 			}
@@ -97,26 +94,26 @@ public final class UHPlugin extends JavaPlugin {
 					String[] teamRawSeparated = ((String) teamRaw).split(",");
 					ChatColor color = this.teamManager.getChatColorByName(teamRawSeparated[0]);
 					if(color == null) {
-						getLogger().warning("Invalid team set in config: " + ((String) teamRaw));
+						getLogger().warning(i18n.t("load.invalidTeam", (String) teamRaw));
 					}
 					else {
 						if(teamRawSeparated.length == 2) { // "color,name"
 							this.teamManager.addTeam(color, teamRawSeparated[1]);
-							getLogger().info("Team " + teamRawSeparated[1] + " (" + teamRawSeparated[0] + ") added from the config file.");
+							getLogger().info(i18n.t("load.namedTeamAdded", teamRawSeparated[1],teamRawSeparated[0]));
 						}
 						else if(teamRawSeparated.length == 1) { // "color"
 							this.teamManager.addTeam(color, teamRawSeparated[0]);
-							getLogger().info("Team " + teamRawSeparated[0] + " added from the config file.");
+							getLogger().info(i18n.t("load.teamAdded", teamRawSeparated[0]));
 						}
 						else {
-							getLogger().warning("Invalid team set in config: " + ((String) teamRaw));
+							getLogger().warning(i18n.t("load.invalidTeam", (String) teamRaw));
 						}
 					}
 				}
 			}
 		}
 		
-		logger.info("UHPlugin loaded");
+		logger.info(i18n.t("load.loaded"));
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -164,7 +161,7 @@ public final class UHPlugin extends JavaPlugin {
 				this.getServer().addRecipe(goldenAppleLoreRemover);
 			}
 			
-			logger.info("Added new recipes for golden apple.");
+			logger.info(i18n.t("load.recipeApple"));
 		}
 		
 		if(getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock")) {
@@ -175,7 +172,7 @@ public final class UHPlugin extends JavaPlugin {
 			goldenMelon.addIngredient(1, Material.MELON);
 			
 			this.getServer().addRecipe(goldenMelon);
-			logger.info("Added new recipe for golden melon.");
+			logger.info(i18n.t("load.recipeMelon"));
 		}
 		
 		if (getConfig().getBoolean("gameplay-changes.compass")) {
@@ -192,7 +189,7 @@ public final class UHPlugin extends JavaPlugin {
 			compass.setIngredient('F', Material.ROTTEN_FLESH);
 			
 			this.getServer().addRecipe(compass);
-			logger.info("Added new recipe for compass.");
+			logger.info(i18n.t("load.recipeCompass"));
 		}
 	}
 	
@@ -232,5 +229,9 @@ public final class UHPlugin extends JavaPlugin {
 	
 	public UHDynmapIntegration getDynmapIntegration() {
 		return dynmapintegration;
+	}
+	
+	public I18n getI18n() {
+		return i18n;
 	}
 }

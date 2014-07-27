@@ -1,5 +1,7 @@
 package me.azenet.UHPlugin;
 
+import me.azenet.UHPlugin.i18n.I18n;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -8,6 +10,7 @@ import org.bukkit.block.Block;
 public class UHWallGenerator {
 	
 	private UHPlugin p = null;
+	private I18n i = null;
 	private World w = null;
 	
 	private Material wallBlockAir = null;
@@ -15,6 +18,7 @@ public class UHWallGenerator {
 	
 	public UHWallGenerator(UHPlugin p, World w) {
 		this.p = p;
+		this.i = p.getI18n();
 		this.w = w;
 	}
 	
@@ -31,7 +35,7 @@ public class UHWallGenerator {
 		this.wallBlockSolid = Material.matchMaterial(p.getConfig().getString("map.wall.block.replaceSolid"));
 		
 		if(wallBlockAir == null || !wallBlockAir.isSolid() || wallBlockSolid == null || !wallBlockSolid.isSolid()) {
-			p.getLogger().severe("Unable to build the wall, the blocks set in the config file are invalid.");
+			p.getLogger().severe(i.t("wall.blocksError"));
 			return false;
 		}
 		

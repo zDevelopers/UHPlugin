@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import me.azenet.UHPlugin.i18n.I18n;
+
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -27,10 +29,13 @@ public class UHPluginCommand implements CommandExecutor {
 	private ArrayList<String> commands = new ArrayList<String>();
 	private ArrayList<String> teamCommands = new ArrayList<String>();
 	private ArrayList<String> specCommands = new ArrayList<String>();
+	
+	private I18n i = null;
 
 
 	public UHPluginCommand(UHPlugin p) {
 		this.p = p;
+		this.i = p.getI18n();
 		
 		commands.add("start");
 		commands.add("shift");
@@ -98,7 +103,7 @@ public class UHPluginCommand implements CommandExecutor {
 			return true;
 			
 		} catch(SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			sender.sendMessage(ce + "An error occured, see console for details. This is probably a bug.");
+			sender.sendMessage(i.t("cmd.errorLoad"));
 			e.printStackTrace();
 			return false;
 		}
@@ -111,28 +116,30 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param error True if the help is printed because the used typed an unknown command.
 	 */
 	private void help(CommandSender sender, boolean error) {
-		sender.sendMessage(ChatColor.YELLOW + p.getDescription().getDescription() + " - version " + p.getDescription().getVersion());
+		sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 		
 		if(error) {
-			sender.sendMessage(ce + "This subcommand does not exists.");
+			sender.sendMessage(i.t("cmd.errorUnknown"));
 		}
 		
-		sender.sendMessage(ci + "Available subcommands are listed below.");
-		sender.sendMessage(ci + "Legend: " + cc + "/uh command <required> [optional=default]" + ci + ".");
-		sender.sendMessage(ChatColor.AQUA + "------ Game-related commands ------");
-		sender.sendMessage(cc + "/uh start " + ci + ": launches the game.");
-		sender.sendMessage(cc + "/uh start slow " + ci + ": launches the game slowly, in two steps, for smaller servers.");
-		sender.sendMessage(cc + "/uh shift " + ci + ": shifts an episode.");
-		sender.sendMessage(cc + "/uh team " + ci + ": manages the teams. Execute /uh team for details.");
-		sender.sendMessage(cc + "/uh addspawn " + ci + ": adds a spawn point for a team or a player, at the current location of the sender.");
-		sender.sendMessage(cc + "/uh addspawn <x> <z> " + ci + ": adds a spawn point for a team or a player, at the provided coordinates.");
-		sender.sendMessage(cc + "/uh spec " + ci + ": manages the spectators. Execute /uh spec for details.");
-		sender.sendMessage(cc + "/uh generatewalls " + ci + ": generates the walls according to the configuration.");
-		sender.sendMessage(ChatColor.AQUA + "------ Bugs-related commands ------");
-		sender.sendMessage(cc + "/uh heal <player> [half-hearts=20] " + ci + ": heals a player to the number of half-hearts provided (default 20).");
-		sender.sendMessage(cc + "/uh healall [half-hearts=20] " + ci + ": heals all players instead of only one.");
-		sender.sendMessage(cc + "/uh resurrect <player> " + ci + ": resurrects a player.");
-		sender.sendMessage(cc + "/uh tpback <player> [force]" + ci + ": safely teleports back a player to his death location.");
+		sender.sendMessage(i.t("cmd.inviteHelp"));
+		sender.sendMessage(i.t("cmd.legendHelp"));
+		
+		sender.sendMessage(i.t("cmd.titleGameCmd"));
+		sender.sendMessage(i.t("cmd.helpStart"));
+		sender.sendMessage(i.t("cmd.helpStartSlow"));
+		sender.sendMessage(i.t("cmd.helpShift"));
+		sender.sendMessage(i.t("cmd.helpTeam"));
+		sender.sendMessage(i.t("cmd.helpAddspawn"));
+		sender.sendMessage(i.t("cmd.helpAddspawnXZ"));
+		sender.sendMessage(i.t("cmd.helpSpec"));
+		sender.sendMessage(i.t("cmd.helpWall"));
+		
+		sender.sendMessage(i.t("cmd.titleBugCmd"));
+		sender.sendMessage(i.t("cmd.helpHeal"));
+		sender.sendMessage(i.t("cmd.helpHealall"));
+		sender.sendMessage(i.t("cmd.helpResurrect"));
+		sender.sendMessage(i.t("cmd.helpTpback"));
 	}
 	
 	/**
@@ -165,7 +172,7 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param command
 	 */
 	private void unauthorized(CommandSender sender, Command command) {
-		sender.sendMessage(ce + "LOLnope.");
+		sender.sendMessage(i.t("cmd.errorUnauthorized"));
 	}
 	
 	/**
@@ -184,21 +191,21 @@ public class UHPluginCommand implements CommandExecutor {
 			try {
 				p.getGameManager().start(sender, false);
 			} catch(RuntimeException e) {
-				sender.sendMessage(ce + "The game is already started! Reload or restart the server to restart the game.");
+				sender.sendMessage(i.t("start.already"));
 			}
 		}
 		else if(args.length == 2 && args[1].equalsIgnoreCase("slow")) { // /uh start slow
 			try {
 				p.getGameManager().start(sender, true);
 			} catch(RuntimeException e) {
-				sender.sendMessage(ce + "The game is already started! Reload or restart the server to restart the game.");
+				sender.sendMessage(i.t("start.already"));
 			}
 		}
 		else if(args.length == 3 && args[1].equalsIgnoreCase("slow") && args[2].equalsIgnoreCase("go")) { // /uh start slow go
 			p.getGameManager().finalizeStartSlow(sender);
 		}
 		else {
-			sender.sendMessage(ce + "Syntax error. Usage: /uh start [slow] or /uh start slow go.");
+			sender.sendMessage(i.t("start.syntax"));
 		}
 	}
 	
@@ -213,7 +220,7 @@ public class UHPluginCommand implements CommandExecutor {
 	 */
 	@SuppressWarnings("unused")
 	private void doGeneratewalls(CommandSender sender, Command command, String label, String[] args) {	
-		sender.sendMessage(cst + "Generating the walls...");
+		sender.sendMessage(i.t("wall.startGen"));
 		
 		World world = null;
 		
@@ -222,7 +229,7 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		else {
 			world = p.getServer().getWorlds().get(0);
-			sender.sendMessage(ci + "From the console, generating the walls of the default world, " + world.getName());
+			sender.sendMessage(i.t("wall.consoleDefaultWorld", world.getName()));
 		}
 		
 		try {
@@ -230,15 +237,15 @@ public class UHPluginCommand implements CommandExecutor {
 			Boolean success = wallGenerator.build();
 			
 			if(!success) {
-				sender.sendMessage(ce + "Unable to generate the wall: see logs for details. The blocks set in the config are probably invalid.");
+				sender.sendMessage(i.t("wall.error"));
 			}
 		}
 		catch(Exception e) {
-			sender.sendMessage(ce + "An error occured, see console for details.");
+			sender.sendMessage(i.t("wall.unknownError"));
 			e.printStackTrace();
 		}
 		
-		sender.sendMessage(cst + "Generation done.");
+		sender.sendMessage(i.t("wall.done"));
 	}
 
 	/**
@@ -255,23 +262,23 @@ public class UHPluginCommand implements CommandExecutor {
 	private void doAddspawn(CommandSender sender, Command command, String label, String[] args) {	
 		if(args.length == 1) { // No coordinates given.
 			if(!(sender instanceof Player)) {
-				sender.sendMessage(ce + "Yo need to specify the coordinates from the console.");
-				sender.sendMessage(ce + "Usage: /uh addspawn <x> <z>");
+				sender.sendMessage(i.t("addspawn.errorCoords"));
+				sender.sendMessage(i.t("addspawn.usage"));
 				return;
 			}
 			else {
 				Player pl = (Player) sender; // Just a way to avoid casts everywhere.
 				p.getGameManager().addLocation(pl.getLocation().getBlockX(), pl.getLocation().getBlockZ());
-				sender.sendMessage(cs + "Spawn added: " + pl.getLocation().getBlockX() + "," + pl.getLocation().getBlockZ());
+				sender.sendMessage(i.t("addspawn.added", String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
 			}
 		}
 		else if(args.length == 2) { // Two coordinates needed!
-			sender.sendMessage(ce + "You need to specify two coordinates.");
-			sender.sendMessage(ce + "Usage: /uh addspawn <x> <z>");
+			sender.sendMessage(i.t("addspawn.error2Coords"));
+			sender.sendMessage(i.t("addspawn.usage"));
 		}
 		else {
 			p.getGameManager().addLocation(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
-			sender.sendMessage(cs + "Spawn added: " + args[1] + "," + args[2]);
+			sender.sendMessage(i.t("addspawn.added", args[1], args[2]));
 		}
 	}
 	
@@ -288,14 +295,14 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doTeam(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // No action provided: doc
-			sender.sendMessage(ci + "Available options are listed below.");
-			sender.sendMessage(cc + "/uh team add <color> " + ci + ": adds a team with the provided color.");
-			sender.sendMessage(cc + "/uh team add <color> <name> " + ci + ": adds a named team with the provided name and color. Usefull if you need more than 16 teams.");
-			sender.sendMessage(cc + "/uh team remove <name> " + ci + ": removes a team.");
-			sender.sendMessage(cc + "/uh team addplayer <teamName> <player> " + ci + ": adds a player inside the given team. The name of the team is it color, or the explicit name given.");
-			sender.sendMessage(cc + "/uh team removeplayer <player> " + ci + ": removes a player from his team.");
-			sender.sendMessage(cc + "/uh team list " + ci + ": list the teams and their players.");
-			sender.sendMessage(cc + "/uh team reset " + ci + ": removes all teams.");
+			sender.sendMessage(i.t("cmd.teamHelpAvailable"));
+			sender.sendMessage(i.t("cmd.teamHelpAdd"));
+			sender.sendMessage(i.t("cmd.teamHelpAddName"));
+			sender.sendMessage(i.t("cmd.teamHelpRemove"));
+			sender.sendMessage(i.t("cmd.teamHelpAddplayer"));
+			sender.sendMessage(i.t("cmd.teamHelpRemoveplayer"));
+			sender.sendMessage(i.t("cmd.teamHelpList"));
+			sender.sendMessage(i.t("cmd.teamHelpReset"));
 		}
 		else {
 			UHTeamManager tm = p.getTeamManager();
@@ -307,16 +314,16 @@ public class UHPluginCommand implements CommandExecutor {
 					ChatColor color = p.getTeamManager().getChatColorByName(args[2]);
 					
 					if(color == null) {
-						sender.sendMessage(ce + "Unable to add the team, check the color name.");
+						sender.sendMessage(i.t("team.add.errorColor"));
 					}
 					else {
 						try {
 							tm.addTeam(color, args[2].toLowerCase());
 						}
 						catch(IllegalArgumentException e) {
-							sender.sendMessage(ce + "This team already exists.");
+							sender.sendMessage(i.t("team.add.errorExists"));
 						}
-						sender.sendMessage(cs + "Team " + color + args[2] + cs + " added.");
+						sender.sendMessage(i.t("team.add.added", color.toString(), args[2]));
 					}
 				
 				}
@@ -325,25 +332,25 @@ public class UHPluginCommand implements CommandExecutor {
 					ChatColor color = p.getTeamManager().getChatColorByName(args[2]);
 					
 					if(color == null) {
-						sender.sendMessage(ce + "Unable to add the team, check the color name.");
+						sender.sendMessage(i.t("team.add.errorColor"));
 					}
 					else if(args[3].length() > 16) {
-						sender.sendMessage(ce + "Unable to add the team, because the name is too long (max 16 characters).");
+						sender.sendMessage(i.t("team.add.nameTooLong"));
 					}
 					else {
 						try {
 							tm.addTeam(color, args[3].toLowerCase());
 						}
 						catch(IllegalArgumentException e) {
-							sender.sendMessage(ce + "This team already exists.");
+							sender.sendMessage(i.t("team.add.errorExists"));
 							return;
 						}
-						sender.sendMessage(cs + "Team " + args[3] + " (" + color + args[2] + cs + ") added.");
+						sender.sendMessage(i.t("team.add.added", color.toString(), args[3]));
 					}
 					
 				}
 				else {
-					sender.sendMessage(ce + "Syntax error, see /uh team.");
+					sender.sendMessage(i.t("team.syntaxError"));
 				}
 			}
 			
@@ -351,14 +358,14 @@ public class UHPluginCommand implements CommandExecutor {
 			else if(subcommand.equalsIgnoreCase("remove")) {
 				if(args.length == 3) { // /uh team remove <teamName>
 					if(!tm.removeTeam(args[2].toLowerCase())) {
-						sender.sendMessage(ce + "This team does not exists.");
+						sender.sendMessage(i.t("team.remove.doesNotExists"));
 					}
 					else {
-						sender.sendMessage(cs + "Team " + args[2] + " removed.");
+						sender.sendMessage(i.t("team.remove.removed", args[2]));
 					}
 				}
 				else {
-					sender.sendMessage(ce + "Syntax error, see /uh team.");
+					sender.sendMessage(i.t("team.syntaxError"));
 				}
 			}
 			
@@ -369,20 +376,20 @@ public class UHPluginCommand implements CommandExecutor {
 					Player player = p.getServer().getPlayer(args[3]);
 					
 					if(player == null || !player.isOnline()) {
-						sender.sendMessage(ce + "Unable to add the player " + args[3] + " to the team " + args[2] + ". The player must be connected.");
+						sender.sendMessage(i.t("team.addplayer.disconnected", args[3], args[2]));
 					}
 					else {
 						try {
 							tm.addPlayerToTeam(args[2], player);
 						} catch(IllegalArgumentException e) {
-							sender.sendMessage(ce + "The team " + args[2] + " does not exists!");
+							sender.sendMessage(i.t("team.addplayer.doesNotExists"));
 							return;
 						}
-						sender.sendMessage(cs + "The player " + args[3] + " was successfully added to the team " + args[2] + ".");
+						sender.sendMessage(i.t("team.addplayer.success", args[3], args[2]));
 					}
 				}
 				else {
-					sender.sendMessage(ce + "Syntax error, see /uh team.");
+					sender.sendMessage(i.t("team.syntaxError"));
 				}
 			}
 			
@@ -390,42 +397,42 @@ public class UHPluginCommand implements CommandExecutor {
 			else if(subcommand.equalsIgnoreCase("removeplayer")) {
 				if(args.length == 3) { // /uh team removeplayer <player>
 					
-					Player player = p.getServer().getPlayer(args[3]);
+					Player player = p.getServer().getPlayer(args[2]);
 					
 					if(player == null || !player.isOnline()) {
-						sender.sendMessage(ce + "Unable to remove the player " + args[2] + " from his team. Either he is not connected or doesn't belong to a team.");
+						sender.sendMessage(i.t("team.removeplayer.disconnected", args[2]));
 					}
 					else {
 						tm.removePlayerFromTeam(player);
-						sender.sendMessage(cs + "The player " + args[2] + " was successfully removed from his team.");
+						sender.sendMessage(i.t("team.removeplayer.success", args[2]));
 					}
 				}
 				else {
-					sender.sendMessage(ce + "Syntax error, see /uh team.");
+					sender.sendMessage(i.t("team.syntaxError"));
 				}
 			}
 			
 			
 			else if(subcommand.equalsIgnoreCase("list")) {
 				if(tm.getTeams().size() == 0) {
-					sender.sendMessage(ce + "There isn't any team to show.");
+					sender.sendMessage(i.t("team.list.nothing"));
 					return;
 				}
 				
 				ChatColor lc = ChatColor.LIGHT_PURPLE; // List color
 				
 				for(final UHTeam team : tm.getTeams()) {
-					sender.sendMessage(team.getChatColor() + team.getName() + ChatColor.WHITE + " - " + ((Integer) team.getPlayers().size()).toString() + " players");
+					sender.sendMessage(i.t("team.list.itemTeam", team.getChatColor().toString(), team.getName(), ((Integer) team.getPlayers().size()).toString()));
 					for(final Player player : team.getPlayers()) {
 						if(!p.getGameManager().isGameRunning()) {
-							sender.sendMessage(lc + " - " + player.getName());
+							sender.sendMessage(i.t("team.list.itemPlayer", player.getName()));
 						}
 						else {
 							if(p.getGameManager().isPlayerDead(player.getName())) {
-								sender.sendMessage(lc + " - " + player.getName() + ci + " (" + ChatColor.RED + "dead" + ci + ")");
+								sender.sendMessage(i.t("team.list.itemPlayerDead", player.getName()));
 							}
 							else {
-								sender.sendMessage(lc + " - " + player.getName() + ci + " (" + ChatColor.GREEN + "alive" + ci + ")");
+								sender.sendMessage(i.t("team.list.itemPlayerAlive", player.getName()));
 							}
 						}
 					}
@@ -434,10 +441,10 @@ public class UHPluginCommand implements CommandExecutor {
 			
 			else if(subcommand.equalsIgnoreCase("reset")) {
 				tm.reset();
-				sender.sendMessage(cs + "All teams where removed.");
+				sender.sendMessage(i.t("team.reset.success"));
 			}
 			else {
-				sender.sendMessage(ce + "Unknown command. See /uh team for availables commands.");
+				sender.sendMessage(i.t("team.unknownCommand"));
 			}
 		}
 	}
@@ -458,11 +465,11 @@ public class UHPluginCommand implements CommandExecutor {
 				p.getGameManager().shiftEpisode((((Player) sender).getName()));
 			}
 			else {
-				p.getGameManager().shiftEpisode("la console");
+				p.getGameManager().shiftEpisode(i.t("shift.consoleName"));
 			}
 		}
 		else {
-			sender.sendMessage(ce + "You can't shift the current episode because the game is not started.");
+			sender.sendMessage(i.t("shift.cantNotStarted"));
 		}
 	}
 	
@@ -479,13 +486,13 @@ public class UHPluginCommand implements CommandExecutor {
 	 */
 	private void doHeal(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length < 2 || args.length > 3) {
-			sender.sendMessage(ce + "Usage: /uh heal <player> [number of half-hearts = 20]");
+			sender.sendMessage(i.t("heal.usage"));
 			return;
 		}
 		
 		Player player = p.getServer().getPlayer(args[1]);
 		if(player == null || !player.isOnline()) {
-			sender.sendMessage(ce + "The player " + args[1] + " is not online.");
+			sender.sendMessage(i.t("heal.offline"));
 			return;
 		}
 		
@@ -499,12 +506,12 @@ public class UHPluginCommand implements CommandExecutor {
 				health = Double.parseDouble(args[2]);
 			}
 			catch(NumberFormatException e) {
-				sender.sendMessage(ce + "Hey, this is not a number of half-hearts. It's a text. Pfff.");
+				sender.sendMessage(i.t("heal.errorNaN"));
 				return;
 			}
 			
 			if(health <= 0D) {
-				sender.sendMessage(ce + "You can't kill a player with this command, to avoid typo fails.");
+				sender.sendMessage(i.t("heal.errorNoKill"));
 				return;
 			}
 			else if(health > 20D) {
@@ -537,11 +544,14 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		try {
 			if(Double.parseDouble(healthArg) <= 0D) {
-				sender.sendMessage(ce + "Serial killer!");
+				sender.sendMessage(i.t("heal.allErrorNoKill"));
 				return;
 			}
 		}
-		catch(NumberFormatException e) { } // See this.doHeal(..) .
+		catch(NumberFormatException e) {
+			sender.sendMessage(i.t("heal.errorNaN"));
+			return;
+		}
 		
 		for(final Player player : p.getServer().getOnlinePlayers()) {
 			String[] argsToHeal = {"heal", player.getName(), healthArg};
@@ -562,7 +572,7 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doResurrect(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length != 2) {
-			sender.sendMessage(ce + "Usage: /uh resurrect <player>");
+			sender.sendMessage(i.t("resurrect.usage"));
 			return;
 		}
 		
@@ -571,15 +581,15 @@ public class UHPluginCommand implements CommandExecutor {
 		Player player = p.getServer().getPlayer(args[1]);
 		if(player == null || !player.isOnline()) {
 			if(!success) { // Player does not exists or is nod dead.
-				sender.sendMessage(ce + "This player is not playing or dead!");
+				sender.sendMessage(i.t("resurrect.unknownOrDead"));
 			}
 			else { // Resurrected
-				sender.sendMessage(cs + "Because " + args[1] + " is offline, he will be resurrected when he logins. If he was, he is no longer banned.");
+				sender.sendMessage(i.t("resurrect.offlineOk", args[1]));
 			}
 		}
 		else {
 			if(!success) { // The player is not dead
-				sender.sendMessage(ce + args[1] + " is not dead!");
+				sender.sendMessage(i.t("resurrect.notDead", args[1]));
 			}
 		}
 	}
@@ -596,17 +606,17 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doTpback(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length < 2) {
-			sender.sendMessage(ce + "Usage: /uh tpback <player> [force]");
+			sender.sendMessage(i.t("tpback.usage"));
 			return;
 		}
 		
 		Player player = p.getServer().getPlayer(args[1]);
 		if(player == null || !player.isOnline()) {
-			sender.sendMessage(ce + "The player " + args[1] + " is not online.");
+			sender.sendMessage(i.t("tpback.offline", args[1]));
 			return;
 		}
 		else if(!p.getGameManager().hasDeathLocation(player)) {
-			sender.sendMessage(ce + "No death location available for the player " + args[1] + ".");
+			sender.sendMessage(i.t("tpback.noDeathLocation", args[1]));
 			return;
 		}
 		
@@ -615,16 +625,16 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		if(args.length >= 3 && args[2].equalsIgnoreCase("force")) {
 			UHUtils.safeTP(player, deathLocation, true);
-			sender.sendMessage(cs + "The player " + args[1] + " was teleported back.");
+			sender.sendMessage(i.t("tpback.teleported", args[1]));
 			p.getGameManager().removeDeathLocation(player);
 		}
 		else if(UHUtils.safeTP(player, deathLocation)) {
-			sender.sendMessage(cs + "The player " + args[1] + " was teleported back.");
+			sender.sendMessage(i.t("tpback.teleported", args[1]));
 			p.getGameManager().removeDeathLocation(player);
 		}
 		else {
-			sender.sendMessage(ce + "The player " + args[1] + " was NOT teleported back because no safe spot was found.");
-			sender.sendMessage(ci + "Use " + cc + "/uh tpback " + args[1] + " force" + ci + " to teleport the player regardess this point.");
+			sender.sendMessage(i.t("tpback.notTeleportedNoSafeSpot", args[1]));
+			sender.sendMessage(i.t("tpback.notTeleportedNoSafeSpotCmd", args[1]));
 		}
 	}
 	
@@ -640,45 +650,45 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doSpec(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // /uh spec
-			sender.sendMessage(ci + "Available options are listed below.");
+			sender.sendMessage(i.t("cmd.specHelpAvailable"));
 			if(!p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
-				sender.sendMessage(ce + "Please note" + ci + ": because SpectatorPlus is not present, a spectator is " + ChatColor.ITALIC + "only" + ci + " an ignored player.");
+				sender.sendMessage(i.t("cmd.specHelpNoticeSpectatorPlusNotInstalled"));
 			}
-			sender.sendMessage(cc + "/uh spec add <player> " + ci + ": adds a spectator.");
-			sender.sendMessage(cc + "/uh spec remove <player> " + ci + ": removes a spectator.");
-			sender.sendMessage(cc + "/uh spec list " + ci + ": list the spectators.");
+			sender.sendMessage(i.t("cmd.specHelpAdd"));
+			sender.sendMessage(i.t("cmd.specHelpRemove"));
+			sender.sendMessage(i.t("cmd.specHelpList"));
 		}
 		else {
 			String subcommand = args[1];
 			
 			if(subcommand.equalsIgnoreCase("add")) {
 				if(args.length == 2) { // /uh spec add
-					sender.sendMessage(ce + "Syntax error, see /uh spec.");
+					sender.sendMessage(i.t("spectators.syntaxError"));
 				}
 				else { // /uh spec add <player>
 					Player newSpectator = p.getServer().getPlayer(args[2]);
 					if(newSpectator == null) {
-						sender.sendMessage(ce + "The player " + args[2] + " is not online.");
+						sender.sendMessage(i.t("spectators.offline", args[2]));
 					}
 					else {
 						p.getGameManager().addSpectator(newSpectator);
-						sender.sendMessage(cs + args[2] + " is now a spectator.");
+						sender.sendMessage(i.t("spectators.add.success", args[2]));
 					}
 				}
 			}
 			
 			else if(subcommand.equalsIgnoreCase("remove")) {
 				if(args.length == 2) { // /uh spec remove
-					sender.sendMessage(ce + "Syntax error, see /uh spec.");
+					sender.sendMessage(i.t("spectators.syntaxError"));
 				}
 				else { // /uh spec remove <player>
 					Player oldSpectator = p.getServer().getPlayer(args[2]);
 					if(oldSpectator == null) {
-						sender.sendMessage(ce + "The player " + args[2] + " is not online.");
+						sender.sendMessage(i.t("spectators.offline", args[2]));
 					}
 					else {
 						p.getGameManager().removeSpectator(oldSpectator);
-						sender.sendMessage(cs + args[2] + " is now a player.");
+						sender.sendMessage(i.t("spectators.remove.success", args[2]));
 					}
 				}
 			}
@@ -686,13 +696,13 @@ public class UHPluginCommand implements CommandExecutor {
 			else if(subcommand.equalsIgnoreCase("list")) {
 				HashSet<String> spectators = p.getGameManager().getSpectators();
 				if(spectators.size() == 0) {
-					sender.sendMessage(ce + "There is not any spectator to list.");
+					sender.sendMessage(i.t("spectators.list.nothing"));
 				}
 				else {
-					sender.sendMessage(ci + String.valueOf(spectators.size()) + " registrered spectator(s).");
-					sender.sendMessage(ci + "This count includes only the initial spectators.");
+					sender.sendMessage(i.t("spectators.list.countSpectators", String.valueOf(spectators.size())));
+					sender.sendMessage(i.t("spectators.list.countOnlyInitial"));
 					for(String spectator : spectators) {
-						sender.sendMessage(ChatColor.LIGHT_PURPLE + " - " + spectator);
+						sender.sendMessage(i.t("spectators.list.itemSpec", spectator));
 					}
 				}
 			}
@@ -713,5 +723,4 @@ public class UHPluginCommand implements CommandExecutor {
 	public ArrayList<String> getSpecCommands() {
 		return specCommands;
 	}
-	
 }

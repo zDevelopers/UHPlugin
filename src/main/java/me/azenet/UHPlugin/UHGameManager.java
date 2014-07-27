@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 
+import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.task.TeamStartTask;
 import me.azenet.UHPlugin.task.UpdateTimerTask;
 
@@ -23,6 +24,7 @@ public class UHGameManager {
 	
 	private UHPlugin p = null;
 	private UHTeamManager tm = null;
+	private I18n i = null;
 	private Random random = null;
 	
 	private Boolean damageIsOn = false;
@@ -55,7 +57,8 @@ public class UHGameManager {
 	
 	public UHGameManager(UHPlugin plugin) {
 		this.p = plugin;
-		this.tm = plugin.getTeamManager();
+		this.i = p.getI18n();
+		this.tm = p.getTeamManager();
 		
 		this.random = new Random();
 	}
@@ -156,7 +159,7 @@ public class UHGameManager {
 		p.getLogger().info("[start] " + alivePlayersCount + " players");
 		
 		if(loc.size() < tm.getTeams().size()) {
-			sender.sendMessage(ChatColor.RED + "Unable to start the game: not enough teleportation spots.");
+			sender.sendMessage(i.t("start.notEnoughTP"));
 			return;
 		}
 		
@@ -191,7 +194,7 @@ public class UHGameManager {
 			
 			// A simple information, because this start is slower (yeah, Captain Obvious here)
 			
-			p.getServer().broadcastMessage(ChatColor.LIGHT_PURPLE + "Téléportation des joueurs en cours... Merci de patienter.");
+			p.getServer().broadcastMessage(i.t("start.teleportationInProgress"));
 			
 			
 			// TP
@@ -225,12 +228,12 @@ public class UHGameManager {
 	public void finalizeStartSlow(CommandSender sender) {
 		
 		if(!this.slowStartInProgress) {
-			sender.sendMessage(ChatColor.RED + "Please execute " + ChatColor.GOLD + "/uh start slow" + ChatColor.RED + " before.");
+			sender.sendMessage(i.t("start.startSlowBeforeStartSlowGo"));
 			return;
 		}
 		
 		if(!this.slowStartTPFinished) {
-			sender.sendMessage(ChatColor.RED + "Please wait while the players are teleported.");
+			sender.sendMessage(i.t("start.startSlowWaitBeforeGo"));
 			return;
 		}
 		
@@ -287,7 +290,6 @@ public class UHGameManager {
 			@Override
 			public void run() {
 				damageIsOn = true;
-				p.getLogger().info("Immunity ended.");
 			}
 		}, 600L);
 	}
@@ -296,7 +298,7 @@ public class UHGameManager {
 	 * Broadcast the start message and change the state of the game.
 	 */
 	private void finalizeStart() {
-		Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "--- GO ---");
+		Bukkit.getServer().broadcastMessage(i.t("start.go"));
 		this.gameRunning = true;
 	}
 	
@@ -351,11 +353,13 @@ public class UHGameManager {
 	 * @param shifter The player who shifts the episode, an empty string if the episode is shifted because the timer is up.
 	 */
 	public void shiftEpisode(String shifter) {
-		String message = ChatColor.AQUA + "-------- Fin de l'épisode " + episode;
+		String message = null;
 		if(!shifter.equals("")) {
-			message += " [forcé par " + shifter + "]";
+			message = i.t("episodes.endForced", String.valueOf(episode), shifter);
 		}
-		message += " --------";
+		else {
+			message = i.t("episodes.end", String.valueOf(episode));
+		}
 		p.getServer().broadcastMessage(message);
 		
 		this.episode++;
@@ -445,7 +449,7 @@ public class UHGameManager {
 		p.getDynmapIntegration().hideDeathLocation(player);
 		
 		// All players are notified
-		this.p.getServer().broadcastMessage(ChatColor.GOLD + player.getName() + " returned from the dead!");
+		this.p.getServer().broadcastMessage(i.t("resurrect.broadcastMessage", player.getName()));
 	}
 	
 	/**

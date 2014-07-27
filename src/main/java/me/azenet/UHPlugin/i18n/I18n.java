@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -154,14 +155,44 @@ public class I18n {
 	}
 	
 	/**
-	 * Replace standard keys in the message, like {gold} for the gold color code.
+	 * Replaces standard keys in the message, like {gold} for the gold color code.
 	 * TODO
 	 * 
 	 * @param text
 	 * @return
 	 */
 	private String replaceStandardKeys(String text) {
-		return text;
+		
+		return text.replace("{black}", ChatColor.BLACK.toString())
+					.replace("{darkblue}", ChatColor.DARK_BLUE.toString())
+					.replace("{darkgreen}", ChatColor.DARK_GREEN.toString())
+					.replace("{darkaqua}", ChatColor.DARK_AQUA.toString())
+					.replace("{darkred}", ChatColor.DARK_RED.toString())
+					.replace("{darkpurple}", ChatColor.DARK_PURPLE.toString())
+					.replace("{gold}", ChatColor.GOLD.toString())
+					.replace("{gray}", ChatColor.GRAY.toString())
+					.replace("{darkgray}", ChatColor.DARK_GRAY.toString())
+					.replace("{blue}", ChatColor.BLUE.toString())
+					.replace("{green}", ChatColor.GREEN.toString())
+					.replace("{aqua}", ChatColor.AQUA.toString())
+					.replace("{red}", ChatColor.RED.toString())
+					.replace("{lightpurple}", ChatColor.LIGHT_PURPLE.toString())
+					.replace("{yellow}", ChatColor.YELLOW.toString())
+					.replace("{white}", ChatColor.WHITE.toString())
+					
+					.replace("{bold}", ChatColor.BOLD.toString())
+					.replace("{strikethrough}", ChatColor.STRIKETHROUGH.toString())
+					.replace("{underline}", ChatColor.UNDERLINE.toString())
+					.replace("{italic}", ChatColor.ITALIC.toString())
+					.replace("{obfuscated}", ChatColor.MAGIC.toString())
+					
+					.replace("{reset}", ChatColor.RESET.toString())
+					
+					.replace("{ce}", ChatColor.RED.toString()) // error
+					.replace("{cc}", ChatColor.GOLD.toString()) // command
+					.replace("{ci}", ChatColor.WHITE.toString()) // info
+					.replace("{cs}", ChatColor.GREEN.toString()) // success
+					.replace("{cst}", ChatColor.DARK_GRAY.toString()); // status
 	}
 	
 	/**

@@ -14,7 +14,6 @@ public class UpdateTimerTask extends BukkitRunnable {
 	
 	@Override
 	public void run() {
-		// TODO sync the timer with a clock to avoid “long” minutes due to lag.
 		p.getGameManager().updateTimer();
 		p.getGameManager().getScoreboardManager().updateScoreboard();
 	}

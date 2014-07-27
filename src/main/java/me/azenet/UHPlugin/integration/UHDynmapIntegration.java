@@ -2,6 +2,7 @@ package me.azenet.UHPlugin.integration;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHTeam;
+import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,12 +17,14 @@ import org.dynmap.markers.MarkerSet;
 public class UHDynmapIntegration {
 	
 	private UHPlugin p = null;
+	private I18n i = null;
 	private DynmapAPI api = null;
 	private MarkerAPI markerAPI = null;
 	private MarkerSet markerSet = null;
 	
 	public UHDynmapIntegration(UHPlugin plugin) {
 		this.p = plugin;
+		this.i = p.getI18n();
 		
 		Plugin apiTest = Bukkit.getServer().getPluginManager().getPlugin("dynmap");
 		if(apiTest == null || !apiTest.isEnabled()) {
@@ -91,10 +94,8 @@ public class UHDynmapIntegration {
 		
 		Location deathPoint = p.getGameManager().getDeathLocation(player);
 		
-		p.getLogger().info("Adding marker for death. " + deathPoint.toString());
-		
 		String markerID = getDeathMarkerName(player);
-		String markerLabel = "Death point of " + player.getName();
+		String markerLabel = i.t("dynmap.markerLabelDeath", player.getName());
 		MarkerIcon icon = markerAPI.getMarkerIcon("skull");
 		
 		Marker marker = markerSet.createMarker(markerID, markerLabel, true, deathPoint.getWorld().getName(), deathPoint.getX(), deathPoint.getY(), deathPoint.getZ(), icon, false);
@@ -132,8 +133,6 @@ public class UHDynmapIntegration {
 		if(!p.getConfig().getBoolean("dynmap.showSpawnLocations")) {
 			return;
 		}
-		
-		p.getLogger().info("Adding marker for spawn. " + spawnPoint.toString());
 		
 		// Let's try to find the best icon
 		// Available flags:
@@ -191,9 +190,16 @@ public class UHDynmapIntegration {
 		}
 		
 		String markerID = getSpawnMarkerName(team);
-		String markerLabel = "Spawn point of the team " + team.getName();
+		String markerLabel = "";
+		if(p.getGameManager().isGameWithTeams()) {
+			markerLabel = i.t("dynmap.markerLabelSpawn", team.getName());
+		}
+		else {
+			markerLabel = i.t("dynmap.markerLabelSpawnNoTeam", team.getName());
+		}
 		
 		Marker marker = markerSet.createMarker(markerID, markerLabel, true, spawnPoint.getWorld().getName(), spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), icon, false);
+		
 		if(marker == null) {
 			p.getLogger().warning("Unable to create marker " + markerID);
 		}

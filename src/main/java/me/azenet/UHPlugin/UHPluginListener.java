@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import me.azenet.UHPlugin.i18n.I18n;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -47,10 +49,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class UHPluginListener implements Listener {
 
-	UHPlugin p = null;
+	private UHPlugin p = null;
+	private I18n i = null;
 	
 	public UHPluginListener(UHPlugin p) {
 		this.p = p;
+		this.i = p.getI18n();
 	}
 	
 	
@@ -93,9 +97,9 @@ public class UHPluginListener implements Listener {
 				
 				@Override
 				public void run() {
-					ev.getEntity().kickPlayer("jayjay");
+					ev.getEntity().kickPlayer(i.t("death.kickMessage"));
 				}
-			}, 20L*this.p.getConfig().getInt("death.kick.time", 30));
+			}, 20L * this.p.getConfig().getInt("death.kick.time", 30));
 		}
 		
 		// Drops the skull of the player.
@@ -138,7 +142,7 @@ public class UHPluginListener implements Listener {
 				}
 				
 				if(!isAliveTeam) {
-					p.getServer().broadcastMessage(p.getConfig().getString("death.messages.teamDeathMessagesPrefix", "") + "The team " + ChatColor.RESET + team.getChatColor() + team.getDisplayName() + ChatColor.RESET + p.getConfig().getString("death.messages.teamDeathMessagesPrefix", "") + " has fallen!");
+					p.getServer().broadcastMessage(i.t("death.teamHasFallen", p.getConfig().getString("death.messages.teamDeathMessagesPrefix", ""), team.getChatColor() + team.getDisplayName() + p.getConfig().getString("death.messages.teamDeathMessagesPrefix", "")));
 				}
 			}
 		}
@@ -179,7 +183,7 @@ public class UHPluginListener implements Listener {
 	public void onPlayerLogin(PlayerLoginEvent ev) {
 		if (this.p.getGameManager().isPlayerDead(ev.getPlayer().getName()) && !this.p.getConfig().getBoolean("death.kick.allow-reconnect", true)) {
 			ev.setResult(Result.KICK_OTHER);
-			ev.setKickMessage("Vous êtes mort !");
+			ev.setKickMessage(i.t("death.banMessage"));
 		}
 	}
 	
@@ -221,15 +225,15 @@ public class UHPluginListener implements Listener {
 		if(!p.getGameManager().isGameRunning() && ev.getPlayer().hasPermission("uh.*")) {
 			// A warning to the administrators if WorldBorder is not present.
 			if(!p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
-				ev.getPlayer().sendMessage(ChatColor.RED + "WorldBorder is not installed, you should use it with the Ultra Hardcore plugin.");
-				ev.getPlayer().sendMessage(ChatColor.GRAY + "Why? Optimized border check, pregenerated world (fill)... Also, the border can be reduced during the game.");
-				ev.getPlayer().sendMessage(ChatColor.GRAY + "It's as simple as putting the WorldBorder jar inside the plugins directory, UHPlugin will automatically configure it.");
+				ev.getPlayer().sendMessage(i.t("load.WBNotInstalled1"));
+				ev.getPlayer().sendMessage(i.t("load.WBNotInstalled2"));
+				ev.getPlayer().sendMessage(i.t("load.WBNotInstalled3"));
 			}
 			
 			// The same for SpectatorPlus
 			if(!p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
-				ev.getPlayer().sendMessage(ChatColor.RED + "SpectatorPlus is not installed, you should use it with the Ultra Hardcore plugin.");
-				ev.getPlayer().sendMessage(ChatColor.GRAY + "Just install the plugin, and UHPlugin will configure it automatically.");
+				ev.getPlayer().sendMessage(i.t("load.SPNotInstalled1"));
+				ev.getPlayer().sendMessage(i.t("load.SPNotInstalled2"));
 			}
 		}
 		
@@ -352,7 +356,7 @@ public class UHPluginListener implements Listener {
 			ItemMeta meta = result.getItemMeta();
 			
 			// Lookup for the head in the recipe
-			String name = "a malignant monster";
+			String name = i.t("craft.goldenApple.monsterName");
 			Boolean wither = true;
 			for(ItemStack item : ev.getInventory().getContents()) {
 				if(item.getType() == Material.SKULL_ITEM && item.getDurability() == (short) SkullType.PLAYER.ordinal()) { // An human head
@@ -368,7 +372,7 @@ public class UHPluginListener implements Listener {
 			if((wither && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore"))
 					|| (!wither && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore"))) {
 			
-				List<String> lore = Arrays.asList("Made from the fallen head", "of " + name);
+				List<String> lore = Arrays.asList(i.t("craft.goldenApple.loreLine1", name), i.t("craft.goldenApple.loreLine2",name));
 				meta.setLore(lore);
 			
 			}
@@ -398,7 +402,7 @@ public class UHPluginListener implements Listener {
 				
 				for(HumanEntity player : brewerContent.getViewers()) {
 					if(player instanceof Player) {
-						((Player) player).sendMessage(ChatColor.RED + "These potions are disabled!");
+						((Player) player).sendMessage(i.t("potions.disabled"));
 					}
 				}
 			}
@@ -505,7 +509,7 @@ public class UHPluginListener implements Listener {
 				}
 			}
 			if (!foundRottenFlesh) {
-				pl.sendMessage(ChatColor.GRAY+""+ChatColor.ITALIC+"Vous n'avez pas de chair de zombie.");
+				pl.sendMessage(i.t("compass.noRottenFlesh"));
 				pl.playSound(pl.getLocation(), Sound.STEP_WOOD, 1F, 1F);
 				return;
 			}
@@ -522,10 +526,10 @@ public class UHPluginListener implements Listener {
 				} catch (Exception e) {}
 			}
 			if (nearest == null) {
-				pl.sendMessage(ChatColor.GRAY+""+ChatColor.ITALIC+"Seul le silence comble votre requête.");
+				pl.sendMessage(i.t("compass.nothingFound"));
 				return;
 			}
-			pl.sendMessage(ChatColor.GRAY+"La boussole pointe sur le joueur le plus proche.");
+			pl.sendMessage(i.t("compass.success"));
 			pl.setCompassTarget(nearest.getLocation());
 		}
 	}

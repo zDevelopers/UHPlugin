@@ -1,3 +1,197 @@
-author: AmauryCarrade
+author: "Amaury Carrade"
 keys:
-    key1: "Text"
+    load:
+        spawnPointAdded: "Spawn point {0},{1} added from the config file"
+        invalidSpawnPoint: "Invalid spawn point set in config: {0}"
+        teamAdded: "Team {0} added from the config file"
+        namedTeamAdded: "Team {0} ({1}) added from the config file"
+        invalidTeam: "Invalid team set in config: {0}"
+        recipeApple: "Added new recipes for golden apple."
+        recipeCompass: "Added new recipe for compass."
+        recipeMelon: "Added new recipe for golden melon."
+        loaded: "Ultra Hardcore plugin loaded."
+        
+        WBNotInstalled1: "{ce}WorldBorder is not installed, you should use it with the Ultra Hardcore plugin."
+        WBNotInstalled2: "{gray}Why? Optimized border check, pre-generated world (fill)... Also, the border can be reduced during the game."
+        WBNotInstalled3: "{gray}It's as simple as putting the WorldBorder jar inside the plugins directory, UHPlugin will automatically configure it."
+        
+        SPNotInstalled1: "{ce}SpectatorPlus is not installed, you should use it with the Ultra Hardcore plugin."
+        SPNotInstalled2: "{gray}Just install the plugin, and UHPlugin will configure it automatically."
+        
+    cmd:
+        errorLoad: "{ce}An error occurred, see console for details. This is probably a bug."
+        errorUnknown: "{ce}This subcommand does not exists."
+        errorUnauthorized: "{ce}lolnope"
+        
+        titleHelp: "{yellow}{0} - version {1}"
+        inviteHelp: "{ci}Available subcommands are listed below."
+        legendHelp: "{ci}Legend: {cc}/uh command <required> [optional=default]{ci}."
+        
+        titleGameCmd: "{aqua}------ Game-related commands ------"
+        helpStart: "{cc}/uh start {ci}: launches the game."
+        helpStartSlow: "{cc}/uh start slow {ci}: launches the game slowly, in two steps, for smaller servers."
+        helpShift: "{cc}/uh shift {ci}: shifts an episode."
+        helpTeam: "{cc}/uh team {ci}: manages the teams. Execute /uh team for details."
+        helpAddspawn: "{cc}/uh addspawn {ci}: adds a spawn point for a team or a player, at the current location of the sender."
+        helpAddspawnXZ: "{cc}/uh addspawn <x> <z> {ci}: adds a spawn point for a team or a player, at the provided coordinates."
+        helpSpec: "{cc}/uh spec {ci}: manages the spectators. Execute /uh spec for details."
+        helpWall: "{cc}/uh generatewalls {ci}: generates the walls according to the configuration."
+        
+        titleBugCmd: "{aqua}------ Bugs-related commands ------"
+        helpHeal: "{cc}/uh heal <player> [half-hearts=20] {ci}: heals a player to the number of half-hearts provided (default 20)."
+        helpHealall: "{cc}/uh healall [half-hearts=20] {ci}: heals all players instead of only one."
+        helpResurrect: "{cc}/uh resurrect <player> {ci}: resurrects a player."
+        helpTpback: "{cc}/uh tpback <player> [force] {ci}: safely teleports back a player to his death location."
+        
+        teamHelpAvailable: "{ci}Available options are listed below."
+        teamHelpAdd: "{cc}/uh team add <color> {ci}: adds a team with the provided color."
+        teamHelpAddName: "{cc}/uh team add <color> <name> {ci}: adds a named team with the provided name and color. Useful if you need more than 16 teams."
+        teamHelpRemove: "{cc}/uh team remove <name> {ci}: removes a team"
+        teamHelpAddplayer: "{cc}/uh team addplayer <teamName> <player> {ci}: adds a player inside the given team. The name of the team is it color, or the explicit name given."
+        teamHelpRemoveplayer: "{cc}/uh team removeplayer <player> {ci}: removes a player from his team."
+        teamHelpList: "{cc}/uh team list {ci}: list the teams and their players."
+        teamHelpReset: "{cc}/uh team reset {ci}: removes all teams."
+        
+        specHelpAvailable: "{ci}Available options are listed below."
+        specHelpNoticeSpectatorPlusNotInstalled: "{ce}Please note{ci}: because SpectatorPlus is not present, a spectator is {italic}only{ci} an ignored player."
+        specHelpAdd: "{cc}/uh spec add <player>{ci}: adds a spectator."
+        specHelpRemove: "{cc}/uh spec remove <player>{ci}: removes a spectator."
+        specHelpList: "{cc}/uh spec list{ci}: lists the spectators."
+    
+    start:
+        aleady: "{ce}The game is already started! Reload or restart the server to restart the game."
+        syntax: "{ce}Syntax error. Usage: /uh start [slow] or /uh start slow go."
+        notEnoughTP: "{ce}Unable to start the game: not enough teleportation spots."
+        teleportationInProgress: "{lightpurple}Teleportation in progress... Please wait."
+        
+        startSlowBeforeStartSlowGo: "{ce}Please execute {cc}/uh start slow{ce} before."
+        startSlowWaitBeforeGo: "{ce}Please wait while the players are teleported."
+        startSlowTeamTP: "{gray}Team {0}{gray} teleported."
+        startSlowAllTeamsTP: "{cs}All teams are teleported."
+        startSlowAllTeamsTPCmd: "{gray}Use {cc}/uh start slow go{gray} to start the game."
+        
+        go: "{green}--- GO ---"
+    
+    episodes:
+        end: "{aqua}-------- End of episode {0} --------"
+        endForced: "{aqua}-------- End of episode {0} [forced by {1}] --------"
+    
+    scoreboard:
+        episode: "{gray}Episode {white}{0}"
+        players: "{white}{0}{gray} players"
+        teams: "{white}{0}{gray} teams"
+        timer: "{white}{0}{gray}:{white}{1}"
+    
+    death:
+        kickMessage: "jayjay"
+        banMessage: "You are dead!"
+        teamHasFallen: "{0}The team {1} has fallen!"
+    
+    craft:
+        goldenApple:
+            loreLine1: "Made from the fallen head"
+            loreLine2: "of {0}"
+            monsterName: "a malignant monster"
+    potions:
+        disabled: "{ce}These potions are disabled!"
+    
+    compass:
+        noRottenFlesh: "{gray}{italic}You do not have rotten flesh."
+        nothingFound: "{gray}{italic}Only silence answers your request."
+        success: "{gray}The compass now points to the closest player."
+    
+    dynmap:
+        markerLabelDeath: "Death point of {0}"
+        markerLabelSpawn: "Spawn point of the team {0}"
+        markerLabelSpawnNoTeam: "Spawn point of {0}"
+    
+    wall:
+        startGen: "{cst}Generating the walls..."
+        consoleDefaultWorld: "{ci}From the console, generating the walls of the default world, {0}"
+        error: "{ce}Unable to generate the wall: see logs for details. The blocks set in the config are probably invalid."
+        unknownError: "{ce}An error occurred, see console for details."
+        blocksError: "Unable to build the wall, the blocks set in the config file are invalid."
+        done: "{cst}Generation done."
+    
+    addspawn:
+        errorCoords: "{ce}Yo need to specify the coordinates from the console."
+        error2Coords: "{ce}You need to specify two coordinates."
+        usage: "{ce}Usage: /uh addspawn <x> <z>"
+        added: "{cs}Spawn added: {0},{1}"
+    
+    team:
+        syntaxError: "{ce}Syntax error, see /uh team."
+        unknownCommand: "{ce}Unknown command. See /uh team for available commands."
+        
+        add:
+            errorColor: "{ce}Unable to add the team, check the color name."
+            errorExists: "{ce}This team already exists."
+            added: "{cs}Team {0}{1}{cs} added."
+            nameTooLong: "{ce}Unable to add the team, because the name is too long (max 16 characters)."
+        
+        remove:
+            doesNotExists: "{ce}This team does not exists."
+            removed: "{cs}Team {0} deleted."
+        
+        addplayer:
+            disconnected: "{ce}Unable to add the player {0} to the team {1}. The player must be connected."
+            success: "{cs}The player {0} was successfully added to the team {1}"
+            doesNotExists: "{ce}This team does not exists."
+        
+        removeplayer:
+            disconnected: "{ce}The player {0} is disconnected!"
+            success: "{cs}The player {0} was successfully removed from his team."
+        
+        list:
+            nothing: "{ce}There isn't any team to show."
+            itemTeam: "{0}{1}{reset} - {2} players"
+            itemPlayer: "{lightpurple} - {0}"
+            itemPlayerDead: "{lightpurple} - {0} {reset}({red}dead{reset})"
+            itemPlayerAlive: "{lightpurple} - {0} {reset}({green}alive{reset})"
+        
+        reset:
+            success: "{cs}All teams where removed."
+        
+    shift:
+        consoleName: "the console"
+        cantNotStarted: "{ce}You can't shift the current episode because the game is not started."
+        
+    heal:
+        usage: "{ce}Usage: /uh heal <player> [number of half-hearts = 20]"
+        offline: "{ce}This player is offline."
+        errorNaN: "{ce}Hey, this is not a number of half-hearts. It's a text. Pfff."
+        errorNoKill: "{ce}You can't kill a player with this command, to avoid typo fails."
+        allErrorNoKill: "{ce}Serial killer!"
+    
+    resurrect:
+        usage: "{ce}Usage: /uh resurrect <player>"
+        unknownOrDead: "{ce}This player is not playing or dead!"
+        offlineOk: "{cs}Because {0} is offline, he will be resurrected when he logins. If he was, he is no longer banned."
+        notDead: "{ce}{0} is not dead!"
+        broadcastMessage: "{gold}{0} returned from the dead!"
+        
+    tpback:
+        usage: "{ce}Usage: /uh tpback <player> [force]"
+        offline: "{ce}The player {0} is not online."
+        noDeathLocation: "{ce}No death location available for the player {0}."
+        teleported: "{cs}The player {0} was teleported back."
+        notTeleportedNoSafeSpot: "{ce}The player {0} was NOT teleported back because no safe spot was found."
+        notTeleportedNoSafeSpotCmd: "{ci}Use {cc}/uh tpback {0} force{ci} to teleport the player regardess this point."
+        
+    spectators:
+        syntaxError: "{ce}Syntax error, see /uh spec."
+        unknownCommand: "{ce}Unknown command. See /uh spec for available commands."
+        offline: "{ce}The player {0} is not online."
+        
+        add:
+            success: "{cs}The player {0} is now a spectator."
+        
+        remove:
+            success: "{cs}The player {0} is now a player."
+        
+        list:
+            nothing: "{ce}There isn't any spectator to list."
+            countSpectators: "{ci}{0} registered spectator(s)."
+            countOnlyInitial: "{ci}This count includes only the initial spectators."
+            itemSpec: "{lightpurple} - {0}"
+        

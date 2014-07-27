@@ -3,6 +3,8 @@ package me.azenet.UHPlugin;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import me.azenet.UHPlugin.i18n.I18n;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -15,6 +17,7 @@ import org.bukkit.scoreboard.Scoreboard;
 public class UHScoreboardManager {
 	
 	private UHPlugin p = null;
+	private I18n i = null;
 	private UHGameManager gm = null;
 	private Scoreboard sb = null;
 	private Objective objective = null;
@@ -40,6 +43,7 @@ public class UHScoreboardManager {
 	 */
 	public UHScoreboardManager(UHPlugin plugin) {
 		this.p  = plugin;
+		this.i  = p.getI18n();
 		this.gm = p.getGameManager();
 		this.sb = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
 		
@@ -113,11 +117,11 @@ public class UHScoreboardManager {
 	private String getText(String textType, Integer arg) {
 		switch(textType) {
 			case "episode":
-				return ChatColor.GRAY + "Épisode " + ChatColor.WHITE + arg.toString();
+				return i.t("scoreboard.episode", arg.toString());
 			case "players":
-				return ChatColor.WHITE + arg.toString() + ChatColor.GRAY + " joueurs";
+				return i.t("scoreboard.players", arg.toString());
 			case "teams":
-				return ChatColor.WHITE + arg.toString() + ChatColor.GRAY + " équipes";
+				return i.t("scoreboard.teams", arg.toString());
 			default:
 				throw new IllegalArgumentException("Incorrect text type, see javadoc");
 		}
@@ -131,7 +135,7 @@ public class UHScoreboardManager {
 	 * @return The text of the timer
 	 */
 	private String getTimerText(Integer minutes, Integer seconds) {
-		return ChatColor.WHITE + formatter.format(minutes) + ChatColor.GRAY + ":" + ChatColor.WHITE + formatter.format(seconds);
+		return i.t("scoreboard.timer", formatter.format(minutes), formatter.format(seconds));
 	}
 	
 	public void updateHealthScore() {
