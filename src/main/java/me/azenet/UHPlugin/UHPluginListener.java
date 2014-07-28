@@ -130,7 +130,7 @@ public class UHPluginListener implements Listener {
 		
 		// Sends a team-death message if needed.
 		if(p.getConfig().getBoolean("death.messages.notifyIfTeamHasFallen", false)) {
-			UHTeam team = p.getTeamManager().getTeamForPlayer((Player) ev.getEntity());
+			final UHTeam team = p.getTeamManager().getTeamForPlayer((Player) ev.getEntity());
 			if(team != null) {
 				boolean isAliveTeam = false;
 				
@@ -142,13 +142,19 @@ public class UHPluginListener implements Listener {
 				}
 				
 				if(!isAliveTeam) {
-					p.getServer().broadcastMessage(i.t("death.teamHasFallen", p.getConfig().getString("death.messages.teamDeathMessagesPrefix", ""), team.getChatColor() + team.getDisplayName() + p.getConfig().getString("death.messages.teamDeathMessagesPrefix", "")));
+					// Used to display this message after the death message.
+					Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+						@Override
+						public void run() {
+							p.getServer().broadcastMessage(i.t("death.teamHasFallen", p.getConfig().getString("death.messages.teamDeathMessagesFormat", ""), team.getChatColor() + team.getDisplayName() + p.getConfig().getString("death.messages.teamDeathMessagesFormat", "")));
+						}
+					}, 1L);
 				}
 			}
 		}
 		
 		// Customizes the death message
-		ev.setDeathMessage(p.getConfig().getString("death.messages.deathMessagesPrefix", "") + ev.getDeathMessage());
+		ev.setDeathMessage(p.getConfig().getString("death.messages.deathMessagesFormat", "") + ev.getDeathMessage());
 		
 		// Updates the number of alive players/teams
 		p.getGameManager().updateAliveCounters();

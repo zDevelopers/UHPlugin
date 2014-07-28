@@ -40,8 +40,8 @@ scoreboard:
 death:
     messages:
         notifyIfTeamHasFallen: true
-        deathMessagesPrefix: "§6"  # Use this to increase visibility of death messages.
-        teamDeathMessagesPrefix: "§6"
+        deathMessagesFormat: "§6"  # Use this to increase visibility of death messages.
+        teamDeathMessagesFormat: "§6"
     kick:
         do: true
         time: 30
