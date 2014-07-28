@@ -44,8 +44,8 @@ C'est très la source.
     - The end of an episode is broadcast in the chat to all players.
     - An episode can be shifted using `/uh shift`.
     - You can disable this feature.
- - **Wall generator included**
-    - Generates a wall around the map following the size of the map set in the config file, centered on the world' spawn point.
+ - **Border manager and wall generator included**
+    - You can generate a wall around the map following the size of the map set in the config file, centered on the world' spawn point.
     - The generated wall is made of two blocks: one replaces the “air-like” blocks and the trees, and the other replaces solid blocks. This is useful to have a glass wall without light gaps in the caverns.
        - Illustrations:  
          ![viewed from the surface](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Wall_Surface.png)  
@@ -54,6 +54,10 @@ C'est très la source.
     - The players are blocked inside the wall, even if the wall is broken or not generated.
        - If WorldBorder is present, it is automatically configured.
        - Else, the plugin will check itself if a player is outside the border (not recommended, use WorldBorder if possible!).
+    - The border can eaily be set during the game with `/uh border set <diameter>`
+    - To anticipate a new border size, a warning can be send to all players out of this future border with `/uh border warning. <futureDiameter>` every 90 seconds (by default, you can change the delay in the config).  
+        ![message broadcasted to the players outside](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Border_Warning.png)
+     - You can list the players outside a given border with `/uh border check <diameter>`; this command gives a very light info (list of players outside plus "far", "close" or "very close") because the administrator can play.
  - **Gameplay tweaks** (all optional, see configuration file)
     - The golden melon is crafted using a gold block instead of eight gold nuggets.  
        ![Craft golden melon](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GlisteringMelon.png)
@@ -90,6 +94,8 @@ C'est très la source.
     - You cannot kill a player with these commands.
     - With `/uh resurrect <player>`, you can resurrect (and deban, if he was banned) a player killed by lag (or other bug).
     - With `/uh tpback <player>`, you can teleport a player back to his death location.
+ - **The players can send a private message to their team**
+    - Use `/t <message>` to send such a private message.
  - The commands can be accessed using permissions (see subsection below).
  - Autocompletion everywhere.
  - Fully translated into English and French.
@@ -97,7 +103,8 @@ C'est très la source.
     - the game can be controlled through the GameManager (`UHPlugin.getGameManager()`); 
     - the teams, using the TeamManager (`UHPlugin.getTeamManager()`);
     - the scoreboard, using the... ScoreboardManager, yes (`UHPlugin.getScoreboardManager()`);
-    - the wall generator, using the `UHWallGenerator` class.
+    - the wall generator, using the `UHWallGenerator` class;
+    - the border, through the BorderManager (`UHPlugin.getBorderManager()`).
  - Compatible with Bukkit 1.7.9+.
  - Lightweight (as much as possible).
 
@@ -105,6 +112,8 @@ C'est très la source.
 ## Documentation
 
 Documentation available via `/uh`.
+You can see the documentation of a command with sub-commands by executing the command without subcommand.
+*Example: `/uh team` for the documentation of the team command.*
 
 Legend: `/uh command <required> [optional=default]`.
 
@@ -116,6 +125,7 @@ Legend: `/uh command <required> [optional=default]`.
  - `/uh addspawn` : adds a spawn point for a team or a player, at the current location of the sender.
  - `/uh addspawn <x> <z>` : adds a spawn point for a team or a player, at the provided coordinates.
  - `/uh spec` : manages the spectators (aka players ignored by /uh start) (add, remove, list).
+ - `/uh border`: manages the border (current, set, warning, check)
  - `/uh generatewalls` : generates the walls according to the configuration.
 
 ### Bugs-related commands
@@ -124,12 +134,16 @@ Legend: `/uh command <required> [optional=default]`.
  - `/uh resurrect <player>` : resurrects a player.
  - `/uh tpback <player> [force]` : safely teleports back a player to his death point.
 
+### Others
+
+ - `/t <message>` : sends a private message to the entire team of the sender.
+
 ### Permissions
 
  - `uh.build`:  allows an user to build before the beginning of the game. Default: operator.
  - `uh.<command>`: allows an user to use the command `/uh <command>`. Default: operator.
 
-If you don't want to bother with permissions: the operators can do anything; the non-ops, nothing (except playing).
+If you don't want to bother with permissions: the operators can do anything; the non-ops, nothing (except play and execute `/t <message>`).
 
 
 ## Licence
