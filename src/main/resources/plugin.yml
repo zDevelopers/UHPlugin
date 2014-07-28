@@ -1,7 +1,7 @@
 name: UHPlugin
 description: Ultra Hardcore plugin
 main: me.azenet.UHPlugin.UHPlugin
-version: 0.5 §cdev§r
+version: 0.7 §cdev§r
 author: "Amaury Carrade"
 authors: [azenet]
 
