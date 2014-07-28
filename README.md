@@ -6,6 +6,8 @@ C'est très la source.
 
 ## Features
 
+For available configuration, please [see directly the configuration file](https://github.com/AmauryCarrade/KTP/blob/master/src/main/resources/config.yml).
+
  - **Manages an UHC match.**
  - Cancels any regeneration by food (just like `/gamerule naturalRegeneration false`).
  - **Manages teams**
@@ -36,7 +38,7 @@ C'est très la source.
     - Shows the time left in the current episode.  
       ![Scoreboard](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Scoreboard.png)
     - You can choose what is displayed in the scoreboard, or disable it.
- - The health of the players is displayed in the `Tab` list.
+ - The health of the players is displayed in the `Tab` list. This can be disabled.
  - **Episodes management**
     - Configurable duration of an episode.
     - A timer is displayed on the left of the player's screen.

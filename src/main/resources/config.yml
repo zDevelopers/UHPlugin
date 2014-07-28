@@ -26,11 +26,16 @@ daylightCycle:
 
 scoreboard: 
     title: Kill the Patrick
+    
+    # Scoreboard displayed on the left of the screen
     enabled: true
     episode: true
     players: true
     teams: true
     timer: true
+    
+    # Health in the list of the players
+    health: true
 
 death:
     messages:

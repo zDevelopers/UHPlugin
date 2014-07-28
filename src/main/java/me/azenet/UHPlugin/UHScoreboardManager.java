@@ -68,12 +68,17 @@ public class UHScoreboardManager {
 		}
 		
 		// Initialization of the scoreboard (health in players' list)
-		Objective healthObjective = this.sb.registerNewObjective("Health", Criterias.HEALTH);
-		healthObjective.setDisplayName("Health");
-		healthObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-		
-		// Sometime the health is initialized to 0. This is used to fix this.
-		updateHealthScore();
+		if(p.getConfig().getBoolean("scoreboard.health")) {
+			Objective healthObjective = this.sb.registerNewObjective("Health", Criterias.HEALTH);
+			healthObjective.setDisplayName("Health");
+			healthObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+			
+			// Sometime the health is initialized to 0. This is used to fix this.
+			updateHealthScore();
+		}
+		else {
+			this.sb.clearSlot(DisplaySlot.PLAYER_LIST); // Just in case
+		}
 	}
 	
 	public void updateScoreboard() {
