@@ -1,4 +1,4 @@
-lang: fr_FR
+lang: en_US
 
 episodes:
     enabled: true
@@ -15,6 +15,8 @@ map:
             replaceAir: GLASS
             replaceSolid: BEDROCK
     border:
+        # The delay between two warning messages sent to the players out of a future border 
+        # (this warning is set using /uh border warning <futureDiameter>).
         warningInterval: 90  # seconds
 
 daylightCycle:
@@ -57,7 +59,7 @@ gameplay-changes:
     craftGoldenAppleFromHead:
         fromHuman:
             do: true
-            numberCrafted: 3
+            numberCrafted: 2
             addLore: true
             craftNotchApple: false
         fromWither:
