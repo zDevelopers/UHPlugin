@@ -73,7 +73,7 @@ public final class UHPlugin extends JavaPlugin {
 		
 		// In case of reload
 		for(Player player : getServer().getOnlinePlayers()) {
-			gameManager.getScoreboardManager().setScoreboardForPlayer(player);
+			gameManager.initPlayer(player);
 		}
 		
 		// Import spawnpoints from config

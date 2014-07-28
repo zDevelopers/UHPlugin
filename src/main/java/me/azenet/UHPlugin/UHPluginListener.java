@@ -200,21 +200,7 @@ public class UHPluginListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(final PlayerJoinEvent ev) {
 		if (!this.p.getGameManager().isGameRunning()) {
-			Location l = ev.getPlayer().getWorld().getSpawnLocation();
-			ev.getPlayer().teleport(l.add(0,1,0));
-			
-			ev.getPlayer().setFoodLevel(20);
-			ev.getPlayer().setSaturation(14);
-			
-			// Used to update the "health" objective, to avoid a null one.
-			p.getGameManager().getScoreboardManager().updateHealthScore(ev.getPlayer());
-			
-			// Disable the spectator mode if the game is not started.
-			if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
-				p.getSpectatorPlusIntegration().getSPAPI().setSpectating(ev.getPlayer(), false);
-			}
-
-			ev.getPlayer().setGameMode(GameMode.CREATIVE);
+			p.getGameManager().initPlayer(ev.getPlayer());
 		}
 		
 		// Mainly useful on the first join.

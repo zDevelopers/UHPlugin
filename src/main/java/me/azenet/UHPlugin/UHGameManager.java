@@ -14,6 +14,7 @@ import me.azenet.UHPlugin.task.UpdateTimerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -77,6 +78,24 @@ public class UHGameManager {
 		// the value returned is "null"...
 		// This is why we initializes the scoreboard manager later, in this method.
 		this.scoreboardManager = new UHScoreboardManager(p);
+	}
+	
+	public void initPlayer(Player player) {		
+		player.setFoodLevel(20);
+		player.setSaturation(14f);
+		player.setHealth(20d);
+		
+		p.getGameManager().getScoreboardManager().setScoreboardForPlayer(player);
+		
+		// Used to update the "health" objective, to avoid a null one.
+		p.getGameManager().getScoreboardManager().updateHealthScore(player);
+		
+		// Disable the spectator mode if the game is not started.
+		if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
+			p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, false);
+		}
+
+		player.setGameMode(GameMode.ADVENTURE);
 	}
 
 
