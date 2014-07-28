@@ -157,6 +157,12 @@ public class UHGameManager {
 		
 		if(loc.size() < tm.getTeams().size()) {
 			sender.sendMessage(i.t("start.notEnoughTP"));
+			
+			// We clears the teams if the game was in solo-mode, to avoid a team-counter to be displayed on the next start
+			if(!this.gameWithTeams) {
+				tm.reset();
+			}
+			
 			return;
 		}
 		
