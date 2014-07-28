@@ -161,6 +161,13 @@ keys:
         
         reset:
             success: "{cs}Toutes les équipes ont été supprimées."
+            
+        message:
+            noConsole: "{ce}Vous ne pouvez envoyer un message d'équipe depuis la console."
+            noTeam: "{ce}Vous n'êtes pas dans une équipe !"
+            usage: "{ce}Utilisation : /t <message>"
+            
+            format: "{gold}[{0}{gold} -> son équipe] {reset}{1}"
         
     shift:
         consoleName: "la console"

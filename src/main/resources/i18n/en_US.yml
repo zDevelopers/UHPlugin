@@ -162,7 +162,14 @@ keys:
         
         reset:
             success: "{cs}All teams where removed."
-        
+            
+        message:
+            noConsole: "{ce}You can't send a team-message from the console."
+            noTeam: "{ce}You are not in a team!"
+            usage: "{ce}Usage: /t <message>"
+            
+            format: "{gold}[{0}{gold} -> his team] {reset}{1}"
+            
     shift:
         consoleName: "the console"
         cantNotStarted: "{ce}You can't shift the current episode because the game is not started."

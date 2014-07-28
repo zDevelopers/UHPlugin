@@ -62,6 +62,8 @@ public final class UHPlugin extends JavaPlugin {
 		getCommand("uh").setExecutor(commandManager);
 		getCommand("uh").setTabCompleter(new UHTabCompleter(this));
 		
+		getCommand("t").setExecutor(commandManager);
+		
 		getServer().getPluginManager().registerEvents(new UHPluginListener(this), this);
 		
 		addRecipes();

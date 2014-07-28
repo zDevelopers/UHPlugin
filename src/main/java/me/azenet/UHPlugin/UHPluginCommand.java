@@ -64,8 +64,13 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (!command.getName().equalsIgnoreCase("uh")) {
+		if (!command.getName().equalsIgnoreCase("uh") && !command.getName().equalsIgnoreCase("t")) {
 			return false;
+		}
+		
+		if(command.getName().equalsIgnoreCase("t")) { // Special case for /t command
+			doTeamMessage(sender, command, label, args);
+			return true;
 		}
 		
 		if(args.length == 0) {
@@ -829,6 +834,43 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 		}
 		
+	}
+	
+	
+	/**
+	 * This command, /t <message>, is used to send a team-message.
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void doTeamMessage(CommandSender sender, Command command, String label, String[] args) {
+		if(!(sender instanceof Player)) {
+			sender.sendMessage(i.t("team.message.noConsole"));
+			return;
+		}
+		
+		if(args.length == 0) { // /t
+			sender.sendMessage(i.t("team.message.usage"));
+			return;
+		}
+		
+		UHTeam team = p.getTeamManager().getTeamForPlayer((Player) sender);
+		
+		if(team == null) {
+			sender.sendMessage(i.t("team.message.noTeam"));
+			return;
+		}
+		
+		String message = "";
+		for(Integer i = 0; i < args.length; i++) {
+			message += args[i] + " ";
+		}
+		
+		for(final Player player : team.getPlayers()) {
+			player.sendMessage(i.t("team.message.format", ((Player) sender).getDisplayName(), message));
+		}
 	}
 	
 	
