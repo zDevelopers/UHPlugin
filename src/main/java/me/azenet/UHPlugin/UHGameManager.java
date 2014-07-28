@@ -80,7 +80,10 @@ public class UHGameManager {
 		this.scoreboardManager = new UHScoreboardManager(p);
 	}
 	
-	public void initPlayer(Player player) {		
+	public void initPlayer(Player player) {
+		Location l = player.getWorld().getSpawnLocation();
+		player.teleport(l.add(0,1,0));
+		
 		player.setFoodLevel(20);
 		player.setSaturation(14f);
 		player.setHealth(20d);

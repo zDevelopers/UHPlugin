@@ -1,6 +1,8 @@
 package me.azenet.UHPlugin;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -87,8 +89,8 @@ public class UHUtils {
 		Block blockAbove = location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() + 1, location.getBlockZ());
 		Block blockBelow = location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() - 1, location.getBlockZ());
 		
-		if((blockCenter.getType().isTransparent() || blockCenter.isLiquid())
-				&& (blockAbove.getType().isTransparent() || blockAbove.isLiquid())) {
+		if((blockCenter.getType().isTransparent() || (blockCenter.isLiquid() && !blockCenter.getType().equals(Material.LAVA) && !blockCenter.getType().equals(Material.STATIONARY_LAVA)))
+				&& (blockAbove.getType().isTransparent() || (blockAbove.isLiquid() && !blockAbove.getType().equals(Material.LAVA) && !blockCenter.getType().equals(Material.STATIONARY_LAVA)))) {
 			// two breathable blocks: ok
 			
 			if(blockBelow.getType().isSolid()) {
