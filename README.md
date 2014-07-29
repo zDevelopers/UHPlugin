@@ -2,7 +2,7 @@
 
 C'est très la source.
 
-[![Build Status](https://travis-ci.org/AmauryCarrade/KTP.svg?branch=master)](https://travis-ci.org/AmauryCarrade/KTP)
+[![Build Status](https://travis-ci.org/AmauryCarrade/UHPlugin.svg?branch=master)](https://travis-ci.org/AmauryCarrade/UHPlugin)
 
 ## Features
 
@@ -146,6 +146,12 @@ Legend: `/uh command <required> [optional=default]`.
  - `uh.<command>`: allows an user to use the command `/uh <command>`. Default: operator.
 
 If you don't want to bother with permissions: the operators can do anything; the non-ops, nothing (except play and execute `/t <message>`).
+
+
+## Thanks
+
+ - This work is a fork of [the KTP plugin](https://github.com/Azenet/KTP) made by [@Azenet](https://github.com/Azenet).
+ - Special thanks to [@jonyroda97](https://github.com/jonyroda97), for many interesting suggestions.
 
 
 ## Licence
