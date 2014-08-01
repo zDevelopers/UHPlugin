@@ -1,8 +1,16 @@
-- [OK] Synchroniser l'horloge des épisodes avec une vraie horloge (évite le décalage à cause du lag).
+- [OK] Synchroniser l'horloge des épisodes avec une vraie horloge (évite le décalage 
+  à cause du lag).
+  
 - [OK] Prendre en compte les cœurs d'absorption en cas de pommes d'or.
-- [OK] Optimiser la vérification de position des joueurs (ou se reposer uniquement sur WorldBorder, via son API).
+
+- [OK] Optimiser la vérification de position des joueurs (ou se reposer uniquement 
+  sur WorldBorder, via son API).
+  
 - Mettre à jour le code pour considérer les UUID (si besoin est).
-- [Supprimée] Mettre à jour le code : l'interface de gestion des équipes ne marche pas en 1.7.9. (Ou suppression ? Elle est jolie mais peu efficace en pratique.)
+
+- [Supprimée] Mettre à jour le code : l'interface de gestion des équipes ne marche 
+  pas en 1.7.9. (Ou suppression ? Elle est jolie mais peu efficace en pratique.)
+  
 - Ajouter des commandes : 
 	[OK] /uh team add <nom> <couleur>
 	[OK] /uh team addplayer <joueur> <équipe>
@@ -11,24 +19,67 @@
 	[OK] /uh heal <joueur> <nombre de demi-cœurs=20>
 	[OK] /uh hellall <cœurs>
 	[OK] /uh resurrect <player>
-	/uh tpback <player>
+	[OK] /uh tpback <player>
+
 - [OK] Désactiver le spawn de mobs nocifs avant le début de la partie
+
 - [OK] Ajouter un mode de démarrage progressif : 
-	/uh start slow : freeze les joueurs et TP les équipes progressivement, les joueurs ont le fly et restent en l'air
+	/uh start slow : freeze les joueurs et TP les équipes progressivement, les
+	                 joueurs ont le fly et restent en l'air
 	/uh start slow go : démarre, défreeze, active les mobs, donne l'immunité pour 30s
+
 - [OK] Autocomplétion des commandes
+
 - [OK] Permissions
+
 - [OK] Option pour annuler les dégâts des ender pearls
+
 - Option pour annuler le spawn des sorcières (non utilisée par moi mais peut être utile)
-- [PARTIAL] Mettre les restrictions en option (notamment celle des potions II, des ghasts qui ne dropent pas des larmes)
-- [PARTIAL] Corriger le bug d'affichage des joueurs vivants (actuellement compte les joueurs en ligne, pas uniquement les vivants)
+
+- [OK] Mettre les restrictions en option (notamment celle des potions II, des 
+  ghasts qui ne dropent pas des larmes)
+
+- [OK] Corriger le bug d'affichage des joueurs vivants (actuellement compte les 
+  joueurs en ligne, pas uniquement les vivants)
 	→ [OK] Liste des joueurs vivants
-	→ [OK+BUG] /uh resurrect <player> pour reprendre en compte un joueur
-- Enregistrer périodiquement les positions des joueurs pour pouvoir faire /uh revive et les re-TP même en cas de solo (quid des morts dans la lave ? Donner 30 sec d'invulnérabilité au joueur en question ?)
+	→ [OK] /uh resurrect <player> pour reprendre en compte un joueur
+- [OK+MIEUX] Enregistrer périodiquement les positions des joueurs pour pouvoir 
+  faire /uh revive et les re-TP même en cas de solo. 
+  (Quid des morts dans la lave ? Donner 30 sec d'invulnérabilité au joueur en question ?)
+
 - Ne pas couper le titre du jeu (actuellement coupé à 16 caractères) si possible.
+
 - [OK] Corriger le bug d'arrondi des cœurs.
+
 - [OK] Remplacer « team » par « équipe ». PARTOUT.
+
 - [OK] Ne pas perdre de la faim avant le début du jeu.
+
 - [OK] Les OPs peuvent placer des blocs même avant le début
+
 - [OK] Commenter le code
+
 - [OK] Réorganiser le code
+
+- Ajouter un moyen de spécifier un temps laissé pour que les joueurs aillent dans 
+  les nouvelles limites.
+	→ Ajoute le temps restant au message disant que le joueur est hors des futures 
+	  limites.
+	  « Vous avez 157 blocs à parcourir pour y être, et 12 minutes pour le faire. »
+	→ À l'expiration du temps imparti, un message est envoyé à celui qui a lancé 
+	  l'avertissement précisant que le temps est écoulé et affichant les joueurs 
+	  hors de la future bordure (comme /uh border ckeck).
+
+- Ajouter un moyen de générer des murs ronds et non que carrés.
+
+- Optimiser la manière dont le blockage des potions est fait (empêcher de mettre
+  la glowstone plutôt qu'annuler la fabrication de la potion, l'annulation étant
+  faite après l'attente d'infusion).
+
+- Ajouter un moyen de configurer le nombre de cœurs régénérés par une pomme d'or 
+  classique/une pomme d'or faite depuis une tête
+	→ Se baser sur le nom de la pomme d'or faite à partir d'une tête
+	→ Modifier le craft anti-lore pour qu'il ne change pas le nom
+	→ Empêcher le renommage d'une pomme d'or en le nom d'une pomme d'or de tête
+
+- Ajouter un moyen de désactiver les pommes de Notch (désactivé par défaut)
