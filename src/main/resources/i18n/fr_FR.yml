@@ -39,32 +39,32 @@ keys:
         helpBorder: "{cc}/uh border {ci}: gère la bordure. Exécutez /uh border pour plus de détails."
         
         titleBugCmd: "{aqua}------ Commandes liées aux bugs ------"
-        helpHeal: "{cc}/uh heal <player> [half-hearts=20] {ci}: change la vie d'un joueur avec le nombre de demi-coeurs donné (par défaut, 20)."
-        helpHealall: "{cc}/uh healall [half-hearts=20] {ci}: change la vie de tous les joueurs, et non d'un seul."
-        helpResurrect: "{cc}/uh resurrect <player> {ci}: fait revivre un joueur."
-        helpTpback: "{cc}/uh tpback <player> [force] {ci}: téléporte un joueur au lieu de sa mort en toute sécurité."
+        helpHeal: "{cc}/uh heal <joueur> [demi-coeurs=20] {ci}: change la vie d'un joueur avec le nombre de demi-coeurs donné (par défaut, 20)."
+        helpHealall: "{cc}/uh healall [demi-coeurs=20] {ci}: change la vie de tous les joueurs, et non d'un seul."
+        helpResurrect: "{cc}/uh resurrect <joueur> {ci}: fait revivre un joueur."
+        helpTpback: "{cc}/uh tpback <joueur> [force] {ci}: téléporte un joueur au lieu de sa mort en toute sécurité."
         
         teamHelpAvailable: "{ci}Les options disponibles sont listées ci-dessous."
-        teamHelpAdd: "{cc}/uh team add <color> {ci}: ajoute une équipe de la couleur donnée."
-        teamHelpAddName: "{cc}/uh team add <color> <name> {ci}: ajoute une équipe avec le nom et la couleur donnés."
-        teamHelpRemove: "{cc}/uh team remove <name> {ci}: supprime une équipe."
-        teamHelpAddplayer: "{cc}/uh team addplayer <teamName> <player> {ci}: ajoute un joueur dans l'équipe donnée. Le nom de l'équipe est sa couleur, ou le nom explicite donné."
-        teamHelpRemoveplayer: "{cc}/uh team removeplayer <player> {ci}: retire un joueur de son équipe."
+        teamHelpAdd: "{cc}/uh team add <couleur> {ci}: ajoute une équipe de la couleur donnée."
+        teamHelpAddName: "{cc}/uh team add <couleur> <nom> {ci}: ajoute une équipe avec le nom et la couleur donnés."
+        teamHelpRemove: "{cc}/uh team remove <nomÉquipe> {ci}: supprime une équipe."
+        teamHelpAddplayer: "{cc}/uh team addplayer <nomÉquipe> <joueur> {ci}: ajoute un joueur dans l'équipe donnée. Le nom de l'équipe est sa couleur, ou le nom explicite donné."
+        teamHelpRemoveplayer: "{cc}/uh team removeplayer <joueur> {ci}: retire un joueur de son équipe."
         teamHelpList: "{cc}/uh team list {ci}: liste toutes les équipes et leurs membres."
         teamHelpReset: "{cc}/uh team reset {ci}: supprime toutes les équipes."
         
         specHelpAvailable: "{ci}Les options disponibles sont listées ci-dessous."
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Attention{ci}: SpectatorPlus n'étant pas installé, un spectateur n'est qu'un joueur ignoré."
-        specHelpAdd: "{cc}/uh spec add <player>{ci}: ajoute un spectateur."
-        specHelpRemove: "{cc}/uh spec remove <player>{ci}: supprime un spectateur."
+        specHelpAdd: "{cc}/uh spec add <joueur>{ci}: ajoute un spectateur."
+        specHelpRemove: "{cc}/uh spec remove <joueur>{ci}: supprime un spectateur."
         specHelpList: "{cc}/uh spec list{ci}: liste les spectateurs."
         
         borderHelpAvailable: "{ci}Les options disponibles sont listées ci-dessous."
         borderHelpCurrent: "{cc}/uh border current{ci}: retourne la taille actuelle de la carte."
-        borderHelpSet: "{cc}/uh border set <diameter> [force]{ci}: change la taille de la carte. Si le paramètre “force” n'est pas donné, l'opération sera annulée s'il existe des joueurs hors de la bordure."
-        borderHelpWarning: "{cc}/uh border warning <futureDiameter>{ci}: avertit tous les joueurs hors de la future bordure donnée. Ce n'est qu'un avertissement, rien de plus."
+        borderHelpSet: "{cc}/uh border set <diamètre> [force]{ci}: change la taille de la carte. Si le paramètre “force” n'est pas donné, l'opération sera annulée s'il existe des joueurs hors de la bordure."
+        borderHelpWarning: "{cc}/uh border warning <futurDiamètre> [minutesAvantRéduction]{ci}: avertit tous les joueurs hors de la future bordure donnée. Ce n'est qu'un avertissement, rien de plus."
         borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: annule un précédent avertissement."
-        borderHelpCheck: "{cc}/uh border check <diameter>{ci}: retourne la liste des joueurs hors de la bordure."
+        borderHelpCheck: "{cc}/uh border check <diamètre>{ci}: retourne la liste des joueurs hors de la bordure."
     
     start:
         already: "{ce}Le jeu est déjà démarré ! Rechargez ou redémarrez le serveur pour redémarrer."
@@ -237,6 +237,9 @@ keys:
             messageCircular: "{ce}Vous êtes hors de la future bordure de {0} blocs de diamètre."
             
             messageDistance: "{ci}Il vous reste {0} blocs à parcourir avant d'y être."
+            messageDistanceTime: "{ci}Il vous reste {0} blocs à parcourir, et {1} minutes pour ce faire."
+            
+            timerUp: "{cs}Le temps imparti avant la nouvelle bordure est écoulé !"
         
         check:
             allPlayersInside: "{cs}Tous les joueurs sont à l'intérieur de cette bordure."

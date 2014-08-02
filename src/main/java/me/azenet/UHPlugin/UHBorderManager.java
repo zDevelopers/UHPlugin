@@ -6,6 +6,7 @@ import me.azenet.UHPlugin.task.BorderWarningTask;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -16,6 +17,10 @@ public class UHBorderManager {
 	
 	private Integer warningSize = 0;
 	private BukkitRunnable warningTask = null;
+	
+	private Boolean warningFinalTimeEnabled = false;
+	private Long warningFinalTime = 0L;
+	private CommandSender warningSender = null;
 	
 	private Boolean isCircularBorder = null;
 	
@@ -112,6 +117,65 @@ public class UHBorderManager {
 	}
 	
 	/**
+	 * Returns the time stamp of the end of the warning time
+	 * (i.e. the time before the players have to go inside the new border).
+	 * 
+	 * @return
+	 */
+	public long getWarningFinalTime() {
+		return this.warningFinalTime;
+	}
+	
+	/**
+	 * Returns true if there is currently a warning with a time left displayed.
+	 * 
+	 * @return
+	 */
+	public boolean getWarningFinalTimeEnabled() {
+		return this.warningFinalTimeEnabled;
+	}
+	
+	/**
+	 * Returns the sender of the last warning configured.
+	 * 
+	 * @return
+	 */
+	public CommandSender getWarningSender() {
+		return this.warningSender;
+	}
+	
+	/**
+	 * Sets the size of the future border, used in the warning messages sent to the
+	 * players out of this future border.
+	 * 
+	 * This also starts the display of the warning messages, every 90 seconds by default
+	 * (configurable, see config.yml, map.border.warningInterval).
+	 * 
+	 * If timeLeft is not null, the time available for the players to go inside the future
+	 * border is displayed in the warning message.
+	 * 
+	 * @param diameter
+	 * @param timeLeft The time available for the players to go inside the future border (minutes).
+	 */
+	public void setWarningSize(int diameter, int timeLeft, CommandSender sender) {
+		cancelWarning();
+		
+		this.warningSize = diameter;
+		
+		if(timeLeft != 0) {
+			this.warningFinalTime = System.currentTimeMillis() + 60000L*timeLeft;
+			this.warningFinalTimeEnabled = true;
+		}
+		
+		if(sender != null) {
+			this.warningSender = sender;
+		}
+		
+		warningTask = new BorderWarningTask(p);
+		warningTask.runTaskTimer(p, 20L, 20L * p.getConfig().getInt("map.border.warningInterval", 90));
+	}
+	
+	/**
 	 * Sets the size of the future border, used in the warning messages sent to the
 	 * players out of this future border.
 	 * 
@@ -119,14 +183,10 @@ public class UHBorderManager {
 	 * (configurable, see config.yml, map.border.warningInterval).
 	 * 
 	 * @param diameter
+	 * @param timeLeft The time available for the players to go inside the future border (minutes).
 	 */
 	public void setWarningSize(int diameter) {
-		cancelWarning();
-		
-		this.warningSize = diameter;
-		
-		warningTask = new BorderWarningTask(p);
-		warningTask.runTaskTimer(p, 20L, 20L * p.getConfig().getInt("map.border.warningInterval", 90));
+		setWarningSize(diameter, 0, null);
 	}
 	
 	/**
@@ -140,6 +200,17 @@ public class UHBorderManager {
 				
 			}
 		}
+		
+		stopWarningTime();
+	}
+	
+	/**
+	 * Stops the display of the time left in the warning message.
+	 */
+	public void stopWarningTime() {
+		this.warningFinalTimeEnabled = false;
+		this.warningFinalTime = 0l;
+		this.warningSender = null;
 	}
 	
 	/**
@@ -250,9 +321,9 @@ public class UHBorderManager {
 	/** Circular border **/
 	
 	private boolean isInsideCircularBorder(Location location, int diameter) {
-		Double halfMapSize = Math.floor(diameter/2);
+		Double radius = Math.floor(diameter/2);
 		
-		return !(location.distance(Bukkit.getWorlds().get(0).getSpawnLocation()) > halfMapSize);
+		return !(location.distance(Bukkit.getWorlds().get(0).getSpawnLocation()) >= radius);
 	}
 	
 	private int getDistanceToCircularBorder(Location location, int diameter) {

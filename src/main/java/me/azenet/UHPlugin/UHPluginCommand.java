@@ -809,7 +809,13 @@ public class UHPluginCommand implements CommandExecutor {
 				else { // /uh border warning <?>
 					try {
 						Integer warnDiameter = Integer.valueOf(args[2]);
-						p.getBorderManager().setWarningSize(warnDiameter);
+						
+						Integer warnTime = 0;
+						if(args.length >= 4) { // /uh border warning <?> <?>
+							warnTime = Integer.valueOf(args[3]);
+						}
+						
+						p.getBorderManager().setWarningSize(warnDiameter, warnTime, sender);
 						sender.sendMessage(i.t("borders.warning.set", p.getConfig().getString("map.border.warningInterval", "90")));
 						
 					} catch(NumberFormatException e) {

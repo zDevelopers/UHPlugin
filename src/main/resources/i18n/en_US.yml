@@ -62,7 +62,7 @@ keys:
         borderHelpAvailable: "{ci}Available options are listed below."
         borderHelpCurrent: "{cc}/uh border current{ci}: returns the current size of the map."
         borderHelpSet: "{cc}/uh border set <diameter> [force]{ci}: change the size of the map. If force is not given, the operation will be canceled if there is a player outside the border."
-        borderHelpWarning: "{cc}/uh border warning <futureDiameter>{ci}: warns all players outside the given future diameter. It's just a notice, nothing else."
+        borderHelpWarning: "{cc}/uh border warning <futureDiameter> [minutesBeforeReduction]{ci}: warns all players outside the given future diameter. It's just a notice, nothing else."
         borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: cancels a previously-set warning."
         borderHelpCheck: "{cc}/uh border check <diameter>{ci}: returns a list of the players outside the given border size."
         
@@ -238,6 +238,9 @@ keys:
             messageCircular: "{ce}You are currently out of the future border (diameter of {0} blocks)."
             
             messageDistance: "{ci}You have {0} blocks to go before being inside."
+            messageDistanceTime: "{ci}You have {0} blocks to go before being inside, and {1} minutes to do so."
+            
+            timerUp: "{cs}The timer before the new border is up!"
         
         check:
             allPlayersInside: "{cs}All players are inside the given border."
