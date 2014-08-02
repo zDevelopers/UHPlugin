@@ -222,7 +222,8 @@ public class UHWallGenerator {
 		// The good block if the one with the closest distance to the radius.
 		
 		Integer radius = (int) Math.floor(diameter/2);
-		Integer radiusSquared = (int) Math.pow(radius, 2);
+		//Integer radiusSquared = (int) Math.pow(radius, 2);
+		Integer halfRadius = (int) Math.floor(radius/2);
 		
 		Integer xSpawn = world.getSpawnLocation().getBlockX();
 		Integer ySpawn = world.getSpawnLocation().getBlockY();
@@ -248,13 +249,15 @@ public class UHWallGenerator {
 				Bukkit.getLogger().info("- END -");
 				break;
 			}
-			else if(currentBlock.getX() > radius) {
+			else if(currentBlock.getX() > halfRadius) {
 				// First part of the quarter ("east")
+				Bukkit.getLogger().info("--- First part (east) ---");
 				candidate1 = world.getBlockAt(currentBlock.getX(), ySpawn, currentBlock.getZ() + 1);
 				candidate2 = world.getBlockAt(currentBlock.getX() - 1, ySpawn, currentBlock.getZ() + 1);
 			}
 			else {
 				// Last part of the quarter ("south")
+				Bukkit.getLogger().info("--- Last part (soith) ---");
 				candidate1 = world.getBlockAt(currentBlock.getX() - 1, ySpawn, currentBlock.getZ());
 				candidate2 = world.getBlockAt(currentBlock.getX() - 1, ySpawn, currentBlock.getZ() + 1);
 			}
@@ -265,18 +268,15 @@ public class UHWallGenerator {
 			Bukkit.getLogger().info("-- --");
 			
 			// 3) The good block is selected
-			//Integer distanceCandidate1ToRef = ((xSpawn - candidate1.getX()) * (xSpawn - candidate1.getX()) + (zSpawn - candidate1.getZ()) * (zSpawn - candidate1.getZ())) - radiusSquared;
-			//Integer distanceCandidate2ToRef = ((xSpawn - candidate2.getX()) * (xSpawn - candidate2.getX()) + (zSpawn - candidate2.getZ()) * (zSpawn - candidate2.getZ())) - radiusSquared;
-			//Integer distanceCandidate1ToRef = (int) (candidate1.getLocation().distanceSquared(world.getSpawnLocation()) - radiusSquared);
-			//Integer distanceCandidate2ToRef = (int) (candidate2.getLocation().distanceSquared(world.getSpawnLocation()) - radiusSquared);
-			
 			Double distanceCandidate1ToRef = Math.abs((candidate1.getLocation().distance(world.getSpawnLocation()) - radius));
 			Double distanceCandidate2ToRef = Math.abs((candidate2.getLocation().distance(world.getSpawnLocation()) - radius));
 			
 			
 			Bukkit.getLogger().info("-- Distances to ref --");
 			Bukkit.getLogger().info("1: " + distanceCandidate1ToRef.toString());
+			Bukkit.getLogger().info("   " + String.valueOf(candidate1.getLocation().distance(world.getSpawnLocation())) + " vs " + String.valueOf(radius));
 			Bukkit.getLogger().info("2: " + distanceCandidate2ToRef.toString());
+			Bukkit.getLogger().info("   " + String.valueOf(candidate2.getLocation().distance(world.getSpawnLocation())) + " vs " + String.valueOf(radius));
 			Bukkit.getLogger().info("-- --");
 			
 			if(distanceCandidate1ToRef > distanceCandidate2ToRef) { // The second is better
