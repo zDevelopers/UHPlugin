@@ -10,7 +10,7 @@
 
 - [Supprimée] Mettre à jour le code : l'interface de gestion des équipes ne marche 
   pas en 1.7.9. (Ou suppression ? Elle est jolie mais peu efficace en pratique.)
-  
+
 - Ajouter des commandes : 
 	[OK] /uh team add <nom> <couleur>
 	[OK] /uh team addplayer <joueur> <équipe>
@@ -70,7 +70,7 @@
 	  l'avertissement précisant que le temps est écoulé et affichant les joueurs 
 	  hors de la future bordure (comme /uh border ckeck).
 
-- Ajouter un moyen de générer des murs ronds et non que carrés.
+- Ajouter un moyen de générer des murs ronds, et non uniquement carrés.
 
 - Optimiser la manière dont le blockage des potions est fait (empêcher de mettre
   la glowstone plutôt qu'annuler la fabrication de la potion, l'annulation étant

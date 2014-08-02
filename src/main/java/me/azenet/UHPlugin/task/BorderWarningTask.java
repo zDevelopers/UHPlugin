@@ -23,7 +23,12 @@ public class BorderWarningTask extends BukkitRunnable {
 		for(Player player : p.getBorderManager().getPlayersOutside(p.getBorderManager().getWarningSize())) {
 			int distance = p.getBorderManager().getDistanceToBorder(player.getLocation(), p.getBorderManager().getWarningSize());
 			
-			player.sendMessage(i.t("borders.warning.message", String.valueOf(p.getBorderManager().getWarningSize())));
+			if(p.getBorderManager().isCircularBorder()) {
+				player.sendMessage(i.t("borders.warning.messageCircular", String.valueOf(p.getBorderManager().getWarningSize())));
+			}
+			else {
+				player.sendMessage(i.t("borders.warning.messageSquared", String.valueOf(p.getBorderManager().getWarningSize())));
+			}
 			player.sendMessage(i.t("borders.warning.messageDistance", String.valueOf(distance)));
 		}
 		

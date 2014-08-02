@@ -7,6 +7,7 @@ episodes:
 
 map:
     size: 2000
+    circular: false
     wall:
         height: 128
         block:

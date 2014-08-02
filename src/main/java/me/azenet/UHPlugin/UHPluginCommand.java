@@ -450,6 +450,7 @@ public class UHPluginCommand implements CommandExecutor {
 				tm.reset();
 				sender.sendMessage(i.t("team.reset.success"));
 			}
+			
 			else {
 				sender.sendMessage(i.t("team.unknownCommand"));
 			}
@@ -740,7 +741,12 @@ public class UHPluginCommand implements CommandExecutor {
 			String subcommand = args[1];
 			
 			if(subcommand.equalsIgnoreCase("current")) { // /uh border current
-				sender.sendMessage(i.t("borders.current.message", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+				if(p.getBorderManager().isCircularBorder()) {
+					sender.sendMessage(i.t("borders.current.messageCircular", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+				}
+				else {
+					sender.sendMessage(i.t("borders.current.messageSquared", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+				}
 			}
 			
 			else if(subcommand.equalsIgnoreCase("set")) { // /uh border set
@@ -760,7 +766,13 @@ public class UHPluginCommand implements CommandExecutor {
 						}
 						else {
 							p.getBorderManager().setCurrentBorderDiameter(newDiameter);
-							p.getServer().broadcastMessage(i.t("borders.set.broadcast", args[2]));
+							
+							if(p.getBorderManager().isCircularBorder()) {
+								p.getServer().broadcastMessage(i.t("borders.set.broadcastCircular", args[2]));
+							}
+							else {
+								p.getServer().broadcastMessage(i.t("borders.set.broadcastSquared", args[2]));
+							}
 						}
 						
 					} catch(NumberFormatException e) {
@@ -772,7 +784,13 @@ public class UHPluginCommand implements CommandExecutor {
 						Integer newDiameter = Integer.valueOf(args[2]);
 						
 						p.getBorderManager().setCurrentBorderDiameter(newDiameter);
-						p.getServer().broadcastMessage(i.t("borders.set.broadcast", args[2]));
+						
+						if(p.getBorderManager().isCircularBorder()) {
+							p.getServer().broadcastMessage(i.t("borders.set.broadcastCircular", args[2]));
+						}
+						else {
+							p.getServer().broadcastMessage(i.t("borders.set.broadcastSquared", args[2]));
+						}
 						
 					} catch(NumberFormatException e) {
 						sender.sendMessage(i.t("borders.NaN", args[2]));

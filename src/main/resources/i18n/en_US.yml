@@ -218,21 +218,25 @@ keys:
         NaN: "{ce}“{0}” is not a number..."
         
         current: 
-            message: "{ci}The current map size is {0}*{0}."
+            messageSquared: "{ci}The current map size is {0}*{0}."
+            messageCircular: "{ci}The current diameter of the map is {0} blocks."
         
         set:
             playersOutsideCanceled: "{ce}Some players are outside the future border, so this operation was cancelled."
             playersOutsideCanceledCmd: "{ci}Use {cc}/uh border set {0} force{ci} to resize the border regardless to this point."
             playersOutsideCanceledWarnWorldBorder: "{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will be frozen!"
             
-            broadcast: "{lightpurple}The size of the map is now {0}*{0}"
+            broadcastSquared: "{lightpurple}The size of the map is now {0}*{0}."
+            broadcastCircular: "{lightpurple}The diameter of the map is now {0} blocks."
         
         warning:
             canceled: "{cs}Warning canceled."
             
             set: "{cs}Future size saved. All players outside this future border will be warned every {0} seconds."
             
-            message: "{ce}You are currently out of the future border of {0}*{0} blocks."
+            messageSquared: "{ce}You are currently out of the future border of {0}*{0} blocks."
+            messageCircular: "{ce}You are currently out of the future border (diameter of {0} blocks)."
+            
             messageDistance: "{ci}You have {0} blocks to go before being inside."
         
         check:
@@ -242,3 +246,4 @@ keys:
             itemPlayerFar: "{lightpurple} - {red}{0}{ci} (far away from the border)"
             itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (close to the border)"
             itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (very close to the border)"
+

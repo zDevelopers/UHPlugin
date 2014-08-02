@@ -67,7 +67,7 @@ public class UHWorldBorderIntegration {
 			borderOverworld = new BorderData(0, 0, 0); // Random values, overwritten later. 
 		}
 		
-		borderOverworld.setShape(false); // Squared border
+		borderOverworld.setShape(p.getBorderManager().isCircularBorder()); // Squared border
 		
 		borderOverworld.setX(overworld.getSpawnLocation().getX()); // A border centered on the spawn point
 		borderOverworld.setZ(overworld.getSpawnLocation().getZ());

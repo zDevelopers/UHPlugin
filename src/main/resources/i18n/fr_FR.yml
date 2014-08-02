@@ -217,21 +217,25 @@ keys:
         NaN: "{ce}“{0}” n'est pas un nombre..."
         
         current: 
-            message: "{ci}La taille actuelle de la carte est {0}*{0}."
+            messageSquared: "{ci}La taille actuelle de la carte est {0}*{0}."
+            messageCircular: "{ci}La carte a actuellement un diamètre de {0} blocs."
         
         set:
             playersOutsideCanceled: "{ce}Certains joueurs étant hors de cette nouvelle bordure, l'opération a été annulée."
             playersOutsideCanceledCmd: "{ci}Utilisez {cc}/uh border set {0} force{ci} pour changer la taille de la carte malgré tout."
             playersOutsideCanceledWarnWorldBorder: "{ce}ATTENTION: {ci}WorldBorder n'étant pas installé, les joueurs hors de la bordure seront immobilisés !"
             
-            broadcast: "{lightpurple}La taille de la carte est désormais de {0}*{0}"
+            broadcastSquared: "{lightpurple}La taille de la carte est désormais de {0}*{0}"
+            broadcastCircular: "{lightpurple}La carte a désormais un diamètre de {0} blocs."
         
         warning:
             canceled: "{cs}Avertissement annulé."
             
             set: "{cs}Future taille enregistrée. Les joueurs hors de la bordure vont être avertis toutes les {0} secondes."
             
-            message: "{ce}Vous êtes hors de la future bordure de {0}*{0} blocs."
+            messageSquared: "{ce}Vous êtes hors de la future bordure de {0}*{0} blocs."
+            messageCircular: "{ce}Vous êtes hors de la future bordure de {0} blocs de diamètre."
+            
             messageDistance: "{ci}Il vous reste {0} blocs à parcourir avant d'y être."
         
         check:
