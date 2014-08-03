@@ -17,6 +17,8 @@ public class UHWallGenerator {
 	private Material wallBlockAir = null;
 	private Material wallBlockSolid = null;
 	
+	private Integer blocksSet = 0;
+	
 	public UHWallGenerator(UHPlugin p, World w) {
 		this.p = p;
 		this.i = p.getI18n();
@@ -24,7 +26,7 @@ public class UHWallGenerator {
 	}
 	
 	/**
-	 * Generate the walls around the map, following the configuration.
+	 * Generates the walls around the map, following the configuration.
 	 * 
 	 */
 	public boolean build() {
@@ -46,12 +48,15 @@ public class UHWallGenerator {
 			this.buildSquaredWall(w, p.getBorderManager().getCurrentBorderDiameter(), wallHeight);
 		}
 		
+		Bukkit.getLogger().info(this.blocksSet + " blocks affected.");
+		this.blocksSet = 0;
+		
 		return true;
 	}
 	
 	
 	/**
-	 * Set a block according to his environment.
+	 * Sets a block according to his environment.
 	 * If the block replaces a "air/tree" block, or if it is next to a transparent block, it needs to be a
 	 * "wall.block.replaceAir" block.
 	 * In all other cases, it needs to be a "wall.block.replaceSolid" one. 
@@ -74,6 +79,8 @@ public class UHWallGenerator {
 				block.setType(wallBlockSolid);
 			}
 		}
+		
+		this.blocksSet++;
 	}
 	
 	/**
@@ -156,7 +163,7 @@ public class UHWallGenerator {
 	
 	
 	/**
-	 * Build a squared wall around the map.
+	 * Builds a squared wall around the map.
 	 * 
 	 * @param w The wall will be built in this world.
 	 * @param diameter The size of the wall.
@@ -188,7 +195,7 @@ public class UHWallGenerator {
 			}
 		} 
 		
-		for (Integer z = limitZInf; z <= limitZSup; z++) {
+		for (Integer z = limitZInf + 1; z <= limitZSup - 1; z++) {
 			world.getBlockAt(limitXInf, 1, z).setType(Material.BEDROCK);
 			world.getBlockAt(limitXSup, 1, z).setType(Material.BEDROCK);
 			
@@ -217,13 +224,11 @@ public class UHWallGenerator {
 		// The quarter chosen to be explicitly generated if the one on the South-East, 
 		// starting at x = xSpawn+radius ; z = zSpawn and ending at x = xSpawn ; z = zSpawn+radius.
 		
-		// In each step we gets the two blocks susceptible to be the newt block and we calculate the
+		// In each step we gets the three blocks susceptible to be the next block and we calculates the
 		// distance from the center to these blocks.
 		// The good block if the one with the closest distance to the radius.
 		
 		Integer radius = (int) Math.floor(diameter/2);
-		//Integer radiusSquared = (int) Math.pow(radius, 2);
-		Integer halfRadius = (int) Math.floor(radius/2);
 		
 		Integer xSpawn = world.getSpawnLocation().getBlockX();
 		Integer ySpawn = world.getSpawnLocation().getBlockY();
@@ -231,13 +236,13 @@ public class UHWallGenerator {
 		
 		// First block.
 		Block currentBlock = world.getBlockAt((int) (xSpawn + radius), ySpawn, zSpawn);
+		
 		Block candidate1 = null;
 		Block candidate2 = null;
+		Block candidate3 = null;
 		
-		Bukkit.getLogger().info("- START -");
-		
+		// Infinite loop broken when the generation is done.
 		while(true) {
-			Bukkit.getLogger().info("-- Started loop tour --");
 			
 			// 1) the current point, the symmetries and the opposite point are built.
 			this.buildWallPoint(world, currentBlock.getX(), currentBlock.getZ(), wallHeight, diameter);
@@ -246,49 +251,29 @@ public class UHWallGenerator {
 			// 2) the two candidates are found, except if the build is finished.
 			if(currentBlock.getX() == xSpawn) {
 				// END
-				Bukkit.getLogger().info("- END -");
 				break;
 			}
-			else if(currentBlock.getX() > halfRadius) {
-				// First part of the quarter ("east")
-				Bukkit.getLogger().info("--- First part (east) ---");
-				candidate1 = world.getBlockAt(currentBlock.getX(), ySpawn, currentBlock.getZ() + 1);
-				candidate2 = world.getBlockAt(currentBlock.getX() - 1, ySpawn, currentBlock.getZ() + 1);
-			}
-			else {
-				// Last part of the quarter ("south")
-				Bukkit.getLogger().info("--- Last part (soith) ---");
-				candidate1 = world.getBlockAt(currentBlock.getX() - 1, ySpawn, currentBlock.getZ());
-				candidate2 = world.getBlockAt(currentBlock.getX() - 1, ySpawn, currentBlock.getZ() + 1);
-			}
 			
-			Bukkit.getLogger().info("-- Candidates --");
-			Bukkit.getLogger().info(candidate1.toString());
-			Bukkit.getLogger().info(candidate2.toString());
-			Bukkit.getLogger().info("-- --");
+			candidate1 = world.getBlockAt(currentBlock.getX() - 1, ySpawn, currentBlock.getZ());
+			candidate2 = world.getBlockAt(currentBlock.getX() - 1, ySpawn, currentBlock.getZ() + 1);
+			candidate3 = world.getBlockAt(currentBlock.getX(), ySpawn, currentBlock.getZ() + 1);
+			
 			
 			// 3) The good block is selected
 			Double distanceCandidate1ToRef = Math.abs((candidate1.getLocation().distance(world.getSpawnLocation()) - radius));
 			Double distanceCandidate2ToRef = Math.abs((candidate2.getLocation().distance(world.getSpawnLocation()) - radius));
+			Double distanceCandidate3ToRef = Math.abs((candidate3.getLocation().distance(world.getSpawnLocation()) - radius));		
 			
-			
-			Bukkit.getLogger().info("-- Distances to ref --");
-			Bukkit.getLogger().info("1: " + distanceCandidate1ToRef.toString());
-			Bukkit.getLogger().info("   " + String.valueOf(candidate1.getLocation().distance(world.getSpawnLocation())) + " vs " + String.valueOf(radius));
-			Bukkit.getLogger().info("2: " + distanceCandidate2ToRef.toString());
-			Bukkit.getLogger().info("   " + String.valueOf(candidate2.getLocation().distance(world.getSpawnLocation())) + " vs " + String.valueOf(radius));
-			Bukkit.getLogger().info("-- --");
-			
-			if(distanceCandidate1ToRef > distanceCandidate2ToRef) { // The second is better
+			if(distanceCandidate1ToRef < distanceCandidate2ToRef && distanceCandidate1ToRef < distanceCandidate3ToRef) { // The first is better
+				currentBlock = candidate1;
+			}
+			else if(distanceCandidate2ToRef < distanceCandidate1ToRef && distanceCandidate2ToRef < distanceCandidate3ToRef) { // The second is better
 				currentBlock = candidate2;
 			}
 			else {
-				currentBlock = candidate1;
+				currentBlock = candidate3;
 			}
-			
-			Bukkit.getLogger().info("Selected: " + currentBlock.toString());
 		}
-		
 	}
 	
 	/**
@@ -310,13 +295,6 @@ public class UHWallGenerator {
 		
 		Integer xSpawn = Bukkit.getWorlds().get(0).getSpawnLocation().getBlockX();
 		Integer zSpawn = Bukkit.getWorlds().get(0).getSpawnLocation().getBlockZ();
-		
-		Bukkit.getLogger().info("---- Building points: ----");
-		Bukkit.getLogger().info(world.getBlockAt(x, 0, z).toString());
-		Bukkit.getLogger().info(world.getBlockAt(x - 2*(x - xSpawn), 0, z).toString());
-		Bukkit.getLogger().info(world.getBlockAt(x, 0, z + 2*(zSpawn - z)).toString());
-		Bukkit.getLogger().info(world.getBlockAt(x - 2*(x - xSpawn), 0, z + 2*(zSpawn - z)).toString());
-		Bukkit.getLogger().info("---- ----");
 		
 		// We generates first the bedrock at y=0
 		world.getBlockAt(x, 0, z).setType(Material.BEDROCK);
@@ -342,8 +320,7 @@ public class UHWallGenerator {
 		
 		// The 4 towers are built.
 		for(int y = 1; y <= wallHeight; y++) {
-			//this.setBlock(world.getBlockAt(x,                  y, z                 ), positionOriginal);
-			world.getBlockAt(x, y, z).setType(Material.BOOKSHELF);
+			this.setBlock(world.getBlockAt(x,                  y, z                 ), positionOriginal);
 			this.setBlock(world.getBlockAt(x - 2*(x - xSpawn), y, z                 ), positionSymmetricX);
 			this.setBlock(world.getBlockAt(x,                  y, z + 2*(zSpawn - z)), positionSymmetricZ);
 			this.setBlock(world.getBlockAt(x - 2*(x - xSpawn), y, z + 2*(zSpawn - z)), positionOpposite);
