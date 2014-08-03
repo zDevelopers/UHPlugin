@@ -276,7 +276,7 @@ public class UHPluginListener implements Listener {
 		}
 		
 		if(!p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
-			if(!p.getBorderManager().isInsideBorder(ev.getTo())) {
+			if(!p.getBorderManager().isInsideBorder(ev.getTo(), p.getBorderManager().getCheckDiameter())) {
 				ev.setCancelled(true);
 			}
 		}

@@ -111,6 +111,25 @@ public class UHBorderManager {
 	}
 	
 	/**
+	 * Returns the diameter used to check if the players are inside the wall.
+	 * 
+	 * If the wall is circular, the diameter used to check must be bigger to avoid false positives
+	 * if a player is in an angle of the circular wall.
+	 * 
+	 * “+4” ? Experimental.
+	 * 
+	 * @return
+	 */
+	public int getCheckDiameter() {
+		if(this.isCircularBorder()) {
+			return this.getCurrentBorderDiameter() + 4;
+		}
+		else {
+			return this.getCurrentBorderDiameter();
+		}
+	}
+	
+	/**
 	 * Returns the size of the future border, used in the warning messages sent to the
 	 * players out of this future border.
 	 * 

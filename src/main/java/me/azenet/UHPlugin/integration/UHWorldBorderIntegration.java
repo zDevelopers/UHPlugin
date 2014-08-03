@@ -72,7 +72,7 @@ public class UHWorldBorderIntegration {
 		borderOverworld.setX(overworld.getSpawnLocation().getX()); // A border centered on the spawn point
 		borderOverworld.setZ(overworld.getSpawnLocation().getZ());
 		
-		borderOverworld.setRadius((int) Math.floor(p.getBorderManager().getCurrentBorderDiameter()/2));
+		borderOverworld.setRadius((int) Math.floor(p.getBorderManager().getCheckDiameter()/2));
 		
 		Config.setBorder(overworld.getName(), borderOverworld);
 		
