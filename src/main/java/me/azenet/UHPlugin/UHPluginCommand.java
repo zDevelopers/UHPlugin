@@ -763,6 +763,7 @@ public class UHPluginCommand implements CommandExecutor {
 							if(!p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
 								sender.sendMessage(i.t("borders.set.playersOutsideCanceledWarnWorldBorder"));
 							}
+							p.getBorderManager().sendCheckMessage(sender, newDiameter);
 						}
 						else {
 							p.getBorderManager().setCurrentBorderDiameter(newDiameter);
@@ -829,27 +830,9 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				else { // /uh border check <?>
 					try {
-						Integer checkDiameter = Integer.valueOf(args[2]);
-						HashSet<Player> playersOutside = p.getBorderManager().getPlayersOutside(checkDiameter);
 						
-						if(playersOutside.size() == 0) {
-							sender.sendMessage(i.t("borders.check.allPlayersInside"));
-						}
-						else {
-							sender.sendMessage(i.t("borders.check.countPlayersOutside", String.valueOf(playersOutside.size())));
-							for(Player player : p.getBorderManager().getPlayersOutside(checkDiameter)) {
-								int distance = p.getBorderManager().getDistanceToBorder(player.getLocation(), checkDiameter);
-								if(distance > 150) {
-									sender.sendMessage(i.t("borders.check.itemPlayerFar", player.getName()));
-								}
-								else if(distance > 25) {
-									sender.sendMessage(i.t("borders.check.itemPlayerClose", player.getName()));
-								}
-								else {
-									sender.sendMessage(i.t("borders.check.itemPlayerVeryClose", player.getName()));
-								}
-							}
-						}
+						Integer checkDiameter = Integer.valueOf(args[2]);
+						p.getBorderManager().sendCheckMessage(sender, checkDiameter);
 						
 					} catch(NumberFormatException e) {
 						sender.sendMessage(i.t("borders.NaN", args[2]));
@@ -857,7 +840,6 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 			}
 		}
-		
 	}
 	
 	

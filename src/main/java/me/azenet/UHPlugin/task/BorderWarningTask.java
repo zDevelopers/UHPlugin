@@ -59,6 +59,7 @@ public class BorderWarningTask extends BukkitRunnable {
 		// Message sent to the sender of the warning if the timer is up
 		if(p.getBorderManager().getWarningFinalTimeEnabled() && minutesLeft <= 0) {
 			p.getBorderManager().getWarningSender().sendMessage(i.t("borders.warning.timerUp"));
+			p.getBorderManager().sendCheckMessage(p.getBorderManager().getWarningSender(), p.getBorderManager().getWarningSize());
 			p.getBorderManager().stopWarningTime();
 		}
 	}

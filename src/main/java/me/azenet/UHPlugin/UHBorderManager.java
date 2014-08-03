@@ -2,6 +2,7 @@ package me.azenet.UHPlugin;
 
 import java.util.HashSet;
 
+import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.task.BorderWarningTask;
 
 import org.bukkit.Bukkit;
@@ -13,6 +14,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class UHBorderManager {
 	
 	private UHPlugin p = null;
+	private I18n i = null;
+	
 	private Integer currentBorderDiameter = null;
 	
 	private Integer warningSize = 0;
@@ -27,6 +30,7 @@ public class UHBorderManager {
 	
 	public UHBorderManager(UHPlugin plugin) {
 		this.p = plugin;
+		this.i = p.getI18n();
 		
 		this.currentBorderDiameter = p.getConfig().getInt("map.size");
 		this.isCircularBorder      = p.getConfig().getBoolean("map.circular");
@@ -245,6 +249,36 @@ public class UHBorderManager {
 		this.currentBorderDiameter = diameter;
 		
 		p.getWorldBorderIntegration().setupBorders(); // Update the WB border if needed
+	}
+	
+	
+	/**
+	 * Sends a list of players outside the given border to the specified sender.
+	 * 
+	 * @param to The player/console to send the check.
+	 * @param diameter The diameter of the border to be checked.
+	 */
+	public void sendCheckMessage(CommandSender to, int diameter) {
+		HashSet<Player> playersOutside = getPlayersOutside(diameter);
+		
+		if(playersOutside.size() == 0) {
+			to.sendMessage(i.t("borders.check.allPlayersInside"));
+		}
+		else {
+			to.sendMessage(i.t("borders.check.countPlayersOutside", String.valueOf(playersOutside.size())));
+			for(Player player : getPlayersOutside(diameter)) {
+				int distance = getDistanceToBorder(player.getLocation(), diameter);
+				if(distance > 150) {
+					to.sendMessage(i.t("borders.check.itemPlayerFar", player.getName()));
+				}
+				else if(distance > 25) {
+					to.sendMessage(i.t("borders.check.itemPlayerClose", player.getName()));
+				}
+				else {
+					to.sendMessage(i.t("borders.check.itemPlayerVeryClose", player.getName()));
+				}
+			}
+		}
 	}
 	
 	
