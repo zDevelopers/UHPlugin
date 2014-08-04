@@ -387,6 +387,6 @@ public class UHBorderManager {
 			return 0;
 		}
 		
-		return (int) (location.distance(Bukkit.getWorlds().get(0).getSpawnLocation()) - diameter);
+		return (int) (location.distance(Bukkit.getWorlds().get(0).getSpawnLocation()) - Math.floor(diameter/2));
 	}
 }
