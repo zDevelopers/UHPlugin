@@ -101,6 +101,9 @@ keys:
             loreLine2Player: "de {0}"
             loreLine1Monster: "Fabriquée depuis la tête tranchée"
             loreLine2Monster: "d'un monstre maléfique"
+            
+            nameGoldenAppleFromHeadNormal: "{aqua}Tête tranchée"
+            nameGoldenAppleFromHeadNotch: "{lightpurple}Tête tranchée"
     
     potions:
         disabled: "{ce}Ces potions sont désactivées !"

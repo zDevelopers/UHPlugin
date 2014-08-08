@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class UHPlugin extends JavaPlugin {
@@ -25,6 +26,7 @@ public final class UHPlugin extends JavaPlugin {
 	private ShapedRecipe goldenAppleFromHead = null;
 	private ShapedRecipe goldenAppleFromWitherHead = null;
 	private ShapelessRecipe goldenAppleLoreRemover = null;
+	private ShapelessRecipe goldenAppleLoreRemoverNotch = null;
 	
 	private UHTeamManager teamManager = null;
 	private UHGameManager gameManager = null;
@@ -127,12 +129,19 @@ public final class UHPlugin extends JavaPlugin {
 			
 			/** From human head **/
 			short damage = 0;
+			String name = i18n.t("craft.goldenApple.nameGoldenAppleFromHeadNormal");
 			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.craftNotchApple")) {
 				damage = 1;
+				name = i18n.t("craft.goldenApple.nameGoldenAppleFromHeadNotch");
 			}
 			
 			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.do")) {
-				goldenAppleFromHead = new ShapedRecipe(new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromHuman.numberCrafted", 1), damage));
+				ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromHuman.numberCrafted", 1), damage);
+				ItemMeta goldenAppleMeta = goldenAppleStack.getItemMeta();
+				goldenAppleMeta.setDisplayName(ChatColor.RESET + name);
+				goldenAppleStack.setItemMeta(goldenAppleMeta);
+				
+				goldenAppleFromHead = new ShapedRecipe(goldenAppleStack);
 				
 				goldenAppleFromHead.shape("GGG", "GHG", "GGG");
 				goldenAppleFromHead.setIngredient('G', Material.GOLD_INGOT);
@@ -143,12 +152,19 @@ public final class UHPlugin extends JavaPlugin {
 			
 			/** From wither head **/
 			damage = 0;
+			name = i18n.t("craft.goldenApple.nameGoldenAppleFromHeadNormal");
 			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.craftNotchApple")) {
 				damage = 1;
+				name = i18n.t("craft.goldenApple.nameGoldenAppleFromHeadNotch");
 			}
 			
 			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.do")) {
-				goldenAppleFromWitherHead = new ShapedRecipe(new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromWither.numberCrafted", 1), damage));
+				ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromWither.numberCrafted", 1), damage);
+				ItemMeta goldenAppleMeta = goldenAppleStack.getItemMeta();
+				goldenAppleMeta.setDisplayName(ChatColor.RESET + name);
+				goldenAppleStack.setItemMeta(goldenAppleMeta);
+				
+				goldenAppleFromWitherHead = new ShapedRecipe(goldenAppleStack);
 				
 				goldenAppleFromWitherHead.shape("GGG", "GHG", "GGG");
 				goldenAppleFromWitherHead.setIngredient('G', Material.GOLD_INGOT);
@@ -159,10 +175,14 @@ public final class UHPlugin extends JavaPlugin {
 			
 			/** Craft to remove the lore **/
 			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore") || getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore")) {
-				goldenAppleLoreRemover = new ShapelessRecipe(new ItemStack(Material.GOLDEN_APPLE, 1, damage));
+				goldenAppleLoreRemover = new ShapelessRecipe(new ItemStack(Material.GOLDEN_APPLE, 1, (short) 0));
 				goldenAppleLoreRemover.addIngredient(Material.GOLDEN_APPLE);
-			
+				
+				goldenAppleLoreRemoverNotch = new ShapelessRecipe(new ItemStack(Material.GOLDEN_APPLE, 1, (short) 1));
+				goldenAppleLoreRemoverNotch.addIngredient(Material.GOLDEN_APPLE, 1);
+				
 				this.getServer().addRecipe(goldenAppleLoreRemover);
+				this.getServer().addRecipe(goldenAppleLoreRemoverNotch);
 			}
 			
 			logger.info(i18n.t("load.recipeApple"));

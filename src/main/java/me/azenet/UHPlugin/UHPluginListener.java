@@ -31,6 +31,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
@@ -45,6 +46,8 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class UHPluginListener implements Listener {
@@ -450,6 +453,95 @@ public class UHPluginListener implements Listener {
 	@EventHandler
 	public void onEntityRegainHealth(final EntityRegainHealthEvent ev) {
 		if (ev.getRegainReason() == RegainReason.SATIATED) ev.setCancelled(true);
+	}
+	
+	/**
+	 * Used to change the amount of regenerated hearts from a golden apple.
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onPlayerItemConsume(final PlayerItemConsumeEvent ev) {
+		
+		final int TICKS_BETWEEN_EACH_REGENERATION = 50;
+		final int DEFAULT_NUMBER_OF_HEARTS_REGEN = 4;
+		final int DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH = 180;
+		final int REGENERATION_LEVEL_GOLDEN_APPLE = 2;
+		final int REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE = 5;
+		
+		if(ev.getItem().getType() == Material.GOLDEN_APPLE) {
+			ItemMeta meta = ev.getItem().getItemMeta();
+			short dataValue = ev.getItem().getDurability();
+			int halfHearts = 0;
+			int level = 0;
+			
+			if(meta.hasDisplayName()
+					&& (meta.getDisplayName().equals(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"))
+					|| meta.getDisplayName().equals(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch")))) {
+				
+				if(dataValue == 0) { // Normal golden apple from a head
+					halfHearts = p.getConfig().getInt("gameplay-changes.goldenApple.regeneration.fromNormalHead", DEFAULT_NUMBER_OF_HEARTS_REGEN);
+					level = REGENERATION_LEVEL_GOLDEN_APPLE;
+				}
+				else { // Notch golden apple from a head
+					halfHearts = p.getConfig().getInt("gameplay-changes.goldenApple.regeneration.fromNotchHead", DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH);
+					level = REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
+				}
+			}
+			else if(dataValue == 0) { // Normal golden apple from an apple
+				halfHearts = p.getConfig().getInt("gameplay-changes.goldenApple.regeneration.normal", DEFAULT_NUMBER_OF_HEARTS_REGEN);
+				level = REGENERATION_LEVEL_GOLDEN_APPLE;
+			}
+			else { // Notch golden apple from an apple
+				halfHearts = p.getConfig().getInt("gameplay-changes.goldenApple.regeneration.notch", DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH);
+				level = REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
+			}
+			
+			// Technically, a level-I effect is « level 0 ».
+			final int realLevel = level - 1;
+			
+			
+			// What is needed to do?
+			if((dataValue == 0 && halfHearts == DEFAULT_NUMBER_OF_HEARTS_REGEN)
+					|| (dataValue == 1 && halfHearts == DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH)) {
+				
+				// Default behavior, nothing to do.
+			}
+			else if((dataValue == 0 && halfHearts > DEFAULT_NUMBER_OF_HEARTS_REGEN)
+					|| (dataValue == 1 && halfHearts > DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH)) {
+				
+				// If the heal needs to be increased, the effect can be applied immediately.
+				
+				int duration = ((int) Math.floor(TICKS_BETWEEN_EACH_REGENERATION / (Math.pow(2, realLevel)))) * halfHearts;
+				
+				new PotionEffect(PotionEffectType.REGENERATION, duration, realLevel).apply(ev.getPlayer());
+			}
+			else {
+				// The heal needs to be decreased.
+				// We can't apply the effect immediately, because the server will just ignore it.
+				// So, we apply it two ticks later, with one half-heart less (because in two ticks, 
+				// one half-heart is given to the player).
+				
+				final int healthApplied = halfHearts - 1;
+				
+				Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable() {
+					@Override
+					public void run() {		
+						// The original, vanilla, effect is removed
+						ev.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
+						
+						
+						int duration = ((int) Math.floor(TICKS_BETWEEN_EACH_REGENERATION / (Math.pow(2, realLevel)))) * healthApplied;
+						
+						p.getLogger().info(String.valueOf(healthApplied));
+						p.getLogger().info(String.valueOf(Math.floor(TICKS_BETWEEN_EACH_REGENERATION / (Math.pow(2, realLevel)))));
+						p.getLogger().info(String.valueOf(duration));
+						
+						new PotionEffect(PotionEffectType.REGENERATION, duration, realLevel).apply(ev.getPlayer());
+					}
+				}, 2l);
+			}
+		}
 	}
 	
 	/**

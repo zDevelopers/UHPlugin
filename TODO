@@ -61,16 +61,16 @@
 
 - [OK] Réorganiser le code
 
-- Ajouter un moyen de spécifier un temps laissé pour que les joueurs aillent dans 
+- [OK] Ajouter un moyen de spécifier un temps laissé pour que les joueurs aillent dans 
   les nouvelles limites.
 	→ Ajoute le temps restant au message disant que le joueur est hors des futures 
 	  limites.
 	  « Vous avez 157 blocs à parcourir pour y être, et 12 minutes pour le faire. »
 	→ À l'expiration du temps imparti, un message est envoyé à celui qui a lancé 
 	  l'avertissement précisant que le temps est écoulé et affichant les joueurs 
-	  hors de la future bordure (comme /uh border ckeck).
+	  hors de la future bordure (comme /uh border check).
 
-- Ajouter un moyen de générer des murs ronds, et non uniquement carrés.
+- [OK] Ajouter un moyen de générer des murs ronds, et non uniquement carrés.
 
 - Optimiser la manière dont le blockage des potions est fait (empêcher de mettre
   la glowstone plutôt qu'annuler la fabrication de la potion, l'annulation étant
@@ -78,8 +78,11 @@
 
 - Ajouter un moyen de configurer le nombre de cœurs régénérés par une pomme d'or 
   classique/une pomme d'or faite depuis une tête
-	→ Se baser sur le nom de la pomme d'or faite à partir d'une tête
+	→ [OK] Se baser sur le nom de la pomme d'or faite à partir d'une tête
 	→ Modifier le craft anti-lore pour qu'il ne change pas le nom
 	→ Empêcher le renommage d'une pomme d'or en le nom d'une pomme d'or de tête
 
 - Ajouter un moyen de désactiver les pommes de Notch (désactivé par défaut)
+
+- Ajouter un moyen de mettre le jeu en pause (immobilise les joueurs, les mobs, le timer).
+	→ Passer par une classe dédiée pour gérer l'immobilisation (que ce soit celui du début ou celui-là).

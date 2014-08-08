@@ -102,6 +102,9 @@ keys:
             loreLine2Player: "of {0}"
             loreLine1Monster: "Made from the fallen head"
             loreLine2Monster: "of a malignant monster"
+            
+            nameGoldenAppleFromHeadNormal: "{aqua}Golden head"
+            nameGoldenAppleFromHeadNotch: "{lightpurple}Golden head"
     
     potions:
         disabled: "{ce}These potions are disabled!"
