@@ -227,8 +227,13 @@ public final class UHPlugin extends JavaPlugin {
 				return this.goldenMelon;
 			case "compass":
 				return this.compass;
+			case "goldenAppleLoreRemover":
+				return this.goldenAppleLoreRemover;
+			case "goldenAppleLoreRemoverNotch":
+				return this.goldenAppleLoreRemoverNotch;
+			default:
+				throw new IllegalArgumentException("Unknow recipe");
 		}
-		throw new IllegalArgumentException("Unknow recipe");
 	}
 	
 	public UHTeamManager getTeamManager() {

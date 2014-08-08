@@ -316,11 +316,13 @@ public class UHPluginListener implements Listener {
 		// Compass
 		if(p.getConfig().getBoolean("gameplay-changes.compass") && RecipeUtil.areSimilar(recipe, originalCompass)) {
 			ev.getInventory().setResult(new ItemStack(Material.AIR));
+			return;
 		}
 		
 		// Golden melon
 		if(p.getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock") && RecipeUtil.areSimilar(recipe, originalGoldenMelon)) {
 			ev.getInventory().setResult(new ItemStack(Material.AIR));
+			return;
 		}
 		
 		
@@ -363,6 +365,37 @@ public class UHPluginListener implements Listener {
 			
 			result.setItemMeta(meta);
 			ev.getInventory().setResult(result);
+			
+			return;
+		}
+		
+		
+		/** The lore removed don't change the name of the item **/
+		
+		if((p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore"))
+				&& (RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleLoreRemover")) || RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleLoreRemoverNotch")))) {
+			
+			ItemStack original = null;
+			for(int slot = 0; slot <= 9; slot++) {
+				original = ev.getInventory().getMatrix()[slot];
+				if(original.getType() != Material.AIR) {
+					break; // found
+				}
+			}
+			
+			ItemMeta metaOriginal = original.getItemMeta();
+			
+			if(metaOriginal != null && metaOriginal.hasDisplayName()) {
+				ItemStack result = ev.getInventory().getResult();
+				ItemMeta metaResult = result.getItemMeta();
+				
+				metaResult.setDisplayName(metaOriginal.getDisplayName());
+				result.setItemMeta(metaResult);
+				
+				ev.getInventory().setResult(result);
+			}
+			
+			return;
 		}
 	}
 	
