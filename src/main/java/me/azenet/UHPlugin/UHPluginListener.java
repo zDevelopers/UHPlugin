@@ -18,6 +18,7 @@ import org.bukkit.entity.Ghast;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -29,6 +30,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.BrewEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -40,7 +42,10 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.BrewerInventory;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -396,6 +401,76 @@ public class UHPluginListener implements Listener {
 			}
 			
 			return;
+		}
+	}
+	
+	
+	/**
+	 * Used to prevent an apple to be renamed to/from the name of an head apple.
+	 * (In vanilla clients, it is not possible to rename an apple to that name because of the
+	 *  ChatColor.RESET before, but some modded clients allows the player to write §r.)
+	 *  
+	 * (Thanks to Zelnehlun on BukkitDev.)
+	 * 
+	 * @param ev
+	 */
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onInventoryClick(InventoryClickEvent ev) {
+		if(!ev.isCancelled()) {
+			if(ev.getWhoClicked() instanceof Player) { // Just in case
+				Inventory inventory = ev.getInventory();
+				
+				if(inventory instanceof AnvilInventory) {
+					InventoryView view = ev.getView();
+					int rawSlot = ev.getRawSlot();
+					
+					if(rawSlot == view.convertSlot(rawSlot)) { // ensure we are talking about the upper inventory
+						if(rawSlot == 2) { // "result" slot
+							ItemStack item = ev.getCurrentItem();
+							if(item != null) { // result slot non empty
+								ItemMeta meta = item.getItemMeta();
+								
+								String prohibedNameNormal = ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal");
+								String prohibedNameNotch  = ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch");
+								
+								// It is possible that the client filter the name of the golden apple in the anvil UI,
+								// removing all §.
+								String filteredProhibedNameNormal = prohibedNameNormal.replace("§", "");
+								String filteredProhibedNameNotch  = prohibedNameNotch.replace("§", "");
+								
+								
+								// An item can't be renamed to the name of a golden head
+								if(meta != null && meta.hasDisplayName()) {
+									if(meta.getDisplayName().equals(prohibedNameNormal)
+											|| meta.getDisplayName().equals(prohibedNameNotch)
+											|| meta.getDisplayName().equals(filteredProhibedNameNormal)
+											|| meta.getDisplayName().equals(filteredProhibedNameNotch)) {
+										
+										ev.setCancelled(true); // nope nope nope
+										
+									}
+								}
+								
+								// A golden head can't be renamed to any other name
+								if(view.getItem(0) != null) { // slot 0 = first slot
+									ItemMeta metaOriginal = view.getItem(0).getItemMeta();
+									
+									if(metaOriginal != null && metaOriginal.hasDisplayName()) {
+										if(metaOriginal.getDisplayName().equals(prohibedNameNormal)
+												|| metaOriginal.getDisplayName().equals(prohibedNameNotch)
+												|| metaOriginal.getDisplayName().equals(filteredProhibedNameNormal)
+												|| metaOriginal.getDisplayName().equals(filteredProhibedNameNotch)) {
+											
+											ev.setCancelled(true);
+											
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	
