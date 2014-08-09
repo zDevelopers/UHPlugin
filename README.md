@@ -6,7 +6,7 @@ C'est très la source.
 
 ## Features
 
-For available configuration, please [see directly the configuration file](https://github.com/AmauryCarrade/KTP/blob/master/src/main/resources/config.yml).
+For available configuration, please [see directly the configuration file](https://github.com/AmauryCarrade/UHPlugin/blob/master/src/main/resources/config.yml).
 
  - **Manages an UHC match.**
  - Cancels any regeneration by food (just like `/gamerule naturalRegeneration false`).
@@ -53,13 +53,15 @@ For available configuration, please [see directly the configuration file](https:
          ![viewed from the surface](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Wall_Surface.png)  
          ![in a cave](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Wall_Cave.png)  
          (using the default configuration).
+    - The generated wall can be either circular or squared.
     - The players are blocked inside the wall, even if the wall is broken or not generated.
        - If WorldBorder is present, it is automatically configured.
        - Else, the plugin will check itself if a player is outside the border (not recommended, use WorldBorder if possible!).
     - The border can eaily be set during the game with `/uh border set <diameter>`
-    - To anticipate a new border size, a warning can be send to all players out of this future border with `/uh border warning. <futureDiameter>` every 90 seconds (by default, you can change the delay in the config).  
+    - To anticipate a new border size, a warning can be send to all players out of this future border with `/uh border warning <futureDiameter>` every 90 seconds (by default, you can change the delay in the config).
+    - The time left to go inside the next border can be included in this message (`/uh border warning <futureDiameter> [minutesBeforeReduction]`).  
         ![message broadcasted to the players outside](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Border_Warning.png)
-     - You can list the players outside a given border with `/uh border check <diameter>`; this command gives a very light info (list of players outside plus "far", "close" or "very close") because the administrator can play.
+    - You can list the players outside a given border with `/uh border check <diameter>`; this command gives a very light info (list of players outside plus "far", "close" or "very close") because the administrator can play.
  - **Gameplay tweaks** (all optional, see configuration file)
     - The golden melon is crafted using a gold block instead of eight gold nuggets.  
        ![Craft golden melon](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GlisteringMelon.png)
@@ -72,6 +74,7 @@ For available configuration, please [see directly the configuration file](https:
          ![Craft from a wither head](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GoldenAppleFromWither.png)
        - There is a way to remove the lore (because two golden apple with a different lore are not stackable), either in the config (lore not added) or using a craft:  
          ![Craft - Lore removal](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_LoreGoldenAppleRemoval.png)
+       - You can configure the number of half-hearts healed by a golden apple, enchanted golden apple, and the same for “golden heads”, independantely.
     - The enderpearl damages can be removed.
     - The ghast tears can be replaced by gold, to make Regeneration potions uncraftable.
     - The level-II potions can be disabled.
