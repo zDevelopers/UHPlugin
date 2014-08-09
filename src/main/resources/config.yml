@@ -81,6 +81,8 @@ gameplay-changes:
             notch: 180
             fromNormalHead: 4
             fromNotchHead: 180
+        
+        disableNotchApples: false
     
     disableEnderpearlsDamages: true
     

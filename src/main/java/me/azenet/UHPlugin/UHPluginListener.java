@@ -49,6 +49,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
@@ -328,6 +329,30 @@ public class UHPluginListener implements Listener {
 		if(p.getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock") && RecipeUtil.areSimilar(recipe, originalGoldenMelon)) {
 			ev.getInventory().setResult(new ItemStack(Material.AIR));
 			return;
+		}
+		
+		// Enchanted golden apple - the same technique does not work, this is a workaround
+		if(p.getConfig().getBoolean("gameplay-changes.goldenApple.disableNotchApples")) {
+			if(ev.getInventory().getResult().getType() == Material.GOLDEN_APPLE) {
+				if(recipe instanceof ShapelessRecipe) {
+					for(ItemStack item : ((ShapelessRecipe) recipe).getIngredientList()) {
+						if(item.getType() == Material.GOLD_BLOCK) {
+							// There is a gold block in a recipe for a golden apple - NOPE
+							ev.getInventory().setResult(new ItemStack(Material.AIR));
+							return;
+						}
+					}
+				}
+				else { // shaped recipe
+					for(ItemStack item : ((ShapedRecipe) recipe).getIngredientMap().values()) {
+						if(item.getType() == Material.GOLD_BLOCK) {
+							// There is a gold block in a recipe for a golden apple - NOPE NOPE NOPE
+							ev.getInventory().setResult(new ItemStack(Material.AIR));
+							return;
+						}
+					}
+				}
+			}
 		}
 		
 		
