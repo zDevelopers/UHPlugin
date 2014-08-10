@@ -50,8 +50,9 @@ death:
     head:
         drop: true
         pvpOnly: false
-    give-xp:
+    give-xp-to-killer:
         levels: 2  # set to 0 to disable
+        onlyOtherTeam: true  # Give XP only if the player kills a player from another team?
 
 # If true, the name of the players will be colorized according to the teams.
 colorizeChat: true

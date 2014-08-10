@@ -127,10 +127,16 @@ public class UHPluginListener implements Listener {
 		}
 		
 		// Give XP to the killer (if needed)
-		if(p.getConfig().getInt("death.give-xp.levels") > 0) {
+		if(p.getConfig().getInt("death.give-xp-to-killer.levels") > 0) {
 			Entity killer = ev.getEntity().getKiller();
 			if(killer != null && killer instanceof Player) {
-				((Player) killer).giveExpLevels(p.getConfig().getInt("death.give-xp.levels"));
+				
+				boolean inSameTeam = p.getTeamManager().inSameTeam(ev.getEntity(), (Player) killer);
+				boolean onlyOtherTeam = p.getConfig().getBoolean("death.give-xp-to-killer.onlyOtherTeam");
+				
+				if((onlyOtherTeam && !inSameTeam) || !onlyOtherTeam) {
+					((Player) killer).giveExpLevels(p.getConfig().getInt("death.give-xp.levels"));
+				}
 			}
 		}
 		
