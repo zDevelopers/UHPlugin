@@ -80,7 +80,7 @@ public class UHGameManager {
 		this.scoreboardManager = new UHScoreboardManager(p);
 	}
 	
-	public void initPlayer(Player player) {
+	public void initPlayer(final Player player) {
 		Location l = player.getWorld().getSpawnLocation();
 		player.teleport(l.add(0,1,0));
 		
@@ -91,7 +91,14 @@ public class UHGameManager {
 		p.getGameManager().getScoreboardManager().setScoreboardForPlayer(player);
 		
 		// Used to update the "health" objective, to avoid a null one.
-		p.getGameManager().getScoreboardManager().updateHealthScore(player);
+		// Launched later because else, the health is constantly set to 20,
+		// and this prevents the health score to be updated.
+		Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+			@Override
+			public void run() {
+				p.getGameManager().getScoreboardManager().updateHealthScore(player);
+			}
+		}, 20L);
 		
 		// Disable the spectator mode if the game is not started.
 		if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {

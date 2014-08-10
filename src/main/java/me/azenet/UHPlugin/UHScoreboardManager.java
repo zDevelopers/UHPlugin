@@ -158,15 +158,17 @@ public class UHScoreboardManager {
 	}
 	
 	public void updateHealthScore(final Player player) {
-		if(player.getHealth() != 1D) {
+		if(player.getHealth() != 1d) { // Prevent killing the player
 			player.setHealth(player.getHealth() - 1);
 			
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 				@Override
 				public void run() {
-					player.setHealth(player.getHealth() + 1);
+					if(player.getHealth() <= 19d) { // Avoid an IllegalArgumentException
+						player.setHealth(player.getHealth() + 1);
+					}
 				}
-			}, 1L);
+			}, 3L);
 		}
 	}
 	
