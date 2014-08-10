@@ -26,8 +26,8 @@ public class UHTeam {
 	
 		Team t = sb.getTeam(this.name);
 		t.setDisplayName(this.displayName);
-		t.setCanSeeFriendlyInvisibles(true);
-		t.setAllowFriendlyFire(true);
+		t.setCanSeeFriendlyInvisibles(plugin.getConfig().getBoolean("teams-options.canSeeFriendlyInvisibles", true));
+		t.setAllowFriendlyFire(plugin.getConfig().getBoolean("teams-options.allowFriendlyFire", true));
 		t.setPrefix(this.color + "");
 	}
 	

@@ -93,6 +93,10 @@ gameplay-changes:
     # Else, the craft will be standard and the compass will show the spawn point of the team/player (not the world spawn point).
     compass: true
 
+teams-options:
+    canSeeFriendlyInvisibles: true
+    allowFriendlyFire: true
+
 slow-start:
     delayBetweenTP: 3  # in seconds
 
