@@ -1,7 +1,6 @@
 package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import me.azenet.UHPlugin.i18n.I18n;
@@ -48,8 +47,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
@@ -295,8 +292,10 @@ public class UHPluginListener implements Listener {
 	/**
 	 * Used to:
 	 *  - prevent items to be crafted;
-	 *  - add a lure to the golden apples crafted from a head.
-	 * @param pce
+	 *  - add a lure to the golden apples crafted from a head;
+	 *  - keep the name of the item when the anti-lore craft is used.
+	 *  
+	 * @param ev
 	 */
 	@EventHandler
 	public void onPreCraftEvent(PrepareItemCraftEvent ev) {
@@ -308,123 +307,25 @@ public class UHPluginListener implements Listener {
 		
 		/** Prevents items to be crafted **/
 		
-		// Original recipes, for comparison
-		ShapedRecipe originalCompass = new ShapedRecipe(new ItemStack(Material.COMPASS));
-		originalCompass.shape(new String[] {" I ", "IRI", " I "});
-		originalCompass.setIngredient('I', Material.IRON_INGOT);
-		originalCompass.setIngredient('R', Material.REDSTONE);
-		
-		ShapedRecipe originalGoldenMelon = new ShapedRecipe(new ItemStack(Material.SPECKLED_MELON));
-		originalGoldenMelon.shape(new String[] {"GGG", "GMG", "GGG"});
-		originalGoldenMelon.setIngredient('G', Material.GOLD_NUGGET);
-		originalGoldenMelon.setIngredient('M', Material.MELON);
-		
-		// Compass
-		if(p.getConfig().getBoolean("gameplay-changes.compass") && RecipeUtil.areSimilar(recipe, originalCompass)) {
+		if(!p.getRecipeManager().isRecipeAllowed(recipe)) {
 			ev.getInventory().setResult(new ItemStack(Material.AIR));
-			return;
-		}
-		
-		// Golden melon
-		if(p.getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock") && RecipeUtil.areSimilar(recipe, originalGoldenMelon)) {
-			ev.getInventory().setResult(new ItemStack(Material.AIR));
-			return;
-		}
-		
-		// Enchanted golden apple - the same technique does not work, this is a workaround
-		if(p.getConfig().getBoolean("gameplay-changes.goldenApple.disableNotchApples")) {
-			if(ev.getInventory().getResult().getType() == Material.GOLDEN_APPLE) {
-				if(recipe instanceof ShapelessRecipe) {
-					for(ItemStack item : ((ShapelessRecipe) recipe).getIngredientList()) {
-						if(item.getType() == Material.GOLD_BLOCK) {
-							// There is a gold block in a recipe for a golden apple - NOPE
-							ev.getInventory().setResult(new ItemStack(Material.AIR));
-							return;
-						}
-					}
-				}
-				else { // shaped recipe
-					for(ItemStack item : ((ShapedRecipe) recipe).getIngredientMap().values()) {
-						if(item.getType() == Material.GOLD_BLOCK) {
-							// There is a gold block in a recipe for a golden apple - NOPE NOPE NOPE
-							ev.getInventory().setResult(new ItemStack(Material.AIR));
-							return;
-						}
-					}
-				}
-			}
 		}
 		
 		
 		/** Adds a lore to the golden apples crafted from a head **/
 		
-		if((p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.do") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.do")) 
-				&& (p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore")) 
-				&& (RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromHead")) || RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleFromWitherHead")))) {	   	
-			
-			ItemStack result = ev.getInventory().getResult();
-			ItemMeta meta = result.getItemMeta();
-			
-			// Lookup for the head in the recipe
-			String name = "";
-			Boolean wither = true;
-			for(ItemStack item : ev.getInventory().getContents()) {
-				if(item.getType() == Material.SKULL_ITEM && item.getDurability() == (short) SkullType.PLAYER.ordinal()) { // An human head
-					SkullMeta sm = (SkullMeta) item.getItemMeta();
-					if(sm.hasOwner()) { // An human head
-						name = sm.getOwner();
-						wither = false;
-					}
-					break;
-				}
-			}
-			
-			if((wither && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore"))
-					|| (!wither && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore"))) {
-				
-				List<String> lore = null;
-				if(wither) {
-					lore = Arrays.asList(i.t("craft.goldenApple.loreLine1Monster"), i.t("craft.goldenApple.loreLine2Monster"));
-				}
-				else {
-					lore = Arrays.asList(i.t("craft.goldenApple.loreLine1Player", name), i.t("craft.goldenApple.loreLine2Player", name));
-				}
-				meta.setLore(lore);
-			
-			}
-			
-			result.setItemMeta(meta);
-			ev.getInventory().setResult(result);
-			
+		ItemStack loreResult = p.getRecipeManager().addLore(recipe, ev.getInventory());
+		if(loreResult != null) {
+			ev.getInventory().setResult(loreResult);
 			return;
 		}
 		
 		
 		/** The lore removed don't change the name of the item **/
 		
-		if((p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore"))
-				&& (RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleLoreRemover")) || RecipeUtil.areSimilar(recipe, p.getRecipe("goldenAppleLoreRemoverNotch")))) {
-			
-			ItemStack original = null;
-			for(int slot = 0; slot <= 9; slot++) {
-				original = ev.getInventory().getMatrix()[slot];
-				if(original.getType() != Material.AIR) {
-					break; // found
-				}
-			}
-			
-			ItemMeta metaOriginal = original.getItemMeta();
-			
-			if(metaOriginal != null && metaOriginal.hasDisplayName()) {
-				ItemStack result = ev.getInventory().getResult();
-				ItemMeta metaResult = result.getItemMeta();
-				
-				metaResult.setDisplayName(metaOriginal.getDisplayName());
-				result.setItemMeta(metaResult);
-				
-				ev.getInventory().setResult(result);
-			}
-			
+		ItemStack keepNameResult = p.getRecipeManager().keepNameOnLoreRemover(recipe, ev.getInventory());
+		if(keepNameResult != null) {
+			ev.getInventory().setResult(keepNameResult);
 			return;
 		}
 	}

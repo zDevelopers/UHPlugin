@@ -23,6 +23,7 @@ package me.azenet.UHPlugin;
 
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 /**
  * Utility class to compare Bukkit recipes.<br>
- * Useful for identifying your recipes in events, where recipes are re-generated in a diferent manner.
+ * Useful for identifying your recipes in events, where recipes are re-generated in a different manner.
  * 
  * @version R1.3
  * @author Digi
@@ -185,4 +186,31 @@ public class RecipeUtil
             matrix[(r * 3) + 2] = tmp;
         }
     }
+    
+    
+    
+    /**
+	 * Returns the list of the ingredients of the given recipe.
+	 * 
+	 * @author Amaury Carrade
+	 * 
+	 * @param recipe The recipe to analyse.
+	 * @return A list of the ingredients.
+	 */
+	public static List<ItemStack> getListOfIngredients(Recipe recipe) {
+		List<ItemStack> listOfItems = null;
+		if(recipe instanceof ShapelessRecipe) {
+			listOfItems = ((ShapelessRecipe) recipe).getIngredientList();
+		}
+		else {
+			try {
+				listOfItems = new LinkedList<ItemStack>(((ShapedRecipe) recipe).getIngredientMap().values());
+			}
+			catch(NullPointerException e) { // If the list of items is null
+				listOfItems = new LinkedList<ItemStack>(); // empty list
+			}
+		}
+		
+		return listOfItems;
+	}
 }

@@ -8,30 +8,18 @@ import me.azenet.UHPlugin.integration.UHSpectatorPlusIntegration;
 import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.SkullType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class UHPlugin extends JavaPlugin {
 
 	private Logger logger = null;
-	private ShapelessRecipe goldenMelon = null;
-	private ShapedRecipe compass = null;
-	private ShapedRecipe goldenAppleFromHead = null;
-	private ShapedRecipe goldenAppleFromWitherHead = null;
-	private ShapelessRecipe goldenAppleLoreRemover = null;
-	private ShapelessRecipe goldenAppleLoreRemoverNotch = null;
 	
 	private UHTeamManager teamManager = null;
 	private UHGameManager gameManager = null;
 	private UHPluginCommand commandManager = null;
 	private UHBorderManager borderManager = null;
+	private UHRecipeManager recipeManager = null;
 	
 	private UHWorldBorderIntegration wbintegration = null;
 	private UHSpectatorPlusIntegration spintegration = null;
@@ -55,6 +43,7 @@ public final class UHPlugin extends JavaPlugin {
 		teamManager = new UHTeamManager(this);
 		gameManager = new UHGameManager(this);
 		borderManager = new UHBorderManager(this);
+		recipeManager = new UHRecipeManager(this);
 		
 		wbintegration = new UHWorldBorderIntegration(this);
 		spintegration = new UHSpectatorPlusIntegration(this);
@@ -68,7 +57,7 @@ public final class UHPlugin extends JavaPlugin {
 		
 		getServer().getPluginManager().registerEvents(new UHPluginListener(this), this);
 		
-		addRecipes();
+		recipeManager.registerRecipes();
 		
 		gameManager.initEnvironment();
 		gameManager.initScoreboard();
@@ -122,120 +111,6 @@ public final class UHPlugin extends JavaPlugin {
 		logger.info(i18n.t("load.loaded"));
 	}
 	
-	@SuppressWarnings("deprecation")
-	public void addRecipes() {
-		if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.do") || getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.do")) {
-			// Golden apple (or notch apple): head in the center and 8 gold ingots.
-			
-			/** From human head **/
-			short damage = 0;
-			String name = i18n.t("craft.goldenApple.nameGoldenAppleFromHeadNormal");
-			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.craftNotchApple")) {
-				damage = 1;
-				name = i18n.t("craft.goldenApple.nameGoldenAppleFromHeadNotch");
-			}
-			
-			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.do")) {
-				ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromHuman.numberCrafted", 1), damage);
-				ItemMeta goldenAppleMeta = goldenAppleStack.getItemMeta();
-				goldenAppleMeta.setDisplayName(ChatColor.RESET + name);
-				goldenAppleStack.setItemMeta(goldenAppleMeta);
-				
-				goldenAppleFromHead = new ShapedRecipe(goldenAppleStack);
-				
-				goldenAppleFromHead.shape("GGG", "GHG", "GGG");
-				goldenAppleFromHead.setIngredient('G', Material.GOLD_INGOT);
-				goldenAppleFromHead.setIngredient('H', Material.SKULL_ITEM, SkullType.PLAYER.ordinal()); // TODO: deprecated, but no alternative found...
-				
-				this.getServer().addRecipe(goldenAppleFromHead);
-			}
-			
-			/** From wither head **/
-			damage = 0;
-			name = i18n.t("craft.goldenApple.nameGoldenAppleFromHeadNormal");
-			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.craftNotchApple")) {
-				damage = 1;
-				name = i18n.t("craft.goldenApple.nameGoldenAppleFromHeadNotch");
-			}
-			
-			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.do")) {
-				ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromWither.numberCrafted", 1), damage);
-				ItemMeta goldenAppleMeta = goldenAppleStack.getItemMeta();
-				goldenAppleMeta.setDisplayName(ChatColor.RESET + name);
-				goldenAppleStack.setItemMeta(goldenAppleMeta);
-				
-				goldenAppleFromWitherHead = new ShapedRecipe(goldenAppleStack);
-				
-				goldenAppleFromWitherHead.shape("GGG", "GHG", "GGG");
-				goldenAppleFromWitherHead.setIngredient('G', Material.GOLD_INGOT);
-				goldenAppleFromWitherHead.setIngredient('H', Material.SKULL_ITEM, SkullType.WITHER.ordinal()); // TODO: deprecated, but no alternative found...
-				
-				this.getServer().addRecipe(goldenAppleFromWitherHead);
-			}
-			
-			/** Craft to remove the lore **/
-			if(getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore") || getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore")) {
-				goldenAppleLoreRemover = new ShapelessRecipe(new ItemStack(Material.GOLDEN_APPLE, 1, (short) 0));
-				goldenAppleLoreRemover.addIngredient(Material.GOLDEN_APPLE);
-				
-				goldenAppleLoreRemoverNotch = new ShapelessRecipe(new ItemStack(Material.GOLDEN_APPLE, 1, (short) 1));
-				goldenAppleLoreRemoverNotch.addIngredient(Material.GOLDEN_APPLE, 1);
-				
-				this.getServer().addRecipe(goldenAppleLoreRemover);
-				this.getServer().addRecipe(goldenAppleLoreRemoverNotch);
-			}
-			
-			logger.info(i18n.t("load.recipeApple"));
-		}
-		
-		if(getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock")) {
-			// Golden melon: gold block + melon
-			
-			goldenMelon = new ShapelessRecipe(new ItemStack(Material.SPECKLED_MELON));
-			goldenMelon.addIngredient(1, Material.GOLD_BLOCK);
-			goldenMelon.addIngredient(1, Material.MELON);
-			
-			this.getServer().addRecipe(goldenMelon);
-			logger.info(i18n.t("load.recipeMelon"));
-		}
-		
-		if (getConfig().getBoolean("gameplay-changes.compass")) {
-			// Compass: redstone in center;
-			// then from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gunpowder. 
-			
-			compass = new ShapedRecipe(new ItemStack(Material.COMPASS));
-			compass.shape(new String[] {"CIE", "IRI", "BIF"});
-			compass.setIngredient('I', Material.IRON_INGOT);
-			compass.setIngredient('R', Material.REDSTONE);
-			compass.setIngredient('C', Material.SULPHUR);
-			compass.setIngredient('E', Material.SPIDER_EYE);
-			compass.setIngredient('B', Material.BONE);
-			compass.setIngredient('F', Material.ROTTEN_FLESH);
-			
-			this.getServer().addRecipe(compass);
-			logger.info(i18n.t("load.recipeCompass"));
-		}
-	}
-	
-	public Recipe getRecipe(String name) {
-		switch(name) {
-			case "goldenAppleFromHead":
-				return this.goldenAppleFromHead;
-			case "goldenAppleFromWitherHead":
-				return this.goldenAppleFromWitherHead;
-			case "goldenMelon":
-				return this.goldenMelon;
-			case "compass":
-				return this.compass;
-			case "goldenAppleLoreRemover":
-				return this.goldenAppleLoreRemover;
-			case "goldenAppleLoreRemoverNotch":
-				return this.goldenAppleLoreRemoverNotch;
-			default:
-				throw new IllegalArgumentException("Unknow recipe");
-		}
-	}
-	
 	public UHTeamManager getTeamManager() {
 		return teamManager;
 	}
@@ -250,6 +125,10 @@ public final class UHPlugin extends JavaPlugin {
 	
 	public UHBorderManager getBorderManager() {
 		return borderManager;
+	}
+	
+	public UHRecipeManager getRecipeManager() {
+		return recipeManager;
 	}
 	
 	public UHWorldBorderIntegration getWorldBorderIntegration() {
