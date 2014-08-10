@@ -97,8 +97,15 @@ public class UHGameManager {
 		if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
 			p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, false);
 		}
-
-		player.setGameMode(GameMode.ADVENTURE);
+		
+		// If the user has the permission to build before the game, he will probably needs
+		// the creative gamemode.
+		if(!player.hasPermission("uh.build")) {
+			player.setGameMode(GameMode.ADVENTURE);
+		}
+		else {
+			player.setGameMode(GameMode.CREATIVE);
+		}
 	}
 
 
