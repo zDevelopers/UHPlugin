@@ -111,9 +111,6 @@ keys:
             nameGoldenAppleFromHeadNormal: "{aqua}Tête tranchée"
             nameGoldenAppleFromHeadNotch: "{lightpurple}Tête tranchée"
     
-    potions:
-        disabled: "{ce}Ces potions sont désactivées !"
-    
     compass:
         noRottenFlesh: "{gray}{italic}Vous n'avez pas de chair de zombie."
         nothingFound: "{gray}{italic}Seul le silence comble votre requête."

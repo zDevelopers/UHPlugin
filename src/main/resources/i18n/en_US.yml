@@ -112,9 +112,6 @@ keys:
             nameGoldenAppleFromHeadNormal: "{aqua}Golden head"
             nameGoldenAppleFromHeadNotch: "{lightpurple}Golden head"
     
-    potions:
-        disabled: "{ce}These potions are disabled!"
-    
     compass:
         noRottenFlesh: "{gray}{italic}You do not have rotten flesh."
         nothingFound: "{gray}{italic}Only silence answers your request."

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.azenet.UHPlugin.i18n.I18n;
+import me.azenet.UHPlugin.task.CancelBrewTask;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,6 +35,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -386,11 +388,15 @@ public class UHPluginListener implements Listener {
 	
 	
 	/**
-	 * Used to prevent an apple to be renamed to/from the name of an head apple.
-	 * (In vanilla clients, it is not possible to rename an apple to that name because of the
-	 *  ChatColor.RESET before, but some modded clients allows the player to write §r.)
-	 *  
-	 * (Thanks to Zelnehlun on BukkitDev.)
+	 * Used to...
+	 *  - Prevent an apple to be renamed to/from the name of an head apple.
+	 *    
+	 *    (In vanilla clients, it is not possible to rename an apple to that name because of the
+	 *    ChatColor.RESET before, but some modded clients allows the player to write §r.)
+	 *    
+	 *    (Thanks to Zelnehlun on BukkitDev.)
+	 *    
+	 *  - Disable power-II potions.
 	 * 
 	 * @param ev
 	 */
@@ -450,34 +456,28 @@ public class UHPluginListener implements Listener {
 						}
 					}
 				}
+				
+				else if(ev.getInventory() instanceof BrewerInventory) {
+					if(p.getConfig().getBoolean("gameplay-changes.disableLevelIIPotions")) {
+						BukkitRunnable cancelBrewTask = new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked());
+						cancelBrewTask.runTaskLater(p, 1l);
+					}
+				}
 			}
 		}
 	}
 	
+	
 	/**
 	 * Used to disable power-II potions.
 	 * 
-	 * TODO find a better way to do this, by simulating the same behavior as when the player
-	 * tries to brew a potion that doesn't exists.
-	 * 
 	 * @param ev
 	 */
-	@EventHandler
-	public void onBrew(BrewEvent ev) {
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onInventoryDrag(InventoryDragEvent ev) {
 		if(p.getConfig().getBoolean("gameplay-changes.disableLevelIIPotions")) {
-			BrewerInventory brewerContent = ev.getContents();
-			ItemStack brewerInvContent = brewerContent.getIngredient();
-			
-			if(brewerInvContent.getType().equals(Material.GLOWSTONE_DUST)) {
-				
-				ev.setCancelled(true);
-				
-				for(HumanEntity player : brewerContent.getViewers()) {
-					if(player instanceof Player) {
-						((Player) player).sendMessage(i.t("potions.disabled"));
-					}
-				}
-			}
+			BukkitRunnable cancelBrewTask = new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked());
+			cancelBrewTask.runTaskLater(p, 1l);
 		}
 	}
 	
