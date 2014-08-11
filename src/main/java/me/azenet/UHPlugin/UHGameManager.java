@@ -630,7 +630,7 @@ public class UHGameManager {
 	}
 	
 	/**
-	 * Returns true if the game is a game with teams, and false if the game is a sol game.
+	 * Returns true if the game is a game with teams, and false if the game is a solo game.
 	 * 
 	 * @return
 	 */
@@ -640,7 +640,7 @@ public class UHGameManager {
 	
 	/**
 	 * Returns true if damages are enabled.
-	 * Damages are enabled 30 seconds after the beginnig of the game.
+	 * Damages are enabled 30 seconds after the beginning of the game.
 	 * 
 	 * @return
 	 */
