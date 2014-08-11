@@ -291,9 +291,6 @@ public class UHPluginListener implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent ev) {
-		if(p.getGameManager().getSlowStartInProgress()) {
-			ev.setCancelled(true);
-		}
 		
 		p.getFreezer().freezePlayerIfNeeded(ev.getPlayer(), ev.getFrom(), ev.getTo());
 		

@@ -227,6 +227,9 @@ public class UHGameManager {
 		else {
 			slowStartInProgress = true;
 			
+			// The players are frozen during the start.
+			p.getFreezer().setGlobalFreezeState(true);
+			
 			// Used to display the number of teams, players... in the scoreboard instead of 0
 			// while the players are teleported.
 			scoreboardManager.updateScoreboard();
@@ -276,11 +279,15 @@ public class UHGameManager {
 			return;
 		}
 		
+		// The freeze is removed.
+		p.getFreezer().setGlobalFreezeState(false);
 		
 		// The fly is removed to everyone
 		for(Player player : p.getServer().getOnlinePlayers()) {
-			player.setFlying(false);
-			player.setAllowFlight(false);
+			if(alivePlayers.contains(player.getName())) {
+				player.setFlying(false);
+				player.setAllowFlight(false);
+			}
 		}
 		
 		// The environment is initialized, the game is started.
@@ -344,10 +351,12 @@ public class UHGameManager {
 		this.gameRunning = true;
 	}
 	
-	public Boolean getSlowStartInProgress() {
-		return this.slowStartInProgress;
-	}
 	
+	/**
+	 * Notify the game manager the teleportation is finished.
+	 * 
+	 * @param finished True if the TP is finished.
+	 */
 	public void setSlowStartTPFinished(Boolean finished) {
 		this.slowStartTPFinished = finished;
 	}
@@ -355,7 +364,9 @@ public class UHGameManager {
 	
 	
 	
-	
+	/**
+	 * Updates the timer.
+	 */
 	public void updateTimer() {
 		if(p.getConfig().getBoolean("episodes.enabled")) {
 			if(p.getConfig().getBoolean("episodes.syncTimer")) {
@@ -384,12 +395,17 @@ public class UHGameManager {
 		}
 	}
 	
+	/**
+	 * Updates the cached values of the numbers of alive players
+	 * and teams.
+	 */
 	public void updateAliveCounters() {
 		this.alivePlayersCount = alivePlayers.size();
 		this.aliveTeamsCount = getAliveTeams().size();
 		
 		this.scoreboardManager.updateScoreboard();
 	}
+	
 	
 	/**
 	 * Shifts an episode.
@@ -571,10 +587,24 @@ public class UHGameManager {
 		tm.removePlayerFromTeam(player);
 	}
 	
+	/**
+	 * Removes a spectator.
+	 * 
+	 * @param player
+	 */
 	public void removeSpectator(Player player) {
 		spectators.remove(player.getName());
 	}
 	
+	/**
+	 * Returns a list of the current registered spectators.
+	 * 
+	 * This returns only a list of the <em>initial</em> spectators.
+	 * Use {@link UHGameManager.getAlivePlayers()} to get the alive players, and remove
+	 * the elements of this list from the online players to get the spectators.
+	 * 
+	 * @return The initial spectators.
+	 */
 	public HashSet<String> getSpectators() {
 		return spectators;
 	}
@@ -590,27 +620,59 @@ public class UHGameManager {
 		loc.add(new Location(p.getServer().getWorlds().get(0), x, p.getServer().getWorlds().get(0).getHighestBlockYAt(x,z)+120, z));
 	}
 	
+	/**
+	 * Returns true if the game was launched.
+	 * 
+	 * @return The running state.
+	 */
 	public boolean isGameRunning() {
 		return gameRunning;
 	}
 	
+	/**
+	 * Returns true if the game is a game with teams, and false if the game is a sol game.
+	 * 
+	 * @return
+	 */
 	public boolean isGameWithTeams() {
 		return gameWithTeams;
 	}
 	
+	/**
+	 * Returns true if damages are enabled.
+	 * Damages are enabled 30 seconds after the beginnig of the game.
+	 * 
+	 * @return
+	 */
 	public boolean isTakingDamage() {
 		return damageIsOn;
 	}
-
+	
+	/**
+	 * Returns true if the given player is dead.
+	 * 
+	 * @param name The name of the player.
+	 * @return True if the player is dead.
+	 */
 	public boolean isPlayerDead(String name) {
 		return !alivePlayers.contains(name);
 	}
 	
+	/**
+	 * Registers a player as dead.
+	 * 
+	 * @param name The name of the player to mark as dead.
+	 */
 	public void addDead(String name) {
 		alivePlayers.remove(name);
 	}
 
-	private ArrayList<UHTeam> getAliveTeams() {
+	/**
+	 * Returns a list of the currently alive teams.
+	 * 
+	 * @return The list.
+	 */
+	public ArrayList<UHTeam> getAliveTeams() {
 		ArrayList<UHTeam> aliveTeams = new ArrayList<UHTeam>();
 		for (UHTeam t : tm.getTeams()) {
 			for (Player p : t.getPlayers()) {
@@ -620,34 +682,73 @@ public class UHGameManager {
 		return aliveTeams;
 	}
 	
+	/**
+	 * Returns a list of the currently alive players.
+	 * 
+	 * @return The list.
+	 */
 	public HashSet<String> getAlivePlayers() {
 		return this.alivePlayers;
 	}
-
+	
+	/**
+	 * Returns the scoreboard manager.
+	 * 
+	 * @return
+	 */
 	public UHScoreboardManager getScoreboardManager() {
 		return scoreboardManager;
 	}
 	
+	/**
+	 * Returns the length of one episode, in minutes.
+	 * 
+	 * @return
+	 */
 	public Integer getEpisodeLength() {
 		return p.getConfig().getInt("episodes.length");
 	}
-
+	
+	/**
+	 * Returns the (cached) number of alive players.
+	 * 
+	 * @return
+	 */
 	public Integer getAlivePlayersCount() {
 		return alivePlayersCount;
 	}
 
+	/**
+	 * Returns the (cached) number of alive teams.
+	 * 
+	 * @return
+	 */
 	public Integer getAliveTeamsCount() {
 		return aliveTeamsCount;
 	}
-
+	
+	/**
+	 * Returns the number of the current episode.
+	 * 
+	 * @return
+	 */
 	public Integer getEpisode() {
 		return episode;
 	}
 
+	/**
+	 * Returns the number of minutes left in the current episode.
+	 * 
+	 * @return
+	 */
 	public Integer getMinutesLeft() {
 		return minutesLeft;
 	}
-
+	
+	/**
+	 * Returns the number of seconds left in the current <em>minute</em>.
+	 * @return
+	 */
 	public Integer getSecondsLeft() {
 		return secondsLeft;
 	}
