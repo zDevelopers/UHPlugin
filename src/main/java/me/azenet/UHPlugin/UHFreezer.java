@@ -27,15 +27,17 @@ public class UHFreezer {
 	 * Freezes a player, if needed.
 	 * The player is blocked inside the block he is currently.
 	 * 
+	 * This method is intended to be executed when a player moves.
+	 * 
 	 * @param player The player to freeze
 	 * @param from The old position from the PlayerMoveEvent
 	 * @param to The new position from the PlayerMoveEvent
 	 */
 	public void freezePlayerIfNeeded(Player player, Location from, Location to) {
 		if(frozenPlayers.contains(player.getName())) {
-			// If the X or Z coordinate of the player change, he needs to be teleported inside the old block.
+			// If the X, Y or Z coordinate of the player change, he needs to be teleported inside the old block.
 			// The yaw and pitch are conserved, to teleport more smoothly.
-			if(from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ()) {
+			if(from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() || from.getBlockZ() != to.getBlockZ()) {
 				player.teleport(new Location(from.getWorld(), from.getBlockX() + 0.5, from.getBlockY(), from.getBlockZ() + 0.5, to.getYaw(), to.getPitch()), TeleportCause.PLUGIN);
 			}
 		}
