@@ -55,9 +55,7 @@ public class UHFreezer {
 		
 		if(frozen) {
 			for(String playerName : p.getGameManager().getAlivePlayers()) {
-				if(!this.frozenPlayers.contains(playerName)) {
-					this.frozenPlayers.add(playerName);
-				}
+				this.setPlayerFreezeState(p.getServer().getPlayer(playerName), true);
 			}
 			
 			// Freeze mobs by applying a Slowness effect. There isn't any EntityMoveEvent, so...
@@ -71,7 +69,13 @@ public class UHFreezer {
 		}
 		
 		else {
-			this.frozenPlayers = new ArrayList<String>();
+			// All the online players are listed, not the internal list of frozen players,
+			// to avoid a ConcurrentModificationException if the iterated list is being emptied.
+			for(Player player : p.getServer().getOnlinePlayers()) {
+				if(this.isPlayerFrozen(player)) {
+					this.setPlayerFreezeState(player, false);
+				}
+			}
 			
 			// Removes the slowness effect
 			for(World world : p.getServer().getWorlds()) {
@@ -102,9 +106,15 @@ public class UHFreezer {
 	public void setPlayerFreezeState(Player player, Boolean frozen) {
 		if(frozen && !this.frozenPlayers.contains(player.getName())) {
 			this.frozenPlayers.add(player.getName());
+			
+			// Used to prevent the player to be kiked for fly if he was frozen during a fall.
+			// He is blocked inside his current block anyway.
+			player.setAllowFlight(true);
 		}
 		else {
 			this.frozenPlayers.remove(player.getName());
+			player.setFlying(false); // just in case
+			player.setAllowFlight(false);
 		}
 	}
 	
