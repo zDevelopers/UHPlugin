@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.Sound;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.HumanEntity;
@@ -22,6 +23,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -331,6 +333,13 @@ public class UHPluginListener implements Listener {
 	public void onItemDespawn(ItemDespawnEvent ev) {
 		if(p.getFreezer().getGlobalFreezeState()) {
 			ev.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void onEntitySpawn(CreatureSpawnEvent ev) {
+		if(p.getFreezer().getGlobalFreezeState() && ev.getEntity() instanceof Creature) {
+			p.getFreezer().freezeCreature((Creature) ev.getEntity(), true);
 		}
 	}
 	

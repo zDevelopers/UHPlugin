@@ -2,6 +2,7 @@ package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Creature;
@@ -62,7 +63,7 @@ public class UHFreezer {
 			for(World world : p.getServer().getWorlds()) {
 				for(Entity entity : world.getLivingEntities()) {
 					if(entity instanceof Creature) {
-						((Creature) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10000000, 100, true));
+						freezeCreature((Creature) entity, true);
 					}
 				}
 			}
@@ -81,7 +82,7 @@ public class UHFreezer {
 			for(World world : p.getServer().getWorlds()) {
 				for(Entity entity : world.getLivingEntities()) {
 					if(entity instanceof Creature) {
-						((Creature) entity).removePotionEffect(PotionEffectType.SLOW);
+						freezeCreature((Creature) entity, false);
 					}
 				}
 			}
@@ -113,8 +114,10 @@ public class UHFreezer {
 		}
 		else {
 			this.frozenPlayers.remove(player.getName());
-			player.setFlying(false); // just in case
-			player.setAllowFlight(false);
+			if(!player.getGameMode().equals(GameMode.CREATIVE)) {
+				player.setFlying(false); // just in case
+				player.setAllowFlight(false);
+			}
 		}
 	}
 	
@@ -127,6 +130,22 @@ public class UHFreezer {
 	public boolean isPlayerFrozen(Player player) {
 		return frozenPlayers.contains(player.getName());
 	}
+	
+	/**
+	 * (Un)freezes a creature.
+	 * 
+	 * @param creature The creature to freeze.
+	 * @param frozen If true the creature will be frozen. Else...
+	 */
+	public void freezeCreature(Creature creature, Boolean frozen) {
+		if(frozen) {
+			creature.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10000000, 100, true));
+		}
+		else {
+			creature.removePotionEffect(PotionEffectType.SLOW);
+		}
+	}
+	
 	
 	/**
 	 * Returns the list of currently frozen players.
