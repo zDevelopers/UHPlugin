@@ -62,7 +62,7 @@ public class UHFreezer {
 			
 			// Freeze mobs by applying a Slowness effect. There isn't any EntityMoveEvent, so...
 			for(World world : p.getServer().getWorlds()) {
-				for(Entity entity : world.getEntities()) {
+				for(Entity entity : world.getLivingEntities()) {
 					if(entity instanceof Creature) {
 						((Creature) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10000000, 100, true));
 					}
@@ -75,7 +75,7 @@ public class UHFreezer {
 			
 			// Removes the slowness effect
 			for(World world : p.getServer().getWorlds()) {
-				for(Entity entity : world.getEntities()) {
+				for(Entity entity : world.getLivingEntities()) {
 					if(entity instanceof Creature) {
 						((Creature) entity).removePotionEffect(PotionEffectType.SLOW);
 					}
