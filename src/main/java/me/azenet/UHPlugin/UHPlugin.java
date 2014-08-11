@@ -21,6 +21,8 @@ public final class UHPlugin extends JavaPlugin {
 	private UHBorderManager borderManager = null;
 	private UHRecipeManager recipeManager = null;
 	
+	private UHFreezer freezer = null;
+	
 	private UHWorldBorderIntegration wbintegration = null;
 	private UHSpectatorPlusIntegration spintegration = null;
 	private UHDynmapIntegration dynmapintegration = null;
@@ -44,6 +46,8 @@ public final class UHPlugin extends JavaPlugin {
 		gameManager = new UHGameManager(this);
 		borderManager = new UHBorderManager(this);
 		recipeManager = new UHRecipeManager(this);
+		
+		freezer = new UHFreezer(this);
 		
 		wbintegration = new UHWorldBorderIntegration(this);
 		spintegration = new UHSpectatorPlusIntegration(this);
@@ -111,6 +115,7 @@ public final class UHPlugin extends JavaPlugin {
 		logger.info(i18n.t("load.loaded"));
 	}
 	
+	
 	public UHTeamManager getTeamManager() {
 		return teamManager;
 	}
@@ -131,6 +136,11 @@ public final class UHPlugin extends JavaPlugin {
 		return recipeManager;
 	}
 	
+	public UHFreezer getFreezer() {
+		return freezer;
+	}
+	
+	
 	public UHWorldBorderIntegration getWorldBorderIntegration() {
 		return wbintegration;
 	}
@@ -142,6 +152,7 @@ public final class UHPlugin extends JavaPlugin {
 	public UHDynmapIntegration getDynmapIntegration() {
 		return dynmapintegration;
 	}
+	
 	
 	public I18n getI18n() {
 		return i18n;

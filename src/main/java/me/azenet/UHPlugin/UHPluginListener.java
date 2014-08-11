@@ -25,7 +25,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.BrewEvent;
@@ -251,25 +253,31 @@ public class UHPluginListener implements Listener {
 	
 	
 	/**
-	 * Used to prevent players from breaking blocks if the game is not currently running.
+	 * Used to:
+	 *  - prevent players from breaking blocks if the game is not currently running;
+	 *  - prevent frozen players to break blocks.
 	 * 
 	 * @param ev
 	 */
 	@EventHandler
 	public void onBlockBreakEvent(final BlockBreakEvent ev) {
-		if (!this.p.getGameManager().isGameRunning() && !((Player)ev.getPlayer()).hasPermission("uh.build")) {
+		if ((!this.p.getGameManager().isGameRunning() && !((Player)ev.getPlayer()).hasPermission("uh.build"))
+				|| p.getFreezer().isPlayerFrozen(ev.getPlayer())) {
 			ev.setCancelled(true);
 		}
 	}
 	
 	/**
-	 * Used to prevent players from placing blocks if the game is not currently running.
+	 * Used to:
+	 *  - prevent players from placing blocks if the game is not currently running;
+	 *  - prevent frozen players to place blocks.
 	 * 
 	 * @param ev
 	 */
 	@EventHandler
 	public void onBlockPlaceEvent(final BlockPlaceEvent ev) {
-		if (!this.p.getGameManager().isGameRunning() && !((Player)ev.getPlayer()).hasPermission("uh.build")) {
+		if ((!this.p.getGameManager().isGameRunning() && !((Player)ev.getPlayer()).hasPermission("uh.build"))
+				|| p.getFreezer().isPlayerFrozen(ev.getPlayer())) {
 			ev.setCancelled(true);
 		}
 	}
@@ -277,7 +285,7 @@ public class UHPluginListener implements Listener {
 	/**
 	 * Used to:
 	 *  - prevent the player to go outside the border;
-	 *  - freeze the players during the (slow) start.
+	 *  - freeze the players.
 	 * 
 	 * @param ev
 	 */
@@ -287,6 +295,8 @@ public class UHPluginListener implements Listener {
 			ev.setCancelled(true);
 		}
 		
+		p.getFreezer().freezePlayerIfNeeded(ev.getPlayer(), ev.getFrom(), ev.getTo());
+		
 		if(!p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
 			if(!p.getBorderManager().isInsideBorder(ev.getTo(), p.getBorderManager().getCheckDiameter())) {
 				ev.setCancelled(true);
@@ -294,6 +304,38 @@ public class UHPluginListener implements Listener {
 		}
 	}
 	
+	/**
+	 * Used to prevent the bows to be used while in global freeze mode.
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onEntityShoot(EntityShootBowEvent ev) {
+		if((ev.getEntity() instanceof Player && p.getFreezer().isPlayerFrozen((Player) ev.getEntity()))
+				|| p.getFreezer().getGlobalFreezeState()) {
+			
+			ev.setCancelled(true);
+			
+			// If a shoot from a player is cancelled, the arrow seems to be
+			// consumed in the player' screen.
+			// The inventory needs to be updated for the arrow to "come back".
+			if(ev.getEntity() instanceof Player) {
+				((Player) ev.getEntity()).updateInventory();
+			}
+		}
+	}
+	
+	/**
+	 * Used to prevent items to despawn if the game is freezed.
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onItemDespawn(ItemDespawnEvent ev) {
+		if(p.getFreezer().getGlobalFreezeState()) {
+			ev.setCancelled(true);
+		}
+	}
 	
 	/**
 	 * Used to:
@@ -455,14 +497,16 @@ public class UHPluginListener implements Listener {
 
 	
 	/**
-	 * Used to disable any damages if the game has not started.
+	 * Used to disable any damages if the game has not started or the player is frozen.
 	 * 
 	 * @param ev
 	 */
 	@EventHandler
 	public void onEntityDamage(final EntityDamageEvent ev) {
 		if (ev.getEntity() instanceof Player) {
-			if (!p.getGameManager().isTakingDamage()) ev.setCancelled(true);
+			if (!p.getGameManager().isTakingDamage() || p.getFreezer().isPlayerFrozen((Player) ev.getEntity())) {
+				ev.setCancelled(true);
+			}
 		}
 	}
 	

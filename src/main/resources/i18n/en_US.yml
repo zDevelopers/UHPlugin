@@ -35,6 +35,7 @@ keys:
         helpAddspawn: "{cc}/uh addspawn {ci}: adds a spawn point for a team or a player, at the current location of the sender."
         helpAddspawnXZ: "{cc}/uh addspawn <x> <z> {ci}: adds a spawn point for a team or a player, at the provided coordinates."
         helpSpec: "{cc}/uh spec {ci}: manages the spectators. Execute /uh spec for details."
+        helpFreeze: "{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."
         helpWall: "{cc}/uh generatewalls {ci}: generates the walls according to the configuration."
         helpBorder: "{cc}/uh border {ci}: manages borders. Execute /uh border for details."
         
@@ -58,6 +59,11 @@ keys:
         specHelpAdd: "{cc}/uh spec add <player>{ci}: adds a spectator."
         specHelpRemove: "{cc}/uh spec remove <player>{ci}: removes a spectator."
         specHelpList: "{cc}/uh spec list{ci}: lists the spectators."
+        
+        freezeHelpOn: "{cc}/uh freeze on [player]{ci}: freezes a player, or the sender without a specified player."
+        freezeHelpOff: "{cc}/uh freeze off [player]{ci}: unfreezes a player (or the sender), even if the entire game is frozen."
+        freezeHelpAll: "{cc}/uh freeze all{ci}: freezes the entire game (players, mobs, timer)."
+        freezeHelpNone: "{cc}/uh freeze none{ci}: unfreezes the entire game. You NEED to execute this in order to relaunch the timer."
         
         borderHelpAvailable: "{ci}Available options are listed below."
         borderHelpCurrent: "{cc}/uh border current{ci}: returns the current size of the map."
@@ -215,6 +221,20 @@ keys:
             countSpectators: "{ci}{0} registered spectator(s)."
             countOnlyInitial: "{ci}This count includes only the initial spectators."
             itemSpec: "{lightpurple} - {0}"
+    
+    freeze:
+        frozen: "{cst}You where frozen by {0}."
+        unfrozen: "{cst}You where unfrozen by {0}."
+        
+        playerFrozen: "{cs}{0} is now frozen."
+        playerUnfrozen: "{cs}{0} is now unfrozen."
+        
+        playerOnly: "{ce}You need to be a player to execute this command this way."
+        offline: "{ce}{0} is offline!"
+        
+        broadcast:
+            globalFreeze: "{darkaqua}The entire game is now frozen."
+            globalUnfreeze: "{darkaqua}The game is now unfrozen."
     
     borders:
         syntaxError: "{ce}Syntax error, see /uh border."

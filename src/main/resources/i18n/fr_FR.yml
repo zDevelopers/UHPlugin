@@ -35,6 +35,7 @@ keys:
         helpAddspawn: "{cc}/uh addspawn {ci}: ajoute un point de démarrage pour une équipe ou un joueur, à la position de l'exécutant."
         helpAddspawnXZ: "{cc}/uh addspawn <x> <z> {ci}: ajoute un point de démarrage pour une équipe ou un joueur, aux coordonnées données."
         helpSpec: "{cc}/uh spec {ci}: gère les spectateurs. Exécutez /uh spec pour plus de détails."
+        helpFreeze: "{cc}/uh freeze {ci}: (dés)immobilise l'ensemble du jeu, ou un joueur. Consultez /uh freeze pour plus de détails."
         helpWall: "{cc}/uh generatewalls {ci}: génère les murs suivant la configuration."
         helpBorder: "{cc}/uh border {ci}: gère la bordure. Exécutez /uh border pour plus de détails."
         
@@ -58,6 +59,11 @@ keys:
         specHelpAdd: "{cc}/uh spec add <joueur>{ci}: ajoute un spectateur."
         specHelpRemove: "{cc}/uh spec remove <joueur>{ci}: supprime un spectateur."
         specHelpList: "{cc}/uh spec list{ci}: liste les spectateurs."
+        
+        freezeHelpOn: "{cc}/uh freeze on [joueur]{ci}: immobilise un joueur, ou l'exécuteur sans joueur spécifié."
+        freezeHelpOff: "{cc}/uh freeze off [player]{ci}: libère un joueur (ou l'envoyeur), même si le jeu est en pause."
+        freezeHelpAll: "{cc}/uh freeze all{ci}: met le jeu en pause (immobilise les joueurs, mobs, et le compteur)."
+        freezeHelpNone: "{cc}/uh freeze none{ci}: relance le jeu. Vous DEVEZ exécuter ceci pour relancer le compteur."
         
         borderHelpAvailable: "{ci}Les options disponibles sont listées ci-dessous."
         borderHelpCurrent: "{cc}/uh border current{ci}: retourne la taille actuelle de la carte."
@@ -214,6 +220,20 @@ keys:
             countSpectators: "{ci}{0} spectateur(s) enregistré(s)."
             countOnlyInitial: "{ci}Ce compte inclue uniquement les spectateurs initiaux."
             itemSpec: "{lightpurple} - {0}"
+    
+    freeze:
+        frozen: "{cst}Vous avez été immobilisé(e) par {0}."
+        unfrozen: "{cst}Vous avez été libéré(e) par {0}."
+        
+        playerFrozen: "{cs}{0} est désormais immobilisé(e)."
+        playerUnfrozen: "{cs}{0} est désormais libéré(e)."
+        
+        playerOnly: "{ce}Vous devez être un joueur pour exécuter cette commande ainsi."
+        offline: "{ce}{0} est hors-ligne !"
+        
+        broadcast:
+            globalFreeze: "{darkaqua}Le jeu est désormais en pause."
+            globalUnfreeze: "{darkaqua}Le jeu n'est plus en pause."
     
     borders:
         syntaxError: "{ce}Erreur de syntaxe, consultez /uh border."

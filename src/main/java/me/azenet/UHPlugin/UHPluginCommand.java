@@ -24,6 +24,7 @@ public class UHPluginCommand implements CommandExecutor {
 	private ArrayList<String> teamCommands = new ArrayList<String>();
 	private ArrayList<String> specCommands = new ArrayList<String>();
 	private ArrayList<String> borderCommands = new ArrayList<String>();
+	private ArrayList<String> freezeCommands = new ArrayList<String>();
 	
 	private I18n i = null;
 
@@ -40,6 +41,7 @@ public class UHPluginCommand implements CommandExecutor {
 		commands.add("border");
 		commands.add("heal");
 		commands.add("healall");
+		commands.add("freeze");
 		commands.add("resurrect");
 		commands.add("tpback");
 		commands.add("spec");
@@ -59,6 +61,11 @@ public class UHPluginCommand implements CommandExecutor {
 		borderCommands.add("set");
 		borderCommands.add("warning");
 		borderCommands.add("check");
+		
+		freezeCommands.add("all");
+		freezeCommands.add("none");
+		freezeCommands.add("on");
+		freezeCommands.add("off");
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -139,6 +146,7 @@ public class UHPluginCommand implements CommandExecutor {
 		sender.sendMessage(i.t("cmd.helpAddspawn"));
 		sender.sendMessage(i.t("cmd.helpAddspawnXZ"));
 		sender.sendMessage(i.t("cmd.helpSpec"));
+		sender.sendMessage(i.t("cmd.helpFreeze"));
 		sender.sendMessage(i.t("cmd.helpWall"));
 		sender.sendMessage(i.t("cmd.helpBorder"));
 		
@@ -880,6 +888,85 @@ public class UHPluginCommand implements CommandExecutor {
 	}
 	
 	
+	/**
+	 * This command freezes the players.
+	 * Usage: /uh freeze on [player] | off [player] | all | none
+	 *  - on [player]: freezes the given player, or the sender if no player was provided.
+	 *  - off [player]: unfreezes the given player (or the sender, same condition).
+	 *  - all: freezes all the alive players, the mobs and the timer.
+	 *  - none: unfreezes all the alive players (even if there where frozen before using
+	 *          /uh freeze all), the mobs and the timer.
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doFreeze(CommandSender sender, Command command, String label, String[] args) {
+		if(args.length == 1) { // /uh freeze
+			sender.sendMessage(i.t("cmd.freezeHelpOn"));
+			sender.sendMessage(i.t("cmd.freezeHelpOff"));
+			sender.sendMessage(i.t("cmd.freezeHelpAll"));
+			sender.sendMessage(i.t("cmd.freezeHelpNone"));
+		}
+		else {
+			String subcommand = args[1];
+			
+			if(subcommand.equalsIgnoreCase("on") || subcommand.equalsIgnoreCase("off")) {
+				
+				boolean on = subcommand.equalsIgnoreCase("on") ? true : false;
+				
+				if(args.length == 2) { // /uh freeze on: freezes the sender
+					if(sender instanceof Player) {
+						p.getFreezer().setPlayerFreezeState((Player) sender, on);
+						if(on) {
+							sender.sendMessage(i.t("freeze.frozen", ((Player) sender).getName()));
+						}
+						else {
+							sender.sendMessage(i.t("freeze.unfrozen", ((Player) sender).getName()));
+						}
+					}
+					else {
+						sender.sendMessage(i.t("freeze.playerOnly"));
+					}
+				}
+				else if(args.length == 3) { // /uh freeze on <player>: freezes <player>.
+					Player player = p.getServer().getPlayer(args[2]);
+					if(player == null) {
+						sender.sendMessage(i.t("freeze.offline", args[2]));
+					}
+					else {
+						p.getFreezer().setPlayerFreezeState(player, on);
+						if(on) {
+							player.sendMessage(i.t("freeze.frozen", ((Player) sender).getName()));
+							sender.sendMessage(i.t("freeze.playerFrozen", player.getName()));
+						}
+						else {
+							player.sendMessage(i.t("freeze.unfrozen", ((Player) sender).getName()));
+							sender.sendMessage(i.t("freeze.playerUnfrozen", player.getName()));
+						}
+					}
+				}
+			}
+			
+			else if(subcommand.equalsIgnoreCase("all") || subcommand.equalsIgnoreCase("none")) {
+				
+				boolean on = subcommand.equalsIgnoreCase("all") ? true : false;
+				
+				p.getFreezer().setGlobalFreezeState(on);
+				
+				if(on) {
+					p.getServer().broadcastMessage(i.t("freeze.broadcast.globalFreeze"));
+				}
+				else {
+					p.getServer().broadcastMessage(i.t("freeze.broadcast.globalUnfreeze"));
+				}
+				
+			}
+		}
+	}
+	
 	
 	public ArrayList<String> getCommands() {
 		return commands;
@@ -895,5 +982,9 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	public ArrayList<String> getBorderCommands() {
 		return borderCommands;
+	}
+	
+	public ArrayList<String> getFreezeCommands() {
+		return freezeCommands;
 	}
 }
