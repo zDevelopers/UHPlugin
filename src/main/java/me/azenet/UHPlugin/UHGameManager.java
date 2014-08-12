@@ -410,10 +410,10 @@ public class UHGameManager {
 			}
 			else {
 				// We have to add to the time of the start of the episode the elapsed time
-				// during the pause.			
+				// during the pause.
 				this.episodeStartTime += (System.currentTimeMillis() - this.timerPauseTime);
 				this.timerPauseTime = 0L;
-	
+
 				this.timerPaused = false;
 			}
 		}

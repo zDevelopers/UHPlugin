@@ -4,7 +4,6 @@ import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHTeam;
 import me.azenet.UHPlugin.i18n.I18n;
 
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;

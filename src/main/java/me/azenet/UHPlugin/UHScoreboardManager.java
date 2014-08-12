@@ -6,7 +6,6 @@ import java.text.NumberFormat;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Criterias;

@@ -1,19 +1,19 @@
 package me.azenet.UHPlugin;
 
-import java.util.logging.Logger;
-
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.integration.UHDynmapIntegration;
 import me.azenet.UHPlugin.integration.UHSpectatorPlusIntegration;
 import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
+import me.azenet.UHPlugin.listeners.UHCraftingListener;
+import me.azenet.UHPlugin.listeners.UHFreezerListener;
+import me.azenet.UHPlugin.listeners.UHGameListener;
+import me.azenet.UHPlugin.listeners.UHGameplayListener;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class UHPlugin extends JavaPlugin {
-
-	private Logger logger = null;
 	
 	private UHTeamManager teamManager = null;
 	private UHGameManager gameManager = null;
@@ -32,8 +32,6 @@ public final class UHPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		this.saveDefaultConfig();
-		
-		logger = this.getLogger();
 		
 		if(getConfig().getString("lang") == null) {
 			i18n = new I18n(this);
@@ -59,7 +57,10 @@ public final class UHPlugin extends JavaPlugin {
 		
 		getCommand("t").setExecutor(commandManager);
 		
-		getServer().getPluginManager().registerEvents(new UHPluginListener(this), this);
+		getServer().getPluginManager().registerEvents(new UHGameListener(this), this);
+		getServer().getPluginManager().registerEvents(new UHGameplayListener(this), this);
+		getServer().getPluginManager().registerEvents(new UHCraftingListener(this), this);
+		getServer().getPluginManager().registerEvents(new UHFreezerListener(this), this);
 		
 		recipeManager.registerRecipes();
 		
@@ -112,7 +113,7 @@ public final class UHPlugin extends JavaPlugin {
 			}
 		}
 		
-		logger.info(i18n.t("load.loaded"));
+		getLogger().info(i18n.t("load.loaded"));
 	}
 	
 	

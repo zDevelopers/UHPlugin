@@ -91,7 +91,7 @@ public class UHFreezer {
 				}
 			}
 			
-			// Uhfreezes the timers.
+			// Unfreezes the timers.
 			p.getGameManager().toggleTimerPause();
 			p.getBorderManager().toggleWarningTimePause();
 		}
