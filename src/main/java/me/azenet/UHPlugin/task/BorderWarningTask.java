@@ -20,6 +20,10 @@ public class BorderWarningTask extends BukkitRunnable {
 	@Override
 	public void run() {
 		
+		if(p.getFreezer().getGlobalFreezeState()) {
+			return; // No messages are sent if the game is frozen.
+		}
+		
 		int minutesLeft = 0;
 		
 		if(p.getBorderManager().getWarningFinalTimeEnabled()) {

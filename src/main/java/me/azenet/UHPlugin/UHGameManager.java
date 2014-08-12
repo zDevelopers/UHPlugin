@@ -55,6 +55,9 @@ public class UHGameManager {
 	
 	private Long episodeStartTime = 0L;
 	
+	private Boolean timerPaused = false;
+	private Long timerPauseTime = 0L;
+	
 	
 	public UHGameManager(UHPlugin plugin) {
 		this.p = plugin;
@@ -368,7 +371,7 @@ public class UHGameManager {
 	 * Updates the timer.
 	 */
 	public void updateTimer() {
-		if(p.getConfig().getBoolean("episodes.enabled")) {
+		if(p.getConfig().getBoolean("episodes.enabled") && !this.timerPaused) {
 			if(p.getConfig().getBoolean("episodes.syncTimer")) {
 				long timeSinceStart = System.currentTimeMillis() - this.episodeStartTime;
 				long diffSeconds = timeSinceStart / 1000 % 60;
@@ -394,6 +397,37 @@ public class UHGameManager {
 			}
 		}
 	}
+	
+	/**
+	 * Pauses (or restarts) the timer.
+	 */
+	public void toggleTimerPause() {
+		// If the game is not started, the timer is not running.
+		if(p.getGameManager().isGameRunning()) {
+			if(!this.timerPaused) {
+				this.timerPaused = true;
+				this.timerPauseTime = System.currentTimeMillis();
+			}
+			else {
+				// We have to add to the time of the start of the episode the elapsed time
+				// during the pause.			
+				this.episodeStartTime += (System.currentTimeMillis() - this.timerPauseTime);
+				this.timerPauseTime = 0L;
+	
+				this.timerPaused = false;
+			}
+		}
+	}
+	
+	/**
+	 * Returns true if the timer is paused.
+	 * 
+	 * @return true if the timer is paused.
+	 */
+	public boolean isTimerPaused() {
+		return timerPaused;
+	}
+	
 	
 	/**
 	 * Updates the cached values of the numbers of alive players

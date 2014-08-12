@@ -59,7 +59,7 @@ public class UHFreezer {
 				this.setPlayerFreezeState(p.getServer().getPlayer(playerName), true);
 			}
 			
-			// Freeze mobs by applying a Slowness effect. There isn't any EntityMoveEvent, so...
+			// Freezes the mobs by applying a Slowness effect. There isn't any EntityMoveEvent, so...
 			for(World world : p.getServer().getWorlds()) {
 				for(Entity entity : world.getLivingEntities()) {
 					if(entity instanceof Creature) {
@@ -67,6 +67,10 @@ public class UHFreezer {
 					}
 				}
 			}
+			
+			// Freezes the timers.
+			p.getGameManager().toggleTimerPause();
+			p.getBorderManager().toggleWarningTimePause();
 		}
 		
 		else {
@@ -86,6 +90,10 @@ public class UHFreezer {
 					}
 				}
 			}
+			
+			// Uhfreezes the timers.
+			p.getGameManager().toggleTimerPause();
+			p.getBorderManager().toggleWarningTimePause();
 		}
 	}
 	

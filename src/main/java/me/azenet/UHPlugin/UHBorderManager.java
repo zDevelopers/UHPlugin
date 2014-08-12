@@ -22,7 +22,9 @@ public class UHBorderManager {
 	private BukkitRunnable warningTask = null;
 	
 	private Boolean warningFinalTimeEnabled = false;
+	private Boolean warningFinalTimePaused = false;
 	private Long warningFinalTime = 0L;
+	private Long warningFinalTimePause = 0L;
 	private CommandSender warningSender = null;
 	
 	private Boolean isCircularBorder = null;
@@ -159,6 +161,21 @@ public class UHBorderManager {
 	}
 	
 	/**
+	 * Returns true if the current warning is paused.
+	 * If there isn't any warning registered, returns false.
+	 * 
+	 * @return
+	 */
+	public boolean isWarningFinalTimePaused() {
+		if(getWarningFinalTimeEnabled()) {
+			return this.warningFinalTimePaused;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Returns the sender of the last warning configured.
 	 * 
 	 * @return
@@ -228,9 +245,32 @@ public class UHBorderManager {
 	}
 	
 	/**
+	 * Toggles the pause of the warning time.
+	 * This timer is paused when the game is frozen.
+	 */
+	public void toggleWarningTimePause() {
+		if(!this.warningFinalTimePaused) {
+			this.warningFinalTimePaused = true;
+			this.warningFinalTimePause = System.currentTimeMillis();
+		}
+		else {
+			// We have to add to the time of the end of the warning the elapsed time
+			// during the pause.
+			this.warningFinalTime += (System.currentTimeMillis() - this.warningFinalTimePause);
+			this.warningFinalTimePause = 0L;
+			
+			this.warningFinalTimePaused = false;
+		}
+	}
+	
+	/**
 	 * Stops the display of the time left in the warning message.
 	 */
 	public void stopWarningTime() {
+		if(this.warningFinalTimePaused) {
+			toggleWarningTimePause();
+		}
+		
 		this.warningFinalTimeEnabled = false;
 		this.warningFinalTime = 0l;
 		this.warningSender = null;
