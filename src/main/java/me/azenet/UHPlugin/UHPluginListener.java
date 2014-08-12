@@ -659,41 +659,58 @@ public class UHPluginListener implements Listener {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent ev) {
 		if ((ev.getAction() == Action.RIGHT_CLICK_AIR || ev.getAction() == Action.RIGHT_CLICK_BLOCK) && ev.getPlayer().getItemInHand().getType() == Material.COMPASS && p.getConfig().getBoolean("gameplay-changes.compass") && !p.getGameManager().isPlayerDead(ev.getPlayer().getName())) {
-			Player pl = ev.getPlayer();
+			Player player1 = ev.getPlayer();
+			
 			Boolean foundRottenFlesh = false;
-			for (ItemStack is : pl.getInventory().getContents()) {
-				if (is != null && is.getType() == Material.ROTTEN_FLESH) {
-					p.getLogger().info(""+is.getAmount());
-					if (is.getAmount() != 1) is.setAmount(is.getAmount()-1);
-					else { pl.getInventory().removeItem(is); }
-					pl.updateInventory();
+			for (ItemStack item : player1.getInventory().getContents()) {
+				if (item != null && item.getType() == Material.ROTTEN_FLESH) {
+					if (item.getAmount() != 1) {
+						item.setAmount(item.getAmount()-1);
+					}
+					else {
+						player1.getInventory().removeItem(item); 
+					}
+					
+					player1.updateInventory();
 					foundRottenFlesh = true;
 					break;
 				}
 			}
+			
 			if (!foundRottenFlesh) {
-				pl.sendMessage(i.t("compass.noRottenFlesh"));
-				pl.playSound(pl.getLocation(), Sound.STEP_WOOD, 1F, 1F);
+				player1.sendMessage(i.t("compass.noRottenFlesh"));
+				player1.playSound(player1.getLocation(), Sound.STEP_WOOD, 1F, 1F);
 				return;
 			}
-			pl.playSound(pl.getLocation(), Sound.BURP, 1F, 1F);
+			
+			player1.playSound(player1.getLocation(), Sound.BURP, 1F, 1F);
+			
 			Player nearest = null;
 			Double distance = 99999D;
-			for (Player pl2 : p.getServer().getOnlinePlayers()) {
+			for (String player2Name : p.getGameManager().getAlivePlayers()) {
+				Player player2 = p.getServer().getPlayer(player2Name);
+				
 				try {	
-					Double calc = pl.getLocation().distance(pl2.getLocation());
+					Double calc = player1.getLocation().distance(player2.getLocation());
+					
 					if (calc > 1 && calc < distance) {
 						distance = calc;
-						if (pl2 != pl && !this.p.getTeamManager().inSameTeam(pl, pl2)) nearest = pl2.getPlayer();
+						if (player2.getName() != player1.getName() && !this.p.getTeamManager().inSameTeam(player1, player2)) {
+							nearest = player2.getPlayer();
+						}
 					}
-				} catch (Exception e) {}
+				} catch (Exception ignored) {
+					
+				}
 			}
+			
 			if (nearest == null) {
-				pl.sendMessage(i.t("compass.nothingFound"));
+				player1.sendMessage(i.t("compass.nothingFound"));
 				return;
 			}
-			pl.sendMessage(i.t("compass.success"));
-			pl.setCompassTarget(nearest.getLocation());
+			
+			player1.sendMessage(i.t("compass.success"));
+			player1.setCompassTarget(nearest.getLocation());
 		}
 	}
 	
