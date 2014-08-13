@@ -172,7 +172,7 @@ public class UHGameManager {
 			
 			for(final Player player : p.getServer().getOnlinePlayers()) {
 				if(!spectators.contains(player.getName())) {
-					UHTeam team = new UHTeam(player.getName(), ChatColor.WHITE, this.p);
+					UHTeam team = new UHTeam(player.getName(), null, this.p);
 					team.addPlayer(player);
 					tm.addTeam(team);
 				}
@@ -184,7 +184,7 @@ public class UHGameManager {
 			
 			for(final Player player : p.getServer().getOnlinePlayers()) {
 				if(tm.getTeamForPlayer(player) == null && !spectators.contains(player.getName())) {
-					UHTeam team = new UHTeam(player.getName(), ChatColor.WHITE, this.p);
+					UHTeam team = new UHTeam(player.getName(), null, this.p);
 					team.addPlayer(player);
 					tm.addTeam(team);
 				}

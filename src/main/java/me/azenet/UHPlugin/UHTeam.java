@@ -2,6 +2,7 @@ package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -16,18 +17,35 @@ public class UHTeam {
 	private ArrayList<Player> players = new ArrayList<Player>();
 	
 	public UHTeam(String name, ChatColor color, UHPlugin plugin) {
-		this.name = name;
-		this.displayName = color + name + ChatColor.RESET;
-		this.color = color;
+		Validate.notNull(name, "The name cannot be null.");
+		Validate.notNull(plugin, "The plugin cannot be null.");
+		
 		this.plugin = plugin;
 		
+		this.name = name;
+		this.color = color;
+		
+		if(this.color != null) {
+			this.displayName = color + name + ChatColor.RESET;
+		}
+		else {
+			this.displayName = name;
+		}
+		
 		Scoreboard sb = this.plugin.getGameManager().getScoreboardManager().getScoreboard();
-		sb.registerNewTeam(this.name);
-	
-		Team t = sb.getTeam(this.name);
+		Team t = null;
+		
+		try {
+			t = sb.registerNewTeam(this.name);
+		} catch(IllegalArgumentException e) {
+			t = sb.getTeam(this.name);
+		}
 		
 		t.setDisplayName(this.displayName);
-		t.setPrefix(this.color.toString());
+		
+		if(this.color != null) {
+			t.setPrefix(this.color.toString());
+		}
 		
 		t.setCanSeeFriendlyInvisibles(plugin.getConfig().getBoolean("teams-options.canSeeFriendlyInvisibles", true));
 		t.setAllowFriendlyFire(plugin.getConfig().getBoolean("teams-options.allowFriendlyFire", true));
@@ -47,6 +65,8 @@ public class UHTeam {
 	}
 
 	public void addPlayer(Player player) {
+		Validate.notNull(player, "The player cannot be null.");
+		
 		players.add(player);
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).addPlayer(player);
 		
@@ -54,6 +74,8 @@ public class UHTeam {
 	}
 	
 	public void removePlayer(Player player) {
+		Validate.notNull(player, "The player cannot be null.");
+		
 		updatePlayerObjects();
 		players.remove(player);
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).removePlayer(player);
@@ -75,6 +97,8 @@ public class UHTeam {
 	}
 	
 	public boolean containsPlayer(Player player) {
+		Validate.notNull(player, "The player cannot be null.");
+		
 		for(Player playerInTeam : players) {
 			if(playerInTeam.getName().equalsIgnoreCase(player.getName())) {
 				return true;
@@ -84,6 +108,8 @@ public class UHTeam {
 	}
 
 	public void teleportTo(Location lo) {
+		Validate.notNull(lo, "The location cannot be null.");
+		
 		updatePlayerObjects();
 		for (Player p : players) {
 			p.teleport(lo);
