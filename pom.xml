@@ -52,7 +52,7 @@
     <dependency>
     	<groupId>com.pgcraft.spectatorplus</groupId>
     	<artifactId>SpectatorPlus</artifactId>
-    	<version>1.9.1</version>
+    	<version>1.9.2</version>
         <scope>system</scope>
     	<systemPath>${basedir}/lib/SpectatorPlus.jar</systemPath>
     </dependency>

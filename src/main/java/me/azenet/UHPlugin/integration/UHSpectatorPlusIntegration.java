@@ -30,14 +30,19 @@ public class UHSpectatorPlusIntegration {
 		try {
 			Class.forName("com.pgcraft.spectatorplus.SpectateAPI");
 			
+			if(sp.getDescription().getVersion().equals("1.9.1")) {
+				// The API of SpectatorPlus 1.9.1 was not working.
+				throw new ClassNotFoundException();
+			}
 		}
 		catch(ClassNotFoundException e) {
 			this.p.getLogger().warning("SpectatorPlus is available, but the version you are using is too old.");
-			this.p.getLogger().warning("This plugin is tested and works with SpectatorPlus 1.9.1 or later. The SpectateAPI is needed.");
+			this.p.getLogger().warning("This plugin is tested and works with SpectatorPlus 1.9.2 or later. The SpectateAPI is needed.");
 			
 			this.sp = null;
 			return;
 		}
+		
 		
 		// All is OK, let's integrate.
 		this.spAPI = sp.getAPI();
