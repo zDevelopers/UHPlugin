@@ -24,7 +24,7 @@ public class UHTeamManager {
 	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */
 	public void addTeam(ChatColor color, String name) {	
-		teams.add(new UHTeam(name, name, color, p));
+		teams.add(new UHTeam(name, color, p));
 	}
 	
 	/**

@@ -338,7 +338,7 @@ public class UHPluginCommand implements CommandExecutor {
 						catch(IllegalArgumentException e) {
 							sender.sendMessage(i.t("team.add.errorExists"));
 						}
-						sender.sendMessage(i.t("team.add.added", color.toString(), args[2]));
+						sender.sendMessage(i.t("team.add.added", color.toString() + args[2]));
 					}
 				
 				}
@@ -360,7 +360,7 @@ public class UHPluginCommand implements CommandExecutor {
 							sender.sendMessage(i.t("team.add.errorExists"));
 							return;
 						}
-						sender.sendMessage(i.t("team.add.added", color.toString(), args[3]));
+						sender.sendMessage(i.t("team.add.added", color.toString() + args[3]));
 					}
 					
 				}
@@ -434,10 +434,8 @@ public class UHPluginCommand implements CommandExecutor {
 					return;
 				}
 				
-				ChatColor lc = ChatColor.LIGHT_PURPLE; // List color
-				
 				for(final UHTeam team : tm.getTeams()) {
-					sender.sendMessage(i.t("team.list.itemTeam", team.getChatColor().toString(), team.getName(), ((Integer) team.getPlayers().size()).toString()));
+					sender.sendMessage(i.t("team.list.itemTeam",  team.getDisplayName(), ((Integer) team.getPlayers().size()).toString()));
 					for(final Player player : team.getPlayers()) {
 						if(!p.getGameManager().isGameRunning()) {
 							sender.sendMessage(i.t("team.list.itemPlayer", player.getName()));

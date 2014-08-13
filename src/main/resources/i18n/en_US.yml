@@ -143,7 +143,7 @@ keys:
         add:
             errorColor: "{ce}Unable to add the team, check the color name."
             errorExists: "{ce}This team already exists."
-            added: "{cs}Team {0}{1}{cs} added."
+            added: "{cs}Team {0}{cs} added."
             nameTooLong: "{ce}Unable to add the team, because the name is too long (max 16 characters)."
         
         remove:
@@ -161,7 +161,7 @@ keys:
         
         list:
             nothing: "{ce}There isn't any team to show."
-            itemTeam: "{0}{1}{reset} - {2} players"
+            itemTeam: "{0} - {1} players"
             itemPlayer: "{lightpurple} - {0}"
             itemPlayerDead: "{lightpurple} - {0} {reset}({red}dead{reset})"
             itemPlayerAlive: "{lightpurple} - {0} {reset}({green}alive{reset})"

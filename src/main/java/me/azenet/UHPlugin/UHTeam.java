@@ -15,9 +15,9 @@ public class UHTeam {
 	private UHPlugin plugin;
 	private ArrayList<Player> players = new ArrayList<Player>();
 	
-	public UHTeam(String name, String displayName, ChatColor color, UHPlugin plugin) {
+	public UHTeam(String name, ChatColor color, UHPlugin plugin) {
 		this.name = name;
-		this.displayName = displayName;
+		this.displayName = color + name + ChatColor.RESET;
 		this.color = color;
 		this.plugin = plugin;
 		
@@ -25,10 +25,12 @@ public class UHTeam {
 		sb.registerNewTeam(this.name);
 	
 		Team t = sb.getTeam(this.name);
+		
 		t.setDisplayName(this.displayName);
+		t.setPrefix(this.color.toString());
+		
 		t.setCanSeeFriendlyInvisibles(plugin.getConfig().getBoolean("teams-options.canSeeFriendlyInvisibles", true));
 		t.setAllowFriendlyFire(plugin.getConfig().getBoolean("teams-options.allowFriendlyFire", true));
-		t.setPrefix(this.color + "");
 	}
 	
 	public String getName() {

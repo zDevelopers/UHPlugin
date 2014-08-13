@@ -67,7 +67,7 @@ public class TeamStartTask extends BukkitRunnable {
 		
 		if(slow) {
 			try {
-				sender.sendMessage(i.t("start.startSlowTeamTP", team.getChatColor() + team.getName()));
+				sender.sendMessage(i.t("start.startSlowTeamTP", team.getDisplayName()));
 			} catch(NullPointerException e) { }
 			
 			if(p.getGameManager().getAliveTeamsCount() == this.teamsTeleported) {

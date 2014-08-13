@@ -134,7 +134,7 @@ public class UHGameListener implements Listener {
 					Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 						@Override
 						public void run() {
-							p.getServer().broadcastMessage(i.t("death.teamHasFallen", p.getConfig().getString("death.messages.teamDeathMessagesFormat", ""), team.getChatColor() + team.getDisplayName() + p.getConfig().getString("death.messages.teamDeathMessagesFormat", "")));
+							p.getServer().broadcastMessage(i.t("death.teamHasFallen", p.getConfig().getString("death.messages.teamDeathMessagesFormat", ""), team.getDisplayName() + p.getConfig().getString("death.messages.teamDeathMessagesFormat", "")));
 						}
 					}, 1L);
 				}
