@@ -25,7 +25,7 @@ keys:
         
         titleHelp: "{yellow}{0} - version {1}"
         inviteHelp: "{ci}Les commandes disponibles sont listées ci-dessous."
-        legendHelp: "{ci}Légende: {cc}/uh command <requis> [optionnel=valeur par défaut]{ci}."
+        legendHelp: "{ci}Légende: {cc}/uh command <requis> [optionnel=valeur par défaut] <espaces autorisées ...>{ci}."
         
         titleGameCmd: "{aqua}------ Commandes liées au jeu ------"
         helpStart: "{cc}/uh start {ci}: lance le jeu."
@@ -49,7 +49,7 @@ keys:
         teamHelpAdd: "{cc}/uh team add <couleur> {ci}: ajoute une équipe de la couleur donnée."
         teamHelpAddName: "{cc}/uh team add <couleur> <nom> {ci}: ajoute une équipe avec le nom et la couleur donnés."
         teamHelpRemove: "{cc}/uh team remove <nomÉquipe> {ci}: supprime une équipe."
-        teamHelpAddplayer: "{cc}/uh team addplayer <nomÉquipe> <joueur> {ci}: ajoute un joueur dans l'équipe donnée. Le nom de l'équipe est sa couleur, ou le nom explicite donné."
+        teamHelpAddplayer: "{cc}/uh team addplayer <joueur> <nomÉquipe ...> {ci}: ajoute un joueur dans l'équipe donnée. Le nom de l'équipe est sa couleur, ou le nom explicite donné."
         teamHelpRemoveplayer: "{cc}/uh team removeplayer <joueur> {ci}: retire un joueur de son équipe."
         teamHelpList: "{cc}/uh team list {ci}: liste toutes les équipes et leurs membres."
         teamHelpReset: "{cc}/uh team reset {ci}: supprime toutes les équipes."

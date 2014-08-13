@@ -25,7 +25,7 @@ keys:
         
         titleHelp: "{yellow}{0} - version {1}"
         inviteHelp: "{ci}Available subcommands are listed below."
-        legendHelp: "{ci}Legend: {cc}/uh command <required> [optional=default]{ci}."
+        legendHelp: "{ci}Legend: {cc}/uh command <required> [optional=default] <spaces allowed ...>{ci}."
         
         titleGameCmd: "{aqua}------ Game-related commands ------"
         helpStart: "{cc}/uh start {ci}: launches the game."
@@ -49,7 +49,7 @@ keys:
         teamHelpAdd: "{cc}/uh team add <color> {ci}: adds a team with the provided color."
         teamHelpAddName: "{cc}/uh team add <color> <name> {ci}: adds a named team with the provided name and color."
         teamHelpRemove: "{cc}/uh team remove <name> {ci}: removes a team"
-        teamHelpAddplayer: "{cc}/uh team addplayer <teamName> <player> {ci}: adds a player inside the given team. The name of the team is it color, or the explicit name given."
+        teamHelpAddplayer: "{cc}/uh team addplayer <player> <teamName ...>{ci}: adds a player inside the given team. The name of the team is it color, or the explicit name given."
         teamHelpRemoveplayer: "{cc}/uh team removeplayer <player> {ci}: removes a player from his team."
         teamHelpList: "{cc}/uh team list {ci}: list the teams and their players."
         teamHelpReset: "{cc}/uh team reset {ci}: removes all teams."

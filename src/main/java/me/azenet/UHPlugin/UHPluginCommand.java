@@ -68,6 +68,17 @@ public class UHPluginCommand implements CommandExecutor {
 		freezeCommands.add("off");
 	}
 
+	
+	/**
+	 * Handles a command.
+	 * 
+	 * @param sender The sender
+	 * @param command The executed command
+	 * @param label The alias used for this command
+	 * @param args The arguments given to the command
+	 * 
+	 * @author Amaury Carrade
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -126,7 +137,7 @@ public class UHPluginCommand implements CommandExecutor {
 	 * Prints the help.
 	 * 
 	 * @param sender
-	 * @param error True if the help is printed because the used typed an unknown command.
+	 * @param error True if the help is printed because the user typed an unknown command.
 	 */
 	private void help(CommandSender sender, boolean error) {
 		sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
@@ -342,41 +353,38 @@ public class UHPluginCommand implements CommandExecutor {
 					}
 				
 				}
-				else if(args.length == 4) { // /uh team add <color> <name>
+				else { // /uh team add <color> <name ...>
 					
 					ChatColor color = p.getTeamManager().getChatColorByName(args[2]);
 					
 					if(color == null) {
 						sender.sendMessage(i.t("team.add.errorColor"));
 					}
-					else if(args[3].length() > 16) {
-						sender.sendMessage(i.t("team.add.nameTooLong"));
-					}
 					else {
+						String name = UHUtils.getStringFromCommandArguments(args, 3);
 						try {
-							tm.addTeam(color, args[3].toLowerCase());
+							tm.addTeam(color, name);
 						}
 						catch(IllegalArgumentException e) {
+							e.printStackTrace();
 							sender.sendMessage(i.t("team.add.errorExists"));
 							return;
 						}
-						sender.sendMessage(i.t("team.add.added", color.toString() + args[3]));
+						sender.sendMessage(i.t("team.add.added", color.toString() + name));
 					}
 					
-				}
-				else {
-					sender.sendMessage(i.t("team.syntaxError"));
 				}
 			}
 			
 			
 			else if(subcommand.equalsIgnoreCase("remove")) {
-				if(args.length == 3) { // /uh team remove <teamName>
-					if(!tm.removeTeam(args[2].toLowerCase())) {
+				if(args.length >= 3) { // /uh team remove <teamName>
+					String name = UHUtils.getStringFromCommandArguments(args, 2);
+					if(!tm.removeTeam(name)) {
 						sender.sendMessage(i.t("team.remove.doesNotExists"));
 					}
 					else {
-						sender.sendMessage(i.t("team.remove.removed", args[2]));
+						sender.sendMessage(i.t("team.remove.removed", name));
 					}
 				}
 				else {
@@ -386,21 +394,23 @@ public class UHPluginCommand implements CommandExecutor {
 			
 			
 			else if(subcommand.equalsIgnoreCase("addplayer")) {
-				if(args.length == 4) { // /uh team addplayer <teamName> <player>
+				if(args.length >= 4) { // /uh team addplayer <player> <teamName>
 					
-					Player player = p.getServer().getPlayer(args[3]);
+					Player player = p.getServer().getPlayer(args[2]);
+					String teamName = UHUtils.getStringFromCommandArguments(args, 3);
 					
 					if(player == null || !player.isOnline()) {
-						sender.sendMessage(i.t("team.addplayer.disconnected", args[3], args[2]));
+						sender.sendMessage(i.t("team.addplayer.disconnected", args[2], teamName));
 					}
 					else {
 						try {
-							tm.addPlayerToTeam(args[2], player);
+							tm.addPlayerToTeam(teamName, player);
 						} catch(IllegalArgumentException e) {
 							sender.sendMessage(i.t("team.addplayer.doesNotExists"));
 							return;
 						}
-						sender.sendMessage(i.t("team.addplayer.success", args[3], args[2]));
+						UHTeam team = p.getTeamManager().getTeam(teamName);
+						sender.sendMessage(i.t("team.addplayer.success", args[2], team.getDisplayName()));
 					}
 				}
 				else {

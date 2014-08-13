@@ -9,6 +9,40 @@ import org.bukkit.entity.Player;
 public class UHUtils {
 	
 	/**
+	 * Extract a string from a list of arguments, starting at the given index.
+	 * 
+	 * @param args The raw arguments.
+	 * @param startIndex The index of the first item in the returned string (first argument given: 0).
+	 * 
+	 * @return The extracted string.
+	 * 
+	 * @throws IllegalArgumentException if the index of the first element is out of the bounds of the arguments' list.
+	 */
+	public static String getStringFromCommandArguments(String[] args, int startIndex) {
+		
+		System.out.print(args.length);
+		System.out.print(startIndex);
+		
+		if(args.length < startIndex) {
+			throw new IllegalArgumentException("The index of the first element is out of the bounds of the arguments' list.");
+		}
+		
+		String text = "";
+		
+		for(int index = startIndex; index < args.length; index++) {
+			if(index < args.length - 1) {
+				text += args[index] + " ";
+			}
+			else {
+				text += args[index];
+			}
+		}
+		
+		return text;
+	}
+	
+	
+	/**
 	 * Find a safe spot where teleport the player, and teleport the player to that spot.
 	 * If a spot is not found, the player is not teleported, except if the force arg is set to true.
 	 * 

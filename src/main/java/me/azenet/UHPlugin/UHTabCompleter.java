@@ -68,18 +68,28 @@ public class UHTabCompleter implements TabCompleter {
 			}
 			
 			// /uh team subcommand <?>
-			if(args.length == 3) {
+			else if(args.length == 3) {
 				
 				if(args[1].equalsIgnoreCase("add")) { // Autocompletion for colors
 					return getAutocompleteSuggestions(args[2].toLowerCase(), this.colors);
 				}
-				else if(args[1].equalsIgnoreCase("remove") || args[1].equalsIgnoreCase("addplayer")) { // Autocompletion for teams names
+				else if(args[1].equalsIgnoreCase("remove")) { // Autocompletion for teams names
 					ArrayList<String> teamNames = new ArrayList<String>();
 					for(UHTeam team : this.p.getTeamManager().getTeams()) {
 						teamNames.add(team.getName());
 					}
 					return getAutocompleteSuggestions(args[2].toLowerCase(), teamNames);
 				}	
+			}
+			
+			else if(args.length == 4) {
+				if(args[1].equalsIgnoreCase("addplayer")) { // Autocompletion for team names
+					ArrayList<String> teamNames = new ArrayList<String>();
+					for(UHTeam team : this.p.getTeamManager().getTeams()) {
+						teamNames.add(team.getName());
+					}
+					return getAutocompleteSuggestions(args[3].toLowerCase(), teamNames);
+				}
 			}
 		}
 		
