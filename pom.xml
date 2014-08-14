@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>UHPlugin</groupId>
+  <groupId>me.azenet</groupId>
   <artifactId>UHPlugin</artifactId>
   <version>0.9-SNAPSHOT</version>
   <name>UHPlugin</name>
   <description>Ultra Hardcore plugin</description>
-  <url>https://github.com/AmauryCarrade/KTP/</url>
+  <url>https://github.com/AmauryCarrade/UHPlugin/</url>
   <issueManagement>
   	<system>GitHub</system>
   	<url>https://github.com/AmauryCarrade/UHPlugin/issues</url>
@@ -33,6 +33,10 @@
       <id>dynmap-repo</id>
       <url>http://repo.mikeprimm.com/</url>
     </repository>
+    <repository>
+      <id>carrade-repo</id>
+      <url>http://depot.carrade.eu/maven2/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -45,16 +49,14 @@
     <dependency>
     	<groupId>com.wimbli.WorldBorder</groupId>
     	<artifactId>WorldBorder</artifactId>
-    	<version>1.8.0</version>
-        <scope>system</scope>
-    	<systemPath>${basedir}/lib/WorldBorder.jar</systemPath>
+        <version>1.8.0</version>
+        <scope>provided</scope>
     </dependency>
     <dependency>
-    	<groupId>com.pgcraft.spectatorplus</groupId>
+    	<groupId>com.pgcraft</groupId>
     	<artifactId>SpectatorPlus</artifactId>
-    	<version>1.9.2</version>
-        <scope>system</scope>
-    	<systemPath>${basedir}/lib/SpectatorPlus.jar</systemPath>
+        <version>1.9.2</version>
+        <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.dynmap</groupId>
