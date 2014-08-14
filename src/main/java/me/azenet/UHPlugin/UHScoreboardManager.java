@@ -182,7 +182,7 @@ public class UHScoreboardManager {
 	
 	public String getScoreboardName() {
 		String s = p.getConfig().getString("scoreboard.title", "Kill the Patrick");
-		return s.substring(0, Math.min(s.length(), 16));
+		return s.substring(0, Math.min(s.length(), 32));
 	}
 	
 	public Scoreboard getScoreboard() {
