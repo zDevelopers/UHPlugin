@@ -23,7 +23,11 @@ public class UHTeamManager {
 	 * @param name The name of the team.
 	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */
-	public void addTeam(ChatColor color, String name) {	
+	public void addTeam(ChatColor color, String name) {
+		if(this.getTeam(name) != null) {
+			throw new IllegalArgumentException("There is already a team named " + name + " registered!");
+		}
+		
 		teams.add(new UHTeam(name, color, p));
 	}
 	
@@ -34,6 +38,10 @@ public class UHTeamManager {
 	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */
 	public void addTeam(UHTeam team) {
+		if(this.getTeam(team.getName()) != null) {
+			throw new IllegalArgumentException("There is already a team named " + team.getName() + " registered!");
+		}
+		
 		teams.add(team);
 	}
 
@@ -61,7 +69,7 @@ public class UHTeamManager {
 		UHTeam team = getTeam(teamName);
 		
 		if(team == null) {
-			throw new IllegalArgumentException("This team, " + teamName + ", does not exists!");
+			throw new IllegalArgumentException("There isn't any team named" + teamName + " registered!");
 		}
 		
 		team.addPlayer(player);
@@ -125,11 +133,13 @@ public class UHTeamManager {
 	 * Get a team.
 	 * 
 	 * @param name The name of the team.
-	 * @return The team.
+	 * @return The team, or null if the team does not exists.
 	 */
 	public UHTeam getTeam(String name) {
 		for(UHTeam t : teams) {
-			if (t.getName().equalsIgnoreCase(name)) return t;
+			if (t.getName().equalsIgnoreCase(name)) {
+				return t;
+			}
 		}
 		return null;
 	}

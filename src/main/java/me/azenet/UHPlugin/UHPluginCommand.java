@@ -366,7 +366,6 @@ public class UHPluginCommand implements CommandExecutor {
 							tm.addTeam(color, name);
 						}
 						catch(IllegalArgumentException e) {
-							e.printStackTrace();
 							sender.sendMessage(i.t("team.add.errorExists"));
 							return;
 						}
