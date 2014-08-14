@@ -2,13 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>UHPlugin</groupId>
   <artifactId>UHPlugin</artifactId>
-  <version>0.7-SNAPSHOT</version>
+  <version>0.9-SNAPSHOT</version>
   <name>UHPlugin</name>
   <description>Ultra Hardcore plugin</description>
   <url>https://github.com/AmauryCarrade/KTP/</url>
   <issueManagement>
   	<system>GitHub</system>
-  	<url>https://github.com/AmauryCarrade/KTP/issues</url>
+  	<url>https://github.com/AmauryCarrade/UHPlugin/issues</url>
   </issueManagement>
   
   <build>
