@@ -16,6 +16,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -58,6 +59,8 @@ public class UHGameManager {
 	private Boolean timerPaused = false;
 	private Long timerPauseTime = 0L;
 	
+	private Sound deathSound = null;
+	
 	
 	public UHGameManager(UHPlugin plugin) {
 		this.p = plugin;
@@ -65,6 +68,19 @@ public class UHGameManager {
 		this.tm = p.getTeamManager();
 		
 		this.random = new Random();
+		
+		
+		// Registers the death sound
+		String nameDeathSound = p.getConfig().getString("death.announcements.sound");
+		if(nameDeathSound != null) {
+			nameDeathSound = nameDeathSound.trim().toUpperCase().replace(" ", "_");
+			try {
+				this.deathSound = Sound.valueOf(nameDeathSound);
+			} catch(IllegalArgumentException ignored) {
+				// Non-existent death sound
+				// The value of this.deathSound is kept to null.
+			}
+		}
 	}
 
 
@@ -74,7 +90,7 @@ public class UHGameManager {
 		p.getServer().getWorlds().get(0).setStorm(false);
 		p.getServer().getWorlds().get(0).setDifficulty(Difficulty.PEACEFUL);
 	}
-	
+
 	public void initScoreboard() {
 		// Strange: if the scoreboard manager is instanced in the constructor, when the
 		// scoreboard manager try to get the game manager through UHPlugin.getGameManager(),
@@ -82,7 +98,7 @@ public class UHGameManager {
 		// This is why we initializes the scoreboard manager later, in this method.
 		this.scoreboardManager = new UHScoreboardManager(p);
 	}
-	
+
 	public void initPlayer(final Player player) {
 		Location l = player.getWorld().getSpawnLocation();
 		player.teleport(l.add(0,1,0));
@@ -109,7 +125,7 @@ public class UHGameManager {
 		}
 		
 		// If the user has the permission to build before the game, he will probably needs
-		// the creative gamemode.
+		// the creative mode.
 		if(!player.hasPermission("uh.build")) {
 			player.setGameMode(GameMode.ADVENTURE);
 		}
@@ -754,6 +770,15 @@ public class UHGameManager {
 	 */
 	public UHScoreboardManager getScoreboardManager() {
 		return scoreboardManager;
+	}
+	
+	/**
+	 * Returns the death sound, or null if no death sound is registered.
+	 * 
+	 * @return
+	 */
+	public Sound getDeathSound() {
+		return deathSound;
 	}
 	
 	/**

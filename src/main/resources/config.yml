@@ -25,7 +25,7 @@ daylightCycle:
     time: 6000  # Initial time (or game time if the daylight cycle is disabled) in ticks. 6000 = noon.
 
 
-scoreboard: 
+scoreboard:
     title: Kill the Patrick
     
     # Scoreboard displayed on the left of the screen
@@ -43,19 +43,26 @@ death:
         notifyIfTeamHasFallen: true
         deathMessagesFormat: "§6"  # Use this to increase visibility of death messages.
         teamDeathMessagesFormat: "§6"
+        
     kick:
         do: true
         time: 30
         allow-reconnect: true
+        
     head:
         drop: true
         pvpOnly: false
+        
     give-xp-to-killer:
         levels: 2  # set to 0 to disable
         onlyOtherTeam: true  # Give XP only if the player kills a player from another team?
         
     announcements:
         lightning-strike: false
+        
+        # Don't want any sound? Set this field to "NONE" (or any other value which is not a sound).
+        # The available sounds can be found here: http://l.carrade.eu/bukkit-sounds .
+        sound: WITHER_SPAWN
 
 # If true, the name of the players will be colorized according to the teams.
 colorizeChat: true

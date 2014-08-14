@@ -65,11 +65,14 @@ public class UHGameListener implements Listener {
 		}
 		
 		// Plays sound.
-		for (Player pp : Bukkit.getServer().getOnlinePlayers()) {
-			pp.playSound(pp.getLocation(), Sound.WITHER_SPAWN, 1F, 1F);
+		Sound deathSound = p.getGameManager().getDeathSound();
+		if(deathSound != null) {
+			for (Player pp : Bukkit.getServer().getOnlinePlayers()) {
+				pp.playSound(pp.getLocation(), deathSound, 1F, 1F);
+			}
 		}
 		
-		// Send lightning strike if needed
+		// Send lightning strike if needed.
 		if(p.getConfig().getBoolean("death.announcements.lightning-strike")) {
 			ev.getEntity().getLocation().getWorld().strikeLightningEffect(ev.getEntity().getLocation());
 		}
