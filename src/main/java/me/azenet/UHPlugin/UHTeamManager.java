@@ -113,10 +113,15 @@ public class UHTeamManager {
 		UHTeam team = getTeamForPlayer(player);
 		
 		if(team == null) {
-			player.setDisplayName(ChatColor.WHITE + player.getName() + ChatColor.RESET);
+			player.setDisplayName(player.getName());
 		}
 		else {
-			player.setDisplayName(team.getChatColor() + player.getName() + ChatColor.RESET);
+			if(team.getChatColor() != null) {
+				player.setDisplayName(team.getChatColor() + player.getName() + ChatColor.RESET);
+			}
+			else {
+				player.setDisplayName(player.getName());
+			}
 		}
 	}
 	
