@@ -19,10 +19,6 @@ public class UHUtils {
 	 * @throws IllegalArgumentException if the index of the first element is out of the bounds of the arguments' list.
 	 */
 	public static String getStringFromCommandArguments(String[] args, int startIndex) {
-		
-		System.out.print(args.length);
-		System.out.print(startIndex);
-		
 		if(args.length < startIndex) {
 			throw new IllegalArgumentException("The index of the first element is out of the bounds of the arguments' list.");
 		}
@@ -40,6 +36,7 @@ public class UHUtils {
 		
 		return text;
 	}
+	
 	
 	
 	/**

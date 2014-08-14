@@ -1,6 +1,8 @@
 package me.azenet.UHPlugin;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -55,7 +57,7 @@ public class UHTabCompleter implements TabCompleter {
 		
 		/** Autocompletion for subcommands **/
 		if(args.length == 1) {
-			return getAutocompleteSuggestions(args[0].toLowerCase(), this.commands);
+			return getAutocompleteSuggestions(args[0], this.commands);
 		}
 		
 		/** Autocompletion for /uh team **/
@@ -64,31 +66,37 @@ public class UHTabCompleter implements TabCompleter {
 			
 			// /uh team <?>
 			if(args.length == 2) {
-				return getAutocompleteSuggestions(args[1].toLowerCase(), this.teamCommands);
+				return getAutocompleteSuggestions(args[1], this.teamCommands);
 			}
 			
 			// /uh team subcommand <?>
 			else if(args.length == 3) {
 				
 				if(args[1].equalsIgnoreCase("add")) { // Autocompletion for colors
-					return getAutocompleteSuggestions(args[2].toLowerCase(), this.colors);
+					return getAutocompleteSuggestions(args[2], this.colors);
 				}
 				else if(args[1].equalsIgnoreCase("remove")) { // Autocompletion for teams names
 					ArrayList<String> teamNames = new ArrayList<String>();
 					for(UHTeam team : this.p.getTeamManager().getTeams()) {
 						teamNames.add(team.getName());
 					}
-					return getAutocompleteSuggestions(args[2].toLowerCase(), teamNames);
+					return getAutocompleteSuggestions(args[2], teamNames);
 				}	
 			}
 			
-			else if(args.length == 4) {
-				if(args[1].equalsIgnoreCase("addplayer")) { // Autocompletion for team names
+			else if(args.length >= 4) { // Autocompletion for team names – multiple words autocompletion
+				if(args[1].equalsIgnoreCase("addplayer") || args[1].equalsIgnoreCase("remove")) {
 					ArrayList<String> teamNames = new ArrayList<String>();
 					for(UHTeam team : this.p.getTeamManager().getTeams()) {
 						teamNames.add(team.getName());
 					}
-					return getAutocompleteSuggestions(args[3].toLowerCase(), teamNames);
+					if(args[1].equalsIgnoreCase("addplayer")) { // /uh team addplayer Sth <?>
+						return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 3), teamNames, args.length - 4);
+					}
+					else if(args[1].equalsIgnoreCase("remove")) { // /uh team remove <?>
+						return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 2), teamNames, args.length - 3);
+					}
+					//return getAutocompleteSuggestions(args[3], teamNames);
 				}
 			}
 		}
@@ -98,7 +106,7 @@ public class UHTabCompleter implements TabCompleter {
 			
 			// /uh spec <?>
 			if(args.length == 2) {
-				return getAutocompleteSuggestions(args[1].toLowerCase(), this.specCommands);
+				return getAutocompleteSuggestions(args[1], this.specCommands);
 			}
 			
 			if(args.length == 3) {
@@ -108,7 +116,7 @@ public class UHTabCompleter implements TabCompleter {
 					for(String spectator : p.getGameManager().getSpectators()) {
 						spectatorsList.add(spectator);
 					}
-					return getAutocompleteSuggestions(args[2].toLowerCase(), spectatorsList);
+					return getAutocompleteSuggestions(args[2], spectatorsList);
 				}
 				
 			}
@@ -120,12 +128,12 @@ public class UHTabCompleter implements TabCompleter {
 			
 			if(args.length == 2) { // /uh start <?>
 				commandSuggested.add("slow");
-				return getAutocompleteSuggestions(args[1].toLowerCase(), commandSuggested);
+				return getAutocompleteSuggestions(args[1], commandSuggested);
 			}
 			
 			else if(args.length == 3 && args[1].equalsIgnoreCase("slow")) { // /uh start slow <?>
 				commandSuggested.add("go");
-				return getAutocompleteSuggestions(args[2].toLowerCase(), commandSuggested);
+				return getAutocompleteSuggestions(args[2], commandSuggested);
 			}
 		}
 		
@@ -134,7 +142,7 @@ public class UHTabCompleter implements TabCompleter {
 			if(args.length == 3) { // /uh tpback <player> <?=force>
 				ArrayList<String> tpBackSuggest = new ArrayList<String>();
 				tpBackSuggest.add("force");
-				return getAutocompleteSuggestions(args[2].toLowerCase(), tpBackSuggest);
+				return getAutocompleteSuggestions(args[2], tpBackSuggest);
 			}
 		}
 		
@@ -143,7 +151,7 @@ public class UHTabCompleter implements TabCompleter {
 			
 			// /uh freeze <?>
 			if(args.length == 2) {
-				return getAutocompleteSuggestions(args[1].toLowerCase(), this.freezeCommands);
+				return getAutocompleteSuggestions(args[1], this.freezeCommands);
 			}
 			
 		}
@@ -153,19 +161,19 @@ public class UHTabCompleter implements TabCompleter {
 			
 			// /uh border <?>
 			if(args.length == 2) {
-				return getAutocompleteSuggestions(args[1].toLowerCase(), this.borderCommands);
+				return getAutocompleteSuggestions(args[1], this.borderCommands);
 			}
 			
 			else if(args[1].equalsIgnoreCase("warning") && args.length == 3) { // /uh border warning <?=cancel>
 				ArrayList<String> commandSuggested = new ArrayList<String>();
 				commandSuggested.add("cancel");
-				return getAutocompleteSuggestions(args[2].toLowerCase(), commandSuggested);
+				return getAutocompleteSuggestions(args[2], commandSuggested);
 			}
 			
 			else if(args[1].equalsIgnoreCase("set") && args.length == 4) { // /uh border set <diameter> <?=force>
 				ArrayList<String> commandSuggested = new ArrayList<String>();
 				commandSuggested.add("force");
-				return getAutocompleteSuggestions(args[3].toLowerCase(), commandSuggested);
+				return getAutocompleteSuggestions(args[3], commandSuggested);
 			}
 			
 		}
@@ -173,16 +181,58 @@ public class UHTabCompleter implements TabCompleter {
 		return null;
 	}
 	
-	private List<String> getAutocompleteSuggestions(String typed, List<String> commandsList) {
+	
+	/**
+	 * Returns a list of autocompletion suggestions based on what the user typed and on a list of
+	 * available commands.
+	 * 
+	 * @param typed What the user typed. This string needs to include <em>all</em> the words typed.
+	 * @param suggestionsList The list of the suggestions.
+	 * @param numberOfWordsToIgnore If non-zero, this number of words will be ignored at the beginning of the string. This is used to handle multiple-words autocompletion.
+	 * 
+	 * @return The list of matching suggestions.
+	 */
+	private List<String> getAutocompleteSuggestions(String typed, List<String> suggestionsList, int numberOfWordsToIgnore) {
 		List<String> list = new ArrayList<String>();
 		
-		for(String c : commandsList) {
-			if(c.startsWith(typed)) {
-				list.add(c);
+		// For each suggestion:
+		//  - if there isn't any world to ignore, we just compare them;
+		//  - else, we removes the correct number of words at the beginning of the string;
+		//    then, if the raw suggestion matches the typed text, we adds to the suggestion list
+		//    the filtered suggestion, because the Bukkit's autocompleter works on a “per-word” basis.
+		
+		for(String rawSuggestion : suggestionsList) {			
+			String suggestion = "";
+			
+			if(numberOfWordsToIgnore == 0) {
+				suggestion = rawSuggestion;
+			}
+			else {
+				// Not the primary use, but, hey! It works.
+				suggestion = UHUtils.getStringFromCommandArguments(rawSuggestion.split(" "), numberOfWordsToIgnore);
+			}
+			
+			if(rawSuggestion.toLowerCase().startsWith(typed.toLowerCase())) {
+				list.add(suggestion);
 			}
 		}
 		
+		Collections.sort(list, Collator.getInstance());
+		
 		return list;
+	}
+	
+	/**
+	 * Returns a list of autocompletion suggestions based on what the user typed and on a list of
+	 * available commands.
+	 * 
+	 * @param typed What the user typed.
+	 * @param suggestionsList The list of the suggestions.
+	 * 
+	 * @return The list of matching suggestions.
+	 */
+	private List<String> getAutocompleteSuggestions(String typed, List<String> suggestionsList) {
+		return getAutocompleteSuggestions(typed, suggestionsList, 0);
 	}
 
 }
