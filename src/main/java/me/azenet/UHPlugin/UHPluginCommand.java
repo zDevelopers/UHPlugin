@@ -217,6 +217,7 @@ public class UHPluginCommand implements CommandExecutor {
 			try {
 				p.getGameManager().start(sender, false);
 			} catch(RuntimeException e) {
+				e.printStackTrace();
 				sender.sendMessage(i.t("start.already"));
 			}
 		}
@@ -362,6 +363,12 @@ public class UHPluginCommand implements CommandExecutor {
 					}
 					else {
 						String name = UHUtils.getStringFromCommandArguments(args, 3);
+						
+						if(name.length() > 16) {
+							sender.sendMessage(i.t("team.add.nameTooLong"));
+							return;
+						}
+						
 						try {
 							tm.addTeam(color, name);
 						}

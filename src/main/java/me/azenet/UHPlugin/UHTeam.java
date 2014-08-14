@@ -10,11 +10,14 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 public class UHTeam {
-	private String name;
-	private String displayName;
-	private ChatColor color;
-	private UHPlugin plugin;
+	private UHPlugin plugin = null;
+	
+	private String name = null;
+	private String displayName = null;
+	private ChatColor color = null;
+	
 	private ArrayList<Player> players = new ArrayList<Player>();
+	
 	
 	public UHTeam(String name, ChatColor color, UHPlugin plugin) {
 		Validate.notNull(name, "The name cannot be null.");
@@ -33,13 +36,9 @@ public class UHTeam {
 		}
 		
 		Scoreboard sb = this.plugin.getGameManager().getScoreboardManager().getScoreboard();
-		Team t = null;
 		
-		try {
-			t = sb.registerNewTeam(this.name);
-		} catch(IllegalArgumentException e) {
-			t = sb.getTeam(this.name);
-		}
+		sb.registerNewTeam(this.name);
+		Team t = sb.getTeam(this.name);
 		
 		t.setDisplayName(this.displayName);
 		

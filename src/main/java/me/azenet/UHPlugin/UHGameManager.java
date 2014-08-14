@@ -172,8 +172,13 @@ public class UHGameManager {
 			
 			for(final Player player : p.getServer().getOnlinePlayers()) {
 				if(!spectators.contains(player.getName())) {
-					UHTeam team = new UHTeam(player.getName(), null, this.p);
+					
+					String teamName = player.getName();
+					teamName = teamName.substring(0, Math.min(teamName.length(), 16));
+					
+					UHTeam team = new UHTeam(teamName, null, this.p);
 					team.addPlayer(player);
+					
 					tm.addTeam(team);
 				}
 			}
@@ -184,8 +189,25 @@ public class UHGameManager {
 			
 			for(final Player player : p.getServer().getOnlinePlayers()) {
 				if(tm.getTeamForPlayer(player) == null && !spectators.contains(player.getName())) {
-					UHTeam team = new UHTeam(player.getName(), null, this.p);
+					
+					// A team with that name may already exists.
+					// Tries:
+					// 1. The name of the player;
+					// 2. TheName (bigRandomNumberHere).
+					
+					String teamName = player.getName();
+					
+					if(tm.getTeam(teamName) != null) { // Team registered
+						// The probability of a conflict here is so small...
+						// I will not take this possibility into account.
+						teamName = player.getName() + " " + this.random.nextInt(1000000);
+					}
+					
+					teamName = teamName.substring(0, Math.min(teamName.length(), 16));
+					
+					UHTeam team = new UHTeam(teamName, null, this.p);
 					team.addPlayer(player);
+					
 					tm.addTeam(team);
 				}
 			}
