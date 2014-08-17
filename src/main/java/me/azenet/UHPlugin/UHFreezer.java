@@ -58,8 +58,9 @@ public class UHFreezer {
 	 * Enables or disables the global freeze of players, mobs, timer.
 	 * 
 	 * @param freezed If true the global freeze will be enabled.
+	 * @param showStateInScoreboard If false, the freeze state will not be displayed in the scoreboard.
 	 */
-	public void setGlobalFreezeState(Boolean frozen) {
+	public void setGlobalFreezeState(Boolean frozen, Boolean showStateInScoreboard) {
 		this.globalFreeze = frozen;
 		
 		if(frozen) {
@@ -104,8 +105,23 @@ public class UHFreezer {
 			p.getBorderManager().toggleWarningTimePause();
 		}
 		
+		if(showStateInScoreboard || !frozen) {
+			this.p.getGameManager().getScoreboardManager().displayFreezeState();
+		}
+		
 		updateListenerRegistration();
 	}
+	
+	/**
+	 * Enables or disables the global freeze of players, mobs, timer.
+	 * 
+	 * @param freezed If true the global freeze will be enabled.
+	 * @param showStateInScoreboard If false, the freeze state will not be displayed in the scoreboard.
+	 */
+	public void setGlobalFreezeState(Boolean frozen) {
+		setGlobalFreezeState(frozen, true);
+	}
+	
 	
 	/**
 	 * Gets the current state of the global freeze.

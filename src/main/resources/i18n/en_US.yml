@@ -229,6 +229,8 @@ keys:
         playerOnly: "{ce}You need to be a player to execute this command this way."
         offline: "{ce}{0} is offline!"
         
+        scoreboard: "{darkaqua}Game frozen"
+        
         broadcast:
             globalFreeze: "{darkaqua}The entire game is now frozen."
             globalUnfreeze: "{darkaqua}The game is now unfrozen."

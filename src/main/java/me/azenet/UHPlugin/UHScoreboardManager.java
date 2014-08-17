@@ -36,7 +36,7 @@ public class UHScoreboardManager {
 	
 	/**
 	 * Constructor.
-	 * Initialize the scoreboard.
+	 * Initializes the scoreboard.
 	 * 
 	 * @param plugin
 	 */
@@ -60,7 +60,7 @@ public class UHScoreboardManager {
 			
 			// The "space" score needs to be set only one time, and only if the episodes/timer are enabled.
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
-				this.objective.getScore("").setScore(2);
+				this.objective.getScore("").setScore(3);
 			}
 			
 			updateScoreboard();
@@ -80,6 +80,9 @@ public class UHScoreboardManager {
 		}
 	}
 	
+	/**
+	 * Updates the scoreboard (if needed).
+	 */
 	public void updateScoreboard() {
 		if(p.getConfig().getBoolean("scoreboard.enabled")) {
 			Integer episode = gm.getEpisode();
@@ -90,13 +93,13 @@ public class UHScoreboardManager {
 			
 			if(!episode.equals(oldEpisode) && p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.episode")) {
 				sb.resetScores(getText("episode", oldEpisode));
-				objective.getScore(getText("episode", episode)).setScore(5);
+				objective.getScore(getText("episode", episode)).setScore(6);
 				oldEpisode = episode;
 			}
 			
 			if(!alivePlayersCount.equals(oldAlivePlayersCount) && p.getConfig().getBoolean("scoreboard.players")) {
 				sb.resetScores(getText("players", oldAlivePlayersCount));
-				objective.getScore(getText("players", alivePlayersCount)).setScore(4);
+				objective.getScore(getText("players", alivePlayersCount)).setScore(5);
 				oldAlivePlayersCount = alivePlayersCount;
 			}
 			
@@ -104,14 +107,14 @@ public class UHScoreboardManager {
 			// if the game is without teams.
 			if(gm.isGameRunning() && gm.isGameWithTeams() && !aliveTeamsCount.equals(oldAliveTeamsCount) && p.getConfig().getBoolean("scoreboard.teams")) {
 				sb.resetScores(getText("teams", oldAliveTeamsCount));
-				objective.getScore(getText("teams", aliveTeamsCount)).setScore(3);
+				objective.getScore(getText("teams", aliveTeamsCount)).setScore(4);
 				oldAliveTeamsCount = aliveTeamsCount;
 			}
 			
 			// The timer score is reset every time.
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer") && !p.getGameManager().isTimerPaused()) {
 				sb.resetScores(getTimerText(oldMinutes, oldSeconds));
-				objective.getScore(getTimerText(minutesLeft, secondsLeft)).setScore(1);
+				objective.getScore(getTimerText(minutesLeft, secondsLeft)).setScore(2);
 				oldMinutes = minutesLeft;
 				oldSeconds = secondsLeft;
 			}
@@ -140,6 +143,31 @@ public class UHScoreboardManager {
 	}
 	
 	/**
+	 * Displays the freeze state in the scoreboard.
+	 */
+	public void displayFreezeState() {
+		if(p.getConfig().getBoolean("scoreboard.enabled", true) && p.getConfig().getBoolean("scoreboard.freezeStatus", true)) {
+			
+			final String freezerStatusText = i.t("freeze.scoreboard").substring(0, Math.min(i.t("freeze.scoreboard").length(), 16));		
+			
+			if(p.getFreezer().getGlobalFreezeState()) {
+				objective.getScore("  ").setScore(1);
+				objective.getScore(freezerStatusText).setScore(-1); // Forces the display
+				Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+					@Override
+					public void run() {
+						objective.getScore(freezerStatusText).setScore(0);
+					}
+				}, 1L);
+			}
+			else {
+				sb.resetScores("  ");
+				sb.resetScores(freezerStatusText);
+			}
+		}
+	}
+	
+	/**
 	 * Returns the text displayed in the scoreboard, for the timer.
 	 * 
 	 * @param minutes The minute in the timer
@@ -150,12 +178,20 @@ public class UHScoreboardManager {
 		return i.t("scoreboard.timer", formatter.format(minutes), formatter.format(seconds));
 	}
 	
+	/**
+	 * Updates the health score for all players.
+	 */
 	public void updateHealthScore() {
 		for(final Player player : p.getServer().getOnlinePlayers()) {
 			updateHealthScore(player);
 		}
 	}
 	
+	/**
+	 * Updates the health score for the given player.
+	 * 
+	 * @param player The player to update.
+	 */
 	public void updateHealthScore(final Player player) {
 		if(player.getHealth() != 1d) { // Prevent killing the player
 			player.setHealth(player.getHealth() - 1);
@@ -180,11 +216,21 @@ public class UHScoreboardManager {
 		p.setScoreboard(sb);
 	}
 	
+	/**
+	 * Returns the title of the scoreboard, truncated at 32 characters.
+	 * 
+	 * @return The name
+	 */
 	public String getScoreboardName() {
 		String s = p.getConfig().getString("scoreboard.title", "Kill the Patrick");
 		return s.substring(0, Math.min(s.length(), 32));
 	}
 	
+	/**
+	 * Returns the internal scoreboard.
+	 * 
+	 * @return The internal scoreboard.
+	 */
 	public Scoreboard getScoreboard() {
 		return sb;
 	}

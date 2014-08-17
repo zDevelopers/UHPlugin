@@ -269,7 +269,7 @@ public class UHGameManager {
 			slowStartInProgress = true;
 			
 			// The players are frozen during the start.
-			p.getFreezer().setGlobalFreezeState(true);
+			p.getFreezer().setGlobalFreezeState(true, false);
 			
 			// Used to display the number of teams, players... in the scoreboard instead of 0
 			// while the players are teleported.
@@ -321,7 +321,7 @@ public class UHGameManager {
 		}
 		
 		// The freeze is removed.
-		p.getFreezer().setGlobalFreezeState(false);
+		p.getFreezer().setGlobalFreezeState(false, false);
 		
 		// The fly is removed to everyone
 		for(Player player : p.getServer().getOnlinePlayers()) {

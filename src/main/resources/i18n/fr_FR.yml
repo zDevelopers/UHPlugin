@@ -228,6 +228,8 @@ keys:
         playerOnly: "{ce}Vous devez être un joueur pour exécuter cette commande ainsi."
         offline: "{ce}{0} est hors-ligne !"
         
+        scoreboard: "{darkaqua}En pause"
+        
         broadcast:
             globalFreeze: "{darkaqua}Le jeu est désormais en pause."
             globalUnfreeze: "{darkaqua}Le jeu n'est plus en pause."

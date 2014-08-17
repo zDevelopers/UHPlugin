@@ -34,6 +34,7 @@ scoreboard:
     players: true
     teams: true
     timer: true
+    freezeStatus: true
     
     # Health in the list of the players
     health: true
