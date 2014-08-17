@@ -99,11 +99,7 @@ public class UHBorderManager {
 	public HashSet<Player> getPlayersOutside(int diameter) {
 		HashSet<Player> playersOutside = new HashSet<Player>();
 		
-		for(final String playerS : p.getGameManager().getAlivePlayers()) {
-			Player player = Bukkit.getPlayer(playerS);
-			if(player == null) { // offline
-				continue;
-			}
+		for(final Player player : p.getGameManager().getAlivePlayers()) {
 			if(!isInsideBorder(player.getLocation(), diameter)) {
 				playersOutside.add(player);
 			}

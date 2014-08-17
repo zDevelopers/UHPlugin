@@ -5,7 +5,6 @@ import me.azenet.UHPlugin.integration.UHDynmapIntegration;
 import me.azenet.UHPlugin.integration.UHSpectatorPlusIntegration;
 import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
 import me.azenet.UHPlugin.listeners.UHCraftingListener;
-import me.azenet.UHPlugin.listeners.UHFreezerListener;
 import me.azenet.UHPlugin.listeners.UHGameListener;
 import me.azenet.UHPlugin.listeners.UHGameplayListener;
 

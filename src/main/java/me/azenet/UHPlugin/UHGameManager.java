@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.task.TeamStartTask;
 import me.azenet.UHPlugin.task.UpdateTimerTask;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -33,12 +33,12 @@ public class UHGameManager {
 	private UHScoreboardManager scoreboardManager = null;
 
 	private LinkedList<Location> loc = new LinkedList<Location>();
-	private HashSet<String> players = new HashSet<String>();
-	private HashSet<String> alivePlayers = new HashSet<String>();
-	private HashSet<String> spectators = new HashSet<String>();
-	private Map<String,Location> deathLocations = new HashMap<String,Location>();
+	private HashSet<String> players = new HashSet<String>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available 
+	private HashSet<UUID> alivePlayers = new HashSet<UUID>();
+	private HashSet<UUID> spectators = new HashSet<UUID>();
+	private Map<UUID,Location> deathLocations = new HashMap<UUID,Location>();
 
-	private HashSet<String> deadPlayersToBeResurrected = new HashSet<String>();
+	private HashSet<String> deadPlayersToBeResurrected = new HashSet<String>(); // Same
 	
 	private Integer alivePlayersCount = 0;
 	private Integer aliveTeamsCount = 0;
@@ -161,8 +161,8 @@ public class UHGameManager {
 		// Also, the spectator mode is enabled/disabled if needed.
 		alivePlayers.clear();
 		for(final Player player : p.getServer().getOnlinePlayers()) {
-			if(!spectators.contains(player.getName())) {
-				alivePlayers.add(player.getName());
+			if(!spectators.contains(player.getUniqueId())) {
+				alivePlayers.add(player.getUniqueId());
 				
 				if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
 					p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, false);
@@ -179,15 +179,17 @@ public class UHGameManager {
 		
 		// The names of the players is stored for later use
 		// Used in the resurrectOffline method, to check if a player was really a player or not.
-		this.players = (HashSet<String>) alivePlayers.clone();
+		for(UUID id : alivePlayers) {
+			this.players.add(p.getServer().getPlayer(id).getName());
+		}
 		
 		
 		// No team? We creates a team per player.
-		if(tm.getTeams().size() == 0) {
+		if(tm.getTeams().isEmpty()) {
 			this.gameWithTeams = false;
 			
 			for(final Player player : p.getServer().getOnlinePlayers()) {
-				if(!spectators.contains(player.getName())) {
+				if(!spectators.contains(player.getUniqueId())) {
 					
 					String teamName = player.getName();
 					teamName = teamName.substring(0, Math.min(teamName.length(), 16));
@@ -204,7 +206,7 @@ public class UHGameManager {
 			this.gameWithTeams = true;
 			
 			for(final Player player : p.getServer().getOnlinePlayers()) {
-				if(tm.getTeamForPlayer(player) == null && !spectators.contains(player.getName())) {
+				if(tm.getTeamForPlayer(player) == null && !spectators.contains(player.getUniqueId())) {
 					
 					// A team with that name may already exists.
 					// Tries:
@@ -325,7 +327,7 @@ public class UHGameManager {
 		
 		// The fly is removed to everyone
 		for(Player player : p.getServer().getOnlinePlayers()) {
-			if(alivePlayers.contains(player.getName())) {
+			if(alivePlayers.contains(player.getUniqueId())) {
 				player.setFlying(false);
 				player.setAllowFlight(false);
 			}
@@ -524,13 +526,11 @@ public class UHGameManager {
 	 * @return true if the player was dead, false otherwise.
 	 */
 	public boolean resurrect(String playerName) {
-		if(!this.isPlayerDead(playerName)) {
-			return false;
-		}
 		
 		Player playerOnline = Bukkit.getPlayer(playerName);
+		
 		if(playerOnline != null) {
-			return resurrectOnline(playerOnline);
+			return resurrectPlayerOnlineTask(playerOnline);
 		}
 		else {
 			// We checks if the player was a player
@@ -539,34 +539,9 @@ public class UHGameManager {
 			}
 		}
 		
-		// So, now, we are sure that the player is really offline.
-		this.alivePlayers.add(playerName);
-		this.updateAliveCounters();
-		
+		// So, now, we are sure that the player is really offline.		
 		// The task needed to be executed will be executed when the player join.
 		this.deadPlayersToBeResurrected.add(playerName);
-		
-		return true;
-	}
-	
-	/**
-	 * Resurrect a player
-	 * 
-	 * @param player
-	 * @return true if the player was dead, false otherwise.
-	 */
-	private boolean resurrectOnline(Player player) {
-		
-		// We registers the user as an alive player.
-		this.alivePlayers.add(player.getName());
-		this.updateAliveCounters();
-		
-		// This method can be used to add a player after the game has started.
-		if(!players.contains(player.getName())) {
-			players.add(player.getName());
-		}
-		
-		this.resurrectPlayerOnlineTask(player);
 		
 		return true;
 	}
@@ -576,18 +551,35 @@ public class UHGameManager {
 	 * and that need the player to be online.
 	 * 
 	 * @param player The player to resurrect
+	 * @return true if the player was dead, false otherwise.
 	 */
-	public void resurrectPlayerOnlineTask(Player player) {
+	public boolean resurrectPlayerOnlineTask(Player player) {
+		
+		if(this.alivePlayers.contains(player.getUniqueId())) {
+			return false;
+		}
+		
+		// Player registered as alive
+		this.alivePlayers.add(player.getUniqueId());
+		this.updateAliveCounters();
+		
+		// This method can be used to add a player after the game has started.
+		if(!players.contains(player.getName())) {
+			players.add(player.getName());
+		}
+		
 		// Spectator disabled
 		if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
 			p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, false);
 		}
 		
-		// Death point hided in the dynmap
+		// Death point removed on the dynmap
 		p.getDynmapIntegration().hideDeathLocation(player);
 		
 		// All players are notified
 		this.p.getServer().broadcastMessage(i.t("resurrect.broadcastMessage", player.getName()));
+		
+		return true;
 	}
 	
 	/**
@@ -617,7 +609,7 @@ public class UHGameManager {
 	 * @param location
 	 */
 	public void addDeathLocation(Player player, Location location) {
-		deathLocations.put(player.getName(), location);
+		deathLocations.put(player.getUniqueId(), location);
 	}
 	
 	/**
@@ -625,7 +617,7 @@ public class UHGameManager {
 	 * @param player
 	 */
 	public void removeDeathLocation(Player player) {
-		deathLocations.remove(player.getName());
+		deathLocations.remove(player.getUniqueId());
 	}
 	
 	/**
@@ -635,8 +627,8 @@ public class UHGameManager {
 	 * @return Location
 	 */
 	public Location getDeathLocation(Player player) {
-		if(deathLocations.containsKey(player.getName())) {
-			return deathLocations.get(player.getName());
+		if(deathLocations.containsKey(player.getUniqueId())) {
+			return deathLocations.get(player.getUniqueId());
 		}
 		
 		return null;
@@ -649,7 +641,7 @@ public class UHGameManager {
 	 * @return boolean
 	 */
 	public boolean hasDeathLocation(Player player) {
-		return deathLocations.containsKey(player.getName());
+		return deathLocations.containsKey(player.getUniqueId());
 	}
 	
 	/**
@@ -659,7 +651,7 @@ public class UHGameManager {
 	 * @param player The player to register as a spectator.
 	 */
 	public void addSpectator(Player player) {
-		spectators.add(player.getName());
+		spectators.add(player.getUniqueId());
 		tm.removePlayerFromTeam(player);
 	}
 	
@@ -669,7 +661,7 @@ public class UHGameManager {
 	 * @param player
 	 */
 	public void removeSpectator(Player player) {
-		spectators.remove(player.getName());
+		spectators.remove(player.getUniqueId());
 	}
 	
 	/**
@@ -682,7 +674,14 @@ public class UHGameManager {
 	 * @return The initial spectators.
 	 */
 	public HashSet<String> getSpectators() {
-		return spectators;
+		
+		HashSet<String> spectatorNames = new HashSet<String>();
+		
+		for(UUID id : spectators) {
+			spectatorNames.add(p.getServer().getPlayer(id).getName());
+		}
+		
+		return spectatorNames;
 	}
 	
 	
@@ -730,8 +729,8 @@ public class UHGameManager {
 	 * @param name The name of the player.
 	 * @return True if the player is dead.
 	 */
-	public boolean isPlayerDead(String name) {
-		return !alivePlayers.contains(name);
+	public boolean isPlayerDead(Player player) {
+		return !alivePlayers.contains(player.getUniqueId());
 	}
 	
 	/**
@@ -739,8 +738,8 @@ public class UHGameManager {
 	 * 
 	 * @param name The name of the player to mark as dead.
 	 */
-	public void addDead(String name) {
-		alivePlayers.remove(name);
+	public void addDead(Player player) {
+		alivePlayers.remove(player.getUniqueId());
 	}
 
 	/**
@@ -763,8 +762,15 @@ public class UHGameManager {
 	 * 
 	 * @return The list.
 	 */
-	public HashSet<String> getAlivePlayers() {
-		return this.alivePlayers;
+	public HashSet<Player> getAlivePlayers() {
+		
+		HashSet<Player> alivePlayersList = new HashSet<Player>();
+		
+		for(UUID id : alivePlayers) {
+			alivePlayersList.add(p.getServer().getPlayer(id));
+		}
+		
+		return alivePlayersList;
 	}
 	
 	/**

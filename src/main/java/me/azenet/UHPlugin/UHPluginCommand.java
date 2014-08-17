@@ -457,7 +457,7 @@ public class UHPluginCommand implements CommandExecutor {
 							sender.sendMessage(i.t("team.list.itemPlayer", player.getName()));
 						}
 						else {
-							if(p.getGameManager().isPlayerDead(player.getName())) {
+							if(p.getGameManager().isPlayerDead(player)) {
 								sender.sendMessage(i.t("team.list.itemPlayerDead", player.getName()));
 							}
 							else {

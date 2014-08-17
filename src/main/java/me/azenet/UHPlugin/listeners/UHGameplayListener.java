@@ -220,7 +220,7 @@ public class UHGameplayListener implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent ev) {
-		if ((ev.getAction() == Action.RIGHT_CLICK_AIR || ev.getAction() == Action.RIGHT_CLICK_BLOCK) && ev.getPlayer().getItemInHand().getType() == Material.COMPASS && p.getConfig().getBoolean("gameplay-changes.compass") && !p.getGameManager().isPlayerDead(ev.getPlayer().getName())) {
+		if ((ev.getAction() == Action.RIGHT_CLICK_AIR || ev.getAction() == Action.RIGHT_CLICK_BLOCK) && ev.getPlayer().getItemInHand().getType() == Material.COMPASS && p.getConfig().getBoolean("gameplay-changes.compass") && !p.getGameManager().isPlayerDead(ev.getPlayer())) {
 			Player player1 = ev.getPlayer();
 			
 			Boolean foundRottenFlesh = false;
@@ -249,9 +249,7 @@ public class UHGameplayListener implements Listener {
 			
 			Player nearest = null;
 			Double distance = 99999D;
-			for (String player2Name : p.getGameManager().getAlivePlayers()) {
-				Player player2 = p.getServer().getPlayer(player2Name);
-				
+			for (Player player2 : p.getGameManager().getAlivePlayers()) {
 				try {	
 					Double calc = player1.getLocation().distance(player2.getLocation());
 					

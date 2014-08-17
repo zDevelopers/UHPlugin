@@ -64,8 +64,8 @@ public class UHFreezer {
 		this.globalFreeze = frozen;
 		
 		if(frozen) {
-			for(String playerName : p.getGameManager().getAlivePlayers()) {
-				this.setPlayerFreezeState(p.getServer().getPlayer(playerName), true);
+			for(Player player : p.getGameManager().getAlivePlayers()) {
+				this.setPlayerFreezeState(player, true);
 			}
 			
 			// Freezes the mobs by applying a Slowness effect. There isn't any EntityMoveEvent, so...

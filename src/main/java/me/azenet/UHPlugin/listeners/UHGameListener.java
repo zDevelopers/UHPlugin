@@ -24,7 +24,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -60,7 +59,7 @@ public class UHGameListener implements Listener {
 	public void onPlayerDeath(final PlayerDeathEvent ev) {
 		// This needs to be executed only if the player die as a player, not a spectator.
 		// Also, the game needs to be started.
-		if(p.getGameManager().isPlayerDead(ev.getEntity().getName()) || !p.getGameManager().isGameRunning()) {
+		if(p.getGameManager().isPlayerDead(ev.getEntity()) || !p.getGameManager().isGameRunning()) {
 			return;
 		}
 		
@@ -78,7 +77,7 @@ public class UHGameListener implements Listener {
 		}
 		
 		// Removes the player from the alive players.
-		this.p.getGameManager().addDead(ev.getEntity().getName());
+		this.p.getGameManager().addDead(ev.getEntity());
 		
 		// Kicks the player if needed.
 		if (this.p.getConfig().getBoolean("death.kick.do", true)) {
@@ -130,7 +129,7 @@ public class UHGameListener implements Listener {
 				boolean isAliveTeam = false;
 				
 				for(Player player : team.getPlayers()) {
-					if(!p.getGameManager().isPlayerDead(player.getName())) {
+					if(!p.getGameManager().isPlayerDead(player)) {
 						isAliveTeam = true;
 						break;
 					}
@@ -214,7 +213,7 @@ public class UHGameListener implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent ev) {
-		if (this.p.getGameManager().isPlayerDead(ev.getPlayer().getName()) && !this.p.getConfig().getBoolean("death.kick.allow-reconnect", true)) {
+		if (this.p.getGameManager().isPlayerDead(ev.getPlayer()) && !this.p.getConfig().getBoolean("death.kick.allow-reconnect", true)) {
 			ev.setResult(Result.KICK_OTHER);
 			ev.setKickMessage(i.t("death.banMessage"));
 		}
