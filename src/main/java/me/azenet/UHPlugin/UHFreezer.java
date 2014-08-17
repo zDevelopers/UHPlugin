@@ -2,12 +2,15 @@ package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
 
+import me.azenet.UHPlugin.listeners.UHFreezerListener;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -16,11 +19,16 @@ public class UHFreezer {
 	
 	private UHPlugin p = null;
 	
+	private boolean isListenerRegistered = false;
+	private UHFreezerListener freezerListener = null;
+	
 	private Boolean globalFreeze = false;
 	private ArrayList<String> frozenPlayers = new ArrayList<String>();
 	
 	public UHFreezer(UHPlugin plugin) {
 		this.p = plugin;
+		
+		this.freezerListener = new UHFreezerListener(p);
 	}
 	
 	
@@ -95,6 +103,8 @@ public class UHFreezer {
 			p.getGameManager().toggleTimerPause();
 			p.getBorderManager().toggleWarningTimePause();
 		}
+		
+		updateListenerRegistration();
 	}
 	
 	/**
@@ -116,7 +126,7 @@ public class UHFreezer {
 		if(frozen && !this.frozenPlayers.contains(player.getName())) {
 			this.frozenPlayers.add(player.getName());
 			
-			// Used to prevent the player to be kiked for fly if he was frozen during a fall.
+			// Used to prevent the player to be kicked for fly if he was frozen during a fall.
 			// He is blocked inside his current block anyway.
 			player.setAllowFlight(true);
 		}
@@ -127,6 +137,8 @@ public class UHFreezer {
 				player.setAllowFlight(false);
 			}
 		}
+		
+		updateListenerRegistration();
 	}
 	
 	/**
@@ -147,10 +159,37 @@ public class UHFreezer {
 	 */
 	public void freezeCreature(Creature creature, Boolean frozen) {
 		if(frozen) {
-			creature.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10000000, 100, true));
+			// Freezes the creature for about 68 years.
+			creature.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 100, true));
 		}
 		else {
 			creature.removePotionEffect(PotionEffectType.SLOW);
+		}
+	}
+	
+	/**
+	 * Registers the listener if it wasn't registered, and unregisters this listener
+	 * if there isn't any frozen player.
+	 * 
+	 * Call this AFTER registering the first frozen player, and AFTER unregistering
+	 * the last one. 
+	 */
+	private void updateListenerRegistration() {
+		// Registers the listener if needed 
+		// (i.e if there isn't any frozen player, or if the global freeze is enabled). 
+		if(!this.isListenerRegistered) {
+			if(!this.frozenPlayers.isEmpty() || this.getGlobalFreezeState()) {
+				p.getServer().getPluginManager().registerEvents(freezerListener, p);
+				this.isListenerRegistered = true;
+			}
+		}
+		
+		// Unregister the listener if needed
+		else {
+			if(this.frozenPlayers.isEmpty() && !this.getGlobalFreezeState()) {
+				HandlerList.unregisterAll(freezerListener);
+				this.isListenerRegistered = false;
+			}
 		}
 	}
 	

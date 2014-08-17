@@ -60,7 +60,7 @@ public final class UHPlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new UHGameListener(this), this);
 		getServer().getPluginManager().registerEvents(new UHGameplayListener(this), this);
 		getServer().getPluginManager().registerEvents(new UHCraftingListener(this), this);
-		getServer().getPluginManager().registerEvents(new UHFreezerListener(this), this);
+		// The freezer listener is registered by the freezer when needed
 		
 		recipeManager.registerRecipes();
 		
