@@ -1,6 +1,7 @@
 package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import me.azenet.UHPlugin.listeners.UHFreezerListener;
 
@@ -23,7 +24,7 @@ public class UHFreezer {
 	private UHFreezerListener freezerListener = null;
 	
 	private Boolean globalFreeze = false;
-	private ArrayList<String> frozenPlayers = new ArrayList<String>();
+	private ArrayList<UUID> frozenPlayers = new ArrayList<UUID>();
 	
 	public UHFreezer(UHPlugin plugin) {
 		this.p = plugin;
@@ -43,7 +44,7 @@ public class UHFreezer {
 	 * @param to The new position from the PlayerMoveEvent
 	 */
 	public void freezePlayerIfNeeded(Player player, Location from, Location to) {
-		if(frozenPlayers.contains(player.getName())) {
+		if(frozenPlayers.contains(player.getUniqueId())) {
 			// If the X, Y or Z coordinate of the player change, he needs to be teleported inside the old block.
 			// The yaw and pitch are conserved, to teleport more smoothly.
 			if(from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() || from.getBlockZ() != to.getBlockZ()) {
@@ -116,7 +117,6 @@ public class UHFreezer {
 	 * Enables or disables the global freeze of players, mobs, timer.
 	 * 
 	 * @param freezed If true the global freeze will be enabled.
-	 * @param showStateInScoreboard If false, the freeze state will not be displayed in the scoreboard.
 	 */
 	public void setGlobalFreezeState(Boolean frozen) {
 		setGlobalFreezeState(frozen, true);
@@ -140,14 +140,14 @@ public class UHFreezer {
 	 */
 	public void setPlayerFreezeState(Player player, Boolean frozen) {
 		if(frozen && !this.frozenPlayers.contains(player.getName())) {
-			this.frozenPlayers.add(player.getName());
+			this.frozenPlayers.add(player.getUniqueId());
 			
 			// Used to prevent the player to be kicked for fly if he was frozen during a fall.
 			// He is blocked inside his current block anyway.
 			player.setAllowFlight(true);
 		}
 		else {
-			this.frozenPlayers.remove(player.getName());
+			this.frozenPlayers.remove(player.getUniqueId());
 			if(!player.getGameMode().equals(GameMode.CREATIVE)) {
 				player.setFlying(false); // just in case
 				player.setAllowFlight(false);
@@ -164,7 +164,7 @@ public class UHFreezer {
 	 * @return
 	 */
 	public boolean isPlayerFrozen(Player player) {
-		return frozenPlayers.contains(player.getName());
+		return frozenPlayers.contains(player.getUniqueId());
 	}
 	
 	/**
@@ -215,7 +215,14 @@ public class UHFreezer {
 	 * 
 	 * @return The list.
 	 */
-	public ArrayList<String> getFrozenPlayers() {
-		return this.frozenPlayers;
+	public ArrayList<Player> getFrozenPlayers() {
+		
+		ArrayList<Player> frozenPlayersList = new ArrayList<Player>();
+		
+		for(UUID id : frozenPlayers) {
+			frozenPlayersList.add(p.getServer().getPlayer(id));
+		}
+		
+		return frozenPlayersList;
 	}
 }
