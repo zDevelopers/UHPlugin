@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -116,6 +117,20 @@ public class UHFreezerListener implements Listener {
 	public void onEntityDamage(final EntityDamageEvent ev) {
 		if (ev.getEntity() instanceof Player) {
 			if (p.getFreezer().isPlayerFrozen((Player) ev.getEntity())) {
+				ev.setCancelled(true);
+			}
+		}
+	}
+	
+	/**
+	 * Used to cancel any food loss (but the players can still eat).
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onFoodUpdate(FoodLevelChangeEvent ev) {
+		if(p.getFreezer().isPlayerFrozen((Player) ev.getEntity())) {
+			if(ev.getFoodLevel() < ((Player) ev.getEntity()).getFoodLevel()) {
 				ev.setCancelled(true);
 			}
 		}
