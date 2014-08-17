@@ -82,8 +82,8 @@ public class UHFreezer {
 			}
 			
 			// Freezes the timers.
-			p.getGameManager().toggleTimerPause();
-			p.getBorderManager().toggleWarningTimePause();
+			p.getGameManager().setTimerPause(true);
+			p.getBorderManager().setWarningTimePause(true);
 		}
 		
 		else {
@@ -105,8 +105,8 @@ public class UHFreezer {
 			}
 			
 			// Unfreezes the timers.
-			p.getGameManager().toggleTimerPause();
-			p.getBorderManager().toggleWarningTimePause();
+			p.getGameManager().setTimerPause(false);
+			p.getBorderManager().setWarningTimePause(false);
 		}
 		
 		if(showStateInScoreboard || !frozen) {
@@ -142,7 +142,7 @@ public class UHFreezer {
 	 * @param freezed If true the player will be frozen. If false, unfrozen.
 	 */
 	public void setPlayerFreezeState(Player player, Boolean frozen) {
-		if(frozen && !this.frozenPlayers.contains(player.getName())) {
+		if(frozen && !this.frozenPlayers.contains(player.getUniqueId())) {
 			this.frozenPlayers.add(player.getUniqueId());
 			this.oldAllowFly.put(player.getUniqueId(), player.getAllowFlight());
 			this.oldFlyMode.put(player.getUniqueId(), player.isFlying());

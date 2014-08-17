@@ -445,14 +445,15 @@ public class UHGameManager {
 	/**
 	 * Pauses (or restarts) the timer.
 	 */
-	public void toggleTimerPause() {
+	public void setTimerPause(boolean pause) {
 		// If the game is not started, the timer is not running.
 		if(p.getGameManager().isGameRunning()) {
-			if(!this.timerPaused) {
+			// The pause is only set once (as example if the user executes /uh freeze all twice).
+			if(pause && !this.timerPaused) {
 				this.timerPaused = true;
 				this.timerPauseTime = System.currentTimeMillis();
 			}
-			else {
+			if(!pause && this.timerPaused) {
 				// We have to add to the time of the start of the episode the elapsed time
 				// during the pause.
 				this.episodeStartTime += (System.currentTimeMillis() - this.timerPauseTime);

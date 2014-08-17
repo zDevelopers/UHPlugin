@@ -244,12 +244,13 @@ public class UHBorderManager {
 	 * Toggles the pause of the warning time.
 	 * This timer is paused when the game is frozen.
 	 */
-	public void toggleWarningTimePause() {
-		if(!this.warningFinalTimePaused) {
+	public void setWarningTimePause(boolean pause) {
+		// The pause is only set once (as example if the user executes /uh freeze all twice).
+		if(pause && !this.warningFinalTimePaused) {
 			this.warningFinalTimePaused = true;
 			this.warningFinalTimePause = System.currentTimeMillis();
 		}
-		else {
+		if(!pause && this.warningFinalTimePaused) {
 			// We have to add to the time of the end of the warning the elapsed time
 			// during the pause.
 			this.warningFinalTime += (System.currentTimeMillis() - this.warningFinalTimePause);
@@ -264,7 +265,7 @@ public class UHBorderManager {
 	 */
 	public void stopWarningTime() {
 		if(this.warningFinalTimePaused) {
-			toggleWarningTimePause();
+			setWarningTimePause(false);
 		}
 		
 		this.warningFinalTimeEnabled = false;
