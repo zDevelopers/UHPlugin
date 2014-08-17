@@ -48,13 +48,8 @@ public class UHSpectatorPlusIntegration {
 		this.spAPI = sp.getAPI();
 		
 		spAPI.setCompass(true, true);
-		spAPI.setArenaClock(false, true);
 		spAPI.setSpectateOnDeath(true, true);
-		spAPI.setColouredTabList(false, true);
-		spAPI.setOutputMessages(false, true);
-		spAPI.setBlockCommands(true, true);
-		spAPI.setAllowAdminBypassCommandBlocking(true, true);
-		spAPI.setSeeSpectators(false, true);
+		spAPI.setColouredTabList(false, true); // potential conflict with our scoreboard
 		
 		this.p.getLogger().info("Successfully hooked into SpectatorPlus.");
 	}
