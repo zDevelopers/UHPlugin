@@ -1,6 +1,7 @@
 package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
@@ -16,7 +17,7 @@ public class UHTeam {
 	private String displayName = null;
 	private ChatColor color = null;
 	
-	private ArrayList<Player> players = new ArrayList<Player>();
+	private ArrayList<UUID> players = new ArrayList<UUID>();
 	
 	
 	public UHTeam(String name, ChatColor color, UHPlugin plugin) {
@@ -59,14 +60,19 @@ public class UHTeam {
 	}
 	
 	public ArrayList<Player> getPlayers() {
-		updatePlayerObjects();
-		return players;
+		ArrayList<Player> playersList = new ArrayList<Player>();
+		
+		for(UUID id : players) {
+			playersList.add(plugin.getServer().getPlayer(id));
+		}
+		
+		return playersList;
 	}
 
 	public void addPlayer(Player player) {
 		Validate.notNull(player, "The player cannot be null.");
 		
-		players.add(player);
+		players.add(player.getUniqueId());
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).addPlayer(player);
 		
 		plugin.getTeamManager().colorizePlayer(player);
@@ -75,19 +81,16 @@ public class UHTeam {
 	public void removePlayer(Player player) {
 		Validate.notNull(player, "The player cannot be null.");
 		
-		updatePlayerObjects();
-		players.remove(player);
+		players.remove(player.getUniqueId());
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).removePlayer(player);
 		
 		plugin.getTeamManager().colorizePlayer(player);
 	}
 	
 	public void deleteTeam() {
-		updatePlayerObjects();
-		
 		// We removes the players from the team (scoreboard team too)
-		for(Player player : players) {
-			removePlayer(player);
+		for(UUID id : players) {
+			removePlayer(plugin.getServer().getPlayer(id));
 		}
 		
 		// Then the scoreboard team is deleted.
@@ -98,8 +101,8 @@ public class UHTeam {
 	public boolean containsPlayer(Player player) {
 		Validate.notNull(player, "The player cannot be null.");
 		
-		for(Player playerInTeam : players) {
-			if(playerInTeam.getName().equalsIgnoreCase(player.getName())) {
+		for(UUID playerInTeamID : players) {
+			if(playerInTeamID.equals(player.getUniqueId())) {
 				return true;
 			}
 		}
@@ -109,33 +112,12 @@ public class UHTeam {
 	public void teleportTo(Location lo) {
 		Validate.notNull(lo, "The location cannot be null.");
 		
-		updatePlayerObjects();
-		for (Player p : players) {
-			p.teleport(lo);
+		for (UUID id : players) {
+			plugin.getServer().getPlayer(id).teleport(lo);
 		}
 	}
 
 	public ChatColor getChatColor() {
 		return color;
-	}
-	
-	/**
-	 * Used to handle the deconnection of a player.
-	 * This will reload the Player objects, this is absolutely vital to teleport players
-	 * deco/reconnected.
-	 */
-	private void updatePlayerObjects() {
-		ArrayList<Player> playersCopy = (ArrayList<Player>) players.clone();
-		players = new ArrayList<Player>();
-		
-		for(Player player : playersCopy) {
-			Player playerFromServer = plugin.getServer().getPlayer(player.getName());
-			if(playerFromServer != null) {
-				players.add(playerFromServer);
-			}
-			else {
-				players.add(player);
-			}
-		}
 	}
 }
