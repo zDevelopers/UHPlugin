@@ -277,7 +277,6 @@ public class UHGameListener implements Listener {
 		}
 	}
 	
-	
 	/**
 	 * Used to prevent players from placing blocks if the game is not currently running.
 	 * 
@@ -287,21 +286,6 @@ public class UHGameListener implements Listener {
 	public void onBlockPlaceEvent(final BlockPlaceEvent ev) {
 		if (!this.p.getGameManager().isGameRunning() && !((Player)ev.getPlayer()).hasPermission("uh.build")) {
 			ev.setCancelled(true);
-		}
-	}
-	
-	
-	/**
-	 * Used to prevent the player to go outside the border.
-	 * 
-	 * @param ev
-	 */
-	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent ev) {
-		if(!p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
-			if(!p.getBorderManager().isInsideBorder(ev.getTo(), p.getBorderManager().getCheckDiameter())) {
-				ev.setCancelled(true);
-			}
 		}
 	}
 }

@@ -11,12 +11,12 @@ keys:
         recipeMelon: "Recette du melon scintillant ajoutée."
         loaded: "Plugin Ultra Hardcore chargé."
         
-        WBNotInstalled1: "{ce}WorldBorder n'est pas installé, vous devriez l'utiliser avec le plugin Ultra Hardcore."
-        WBNotInstalled2: "{gray}Pourquoi ? Optimisation de la surveillance des bordures, pré-génération du monde (fill)... De plus, la bordure peut être réduite durant le jeu."
-        WBNotInstalled3: "{gray}Vous n'avez qu'à mettre le JAR de WorldBorder dans le dossier plugins, UHPlugin va automatiquement le configurer."
+        WBNotInstalled1: "{darkred}[UHC] {ce}WorldBorder pas installé : bordures non surveillées !"
+        WBNotInstalled2: "{gray}Aussi, sans WorldBorder, impossible de réduire la bordure pendant le jeu (sauf avertissements)."
+        WBNotInstalled3: "{gray}Installez le plugin ; UHPlugin va automatiquement le configurer."
         
-        SPNotInstalled1: "{ce}SpectatorPlus n'est pas installé, vous devriez l'utiliser avec le plugin Ultra Hardcore."
-        SPNotInstalled2: "{gray}Installez le plugin, et UHPlugin va automatiquement le configurer."
+        SPNotInstalled1: "{darkred}[UHC] {ce}SpectatorPlus n'est pas installé."
+        SPNotInstalled2: "{gray}Si vous voulez un mode spectateur, installez le plugin ; UHPlugin va automatiquement le configurer."
         
     cmd:
         errorLoad: "{ce}Une erreur est survenue, consultez la console pour plus de détails. Il s'agit probablement d'un bug."

@@ -11,12 +11,12 @@ keys:
         recipeMelon: "Added new recipe for golden melon."
         loaded: "Ultra Hardcore plugin loaded."
         
-        WBNotInstalled1: "{ce}WorldBorder is not installed, you should use it with the Ultra Hardcore plugin."
-        WBNotInstalled2: "{gray}Why? Optimized border check, pre-generated world (fill)... Also, the border can be reduced during the game."
-        WBNotInstalled3: "{gray}It's as simple as putting the WorldBorder jar inside the plugins directory, UHPlugin will automatically configure it."
+        WBNotInstalled1: "{darkred}[UHC] {ce}WorldBorder is not installed: no borders' check!"
+        WBNotInstalled2: "{gray}Also, without WorldBorder, the border can't be reduced during the game (warnings excluded)."
+        WBNotInstalled3: "{gray}Just install the plugin; UHPlugin will automatically configure it."
         
-        SPNotInstalled1: "{ce}SpectatorPlus is not installed, you should use it with the Ultra Hardcore plugin."
-        SPNotInstalled2: "{gray}Just install the plugin, and UHPlugin will configure it automatically."
+        SPNotInstalled1: "{darkred}[UHC] {ce}SpectatorPlus is not installed."
+        SPNotInstalled2: "{gray}If you want a spectator mode, install the plugin; UHPlugin will configure it automatically."
         
     cmd:
         errorLoad: "{ce}An error occurred, see console for details. This is probably a bug."
