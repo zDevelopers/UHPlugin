@@ -385,10 +385,14 @@ public class UHGameManager {
 	
 	/**
 	 * Broadcast the start message and change the state of the game.
+	 * Also, force the global freeze start to false, to avoid toggle bugs (like inverted state).
 	 */
 	private void finalizeStart() {
 		Bukkit.getServer().broadcastMessage(i.t("start.go"));
 		this.scoreboardManager.updateScoreboard();
+		
+		p.getFreezer().setGlobalFreezeState(false);
+		
 		this.gameRunning = true;
 	}
 	
