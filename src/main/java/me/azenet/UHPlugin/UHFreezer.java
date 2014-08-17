@@ -1,6 +1,7 @@
 package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import me.azenet.UHPlugin.listeners.UHFreezerListener;
@@ -25,6 +26,8 @@ public class UHFreezer {
 	
 	private Boolean globalFreeze = false;
 	private ArrayList<UUID> frozenPlayers = new ArrayList<UUID>();
+	private HashMap<UUID,Boolean> oldAllowFly = new HashMap<UUID,Boolean>();
+	private HashMap<UUID,Boolean> oldFlyMode = new HashMap<UUID,Boolean>();
 	
 	public UHFreezer(UHPlugin plugin) {
 		this.p = plugin;
@@ -141,6 +144,8 @@ public class UHFreezer {
 	public void setPlayerFreezeState(Player player, Boolean frozen) {
 		if(frozen && !this.frozenPlayers.contains(player.getName())) {
 			this.frozenPlayers.add(player.getUniqueId());
+			this.oldAllowFly.put(player.getUniqueId(), player.getAllowFlight());
+			this.oldFlyMode.put(player.getUniqueId(), player.isFlying());
 			
 			// Used to prevent the player to be kicked for fly if he was frozen during a fall.
 			// He is blocked inside his current block anyway.
@@ -148,10 +153,12 @@ public class UHFreezer {
 		}
 		else {
 			this.frozenPlayers.remove(player.getUniqueId());
-			if(!player.getGameMode().equals(GameMode.CREATIVE)) {
-				player.setFlying(false); // just in case
-				player.setAllowFlight(false);
-			}
+			
+			player.setFlying(this.oldFlyMode.get(player.getUniqueId()));
+			player.setAllowFlight(this.oldAllowFly.get(player.getUniqueId()));
+			
+			this.oldAllowFly.remove(player.getUniqueId());
+			this.oldFlyMode.remove(player.getUniqueId());
 		}
 		
 		updateListenerRegistration();
