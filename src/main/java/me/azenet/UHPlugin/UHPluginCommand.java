@@ -295,7 +295,7 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 			else {
 				Player pl = (Player) sender; // Just a way to avoid casts everywhere.
-				p.getGameManager().addLocation(pl.getLocation().getBlockX(), pl.getLocation().getBlockZ());
+				p.getGameManager().addSpawnpoint(pl.getLocation().getBlockX(), pl.getLocation().getBlockZ());
 				sender.sendMessage(i.t("addspawn.added", String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
 			}
 		}
@@ -304,7 +304,7 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("addspawn.usage"));
 		}
 		else {
-			p.getGameManager().addLocation(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+			p.getGameManager().addSpawnpoint(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 			sender.sendMessage(i.t("addspawn.added", args[1], args[2]));
 		}
 	}

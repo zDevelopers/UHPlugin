@@ -82,11 +82,10 @@ public class UHGameplayListener implements Listener {
 	 * 
 	 * @param ev
 	 */
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler
 	public void onInventoryDrag(InventoryDragEvent ev) {
 		if(p.getConfig().getBoolean("gameplay-changes.disableLevelIIPotions") && ev.getInventory() instanceof BrewerInventory) {
-			BukkitRunnable cancelBrewTask = new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked());
-			cancelBrewTask.runTaskLater(p, 1l);
+			new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()).runTaskLater(p, 1l);
 		}
 	}
 	
@@ -95,13 +94,10 @@ public class UHGameplayListener implements Listener {
 	 * 
 	 * @param ev
 	 */
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler
 	public void onInventoryClick(InventoryClickEvent ev) {
-		if(ev.getInventory() instanceof BrewerInventory) {
-			if(p.getConfig().getBoolean("gameplay-changes.disableLevelIIPotions")) {
-				BukkitRunnable cancelBrewTask = new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked());
-				cancelBrewTask.runTaskLater(p, 1l);
-			}
+		if(p.getConfig().getBoolean("gameplay-changes.disableLevelIIPotions") && ev.getInventory() instanceof BrewerInventory) {
+			new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()).runTaskLater(p, 1l);
 		}
 	}
 	
@@ -116,7 +112,7 @@ public class UHGameplayListener implements Listener {
 		if(p.getConfig().getBoolean("gameplay-changes.disableEnderpearlsDamages")) {
 			if(ev.getCause() == TeleportCause.ENDER_PEARL) {
 				ev.setCancelled(true);
-				ev.getPlayer().teleport(ev.getTo());
+				ev.getPlayer().teleport(ev.getTo(), TeleportCause.ENDER_PEARL);
 			}
 		}
 	}
@@ -197,12 +193,7 @@ public class UHGameplayListener implements Listener {
 						// The original, vanilla, effect is removed
 						ev.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
 						
-						
 						int duration = ((int) Math.floor(TICKS_BETWEEN_EACH_REGENERATION / (Math.pow(2, realLevel)))) * healthApplied;
-						
-						p.getLogger().info(String.valueOf(healthApplied));
-						p.getLogger().info(String.valueOf(Math.floor(TICKS_BETWEEN_EACH_REGENERATION / (Math.pow(2, realLevel)))));
-						p.getLogger().info(String.valueOf(duration));
 						
 						new PotionEffect(PotionEffectType.REGENERATION, duration, realLevel).apply(ev.getPlayer());
 					}
@@ -255,7 +246,7 @@ public class UHGameplayListener implements Listener {
 					
 					if (calc > 1 && calc < distance) {
 						distance = calc;
-						if (player2.getName() != player1.getName() && !this.p.getTeamManager().inSameTeam(player1, player2)) {
+						if (!player2.getUniqueId().equals(player1.getUniqueId()) && !p.getTeamManager().inSameTeam(player1, player2)) {
 							nearest = player2.getPlayer();
 						}
 					}

@@ -31,7 +31,6 @@ public class UHWorldBorderIntegration {
 		try {
 			Class.forName("com.wimbli.WorldBorder.BorderData");
 			Class.forName("com.wimbli.WorldBorder.Config");
-			
 		}
 		catch(ClassNotFoundException e) {
 			p.getLogger().warning("WorldBorder is available, but the version you are using is too old.");

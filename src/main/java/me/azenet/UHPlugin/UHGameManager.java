@@ -32,7 +32,7 @@ public class UHGameManager {
 	private Boolean damageIsOn = false;
 	private UHScoreboardManager scoreboardManager = null;
 
-	private LinkedList<Location> loc = new LinkedList<Location>();
+	private LinkedList<Location> spawnPoints = new LinkedList<Location>();
 	private HashSet<String> players = new HashSet<String>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available 
 	private HashSet<UUID> alivePlayers = new HashSet<UUID>();
 	private HashSet<UUID> spectators = new HashSet<UUID>();
@@ -234,7 +234,7 @@ public class UHGameManager {
 		
 		this.aliveTeamsCount = tm.getTeams().size();
 		
-		if(loc.size() < tm.getTeams().size()) {
+		if(spawnPoints.size() < tm.getTeams().size()) {
 			sender.sendMessage(i.t("start.notEnoughTP"));
 			
 			// We clears the teams if the game was in solo-mode, to avoid a team-counter to be displayed on the next start
@@ -249,7 +249,7 @@ public class UHGameManager {
 		
 		// Standard mode
 		if(slow == false) {
-			LinkedList<Location> unusedTP = loc;
+			LinkedList<Location> unusedTP = spawnPoints;
 			for (final UHTeam t : tm.getTeams()) {
 				final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
 				
@@ -284,7 +284,7 @@ public class UHGameManager {
 			
 			// TP
 			
-			LinkedList<Location> unusedTP = loc;
+			LinkedList<Location> unusedTP = spawnPoints;
 			Integer teamsTeleported = 1;
 			Integer delayBetweenTP = p.getConfig().getInt("slow-start.delayBetweenTP");
 			
@@ -692,8 +692,8 @@ public class UHGameManager {
 	 * @param x
 	 * @param z
 	 */
-	public void addLocation(int x, int z) {
-		loc.add(new Location(p.getServer().getWorlds().get(0), x, p.getServer().getWorlds().get(0).getHighestBlockYAt(x,z)+120, z));
+	public void addSpawnpoint(int x, int z) {
+		spawnPoints.add(new Location(p.getServer().getWorlds().get(0), x, p.getServer().getWorlds().get(0).getHighestBlockYAt(x,z)+120, z));
 	}
 	
 	public int importSpawnPointsFromConfig() {
@@ -703,7 +703,7 @@ public class UHGameManager {
 				if(position instanceof String && position != null) {
 					String[] coords = ((String) position).split(",");
 					try {
-						addLocation(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+						addSpawnpoint(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
 						p.getLogger().info(i.t("load.spawnPointAdded", coords[0], coords[1]));
 						spawnCount++;
 					} catch(Exception e) { // Not an integer or not enough coords
