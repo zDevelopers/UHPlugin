@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import me.azenet.UHPlugin.listeners.UHFreezerListener;
 
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Creature;
@@ -151,7 +150,8 @@ public class UHFreezer {
 			// He is blocked inside his current block anyway.
 			player.setAllowFlight(true);
 		}
-		else {
+		
+		if(!frozen && this.frozenPlayers.contains(player.getUniqueId())) {
 			this.frozenPlayers.remove(player.getUniqueId());
 			
 			player.setFlying(this.oldFlyMode.get(player.getUniqueId()));

@@ -44,11 +44,10 @@ public class CancelBrewTask extends BukkitRunnable {
 				
 				if(!added) {
 					// Failed... We adds the glowstone to the first empty slot found.
-					added = false;
 					
 					Integer slotEmpty = whoClicked.getInventory().firstEmpty();
 					
-					if(slotEmpty != -1) { // -1 is returned if there isn't any enpty slot
+					if(slotEmpty != -1) { // -1 is returned if there isn't any empty slot
 						whoClicked.getInventory().setItem(slotEmpty, ingredient);
 					}
 					else {

@@ -19,7 +19,7 @@ public class UHTeamManager {
 	/**
 	 * Adds a team.
 	 * 
-	 * @param color The color. This must be a valid Minecraft color name.
+	 * @param color The color.
 	 * @param name The name of the team.
 	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */

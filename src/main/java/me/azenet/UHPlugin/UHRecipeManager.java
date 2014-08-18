@@ -143,7 +143,7 @@ public class UHRecipeManager {
 	}
 	
 	/**
-	 * Change the name of the result item of the anti-lore recipe,
+	 * Changes the name of the result item of the anti-lore recipe,
 	 * to keep the same name than the original.
 	 * 
 	 * @param recipe The recipe.
