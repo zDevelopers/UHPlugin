@@ -140,6 +140,7 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param error True if the help is printed because the user typed an unknown command.
 	 */
 	private void help(CommandSender sender, boolean error) {
+		if(sender instanceof Player) sender.sendMessage("");
 		sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 		
 		if(error) {
@@ -322,6 +323,9 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doTeam(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // No action provided: doc
+			if(sender instanceof Player) sender.sendMessage("");
+			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+			
 			sender.sendMessage(i.t("cmd.teamHelpAvailable"));
 			sender.sendMessage(i.t("cmd.teamHelpAdd"));
 			sender.sendMessage(i.t("cmd.teamHelpAddName"));
@@ -680,6 +684,9 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doSpec(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // /uh spec
+			if(sender instanceof Player) sender.sendMessage("");
+			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+			
 			sender.sendMessage(i.t("cmd.specHelpAvailable"));
 			if(!p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
 				sender.sendMessage(i.t("cmd.specHelpNoticeSpectatorPlusNotInstalled"));
@@ -752,6 +759,9 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doBorder(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // /uh border
+			if(sender instanceof Player) sender.sendMessage("");
+			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+			
 			sender.sendMessage(i.t("cmd.borderHelpAvailable"));
 			sender.sendMessage(i.t("cmd.borderHelpCurrent"));
 			sender.sendMessage(i.t("cmd.borderHelpSet"));
@@ -919,6 +929,9 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doFreeze(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // /uh freeze
+			if(sender instanceof Player) sender.sendMessage("");
+			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+			
 			sender.sendMessage(i.t("cmd.freezeHelpOn"));
 			sender.sendMessage(i.t("cmd.freezeHelpOff"));
 			sender.sendMessage(i.t("cmd.freezeHelpAll"));
