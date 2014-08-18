@@ -696,6 +696,28 @@ public class UHGameManager {
 		loc.add(new Location(p.getServer().getWorlds().get(0), x, p.getServer().getWorlds().get(0).getHighestBlockYAt(x,z)+120, z));
 	}
 	
+	public int importSpawnPointsFromConfig() {
+		if(p.getConfig().getList("spawnpoints") != null) {
+			int spawnCount = 0;
+			for(Object position : p.getConfig().getList("spawnpoints")) {
+				if(position instanceof String && position != null) {
+					String[] coords = ((String) position).split(",");
+					try {
+						addLocation(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+						p.getLogger().info(i.t("load.spawnPointAdded", coords[0], coords[1]));
+						spawnCount++;
+					} catch(Exception e) { // Not an integer or not enough coords
+						p.getLogger().warning(i.t("load.invalidSpawnPoint", (String) position));
+					}
+				}
+			}
+			
+			return spawnCount;
+		}
+		
+		return 0;
+	}
+	
 	/**
 	 * Returns true if the game was launched.
 	 * 

@@ -2,17 +2,21 @@ package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
 
+import me.azenet.UHPlugin.i18n.I18n;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class UHTeamManager {
 	
 	private UHPlugin p = null;
+	private I18n i = null;
 	private ArrayList<UHTeam> teams = new ArrayList<UHTeam>();
 	
 	
 	public UHTeamManager(UHPlugin plugin) {
 		this.p = plugin;
+		this.i = p.getI18n();
 	}
 
 	
@@ -171,6 +175,45 @@ public class UHTeamManager {
 	 */
 	public boolean inSameTeam(Player pl, Player pl2) {
 		return (getTeamForPlayer(pl).equals(getTeamForPlayer(pl2)));
+	}
+	
+	/**
+	 * Imports the teams from the configuration.
+	 * 
+	 * @return The number of teams imported.
+	 */
+	public int importTeamsFromConfig() {
+		if(p.getConfig().getList("teams") != null) {
+			int teamsCount = 0;
+			for(Object teamRaw : p.getConfig().getList("teams")) {
+				if(teamRaw instanceof String && teamRaw != null) {
+					String[] teamRawSeparated = ((String) teamRaw).split(",");
+					ChatColor color = getChatColorByName(teamRawSeparated[0]);
+					if(color == null) {
+						p.getLogger().warning(i.t("load.invalidTeam", (String) teamRaw));
+					}
+					else {
+						if(teamRawSeparated.length == 2) { // "color,name"
+							addTeam(color, teamRawSeparated[1]);
+							p.getLogger().info(i.t("load.namedTeamAdded", teamRawSeparated[1],teamRawSeparated[0]));
+							teamsCount++;
+						}
+						else if(teamRawSeparated.length == 1) { // "color"
+							addTeam(color, teamRawSeparated[0]);
+							p.getLogger().info(i.t("load.teamAdded", teamRawSeparated[0]));
+							teamsCount++;
+						}
+						else {
+							p.getLogger().warning(i.t("load.invalidTeam", (String) teamRaw));
+						}
+					}
+				}
+			}
+			
+			return teamsCount;
+		}
+		
+		return 0;
 	}
 	
 	

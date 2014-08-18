@@ -72,45 +72,10 @@ public final class UHPlugin extends JavaPlugin {
 		}
 		
 		// Import spawnpoints from config
-		if(getConfig().getList("spawnpoints") != null) {
-			for(Object position : getConfig().getList("spawnpoints")) {
-				if(position instanceof String && position != null) {
-					String[] coords = ((String) position).split(",");
-					try {
-						gameManager.addLocation(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
-						getLogger().info(i18n.t("load.spawnPointAdded", coords[0], coords[1]));
-					} catch(Exception e) { // Not an integer or not enough coords
-						getLogger().warning(i18n.t("load.invalidSpawnPoint", (String) position));
-					}
-				}
-			}
-		}
+		this.gameManager.importSpawnPointsFromConfig();
 		
 		// Import teams from config
-		if(getConfig().getList("teams") != null) {
-			for(Object teamRaw : getConfig().getList("teams")) {
-				if(teamRaw instanceof String && teamRaw != null) {
-					String[] teamRawSeparated = ((String) teamRaw).split(",");
-					ChatColor color = this.teamManager.getChatColorByName(teamRawSeparated[0]);
-					if(color == null) {
-						getLogger().warning(i18n.t("load.invalidTeam", (String) teamRaw));
-					}
-					else {
-						if(teamRawSeparated.length == 2) { // "color,name"
-							this.teamManager.addTeam(color, teamRawSeparated[1]);
-							getLogger().info(i18n.t("load.namedTeamAdded", teamRawSeparated[1],teamRawSeparated[0]));
-						}
-						else if(teamRawSeparated.length == 1) { // "color"
-							this.teamManager.addTeam(color, teamRawSeparated[0]);
-							getLogger().info(i18n.t("load.teamAdded", teamRawSeparated[0]));
-						}
-						else {
-							getLogger().warning(i18n.t("load.invalidTeam", (String) teamRaw));
-						}
-					}
-				}
-			}
-		}
+		this.teamManager.importTeamsFromConfig();
 		
 		getLogger().info(i18n.t("load.loaded"));
 	}
