@@ -36,7 +36,11 @@ public final class UHPlugin extends JavaPlugin {
 			i18n = new I18n(this);
 		}
 		else {
-			i18n = new I18n(this, getConfig().getString("lang"));
+			try {
+				i18n = new I18n(this, getConfig().getString("lang"));
+			} catch(IllegalArgumentException e) {
+				i18n = new I18n(this);
+			}
 		}
 		
 		teamManager = new UHTeamManager(this);
