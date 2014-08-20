@@ -260,6 +260,8 @@ public class UHPluginCommand implements CommandExecutor {
 		sender.sendMessage(i.t("about.i18n.title"));
 		sender.sendMessage(i.t("about.i18n.selected", i.getSelectedLanguage(), i.getTranslator(i.getSelectedLanguage())));
 		sender.sendMessage(i.t("about.i18n.fallback", i.getDefaultLanguage(), i.getTranslator(i.getDefaultLanguage())));
+		sender.sendMessage(i.t("about.license.title"));
+		sender.sendMessage(i.t("about.license.license"));
 	}
 	
 	/**

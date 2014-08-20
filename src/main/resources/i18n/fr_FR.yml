@@ -81,8 +81,11 @@ keys:
         
         i18n:
             title: "{aqua}------ Traductions ------"
-            selected: "Langue courante : {0} (traduit par {1})"
-            fallback: "Langue par défaut : {0} (traduit par {1})"
+            selected: "Langue courante : {0} (traduit par {1})."
+            fallback: "Langue par défaut : {0} (traduit par {1})."
+        license:
+            title: "{aqua}------ Licence ------"
+            license: "Publié sous licence générale publique GNU (version 3)."
     
     start:
         already: "{ce}Le jeu est déjà démarré ! Rechargez ou redémarrez le serveur pour redémarrer."
