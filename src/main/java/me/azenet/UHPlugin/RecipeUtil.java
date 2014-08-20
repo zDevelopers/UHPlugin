@@ -1,6 +1,4 @@
-package me.azenet.UHPlugin;
-
-/*
+/**
  * RecipeUtil.java
  *
  * Copyright (c) 2014 Graham Howden <graham_howden1 at yahoo.co.uk>.
@@ -21,6 +19,7 @@ package me.azenet.UHPlugin;
  * along with UltraHardcore.  If not, see <http ://www.gnu.org/licenses/>.
  */
 
+package me.azenet.UHPlugin;
 
 import java.util.Arrays;
 import java.util.LinkedList;
