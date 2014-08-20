@@ -35,7 +35,6 @@ keys:
         helpAddspawn: "{cc}/uh addspawn {ci}: ajoute un point de démarrage pour une équipe ou un joueur, à la position de l'exécutant."
         helpAddspawnXZ: "{cc}/uh addspawn <x> <z> {ci}: ajoute un point de démarrage pour une équipe ou un joueur, aux coordonnées données."
         helpSpec: "{cc}/uh spec {ci}: gère les spectateurs. Exécutez /uh spec pour plus de détails."
-        helpFreeze: "{cc}/uh freeze {ci}: (dés)immobilise l'ensemble du jeu, ou un joueur. Consultez /uh freeze pour plus de détails."
         helpWall: "{cc}/uh generatewalls {ci}: génère les murs suivant la configuration."
         helpBorder: "{cc}/uh border {ci}: gère la bordure. Exécutez /uh border pour plus de détails."
         
@@ -44,6 +43,10 @@ keys:
         helpHealall: "{cc}/uh healall [demi-coeurs=20] {ci}: change la vie de tous les joueurs, et non d'un seul."
         helpResurrect: "{cc}/uh resurrect <joueur> {ci}: fait revivre un joueur."
         helpTpback: "{cc}/uh tpback <joueur> [force] {ci}: téléporte un joueur au lieu de sa mort en toute sécurité."
+        
+        titleMiscCmd: "{aqua}------ Commandes diverses ------"
+        helpFreeze: "{cc}/uh freeze {ci}: (dés)immobilise l'ensemble du jeu, ou un joueur. Consultez /uh freeze pour plus de détails."
+        helpAbout: "{cc}/uh about {ci}: informations à propos du plugin et des traductions"
         
         teamHelpAvailable: "{ci}Les options disponibles sont listées ci-dessous."
         teamHelpAdd: "{cc}/uh team add <couleur> {ci}: ajoute une équipe de la couleur donnée."
@@ -71,6 +74,15 @@ keys:
         borderHelpWarning: "{cc}/uh border warning <futurDiamètre> [minutesAvantRéduction]{ci}: avertit tous les joueurs hors de la future bordure donnée. Ce n'est qu'un avertissement, rien de plus."
         borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: annule un précédent avertissement."
         borderHelpCheck: "{cc}/uh border check <diamètre>{ci}: retourne la liste des joueurs hors de la bordure."
+    
+    about:
+        authors: "Plugin réalisé avec amour par {0}."
+        and: "et"
+        
+        i18n:
+            title: "{aqua}------ Traductions ------"
+            selected: "Langue courante : {0} (traduit par {1})"
+            fallback: "Langue par défaut : {0} (traduit par {1})"
     
     start:
         already: "{ce}Le jeu est déjà démarré ! Rechargez ou redémarrez le serveur pour redémarrer."

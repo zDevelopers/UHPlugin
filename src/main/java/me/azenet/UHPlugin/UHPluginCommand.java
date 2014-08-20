@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import me.azenet.UHPlugin.i18n.I18n;
 
@@ -33,6 +34,7 @@ public class UHPluginCommand implements CommandExecutor {
 		this.p = p;
 		this.i = p.getI18n();
 		
+		commands.add("about");
 		commands.add("start");
 		commands.add("shift");
 		commands.add("team");
@@ -158,7 +160,6 @@ public class UHPluginCommand implements CommandExecutor {
 		sender.sendMessage(i.t("cmd.helpAddspawn"));
 		sender.sendMessage(i.t("cmd.helpAddspawnXZ"));
 		sender.sendMessage(i.t("cmd.helpSpec"));
-		sender.sendMessage(i.t("cmd.helpFreeze"));
 		sender.sendMessage(i.t("cmd.helpWall"));
 		sender.sendMessage(i.t("cmd.helpBorder"));
 		
@@ -167,6 +168,10 @@ public class UHPluginCommand implements CommandExecutor {
 		sender.sendMessage(i.t("cmd.helpHealall"));
 		sender.sendMessage(i.t("cmd.helpResurrect"));
 		sender.sendMessage(i.t("cmd.helpTpback"));
+		
+		sender.sendMessage(i.t("cmd.titleMiscCmd"));
+		sender.sendMessage(i.t("cmd.helpFreeze"));
+		sender.sendMessage(i.t("cmd.helpAbout"));
 	}
 	
 	/**
@@ -200,6 +205,42 @@ public class UHPluginCommand implements CommandExecutor {
 	 */
 	private void unauthorized(CommandSender sender, Command command) {
 		sender.sendMessage(i.t("cmd.errorUnauthorized"));
+	}
+	
+	
+	/**
+	 * This command prints some informations about the plugin and the translation.
+	 * Usage: /uh about
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doAbout(CommandSender sender, Command command, String label, String[] args) {
+		if(sender instanceof Player) sender.sendMessage("");
+		sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+		
+		String authors = "";
+		List<String> listAuthors = p.getDescription().getAuthors();
+		for(String author : listAuthors) {
+			if(author == listAuthors.get(0)) {
+				// Nothing
+			}
+			else if(author == listAuthors.get(listAuthors.size() - 1)) {
+				authors += " " + i.t("about.and") + " ";
+			}
+			else {
+				authors += ", ";
+			}
+			authors += author;
+		}
+		sender.sendMessage(i.t("about.authors", authors));
+		
+		sender.sendMessage(i.t("about.i18n.title"));
+		sender.sendMessage(i.t("about.i18n.selected", i.getSelectedLanguage(), i.getTranslator(i.getSelectedLanguage())));
+		sender.sendMessage(i.t("about.i18n.fallback", i.getDefaultLanguage(), i.getTranslator(i.getDefaultLanguage())));
 	}
 	
 	/**

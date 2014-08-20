@@ -35,7 +35,6 @@ keys:
         helpAddspawn: "{cc}/uh addspawn {ci}: adds a spawn point for a team or a player, at the current location of the sender."
         helpAddspawnXZ: "{cc}/uh addspawn <x> <z> {ci}: adds a spawn point for a team or a player, at the provided coordinates."
         helpSpec: "{cc}/uh spec {ci}: manages the spectators. Execute /uh spec for details."
-        helpFreeze: "{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."
         helpWall: "{cc}/uh generatewalls {ci}: generates the walls according to the configuration."
         helpBorder: "{cc}/uh border {ci}: manages borders. Execute /uh border for details."
         
@@ -45,13 +44,17 @@ keys:
         helpResurrect: "{cc}/uh resurrect <player> {ci}: resurrects a player."
         helpTpback: "{cc}/uh tpback <player> [force] {ci}: safely teleports back a player to his death location."
         
+        titleMiscCmd: "{aqua}------ Miscellaneous commands ------"
+        helpFreeze: "{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."
+        helpAbout: "{cc}/uh about {ci}: informations about the plugin and the translation"
+        
         teamHelpAvailable: "{ci}Available options are listed below."
         teamHelpAdd: "{cc}/uh team add <color> {ci}: adds a team with the provided color."
         teamHelpAddName: "{cc}/uh team add <color> <name ...> {ci}: adds a named team with the provided name and color."
         teamHelpRemove: "{cc}/uh team remove <name ...> {ci}: removes a team"
         teamHelpAddplayer: "{cc}/uh team addplayer <player> <teamName ...>{ci}: adds a player inside the given team. The name of the team is it color, or the explicit name given."
         teamHelpRemoveplayer: "{cc}/uh team removeplayer <player> {ci}: removes a player from his team."
-        teamHelpList: "{cc}/uh team list {ci}: list the teams and their players."
+        teamHelpList: "{cc}/uh team list {ci}: lists the teams and their players."
         teamHelpReset: "{cc}/uh team reset {ci}: removes all teams."
         
         specHelpAvailable: "{ci}Available options are listed below."
@@ -67,11 +70,19 @@ keys:
         
         borderHelpAvailable: "{ci}Available options are listed below."
         borderHelpCurrent: "{cc}/uh border current{ci}: returns the current size of the map."
-        borderHelpSet: "{cc}/uh border set <diameter> [force]{ci}: change the size of the map. If force is not given, the operation will be canceled if there is a player outside the border."
+        borderHelpSet: "{cc}/uh border set <diameter> [force]{ci}: changes the size of the map. If force is not given, the operation will be canceled if there is a player outside the border."
         borderHelpWarning: "{cc}/uh border warning <futureDiameter> [minutesBeforeReduction]{ci}: warns all players outside the given future diameter. It's just a notice, nothing else."
         borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: cancels a previously-set warning."
         borderHelpCheck: "{cc}/uh border check <diameter>{ci}: returns a list of the players outside the given border size."
         
+    about:
+        authors: "Plugin made with love by {0}."
+        and: "and"
+        
+        i18n:
+            title: "{aqua}------ Translations ------"
+            selected: "Current language: {0} (translated by {1})"
+            fallback: "Fallback language: {0} (translated by {1})"
     
     start:
         already: "{ce}The game is already started! Reload or restart the server to restart the game."

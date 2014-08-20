@@ -23,11 +23,14 @@ permissions:
         description: Gives access to all Ultra Hardcore commands.
         children:
             uh.build: true
+            uh.about: true
             uh.start: true
             uh.shift: true
             uh.team: true
             uh.addspawn: true
             uh.generatewalls: true
+            uh.freeze: true
+            uh.border: true
             uh.heal: true
             uh.healall: true
             uh.tpback: true
@@ -36,6 +39,9 @@ permissions:
     uh.build:
         description: Allows an user to build before the beginning of the game
         default: op
+    uh.about:
+        description: Prints some informations about the plugin and the translation.
+        default: true
     uh.start:
         description: Allows an user to start the game with /uh start
         default: op
@@ -50,6 +56,9 @@ permissions:
         default: op
     uh.generatewalls:
         description: Allows an user to generate the walls around the map
+        default: op
+    uh.freeze:
+        description: Allows an user to freeze the players
         default: op
     uh.border:
         description: Allows an user to manage the border using /uh border *

@@ -100,6 +100,37 @@ public class I18n {
 	}
 	
 	/**
+	 * Returns the translator of the given language.
+	 * 
+	 * @param lang The language.
+	 * @return The translator, or null if not defined.
+	 */
+	public String getTranslator(String lang) {
+		if(this.languageSource.get(lang) == null) {
+			return null;
+		}
+		return this.languageSource.get(lang).getString("author");
+	}
+	
+	/**
+	 * Returns the selected language.
+	 * 
+	 * @return The code of the language (ex. en_US).
+	 */
+	public String getSelectedLanguage() {
+		return this.selectedLanguage;
+	}
+	
+	/**
+	 * Returns the default (fallback) language.
+	 * 
+	 * @return The code of the language (ex. en_US).
+	 */
+	public String getDefaultLanguage() {
+		return this.defaultLanguage;
+	}
+	
+	/**
 	 * Returns the translated value associated to a key.
 	 * 
 	 * @param key The key.
