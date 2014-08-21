@@ -851,7 +851,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command manages borders (gets current, checks if players are out, sets a new size, warnings players
-	 * about the futur size).
+	 * about the future size).
 	 * 
 	 * @param sender
 	 * @param command

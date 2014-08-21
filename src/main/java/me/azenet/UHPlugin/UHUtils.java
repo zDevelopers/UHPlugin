@@ -128,7 +128,7 @@ public class UHUtils {
 	/**
 	 * Checks if a given location is safe.
 	 * A safe location is a location with two breathable blocks (aka transparent block or water)
-	 * over something solid
+	 * over something solid (or water).
 	 * 
 	 * @param location
 	 * @return true if the location is safe.
@@ -142,12 +142,16 @@ public class UHUtils {
 				&& (blockAbove.getType().isTransparent() || (blockAbove.isLiquid() && !blockAbove.getType().equals(Material.LAVA) && !blockCenter.getType().equals(Material.STATIONARY_LAVA)))) {
 			// two breathable blocks: ok
 			
-			if(blockBelow.getType().isSolid()) {
-				// The block below is solid 
+			if(blockBelow.getType().isSolid() || blockBelow.getType().equals(Material.WATER) || blockBelow.equals(Material.STATIONARY_WATER)) {
+				// The block below is solid, or liquid (but not lava)
 				return true;
 			}
+			else {
+				return false;
+			}
+		}
+		else {
 			return false;
 		}
-		return false;
 	}
 }
