@@ -20,12 +20,12 @@ keys:
         
     cmd:
         errorLoad: "{ce}Une erreur est survenue, consultez la console pour plus de détails. Il s'agit probablement d'un bug."
-        errorUnknown: "{ce}Cette commande n'existe pas."
+        errorUnknown: "{ce}Cette commande n'existe pas. Tapez /uh pour la liste des commandes."
         errorUnauthorized: "{ce}lolnope"
         
         titleHelp: "{yellow}{0} - version {1}"
-        inviteHelp: "{ci}Les commandes disponibles sont listées ci-dessous."
         legendHelp: "{ci}Légende: {cc}/uh command <requis> [optionnel=valeur par défaut] <espaces autorisées ...>{ci}."
+        helpNextPage: "{gray}Page suivante : /uh {0}"
         
         titleGameCmd: "{aqua}------ Commandes liées au jeu ------"
         helpStart: "{cc}/uh start {ci}: lance le jeu."
@@ -46,9 +46,9 @@ keys:
         
         titleMiscCmd: "{aqua}------ Commandes diverses ------"
         helpFreeze: "{cc}/uh freeze {ci}: (dés)immobilise l'ensemble du jeu, ou un joueur. Consultez /uh freeze pour plus de détails."
-        helpAbout: "{cc}/uh about {ci}: informations à propos du plugin et des traductions"
+        helpAbout: "{cc}/uh about {ci}: informations à propos du plugin et des traductions."
         
-        teamHelpAvailable: "{ci}Les options disponibles sont listées ci-dessous."
+        teamHelpTitle: "{aqua}------ Commandes liées aux équipes ------"
         teamHelpAdd: "{cc}/uh team add <couleur> {ci}: ajoute une équipe de la couleur donnée."
         teamHelpAddName: "{cc}/uh team add <couleur> <nom ...> {ci}: ajoute une équipe avec le nom et la couleur donnés."
         teamHelpRemove: "{cc}/uh team remove <nom ...> {ci}: supprime une équipe."
@@ -57,18 +57,19 @@ keys:
         teamHelpList: "{cc}/uh team list {ci}: liste toutes les équipes et leurs membres."
         teamHelpReset: "{cc}/uh team reset {ci}: supprime toutes les équipes."
         
-        specHelpAvailable: "{ci}Les options disponibles sont listées ci-dessous."
+        specHelpTitle: "{aqua}------ Commandes liées aux spectateurs ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Attention{ci}: SpectatorPlus n'étant pas installé, un spectateur n'est qu'un joueur ignoré."
         specHelpAdd: "{cc}/uh spec add <joueur>{ci}: ajoute un spectateur."
         specHelpRemove: "{cc}/uh spec remove <joueur>{ci}: supprime un spectateur."
         specHelpList: "{cc}/uh spec list{ci}: liste les spectateurs."
         
+        specHelpTitle: "{aqua}------ Commandes liées à l'immobilisation ------"
         freezeHelpOn: "{cc}/uh freeze on [joueur]{ci}: immobilise un joueur, ou l'exécuteur sans joueur spécifié."
         freezeHelpOff: "{cc}/uh freeze off [player]{ci}: libère un joueur (ou l'envoyeur), même si le jeu est en pause."
         freezeHelpAll: "{cc}/uh freeze all{ci}: met le jeu en pause (immobilise les joueurs, mobs, et le compteur)."
         freezeHelpNone: "{cc}/uh freeze none{ci}: relance le jeu. Vous DEVEZ exécuter ceci pour relancer le compteur."
         
-        borderHelpAvailable: "{ci}Les options disponibles sont listées ci-dessous."
+        borderHelpTitle: "{aqua}------ Commandes liées aux bordures ------"
         borderHelpCurrent: "{cc}/uh border current{ci}: retourne la taille actuelle de la carte."
         borderHelpSet: "{cc}/uh border set <diamètre> [force]{ci}: change la taille de la carte. Si le paramètre “force” n'est pas donné, l'opération sera annulée s'il existe des joueurs hors de la bordure."
         borderHelpWarning: "{cc}/uh border warning <futurDiamètre> [minutesAvantRéduction]{ci}: avertit tous les joueurs hors de la future bordure donnée. Ce n'est qu'un avertissement, rien de plus."

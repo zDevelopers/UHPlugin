@@ -113,7 +113,7 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		
 		if(args.length == 0) {
-			help(sender, false);
+			help(sender, args, false);
 			return true;
 		}
 		
@@ -121,7 +121,12 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		// First: subcommand existence.
 		if(!this.commands.contains(subcommandName)) {
-			help(sender, true);
+			try {
+				Integer.valueOf(subcommandName);
+				help(sender, args, false);
+			} catch(NumberFormatException e) { // If the subcommand isn't a number, it's an error.
+				help(sender, args, true);
+			}
 			return true;
 		}
 		
@@ -144,7 +149,7 @@ public class UHPluginCommand implements CommandExecutor {
 			
 		} catch (NoSuchMethodException e) {
 			// Unknown method => unknown subcommand.
-			help(sender, true);
+			help(sender, args, true);
 			return true;
 			
 		} catch(SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -160,38 +165,70 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param sender
 	 * @param error True if the help is printed because the user typed an unknown command.
 	 */
-	private void help(CommandSender sender, boolean error) {
+	private void help(CommandSender sender, String[] args, boolean error) {
+		if(error) {
+			sender.sendMessage(i.t("cmd.errorUnknown"));
+			return;
+		}
+		
 		if(sender instanceof Player) sender.sendMessage("");
 		sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 		
-		if(error) {
-			sender.sendMessage(i.t("cmd.errorUnknown"));
-		}
-		
-		sender.sendMessage(i.t("cmd.inviteHelp"));
 		sender.sendMessage(i.t("cmd.legendHelp"));
 		
-		sender.sendMessage(i.t("cmd.titleGameCmd"));
-		sender.sendMessage(i.t("cmd.helpStart"));
-		sender.sendMessage(i.t("cmd.helpStartSlow"));
-		sender.sendMessage(i.t("cmd.helpShift"));
-		sender.sendMessage(i.t("cmd.helpTeam"));
-		sender.sendMessage(i.t("cmd.helpAddspawn"));
-		sender.sendMessage(i.t("cmd.helpAddspawnXZ"));
-		sender.sendMessage(i.t("cmd.helpSpec"));
-		sender.sendMessage(i.t("cmd.helpWall"));
-		sender.sendMessage(i.t("cmd.helpBorder"));
-		
-		sender.sendMessage(i.t("cmd.titleBugCmd"));
-		sender.sendMessage(i.t("cmd.helpHeal"));
-		sender.sendMessage(i.t("cmd.helpHealall"));
-		sender.sendMessage(i.t("cmd.helpResurrect"));
-		sender.sendMessage(i.t("cmd.helpTpback"));
-		
-		sender.sendMessage(i.t("cmd.titleMiscCmd"));
-		sender.sendMessage(i.t("cmd.helpFreeze"));
-		sender.sendMessage(i.t("cmd.helpAbout"));
+		if(!(sender instanceof Player)) {
+			helpPage(sender, 1);
+			helpPage(sender, 2);
+			helpPage(sender, 3);
+		}
+		else {
+			int page = 0;
+			if(args.length == 0) {
+				page = 1;
+			}
+			else {
+				page = Integer.valueOf(args[0]) <= 3 ? Integer.valueOf(args[0]) : 3;
+			}
+			helpPage(sender, page);
+			if(page < 3) sender.sendMessage(i.t("cmd.helpNextPage", String.valueOf(page + 1)));
+		}
 	}
+	
+	/**
+	 * Prints a page of the help (for the player screen).
+	 * 
+	 * @param sender The sender
+	 * @param page The page to print (1 to 3).
+	 */
+	private void helpPage(CommandSender sender, int page) {
+		switch(page) {
+			case 1:
+				sender.sendMessage(i.t("cmd.titleGameCmd"));
+				sender.sendMessage(i.t("cmd.helpStart"));
+				sender.sendMessage(i.t("cmd.helpStartSlow"));
+				sender.sendMessage(i.t("cmd.helpShift"));
+				sender.sendMessage(i.t("cmd.helpTeam"));
+				sender.sendMessage(i.t("cmd.helpAddspawn"));
+				sender.sendMessage(i.t("cmd.helpAddspawnXZ"));
+				sender.sendMessage(i.t("cmd.helpSpec"));
+				sender.sendMessage(i.t("cmd.helpWall"));
+				sender.sendMessage(i.t("cmd.helpBorder"));
+				break;
+			case 2:
+				sender.sendMessage(i.t("cmd.titleBugCmd"));
+				sender.sendMessage(i.t("cmd.helpHeal"));
+				sender.sendMessage(i.t("cmd.helpHealall"));
+				sender.sendMessage(i.t("cmd.helpResurrect"));
+				sender.sendMessage(i.t("cmd.helpTpback"));
+				break;
+			case 3:
+				sender.sendMessage(i.t("cmd.titleMiscCmd"));
+				sender.sendMessage(i.t("cmd.helpFreeze"));
+				sender.sendMessage(i.t("cmd.helpAbout"));
+				break;
+		}
+	}
+	
 	
 	/**
 	 * This method checks if an user is allowed to send a command.
@@ -387,8 +424,9 @@ public class UHPluginCommand implements CommandExecutor {
 		if(args.length == 1) { // No action provided: doc
 			if(sender instanceof Player) sender.sendMessage("");
 			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
-			
-			sender.sendMessage(i.t("cmd.teamHelpAvailable"));
+			sender.sendMessage(i.t("cmd.legendHelp"));
+
+			sender.sendMessage(i.t("cmd.teamHelpTitle"));
 			sender.sendMessage(i.t("cmd.teamHelpAdd"));
 			sender.sendMessage(i.t("cmd.teamHelpAddName"));
 			sender.sendMessage(i.t("cmd.teamHelpRemove"));
@@ -749,10 +787,12 @@ public class UHPluginCommand implements CommandExecutor {
 			if(sender instanceof Player) sender.sendMessage("");
 			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 			
-			sender.sendMessage(i.t("cmd.specHelpAvailable"));
+			sender.sendMessage(i.t("cmd.legendHelp"));
 			if(!p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
 				sender.sendMessage(i.t("cmd.specHelpNoticeSpectatorPlusNotInstalled"));
 			}
+
+			sender.sendMessage(i.t("cmd.specHelpTitle"));
 			sender.sendMessage(i.t("cmd.specHelpAdd"));
 			sender.sendMessage(i.t("cmd.specHelpRemove"));
 			sender.sendMessage(i.t("cmd.specHelpList"));
@@ -823,8 +863,9 @@ public class UHPluginCommand implements CommandExecutor {
 		if(args.length == 1) { // /uh border
 			if(sender instanceof Player) sender.sendMessage("");
 			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
-			
-			sender.sendMessage(i.t("cmd.borderHelpAvailable"));
+			sender.sendMessage(i.t("cmd.legendHelp"));
+
+			sender.sendMessage(i.t("cmd.borderHelpTitle"));
 			sender.sendMessage(i.t("cmd.borderHelpCurrent"));
 			sender.sendMessage(i.t("cmd.borderHelpSet"));
 			sender.sendMessage(i.t("cmd.borderHelpWarning"));
@@ -993,7 +1034,9 @@ public class UHPluginCommand implements CommandExecutor {
 		if(args.length == 1) { // /uh freeze
 			if(sender instanceof Player) sender.sendMessage("");
 			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+			sender.sendMessage(i.t("cmd.legendHelp"));
 			
+			sender.sendMessage(i.t("cmd.freezeHelpTitle"));
 			sender.sendMessage(i.t("cmd.freezeHelpOn"));
 			sender.sendMessage(i.t("cmd.freezeHelpOff"));
 			sender.sendMessage(i.t("cmd.freezeHelpAll"));

@@ -20,12 +20,12 @@ keys:
         
     cmd:
         errorLoad: "{ce}An error occurred, see console for details. This is probably a bug."
-        errorUnknown: "{ce}This subcommand does not exists."
+        errorUnknown: "{ce}This subcommand does not exists. See /uh for the available commands."
         errorUnauthorized: "{ce}lolnope"
         
         titleHelp: "{yellow}{0} - version {1}"
-        inviteHelp: "{ci}Available subcommands are listed below."
         legendHelp: "{ci}Legend: {cc}/uh command <required> [optional=default] <spaces allowed ...>{ci}."
+        helpNextPage: "{gray}Next page: /uh {0}"
         
         titleGameCmd: "{aqua}------ Game-related commands ------"
         helpStart: "{cc}/uh start {ci}: launches the game."
@@ -46,9 +46,9 @@ keys:
         
         titleMiscCmd: "{aqua}------ Miscellaneous commands ------"
         helpFreeze: "{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."
-        helpAbout: "{cc}/uh about {ci}: informations about the plugin and the translation"
+        helpAbout: "{cc}/uh about {ci}: informations about the plugin and the translation."
         
-        teamHelpAvailable: "{ci}Available options are listed below."
+        teamHelpTitle: "{aqua}------ Team commands ------"
         teamHelpAdd: "{cc}/uh team add <color> {ci}: adds a team with the provided color."
         teamHelpAddName: "{cc}/uh team add <color> <name ...> {ci}: adds a named team with the provided name and color."
         teamHelpRemove: "{cc}/uh team remove <name ...> {ci}: removes a team"
@@ -57,18 +57,19 @@ keys:
         teamHelpList: "{cc}/uh team list {ci}: lists the teams and their players."
         teamHelpReset: "{cc}/uh team reset {ci}: removes all teams."
         
-        specHelpAvailable: "{ci}Available options are listed below."
+        specHelpTitle: "{aqua}------ Spectator commands ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Please note{ci}: because SpectatorPlus is not present, a spectator is {italic}only{ci} an ignored player."
         specHelpAdd: "{cc}/uh spec add <player>{ci}: adds a spectator."
         specHelpRemove: "{cc}/uh spec remove <player>{ci}: removes a spectator."
         specHelpList: "{cc}/uh spec list{ci}: lists the spectators."
         
+        freezeHelpTitle: "{aqua}------ Freeze commands ------"
         freezeHelpOn: "{cc}/uh freeze on [player]{ci}: freezes a player, or the sender without a specified player."
         freezeHelpOff: "{cc}/uh freeze off [player]{ci}: unfreezes a player (or the sender), even if the entire game is frozen."
         freezeHelpAll: "{cc}/uh freeze all{ci}: freezes the entire game (players, mobs, timer)."
         freezeHelpNone: "{cc}/uh freeze none{ci}: unfreezes the entire game. You NEED to execute this in order to relaunch the timer."
         
-        borderHelpAvailable: "{ci}Available options are listed below."
+        borderHelpTitle: "{aqua}------ Border commands ------"
         borderHelpCurrent: "{cc}/uh border current{ci}: returns the current size of the map."
         borderHelpSet: "{cc}/uh border set <diameter> [force]{ci}: changes the size of the map. If force is not given, the operation will be canceled if there is a player outside the border."
         borderHelpWarning: "{cc}/uh border warning <futureDiameter> [minutesBeforeReduction]{ci}: warns all players outside the given future diameter. It's just a notice, nothing else."
