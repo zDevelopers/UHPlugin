@@ -39,7 +39,7 @@ import org.bukkit.plugin.Plugin;
  * It is plugin-independent.
  * 
  * @author Amaury Carrade
- * @version 1.0
+ * @version 1.1
  * @licence Mozilla Public Licence
  *
  */
@@ -87,8 +87,8 @@ public class I18n {
 		this.defaultLanguage = defaultLanguage;
 		
 		try {
-			this.reloadLanguageFile(defaultLanguage, false);
-			this.reloadLanguageFile(selectedLanguage, false);
+			this.reloadLanguageFile(defaultLanguage, false, false);
+			this.reloadLanguageFile(selectedLanguage, false, false);
 		} catch (InvalidConfigurationException e) {
 			p.getLogger().severe("Unable to load malformed language files");
 			e.printStackTrace();
@@ -250,9 +250,11 @@ public class I18n {
 	 * 
 	 * @param lang The language to (re)load.
 	 * @param write If true the file will be written to the disk.
+	 * @param writeOnly If true, the language file will not be kept in memory.
 	 * @throws IllegalArgumentException if the language file does not exists for the given language.
+	 * @throws InvalidConfigurationException if the language file is malformed (not a valid YML file).
 	 */
-	private void reloadLanguageFile(String lang, boolean write) throws InvalidConfigurationException {
+	private void reloadLanguageFile(String lang, boolean write, boolean writeOnly) throws InvalidConfigurationException, IllegalArgumentException {
 		lang = this.cleanLanguageName(lang);
 		
 		if(!this.manifest.getList("languages").contains(lang)) { // Unknown language
@@ -283,6 +285,11 @@ public class I18n {
 			} catch(IOException e) {
 				p.getLogger().log(Level.SEVERE, "Unable to write the language file " + p.getDataFolder() + "/" + getLanguageFilePath(lang) + " to the disk, check the write permissions.", e);
 			}
+		}
+		
+		if(writeOnly) {
+			languageSource.remove(lang);
+			languageFile.remove(lang);
 		}
 	}
 	
@@ -329,7 +336,7 @@ public class I18n {
 		else {
 			// Update needed?
 			if(manifest != null) {
-				if(manifest.getString("version") != p.getDescription().getVersion()) {
+				if(!manifest.getString("version").equals(p.getDescription().getVersion())) {
 					writeLanguageFiles(true);
 				}
 			}
@@ -346,12 +353,12 @@ public class I18n {
 			if(lang != null && lang instanceof String && !((String) lang).isEmpty()) {
 				try {
 					if(overwrite) {
-						reloadLanguageFile((String) lang, true);
+						reloadLanguageFile((String) lang, true, true);
 					}
 					else {
 						File testFile = new File(p.getDataFolder() + "/" + this.getLanguageFilePath((String) lang));
 						if(!testFile.exists()) {
-							reloadLanguageFile((String) lang, true);
+							reloadLanguageFile((String) lang, true, true);
 						}
 					}
 				} catch(IllegalArgumentException e) {
@@ -371,7 +378,7 @@ public class I18n {
 				p.getLogger().severe("Unable to load a malformed manifest.");
 			}
 		}
-		// Else, the manifest has already be written.
+		// Else, the manifest has already been written.
 	}
 	
 	/**
