@@ -268,12 +268,15 @@ public class I18n {
 		this.languageSource.put(lang, YamlConfiguration.loadConfiguration(this.languageFile.get(lang)));
 		
 		// Default config
-		Reader defaultLanguageFile = new InputStreamReader(p.getResource(getLanguageFilePath(lang)));
-		if(defaultLanguageFile != null) {
-			YamlConfiguration defaultLanguageSource = YamlConfiguration.loadConfiguration(defaultLanguageFile);
-			this.languageSource.get(lang).setDefaults(defaultLanguageSource);
+		try {
+			Reader defaultLanguageFile = new InputStreamReader(p.getResource(getLanguageFilePath(lang)));
+			if(defaultLanguageFile != null) {
+				YamlConfiguration defaultLanguageSource = YamlConfiguration.loadConfiguration(defaultLanguageFile);
+				this.languageSource.get(lang).setDefaults(defaultLanguageSource);
+			}
+		} catch(NullPointerException ignored) {
+			// No "default" translation file available: user-only language file.
 		}
-		
 		if(write) {
 			try {
 				if(!languageFile.get(lang).exists()) {
