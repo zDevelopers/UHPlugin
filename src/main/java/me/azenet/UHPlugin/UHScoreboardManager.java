@@ -120,8 +120,11 @@ public class UHScoreboardManager {
 			
 			// The timer score is reset every time.
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer") && !p.getGameManager().isTimerPaused()) {
-				sb.resetScores(getTimerText(oldHours, oldMinutes, oldSeconds, false));
-				objective.getScore(getTimerText(hoursLeft, minutesLeft, secondsLeft, false)).setScore(2);
+				String oldTimerText = getTimerText(oldHours, oldMinutes, oldSeconds, false);
+				String newTimerText = getTimerText(hoursLeft, minutesLeft, secondsLeft, false);
+				
+				sb.resetScores(oldTimerText);
+				objective.getScore(newTimerText).setScore(2);
 				
 				oldHours = hoursLeft;
 				oldMinutes = minutesLeft;
