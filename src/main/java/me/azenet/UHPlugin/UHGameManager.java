@@ -69,7 +69,9 @@ public class UHGameManager {
 	private Boolean slowStartTPFinished = false;
 	
 	private Boolean gameRunning = false;
+	private Boolean displayHourInTimer = false;
 	private Integer episode = 0;
+	private Integer hoursLeft = 0;
 	private Integer minutesLeft = 0;
 	private Integer secondsLeft = 0;
 	
@@ -111,9 +113,9 @@ public class UHGameManager {
 	}
 
 	public void initScoreboard() {
-		// Strange: if the scoreboard manager is instanced in the constructor, when the
+		// If the scoreboard manager is instanced in the constructor, when the
 		// scoreboard manager try to get the game manager through UHPlugin.getGameManager(),
-		// the value returned is "null"...
+		// the value returned is "null" (because the object is not yet constructed).
 		// This is why we initializes the scoreboard manager later, in this method.
 		this.scoreboardManager = new UHScoreboardManager(p);
 	}
@@ -166,12 +168,12 @@ public class UHGameManager {
 	 * and with the fly.
 	 * Then, the fly is removed and the game starts.
 	 * 
-	 * @throws RuntimeException if the game is already started.
+	 * @throws IllegalStateException if the game is already started.
 	 */
-	public void start(CommandSender sender, Boolean slow) {
+	public void start(CommandSender sender, Boolean slow) throws IllegalStateException {
 		
 		if(isGameRunning()) {
-			throw new RuntimeException("The game is already started!");
+			throw new IllegalStateException("The game is already started!");
 		}
 		
 		/** Initialization of the players and the teams **/
@@ -294,10 +296,9 @@ public class UHGameManager {
 			
 			// Used to display the number of teams, players... in the scoreboard instead of 0
 			// while the players are teleported.
-			scoreboardManager.updateScoreboard();
+			scoreboardManager.updateCounters();
 			
 			// A simple information, because this start is slower (yeah, Captain Obvious here)
-			
 			p.getServer().broadcastMessage(i.t("start.teleportationInProgress"));
 			
 			
@@ -378,23 +379,30 @@ public class UHGameManager {
 	/**
 	 * Launches the timer by launching the task that updates the scoreboard every second.
 	 */
-	private void startTimer() {
+	public void startTimer() {
 		if(p.getConfig().getBoolean("episodes.enabled")) {
 			this.episode = 1;
-			this.minutesLeft = getEpisodeLength();
+			
+			this.hoursLeft   = (int) Math.floor(getEpisodeLength() / 60);
+			this.minutesLeft = getEpisodeLength() - (60 * hoursLeft);
 			this.secondsLeft = 0;
+			
+			// Lower than 100 because else the counter text is longer than 16 characters.
+			this.displayHourInTimer = (this.hoursLeft != 0 && this.hoursLeft < 100);
 			
 			this.episodeStartTime = System.currentTimeMillis();
 			
 			BukkitRunnable updateTimer = new UpdateTimerTask(p);
 			updateTimer.runTaskTimer(p, 20L, 20L);
+			
+			this.scoreboardManager.startTimer();
 		}
 	}
 	
 	/**
 	 * Enables the damages 30 seconds (600 ticks) later.
 	 */
-	private void scheduleDamages() {
+	public void scheduleDamages() {
 		// 30 seconds later, damages are enabled.
 		Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 			@Override
@@ -405,12 +413,13 @@ public class UHGameManager {
 	}
 	
 	/**
-	 * Broadcast the start message and change the state of the game.
+	 * Broadcasts the start message and change the state of the game.
 	 * Also, force the global freeze start to false, to avoid toggle bugs (like inverted state).
 	 */
-	private void finalizeStart() {
+	public void finalizeStart() {
 		Bukkit.getServer().broadcastMessage(i.t("start.go"));
-		this.scoreboardManager.updateScoreboard();
+		this.scoreboardManager.updateCounters();
+		this.scoreboardManager.updateTimer();
 		
 		p.getFreezer().setGlobalFreezeState(false);
 		
@@ -444,8 +453,16 @@ public class UHGameManager {
 					shiftEpisode();
 				}
 				else {
-					minutesLeft = (int) (this.getEpisodeLength() - diffMinutes) - 1;
-					secondsLeft = (int) (60 - diffSeconds) - 1;
+					if(displayHourInTimer) {
+						int rawMinutesLeft = (int) ((this.getEpisodeLength() - diffMinutes) - 1);
+						hoursLeft   = (int) Math.floor(rawMinutesLeft / 60);
+						minutesLeft = (int) rawMinutesLeft - (60 * hoursLeft);
+						secondsLeft = (int) (60 - diffSeconds) - 1;
+					}
+					else {
+						minutesLeft = (int) (this.getEpisodeLength() - diffMinutes) - 1;
+						secondsLeft = (int) (60 - diffSeconds) - 1;
+					}
 				}
 			}
 			else {
@@ -455,9 +472,18 @@ public class UHGameManager {
 					secondsLeft = 59;
 				}
 				if (minutesLeft == -1) {
-					shiftEpisode();
+					if(hoursLeft != 0) {
+						hoursLeft--;
+						minutesLeft = 59;
+						secondsLeft = 59;
+					}
+					else {
+						shiftEpisode();
+					}
 				}
 			}
+			
+			scoreboardManager.updateTimer();
 		}
 	}
 	
@@ -501,7 +527,7 @@ public class UHGameManager {
 		this.alivePlayersCount = alivePlayers.size();
 		this.aliveTeamsCount = getAliveTeams().size();
 		
-		this.scoreboardManager.updateScoreboard();
+		this.scoreboardManager.updateCounters();
 	}
 	
 	
@@ -522,10 +548,14 @@ public class UHGameManager {
 			p.getServer().broadcastMessage(message);
 			
 			this.episode++;
-			this.minutesLeft = getEpisodeLength();
+			
+			this.hoursLeft   = (int) Math.floor(getEpisodeLength() / 60);
+			this.minutesLeft = getEpisodeLength() - (60 * hoursLeft);
 			this.secondsLeft = 0;
 			
 			this.episodeStartTime = System.currentTimeMillis();
+			
+			this.scoreboardManager.updateCounters();
 		}
 	}
 	
@@ -869,6 +899,10 @@ public class UHGameManager {
 		return episode;
 	}
 
+	public Integer getHoursLeft() {
+		return hoursLeft;
+	}
+	
 	/**
 	 * Returns the number of minutes left in the current episode.
 	 * 
@@ -884,5 +918,13 @@ public class UHGameManager {
 	 */
 	public Integer getSecondsLeft() {
 		return secondsLeft;
+	}
+	
+	/**
+	 * Returns true if the hour needs to be displayed in the timer.
+	 * @return
+	 */
+	public Boolean displayHourInTimer() {
+		return this.displayHourInTimer;
 	}
 }

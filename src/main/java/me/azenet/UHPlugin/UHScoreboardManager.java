@@ -45,6 +45,7 @@ public class UHScoreboardManager {
 	private Integer oldEpisode = -1;
 	private Integer oldAlivePlayersCount = -1;
 	private Integer oldAliveTeamsCount = -1;
+	private Integer oldHours = 0;
 	private Integer oldMinutes = 0;
 	private Integer oldSeconds = 0;
 	
@@ -82,7 +83,8 @@ public class UHScoreboardManager {
 				this.objective.getScore("").setScore(3);
 			}
 			
-			updateScoreboard();
+			updateCounters();
+			updateTimer();
 		}
 		
 		// Initialization of the scoreboard (health in players' list)
@@ -100,15 +102,42 @@ public class UHScoreboardManager {
 	}
 	
 	/**
-	 * Updates the scoreboard (if needed).
+	 * Resets the score of the timer without hours,
+	 * because this score is not reset if the timer is with hours.
 	 */
-	public void updateScoreboard() {
+	public void startTimer() {
+		sb.resetScores(getTimerText(oldHours, oldMinutes, oldSeconds, true));
+	}
+	
+	/**
+	 * Updates the timer of the scoreboard (if needed).
+	 */
+	public void updateTimer() {
+		if(p.getConfig().getBoolean("scoreboard.enabled")) {
+			Integer hoursLeft   = gm.getHoursLeft();
+			Integer minutesLeft = gm.getMinutesLeft();
+			Integer secondsLeft = gm.getSecondsLeft();
+			
+			// The timer score is reset every time.
+			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer") && !p.getGameManager().isTimerPaused()) {
+				sb.resetScores(getTimerText(oldHours, oldMinutes, oldSeconds, false));
+				objective.getScore(getTimerText(hoursLeft, minutesLeft, secondsLeft, false)).setScore(2);
+				
+				oldHours = hoursLeft;
+				oldMinutes = minutesLeft;
+				oldSeconds = secondsLeft;
+			}
+		}
+	}
+	
+	/**
+	 * Updates the counters of the scoreboard (if needed).
+	 */
+	public void updateCounters() {
 		if(p.getConfig().getBoolean("scoreboard.enabled")) {
 			Integer episode = gm.getEpisode();
 			Integer alivePlayersCount = gm.getAlivePlayersCount();
 			Integer aliveTeamsCount = gm.getAliveTeamsCount();
-			Integer minutesLeft = gm.getMinutesLeft();
-			Integer secondsLeft = gm.getSecondsLeft();
 			
 			if(!episode.equals(oldEpisode) && p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.episode")) {
 				sb.resetScores(getText("episode", oldEpisode));
@@ -129,35 +158,6 @@ public class UHScoreboardManager {
 				objective.getScore(getText("teams", aliveTeamsCount)).setScore(4);
 				oldAliveTeamsCount = aliveTeamsCount;
 			}
-			
-			// The timer score is reset every time.
-			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer") && !p.getGameManager().isTimerPaused()) {
-				sb.resetScores(getTimerText(oldMinutes, oldSeconds));
-				objective.getScore(getTimerText(minutesLeft, secondsLeft)).setScore(2);
-				oldMinutes = minutesLeft;
-				oldSeconds = secondsLeft;
-			}
-		}
-	}
-	
-	/**
-	 * Returns the text displayed in the scoreboard.
-	 * 
-	 * @param textType Either "episode", "players" or "teams".
-	 * @param arg Respectively, the episode number, the players count and the teams count.
-	 * @return The text.
-	 * @throws IllegalArgumentException if the textType is not one of the listed types.
-	 */
-	private String getText(String textType, Integer arg) {
-		switch(textType) {
-			case "episode":
-				return i.t("scoreboard.episode", arg.toString());
-			case "players":
-				return i.t("scoreboard.players", arg.toString());
-			case "teams":
-				return i.t("scoreboard.teams", arg.toString());
-			default:
-				throw new IllegalArgumentException("Incorrect text type, see javadoc");
 		}
 	}
 	
@@ -187,14 +187,42 @@ public class UHScoreboardManager {
 	}
 	
 	/**
+	 * Returns the text displayed in the scoreboard.
+	 * 
+	 * @param textType Either "episode", "players" or "teams".
+	 * @param arg Respectively, the episode number, the players count and the teams count.
+	 * @return The text.
+	 * @throws IllegalArgumentException if the textType is not one of the listed types.
+	 */
+	private String getText(String textType, Integer arg) {
+		switch(textType) {
+			case "episode":
+				return i.t("scoreboard.episode", arg.toString());
+			case "players":
+				return i.t("scoreboard.players", arg.toString());
+			case "teams":
+				return i.t("scoreboard.teams", arg.toString());
+			default:
+				throw new IllegalArgumentException("Incorrect text type, see javadoc");
+		}
+	}
+	
+	/**
 	 * Returns the text displayed in the scoreboard, for the timer.
 	 * 
+	 * @param hours The hours in the timer
 	 * @param minutes The minute in the timer
 	 * @param seconds The second in the timer
+	 * @param forceNonHoursTimer If true, the non-hours timer text will be returned.
 	 * @return The text of the timer
 	 */
-	private String getTimerText(Integer minutes, Integer seconds) {
-		return i.t("scoreboard.timer", formatter.format(minutes), formatter.format(seconds));
+	private String getTimerText(Integer hours, Integer minutes, Integer seconds, Boolean forceNonHoursTimer) {
+		if(gm.displayHourInTimer() && !forceNonHoursTimer) {
+			return i.t("scoreboard.timerWithHours", formatter.format(hours), formatter.format(minutes), formatter.format(seconds));
+		}
+		else {
+			return i.t("scoreboard.timer", formatter.format(minutes), formatter.format(seconds));
+		}
 	}
 	
 	/**

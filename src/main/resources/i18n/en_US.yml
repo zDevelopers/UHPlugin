@@ -111,6 +111,7 @@ keys:
         players: "{white}{0}{gray} players"
         teams: "{white}{0}{gray} teams"
         timer: "{white}{0}{gray}:{white}{1}"
+        timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
     
     death:
         kickMessage: "jayjay"

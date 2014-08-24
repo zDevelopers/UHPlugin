@@ -34,7 +34,6 @@ public class UpdateTimerTask extends BukkitRunnable {
 	@Override
 	public void run() {
 		p.getGameManager().updateTimer();
-		p.getGameManager().getScoreboardManager().updateScoreboard();
 	}
 
 }

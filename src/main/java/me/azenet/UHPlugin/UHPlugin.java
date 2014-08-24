@@ -27,7 +27,6 @@ import me.azenet.UHPlugin.listeners.UHCraftingListener;
 import me.azenet.UHPlugin.listeners.UHGameListener;
 import me.azenet.UHPlugin.listeners.UHGameplayListener;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 

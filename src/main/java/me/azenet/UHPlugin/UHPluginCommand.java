@@ -324,7 +324,7 @@ public class UHPluginCommand implements CommandExecutor {
 		else if(args.length == 2 && args[1].equalsIgnoreCase("slow")) { // /uh start slow
 			try {
 				p.getGameManager().start(sender, true);
-			} catch(RuntimeException e) {
+			} catch(IllegalStateException e) {
 				sender.sendMessage(i.t("start.already"));
 			}
 		}
@@ -1047,7 +1047,7 @@ public class UHPluginCommand implements CommandExecutor {
 			
 			if(subcommand.equalsIgnoreCase("on") || subcommand.equalsIgnoreCase("off")) {
 				
-				boolean on = subcommand.equalsIgnoreCase("on") ? true : false;
+				boolean on = subcommand.equalsIgnoreCase("on");
 				
 				if(args.length == 2) { // /uh freeze on: freezes the sender
 					if(sender instanceof Player) {
@@ -1084,7 +1084,7 @@ public class UHPluginCommand implements CommandExecutor {
 			
 			else if(subcommand.equalsIgnoreCase("all") || subcommand.equalsIgnoreCase("none")) {
 				
-				boolean on = subcommand.equalsIgnoreCase("all") ? true : false;
+				boolean on = subcommand.equalsIgnoreCase("all");
 				
 				p.getFreezer().setGlobalFreezeState(on);
 				
