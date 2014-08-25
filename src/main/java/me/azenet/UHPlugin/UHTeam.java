@@ -70,14 +70,36 @@ public class UHTeam {
 		t.setAllowFriendlyFire(plugin.getConfig().getBoolean("teams-options.allowFriendlyFire", true));
 	}
 	
+	/**
+	 * Returns the name of the team. 
+	 * 
+	 * Can include spaces.
+	 * 
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
 	
+	/**
+	 * Returns the display name of the team.
+	 * 
+	 * This name is:
+	 *  - if the team is uncolored, the name of the team;
+	 *  - else, the name of the team with:
+	 *     - before, the color of the team;
+	 *     - after, the "reset" formatting mark (§r).
+	 * 
+	 * @return
+	 */
 	public String getDisplayName() {
 		return displayName;
 	}
 	
+	/**
+	 * Returns the players inside this team.
+	 * @return
+	 */
 	public ArrayList<Player> getPlayers() {
 		ArrayList<Player> playersList = new ArrayList<Player>();
 		
@@ -88,6 +110,11 @@ public class UHTeam {
 		return playersList;
 	}
 
+	/**
+	 * Adds a player inside this team.
+	 * 
+	 * @param player The player to add.
+	 */
 	public void addPlayer(Player player) {
 		Validate.notNull(player, "The player cannot be null.");
 		
@@ -97,6 +124,13 @@ public class UHTeam {
 		plugin.getTeamManager().colorizePlayer(player);
 	}
 	
+	/**
+	 * Removes a player from this team.
+	 * 
+	 * Nothing is done if the player wasn't in this team.
+	 * 
+	 * @param player The player to remove.
+	 */
 	public void removePlayer(Player player) {
 		Validate.notNull(player, "The player cannot be null.");
 		
@@ -106,6 +140,11 @@ public class UHTeam {
 		plugin.getTeamManager().colorizePlayer(player);
 	}
 	
+	/**
+	 * Deletes this team.
+	 * 
+	 * The players inside the team are left without any team. 
+	 */
 	public void deleteTeam() {
 		// We removes the players from the team (scoreboard team too)
 		for(UUID id : players) {
@@ -117,6 +156,12 @@ public class UHTeam {
 		
 	}
 	
+	/**
+	 * Returns true if the given player is in this team.
+	 * 
+	 * @param player The player to check.
+	 * @return true if the given player is in this team.
+	 */
 	public boolean containsPlayer(Player player) {
 		Validate.notNull(player, "The player cannot be null.");
 		
@@ -127,7 +172,12 @@ public class UHTeam {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Teleports the entire team to the given location.
+	 * 
+	 * @param lo
+	 */
 	public void teleportTo(Location lo) {
 		Validate.notNull(lo, "The location cannot be null.");
 		
@@ -136,7 +186,12 @@ public class UHTeam {
 		}
 	}
 
-	public ChatColor getChatColor() {
+	/**
+	 * Returns the color of the team.
+	 * 
+	 * @return
+	 */
+	public ChatColor getColor() {
 		return color;
 	}
 }

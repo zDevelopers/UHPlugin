@@ -145,7 +145,7 @@ public class UHFreezer {
 	
 	
 	/**
-	 * Gets the current state of the global freeze.
+	 * Returns the current state of the global freeze.
 	 * 
 	 * @return True if the global freeze is enabled.
 	 */
@@ -187,7 +187,7 @@ public class UHFreezer {
 	 * Returns true if the given player is frozen.
 	 * 
 	 * @param player The player to be checked.
-	 * @return
+	 * @return true if the given player is frozen.
 	 */
 	public boolean isPlayerFrozen(Player player) {
 		return frozenPlayers.contains(player.getUniqueId());
@@ -226,7 +226,7 @@ public class UHFreezer {
 			}
 		}
 		
-		// Unregister the listener if needed
+		// Unregisters the listener if needed
 		else {
 			if(this.frozenPlayers.isEmpty() && !this.getGlobalFreezeState()) {
 				HandlerList.unregisterAll(freezerListener);
@@ -237,7 +237,7 @@ public class UHFreezer {
 	
 	
 	/**
-	 * Returns the list of currently frozen players.
+	 * Returns the list of the currently frozen players.
 	 * 
 	 * @return The list.
 	 */

@@ -57,7 +57,7 @@ public class UHTeamManager {
 	/**
 	 * Adds a team from an UHTeam object.
 	 * 
-	 * @param UHTeam team The team.
+	 * @param team The team.
 	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */
 	public void addTeam(UHTeam team) {
@@ -76,6 +76,9 @@ public class UHTeamManager {
 	 */
 	public boolean removeTeam(String name) {
 		UHTeam team = getTeam(name);
+		if(team != null) {
+			team.deleteTeam();
+		}
 		return teams.remove(team);
 	}
 
@@ -139,8 +142,8 @@ public class UHTeamManager {
 			player.setDisplayName(player.getName());
 		}
 		else {
-			if(team.getChatColor() != null) {
-				player.setDisplayName(team.getChatColor() + player.getName() + ChatColor.RESET);
+			if(team.getColor() != null) {
+				player.setDisplayName(team.getColor() + player.getName() + ChatColor.RESET);
 			}
 			else {
 				player.setDisplayName(player.getName());
@@ -158,7 +161,7 @@ public class UHTeamManager {
 	}
 	
 	/**
-	 * Get a team.
+	 * Returns the UHTeam object of the team with the given name.
 	 * 
 	 * @param name The name of the team.
 	 * @return The team, or null if the team does not exists.
@@ -173,7 +176,7 @@ public class UHTeamManager {
 	}
 	
 	/**
-	 * Get a player's team.
+	 * Gets a player's team.
 	 * 
 	 * @param player The player.
 	 * @return The team of this player.

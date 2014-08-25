@@ -104,7 +104,9 @@ public class UHGameManager {
 		}
 	}
 
-
+	/**
+	 * Initializes the environment before the start of the game.
+	 */
 	public void initEnvironment() {
 		p.getServer().getWorlds().get(0).setGameRuleValue("doDaylightCycle", "false");
 		p.getServer().getWorlds().get(0).setTime(6000L);
@@ -112,14 +114,30 @@ public class UHGameManager {
 		p.getServer().getWorlds().get(0).setDifficulty(Difficulty.PEACEFUL);
 	}
 
+	/**
+	 * Initializes the scoreboard.
+	 * 
+	 * If the scoreboard manager is instanced in the constructor, when the
+	 * scoreboard manager try to get the game manager through UHPlugin.getGameManager(),
+	 * the value returned is "null" (because the object is not yet constructed).
+	 * This is why we initializes the scoreboard manager later, in this method.
+	 */
 	public void initScoreboard() {
-		// If the scoreboard manager is instanced in the constructor, when the
-		// scoreboard manager try to get the game manager through UHPlugin.getGameManager(),
-		// the value returned is "null" (because the object is not yet constructed).
-		// This is why we initializes the scoreboard manager later, in this method.
 		this.scoreboardManager = new UHScoreboardManager(p);
 	}
 
+	/**
+	 * Initializes the given player.
+	 * 
+	 *  - Teleportation to the default world's spawn point.
+	 *  - Max food level & health.
+	 *  - Scoreboard.
+	 *  - Fixed health score.
+	 *  - Spectate mode disabled.
+	 *  - Gamemode: creative (if permission "uh.build" granted) or adventure (else).
+	 * 
+	 * @param player
+	 */
 	public void initPlayer(final Player player) {
 		Location l = player.getWorld().getSpawnLocation();
 		player.teleport(l.add(0,1,0));
@@ -414,7 +432,7 @@ public class UHGameManager {
 	
 	/**
 	 * Broadcasts the start message and change the state of the game.
-	 * Also, force the global freeze start to false, to avoid toggle bugs (like inverted state).
+	 * Also, forces the global freeze start to false, to avoid toggle bugs (like inverted state).
 	 */
 	public void finalizeStart() {
 		Bukkit.getServer().broadcastMessage(i.t("start.go"));
@@ -598,7 +616,7 @@ public class UHGameManager {
 	
 	/**
 	 * The things that have to be done in order to resurrect the players
-	 * and that need the player to be online.
+	 * and that needs the player to be online.
 	 * 
 	 * @param player The player to resurrect
 	 * @return true if the player was dead, false otherwise.
@@ -643,7 +661,7 @@ public class UHGameManager {
 	}
 	
 	/**
-	 * Register a player as resurrected.
+	 * Registers a player as resurrected.
 	 * 
 	 * @param player
 	 */
@@ -745,6 +763,11 @@ public class UHGameManager {
 		spawnPoints.add(new Location(p.getServer().getWorlds().get(0), x, p.getServer().getWorlds().get(0).getHighestBlockYAt(x,z)+120, z));
 	}
 	
+	/**
+	 * Imports spawn points from the configuration.
+	 * 
+	 * @return The number of spawn points imported.
+	 */
 	public int importSpawnPointsFromConfig() {
 		if(p.getConfig().getList("spawnpoints") != null) {
 			int spawnCount = 0;
@@ -898,7 +921,12 @@ public class UHGameManager {
 	public Integer getEpisode() {
 		return episode;
 	}
-
+	
+	/**
+	 * Returns the number of hours left in the current episode.
+	 *  
+	 * @return
+	 */
 	public Integer getHoursLeft() {
 		return hoursLeft;
 	}

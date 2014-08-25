@@ -1,22 +1,20 @@
 /**
- * RecipeUtil.java
+ *  Plugin UltraHardcore (UHPlugin)
+ *  Copyright (C) 2013 azenet
+ *  Copyright (C) 2014 Amaury Carrade
  *
- * Copyright (c) 2014 Graham Howden <graham_howden1 at yahoo.co.uk>.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This file is part of UltraHardcore and used in UHPlugin.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * UltraHardcore is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * UltraHardcore is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with UltraHardcore.  If not, see <http ://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
 package me.azenet.UHPlugin;
@@ -193,7 +191,7 @@ public class RecipeUtil
 	 * 
 	 * @author Amaury Carrade
 	 * 
-	 * @param recipe The recipe to analyse.
+	 * @param recipe The recipe to analyze.
 	 * @return A list of the ingredients.
 	 */
 	public static List<ItemStack> getListOfIngredients(Recipe recipe) {

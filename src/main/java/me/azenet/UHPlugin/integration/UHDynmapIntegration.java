@@ -98,6 +98,11 @@ public class UHDynmapIntegration {
 	
 	/** Death locations **/
 	
+	/**
+	 * Displays the death location of the given player.
+	 * 
+	 * @param player The player.
+	 */
 	public void showDeathLocation(Player player) {
 		if(!isDynmapIntegrationEnabled()) {
 			return;
@@ -123,6 +128,11 @@ public class UHDynmapIntegration {
 		}
 	}
 	
+	/**
+	 * Hides the death location of the given player.
+	 * 
+	 * @param player The player.
+	 */
 	public void hideDeathLocation(Player player) {
 		if(!isDynmapIntegrationEnabled()) {
 			return;
@@ -138,12 +148,26 @@ public class UHDynmapIntegration {
 		}
 	}
 	
+	/**
+	 * Returns the internal ID of the marker of the death point of the given player.
+	 * 
+	 * @param player The player.
+	 * @return The ID.
+	 */
 	private String getDeathMarkerName(Player player) {
 		return "uhplugin.death." + player.getName();
 	}
 	
+	
+	
 	/** Spawn locations **/
 	
+	/**
+	 * Displays the spawn point of the given team.
+	 * 
+	 * @param team The team.
+	 * @param spawnPoint The location of the spawn point.
+	 */
 	public void showSpawnLocation(UHTeam team, Location spawnPoint) {
 		if(!isDynmapIntegrationEnabled()) {
 			return;
@@ -159,7 +183,7 @@ public class UHDynmapIntegration {
 		// Ref. https://github.com/webbukkit/dynmap/wiki/Using-markers
 		
 		MarkerIcon icon = null;
-		switch(team.getChatColor()) {
+		switch(team.getColor()) {
 			case BLUE:
 			case DARK_BLUE:
 			case AQUA:
@@ -224,6 +248,12 @@ public class UHDynmapIntegration {
 		}
 	}
 	
+	/**
+	 * Returns the internal ID of the marker of the spawn point of the given team.
+	 * 
+	 * @param team The team.
+	 * @return The ID.
+	 */
 	private String getSpawnMarkerName(UHTeam team) {
 		return "uhplugin.spawn." + team.getName();
 	}

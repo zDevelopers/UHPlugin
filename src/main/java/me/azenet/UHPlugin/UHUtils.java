@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
 public class UHUtils {
 	
 	/**
-	 * Extract a string from a list of arguments, starting at the given index.
+	 * Extracts a string from a list of arguments, starting at the given index.
 	 * 
 	 * @param args The raw arguments.
 	 * @param startIndex The index of the first item in the returned string (first argument given: 0).
@@ -59,7 +59,7 @@ public class UHUtils {
 	
 	
 	/**
-	 * Find a safe spot where teleport the player, and teleport the player to that spot.
+	 * Finds a safe spot where teleport the player, and teleport the player to that spot.
 	 * If a spot is not found, the player is not teleported, except if the force arg is set to true.
 	 * 
 	 * Inspiration took in the WorldBorder plugin.

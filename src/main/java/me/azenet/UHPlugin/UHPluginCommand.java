@@ -266,6 +266,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command prints some informations about the plugin and the translation.
+	 * 
 	 * Usage: /uh about
 	 * 
 	 * @param sender
@@ -303,7 +304,8 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command starts the game.
-	 * Usage: /uh start [slow]
+	 * 
+	 * Usage: /uh start [slow [go]]
 	 * 
 	 * @param sender
 	 * @param command
@@ -338,6 +340,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command generates the walls around the map.
+	 * 
 	 * Usage: /uh generatewalls
 	 * 
 	 * @param sender
@@ -377,6 +380,7 @@ public class UHPluginCommand implements CommandExecutor {
 
 	/**
 	 * This command adds a spawn point for a team or a player.
+	 * 
 	 * Usage: /uh addspawn (as a player).
 	 * Usage: /uh addspawn <x> <z> (as everyone).
 	 * 
@@ -411,6 +415,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command is used to manage the teams.
+	 * 
 	 * Usage: /uh team (for the doc).
 	 * Usage: /uh team <add|remove|addplayer|removeplayer|list|reset> (see doc for details).
 	 * 	
@@ -585,6 +590,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command shifts an episode.
+	 * 
 	 * Usage: /uh shift (during the game).
 	 * 
 	 * @param sender
@@ -610,6 +616,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command heals a player.
+	 * 
 	 * Usage: /uh heal <player> <half-hearts>
 	 * 
 	 * 
@@ -658,6 +665,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command heals all players.
+	 * 
 	 * Usage: /uh healall <half-hearts>
 	 * 
 	 * 
@@ -696,6 +704,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command resurrects a player.
+	 * 
 	 * Usage: /uh resurrect <player>
 	 * 
 	 * @param sender
@@ -730,6 +739,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command safely teleports back a player to his death location.
+	 * 
 	 * Usage: /uh tpback <player>
 	 * 
 	 * @param sender
@@ -775,6 +785,9 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command manages spectators (aka ignored players).
+	 * 
+	 * Usage: /uh spec (doc)
+	 * Usage: /uh spec <add|remove|list>
 	 * 
 	 * @param sender
 	 * @param command
@@ -852,6 +865,9 @@ public class UHPluginCommand implements CommandExecutor {
 	/**
 	 * This command manages borders (gets current, checks if players are out, sets a new size, warnings players
 	 * about the future size).
+	 * 
+	 * Usage: /uh border (doc)
+	 * Usage: /uh border <current|set [force]|warning|check>
 	 * 
 	 * @param sender
 	 * @param command
@@ -1017,7 +1033,8 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	/**
 	 * This command freezes the players.
-	 * Usage: /uh freeze on [player] | off [player] | all | none
+	 * 
+	 * Usage: /uh freeze <on [player]|off [player]|all|none>
 	 *  - on [player]: freezes the given player, or the sender if no player was provided.
 	 *  - off [player]: unfreezes the given player (or the sender, same condition).
 	 *  - all: freezes all the alive players, the mobs and the timer.

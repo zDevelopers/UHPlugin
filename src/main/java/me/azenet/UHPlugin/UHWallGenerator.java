@@ -106,7 +106,7 @@ public class UHWallGenerator {
 	 * Checks if a block is transparent or is part of a tree.
 	 * Used to generate the wall.
 	 * 
-	 * @return bool True if the block is transparent, or part of a tree.
+	 * @return boolean True if the block is transparent, or part of a tree.
 	 */
 	private Boolean isBlockTransparentOrTree(Material blockType) {
 		if(blockType.isTransparent()) {

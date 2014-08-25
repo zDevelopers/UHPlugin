@@ -75,7 +75,7 @@ public class UHRecipeManager {
 	}
 	
 	/**
-	 * Checks if a recipe is allowed
+	 * Checks if a recipe is allowed.
 	 * 
 	 * @param recipe
 	 * @return True if the recipe is allowed, false else.

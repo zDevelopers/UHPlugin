@@ -40,7 +40,7 @@ import org.bukkit.plugin.Plugin;
  * 
  * @author Amaury Carrade
  * @version 1.1
- * @licence Mozilla Public Licence
+ * @license Mozilla Public License
  *
  */
 public class I18n {
@@ -57,6 +57,7 @@ public class I18n {
 	
 	/**
 	 * Constructor.
+	 * 
 	 * About the storage: 
 	 *  - the translation files are stored in the directory {PluginDir}/i18n/{languageCode}.yml
 	 *  - an additional file, {PluginDir}/i18n/manifest.yml, contains two keys. 
@@ -98,7 +99,7 @@ public class I18n {
 	
 	/**
 	 * Constructor.
-	 * With this constructor, the default language is the english one (en_US).
+	 * With this constructor, the default language is the English one (en_US).
 	 * 
 	 * @param plugin The plugin.
 	 * @param selectedLanguage The selected language.
@@ -109,7 +110,7 @@ public class I18n {
 	
 	/**
 	 * Constructor.
-	 * With this constructor, the default language is the english one (en_US), and 
+	 * With this constructor, the default language is the English one (en_US), and 
 	 * the selected language is the one returned by Locale.getDefault().
 	 * 
 	 * @param plugin The plugin.
@@ -191,7 +192,7 @@ public class I18n {
 	}
 	
 	/**
-	 * Return the raw translation stored in the language file.
+	 * Returns the raw translation stored in the language file.
 	 * 
 	 * @param key
 	 * @param lang
@@ -327,7 +328,7 @@ public class I18n {
 	}
 	
 	/**
-	 * Write the language files and the manifest to the disk if needed.
+	 * Writes the language files and the manifest to the disk if needed.
 	 * The files are written if they are not already written of if the version changed.
 	 */
 	private void writeFilesIfNeeded() {

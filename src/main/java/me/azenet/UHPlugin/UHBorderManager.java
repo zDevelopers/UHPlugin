@@ -91,7 +91,7 @@ public class UHBorderManager {
 	}
 	
 	/**
-	 * Return the distance from the location to the border, if the location is outside this border.
+	 * Returns the distance from the location to the border, if the location is outside this border.
 	 * If it is inside, or in another world, returns 0.
 	 * 
 	 * @param location 
@@ -238,7 +238,6 @@ public class UHBorderManager {
 	 * (configurable, see config.yml, map.border.warningInterval).
 	 * 
 	 * @param diameter
-	 * @param timeLeft The time available for the players to go inside the future border (minutes).
 	 */
 	public void setWarningSize(int diameter) {
 		setWarningSize(diameter, 0, null);
@@ -260,8 +259,9 @@ public class UHBorderManager {
 	}
 	
 	/**
-	 * Toggles the pause of the warning time.
-	 * This timer is paused when the game is frozen.
+	 * (Un)pauses the warning time.
+	 * 
+	 *  @param pause If true the timer will be paused.
 	 */
 	public void setWarningTimePause(boolean pause) {
 		// The pause is only set once (as example if the user executes /uh freeze all twice).
@@ -312,10 +312,10 @@ public class UHBorderManager {
 	
 	/**
 	 * Changes the current border diameter.
-	 * This also reconfigure WorldBorder (if present).
+	 * This also reconfigures WorldBorder (if present).
 	 * 
 	 * If WorldBorder is installed, all players out of this new border will be teleported inside the new one.
-	 * Else, these players will be frozen.
+	 * Else, nothing will happens.
 	 * 
 	 * @param diameter
 	 */
@@ -328,7 +328,7 @@ public class UHBorderManager {
 	
 	
 	/**
-	 * Sends a list of players outside the given border to the specified sender.
+	 * Sends a list of the players outside the given border to the specified sender.
 	 * 
 	 * @param to The player/console to send the check.
 	 * @param diameter The diameter of the border to be checked.
@@ -359,6 +359,14 @@ public class UHBorderManager {
 	
 	/*** Squared border ***/
 	
+	/**
+	 * Checks if the given location is inside the given squared border.
+	 * 
+	 * @param location The location to be checked.
+	 * @param diameter The "diameter" of the squared wall (i.e. the size of a side of the wall).
+	 * 
+	 * @return true if the location is inside the border.
+	 */
 	private boolean isInsideSquaredBorder(Location location, int diameter) {
 		Integer halfMapSize = (int) Math.floor(diameter/2);
 		Integer x = location.getBlockX();
@@ -379,6 +387,16 @@ public class UHBorderManager {
 		return !(x < limitXInf || x > limitXSup || z < limitZInf || z > limitZSup);
 	}
 	
+	/**
+	 * Returns the distance from the given location to the border.
+	 * 
+	 * If the location is inside the border, or not in the same world, this returns 0.
+	 * 
+	 * @param location The location to be checked.
+	 * @param diameter The "diameter" of the squared wall (i.e. the size of a side of the wall).
+	 * 
+	 * @return the distance from the given location to the border.
+	 */
 	private int getDistanceToSquaredBorder(Location location, int diameter) {
 		if(!location.getWorld().equals(Bukkit.getWorlds().get(0))) { // The nether is not limited.
 			return 0;
@@ -429,12 +447,30 @@ public class UHBorderManager {
 	
 	/** Circular border **/
 	
+	/**
+	 * Checks if the given location is inside the given circular border.
+	 * 
+	 * @param location The location to be checked.
+	 * @param diameter The diameter of the circular wall.
+	 * 
+	 * @return true if the location is inside the border.
+	 */
 	private boolean isInsideCircularBorder(Location location, int diameter) {
 		Double radius = Math.floor(diameter/2);
 		
 		return !(location.distance(Bukkit.getWorlds().get(0).getSpawnLocation()) >= radius);
 	}
 	
+	/**
+	 * Returns the distance from the given location to the border.
+	 * 
+	 * If the location is inside the border, or not in the same world, this returns 0.
+	 * 
+	 * @param location The location to be checked.
+	 * @param diameter The diameter of the circular wall.
+	 * 
+	 * @return the distance from the given location to the border.
+	 */
 	private int getDistanceToCircularBorder(Location location, int diameter) {
 		if(!location.getWorld().equals(Bukkit.getWorlds().get(0))) { // The nether is not limited.
 			return 0;

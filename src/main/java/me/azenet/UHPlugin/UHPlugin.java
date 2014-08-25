@@ -81,7 +81,7 @@ public final class UHPlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new UHGameListener(this), this);
 		getServer().getPluginManager().registerEvents(new UHGameplayListener(this), this);
 		getServer().getPluginManager().registerEvents(new UHCraftingListener(this), this);
-		// The freezer listener is registered by the freezer when needed
+		// The freezer listener is registered by the freezer when it is needed.
 		
 		recipeManager.registerRecipes();
 		
@@ -93,54 +93,105 @@ public final class UHPlugin extends JavaPlugin {
 			gameManager.initPlayer(player);
 		}
 		
-		// Import spawnpoints from config
+		// Imports spawnpoints from the config.
 		this.gameManager.importSpawnPointsFromConfig();
 		
-		// Import teams from config
+		// Imports teams from the config.
 		this.teamManager.importTeamsFromConfig();
 		
 		getLogger().info(i18n.t("load.loaded"));
 	}
 	
-	
+	/**
+	 * Returns the team manager.
+	 * 
+	 * @return
+	 */
 	public UHTeamManager getTeamManager() {
 		return teamManager;
 	}
 	
+	/**
+	 * Returns the game manager.
+	 * 
+	 * The scoreboard manager is available through the game manager.
+	 * Use <code>plugin.getGameManager().getScoreboardManager();</code>.
+	 * 
+	 * @return
+	 */
 	public UHGameManager getGameManager() {
 		return gameManager;
 	}
 	
+	/**
+	 * Returns the command manager.
+	 * 
+	 * @return
+	 */
 	public UHPluginCommand getCommandManager() {
 		return commandManager;
 	}
 	
+	/**
+	 * Returns the border manager.
+	 * 
+	 * @return
+	 */
 	public UHBorderManager getBorderManager() {
 		return borderManager;
 	}
 	
+	/**
+	 * Returns the recipe manager.
+	 * @return
+	 */
 	public UHRecipeManager getRecipeManager() {
 		return recipeManager;
 	}
 	
+	/**
+	 * Returns the freezer.
+	 * 
+	 * @return
+	 */
 	public UHFreezer getFreezer() {
 		return freezer;
 	}
 	
 	
+	/**
+	 * Returns the representation of the WorldBorder integration in the plugin.
+	 * 
+	 * @return
+	 */
 	public UHWorldBorderIntegration getWorldBorderIntegration() {
 		return wbintegration;
 	}
 	
+	/**
+	 * Returns the representation of the SpectatorPlus integration in the plugin.
+	 * 
+	 * @return
+	 */
 	public UHSpectatorPlusIntegration getSpectatorPlusIntegration() {
 		return spintegration;
 	}
 	
+	/**
+	 * Returns the representation of the dynmap integration in the plugin.
+	 * 
+	 * @return
+	 */
 	public UHDynmapIntegration getDynmapIntegration() {
 		return dynmapintegration;
 	}
 	
 	
+	/**
+	 * Returns the internationalization manager.
+	 * 
+	 * @return
+	 */
 	public I18n getI18n() {
 		return i18n;
 	}

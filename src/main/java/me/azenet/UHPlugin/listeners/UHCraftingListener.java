@@ -78,7 +78,7 @@ public class UHCraftingListener implements Listener {
 		}
 		
 		
-		/** The lore removed don't change the name of the item **/
+		/** The lore remover don't change the name of the item **/
 		
 		ItemStack keepNameResult = p.getRecipeManager().keepNameOnLoreRemover(recipe, ev.getInventory());
 		if(keepNameResult != null) {

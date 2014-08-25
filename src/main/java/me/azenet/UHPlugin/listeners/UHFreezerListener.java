@@ -103,7 +103,7 @@ public class UHFreezerListener implements Listener {
 	
 	
 	/**
-	 * Used to prevent items to despawn if the game is freezed.
+	 * Used to prevent items from despawning if the game is frozen.
 	 * 
 	 * @param ev
 	 */

@@ -23,6 +23,7 @@ import me.azenet.UHPlugin.UHPlugin;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.plugin.Plugin;
 
@@ -104,9 +105,14 @@ public class UHWorldBorderIntegration {
 		
 	}
 	
+	/**
+	 * Returns the overworld.
+	 * 
+	 * @return the... overworld?
+	 */
 	private World getOverworld() {
 		for(World world : Bukkit.getServer().getWorlds()) {
-			if(world.getBiome(0, 0) != Biome.HELL && world.getBiome(0, 0) != Biome.SKY) {
+			if(world.getEnvironment() != Environment.NETHER && world.getEnvironment() != Environment.THE_END) {
 				return world;
 			}
 		}

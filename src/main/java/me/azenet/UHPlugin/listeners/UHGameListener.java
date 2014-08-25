@@ -256,7 +256,7 @@ public class UHGameListener implements Listener {
 		// Mainly useful on the first join.
 		p.getGameManager().getScoreboardManager().setScoreboardForPlayer(ev.getPlayer());
 		
-		// The display name is reset when the player log off.
+		// The display name is reset when the player logs off.
 		p.getTeamManager().colorizePlayer(ev.getPlayer());
 		
 		if(!p.getGameManager().isGameRunning() && ev.getPlayer().hasPermission("uh.*")) {

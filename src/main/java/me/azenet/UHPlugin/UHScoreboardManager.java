@@ -72,13 +72,13 @@ public class UHScoreboardManager {
 			try {
 				this.sb.clearSlot(DisplaySlot.SIDEBAR);
 				this.sb.getObjective(objectiveName).unregister();
-			} catch(NullPointerException | IllegalArgumentException e) { }
+			} catch(NullPointerException | IllegalArgumentException ignored) { }
 			
 			this.objective = this.sb.registerNewObjective(objectiveName, "dummy");
 			this.objective.setDisplayName(getScoreboardName());
 			this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 			
-			// The "space" score needs to be set only one time, and only if the episodes/timer are enabled.
+			// The "space" score needs to be registered only one time, and only if the episodes/timer are enabled.
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
 				this.objective.getScore("").setScore(3);
 			}
@@ -93,7 +93,7 @@ public class UHScoreboardManager {
 			healthObjective.setDisplayName("Health");
 			healthObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 			
-			// Sometime the health is initialized to 0. This is used to fix this.
+			// Sometimes, the health is initialized to 0. This is used to fix this.
 			updateHealthScore();
 		}
 		else {
@@ -243,13 +243,13 @@ public class UHScoreboardManager {
 	 * @param player The player to update.
 	 */
 	public void updateHealthScore(final Player player) {
-		if(player.getHealth() != 1d) { // Prevent killing the player
+		if(player.getHealth() != 1d) { // Prevents killing the player
 			player.setHealth(player.getHealth() - 1);
 			
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 				@Override
 				public void run() {
-					if(player.getHealth() <= 19d) { // Avoid an IllegalArgumentException
+					if(player.getHealth() <= 19d) { // Avoids an IllegalArgumentException
 						player.setHealth(player.getHealth() + 1);
 					}
 				}
@@ -258,7 +258,7 @@ public class UHScoreboardManager {
 	}
 	
 	/**
-	 * Tell the player's client to use this scoreboard.
+	 * Tells the player's client to use this scoreboard.
 	 * 
 	 * @param p The player.
 	 */
