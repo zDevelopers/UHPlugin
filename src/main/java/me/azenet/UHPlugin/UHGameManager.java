@@ -436,12 +436,15 @@ public class UHGameManager {
 	 */
 	public void finalizeStart() {
 		Bukkit.getServer().broadcastMessage(i.t("start.go"));
-		this.scoreboardManager.updateCounters();
-		this.scoreboardManager.updateTimer();
 		
 		p.getFreezer().setGlobalFreezeState(false);
 		
 		this.gameRunning = true;
+		
+		// The updateCounters method needs to be executed when the game is marked
+		// as running, in order to display the team count.
+		this.scoreboardManager.updateCounters();
+		this.scoreboardManager.updateTimer();
 	}
 	
 	
