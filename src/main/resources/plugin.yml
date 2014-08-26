@@ -3,7 +3,7 @@ description: Ultra Hardcore plugin
 main: me.azenet.UHPlugin.UHPlugin
 version: 0.9 §cdev§r
 author: "Amaury Carrade"
-authors: [azenet]
+authors: [azenet, "João Roda"]
 
 awareness:
   - !@UTF8

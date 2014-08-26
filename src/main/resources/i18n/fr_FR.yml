@@ -157,7 +157,7 @@ keys:
         unknownCommand: "{ce}Commande inconnue. Consultez /uh team pour obtenir la liste des commandes disponibles."
         
         add:
-            errorColor: "{ce}Impossible d'ajouter l'équipe. Vérifiez le nom de la couleur."
+            errorColor: "{ce}Impossible d'ajouter l'équipe ; vérifiez le nom de la couleur. Conseil : utilisez l'autocomplétion."
             errorExists: "{ce}Cette équipe existe déjà."
             added: "{cs}Équipe {0}{cs} ajoutée."
             nameTooLong: "{ce}Impossible d'ajouter l'équipe : le nom est trop long (maximum 16 caractères)."
@@ -262,7 +262,7 @@ keys:
         set:
             playersOutsideCanceled: "{ce}Certains joueurs étant hors de cette nouvelle bordure, l'opération a été annulée."
             playersOutsideCanceledCmd: "{ci}Utilisez {cc}/uh border set {0} force{ci} pour changer la taille de la carte malgré tout."
-            playersOutsideCanceledWarnWorldBorder: "{ce}ATTENTION: {ci}WorldBorder n'étant pas installé, les joueurs hors de la bordure seront immobilisés !"
+            playersOutsideCanceledWarnWorldBorder: "{ce}ATTENTION: {ci}WorldBorder n'étant pas installé, les joueurs hors de la bordure ne seront pas téléportés !"
             
             broadcastSquared: "{lightpurple}La taille de la carte est désormais de {0}*{0}"
             broadcastCircular: "{lightpurple}La carte a désormais un diamètre de {0} blocs."

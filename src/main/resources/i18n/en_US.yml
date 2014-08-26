@@ -157,7 +157,7 @@ keys:
         unknownCommand: "{ce}Unknown command. See /uh team for available commands."
         
         add:
-            errorColor: "{ce}Unable to add the team, check the color name."
+            errorColor: "{ce}Unable to add the team, check the color name. Tip: use Tab to autocomplete."
             errorExists: "{ce}This team already exists."
             added: "{cs}Team {0}{cs} added."
             nameTooLong: "{ce}Unable to add the team, because the name is too long (max 16 characters)."
@@ -262,7 +262,7 @@ keys:
         set:
             playersOutsideCanceled: "{ce}Some players are outside the future border, so this operation was cancelled."
             playersOutsideCanceledCmd: "{ci}Use {cc}/uh border set {0} force{ci} to resize the border regardless to this point."
-            playersOutsideCanceledWarnWorldBorder: "{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will be frozen!"
+            playersOutsideCanceledWarnWorldBorder: "{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will not be teleported!"
             
             broadcastSquared: "{lightpurple}The size of the map is now {0}*{0}."
             broadcastCircular: "{lightpurple}The diameter of the map is now {0} blocks."
