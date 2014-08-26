@@ -150,13 +150,14 @@ All these gameplay tweaks are optional — see [the configuration file](https://
     - Use `/t <message>` to send such a private message.
  - The commands can be accessed using permissions (see subsection below).
  - Autocompletion everywhere.
- - Fully translated into English and French.
+ - Fully translated into English, French and Portuguese.
  - For developers:
     - the game can be controlled through the GameManager (`UHPlugin.getGameManager()`); 
     - the teams, using the TeamManager (`UHPlugin.getTeamManager()`);
-    - the scoreboard, using the... ScoreboardManager, yes (`UHPlugin.getScoreboardManager()`);
+    - the scoreboard, using the... ScoreboardManager, yes (`UHPlugin.getGameManager().getScoreboardManager()`);
     - the wall generator, using the `UHWallGenerator` class;
-    - the border, through the BorderManager (`UHPlugin.getBorderManager()`).
+    - the border, through the BorderManager (`UHPlugin.getBorderManager()`);
+    - the freezer, using the Freezer (...yes) (`UHPlugin.getFreezer()`).
  - Compatible with Bukkit 1.7.9+.
  - Lightweight (as much as possible).
 
@@ -177,7 +178,6 @@ Legend: `/uh command <required> [optional=default]`.
  - `/uh addspawn` : adds a spawn point for a team or a player, at the current location of the sender.
  - `/uh addspawn <x> <z>` : adds a spawn point for a team or a player, at the provided coordinates.
  - `/uh spec` : manages the spectators (aka players ignored by /uh start) (add, remove, list).
- - `/uh freeze` : used to (un)freeze the entire game or some players.
  - `/uh border`: manages the border (current, set, warning, check)
  - `/uh generatewalls` : generates the walls according to the configuration.
 
@@ -189,7 +189,9 @@ Legend: `/uh command <required> [optional=default]`.
 
 ### Others
 
+ - `/uh freeze` : used to (un)freeze the entire game or some players.
  - `/t <message>` : sends a private message to the entire team of the sender.
+ - `/uh about` : prints informations about the plugin and the translations.
 
 ### Permissions
 
@@ -212,19 +214,29 @@ You can also install these plugins:
  - [SpectatorPlus](http://dev.bukkit.org/plugin/spectator/), if you want to enable a spectator mode for dead players;
  - [dynmap](http://dev.bukkit.org/plugin/dynmap/), because the plugin can display the spawn & death points on the map.
 
+
+After the installation, I recommend you to:
+
+1. teleport yourself to 0,0;
+2. set the world spawn point here (`/setworldspawn`);
+3. reload the server (for the plugin to take into account the change) (`/rl`);
+4. pregenerate the entire world (WorldBorder is preconfigured, just execute `/wb fill`);
+5. After that, generate the wall (`/uh generatewalls`). Else, holes will be formed in the wall when Minecraft will populate the terrain.
+
+
 ## How to translate the plugin in your own language
 
 It's pretty simple.
 
 1. **Duplicate a language file** in the `plugins/UHPlugin/i18n/` folder of your server.  
-   You can name the new language file with any name wanted, but I recommend naming it `language_COUNTRY.yml` (like the other ones).
+   Name the file `language_COUNTRY.yml` (like the other ones).
 2. Open the new language file with a text editor (like notepad, gedit, kate, vi, etc.) and **translate the strings**.  
    *DON'T change the keys*, only the strings after the comas.  
    Also, *never use tabulations in these files*, *don't change the indentation* and *don't remove the quotes around the sentences*.
 3. When the translation is done, open the `manifest.yml` file (in the same folder) and **add the name of the new language file** (without the `.yml`) in the list:
    
    ```yml
-   version: 0.9 §cdev§r
+   version: 1.0
    languages:
     - en_US
     - fr_FR
@@ -270,7 +282,7 @@ These values are replaced by the plugin; see below.
 ## Thanks
 
  - This work is a fork of [the KTP plugin](https://github.com/Azenet/KTP) made by [@Azenet](https://github.com/Azenet).
- - Special thanks to [@jonyroda97](https://github.com/jonyroda97), for many interesting suggestions.
+ - Special thanks to [@jonyroda97](https://github.com/jonyroda97), for many interesting suggestions and Portuguese translation.
 
 
 ## License
