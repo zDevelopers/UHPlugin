@@ -136,7 +136,7 @@ public class UHGameListener implements Listener {
 				boolean onlyOtherTeam = p.getConfig().getBoolean("death.give-xp-to-killer.onlyOtherTeam");
 				
 				if((onlyOtherTeam && !inSameTeam) || !onlyOtherTeam) {
-					((Player) killer).giveExpLevels(p.getConfig().getInt("death.give-xp.levels"));
+					((Player) killer).giveExpLevels(p.getConfig().getInt("death.give-xp-to-killer.levels"));
 				}
 			}
 		}
