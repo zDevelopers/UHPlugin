@@ -159,7 +159,8 @@ public class UHGameListener implements Listener {
 					Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 						@Override
 						public void run() {
-							p.getServer().broadcastMessage(i.t("death.teamHasFallen", p.getConfig().getString("death.messages.teamDeathMessagesFormat", ""), team.getDisplayName() + p.getConfig().getString("death.messages.teamDeathMessagesFormat", "")));
+							String format = ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.teamDeathMessagesFormat", ""));
+							p.getServer().broadcastMessage(i.t("death.teamHasFallen", format, team.getDisplayName() + format));
 						}
 					}, 1L);
 				}
@@ -167,7 +168,7 @@ public class UHGameListener implements Listener {
 		}
 		
 		// Customizes the death message
-		ev.setDeathMessage(p.getConfig().getString("death.messages.deathMessagesFormat", "") + ev.getDeathMessage());
+		ev.setDeathMessage(ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.deathMessagesFormat", "")) + ev.getDeathMessage());
 		
 		// Updates the number of alive players/teams
 		p.getGameManager().updateAliveCounters();
