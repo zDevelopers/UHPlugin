@@ -396,7 +396,7 @@ public class I18n {
 	 */
 	private void writeFilesIfNeeded() {
 		// Files already written?
-		File test = new File(p.getDataFolder() + "/" + this.getLanguageFilePath("manifest"));
+		File test = new File(p.getDataFolder().getAbsolutePath() + "/" + this.getLanguageFilePath("en_US"));
 		if(!test.exists()) { // Files not written
 			writeLanguageFiles(false);
 		}
