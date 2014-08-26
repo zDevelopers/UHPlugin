@@ -69,7 +69,7 @@ death:
 colorizeChat: true
 
 gameplay-changes:
-    weather: true  # If false, the “bad” weather (rain, thunder) is disabled.
+    weather: true  # If false, the "bad" weather (rain, thunder) is disabled.
     
     replaceGhastTearsWithGold: true
     craftGoldenMelonWithGoldBlock: true

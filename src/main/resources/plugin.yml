@@ -5,6 +5,9 @@ version: 0.9 §cdev§r
 author: "Amaury Carrade"
 authors: [azenet]
 
+awareness:
+  - !@UTF8
+
 softdepend:
   - WorldBorder
   - SpectatorPlus

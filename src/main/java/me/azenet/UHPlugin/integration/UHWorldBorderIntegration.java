@@ -24,7 +24,6 @@ import me.azenet.UHPlugin.UHPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.block.Biome;
 import org.bukkit.plugin.Plugin;
 
 import com.wimbli.WorldBorder.BorderData;

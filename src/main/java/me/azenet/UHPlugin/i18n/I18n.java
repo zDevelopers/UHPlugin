@@ -20,7 +20,9 @@
 package me.azenet.UHPlugin.i18n;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.HashMap;
@@ -34,12 +36,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
+import com.google.common.base.Charsets;
+
 /**
  * This class is used to manage the internationalization of this plugin.
  * It is plugin-independent.
  * 
  * @author Amaury Carrade
- * @version 1.1
+ * @version 1.2
  * @license Mozilla Public License
  *
  */
@@ -65,6 +69,9 @@ public class I18n {
 	 *     - "version": this key is the version of the plugin (used to update the language files on the disk).
 	 *       This needs to be the exact version defined in the plugin.yml file.
 	 * 
+	 * Currently, an "en_US" language file is needed.
+	 * Else, if the requested language is not available, a crash will occur when trying to load the en_US language.
+	 * 
 	 * @param plugin The plugin.
 	 * @param selectedLanguage The selected language.
 	 * @param defaultLanguage The default language, used when a key is missing or null.
@@ -75,8 +82,7 @@ public class I18n {
 		try {
 			reloadManifest(false);
 		} catch (InvalidConfigurationException e) {
-			p.getLogger().severe("Unable to load a malformed manifest");
-			e.printStackTrace();
+			p.getLogger().log(Level.SEVERE, "Unable to load a malformed i18n manifest", e);
 			return;
 		}
 		
@@ -87,12 +93,25 @@ public class I18n {
 		this.selectedLanguage = selectedLanguage;
 		this.defaultLanguage = defaultLanguage;
 		
+		if(!isLanguageAvailable(selectedLanguage)) {
+			if(isLanguageAvailable(getLanguageName(Locale.getDefault()))) {
+				this.selectedLanguage = getLanguageName(Locale.getDefault());
+			}
+			else {
+				this.selectedLanguage = "en_US";
+			}
+			p.getLogger().info("The selected language (" + selectedLanguage + ") is not available or not registered in the manifest; using " + this.selectedLanguage + ".");
+		}
+		if(!isLanguageAvailable(defaultLanguage)) {
+			this.defaultLanguage  = "en_US";
+			p.getLogger().info("The default language (" + defaultLanguage + ") is not available or not registered in the manifest; using en_US.");
+		}
+		
 		try {
-			this.reloadLanguageFile(defaultLanguage, false, false);
-			this.reloadLanguageFile(selectedLanguage, false, false);
+			this.reloadLanguageFile(this.selectedLanguage, false, false);
+			this.reloadLanguageFile(this.defaultLanguage, false, false);
 		} catch (InvalidConfigurationException e) {
-			p.getLogger().severe("Unable to load malformed language files");
-			e.printStackTrace();
+			p.getLogger().log(Level.SEVERE, "Unable to load malformed language files (" + this.selectedLanguage + " or " + this.defaultLanguage + ")", e);
 			return;
 		}
 	}
@@ -116,7 +135,7 @@ public class I18n {
 	 * @param plugin The plugin.
 	 */
 	public I18n(Plugin plugin) {
-		this(plugin, Locale.getDefault().toString());
+		this(plugin, getLanguageName(Locale.getDefault()));
 	}
 	
 	/**
@@ -207,7 +226,6 @@ public class I18n {
 	
 	/**
 	 * Replaces standard keys in the message, like {gold} for the gold color code.
-	 * TODO
 	 * 
 	 * @param text
 	 * @return
@@ -247,6 +265,34 @@ public class I18n {
 	}
 	
 	/**
+	 * Returns the name of the language associated with the given locale.
+	 * <p>
+	 * <code>locale.toString()</code> is not use to avoid a longer name, because the format
+	 * of this method is:
+	 * 
+	 * <pre>language + "_" + country + "_" + (variant + "_#" | "#") + script + "-" + extensions</pre>
+	 * 
+	 * <p>
+	 * Static because I need this in a constructor.
+	 * 
+	 * @param locale The locale
+	 * @return The name of the locale, formatted following this scheme: "language_COUNTRY".
+	 */
+	private static String getLanguageName(Locale locale) {
+		return locale.getLanguage() + "_" + locale.getCountry();
+	}
+	
+	/**
+	 * Returns true if the given language is available, using the manifest.
+	 * 
+	 * @param lang The lang.
+	 * @return true if the given language is available.
+	 */
+	private boolean isLanguageAvailable(String lang) {
+		return this.manifest.getList("languages").contains(lang);
+	}
+	
+	/**
 	 * (Re)loads a language file.
 	 * 
 	 * @param lang The language to (re)load.
@@ -258,19 +304,36 @@ public class I18n {
 	private void reloadLanguageFile(String lang, boolean write, boolean writeOnly) throws InvalidConfigurationException, IllegalArgumentException {
 		lang = this.cleanLanguageName(lang);
 		
-		if(!this.manifest.getList("languages").contains(lang)) { // Unknown language
+		if(!isLanguageAvailable(lang)) { // Unknown language
 			throw new IllegalArgumentException("The language " + lang + " is not registered");
 		}
 		
 		if(this.languageFile.get(lang) == null) {
 			this.languageFile.put(lang, new File(p.getDataFolder() + "/" + getLanguageFilePath(lang)));
 		}
+		 
 		
-		this.languageSource.put(lang, YamlConfiguration.loadConfiguration(this.languageFile.get(lang)));
+		
+		// The YAML configuration is loaded using a Reader, to specify the encoding to be used,
+		// to be able to force UTF-8.
+		// An InputStream of the language file is needed for this.
+		InputStream languageFileInputStream = null;
+		try {
+			languageFileInputStream = languageFile.get(lang).toURI().toURL().openConnection().getInputStream();
+			this.languageSource.put(lang, YamlConfiguration.loadConfiguration(new InputStreamReader(languageFileInputStream, Charsets.UTF_8)));
+			
+		} catch (FileNotFoundException e) {
+			p.getLogger().log(Level.INFO, "Writing the language file for " + lang + "...");
+			this.languageSource.put(lang, new YamlConfiguration());
+			
+		} catch (IOException e) {
+			p.getLogger().log(Level.SEVERE, "Unable to load the language " + lang + ": input/output error. Please check if the file is readable.", e);
+			return;
+		}
 		
 		// Default config
 		try {
-			Reader defaultLanguageFile = new InputStreamReader(p.getResource(getLanguageFilePath(lang)));
+			Reader defaultLanguageFile = new InputStreamReader(p.getResource(getLanguageFilePath(lang)), Charsets.UTF_8);
 			if(defaultLanguageFile != null) {
 				YamlConfiguration defaultLanguageSource = YamlConfiguration.loadConfiguration(defaultLanguageFile);
 				this.languageSource.get(lang).setDefaults(defaultLanguageSource);
@@ -369,7 +432,7 @@ public class I18n {
 					p.getLogger().severe("Unable to load the language file for " + lang + ": the file does not exists.");
 				}
 				catch(InvalidConfigurationException e) {
-					p.getLogger().severe("Unable to load a malformed language file for " + lang);
+					p.getLogger().log(Level.SEVERE, "Unable to load a malformed language file for " + lang, e);
 				}
 			}
 		}

@@ -85,7 +85,7 @@ public class UHTeamManager {
 	/**
 	 * Adds a player to a team.
 	 * 
-	 * @param teamName The team in which we add the player.
+	 * @param teamName The team in which we adds the player.
 	 * @param player The player to add.
 	 * @throws IllegalArgumentException if the team does not exists.
 	 */
@@ -102,7 +102,7 @@ public class UHTeamManager {
 	}
 
 	/**
-	 * Removes a player from its team.
+	 * Removes a player from his team.
 	 * 
 	 * @param player The player to remove.
 	 */
