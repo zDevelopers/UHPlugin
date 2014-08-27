@@ -42,7 +42,7 @@ For available configuration, please [see directly the configuration file](https:
 - Automatic set of teleportation spots is not supported.
 - The teams (or players, if solo) are automatically teleported to a random teleportation spot.
 - Two teleportation modes available:
-   -  a “direct” one, all players are teleported in the same time;
+   - a “direct” one, all players are teleported in the same time;
    - a “slow” one, the teams are teleported with a delay, and the game is launched after; useful for smaller servers.
 - The players state is reset when they are teleported: inventory cleaned, max food and health, no XP, no potion effects...
 - Some players can be marked as “spectators”: they are not teleported and not counted as a player.
@@ -81,10 +81,8 @@ For available configuration, please [see directly the configuration file](https:
      ![in a cave](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Wall_Cave.png)  
      (using the default configuration).
    - The generated wall can be either circular or squared.
-- The players are blocked inside the wall, even if the wall is broken or not generated.
-   - If WorldBorder is present, it is automatically configured.
-   - Else, the plugin will check itself if a player is outside the border (not recommended, use WorldBorder if possible!).
-- The border can eaily be set during the game with `/uh border set <diameter>`
+- The players are blocked inside the wall, even if the wall is broken or not generated, if WorldBorder is present (automatic configuration of the plugin).
+- The border can easily be set during the game with `/uh border set <diameter>`
 - To anticipate a new border size, a warning can be send to all players out of this future border with `/uh border warning <futureDiameter>` every 90 seconds (by default, you can change the delay in the config).
    - The time left to go inside the next border can be included in this message (`/uh border warning <futureDiameter> [minutesBeforeReduction]`).  
      ![message broadcasted to the players outside](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Border_Warning.png)
