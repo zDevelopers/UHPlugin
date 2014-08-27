@@ -68,10 +68,19 @@ public class UHRecipeManager {
 			p.getServer().addRecipe(getGoldenMelonRecipe());
 		}
 		
-		if (p.getConfig().getBoolean("gameplay-changes.compass")) {
-			p.getServer().addRecipe(getCompassRecipe());
+		if (p.getConfig().getBoolean("gameplay-changes.compass.enabled")) {
+			switch(p.getConfig().getString("gameplay-changes.compass.recipe")) {
+				case "easy":
+					p.getServer().addRecipe(getEasyCompassRecipe());
+					break;
+				case "hard":
+					p.getServer().addRecipe(getHardCompassRecipe());
+					break;
+				default:
+					p.getServer().addRecipe(getMediumCompassRecipe());
+			}
 		}
-			
+		
 	}
 	
 	/**
@@ -82,8 +91,8 @@ public class UHRecipeManager {
 	 */
 	public boolean isRecipeAllowed(Recipe recipe) {
 		
-		// Vanilla compass recipe is disabled if special compass is used.
-		if(p.getConfig().getBoolean("gameplay-changes.compass") && RecipeUtil.areSimilar(recipe, getVanillaCompassRecipe())) {
+		// Vanilla compass recipe is disabled if the special compass is used.
+		if(p.getConfig().getBoolean("gameplay-changes.compass.enabled") && RecipeUtil.areSimilar(recipe, getVanillaCompassRecipe())) {
 			return false;
 		}
 		
@@ -314,12 +323,70 @@ public class UHRecipeManager {
 	 * 
 	 * @return The shaped recipe.
 	 */
-	public ShapedRecipe getCompassRecipe() {
+	public ShapedRecipe getEasyCompassRecipe() {
 		ShapedRecipe compassRecipe = new ShapedRecipe(new ItemStack(Material.COMPASS));
 		compassRecipe.shape(new String[] {"CIE", "IRI", "BIF"});
 		
 		compassRecipe.setIngredient('I', Material.IRON_INGOT);
 		compassRecipe.setIngredient('R', Material.REDSTONE);
+		compassRecipe.setIngredient('C', Material.SULPHUR);
+		compassRecipe.setIngredient('E', Material.SPIDER_EYE);
+		compassRecipe.setIngredient('B', Material.BONE);
+		compassRecipe.setIngredient('F', Material.ROTTEN_FLESH);
+		
+		return compassRecipe;
+	}
+	
+	/**
+	 * Returns the recipe that transforms into a compass:
+	 *  - in the center, an ender pearl;
+	 *  - from the top, clockwise:
+	 *     - iron
+	 *     - spider eye
+	 *     - iron
+	 *     - rotten flesh
+	 *     - iron
+	 *     - bone
+	 *     - iron
+	 *     - gunpowder.
+	 * 
+	 * @return The shaped recipe.
+	 */
+	public ShapedRecipe getMediumCompassRecipe() {
+		ShapedRecipe compassRecipe = new ShapedRecipe(new ItemStack(Material.COMPASS));
+		compassRecipe.shape(new String[] {"CIE", "IPI", "BIF"});
+		
+		compassRecipe.setIngredient('I', Material.IRON_INGOT);
+		compassRecipe.setIngredient('P', Material.ENDER_PEARL);
+		compassRecipe.setIngredient('C', Material.SULPHUR);
+		compassRecipe.setIngredient('E', Material.SPIDER_EYE);
+		compassRecipe.setIngredient('B', Material.BONE);
+		compassRecipe.setIngredient('F', Material.ROTTEN_FLESH);
+		
+		return compassRecipe;
+	}
+	
+	/**
+	 * Returns the recipe that transforms into a compass:
+	 *  - in the center, an eye of ender;
+	 *  - from the top, clockwise:
+	 *     - iron
+	 *     - spider eye
+	 *     - iron
+	 *     - rotten flesh
+	 *     - iron
+	 *     - bone
+	 *     - iron
+	 *     - gunpowder.
+	 * 
+	 * @return The shaped recipe.
+	 */
+	public ShapedRecipe getHardCompassRecipe() {
+		ShapedRecipe compassRecipe = new ShapedRecipe(new ItemStack(Material.COMPASS));
+		compassRecipe.shape(new String[] {"CIE", "IPI", "BIF"});
+		
+		compassRecipe.setIngredient('I', Material.IRON_INGOT);
+		compassRecipe.setIngredient('P', Material.EYE_OF_ENDER);
 		compassRecipe.setIngredient('C', Material.SULPHUR);
 		compassRecipe.setIngredient('E', Material.SPIDER_EYE);
 		compassRecipe.setIngredient('B', Material.BONE);

@@ -108,8 +108,12 @@ All these gameplay tweaks are optional — see [the configuration file](https://
 - The ghast tears can be replaced by gold, to make Regeneration potions uncraftable.
 - The level-II potions can be disabled.
 - The compass behavior can be changed.
-   - New craft: redstone in center; then from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gunpowder.  
+   - New craft: an ingredient in the center; then from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gunpowder.  
      ![Craft for the special compass](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_Compass.png)
+   - There are three different ingredients in the center, for three levels of difficulty.
+       - `Simple`: redstone powder (just like the vanilla compass).
+       - `Medium`: ender pearl.
+       - `Hard`: eye of ender.
    - If a player right-click with a compass, the compass shows the nearest player (team excluded).
    - This consumes a rotten flesh.
 - The time can be frozen to any hour (eternal day/night), or not.

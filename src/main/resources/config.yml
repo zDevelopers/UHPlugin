@@ -103,7 +103,16 @@ gameplay-changes:
     
     # If true a compass will show the nearest player, and the craft will be different.
     # Else, the craft will be standard and the compass will show the spawn point of the team/player (not the world spawn point).
-    compass: true
+    compass:
+        enabled: true
+        
+        # The special recipe is with an ingredient in the center, and then,
+        # from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gunpowder.
+        # This field change the central ingredient.
+        # "easy": redstone (like the normal compass).
+        # "medium": ender pearl.
+        # "hard": eye of ender.
+        recipe: "medium"
 
 teams-options:
     canSeeFriendlyInvisibles: true
