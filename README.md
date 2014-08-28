@@ -1,6 +1,9 @@
-# Plugin KTP
+# UltraHardcore, reloaded
 
 C'est très la source.
+
+This plugin is [available on BukkitDev](http://dev.bukkit.org/bukkit-plugins/uhc/).  
+Please note, this README reflects the last development version. Some features listed here may not be in the version published on BukkitDev.
 
 [![Build Status](https://travis-ci.org/AmauryCarrade/UHPlugin.svg?branch=master)](https://travis-ci.org/AmauryCarrade/UHPlugin)
 
