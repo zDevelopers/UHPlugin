@@ -46,6 +46,7 @@ keys:
         
         titleMiscCmd: "{aqua}------ Commandes diverses ------"
         helpFreeze: "{cc}/uh freeze {ci}: (dés)immobilise l'ensemble du jeu, ou un joueur. Consultez /uh freeze pour plus de détails."
+        helpFinish: "{cc}/uh finish {ci}: affiche le nom du/des vainqueurs et lance des feux d'artifices."
         helpAbout: "{cc}/uh about {ci}: informations à propos du plugin et des traductions."
         
         teamHelpTitle: "{aqua}------ Commandes liées aux équipes ------"
@@ -102,6 +103,16 @@ keys:
         
         go: "{green}--- GO ---"
     
+    finish:
+        notStarted: "{ce}Le jeu n'est pas encore démarré !"
+        notFinished: "{ce}Il n'y a pas qu'une équipe encore en vie !"
+        
+        and: "et"
+        
+        broadcast:
+            withTeams: "{darkgreen}{obfuscated}--{green} Félicitations à {0} (équipe {1}{green}) pour leur victoire ! {darkgreen}{obfuscated}--"
+            withoutTeams: "{darkgreen}{obfuscated}--{green} Félicitation à {0} pour sa victoire ! {darkgreen}{obfuscated}--"
+
     episodes:
         end: "{aqua}-------- Fin de l'épisode {0} --------"
         endForced: "{aqua}-------- Fin de l'épisode {0} [forcé par {1}] --------"

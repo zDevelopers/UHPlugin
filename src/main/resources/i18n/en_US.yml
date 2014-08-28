@@ -46,6 +46,7 @@ keys:
         
         titleMiscCmd: "{aqua}------ Miscellaneous commands ------"
         helpFreeze: "{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."
+        helpFinish: "{cc}/uh finish {ci}: displays the name of the winner(s) and launches some fireworks."
         helpAbout: "{cc}/uh about {ci}: informations about the plugin and the translation."
         
         teamHelpTitle: "{aqua}------ Team commands ------"
@@ -101,6 +102,16 @@ keys:
         startSlowAllTeamsTPCmd: "{gray}Use {cc}/uh start slow go{gray} to start the game."
         
         go: "{green}--- GO ---"
+    
+    finish:
+        notStarted: "{ce}The game is not started!"
+        notFinished: "{ce}There's not one team alive!"
+        
+        and: "and"
+        
+        broadcast:
+            withTeams: "{darkgreen}{obfuscated}--{green} Congratulations to {0} (team {1}{green}) for their victory! {darkgreen}{obfuscated}--"
+            withoutTeams: "{darkgreen}{obfuscated}--{green} Congratulations to {0} for his victory! {darkgreen}{obfuscated}--"
     
     episodes:
         end: "{aqua}-------- End of episode {0} --------"

@@ -121,6 +121,14 @@ teams-options:
 slow-start:
     delayBetweenTP: 3  # in seconds
 
+# Controls the behavior of the /uh finish command
+finish:
+    message: true  # If true, the name of the winner(s) will be broadcasted.
+    fireworks:
+        enabled: true  # If true, some fireworks will be launched at the location of the winners.
+        duration: 10   # In seconds.
+
+
 dynmap:
     showSpawnLocations: true
     showDeathLocations: true
