@@ -130,6 +130,12 @@ slow-start:
 # Display hardcore hearts instead of normal ones?
 hardcore-hearts: true
 
+# Automatically respawn the player after his death.
+# Avoid the interrogation about the ability to respawn, if hardcore hearts are enabled.
+auto-respawn:
+    do: true
+    delay: 6  # seconds
+
 
 # Controls the behavior of the /uh finish command
 finish:

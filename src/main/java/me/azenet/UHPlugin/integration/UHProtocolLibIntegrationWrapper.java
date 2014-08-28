@@ -63,6 +63,7 @@ public class UHProtocolLibIntegrationWrapper {
 		
 		ArrayList<String> options = new ArrayList<String>();
 		options.add("hardcore-hearts");
+		options.add("auto-respawn.do");
 		
 		ArrayList<String> enabledOptions = new ArrayList<String>();
 		

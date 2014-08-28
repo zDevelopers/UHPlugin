@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.listeners.UHLoginPacketsListener;
+import me.azenet.UHPlugin.listeners.UHPacketsListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -37,6 +37,8 @@ public class UHProtocolLibIntegration {
 	private UHPlugin p = null;
 	private ProtocolManager pm = null;
 	
+	private UHPacketsListener packetsListener = null;
+	
 	public UHProtocolLibIntegration(UHPlugin p) {
 		this.p = p;
 		
@@ -48,10 +50,15 @@ public class UHProtocolLibIntegration {
 		
 		
 		this.pm = ProtocolLibrary.getProtocolManager();
+		this.packetsListener = new UHPacketsListener(p);
 		
-		if(isProtocolLibIntegrationEnabled() && p.getConfig().getBoolean("hardcore-hearts")) {
-			pm.addPacketListener(new UHLoginPacketsListener(p));
+		if(p.getConfig().getBoolean("hardcore-hearts")) {
+			pm.addPacketListener(packetsListener);
 		}
+		if(p.getConfig().getBoolean("auto-respawn.do")) {
+			p.getServer().getPluginManager().registerEvents(packetsListener, p);
+		}
+		
 		
 		this.p.getLogger().info("Successfully hooked into ProtocolLib.");
 	}
@@ -70,6 +77,7 @@ public class UHProtocolLibIntegration {
 		
 		ArrayList<String> options = new ArrayList<String>();
 		options.add("hardcore-hearts");
+		options.add("auto-respawn.do");
 		
 		ArrayList<String> enabledOptions = new ArrayList<String>();
 		
