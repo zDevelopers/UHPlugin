@@ -127,6 +127,10 @@ slow-start:
     delayBetweenTP: 3  # in seconds
 
 
+# Display hardcore hearts instead of normal ones?
+hardcore-hearts: true
+
+
 # Controls the behavior of the /uh finish command
 finish:
     auto:

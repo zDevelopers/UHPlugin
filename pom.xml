@@ -34,6 +34,11 @@
       <url>http://repo.mikeprimm.com/</url>
     </repository>
     <repository>
+      <id>comphenix-rep</id>
+      <name>Comphenix Repository</name>
+      <url>http://repo.comphenix.net/content/groups/public</url>
+    </repository>
+    <repository>
       <id>carrade-repo</id>
       <url>http://depot.carrade.eu/maven2/</url>
     </repository>
@@ -62,6 +67,11 @@
       <groupId>org.dynmap</groupId>
       <artifactId>dynmap-api</artifactId>
       <version>1.8</version>
+    </dependency>
+    <dependency>
+      <groupId>com.comphenix.protocol</groupId>
+      <artifactId>ProtocolLib</artifactId>
+      <version>3.4.0</version>
     </dependency>
   </dependencies>
 </project>

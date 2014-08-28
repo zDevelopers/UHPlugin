@@ -19,6 +19,9 @@
 
 package me.azenet.UHPlugin.listeners;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHTeam;
 import me.azenet.UHPlugin.i18n.I18n;
@@ -70,7 +73,8 @@ public class UHGameListener implements Listener {
 	 *  - save the location of the death of the player, to allow a teleportation later;
 	 *  - show the death location on the dynmap (if needed);
 	 *  - give XP to the killer (if needed);
-	 *  - broadcast the winners and launch the fireworks if needed.
+	 *  - broadcast the winners and launch the fireworks if needed;
+	 *  - notify the player about the possibility of respawn if hardcore hearts are enabled.
 	 *  
 	 * @param ev
 	 */
@@ -180,7 +184,7 @@ public class UHGameListener implements Listener {
 		// Shows the death location on the dynmap
 		p.getDynmapIntegration().showDeathLocation(ev.getEntity());
 		
-		// Broadcasts the winner(s) and launches some fireworks if needed, a few seconds later.
+		// Broadcasts the winner(s) and launches some fireworks if needed, a few seconds later
 		if(p.getConfig().getBoolean("finish.auto.do")) {
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 				@Override
@@ -192,6 +196,16 @@ public class UHGameListener implements Listener {
 					}
 				}
 			}, p.getConfig().getInt("finish.auto.timeAfterLastDeath", 3) * 20L);
+		}
+		
+		// Notifies the player about the possibility of respawn if hardcore hearts are enabled
+		if(p.getConfig().getBoolean("hardcore-hearts") && p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled()) {
+			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+				@Override
+				public void run() {
+					ev.getEntity().sendMessage(i.t("death.canRespawn"));
+				}
+			}, 2L);
 		}
 	}
 	
@@ -287,6 +301,20 @@ public class UHGameListener implements Listener {
 			if(!p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
 				ev.getPlayer().sendMessage(i.t("load.SPNotInstalled1"));
 				ev.getPlayer().sendMessage(i.t("load.SPNotInstalled2"));
+			}
+			
+			// The same for ProtocolLib
+			if(!p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled()) {
+				List<String> enabledOptionsWithProtocolLibNeeded = p.getProtocolLibIntegrationWrapper().isProtocolLibNeeded();
+				
+				if(enabledOptionsWithProtocolLibNeeded != null) {
+					ev.getPlayer().sendMessage(i.t("load.PLNotInstalled1"));
+					ev.getPlayer().sendMessage(i.t("load.PLNotInstalled2"));
+					for(String option : enabledOptionsWithProtocolLibNeeded) {
+						ev.getPlayer().sendMessage(i.t("load.PLNotInstalledItem", option));
+					}
+					ev.getPlayer().sendMessage(i.t("load.PLNotInstalled3", "http://dev.bukkit.org/bukkit-plugins/protocollib/"));
+				}
 			}
 		}
 		

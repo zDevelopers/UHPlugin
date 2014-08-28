@@ -12,6 +12,7 @@ softdepend:
   - WorldBorder
   - SpectatorPlus
   - dynmap
+  - ProtocolLib
 
 commands:
    uh:

@@ -18,6 +18,11 @@ keys:
         SPNotInstalled1: "{darkred}[UHC] {ce}SpectatorPlus n'est pas installé."
         SPNotInstalled2: "{gray}Si vous voulez un mode spectateur, installez le plugin ; UHPlugin va automatiquement le configurer."
         
+        PLNotInstalled1: "{darkred}[UHC] {ce}ProtocolLib est requis mais non installé !"
+        PLNotInstalled2: "{gray}Les options suivantes requièrent la présence de ProtocolLib :"
+        PLNotInstalledItem: "{darkgray} - {gray}{0}"
+        PLNotInstalled3: "{gray}ProtocolLib est disponible ici : {0}"
+        
     cmd:
         errorLoad: "{ce}Une erreur est survenue, consultez la console pour plus de détails. Il s'agit probablement d'un bug."
         errorUnknown: "{ce}Cette commande n'existe pas. Tapez /uh pour la liste des commandes."
@@ -128,6 +133,8 @@ keys:
         kickMessage: "jayjay"
         banMessage: "Vous êtes mort !"
         teamHasFallen: "{0}L'équipe {1} est vaincue !"
+        
+        canRespawn: "{darkpurple}{obfuscated}----{lightpurple}{italic} VOUS POUVEZ REVENIR{lightpurple}, cliquez sur {italic}Ressusciter {lightpurple}sur l'écran suivant."
     
     craft:
         goldenApple:

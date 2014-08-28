@@ -21,6 +21,7 @@ package me.azenet.UHPlugin;
 
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.integration.UHDynmapIntegration;
+import me.azenet.UHPlugin.integration.UHProtocolLibIntegrationWrapper;
 import me.azenet.UHPlugin.integration.UHSpectatorPlusIntegration;
 import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
 import me.azenet.UHPlugin.listeners.UHCraftingListener;
@@ -43,6 +44,7 @@ public final class UHPlugin extends JavaPlugin {
 	private UHWorldBorderIntegration wbintegration = null;
 	private UHSpectatorPlusIntegration spintegration = null;
 	private UHDynmapIntegration dynmapintegration = null;
+	private UHProtocolLibIntegrationWrapper protocollibintegrationwrapper = null;
 	
 	private I18n i18n = null;
 
@@ -67,6 +69,10 @@ public final class UHPlugin extends JavaPlugin {
 		wbintegration = new UHWorldBorderIntegration(this);
 		spintegration = new UHSpectatorPlusIntegration(this);
 		dynmapintegration = new UHDynmapIntegration(this);
+		
+		// Needed to avoid a NoClassDefFoundError.
+		// I don't like this way of doing this, but else, the plugin will not load without ProtocolLib.
+		protocollibintegrationwrapper = new UHProtocolLibIntegrationWrapper(this);
 		
 		commandManager = new UHPluginCommand(this);
 		getCommand("uh").setExecutor(commandManager);
@@ -180,6 +186,15 @@ public final class UHPlugin extends JavaPlugin {
 	 */
 	public UHDynmapIntegration getDynmapIntegration() {
 		return dynmapintegration;
+	}
+	
+	/**
+	 * Returns a wrapper of the representation of the ProtocolLib integration in the plugin.
+	 * 
+	 * @return
+	 */
+	public UHProtocolLibIntegrationWrapper getProtocolLibIntegrationWrapper() {
+		return protocollibintegrationwrapper;
 	}
 	
 	
