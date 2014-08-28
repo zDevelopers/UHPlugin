@@ -168,7 +168,7 @@ keys:
         
         addplayer:
             disconnected: "{ce}Impossible d'ajouter le joueur {0} dans l'équipe {1}. Le joueur doit être connecté."
-            success: "{cs}Le joueur {0} a été ajouté à l'équipe {1} avec succès."
+            success: "{cs}Le joueur {0} a été ajouté à l'équipe {1}{cs} avec succès."
             doesNotExists: "{ce}Cette équipe n'existe pas."
         
         removeplayer:

@@ -126,35 +126,49 @@ public class UHTeam {
 	
 	/**
 	 * Removes a player from this team.
-	 * 
+	 *
 	 * Nothing is done if the player wasn't in this team.
-	 * 
+	 *
 	 * @param player The player to remove.
 	 */
 	public void removePlayer(Player player) {
 		Validate.notNull(player, "The player cannot be null.");
 		
 		players.remove(player.getUniqueId());
-		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).removePlayer(player);
-		
-		plugin.getTeamManager().colorizePlayer(player);
+		unregisterPlayer(player);
 	}
 	
 	/**
+	 * Unregisters a player from the scoreboard and uncolorizes the pseudo.
+	 *
+	 * Internal use, avoids a ConcurrentModificationException in this.deleteTeam()
+	 * (this.players is listed and emptied simultaneously, else).
+	 *
+	 * @param player
+	 */
+	private void unregisterPlayer(Player player) {
+		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).removePlayer(player);
+		plugin.getTeamManager().colorizePlayer(player);
+	}
+	
+	
+	/**
 	 * Deletes this team.
-	 * 
-	 * The players inside the team are left without any team. 
+	 *
+	 * The players inside the team are left without any team.
 	 */
 	public void deleteTeam() {
 		// We removes the players from the team (scoreboard team too)
 		for(UUID id : players) {
-			removePlayer(plugin.getServer().getPlayer(id));
+			unregisterPlayer(plugin.getServer().getPlayer(id));
 		}
+		
+		this.players.clear();
 		
 		// Then the scoreboard team is deleted.
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).unregister();
-		
 	}
+	
 	
 	/**
 	 * Returns true if the given player is in this team.
