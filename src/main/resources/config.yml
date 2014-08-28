@@ -121,8 +121,13 @@ teams-options:
 slow-start:
     delayBetweenTP: 3  # in seconds
 
+
 # Controls the behavior of the /uh finish command
 finish:
+    auto:
+        do: true  # Execute /uh finish automatically a few seconds after the final death?
+        timeAfterLastDeath: 3  # The command will be executed this amount of seconds after the last death.
+    
     message: true  # If true, the name of the winner(s) will be broadcasted.
     fireworks:
         enabled: true  # If true, some fireworks will be launched at the location of the winners.

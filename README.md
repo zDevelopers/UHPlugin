@@ -150,6 +150,7 @@ All these gameplay tweaks are optional — see [the configuration file](https://
 
  - **The players can send a private message to their team**
     - Use `/t <message>` to send such a private message.
+ - You can broadcast the winner(s) of the game in the chat and launch some fireworks; either automatically, after the last death, or using `/uh finish`.
  - The commands can be accessed using permissions (see subsection below).
  - Autocompletion everywhere.
  - Fully translated into English, French and Portuguese.
@@ -192,6 +193,7 @@ Legend: `/uh command <required> [optional=default]`.
 ### Others
 
  - `/uh freeze` : used to (un)freeze the entire game or some players.
+ - `/uh finish` : broadcasts the winner(s) of the game, and sends some fireworks!
  - `/t <message>` : sends a private message to the entire team of the sender.
  - `/uh about` : prints informations about the plugin and the translations.
 

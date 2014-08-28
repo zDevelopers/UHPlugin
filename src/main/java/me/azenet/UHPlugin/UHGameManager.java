@@ -28,6 +28,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import me.azenet.UHPlugin.i18n.I18n;
+import me.azenet.UHPlugin.task.FireworksOnWinnersTask;
 import me.azenet.UHPlugin.task.TeamStartTask;
 import me.azenet.UHPlugin.task.UpdateTimerTask;
 
@@ -81,6 +82,11 @@ public class UHGameManager {
 	private Long timerPauseTime = 0L;
 	
 	private Sound deathSound = null;
+	
+	// Used to send a contextual error message in UHCommandManager, using only one exception,
+	// by checking the message. (Used in this.finishGame().)
+	public final static String FINISH_ERROR_NOT_STARTED = "Unable to finish the game: the game is not started";
+	public final static String FINISH_ERROR_NOT_FINISHED = "Unable to finish the game: the game is not finished";
 	
 	
 	public UHGameManager(UHPlugin plugin) {
@@ -851,6 +857,56 @@ public class UHGameManager {
 		alivePlayers.remove(player.getUniqueId());
 	}
 
+	
+	/**
+	 * Broadcasts the winner(s) of the game and launches some fireworks
+	 * 
+	 * @throws IllegalStateException if the game is not started or not finished
+	 * (use the message to distinguish these cases, {@link #FINISH_ERROR_NOT_STARTED}
+	 * or {@link #FINISH_ERROR_NOT_FINISHED}).
+	 */
+	public void finishGame() {
+		if(!p.getGameManager().isGameRunning()) {
+			throw new IllegalStateException(FINISH_ERROR_NOT_STARTED);
+		}
+		
+		if(p.getGameManager().getAliveTeamsCount() != 1) {
+			throw new IllegalStateException(FINISH_ERROR_NOT_FINISHED);
+		}
+		
+		// There's only one team.
+		UHTeam winnerTeam = p.getGameManager().getAliveTeams().get(0);
+		ArrayList<Player> listWinners = winnerTeam.getPlayers();
+		
+		if(p.getConfig().getBoolean("finish.message")) {
+			if(p.getGameManager().isGameWithTeams()) {
+				String winners = "";
+				
+				for(Player winner : listWinners) {
+					if(winner == listWinners.get(0)) {
+						// Nothing
+					}
+					else if(winner == listWinners.get(listWinners.size() - 1)) {
+						winners += " " + i.t("finish.and") + " ";
+					}
+					else {
+						winners += ", ";
+					}
+					winners += winner.getName();
+				}
+				
+				p.getServer().broadcastMessage(i.t("finish.broadcast.withTeams", winners, winnerTeam.getDisplayName()));
+			}
+			else {
+				p.getServer().broadcastMessage(i.t("finish.broadcast.withoutTeams", winnerTeam.getName()));
+			}
+		}
+		
+		if(p.getConfig().getBoolean("finish.fireworks.enabled")) {
+			new FireworksOnWinnersTask(p, listWinners).runTaskTimer(p, 0l, 10l);
+		}
+	}
+	
 	/**
 	 * Returns a list of the currently alive teams.
 	 * 

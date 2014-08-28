@@ -69,7 +69,8 @@ public class UHGameListener implements Listener {
 	 *  - update the number of alive players/teams;
 	 *  - save the location of the death of the player, to allow a teleportation later;
 	 *  - show the death location on the dynmap (if needed);
-	 *  - give XP to the killer (if needed).
+	 *  - give XP to the killer (if needed);
+	 *  - broadcast the winners and launch the fireworks if needed.
 	 *  
 	 * @param ev
 	 */
@@ -178,6 +179,20 @@ public class UHGameListener implements Listener {
 		
 		// Shows the death location on the dynmap
 		p.getDynmapIntegration().showDeathLocation(ev.getEntity());
+		
+		// Broadcasts the winner(s) and launches some fireworks if needed, a few seconds later.
+		if(p.getConfig().getBoolean("finish.auto.do")) {
+			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+				@Override
+				public void run() {
+					try {
+						p.getGameManager().finishGame();
+					} catch(IllegalStateException ignored) {
+						// The game is not finished.
+					}
+				}
+			}, p.getConfig().getInt("finish.auto.timeAfterLastDeath", 3) * 20L);
+		}
 	}
 	
 	

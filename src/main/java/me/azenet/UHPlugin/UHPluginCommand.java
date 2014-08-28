@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import me.azenet.UHPlugin.i18n.I18n;
-import me.azenet.UHPlugin.task.FireworksOnWinnersTask;
 
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
@@ -1011,47 +1010,22 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doFinish(CommandSender sender, Command command, String label, String[] args) {
 		
-		if(!p.getGameManager().isGameRunning()) {
-			sender.sendMessage(i.t("finish.notStarted"));
-			return;
-		}
-		
-		if(p.getGameManager().getAliveTeamsCount() != 1) {
-			sender.sendMessage(i.t("finish.notFinished"));
-			return;
-		}
-		
-		// There's only one team.
-		UHTeam winnerTeam = p.getGameManager().getAliveTeams().get(0);
-		ArrayList<Player> listWinners = winnerTeam.getPlayers();
-		
-		if(p.getConfig().getBoolean("finish.message")) {
-			if(p.getGameManager().isGameWithTeams()) {
-				String winners = "";
-				
-				for(Player winner : listWinners) {
-					if(winner == listWinners.get(0)) {
-						// Nothing
-					}
-					else if(winner == listWinners.get(listWinners.size() - 1)) {
-						winners += " " + i.t("finish.and") + " ";
-					}
-					else {
-						winners += ", ";
-					}
-					winners += winner.getName();
-				}
-				
-				p.getServer().broadcastMessage(i.t("finish.broadcast.withTeams", winners, winnerTeam.getDisplayName()));
+		try {
+			p.getGameManager().finishGame();
+			
+		} catch(IllegalStateException e) {
+			
+			if(e.getMessage().equals(UHGameManager.FINISH_ERROR_NOT_STARTED)) {
+				sender.sendMessage(i.t("finish.notStarted"));
+			}
+			else if(e.getMessage().equals(UHGameManager.FINISH_ERROR_NOT_FINISHED)) {
+				sender.sendMessage(i.t("finish.notFinished"));
 			}
 			else {
-				p.getServer().broadcastMessage(i.t("finish.broadcast.withoutTeams", winnerTeam.getName()));
+				throw e;
 			}
 		}
 		
-		if(p.getConfig().getBoolean("finish.fireworks.enabled")) {
-			new FireworksOnWinnersTask(p, listWinners).runTaskTimer(p, 0l, 10l);
-		}
 	}
 	
 	
