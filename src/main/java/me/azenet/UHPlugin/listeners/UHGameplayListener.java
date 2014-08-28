@@ -31,11 +31,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -122,7 +125,7 @@ public class UHGameplayListener implements Listener {
 	
 	
 	/**
-	 * Used to disable enderpearl damages (if needed)
+	 * Used to disable enderpearl damages (if needed).
 	 * 
 	 * @param ev
 	 */
@@ -132,6 +135,24 @@ public class UHGameplayListener implements Listener {
 			if(ev.getCause() == TeleportCause.ENDER_PEARL) {
 				ev.setCancelled(true);
 				ev.getPlayer().teleport(ev.getTo(), TeleportCause.ENDER_PEARL);
+			}
+		}
+	}
+	
+	
+	/**
+	 * Used to disable witch spawn (if needed).
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onCreatureSpawn(CreatureSpawnEvent ev) {
+		if(ev.getEntityType().equals(EntityType.WITCH)) {
+			if(p.getConfig().getBoolean("gameplay-changes.witch.disableNaturalSpawn") && ev.getSpawnReason().equals(SpawnReason.NATURAL)) {
+				ev.setCancelled(true);
+			}
+			if(p.getConfig().getBoolean("gameplay-changes.witch.disableLightningSpawn") && ev.getSpawnReason().equals(SpawnReason.LIGHTNING)) {
+				ev.setCancelled(true);
 			}
 		}
 	}
