@@ -222,6 +222,9 @@ public class UHGameManager {
 			this.players.add(p.getServer().getPlayer(id).getName());
 		}
 		
+		// This is used to be able to delete the teams created on-the-fly
+		ArrayList<String> onTheFlyTeams = new ArrayList<String>();
+		
 		
 		// No team? We creates a team per player.
 		if(tm.getTeams().isEmpty()) {
@@ -266,6 +269,8 @@ public class UHGameManager {
 					team.addPlayer(player);
 					
 					tm.addTeam(team);
+					
+					onTheFlyTeams.add(teamName);
 				}
 			}
 		}
@@ -279,6 +284,12 @@ public class UHGameManager {
 			// We clears the teams if the game was in solo-mode, to avoid a team-counter to be displayed on the next start
 			if(!this.gameWithTeams) {
 				tm.reset();
+			}
+			// We removes the teams automatically added, to avoid a bad team count.
+			else {
+				for(String teamName : onTheFlyTeams) {
+					tm.removeTeam(teamName);
+				}
 			}
 			
 			return;
@@ -849,7 +860,7 @@ public class UHGameManager {
 		ArrayList<UHTeam> aliveTeams = new ArrayList<UHTeam>();
 		for (UHTeam t : tm.getTeams()) {
 			for (Player p : t.getPlayers()) {
-				if (p.isOnline() && !aliveTeams.contains(t)) aliveTeams.add(t);
+				if (!this.isPlayerDead(p) && !aliveTeams.contains(t)) aliveTeams.add(t);
 			}
 		}
 		return aliveTeams;

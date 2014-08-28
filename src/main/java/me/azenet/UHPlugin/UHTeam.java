@@ -135,8 +135,19 @@ public class UHTeam {
 		Validate.notNull(player, "The player cannot be null.");
 		
 		players.remove(player.getUniqueId());
+		unregisterPlayer(player);
+	}
+	
+	/**
+	 * Unregisters a player from the scoreboard and uncolorizes the pseudo.
+	 * 
+	 * Internal use, avoids a ConcurrentModificationException in this.deleteTeam()
+	 * (this.players is listed and emptied simultaneously, else).
+	 * 
+	 * @param player
+	 */
+	private void unregisterPlayer(Player player) {
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).removePlayer(player);
-		
 		plugin.getTeamManager().colorizePlayer(player);
 	}
 	
@@ -148,8 +159,10 @@ public class UHTeam {
 	public void deleteTeam() {
 		// We removes the players from the team (scoreboard team too)
 		for(UUID id : players) {
-			removePlayer(plugin.getServer().getPlayer(id));
+			unregisterPlayer(plugin.getServer().getPlayer(id));
 		}
+		
+		this.players.clear();
 		
 		// Then the scoreboard team is deleted.
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).unregister();
