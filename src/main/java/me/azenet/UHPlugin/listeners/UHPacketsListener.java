@@ -21,13 +21,13 @@ package me.azenet.UHPlugin.listeners;
 
 import java.lang.reflect.InvocationTargetException;
 
+import me.azenet.UHPlugin.UHPlugin;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import me.azenet.UHPlugin.UHPlugin;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;

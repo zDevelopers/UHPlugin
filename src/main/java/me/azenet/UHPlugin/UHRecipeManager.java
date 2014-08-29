@@ -19,6 +19,7 @@
 
 package me.azenet.UHPlugin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,6 +40,8 @@ public class UHRecipeManager {
 	
 	private UHPlugin p = null;
 	private I18n i = null;
+	
+	Material compassCentralIngredient = null;
 	
 	public UHRecipeManager(UHPlugin plugin) {
 		this.p = plugin;
@@ -68,16 +71,21 @@ public class UHRecipeManager {
 			p.getServer().addRecipe(getGoldenMelonRecipe());
 		}
 		
+		// Because the compass recipe is "semi-shapeless" (the central part is fixed, but the
+		// loots can be placed into any configuration), there isn't a registered recipe for it
+		// (I don't want to register 16 recipes for each difficulty).
+		// Instead, using the inventoryClickEvent/inventoryDragEvent, we checks manually if the
+		// recipe is valid.
 		if (p.getConfig().getBoolean("gameplay-changes.compass.enabled")) {
 			switch(p.getConfig().getString("gameplay-changes.compass.recipe")) {
 				case "easy":
-					p.getServer().addRecipe(getEasyCompassRecipe());
+					compassCentralIngredient = Material.REDSTONE;
 					break;
 				case "hard":
-					p.getServer().addRecipe(getHardCompassRecipe());
+					compassCentralIngredient = Material.EYE_OF_ENDER;
 					break;
 				default:
-					p.getServer().addRecipe(getMediumCompassRecipe());
+					compassCentralIngredient = Material.ENDER_PEARL;
 			}
 		}
 		
@@ -117,6 +125,67 @@ public class UHRecipeManager {
 		// The recipe is allowed.
 		return true;
 	}
+	
+	/**
+	 * Checks if the recipe is a valid compass recipe.
+	 * <p>
+	 * A valid compass recipe is a recipe with:
+	 * <ul>
+	 *  <li>
+	 *    in the center, the valid ingredient for the current compass craft
+	 *    (redstone, ender pearl or eye of ender);
+	 *  </li>
+	 *  <li>
+	 *    four iron ingots placed like the vanilla compass recipe;
+	 *  </li>
+	 *  <li>
+	 *    in the four corners, a bone, a rotten flesh, a spider eye and a gunpowder,
+	 *    placed in any shape.
+	 *  </li>
+	 * </ul>
+	 * <p>
+	 * Executed in the  {@code onInventoryClick} and {@code onInventoryDrag} events, to allow this to be recognized even if
+	 * the recipe is not registered.
+	 * 
+	 * @param matrix The content of the crafting inventory.
+	 * @return true if the recipe is an alternate recipe for the compass.
+	 */
+	public boolean isValidCompassRecipe(ItemStack[] matrix) {
+		
+		// 1: check of the static part (central ingredient + iron)
+		
+		Material iron1 = matrix[1].getType();
+		Material iron2 = matrix[3].getType();
+		Material iron3 = matrix[5].getType();
+		Material iron4 = matrix[7].getType();
+		Material centralIngredient = matrix[4].getType();
+		
+		if(!(iron1.equals(Material.IRON_INGOT)
+				&& iron2.equals(Material.IRON_INGOT)
+				&& iron3.equals(Material.IRON_INGOT)
+				&& iron4.equals(Material.IRON_INGOT)
+				&& centralIngredient.equals(compassCentralIngredient))) {
+			return false;
+		}
+		
+		// 2: check of the dynamic part (loots)
+		
+		ArrayList<Material> corners = new ArrayList<Material>();
+		corners.add(matrix[0].getType());
+		corners.add(matrix[2].getType());
+		corners.add(matrix[6].getType());
+		corners.add(matrix[8].getType());
+		
+		if(!(corners.contains(Material.BONE)
+				&& corners.contains(Material.ROTTEN_FLESH)
+				&& corners.contains(Material.SPIDER_EYE)
+				&& corners.contains(Material.SULPHUR))) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	
 	/**
 	 * Adds the lore to the golden apples, if needed.
@@ -306,93 +375,6 @@ public class UHRecipeManager {
 		goldenMelonRecipe.addIngredient(1, Material.MELON);
 		
 		return goldenMelonRecipe;
-	}
-	
-	/**
-	 * Returns the recipe that transforms into a compass:
-	 *  - in the center, a redstone powder;
-	 *  - from the top, clockwise:
-	 *     - iron
-	 *     - spider eye
-	 *     - iron
-	 *     - rotten flesh
-	 *     - iron
-	 *     - bone
-	 *     - iron
-	 *     - gunpowder.
-	 * 
-	 * @return The shaped recipe.
-	 */
-	public ShapedRecipe getEasyCompassRecipe() {
-		ShapedRecipe compassRecipe = new ShapedRecipe(new ItemStack(Material.COMPASS));
-		compassRecipe.shape(new String[] {"CIE", "IRI", "BIF"});
-		
-		compassRecipe.setIngredient('I', Material.IRON_INGOT);
-		compassRecipe.setIngredient('R', Material.REDSTONE);
-		compassRecipe.setIngredient('C', Material.SULPHUR);
-		compassRecipe.setIngredient('E', Material.SPIDER_EYE);
-		compassRecipe.setIngredient('B', Material.BONE);
-		compassRecipe.setIngredient('F', Material.ROTTEN_FLESH);
-		
-		return compassRecipe;
-	}
-	
-	/**
-	 * Returns the recipe that transforms into a compass:
-	 *  - in the center, an ender pearl;
-	 *  - from the top, clockwise:
-	 *     - iron
-	 *     - spider eye
-	 *     - iron
-	 *     - rotten flesh
-	 *     - iron
-	 *     - bone
-	 *     - iron
-	 *     - gunpowder.
-	 * 
-	 * @return The shaped recipe.
-	 */
-	public ShapedRecipe getMediumCompassRecipe() {
-		ShapedRecipe compassRecipe = new ShapedRecipe(new ItemStack(Material.COMPASS));
-		compassRecipe.shape(new String[] {"CIE", "IPI", "BIF"});
-		
-		compassRecipe.setIngredient('I', Material.IRON_INGOT);
-		compassRecipe.setIngredient('P', Material.ENDER_PEARL);
-		compassRecipe.setIngredient('C', Material.SULPHUR);
-		compassRecipe.setIngredient('E', Material.SPIDER_EYE);
-		compassRecipe.setIngredient('B', Material.BONE);
-		compassRecipe.setIngredient('F', Material.ROTTEN_FLESH);
-		
-		return compassRecipe;
-	}
-	
-	/**
-	 * Returns the recipe that transforms into a compass:
-	 *  - in the center, an eye of ender;
-	 *  - from the top, clockwise:
-	 *     - iron
-	 *     - spider eye
-	 *     - iron
-	 *     - rotten flesh
-	 *     - iron
-	 *     - bone
-	 *     - iron
-	 *     - gunpowder.
-	 * 
-	 * @return The shaped recipe.
-	 */
-	public ShapedRecipe getHardCompassRecipe() {
-		ShapedRecipe compassRecipe = new ShapedRecipe(new ItemStack(Material.COMPASS));
-		compassRecipe.shape(new String[] {"CIE", "IPI", "BIF"});
-		
-		compassRecipe.setIngredient('I', Material.IRON_INGOT);
-		compassRecipe.setIngredient('P', Material.EYE_OF_ENDER);
-		compassRecipe.setIngredient('C', Material.SULPHUR);
-		compassRecipe.setIngredient('E', Material.SPIDER_EYE);
-		compassRecipe.setIngredient('B', Material.BONE);
-		compassRecipe.setIngredient('F', Material.ROTTEN_FLESH);
-		
-		return compassRecipe;
 	}
 	
 	/**

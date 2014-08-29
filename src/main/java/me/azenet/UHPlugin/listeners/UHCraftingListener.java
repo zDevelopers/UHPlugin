@@ -22,19 +22,23 @@ package me.azenet.UHPlugin.listeners;
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class UHCraftingListener implements Listener {
 	private UHPlugin p = null;
@@ -66,6 +70,7 @@ public class UHCraftingListener implements Listener {
 		
 		if(!p.getRecipeManager().isRecipeAllowed(recipe)) {
 			ev.getInventory().setResult(new ItemStack(Material.AIR));
+			return;
 		}
 		
 		
@@ -89,21 +94,42 @@ public class UHCraftingListener implements Listener {
 	
 	
 	/**
-	 * Used to prevent an apple to be renamed to/from the name of an head apple.
+	 *   - Prevents an apple to be renamed to/from the name of an head apple.
 	 *    
-	 * (In vanilla clients, it is not possible to rename an apple to that name because of the
-	 * ChatColor.RESET before, but some modded clients allows the player to write §r.)
+	 *     (In vanilla clients, it is not possible to rename an apple to that name because of the
+	 *     ChatColor.RESET before, but some modded clients allows the player to write §r.)
 	 *    
-	 * (Thanks to Zelnehlun on BukkitDev.)
+	 *     (Thanks to Zelnehlun on BukkitDev.)
+	 *     <p>
+	 *   - Crafts the special compass (“semi-shapeless” recipe).
 	 * 
 	 * @param ev
 	 */
 	@EventHandler(ignoreCancelled = true)
-	public void onInventoryClick(InventoryClickEvent ev) {
+	public void onInventoryClick(final InventoryClickEvent ev) {
 		if(ev.getWhoClicked() instanceof Player) { // Just in case
-			Inventory inventory = ev.getInventory();
+			final Inventory inventory = ev.getInventory();
 			
-			if(inventory instanceof AnvilInventory) {
+			/** Allows any shape for the loots in the compass recipe. **/
+			
+			if(inventory instanceof CraftingInventory) {				
+				Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+					@Override
+					public void run() {
+						if(p.getRecipeManager().isValidCompassRecipe(((CraftingInventory) inventory).getMatrix())) {
+							((CraftingInventory) inventory).setResult(new ItemStack(Material.COMPASS));
+							((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
+						}					
+					}
+				}, 1L);
+				
+				return;
+			}
+			
+			
+			/** Prevent an apple to be renamed to/from the name of an head apple. **/
+			
+			else if(inventory instanceof AnvilInventory) {
 				InventoryView view = ev.getView();
 				int rawSlot = ev.getRawSlot();
 				
@@ -116,7 +142,7 @@ public class UHCraftingListener implements Listener {
 							String prohibedNameNormal = ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal");
 							String prohibedNameNotch  = ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch");
 							
-							// It is possible that the client filter the name of the golden apple in the anvil UI,
+							// It is possible that the client filters the name of the golden apple in the anvil UI,
 							// removing all §.
 							String filteredProhibedNameNormal = prohibedNameNormal.replace("§", "");
 							String filteredProhibedNameNotch  = prohibedNameNotch.replace("§", "");
@@ -153,6 +179,27 @@ public class UHCraftingListener implements Listener {
 					}
 				}
 			}
+		}
+	}
+	
+	
+	/**
+	 * Used to craft the special compass (“semi-shapeless” recipe).
+	 * 
+	 * @param ev
+	 */
+	@EventHandler(ignoreCancelled = true)
+	public void onInventoryDrag(final InventoryDragEvent ev) {		
+		if(ev.getInventory() instanceof CraftingInventory) {				
+			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+				@Override
+				public void run() {
+					if(p.getRecipeManager().isValidCompassRecipe(((CraftingInventory) ev.getInventory()).getMatrix())) {
+						((CraftingInventory) ev.getInventory()).setResult(new ItemStack(Material.COMPASS));
+						((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
+					}					
+				}
+			}, 1L);
 		}
 	}
 }

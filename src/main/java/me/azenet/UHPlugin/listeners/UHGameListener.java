@@ -19,7 +19,6 @@
 
 package me.azenet.UHPlugin.listeners;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import me.azenet.UHPlugin.UHPlugin;
