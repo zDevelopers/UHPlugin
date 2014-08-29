@@ -52,6 +52,7 @@ keys:
         titleMiscCmd: "{aqua}------ Commandes diverses ------"
         helpFreeze: "{cc}/uh freeze {ci}: (dés)immobilise l'ensemble du jeu, ou un joueur. Consultez /uh freeze pour plus de détails."
         helpFinish: "{cc}/uh finish {ci}: affiche le nom du/des vainqueurs et lance des feux d'artifices."
+        helpTP: "{cc}/uh tp {ci}: téléporte les spectateurs ou une équipe. Consultez /uh tp pour plus de détails."
         helpAbout: "{cc}/uh about {ci}: informations à propos du plugin et des traductions."
         
         teamHelpTitle: "{aqua}------ Commandes liées aux équipes ------"
@@ -81,6 +82,11 @@ keys:
         borderHelpWarning: "{cc}/uh border warning <futurDiamètre> [minutesAvantRéduction]{ci}: avertit tous les joueurs hors de la future bordure donnée. Ce n'est qu'un avertissement, rien de plus."
         borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: annule un précédent avertissement."
         borderHelpCheck: "{cc}/uh border check <diamètre>{ci}: retourne la liste des joueurs hors de la bordure."
+        
+        tpHelpTitle: "{aqua}------ Commandes de téléportation ------"
+        tpHelpTeam: "{cc}/uh tp team <x> <y> <z> | <target> <team ...> {ci}: téléporte une équipe au lieu ou au joueur indiqué."
+        tpHelpSpectators: "{cc}/uh tp spectators <x> <y> <z> | <target> {ci}: téléporte les spectateurs (i.e. les joueurs non-vivants) au lieu ou au joueur indiqué."
+
     
     about:
         authors: "Plugin réalisé avec amour par {0}."
@@ -235,6 +241,11 @@ keys:
         teleported: "{cs}Le joueur {0} a été téléporté là où il est mort."
         notTeleportedNoSafeSpot: "{ce}Le joueur {0} n'a PAS été téléporté car aucun point de téléportation sûr n'a été trouvé."
         notTeleportedNoSafeSpotCmd: "{ci}Utilisez {cc}/uh tpback {0} force{ci} pour le téléporter malgré tout."
+    
+    tp:
+        NaN: "{ce}Les coordonnées doivent être trois nombres."
+        targetOffline: "{ce}{0} est hors-ligne !"
+        teamDoesNotExists: "{ce}Cette équipe n'est pas enregistrée."
         
     spectators:
         syntaxError: "{ce}Erreur de syntaxe, consultez /uh spec."

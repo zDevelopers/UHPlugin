@@ -52,6 +52,7 @@ keys:
         titleMiscCmd: "{aqua}------ Miscellaneous commands ------"
         helpFreeze: "{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."
         helpFinish: "{cc}/uh finish {ci}: displays the name of the winner(s) and launches some fireworks."
+        helpTP: "{cc}/uh tp {ci}: teleports the spectators or an entire team. See /uh tp for details."
         helpAbout: "{cc}/uh about {ci}: informations about the plugin and the translation."
         
         teamHelpTitle: "{aqua}------ Team commands ------"
@@ -81,6 +82,11 @@ keys:
         borderHelpWarning: "{cc}/uh border warning <futureDiameter> [minutesBeforeReduction]{ci}: warns all players outside the given future diameter. It's just a notice, nothing else."
         borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: cancels a previously-set warning."
         borderHelpCheck: "{cc}/uh border check <diameter>{ci}: returns a list of the players outside the given border size."
+        
+        tpHelpTitle: "{aqua}------ Teleportation commands ------"
+        tpHelpTeam: "{cc}/uh tp team <x> <y> <z> | <target> <team ...> {ci}: teleports the team to the given location/target."
+        tpHelpSpectators: "{cc}/uh tp spectators <x> <y> <z> | <target> {ci}: teleports the spectators (aka non-alive players) to the given location/target."
+        
         
     about:
         authors: "Plugin made with love by {0}."
@@ -235,6 +241,11 @@ keys:
         teleported: "{cs}The player {0} was teleported back."
         notTeleportedNoSafeSpot: "{ce}The player {0} was NOT teleported back because no safe spot was found."
         notTeleportedNoSafeSpotCmd: "{ci}Use {cc}/uh tpback {0} force{ci} to teleport the player regardess this point."
+    
+    tp:
+        NaN: "{ce}The coordinates must be three valid numbers."
+        targetOffline: "{ce}{0} is offline!"
+        teamDoesNotExists: "{ce}This team is not registered."
         
     spectators:
         syntaxError: "{ce}Syntax error, see /uh spec."

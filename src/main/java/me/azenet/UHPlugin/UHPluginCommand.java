@@ -31,10 +31,12 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 public class UHPluginCommand implements CommandExecutor {
 	
@@ -67,6 +69,7 @@ public class UHPluginCommand implements CommandExecutor {
 		commands.add("tpback");
 		commands.add("spec");
 		commands.add("finish");
+		commands.add("tp");
 		
 		teamCommands.add("add");
 		teamCommands.add("remove");
@@ -226,6 +229,7 @@ public class UHPluginCommand implements CommandExecutor {
 				sender.sendMessage(i.t("cmd.titleMiscCmd"));
 				sender.sendMessage(i.t("cmd.helpFreeze"));
 				sender.sendMessage(i.t("cmd.helpFinish"));
+				sender.sendMessage(i.t("cmd.helpTP"));
 				sender.sendMessage(i.t("cmd.helpAbout"));
 				break;
 		}
@@ -1026,6 +1030,132 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 		}
 		
+	}
+	
+	/**
+	 * This command teleports a team or the spectators to a given location.
+	 * 
+	 * Usage: /uh tp team <x> <y> <z> <team name ...>
+	 * Usage: /uh tp team <target> <team name...>
+	 * Usage: /uh tp spectators <x> <y> <z>
+	 * Usage: /uh tp spectators <target>
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void doTp(CommandSender sender, Command command, String label, String[] args) {
+		if(args.length == 1) { // No action provided: doc
+			if(sender instanceof Player) sender.sendMessage("");
+			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+			sender.sendMessage(i.t("cmd.legendHelp"));
+
+			sender.sendMessage(i.t("cmd.tpHelpTitle"));
+			sender.sendMessage(i.t("cmd.tpHelpTeam"));
+			sender.sendMessage(i.t("cmd.tpHelpSpectators"));
+		}
+		else {
+			String subcommand = args[1];
+			
+			World targetWorld = null;
+			if(sender instanceof Player) {
+				targetWorld = ((Player) sender).getWorld();
+			}
+			else if(sender instanceof BlockCommandSender) {
+				targetWorld = ((BlockCommandSender) sender).getBlock().getWorld();
+			}
+			else {
+				targetWorld = p.getServer().getWorlds().get(0);
+			}
+			
+			if(subcommand.equalsIgnoreCase("team")) {
+				boolean mayBeNaNError = false;
+				
+				if(args.length >= 6) { // possibly /uh tp team <x> <y> <z> <team ...>					
+					String teamName = UHUtils.getStringFromCommandArguments(args, 5);
+					UHTeam team = p.getTeamManager().getTeam(teamName);
+					
+					p.getLogger().info(teamName);
+					
+					if(team != null) { // ok, the team exists.
+						try {
+							double x = Integer.parseInt(args[2]) + 0.5;
+							double y = Integer.parseInt(args[3]) + 0.5;
+							double z = Integer.parseInt(args[4]) + 0.5;
+							
+							for(Player player : team.getPlayers()) {
+								player.teleport(new Location(targetWorld, x, y, z), TeleportCause.PLUGIN);
+							}
+							
+							return;
+						} catch(NumberFormatException e) {
+							// It can be either another name for the team, starting by "<y> <z> the name"
+							// or a formatting error.
+							// The possibility of an error is saved.
+							mayBeNaNError = true;
+						}
+					}
+				}
+				if(args.length >= 4) { // /uh tp team <target> <team ...>
+					String teamName = UHUtils.getStringFromCommandArguments(args, 3);
+					UHTeam team = p.getTeamManager().getTeam(teamName);
+					
+					if(team == null) {
+						if(mayBeNaNError) {
+							sender.sendMessage(i.t("tp.NaN"));
+						}
+						else {
+							sender.sendMessage(i.t("tp.teamDoesNotExists"));
+						}
+					}
+					else {
+						Player target = p.getServer().getPlayer(args[2]);
+						
+						if(target == null) {
+							sender.sendMessage(i.t("tp.targetOffline", args[2]));
+						}
+						else {
+							for(Player player : team.getPlayers()) {
+								player.teleport(target.getLocation(), TeleportCause.PLUGIN);
+							}
+						}
+					}
+				}
+			}
+			else if(subcommand.equalsIgnoreCase("spectators")) {
+				if(args.length == 5) { // /uh tp spectators <x> <y> <z>
+					try {
+						double x = Integer.parseInt(args[2]) + 0.5;
+						double y = Integer.parseInt(args[3]) + 0.5;
+						double z = Integer.parseInt(args[4]) + 0.5;
+						
+						for(Player player : p.getServer().getOnlinePlayers()) {
+							if(p.getGameManager().isPlayerDead(player)) {
+								player.teleport(new Location(targetWorld, x, y, z), TeleportCause.PLUGIN);
+							}
+						}
+					} catch(NumberFormatException e) {
+						sender.sendMessage(i.t("tp.NaN"));
+						return;
+					}
+				}
+				else if(args.length == 3) { // /uh tp spectators <target>
+					Player target = p.getServer().getPlayer(args[2]);
+					
+					if(target == null) {
+						sender.sendMessage(i.t("tp.targetOffline", args[2]));
+					}
+					else {
+						for(Player player : p.getServer().getOnlinePlayers()) {
+							if(p.getGameManager().isPlayerDead(player)) {
+								player.teleport(target.getLocation(), TeleportCause.PLUGIN);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	
