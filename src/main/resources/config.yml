@@ -128,7 +128,15 @@ slow-start:
 
 
 # Display hardcore hearts instead of normal ones?
-hardcore-hearts: true
+hardcore-hearts: 
+    display: true
+    
+    # If a player die, his client will display an hardcore Game Over screen, without a « Respawn » button.
+    # But the player CAN respawn, by clicking « Leave server » and then, on the confirmation screen,
+    # « Respawn ».
+    # With this option enabled, a short message will notify the player about that.
+    # Notice: this will be disabled even with this set to true if the hardcore hearts are not enabled (useless).
+    respawnMessage: true
 
 # Automatically respawn the player after his death.
 # Avoid the interrogation about the ability to respawn, if hardcore hearts are enabled.

@@ -52,7 +52,7 @@ public class UHProtocolLibIntegration {
 		this.pm = ProtocolLibrary.getProtocolManager();
 		this.packetsListener = new UHPacketsListener(p);
 		
-		if(p.getConfig().getBoolean("hardcore-hearts")) {
+		if(p.getConfig().getBoolean("hardcore-hearts.display")) {
 			pm.addPacketListener(packetsListener);
 		}
 		if(p.getConfig().getBoolean("auto-respawn.do")) {
@@ -76,7 +76,7 @@ public class UHProtocolLibIntegration {
 	public List<String> isProtocolLibNeeded() {
 		
 		ArrayList<String> options = new ArrayList<String>();
-		options.add("hardcore-hearts");
+		options.add("hardcore-hearts.display");
 		options.add("auto-respawn.do");
 		
 		ArrayList<String> enabledOptions = new ArrayList<String>();

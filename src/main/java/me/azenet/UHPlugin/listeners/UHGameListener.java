@@ -199,7 +199,7 @@ public class UHGameListener implements Listener {
 		}
 		
 		// Notifies the player about the possibility of respawn if hardcore hearts are enabled
-		if(p.getConfig().getBoolean("hardcore-hearts") && p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled()) {
+		if(p.getConfig().getBoolean("hardcore-hearts.display") && p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled() && p.getConfig().getBoolean("hardcore-hearts.respawnMessage")) {
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 				@Override
 				public void run() {
