@@ -21,6 +21,14 @@ commands:
    t:
       description: Allows an user to send a message to his team.
       usage: /t <message>
+   
+   g:
+      description: Allows an user to send a message to everyone.
+      usage: /g <message>
+   
+   togglechat:
+       description: Allows an user to toggle the chat between the global chat and a team chat.
+       usage: /togglechat
 
 permissions:
     uh.*:

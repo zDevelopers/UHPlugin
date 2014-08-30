@@ -212,7 +212,14 @@ keys:
         message:
             noConsole: "{ce}Vous ne pouvez envoyer un message d'équipe depuis la console."
             noTeam: "{ce}Vous n'êtes pas dans une équipe !"
-            usage: "{ce}Utilisation : /t <message>"
+            usage: "{ce}Utilisation : /{0} <message>"
+            
+            toggle:
+                nowTeamChat: "{cs}Vous discutez désormais avec votre équipe."
+                nowTeamChatTipGlobal: "{gray}Astuce : utilisez {cc}/g <message>{gray} pour envoyer un message à tous le monde."
+                
+                nowGlobalChat: "{cs}Vous discutez désormais avec tous le monde."
+                nowGlobalChatTipTeam: "{gray}Astuce : utilisez {cc}/t <message>{gray} pour envoyer un message à votre équipe."
             
             format: "{gold}[{0}{gold} -> son équipe] {reset}{1}"
         

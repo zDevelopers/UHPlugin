@@ -212,7 +212,14 @@ keys:
         message:
             noConsole: "{ce}You can't send a team-message from the console."
             noTeam: "{ce}You are not in a team!"
-            usage: "{ce}Usage: /t <message>"
+            usage: "{ce}Usage: /{0} <message>"
+            
+            toggle:
+                nowTeamChat: "{cs}You are now chatting with your team only."
+                nowTeamChatTipGlobal: "{gray}Tip: use {cc}/g <message>{gray} to send a message to everyone."
+                
+                nowGlobalChat: "{cs}You are now chatting with everyone."
+                nowGlobalChatTipTeam: "{gray}Tip: use {cc}/t <message>{gray} to send a message to your team."
             
             format: "{gold}[{0}{gold} -> his team] {reset}{1}"
             

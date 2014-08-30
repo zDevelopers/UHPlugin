@@ -38,6 +38,7 @@ public final class UHPlugin extends JavaPlugin {
 	private UHPluginCommand commandManager = null;
 	private UHBorderManager borderManager = null;
 	private UHRecipeManager recipeManager = null;
+	private UHTeamChatManager teamChatManager = null;
 	
 	private UHFreezer freezer = null;
 	
@@ -63,6 +64,7 @@ public final class UHPlugin extends JavaPlugin {
 		gameManager = new UHGameManager(this);
 		borderManager = new UHBorderManager(this);
 		recipeManager = new UHRecipeManager(this);
+		teamChatManager = new UHTeamChatManager(this);
 		
 		freezer = new UHFreezer(this);
 		
@@ -79,6 +81,8 @@ public final class UHPlugin extends JavaPlugin {
 		getCommand("uh").setTabCompleter(new UHTabCompleter(this));
 		
 		getCommand("t").setExecutor(commandManager);
+		getCommand("g").setExecutor(commandManager);
+		getCommand("togglechat").setExecutor(commandManager);
 		
 		getServer().getPluginManager().registerEvents(new UHGameListener(this), this);
 		getServer().getPluginManager().registerEvents(new UHGameplayListener(this), this);
@@ -149,6 +153,14 @@ public final class UHPlugin extends JavaPlugin {
 	 */
 	public UHRecipeManager getRecipeManager() {
 		return recipeManager;
+	}
+	
+	/**
+	 * Returns the team-chat manager.
+	 * @return
+	 */
+	public UHTeamChatManager getTeamChatManager() {
+		return teamChatManager;
 	}
 	
 	/**

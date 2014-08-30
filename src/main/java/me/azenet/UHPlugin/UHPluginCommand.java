@@ -111,12 +111,31 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (!command.getName().equalsIgnoreCase("uh") && !command.getName().equalsIgnoreCase("t")) {
+		
+		boolean ourCommand = false;
+		for(String commandName : p.getDescription().getCommands().keySet()) {
+			if(commandName.equalsIgnoreCase(command.getName())) {
+				ourCommand = true;
+				break;
+			}
+		}
+		
+		if(!ourCommand) {
 			return false;
 		}
 		
-		if(command.getName().equalsIgnoreCase("t")) { // Special case for /t command
+		/** Team chat commands **/
+		
+		if(command.getName().equalsIgnoreCase("t")) { 
 			doTeamMessage(sender, command, label, args);
+			return true;
+		}
+		if(command.getName().equalsIgnoreCase("g")) { 
+			doGlobalMessage(sender, command, label, args);
+			return true;
+		}
+		if(command.getName().equalsIgnoreCase("togglechat")) { 
+			doToggleTeamChat(sender, command, label, args);
 			return true;
 		}
 		
@@ -1163,43 +1182,6 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	
 	/**
-	 * This command, /t <message>, is used to send a team-message.
-	 * 
-	 * @param sender
-	 * @param command
-	 * @param label
-	 * @param args
-	 */
-	private void doTeamMessage(CommandSender sender, Command command, String label, String[] args) {
-		if(!(sender instanceof Player)) {
-			sender.sendMessage(i.t("team.message.noConsole"));
-			return;
-		}
-		
-		if(args.length == 0) { // /t
-			sender.sendMessage(i.t("team.message.usage"));
-			return;
-		}
-		
-		UHTeam team = p.getTeamManager().getTeamForPlayer((Player) sender);
-		
-		if(team == null) {
-			sender.sendMessage(i.t("team.message.noTeam"));
-			return;
-		}
-		
-		String message = "";
-		for(Integer i = 0; i < args.length; i++) {
-			message += args[i] + " ";
-		}
-		
-		for(final Player player : team.getPlayers()) {
-			player.sendMessage(i.t("team.message.format", ((Player) sender).getDisplayName(), message));
-		}
-	}
-	
-	
-	/**
 	 * This command freezes the players.
 	 * 
 	 * Usage: /uh freeze <on [player]|off [player]|all|none>
@@ -1283,6 +1265,89 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 		}
 	}
+	
+	
+	
+	
+	/**
+	 * This command, /t <message>, is used to send a team-message.
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void doTeamMessage(CommandSender sender, Command command, String label, String[] args) {
+		if(!(sender instanceof Player)) {
+			sender.sendMessage(i.t("team.message.noConsole"));
+			return;
+		}
+		
+		if(args.length == 0) { // /t
+			sender.sendMessage(i.t("team.message.usage", "t"));
+			return;
+		}
+		
+		String message = "";
+		for(Integer i = 0; i < args.length; i++) {
+			message += args[i] + " ";
+		}
+		
+		p.getTeamChatManager().sendTeamMessage((Player) sender, message);
+	}
+	
+	/**
+	 * This command, /g <message>, is used to send a global message.
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void doGlobalMessage(CommandSender sender, Command command, String label, String[] args) {
+		if(!(sender instanceof Player)) {
+			sender.sendMessage(i.t("team.message.noConsole"));
+			return;
+		}
+		
+		if(args.length == 0) { // /g
+			sender.sendMessage(i.t("team.message.usage", "g"));
+			return;
+		}
+		
+		String message = "";
+		for(Integer i = 0; i < args.length; i++) {
+			message += args[i] + " ";
+		}
+		
+		p.getTeamChatManager().sendGlobalMessage((Player) sender, message);
+	}
+	
+	/**
+	 * This command, /togglechat, is used to toggle the chat between the global chat and the team chat.
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void doToggleTeamChat(CommandSender sender, Command command, String label, String[] args) {
+		if(!(sender instanceof Player)) {
+			sender.sendMessage(i.t("team.message.noConsole"));
+			return;
+		}
+		
+		if(p.getTeamChatManager().toggleChatForPlayer((Player) sender)) {
+			sender.sendMessage(i.t("team.message.toggle.nowTeamChat"));
+			sender.sendMessage(i.t("team.message.toggle.nowTeamChatTipGlobal"));
+		}
+		else {
+			sender.sendMessage(i.t("team.message.toggle.nowGlobalChat"));
+			sender.sendMessage(i.t("team.message.toggle.nowGlobalChatTipTeam"));
+		}
+	}
+	
+	
 	
 	
 	public ArrayList<String> getCommands() {

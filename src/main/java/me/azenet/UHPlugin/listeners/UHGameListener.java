@@ -42,6 +42,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
@@ -346,6 +347,24 @@ public class UHGameListener implements Listener {
 	public void onBlockPlaceEvent(final BlockPlaceEvent ev) {
 		if (!this.p.getGameManager().isGameRunning() && !((Player)ev.getPlayer()).hasPermission("uh.build")) {
 			ev.setCancelled(true);
+		}
+	}
+	
+	/**
+	 * Used to send the chat to the team-chat if this team-chat is enabled.
+	 * 
+	 * @param ev
+	 */
+	@EventHandler(ignoreCancelled=true)
+	public void onAsyncPlayerChat(AsyncPlayerChatEvent ev) {
+		// If the event is asynchronous, the message was sent by a "real" player.
+		// Else, the message was sent by a plugin (like our /g command, or another plugin), and
+		// the event is ignored.
+		if(ev.isAsynchronous()) {
+			if(p.getTeamChatManager().isTeamChatEnabled(ev.getPlayer())) {
+				ev.setCancelled(true);
+				p.getTeamChatManager().sendTeamMessage(ev.getPlayer(), ev.getMessage());
+			}
 		}
 	}
 }
