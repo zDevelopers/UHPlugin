@@ -34,6 +34,7 @@ public class UHTabCompleter implements TabCompleter {
 	
 	private ArrayList<String> commands = null;
 	private ArrayList<String> teamCommands = null;
+	private ArrayList<String> tpCommands = null;
 	private ArrayList<String> specCommands = null;
 	private ArrayList<String> borderCommands = null;
 	private ArrayList<String> freezeCommands = null;
@@ -46,6 +47,7 @@ public class UHTabCompleter implements TabCompleter {
 		
 		this.commands = p.getCommandManager().getCommands();
 		this.teamCommands = p.getCommandManager().getTeamCommands();
+		this.tpCommands = p.getCommandManager().getTPCommands();
 		this.specCommands = p.getCommandManager().getSpecCommands();
 		this.borderCommands = p.getCommandManager().getBorderCommands();
 		this.freezeCommands = p.getCommandManager().getFreezeCommands();
@@ -109,13 +111,47 @@ public class UHTabCompleter implements TabCompleter {
 					for(UHTeam team : this.p.getTeamManager().getTeams()) {
 						teamNames.add(team.getName());
 					}
-					if(args[1].equalsIgnoreCase("addplayer")) { // /uh team addplayer Sth <?>
+					if(args[1].equalsIgnoreCase("addplayer")) { // /uh team addplayer <player> <?>
 						return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 3), teamNames, args.length - 4);
 					}
 					else if(args[1].equalsIgnoreCase("remove")) { // /uh team remove <?>
 						return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 2), teamNames, args.length - 3);
 					}
-					//return getAutocompleteSuggestions(args[3], teamNames);
+				}
+			}
+		}
+		
+		/** Autocompletion for /uh tp **/
+		else if(args[0].equalsIgnoreCase("tp")) {
+			// /uh tp <?>
+			if(args.length == 2) {
+				return getAutocompleteSuggestions(args[1], this.tpCommands);
+			}
+			
+			// /uh tp spectators: no autocomplete needed (only pseudonyms).
+			
+			if(args[1].equalsIgnoreCase("team")) {
+				ArrayList<String> teamNames = new ArrayList<String>();
+				for(UHTeam team : this.p.getTeamManager().getTeams()) {
+					teamNames.add(team.getName());
+				}
+				
+				// /uh tp team <x> <y> <z> <?>: autocompletion for team names – multiple words autocompletion
+				if(args.length >= 6) {
+					List<String> suggestions = getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 5), teamNames, args.length - 6);
+					
+					if(suggestions.size() != 0) {
+						return suggestions;
+					}
+				}
+				
+				// /uh tp team <target> <?>: autocompletion for team names – multiple words autocompletion
+				if(args.length >= 4) {
+					try {
+						return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 3), teamNames, args.length - 4);
+					} catch(IllegalArgumentException ignored) {
+						// Temp workaround for an unknown bug.
+					}
 				}
 			}
 		}

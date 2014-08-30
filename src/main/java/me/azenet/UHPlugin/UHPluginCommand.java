@@ -44,6 +44,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	private ArrayList<String> commands = new ArrayList<String>();
 	private ArrayList<String> teamCommands = new ArrayList<String>();
+	private ArrayList<String> tpCommands = new ArrayList<String>();
 	private ArrayList<String> specCommands = new ArrayList<String>();
 	private ArrayList<String> borderCommands = new ArrayList<String>();
 	private ArrayList<String> freezeCommands = new ArrayList<String>();
@@ -77,6 +78,9 @@ public class UHPluginCommand implements CommandExecutor {
 		teamCommands.add("removeplayer");
 		teamCommands.add("list");
 		teamCommands.add("reset");
+		
+		tpCommands.add("team");
+		tpCommands.add("spectators");
 		
 		specCommands.add("add");
 		specCommands.add("remove");
@@ -1045,6 +1049,7 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param label
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	private void doTp(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // No action provided: doc
 			if(sender instanceof Player) sender.sendMessage("");
@@ -1075,8 +1080,6 @@ public class UHPluginCommand implements CommandExecutor {
 				if(args.length >= 6) { // possibly /uh tp team <x> <y> <z> <team ...>					
 					String teamName = UHUtils.getStringFromCommandArguments(args, 5);
 					UHTeam team = p.getTeamManager().getTeam(teamName);
-					
-					p.getLogger().info(teamName);
 					
 					if(team != null) { // ok, the team exists.
 						try {
@@ -1288,6 +1291,10 @@ public class UHPluginCommand implements CommandExecutor {
 
 	public ArrayList<String> getTeamCommands() {
 		return teamCommands;
+	}
+	
+	public ArrayList<String> getTPCommands() {
+		return tpCommands;
 	}
 	
 	public ArrayList<String> getSpecCommands() {
