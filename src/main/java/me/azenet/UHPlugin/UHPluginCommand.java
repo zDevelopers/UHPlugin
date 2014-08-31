@@ -1337,11 +1337,26 @@ public class UHPluginCommand implements CommandExecutor {
 			return;
 		}
 		
-		if(p.getTeamChatManager().toggleChatForPlayer((Player) sender)) {
-			sender.sendMessage(i.t("team.message.toggle.nowTeamChat"));
+		if(args.length == 0) { // /togglechat
+			if(p.getTeamChatManager().toggleChatForPlayer((Player) sender)) {
+				sender.sendMessage(i.t("team.message.toggle.nowTeamChat"));
+			}
+			else {
+				sender.sendMessage(i.t("team.message.toggle.nowGlobalChat"));
+			}
 		}
-		else {
-			sender.sendMessage(i.t("team.message.toggle.nowGlobalChat"));
+		else { // /togglechat <another team>
+			String teamName = UHUtils.getStringFromCommandArguments(args, 0);
+			UHTeam team = p.getTeamManager().getTeam(teamName);
+			
+			if(team != null) {
+				if(p.getTeamChatManager().toggleChatForPlayer((Player) sender, team)) {
+					sender.sendMessage(i.t("team.message.toggle.nowOtherTeamChat", team.getDisplayName()));
+				}
+			}
+			else {
+				sender.sendMessage(i.t("team.message.toggle.unknownTeam"));
+			}
 		}
 	}
 	

@@ -187,6 +187,18 @@ public class UHTeam {
 	}
 	
 	/**
+	 * Returns true if the player with the given UUID is in this team.
+	 * 
+	 * @param id The UUID of the player to check.
+	 * @return true if the given player is in this team.
+	 */
+	public boolean containsPlayer(UUID id) {
+		Validate.notNull(id, "The player cannot be null.");
+		
+		return players.contains(id);
+	}
+	
+	/**
 	 * Teleports the entire team to the given location.
 	 * 
 	 * @param lo
@@ -206,5 +218,19 @@ public class UHTeam {
 	 */
 	public ChatColor getColor() {
 		return color;
+	}
+	
+	
+	@Override
+	public boolean equals(Object otherTeam) {
+		if(!(otherTeam instanceof UHTeam)) {
+			return false;
+		}
+		
+		if(!((UHTeam) otherTeam).getName().equals(this.getName())) {
+			return false;
+		}
+		
+		return true;
 	}
 }

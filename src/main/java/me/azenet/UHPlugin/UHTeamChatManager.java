@@ -20,7 +20,9 @@
 package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import me.azenet.UHPlugin.i18n.I18n;
@@ -35,6 +37,7 @@ public class UHTeamChatManager {
 	I18n i = null;
 	
 	List<UUID> teamChatLocked = new ArrayList<UUID>();
+	Map<UUID,UHTeam> otherTeamChatLocked = new HashMap<UUID,UHTeam>();
 	
 	public UHTeamChatManager(UHPlugin p) {
 		this.p = p;
@@ -42,30 +45,81 @@ public class UHTeamChatManager {
 	}
 	
 	/**
-	 * Sends a team-message from the given player.
+	 * Sends a team-message from the given sender.
 	 * 
-	 * @param sender The sender of this message.
-	 * @param message The message to be sent.
+	 * @param sender The sender.
+	 * @param message The message to send.
 	 */
-	public void sendTeamMessage(final Player sender, String message) {
-		if(!sender.hasPermission("uh.teamchat.self")) {
+	public void sendTeamMessage(Player sender, String message) {
+		sendTeamMessage(sender, message, null);
+	}
+	
+	/**
+	 * Sends a team-message from the given sender.
+	 * 
+	 * @param sender The sender.
+	 * @param message The message to send.
+	 * @param team If not null, this message will be considered as an external message from another player to this team.
+	 */
+	public void sendTeamMessage(Player sender, String message, UHTeam team) {
+		
+		// Permission check
+		if(team == null && !sender.hasPermission("uh.teamchat.self")) {
 			sender.sendMessage(i.t("team.message.notAllowed.self"));
 			return;
 		}
-		
-		UHTeam team = p.getTeamManager().getTeamForPlayer((Player) sender);
-		
-		if(team == null) {
-			sender.sendMessage(i.t("team.message.noTeam"));
+		if(team != null && !sender.hasPermission("uh.teamchat.others")) {
+			sender.sendMessage(i.t("team.message.notAllowed.others"));
 			return;
 		}
 		
-		for(final Player player : team.getPlayers()) {
-			player.sendMessage(i.t("team.message.format", ((Player) sender).getDisplayName(), message));
+		String rawMessage = null;
+		UHTeam recipient = null;
+		
+		if(team == null) {
+			rawMessage = i.t("team.message.format", sender.getDisplayName(), message);
+			recipient = p.getTeamManager().getTeamForPlayer(sender);
+			
+			if(recipient == null) {
+				sender.sendMessage(i.t("team.message.noTeam"));
+				return;
+			}
+		}
+		else {
+			rawMessage = i.t("team.message.formatOtherTeam", sender.getDisplayName(), team.getDisplayName(), message);
+			recipient = team;
 		}
 		
+		sendRawTeamMessage(sender, rawMessage, recipient);
+	}
+	
+	/**
+	 * Sends a raw team-message from the given player.
+	 * 
+	 * @param sender The sender of this message.
+	 * @param rawMessage The raw message to be sent.
+	 * @param team The recipient of this message.
+	 */
+	private void sendRawTeamMessage(final Player sender, String rawMessage, UHTeam team) {
+		
+		// The message is sent to the players of the team...
+		for(final Player player : team.getPlayers()) {
+			player.sendMessage(rawMessage);
+		}
+		
+		// ... to the spies ...
+		if(otherTeamChatLocked.containsValue(team)) {
+			for(UUID playerId : otherTeamChatLocked.keySet()) {
+				// The message is only sent to the spies not in the team, to avoid double messages
+				if(otherTeamChatLocked.get(playerId).equals(team) && !team.containsPlayer(playerId)) {
+					p.getServer().getPlayer(playerId).sendMessage(rawMessage);
+				}
+			}
+		}
+		
+		// ... and to the console.
 		if(p.getConfig().getBoolean("logTeamChat")) {
-			p.getServer().getConsoleSender().sendMessage(i.t("team.message.format", ((Player) sender).getDisplayName(), message));
+			p.getServer().getConsoleSender().sendMessage(rawMessage);
 		}
 		
 		if(!p.getProtipsSender().wasProtipSent(sender, UHProTipsSender.PROTIP_LOCK_CHAT)) {
@@ -93,34 +147,85 @@ public class UHTeamChatManager {
 		sender.chat(message);
 	}
 	
+	
 	/**
 	 * Toggles the chat between the global chat and the team chat.
 	 * 
 	 * @param player The chat of this player will be toggled.
 	 * @return true if the chat is now the team chat; false else.
 	 */
-	public boolean toggleChatForPlayer(final Player player) {
+	public boolean toggleChatForPlayer(Player player) {
+		return toggleChatForPlayer(player, null);
+	}
+	
+	/**
+	 * Toggles the chat between the global chat and the team chat.
+	 * 
+	 * @param player The chat of this player will be toggled.
+	 * @param team The team to chat with. If null, the player's team will be used. 
+	 * @return true if the chat is now the team chat; false else.
+	 */
+	public boolean toggleChatForPlayer(final Player player, UHTeam team) {
 		
-		if(!player.hasPermission("uh.teamchat.self")) {
+		// Permission check
+		if(team == null && !player.hasPermission("uh.teamchat.self")) {
 			player.sendMessage(i.t("team.message.notAllowed.self"));
 			return false;
 		}
-		
-		if(isTeamChatEnabled(player)) {
-			teamChatLocked.remove(player.getUniqueId());			
+		if(team != null && !player.hasPermission("uh.teamchat.others")) {
+			player.sendMessage(i.t("team.message.notAllowed.others"));
 			return false;
 		}
-		else {
-			teamChatLocked.add(player.getUniqueId());
-			
-			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
-				@Override
-				public void run() {
-					p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_USE_G_COMMAND);
-				}
-			}, 10L);
+		
+		
+		// If the team is not null, we will always go to the team chat
+		// Else, normal toggle
+		
+		if(team != null) {
+			// if the player was in another team chat before, we removes it.
+			teamChatLocked.remove(player.getUniqueId());
+			otherTeamChatLocked.put(player.getUniqueId(), team);
 			
 			return true;
+		}
+		
+		else {
+			if(isAnyTeamChatEnabled(player)) {
+				teamChatLocked.remove(player.getUniqueId());
+				otherTeamChatLocked.remove(player.getUniqueId());
+				
+				return false;
+			}
+			else {
+				teamChatLocked.add(player.getUniqueId());
+				
+				Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+					@Override
+					public void run() {
+						p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_USE_G_COMMAND);
+					}
+				}, 10L);
+				
+				return true;
+			}
+		}
+	}
+	
+	/**
+	 * Returns true if the team chat is enabled for the given player.
+	 * 
+	 * @param player The player.
+	 * @param team If non-null, this will check if the given player is spying the current team.
+	 * @return
+	 */
+	public boolean isTeamChatEnabled(Player player, UHTeam team) {
+		if(team == null) {
+			return teamChatLocked.contains(player.getUniqueId());
+		}
+		else {
+			UHTeam lockedTeam = this.otherTeamChatLocked.get(player.getUniqueId());
+			UHTeam playerTeam = p.getTeamManager().getTeamForPlayer(player);
+			return (lockedTeam != null && lockedTeam.equals(team)) || (playerTeam != null && playerTeam.equals(team));
 		}
 	}
 	
@@ -131,6 +236,37 @@ public class UHTeamChatManager {
 	 * @return
 	 */
 	public boolean isTeamChatEnabled(Player player) {
-		return teamChatLocked.contains(player.getUniqueId());
+		return this.isTeamChatEnabled(player, null);
+	}
+	
+	/**
+	 * Returns true if the given player is in the team chat of another team.
+	 * 
+	 * @param player The player.
+	 * @return
+	 */
+	public boolean isOtherTeamChatEnabled(Player player) {
+		return otherTeamChatLocked.containsKey(player.getUniqueId());
+	}
+	
+	/**
+	 * Returns true if a team chat is enabled for the given player.
+	 * 
+	 * @param player The player.
+	 * @return
+	 */
+	public boolean isAnyTeamChatEnabled(Player player) {
+		return (teamChatLocked.contains(player.getUniqueId()) || otherTeamChatLocked.containsKey(player.getUniqueId()));
+	}
+	
+	/**
+	 * Returns the other team viewed by the given player, or null if the player is not in
+	 * the chat of another team.
+	 * 
+	 * @param player The player.
+	 * @return
+	 */
+	public UHTeam getOtherTeamEnabled(Player player) {
+		return otherTeamChatLocked.get(player.getUniqueId());
 	}
 }

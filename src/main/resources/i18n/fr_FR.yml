@@ -216,15 +216,17 @@ keys:
             
             notAllowed: 
                 self: "{ce}Vous n'avez pas le droit d'envoyer des messages privés à votre équipe."
+                others: "{ce}Vous n'avez pas le droit d'entrer dans le chat privé d'une autre équipe."
             
             toggle:
                 nowTeamChat: "{cs}Vous discutez désormais avec votre équipe."
-                nowTeamChatTipGlobal: "{gray}Astuce : utilisez {cc}/g <message>{gray} pour envoyer un message à tous le monde."
-                
                 nowGlobalChat: "{cs}Vous discutez désormais avec tous le monde."
-                nowGlobalChatTipTeam: "{gray}Astuce : utilisez {cc}/t <message>{gray} pour envoyer un message à votre équipe."
+                
+                nowOtherTeamChat: "{cs}Vous discutez désormais avec l'équipe {0}{cs}."
+                unknownTeam: "{ce}Cette équipe n'existe pas."
             
             format: "{gold}[{0}{gold} -> son équipe] {reset}{1}"
+            formatOtherTeam: "{gold}[{0}{gold} -> équipe {1}{gold}] {reset}{2}"
         
     shift:
         consoleName: "la console"

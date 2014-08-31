@@ -34,6 +34,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -355,7 +356,8 @@ public class UHGameListener implements Listener {
 	 * 
 	 * @param ev
 	 */
-	@EventHandler(ignoreCancelled=true)
+	// Priority LOWEST to be able to cancel the event before all other plugins
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent ev) {
 		// If the event is asynchronous, the message was sent by a "real" player.
 		// Else, the message was sent by a plugin (like our /g command, or another plugin), and
@@ -364,6 +366,10 @@ public class UHGameListener implements Listener {
 			if(p.getTeamChatManager().isTeamChatEnabled(ev.getPlayer())) {
 				ev.setCancelled(true);
 				p.getTeamChatManager().sendTeamMessage(ev.getPlayer(), ev.getMessage());
+			}
+			else if(p.getTeamChatManager().isOtherTeamChatEnabled(ev.getPlayer())) {
+				ev.setCancelled(true);
+				p.getTeamChatManager().sendTeamMessage(ev.getPlayer(), ev.getMessage(), p.getTeamChatManager().getOtherTeamEnabled(ev.getPlayer()));
 			}
 		}
 	}
