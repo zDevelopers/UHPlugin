@@ -33,9 +33,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class UHPlugin extends JavaPlugin {
 	
+	private UHPluginCommand commandManager = null;
+	private UHTabCompleter tabCompleter = null;
+	
 	private UHTeamManager teamManager = null;
 	private UHGameManager gameManager = null;
-	private UHPluginCommand commandManager = null;
 	private UHBorderManager borderManager = null;
 	private UHRecipeManager recipeManager = null;
 	private UHTeamChatManager teamChatManager = null;
@@ -81,12 +83,15 @@ public final class UHPlugin extends JavaPlugin {
 		protocollibintegrationwrapper = new UHProtocolLibIntegrationWrapper(this);
 		
 		commandManager = new UHPluginCommand(this);
-		getCommand("uh").setExecutor(commandManager);
-		getCommand("uh").setTabCompleter(new UHTabCompleter(this));
+		tabCompleter = new UHTabCompleter(this);
 		
+		getCommand("uh").setExecutor(commandManager);		
 		getCommand("t").setExecutor(commandManager);
 		getCommand("g").setExecutor(commandManager);
 		getCommand("togglechat").setExecutor(commandManager);
+		
+		getCommand("uh").setTabCompleter(tabCompleter);
+		getCommand("togglechat").setTabCompleter(tabCompleter);
 		
 		getServer().getPluginManager().registerEvents(new UHGameListener(this), this);
 		getServer().getPluginManager().registerEvents(new UHGameplayListener(this), this);

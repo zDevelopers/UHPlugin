@@ -27,6 +27,7 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 public class UHTabCompleter implements TabCompleter {
 	
@@ -72,9 +73,25 @@ public class UHTabCompleter implements TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		if (!command.getName().equalsIgnoreCase("uh")) {
+		if (!command.getName().equalsIgnoreCase("uh") && !command.getName().equalsIgnoreCase("togglechat")) {
 			return null;
 		}
+		
+		/** ** Autocompletion for the /togglechat command ** **/
+		
+		if(command.getName().equalsIgnoreCase("togglechat")) {
+			if(sender instanceof Player && ((Player) sender).hasPermission("uh.teamchat.others")) {
+				ArrayList<String> teamNames = new ArrayList<String>();
+				for(UHTeam team : this.p.getTeamManager().getTeams()) {
+					teamNames.add(team.getName());
+				}
+				return getAutocompleteSuggestions(args[0], teamNames);
+			}
+			return null;
+		}
+		
+		
+		/** ** Autocompletion for the /uh command ** **/
 		
 		/** Autocompletion for subcommands **/
 		if(args.length == 1) {
