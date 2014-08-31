@@ -161,6 +161,12 @@ dynmap:
     showSpawnLocations: true
     showDeathLocations: true
 
+protips:
+    teamchat:
+        useTCommand: true  # Protip: team-chat command
+        lock: true         # Protip: can lock the team-chat
+        useGCommand: true  # Protip: global-chat command
+
 # Use this to set the spawnpoints of the teams (or the players)
 # You can also use the command /uh addspawn (see /uh for documentation) to add temporary spawn points.
 # (The spawn points added through /uh addspawn are deleted when the server is stopped.)

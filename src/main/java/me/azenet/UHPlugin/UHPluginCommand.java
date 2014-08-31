@@ -1339,11 +1339,9 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		if(p.getTeamChatManager().toggleChatForPlayer((Player) sender)) {
 			sender.sendMessage(i.t("team.message.toggle.nowTeamChat"));
-			sender.sendMessage(i.t("team.message.toggle.nowTeamChatTipGlobal"));
 		}
 		else {
 			sender.sendMessage(i.t("team.message.toggle.nowGlobalChat"));
-			sender.sendMessage(i.t("team.message.toggle.nowGlobalChatTipTeam"));
 		}
 	}
 	

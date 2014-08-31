@@ -42,6 +42,8 @@ public final class UHPlugin extends JavaPlugin {
 	
 	private UHFreezer freezer = null;
 	
+	private UHProTipsSender protipsSender = null;
+	
 	private UHWorldBorderIntegration wbintegration = null;
 	private UHSpectatorPlusIntegration spintegration = null;
 	private UHDynmapIntegration dynmapintegration = null;
@@ -67,6 +69,8 @@ public final class UHPlugin extends JavaPlugin {
 		teamChatManager = new UHTeamChatManager(this);
 		
 		freezer = new UHFreezer(this);
+		
+		protipsSender = new UHProTipsSender(this);
 		
 		wbintegration = new UHWorldBorderIntegration(this);
 		spintegration = new UHSpectatorPlusIntegration(this);
@@ -172,6 +176,14 @@ public final class UHPlugin extends JavaPlugin {
 		return freezer;
 	}
 	
+	/**
+	 * Returns the ProTips sender.
+	 * 
+	 * @return
+	 */
+	public UHProTipsSender getProtipsSender() {
+		return protipsSender;
+	}
 	
 	/**
 	 * Returns the representation of the WorldBorder integration in the plugin.

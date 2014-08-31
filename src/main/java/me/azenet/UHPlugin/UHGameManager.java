@@ -319,6 +319,7 @@ public class UHGameManager {
 			this.startEnvironment();
 			this.startTimer();
 			this.scheduleDamages();
+			this.sendStartupProTips();
 			this.finalizeStart();
 		}
 		
@@ -392,6 +393,7 @@ public class UHGameManager {
 		this.startEnvironment();
 		this.startTimer();
 		this.scheduleDamages();
+		this.sendStartupProTips();
 		this.finalizeStart();
 		
 		this.slowStartInProgress = false;
@@ -445,6 +447,22 @@ public class UHGameManager {
 				damageIsOn = true;
 			}
 		}, 600L);
+	}
+	
+	/**
+	 * Sends a ProTip about the team chat, to all players, a few seconds after the beginning of the game.
+	 */
+	public void sendStartupProTips() {
+		if(this.isGameWithTeams()) {
+			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+				@Override
+				public void run() {
+					for(Player player : getAlivePlayers()) {
+						p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_USE_T_COMMAND);
+					}
+				}
+			}, 400L);
+		}
 	}
 	
 	/**

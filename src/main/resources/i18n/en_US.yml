@@ -324,3 +324,11 @@ keys:
             itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (close to the border)"
             itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (very close to the border)"
 
+    protips:
+        base: "{darkpurple}ProTip!"
+        
+        teamchat:
+            lock: "{gray}You can lock and unlock the team chat with {cc}/togglechat{gray}."
+            useTCommand: "{gray}You can send a team-chat message with {cc}/t <message>{gray}."
+            useGCommand: "{gray}You can send a global message using {cc}/g <message>{gray}."
+

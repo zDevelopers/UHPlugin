@@ -323,4 +323,12 @@ keys:
             itemPlayerFar: "{lightpurple} - {red}{0}{ci} (loin de la bordure)"
             itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (proche de la bordure)"
             itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (très proche de la bordure)"
+    
+    protips:
+        base: "{darkpurple}Astuce !"
+        
+        teamchat:
+            lock: "{gray}Verrouillez le chat d'équipe avec {cc}/togglechat{gray}, qui permet de passer d'un chat à l'autre."
+            useTCommand: "{gray}Vous pouvez envoyer un message à votre équipe avec {cc}/t <message>{gray}."
+            useGCommand: "{gray}Vous pouvez envoyer un message à tout le monde avec {cc}/g <message>{gray}."
 
