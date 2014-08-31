@@ -214,6 +214,9 @@ keys:
             noTeam: "{ce}Vous n'êtes pas dans une équipe !"
             usage: "{ce}Utilisation : /{0} <message>"
             
+            notAllowed: 
+                self: "{ce}Vous n'avez pas le droit d'envoyer des messages privés à votre équipe."
+            
             toggle:
                 nowTeamChat: "{cs}Vous discutez désormais avec votre équipe."
                 nowTeamChatTipGlobal: "{gray}Astuce : utilisez {cc}/g <message>{gray} pour envoyer un message à tous le monde."

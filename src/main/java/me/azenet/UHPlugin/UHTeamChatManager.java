@@ -48,6 +48,11 @@ public class UHTeamChatManager {
 	 * @param message The message to be sent.
 	 */
 	public void sendTeamMessage(final Player sender, String message) {
+		if(!sender.hasPermission("uh.teamchat.self")) {
+			sender.sendMessage(i.t("team.message.notAllowed.self"));
+			return;
+		}
+		
 		UHTeam team = p.getTeamManager().getTeamForPlayer((Player) sender);
 		
 		if(team == null) {
@@ -80,6 +85,11 @@ public class UHTeamChatManager {
 	 * @param message The message to be sent.
 	 */
 	public void sendGlobalMessage(Player sender, String message) {
+		// This message will be sent synchronously.
+		// The players' messages are sent asynchronously.
+		// That's how we differentiates the messages sent through /g and the messages sent using
+		// the normal chat.
+		
 		sender.chat(message);
 	}
 	
@@ -90,7 +100,13 @@ public class UHTeamChatManager {
 	 * @return true if the chat is now the team chat; false else.
 	 */
 	public boolean toggleChatForPlayer(final Player player) {
-		if(teamChatLocked.contains(player.getUniqueId())) {
+		
+		if(!player.hasPermission("uh.teamchat.self")) {
+			player.sendMessage(i.t("team.message.notAllowed.self"));
+			return false;
+		}
+		
+		if(isTeamChatEnabled(player)) {
 			teamChatLocked.remove(player.getUniqueId());			
 			return false;
 		}
