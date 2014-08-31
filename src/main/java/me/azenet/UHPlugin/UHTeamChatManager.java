@@ -56,7 +56,11 @@ public class UHTeamChatManager {
 		}
 		
 		for(final Player player : team.getPlayers()) {
-			player.sendMessage(i.t("team.message.format", ((Player) player).getDisplayName(), message));
+			player.sendMessage(i.t("team.message.format", ((Player) sender).getDisplayName(), message));
+		}
+		
+		if(p.getConfig().getBoolean("logTeamChat")) {
+			p.getServer().getConsoleSender().sendMessage(i.t("team.message.format", ((Player) sender).getDisplayName(), message));
 		}
 		
 		if(!p.getProtipsSender().wasProtipSent(sender, UHProTipsSender.PROTIP_LOCK_CHAT)) {

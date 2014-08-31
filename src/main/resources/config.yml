@@ -127,8 +127,8 @@ slow-start:
     delayBetweenTP: 3  # in seconds
 
 
-# Display hardcore hearts instead of normal ones?
-hardcore-hearts: 
+hardcore-hearts:
+    # Display hardcore hearts instead of normal ones?
     display: true
     
     # If a player die, his client will display an hardcore Game Over screen, without a « Respawn » button.
@@ -160,6 +160,9 @@ finish:
 dynmap:
     showSpawnLocations: true
     showDeathLocations: true
+
+# Log the private team-chat in the console?
+logTeamChat: false
 
 protips:
     teamchat:
