@@ -98,11 +98,10 @@ All these gameplay tweaks are optional — see [the configuration file](https://
 ![Craft golden melon](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GlisteringMelon.png)
 - When a player die, his head is dropped (pvp-only flag available); this head can be used to craft a golden apple.
    - The craft is the same as the normal golden apple, with a head instead of an apple.  
-     ![Craft golden Apple from human](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GoldenAppleFromHuman.png)
+     You can use a player head or a wither head, and configure these two crafts independently.  
+     ![Craft golden Apple](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GoldenHead.gif)
    - You can configure the number of apples crafted, the type (normal or Notch apple), and if a lore is added (saying “Made from the fallen head of *ThePlayer*”).  
      ![Lure of a golden apple crafted from a Wither](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_LoreGoldenApple.png)
-   - You can also do the same from wither heads.  
-     ![Craft from a wither head](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_GoldenAppleFromWither.png)
    - There is a way to remove the lore (because two golden apple with a different lore are not stackable), either in the config (lore not added) or using a craft:  
      ![Craft - Lore removal](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_LoreGoldenAppleRemoval.png)
 - You can configure the number of half-hearts healed by a golden apple, enchanted golden apple, and the same for “golden heads”, independantely.
@@ -111,14 +110,16 @@ All these gameplay tweaks are optional — see [the configuration file](https://
 - The ghast tears can be replaced by gold, to make Regeneration potions uncraftable.
 - The level-II potions can be disabled.
 - The compass behavior can be changed.
-   - New craft: an ingredient in the center; then from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gunpowder.  
-     ![Craft for the special compass](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_Craft_Compass.png)
+   - New craft: an ingredient in the center; four iron ingots like in the vanilla compass recipe; bone, gunpowder, rotten flesh and spider eye in the corners.  
+     ![Craft for the special compass](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_CraftCompass_Names.gif)
+   - The four loots in the corners can be in any configuration (*semi-shapeless* recipe).
    - There are three different ingredients in the center, for three levels of difficulty.
-       - `Simple`: redstone powder (just like the vanilla compass).
+       - `Simple`: redstone dust (just like the vanilla compass).
        - `Medium`: ender pearl.
        - `Hard`: eye of ender.
    - If a player right-click with a compass, the compass shows the nearest player (team excluded).
    - This consumes a rotten flesh.
+- The Witch spawn can be disabled (either the natural one, or the spawn from a villagers struck by a lightning bolt).
 - The time can be frozen to any hour (eternal day/night), or not.
 - The “bad” weather (rain, thunder) can be disabled.
 
@@ -153,7 +154,15 @@ All these gameplay tweaks are optional — see [the configuration file](https://
 
  - **The players can send a private message to their team**
     - Use `/t <message>` to send such a private message.
+    - Use `/togglechat` to lock this team-chat and use it without `/t`.
+    - From the locked team-chat, you can use `/g <message>` if you want to send a message to the main (global) chat.
+    - An administrator can use `/togglechat <team ...>` to enter into the private chat of another team.
  - You can broadcast the winner(s) of the game in the chat and launch some fireworks; either automatically, after the last death, or using `/uh finish`.
+ - You can display hardcore hearts instead of normal ones.
+   ![Hardcore hearts](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_HardcoreHearts.png)
+ - Possible automatic respawn after a delay, to avoid the interrogation about “Can I respawn?” (the client thinks the server is in hardcore mode, and so displays an hardcore death screen).
+ - ProTips can be sent automatically, at the good moment, to the players. *Currently, ProTips about the team-chat are sent.*
+   ![ProTips](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_ProTips.png)
  - The commands can be accessed using permissions (see subsection below).
  - Autocompletion everywhere.
  - Fully translated into English, French and Portuguese.
@@ -196,16 +205,23 @@ Legend: `/uh command <required> [optional=default]`.
 ### Others
 
  - `/uh freeze` : used to (un)freeze the entire game or some players.
+ - `/uh tp <team|spectators>` : teleports a team or the spectators to a given location.
  - `/uh finish` : broadcasts the winner(s) of the game, and sends some fireworks!
- - `/t <message>` : sends a private message to the entire team of the sender.
+ - **Team-chat commands**
+    - `/t <message>` : sends a private message to the entire team of the sender.
+    - `/togglechat` : toggles the chat between the main chat and the private team chat.
+    - `/togglechat <team ...>` : enters the private team chat of another team.
+    - `/g <message>` : sends a message to the main chat.
  - `/uh about` : prints informations about the plugin and the translations.
 
 ### Permissions
 
  - `uh.build`:  allows an user to build before the beginning of the game. Default: operator.
+ - `uh.teamchat.self`: allows an user to send a private message to his own team. Default: everyone.
+ - `uh.teamchat.others`: allows an user to enter into the private chat of another team. Default: operator.
  - `uh.<command>`: allows an user to use the command `/uh <command>`. Default: operator.
 
-If you don't want to bother with permissions: the operators can do anything; the non-ops, nothing (except play and execute `/t <message>`).
+If you don't want to bother with permissions: the operators can do anything; the non-ops, nothing (except play and use the team-chat with `/t`, `/togglechat` and `/g` — not `/togglechat <team ...>`).
 
 
 ## Installation
@@ -221,14 +237,17 @@ You can also install these plugins:
  - [SpectatorPlus](http://dev.bukkit.org/plugin/spectator/), if you want to enable a spectator mode for dead players;
  - [dynmap](http://dev.bukkit.org/plugin/dynmap/), because the plugin can display the spawn & death points on the map.
 
+This plugin is needed for some options:
+
+ - [ProtocolLib](http://dev.bukkit.org/bukkit-plugins/protocollib/), for the hardcore hearts and the automatic respawn.
 
 After the installation, I recommend you to:
 
-1. teleport yourself to 0,0;
+1. teleport yourself to 0,0 (in creative, `/tp 0 100 0`);
 2. set the world spawn point here (`/setworldspawn`);
 3. reload the server (for the plugin to take into account the change) (`/rl`);
 4. pregenerate the entire world (WorldBorder is preconfigured, just execute `/wb fill`);
-5. After that, generate the wall (`/uh generatewalls`). Else, holes will be formed in the wall when Minecraft will populate the terrain.
+5. only after that, generate the wall (`/uh generatewalls`) (don't forget to configure the shape and the size in the config file before). Otherwise, holes will be formed in the wall when Minecraft will populate the terrain.
 
 
 ## How to translate the plugin in your own language
