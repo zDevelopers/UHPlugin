@@ -1,5 +1,6 @@
 package me.azenet.UHPlugin;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,5 +76,34 @@ public class UHTimerManager {
 				runningTimers.put(timer.getName(), timer);
 			}
 		}
-	}	
+	}
+	
+	/**
+	 * Returns a collection containing the registered timers.
+	 * 
+	 * @return The collection.
+	 */
+	public Collection<UHTimer> getTimers() {
+		return timers.values();
+	}
+	
+	/**
+	 * Returns a collection containing the running timers.
+	 * 
+	 * @return The collection.
+	 */
+	public Collection<UHTimer> getRunningTimers() {
+		return runningTimers.values();
+	}
+	
+	/**
+	 * Pauses (or unpauses) all the running timers.
+	 * 
+	 * @param paused If true, all the timers will be paused. Else, restarted.
+	 */
+	public void pauseAll(boolean paused) {
+		for(UHTimer timer : getRunningTimers()) {
+			timer.setPaused(paused);
+		}
+	}
 }
