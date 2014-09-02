@@ -420,18 +420,16 @@ public class UHGameManager {
 		if(p.getConfig().getBoolean("episodes.enabled")) {
 			this.episode = 1;
 			
-			this.hoursLeft   = (int) Math.floor(getEpisodeLength() / 60);
-			this.minutesLeft = getEpisodeLength() - (60 * hoursLeft);
-			this.secondsLeft = 0;
+			// An empty string is used for the name of the main timer, because
+			// such a name can't be used by players.
+			UHTimer mainTimer = new UHTimer("");
+			mainTimer.setDuration(this.getEpisodeLength() * 60);
 			
-			// Lower than 100 because else the counter text is longer than 16 characters.
-			this.displayHourInTimer = (this.hoursLeft != 0 && this.hoursLeft < 100);
+			p.getTimerManager().registerMainTimer(mainTimer);
 			
-			this.episodeStartTime = System.currentTimeMillis();
+			mainTimer.start();
 			
-			BukkitRunnable updateTimer = new UpdateTimerTask(p);
-			updateTimer.runTaskTimer(p, 20L, 20L);
-			
+			// will be removed
 			this.scoreboardManager.startTimer();
 		}
 	}
@@ -492,89 +490,6 @@ public class UHGameManager {
 		this.slowStartTPFinished = finished;
 	}
 	
-	
-	
-	
-	/**
-	 * Updates the timer.
-	 */
-	public void updateTimer() {
-		if(p.getConfig().getBoolean("episodes.enabled") && !this.timerPaused) {
-			if(p.getConfig().getBoolean("episodes.syncTimer")) {
-				long timeSinceStart = System.currentTimeMillis() - this.episodeStartTime;
-				long diffSeconds = timeSinceStart / 1000 % 60;
-				long diffMinutes = timeSinceStart / (60 * 1000) % 60;
-				
-				if(diffMinutes >= this.getEpisodeLength()) {
-					shiftEpisode();
-				}
-				else {
-					if(displayHourInTimer) {
-						int rawMinutesLeft = (int) ((this.getEpisodeLength() - diffMinutes) - 1);
-						hoursLeft   = (int) Math.floor(rawMinutesLeft / 60);
-						minutesLeft = (int) rawMinutesLeft - (60 * hoursLeft);
-						secondsLeft = (int) (60 - diffSeconds) - 1;
-					}
-					else {
-						minutesLeft = (int) (this.getEpisodeLength() - diffMinutes) - 1;
-						secondsLeft = (int) (60 - diffSeconds) - 1;
-					}
-				}
-			}
-			else {
-				secondsLeft--;
-				if (secondsLeft == -1) {
-					minutesLeft--;
-					secondsLeft = 59;
-				}
-				if (minutesLeft == -1) {
-					if(hoursLeft != 0) {
-						hoursLeft--;
-						minutesLeft = 59;
-						secondsLeft = 59;
-					}
-					else {
-						shiftEpisode();
-					}
-				}
-			}
-			
-			scoreboardManager.updateTimer();
-		}
-	}
-	
-	/**
-	 * Pauses (or restarts) the timer.
-	 */
-	public void setTimerPause(boolean pause) {
-		// If the game is not started, the timer is not running.
-		if(p.getGameManager().isGameRunning()) {
-			// The pause is only set once (as example if the user executes /uh freeze all twice).
-			if(pause && !this.timerPaused) {
-				this.timerPaused = true;
-				this.timerPauseTime = System.currentTimeMillis();
-			}
-			if(!pause && this.timerPaused) {
-				// We have to add to the time of the start of the episode the elapsed time
-				// during the pause.
-				this.episodeStartTime += (System.currentTimeMillis() - this.timerPauseTime);
-				this.timerPauseTime = 0L;
-
-				this.timerPaused = false;
-			}
-		}
-	}
-	
-	/**
-	 * Returns true if the timer is paused.
-	 * 
-	 * @return true if the timer is paused.
-	 */
-	public boolean isTimerPaused() {
-		return timerPaused;
-	}
-	
-	
 	/**
 	 * Updates the cached values of the numbers of alive players
 	 * and teams.
@@ -605,11 +520,8 @@ public class UHGameManager {
 			
 			this.episode++;
 			
-			this.hoursLeft   = (int) Math.floor(getEpisodeLength() / 60);
-			this.minutesLeft = getEpisodeLength() - (60 * hoursLeft);
-			this.secondsLeft = 0;
-			
-			this.episodeStartTime = System.currentTimeMillis();
+			// Restarts the timer
+			p.getTimerManager().getMainTimer().start();
 			
 			this.scoreboardManager.updateCounters();
 		}
@@ -1008,39 +920,5 @@ public class UHGameManager {
 	 */
 	public Integer getEpisode() {
 		return episode;
-	}
-	
-	/**
-	 * Returns the number of hours left in the current episode.
-	 *  
-	 * @return
-	 */
-	public Integer getHoursLeft() {
-		return hoursLeft;
-	}
-	
-	/**
-	 * Returns the number of minutes left in the current episode.
-	 * 
-	 * @return
-	 */
-	public Integer getMinutesLeft() {
-		return minutesLeft;
-	}
-	
-	/**
-	 * Returns the number of seconds left in the current <em>minute</em>.
-	 * @return
-	 */
-	public Integer getSecondsLeft() {
-		return secondsLeft;
-	}
-	
-	/**
-	 * Returns true if the hour needs to be displayed in the timer.
-	 * @return
-	 */
-	public Boolean displayHourInTimer() {
-		return this.displayHourInTimer;
 	}
 }

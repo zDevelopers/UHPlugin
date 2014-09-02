@@ -380,6 +380,12 @@ public class UHGameListener implements Listener {
 	@EventHandler
 	public void onTimerEnds(TimerEndsEvent ev) {
 		p.getTimerManager().updateStartedTimersList();
+		
+		if(ev.getTimer().equals(p.getTimerManager().getMainTimer())) {
+			// If this timer is the main one, we shifts an episode.
+			// The shift restarts the timer.
+			p.getGameManager().shiftEpisode();
+		}
 	}
 	
 	@EventHandler

@@ -228,7 +228,7 @@ public class UHScoreboardManager {
 			return i.t("scoreboard.timer", formatter.format(minutes), formatter.format(seconds));
 		}
 	}
-	
+	 
 	/**
 	 * Updates the health score for all players.
 	 */

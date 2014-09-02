@@ -100,7 +100,7 @@ public class UHFreezer {
 			}
 			
 			// Freezes the timers.
-			p.getGameManager().setTimerPause(true);
+			p.getTimerManager().pauseAll(true);
 			p.getBorderManager().setWarningTimePause(true);
 		}
 		
@@ -123,7 +123,7 @@ public class UHFreezer {
 			}
 			
 			// Unfreezes the timers.
-			p.getGameManager().setTimerPause(false);
+			p.getTimerManager().pauseAll(false);
 			p.getBorderManager().setWarningTimePause(false);
 		}
 		
