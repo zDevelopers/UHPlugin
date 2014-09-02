@@ -1,6 +1,10 @@
 package me.azenet.UHPlugin;
 
+import me.azenet.UHPlugin.events.TimerEndsEvent;
+import me.azenet.UHPlugin.events.TimerStartsEvent;
+
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 
 
 /**
@@ -60,18 +64,31 @@ public class UHTimer {
 		
 		// Lower than 100 because else the counter text is longer than 16 characters.
 		this.displayHoursInTimer = (this.hoursLeft != 0 && this.hoursLeft < 100);
+		
+		Bukkit.getServer().getPluginManager().callEvent(new TimerStartsEvent(this));
 	}
 
 	/**
 	 * Stops this timer.
 	 */
 	public void stop() {
+		stop(false);
+	}
+	
+	/**
+	 * Stops this timer.
+	 * 
+	 * @param ended If true, the timer was stopped because the timer was up.
+	 */
+	private void stop(boolean wasUp) {
 		this.running = false;
 		this.startTime = 0l;
 		
 		this.hoursLeft   = 0;
 		this.minutesLeft = 0;
 		this.secondsLeft = 0;
+		
+		Bukkit.getServer().getPluginManager().callEvent(new TimerEndsEvent(this, wasUp));
 	}
 
 	/**
@@ -84,8 +101,8 @@ public class UHTimer {
 		
 		double durationInMinutes = Math.floor(this.duration / 60);
 		
-		if(diffMinutes >= durationInMinutes) {
-			stop();
+		if(diffMinutes >= durationInMinutes) {			
+			stop(true);
 		}
 		else {
 			if(displayHoursInTimer) {
@@ -215,5 +232,15 @@ public class UHTimer {
 	 */
 	public Boolean getDisplayHoursInTimer() {
 		return displayHoursInTimer;
+	}
+	
+	
+	
+	public boolean equals(Object other) {
+		if(!(other instanceof UHTimer)) {
+			return false;
+		}
+		
+		return ((UHTimer) other).getName().equals(this.getName());
 	}
 }

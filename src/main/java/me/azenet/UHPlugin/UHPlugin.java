@@ -41,6 +41,7 @@ public final class UHPlugin extends JavaPlugin {
 	private UHBorderManager borderManager = null;
 	private UHRecipeManager recipeManager = null;
 	private UHTeamChatManager teamChatManager = null;
+	private UHTimerManager timerManager = null;
 	
 	private UHFreezer freezer = null;
 	
@@ -69,6 +70,7 @@ public final class UHPlugin extends JavaPlugin {
 		borderManager = new UHBorderManager(this);
 		recipeManager = new UHRecipeManager(this);
 		teamChatManager = new UHTeamChatManager(this);
+		timerManager = new UHTimerManager();
 		
 		freezer = new UHFreezer(this);
 		
@@ -170,6 +172,14 @@ public final class UHPlugin extends JavaPlugin {
 	 */
 	public UHTeamChatManager getTeamChatManager() {
 		return teamChatManager;
+	}
+	
+	/**
+	 * Returns the timer manager.
+	 * @return
+	 */
+	public UHTimerManager getTimerManager() {
+		return timerManager;
 	}
 	
 	/**

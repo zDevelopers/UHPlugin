@@ -23,6 +23,8 @@ import java.util.List;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHTeam;
+import me.azenet.UHPlugin.events.TimerEndsEvent;
+import me.azenet.UHPlugin.events.TimerStartsEvent;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Bukkit;
@@ -372,5 +374,16 @@ public class UHGameListener implements Listener {
 				p.getTeamChatManager().sendTeamMessage(ev.getPlayer(), ev.getMessage(), p.getTeamChatManager().getOtherTeamEnabled(ev.getPlayer()));
 			}
 		}
+	}
+	
+	
+	@EventHandler
+	public void onTimerEnds(TimerEndsEvent ev) {
+		p.getTimerManager().updateStartedTimersList();
+	}
+	
+	@EventHandler
+	public void onTimerStarts(TimerStartsEvent ev) {
+		p.getTimerManager().updateStartedTimersList();
 	}
 }
