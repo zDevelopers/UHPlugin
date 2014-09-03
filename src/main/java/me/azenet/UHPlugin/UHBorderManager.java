@@ -223,6 +223,17 @@ public class UHBorderManager {
 	}
 	
 	/**
+	 * Returns the UHTimer object representing the countdown before the next border reduction.
+	 * <p>
+	 * Returns null if there isn't any countdown running currently.
+	 * 
+	 * @return The timer.
+	 */
+	public UHTimer getWarningTimer() {
+		return p.getTimerManager().getTimer(this.warningTimerName);
+	}
+	
+	/**
 	 * Stops the display of the warning messages.
 	 */
 	public void cancelWarning() {
@@ -234,7 +245,7 @@ public class UHBorderManager {
 			}
 		}
 		
-		UHTimer timer = p.getTimerManager().getTimer(this.warningTimerName);
+		UHTimer timer = getWarningTimer();
 		timer.stop();
 		p.getTimerManager().unregisterTimer(timer);
 	}

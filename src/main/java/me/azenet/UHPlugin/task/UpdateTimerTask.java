@@ -20,6 +20,7 @@
 package me.azenet.UHPlugin.task;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.UHTimer;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -33,7 +34,8 @@ public class UpdateTimerTask extends BukkitRunnable {
 	
 	@Override
 	public void run() {
-		p.getGameManager().updateTimer();
+		for(UHTimer timer : p.getTimerManager().getRunningTimers()) {
+			timer.update();
+		}
 	}
-
 }

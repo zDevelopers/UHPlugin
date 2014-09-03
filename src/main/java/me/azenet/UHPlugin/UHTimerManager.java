@@ -71,6 +71,10 @@ public class UHTimerManager {
 	public void updateStartedTimersList() {
 		runningTimers = new HashMap<String,UHTimer>();
 		
+		if(getMainTimer() != null && getMainTimer().isRunning()) {
+			runningTimers.put(getMainTimer().getName(), getMainTimer());
+		}
+		
 		for(UHTimer timer : timers.values()) {
 			if(timer.isRunning()) {
 				runningTimers.put(timer.getName(), timer);

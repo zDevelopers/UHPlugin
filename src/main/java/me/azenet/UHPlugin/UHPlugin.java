@@ -27,6 +27,7 @@ import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
 import me.azenet.UHPlugin.listeners.UHCraftingListener;
 import me.azenet.UHPlugin.listeners.UHGameListener;
 import me.azenet.UHPlugin.listeners.UHGameplayListener;
+import me.azenet.UHPlugin.task.UpdateTimerTask;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -115,6 +116,11 @@ public final class UHPlugin extends JavaPlugin {
 		
 		// Imports teams from the config.
 		this.teamManager.importTeamsFromConfig();
+		
+		// Starts the task that updates the timers.
+		// Started here, so a timer can be displayed before the start of the game
+		// (example: countdown before the start).
+		new UpdateTimerTask(this).runTaskTimer(this, 20l, 20l);
 		
 		getLogger().info(i18n.t("load.loaded"));
 	}
