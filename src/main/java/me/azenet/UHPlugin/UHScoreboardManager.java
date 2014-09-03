@@ -21,9 +21,13 @@ package me.azenet.UHPlugin;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import me.azenet.UHPlugin.i18n.I18n;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -46,9 +50,44 @@ public class UHScoreboardManager {
 	private Integer oldEpisode = -1;
 	private Integer oldAlivePlayersCount = -1;
 	private Integer oldAliveTeamsCount = -1;
-	private Integer oldHours = 0;
-	private Integer oldMinutes = 0;
-	private Integer oldSeconds = 0;
+	
+	// Timers
+	
+	/**
+	 * Represents the position of each displayed timer.
+	 * <ul>
+	 *  <li><tt>This position</tt>: the space before the timer.</li>
+	 *  <li><tt>This position - 1</tt>: the name of the timer.</li>
+	 *  <li><tt>This position - 2</tt>: the timer.</li>
+	 * </ul>
+	 */
+	private Map<UHTimer,Integer> timersPositions = new HashMap<UHTimer,Integer>();
+	
+	/**
+	 * The first position of the timers (main timer excluded).
+	 * <p>
+	 * -1, so there isn't any problem related to the line with a score equals to 0 
+	 * (not displayed except if the score is set to 1, then to 0 one tick later).
+	 */
+	private static final Integer TIMERS_FIRST_POSITION = 81;
+	
+	/**
+	 * The last position used by the timers.
+	 */
+	private Integer timersLastUsedPosition = null;
+	
+	/**
+	 * The number of spaces in the separator. Max 16.
+	 */
+	private Map<UHTimer,Integer> numberOfSpacesInSeparator = new HashMap<UHTimer,Integer>();
+	
+	/**
+	 * The biggest number of spaces used, for the separators.
+	 * <p>
+	 * 1 because "" is used by the main timer, and " " by the "Game Frozen" text.
+	 */
+	private Integer biggestNumberOfSpacesUsed = 1;
+	
 	
 	// Static values
 	private String objectiveName = "UHPlugin";
@@ -81,11 +120,14 @@ public class UHScoreboardManager {
 			
 			// The "space" score needs to be registered only one time, and only if the episodes/timer are enabled.
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
-				this.objective.getScore("").setScore(3);
+				this.objective.getScore("").setScore(85);
+				
+				// Displays a fake, frozen timer if the game is not started.
+				this.objective.getScore(this.getTimerText(new UHTimer(""), true, false)).setScore(84);
 			}
 			
 			updateCounters();
-			updateTimer();
+			updateTimers();
 		}
 		
 		// Initialization of the scoreboard (health in players' list)
@@ -107,30 +149,130 @@ public class UHScoreboardManager {
 	 * because this score is not reset if the timer is with hours.
 	 */
 	public void startTimer() {
-		sb.resetScores(getTimerText(oldHours, oldMinutes, oldSeconds, true));
+		this.sb.resetScores(this.getTimerText(new UHTimer(""), true, false));
 	}
 	
 	/**
-	 * Updates the timer of the scoreboard (if needed).
+	 * Displays a timer in the scoreboard.
+	 * 
+	 * @param timer
 	 */
-	public void updateTimer() {
-		if(p.getConfig().getBoolean("scoreboard.enabled")) {
-			Integer hoursLeft   = gm.getHoursLeft();
-			Integer minutesLeft = gm.getMinutesLeft();
-			Integer secondsLeft = gm.getSecondsLeft();
+	public void displayTimer(UHTimer timer) {		
+		// Position of the timer
+		Integer position = null;
+		if(timersLastUsedPosition == null) {
+			position = TIMERS_FIRST_POSITION;
+		}
+		else {
+			position = timersLastUsedPosition - 3;
+		}
+		
+		timersPositions.put(timer, position);
+		timersLastUsedPosition = position;
+		
+		// Number of spaces in the separator
+		numberOfSpacesInSeparator.put(timer, biggestNumberOfSpacesUsed + 1);
+		biggestNumberOfSpacesUsed++;
+		
+		// Effective display
+		objective.getScore(getValidScoreName(generateSpaces(numberOfSpacesInSeparator.get(timer)))).setScore(position);
+		objective.getScore(getValidScoreName(timer.getName())).setScore(position - 1);
+		objective.getScore(getValidScoreName(getTimerText(timer, false, false))).setScore(position - 2);
+	}
+	
+	/**
+	 * Hides a timer, in the scoreboard.
+	 * 
+	 * @param timer
+	 */
+	public void hideTimer(UHTimer timer) {
+		// The timer is removed from the lists of the displayed timers.
+		// All the positions of the displayed timers are changed, as well as the number of spaces used.
+		
+		if(!timersPositions.containsKey(timer)) {
+			return;
+		}
+		
+		// The timer is hidden
+		sb.resetScores(getValidScoreName(generateSpaces(numberOfSpacesInSeparator.get(timer))));
+		sb.resetScores(getValidScoreName(timer.getName()));
+		sb.resetScores(getValidScoreName(getTimerText(timer, false, false)));
+		sb.resetScores(getValidScoreName(getTimerText(timer, false, true)));
+		
+		Integer oldPosition = timersPositions.get(timer);
+		
+		timersPositions.remove(timer);
+		numberOfSpacesInSeparator.remove(timer);
+		
+		for(Entry<UHTimer, Integer> entry : timersPositions.entrySet()) {
+			// If the timer is below the deleted timer, the position and the spaces in the separator
+			// are changed.
 			
-			// The timer score is reset every time.
-			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer") && !p.getGameManager().isTimerPaused()) {
-				String oldTimerText = getTimerText(oldHours, oldMinutes, oldSeconds, false);
-				String newTimerText = getTimerText(hoursLeft, minutesLeft, secondsLeft, false);
+			if(entry.getValue() < oldPosition) {
+				UHTimer thisTimer = entry.getKey();
+				Integer newPosition = entry.getValue() + 3;
 				
-				sb.resetScores(oldTimerText);
-				objective.getScore(newTimerText).setScore(2);
+				timersPositions.put(thisTimer, newPosition);
+				numberOfSpacesInSeparator.put(thisTimer, numberOfSpacesInSeparator.get(thisTimer) - 1);
 				
-				oldHours = hoursLeft;
-				oldMinutes = minutesLeft;
-				oldSeconds = secondsLeft;
+				// Effective display
+				sb.resetScores(getValidScoreName(generateSpaces(numberOfSpacesInSeparator.get(thisTimer) + 1))); // resets the old "space" score
+				objective.getScore(getValidScoreName(generateSpaces(numberOfSpacesInSeparator.get(thisTimer)))).setScore(newPosition);
+				objective.getScore(getValidScoreName(thisTimer.getName())).setScore(newPosition - 1);
+				objective.getScore(getValidScoreName(getTimerText(thisTimer, false, false))).setScore(newPosition - 2);
 			}
+		}
+		
+		if(timersLastUsedPosition + 3 < TIMERS_FIRST_POSITION) {
+			timersLastUsedPosition += 3;
+		}
+		else {
+			timersLastUsedPosition = null; // no timers left.
+		}
+		
+		biggestNumberOfSpacesUsed--;
+	}
+	
+	/**
+	 * Remove the old timers text when a pause is stopped, because the usual solution doesn't work here
+	 * (the old values stored in the timers are the same as the current ones due to an update after a freeze).
+	 * 
+	 * This method is called before the update of the timers.
+	 */
+	public void restartTimers() {		
+		// Main timer
+		if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer") && p.getTimerManager().getMainTimer() != null) {		
+			sb.resetScores(getTimerText(p.getTimerManager().getMainTimer(), false, true));
+			sb.resetScores(getTimerText(p.getTimerManager().getMainTimer(), false, false));			
+		}
+		
+		
+		// Other timers
+		for(Entry<UHTimer,Integer> entry : timersPositions.entrySet()) {
+			sb.resetScores(getTimerText(entry.getKey(), false, true));
+			sb.resetScores(getTimerText(entry.getKey(), false, false));
+		}
+	}
+	
+	/**
+	 * Updates the timers of the scoreboard (if needed).
+	 */
+	public void updateTimers() {
+		if(p.getConfig().getBoolean("scoreboard.enabled") && !p.getFreezer().getGlobalFreezeState()) {
+			
+			// Main timer
+			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer") && p.getTimerManager().getMainTimer() != null) {
+				sb.resetScores(getTimerText(p.getTimerManager().getMainTimer(), false, true));
+				objective.getScore(getTimerText(p.getTimerManager().getMainTimer(), false, false)).setScore(84);
+			}
+			
+			
+			// Other timers
+			for(Entry<UHTimer,Integer> entry : timersPositions.entrySet()) {
+				sb.resetScores(getTimerText(entry.getKey(), false, true));
+				objective.getScore(getTimerText(entry.getKey(), false, false)).setScore(entry.getValue() - 2);
+			}
+			
 		}
 	}
 	
@@ -145,13 +287,13 @@ public class UHScoreboardManager {
 			
 			if(!episode.equals(oldEpisode) && p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.episode")) {
 				sb.resetScores(getText("episode", oldEpisode));
-				objective.getScore(getText("episode", episode)).setScore(6);
+				objective.getScore(getText("episode", episode)).setScore(88);
 				oldEpisode = episode;
 			}
 			
 			if(!alivePlayersCount.equals(oldAlivePlayersCount) && p.getConfig().getBoolean("scoreboard.players")) {
 				sb.resetScores(getText("players", oldAlivePlayersCount));
-				objective.getScore(getText("players", alivePlayersCount)).setScore(5);
+				objective.getScore(getText("players", alivePlayersCount)).setScore(87);
 				oldAlivePlayersCount = alivePlayersCount;
 			}
 			
@@ -159,7 +301,7 @@ public class UHScoreboardManager {
 			// if the game is without teams.
 			if(gm.isGameRunning() && gm.isGameWithTeams() && !aliveTeamsCount.equals(oldAliveTeamsCount) && p.getConfig().getBoolean("scoreboard.teams")) {
 				sb.resetScores(getText("teams", oldAliveTeamsCount));
-				objective.getScore(getText("teams", aliveTeamsCount)).setScore(4);
+				objective.getScore(getText("teams", aliveTeamsCount)).setScore(86);
 				oldAliveTeamsCount = aliveTeamsCount;
 			}
 		}
@@ -174,17 +316,11 @@ public class UHScoreboardManager {
 			final String freezerStatusText = i.t("freeze.scoreboard").substring(0, Math.min(i.t("freeze.scoreboard").length(), 16));		
 			
 			if(p.getFreezer().getGlobalFreezeState()) {
-				objective.getScore("  ").setScore(1);
-				objective.getScore(freezerStatusText).setScore(-1); // Forces the display
-				Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
-					@Override
-					public void run() {
-						objective.getScore(freezerStatusText).setScore(0);
-					}
-				}, 1L);
+				objective.getScore(" ").setScore(83);
+				objective.getScore(freezerStatusText).setScore(82);
 			}
 			else {
-				sb.resetScores("  ");
+				sb.resetScores(" ");
 				sb.resetScores(freezerStatusText);
 			}
 		}
@@ -214,21 +350,51 @@ public class UHScoreboardManager {
 	/**
 	 * Returns the text displayed in the scoreboard, for the timer.
 	 * 
-	 * @param hours The hours in the timer
-	 * @param minutes The minute in the timer
-	 * @param seconds The second in the timer
+	 * @param timer The timer to display.
 	 * @param forceNonHoursTimer If true, the non-hours timer text will be returned.
-	 * @return The text of the timer
+	 * @param useOldValues if true, the old values of the timer will be used.
+	 * @return The text of the timer.
 	 */
-	private String getTimerText(Integer hours, Integer minutes, Integer seconds, Boolean forceNonHoursTimer) {
-		if(gm.displayHourInTimer() && !forceNonHoursTimer) {
+	private String getTimerText(UHTimer timer, Boolean forceNonHoursTimer, Boolean useOldValues) {
+		Validate.notNull(timer, "The timer cannot be null");
+		
+		if(timer.getDisplayHoursInTimer() && !forceNonHoursTimer) {
+			if(useOldValues) {
+				return getTimerText(timer.getOldHoursLeft(), timer.getOldMinutesLeft(), timer.getOldSecondsLeft(), true);
+			}
+			else {
+				return getTimerText(timer.getHoursLeft(), timer.getMinutesLeft(), timer.getSecondsLeft(), true);
+			}
+		}
+		else {
+			if(useOldValues) {
+				return getTimerText(0, timer.getOldMinutesLeft(), timer.getOldSecondsLeft(), false);
+			}
+			else {
+				return getTimerText(0, timer.getMinutesLeft(), timer.getSecondsLeft(), false);
+			}
+		}
+	}
+	
+	/**
+	 * Returns the text displayed in the scoreboard, for the give values.
+	 * 
+	 * @param hours The hours in the timer.
+	 * @param minutes The minutes in the timer.
+	 * @param seconds The seconds in the timer.
+	 * @param displayHours If true, "hh:mm:ss"; else, "mm:ss".
+	 * 
+	 * @return The text of the timer.
+	 */
+	private String getTimerText(Integer hours, Integer minutes, Integer seconds, Boolean displayHours) {		
+		if(displayHours) {
 			return i.t("scoreboard.timerWithHours", formatter.format(hours), formatter.format(minutes), formatter.format(seconds));
 		}
 		else {
 			return i.t("scoreboard.timer", formatter.format(minutes), formatter.format(seconds));
 		}
 	}
-	 
+	
 	/**
 	 * Updates the health score for all players.
 	 */
@@ -256,6 +422,35 @@ public class UHScoreboardManager {
 				}
 			}, 3L);
 		}
+	}
+	
+	/**
+	 * Generates a string containing {@code spaces} spaces.
+	 * 
+	 * @param spaces The number of spaces in the string.
+	 * 
+	 * @return The string.
+	 */
+	protected String generateSpaces(int spaces) {
+		String space = "";
+		
+		for(int i = 0; i < spaces; i++) {
+			space += " ";
+		}
+		
+		return space;
+	}
+	
+	/**
+	 * Returns a string that can fit in a scoreboard.
+	 * 
+	 * Aka, cut the given string at the 16th character.
+	 * 
+	 * @param original The original string.
+	 * @return The cut string.
+	 */
+	public String getValidScoreName(String original) {
+		return original.substring(0, Math.min(original.length(), 16));
 	}
 	
 	/**

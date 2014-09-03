@@ -42,6 +42,7 @@ public class UHTimerManager {
 	 * @throws IllegalArgumentException if a timer with the same name is already registered.
 	 */
 	public void registerTimer(UHTimer timer) {
+		
 		if(timers.get(timer.getName()) != null) {
 			throw new IllegalArgumentException("A timer with the name " + timer.getName() + " is already registered.");
 		}
@@ -58,9 +59,9 @@ public class UHTimerManager {
 	 * 
 	 * @param timer The timer to unregister.
 	 */
-	public void unregisterTimer(UHTimer timer) {
-		timers.remove(timer);
-		runningTimers.remove(timer);
+	public void unregisterTimer(UHTimer timer) {		
+		timers.remove(timer.getName());
+		runningTimers.remove(timer.getName());
 		
 		timer.setRegistered(false);
 	}

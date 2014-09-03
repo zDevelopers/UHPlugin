@@ -376,20 +376,45 @@ public class UHGameListener implements Listener {
 		}
 	}
 	
-	
+	/**
+	 * Used to:
+	 *  - update the internal list of running timers;
+	 *  - shift the episode if the main timer is up (and restart this main timer);
+	 *  - hide an other timer when it is up.
+	 * 
+	 * @param ev
+	 */
 	@EventHandler
 	public void onTimerEnds(TimerEndsEvent ev) {
 		p.getTimerManager().updateStartedTimersList();
 		
 		if(ev.getTimer().equals(p.getTimerManager().getMainTimer())) {
 			// If this timer is the main one, we shifts an episode.
-			// The shift restarts the timer.
 			p.getGameManager().shiftEpisode();
+			ev.setRestart(true);
+		}
+		else {
+			p.getGameManager().getScoreboardManager().hideTimer(ev.getTimer());
+		}
+		
+		if(ev.getTimer().equals(p.getBorderManager().getWarningTimer())) {
+			p.getBorderManager().getWarningSender().sendMessage(i.t("borders.warning.timerUp"));
+			p.getBorderManager().sendCheckMessage(p.getBorderManager().getWarningSender(), p.getBorderManager().getWarningSize());
 		}
 	}
 	
+	/**
+	 * Used to:
+	 *  - update the internal list of running timers;
+	 *  - display a timer when it is started.
+	 * @param ev
+	 */
 	@EventHandler
-	public void onTimerStarts(TimerStartsEvent ev) {
+	public void onTimerStarts(TimerStartsEvent ev) {		
 		p.getTimerManager().updateStartedTimersList();
+		
+		if(!ev.getTimer().equals(p.getTimerManager().getMainTimer())) {
+			p.getGameManager().getScoreboardManager().displayTimer(ev.getTimer());
+		}
 	}
 }

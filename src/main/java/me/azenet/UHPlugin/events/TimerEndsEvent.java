@@ -7,6 +7,8 @@ import org.bukkit.event.HandlerList;
 
 /**
  * This event is fired when a timer ends.
+ * <p>
+ * It is fired before all the values of the timer are reset.
  * 
  * @author Amaury Carrade
  */
@@ -16,6 +18,7 @@ public final class TimerEndsEvent extends Event {
     
 	private UHTimer timer;
     private Boolean timerWasUp = false;
+    private Boolean restart = false;
     
     
     public TimerEndsEvent(UHTimer timer, Boolean timerUp) {
@@ -41,6 +44,26 @@ public final class TimerEndsEvent extends Event {
     public boolean wasTimerUp() {
     	return timerWasUp;
     }
+    
+    /**
+     * If true, the timer will be restarted.
+     * 
+     * @param restart true if the timer needs to be restarted.
+     */
+    public void setRestart(boolean restart) {
+    	this.restart = restart;
+    }
+    
+    /**
+     * Return true if the timer will be restarted.
+     * 
+     * @param restart true if the timer will be restarted.
+     * @return 
+     */
+    public boolean getRestart() {
+    	return this.restart;
+    }
+    
     
     public HandlerList getHandlers() {
         return handlers;

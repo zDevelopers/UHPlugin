@@ -319,7 +319,7 @@ keys:
             messageDistance: "{ci}You have {0} blocks to go before being inside."
             messageDistanceTime: "{ci}You have {0} blocks to go before being inside, and {1} minutes to do so."
             
-            nameTimer: "Réduction"
+            nameTimer: "Border shrinking"
             
             timerUp: "{cs}The timer before the new border is up!"
         

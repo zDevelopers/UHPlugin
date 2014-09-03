@@ -246,8 +246,10 @@ public class UHBorderManager {
 		}
 		
 		UHTimer timer = getWarningTimer();
-		timer.stop();
-		p.getTimerManager().unregisterTimer(timer);
+		if(timer != null) {
+			timer.stop();
+			p.getTimerManager().unregisterTimer(timer);
+		}
 	}
 	
 	/**

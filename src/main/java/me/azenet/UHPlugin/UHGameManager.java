@@ -69,17 +69,7 @@ public class UHGameManager {
 	private Boolean slowStartTPFinished = false;
 	
 	private Boolean gameRunning = false;
-	private Boolean displayHourInTimer = false;
 	private Integer episode = 0;
-	private Integer hoursLeft = 0;
-	private Integer minutesLeft = 0;
-	private Integer secondsLeft = 0;
-	
-	private Long episodeStartTime = 0L;
-	
-	private Boolean timerPaused = false;
-	private Long timerPauseTime = 0L;
-	
 	private Sound deathSound = null;
 	
 	// Used to send a contextual error message in UHCommandManager, using only one exception,
@@ -419,6 +409,9 @@ public class UHGameManager {
 		if(p.getConfig().getBoolean("episodes.enabled")) {
 			this.episode = 1;
 			
+			// Removes the fake timer displayed before the start of the game.
+			scoreboardManager.startTimer();
+			
 			// An empty string is used for the name of the main timer, because
 			// such a name can't be used by players.
 			UHTimer mainTimer = new UHTimer("");
@@ -427,9 +420,6 @@ public class UHGameManager {
 			p.getTimerManager().registerMainTimer(mainTimer);
 			
 			mainTimer.start();
-			
-			// will be removed
-			this.scoreboardManager.startTimer();
 		}
 	}
 	
@@ -476,7 +466,7 @@ public class UHGameManager {
 		// The updateCounters method needs to be executed when the game is marked
 		// as running, in order to display the team count.
 		this.scoreboardManager.updateCounters();
-		this.scoreboardManager.updateTimer();
+		this.scoreboardManager.updateTimers();
 	}
 	
 	
@@ -519,8 +509,12 @@ public class UHGameManager {
 			
 			this.episode++;
 			
-			// Restarts the timer
-			p.getTimerManager().getMainTimer().start();
+			// Restarts the timer.
+			// Useless for a normal start (restarted in the event), but needed if the episode was shifted.
+			if(!shifter.equals("")) {
+				scoreboardManager.restartTimers();
+				p.getTimerManager().getMainTimer().start();
+			}
 			
 			this.scoreboardManager.updateCounters();
 		}
