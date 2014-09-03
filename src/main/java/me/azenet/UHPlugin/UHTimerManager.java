@@ -79,6 +79,17 @@ public class UHTimerManager {
 	}
 	
 	/**
+	 * Returns a timer by his name.
+	 * 
+	 * @param name The name of the timer.
+	 * 
+	 * @return The timer.
+	 */
+	public UHTimer getTimer(String name) {
+		return timers.get(name);
+	}
+	
+	/**
 	 * Returns a collection containing the registered timers.
 	 * 
 	 * @return The collection.

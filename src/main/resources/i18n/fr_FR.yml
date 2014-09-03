@@ -319,6 +319,8 @@ keys:
             messageDistance: "{ci}Il vous reste {0} blocs à parcourir avant d'y être."
             messageDistanceTime: "{ci}Il vous reste {0} blocs à parcourir, et {1} minutes pour ce faire."
             
+            nameTimer: "Réduction"
+            
             timerUp: "{cs}Le temps imparti avant la nouvelle bordure est écoulé !"
         
         check:

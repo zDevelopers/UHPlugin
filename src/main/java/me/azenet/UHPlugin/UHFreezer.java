@@ -101,7 +101,6 @@ public class UHFreezer {
 			
 			// Freezes the timers.
 			p.getTimerManager().pauseAll(true);
-			p.getBorderManager().setWarningTimePause(true);
 		}
 		
 		else {
@@ -124,7 +123,6 @@ public class UHFreezer {
 			
 			// Unfreezes the timers.
 			p.getTimerManager().pauseAll(false);
-			p.getBorderManager().setWarningTimePause(false);
 		}
 		
 		if(showStateInScoreboard || !frozen) {

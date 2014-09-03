@@ -41,9 +41,7 @@ public class UHBorderManager {
 	private BukkitRunnable warningTask = null;
 	
 	private Boolean warningFinalTimeEnabled = false;
-	private Boolean warningFinalTimePaused = false;
-	private Long warningFinalTime = 0L;
-	private Long warningFinalTimePause = 0L;
+	private String warningTimerName = null;
 	private CommandSender warningSender = null;
 	
 	private Boolean isCircularBorder = null;
@@ -52,6 +50,8 @@ public class UHBorderManager {
 	public UHBorderManager(UHPlugin plugin) {
 		this.p = plugin;
 		this.i = p.getI18n();
+		
+		this.warningTimerName = i.t("borders.warning.nameTimer");
 		
 		this.currentBorderDiameter = p.getConfig().getInt("map.size");
 		this.isCircularBorder      = p.getConfig().getBoolean("map.circular");
@@ -157,37 +157,12 @@ public class UHBorderManager {
 	}
 	
 	/**
-	 * Returns the time stamp of the end of the warning time
-	 * (i.e. the time before the players have to go inside the new border).
-	 * 
-	 * @return
-	 */
-	public long getWarningFinalTime() {
-		return this.warningFinalTime;
-	}
-	
-	/**
 	 * Returns true if there is currently a warning with a time left displayed.
 	 * 
 	 * @return
 	 */
 	public boolean getWarningFinalTimeEnabled() {
 		return this.warningFinalTimeEnabled;
-	}
-	
-	/**
-	 * Returns true if the current warning is paused.
-	 * If there isn't any warning registered, returns false.
-	 * 
-	 * @return
-	 */
-	public boolean isWarningFinalTimePaused() {
-		if(getWarningFinalTimeEnabled()) {
-			return this.warningFinalTimePaused;
-		}
-		else {
-			return false;
-		}
 	}
 	
 	/**
@@ -218,8 +193,12 @@ public class UHBorderManager {
 		this.warningSize = diameter;
 		
 		if(timeLeft != 0) {
-			this.warningFinalTime = System.currentTimeMillis() + 60000L*timeLeft;
-			this.warningFinalTimeEnabled = true;
+			UHTimer timer = new UHTimer(this.warningTimerName);
+			timer.setDuration(timeLeft * 60);
+			
+			p.getTimerManager().registerTimer(timer);
+			
+			timer.start();
 		}
 		
 		if(sender != null) {
@@ -255,41 +234,9 @@ public class UHBorderManager {
 			}
 		}
 		
-		stopWarningTime();
-	}
-	
-	/**
-	 * (Un)pauses the warning time.
-	 * 
-	 *  @param pause If true the timer will be paused.
-	 */
-	public void setWarningTimePause(boolean pause) {
-		// The pause is only set once (as example if the user executes /uh freeze all twice).
-		if(pause && !this.warningFinalTimePaused) {
-			this.warningFinalTimePaused = true;
-			this.warningFinalTimePause = System.currentTimeMillis();
-		}
-		if(!pause && this.warningFinalTimePaused) {
-			// We have to add to the time of the end of the warning the elapsed time
-			// during the pause.
-			this.warningFinalTime += (System.currentTimeMillis() - this.warningFinalTimePause);
-			this.warningFinalTimePause = 0L;
-			
-			this.warningFinalTimePaused = false;
-		}
-	}
-	
-	/**
-	 * Stops the display of the time left in the warning message.
-	 */
-	public void stopWarningTime() {
-		if(this.warningFinalTimePaused) {
-			setWarningTimePause(false);
-		}
-		
-		this.warningFinalTimeEnabled = false;
-		this.warningFinalTime = 0l;
-		this.warningSender = null;
+		UHTimer timer = p.getTimerManager().getTimer(this.warningTimerName);
+		timer.stop();
+		p.getTimerManager().unregisterTimer(timer);
 	}
 	
 	/**
