@@ -53,6 +53,7 @@ keys:
         helpFreeze: "{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."
         helpFinish: "{cc}/uh finish {ci}: displays the name of the winner(s) and launches some fireworks."
         helpTP: "{cc}/uh tp {ci}: teleports the spectators or an entire team. See /uh tp for details."
+        helpTP: "{cc}/uh tp {ci}: manages the timers. See /uh timers for details."
         helpAbout: "{cc}/uh about {ci}: informations about the plugin and the translation."
         
         teamHelpTitle: "{aqua}------ Team commands ------"
@@ -87,6 +88,18 @@ keys:
         tpHelpTeam: "{cc}/uh tp team <x> <y> <z> | <target> <team ...> {ci}: teleports the team to the given location/target."
         tpHelpSpectators: "{cc}/uh tp spectators <x> <y> <z> | <target> {ci}: teleports the spectators (aka non-alive players) to the given location/target."
         
+        timersHelpTitle: "{aqua}------ Timers commands ------"
+        timersHelpAdd: "{cc}/uh timers add <duration> <title ...> {ci}: adds a timer."
+        timersHelpSet: "{cc}/uh timers set <duration> <title ...> {ci}: sets the duration of a timer."
+        timersHelpDisplay: "{cc}/uh timers display <title ...> {ci}: displays a timer in the scoreboard. Automatic when a timer is started."
+        timersHelpHide: "{cc}/uh timers hide <title ...> {ci}: removes a timer from the scoreboard. Don't stops the timer."
+        timersHelpStart: "{cc}/uh timers start <title ...> {ci}: starts a timer."
+        timersHelpPause: "{cc}/uh timers pause <title ...> {ci}: pauses a timer."
+        timersHelpRestart: "{cc}/uh timers restart <title ...> {ci}: unpauses a timer."
+        timersHelpStop: "{cc}/uh timers stop <title ...> {ci}: stops a timer. The timer will be removed from the scoreboard."
+        timersHelpRemove: "{cc}/uh timers remove <title ...> {ci}: deletes a timer."
+        timersHelpList: "{cc}/uh timers list {ci}: lists the registered timers."
+        timersHelpDurations: "{gray}Durations' format : mm, mm:ss or hh:mm:ss."
         
     about:
         authors: "Plugin made with love by {0}."
@@ -330,6 +343,28 @@ keys:
             itemPlayerFar: "{lightpurple} - {red}{0}{ci} (far away from the border)"
             itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (close to the border)"
             itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (very close to the border)"
+
+    timers:
+        syntaxError: "{ce}Syntax error, see /uh timers."
+        durationSyntaxError: "{ce}The duration' syntax is invalid; accepted formats are mm, mm:ss or hh:mm:ss."
+        timerDoesNotExists: "{ce}This timer is not registered."
+        alreadyExists: "{ce}A timer called {0} already exists; please choose another name."
+        
+        added: "{cs}The timer {0} (duration {1}) has been registered."
+        set: "{cs}The duration of the timer {0} is now {1}."
+        displayed: "{cs}The timer {0}{cs} is now displayed."
+        hidden: "{cs}The timer {0}{cs} is now hidden."
+        started: "{cs}The timer {0}{cs} was started."
+        paused: "{cs}The timer {0}{cs} is now paused."
+        restarted: "{cs}The timer {0}{cs} is now unpaused"
+        stopped: "{cs}The timer {0}{cs} was stopped."
+        removed: "{cs}The timer {0}{cs} has been deleted."
+        
+        list:
+            count: "{ci}{0} timer(s) are registered."
+            itemRunning: "{green} • {ci}{0}{ci} - total {1} seconds - {2}"
+            itemPaused: "{yellow} • {{ci}{0}{ci} - total {1} seconds - {2}"
+            itemStopped: "{red} • {ci}{0}{ci} - total {1} seconds"
 
     protips:
         base: "{darkpurple}ProTip!"

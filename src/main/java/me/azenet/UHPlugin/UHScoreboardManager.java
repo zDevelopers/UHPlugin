@@ -157,7 +157,12 @@ public class UHScoreboardManager {
 	 * 
 	 * @param timer
 	 */
-	public void displayTimer(UHTimer timer) {		
+	public void displayTimer(UHTimer timer) {
+		if(timersPositions.containsKey(timer)) {
+			return; // already displayed
+		}
+		
+		
 		// Position of the timer
 		Integer position = null;
 		if(timersLastUsedPosition == null) {
@@ -355,7 +360,7 @@ public class UHScoreboardManager {
 	 * @param useOldValues if true, the old values of the timer will be used.
 	 * @return The text of the timer.
 	 */
-	private String getTimerText(UHTimer timer, Boolean forceNonHoursTimer, Boolean useOldValues) {
+	protected String getTimerText(UHTimer timer, Boolean forceNonHoursTimer, Boolean useOldValues) {
 		Validate.notNull(timer, "The timer cannot be null");
 		
 		if(timer.getDisplayHoursInTimer() && !forceNonHoursTimer) {

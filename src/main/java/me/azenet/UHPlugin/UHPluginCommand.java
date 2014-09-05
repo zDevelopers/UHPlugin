@@ -22,6 +22,7 @@ package me.azenet.UHPlugin;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class UHPluginCommand implements CommandExecutor {
 	private ArrayList<String> commands = new ArrayList<String>();
 	private ArrayList<String> teamCommands = new ArrayList<String>();
 	private ArrayList<String> tpCommands = new ArrayList<String>();
+	private ArrayList<String> timersCommands = new ArrayList<String>();
 	private ArrayList<String> specCommands = new ArrayList<String>();
 	private ArrayList<String> borderCommands = new ArrayList<String>();
 	private ArrayList<String> freezeCommands = new ArrayList<String>();
@@ -71,6 +73,7 @@ public class UHPluginCommand implements CommandExecutor {
 		commands.add("spec");
 		commands.add("finish");
 		commands.add("tp");
+		commands.add("timers");
 		
 		teamCommands.add("add");
 		teamCommands.add("remove");
@@ -81,6 +84,17 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		tpCommands.add("team");
 		tpCommands.add("spectators");
+
+		timersCommands.add("add");
+		timersCommands.add("set");
+		timersCommands.add("display");
+		timersCommands.add("hide");
+		timersCommands.add("start");
+		timersCommands.add("pause");
+		timersCommands.add("restart");
+		timersCommands.add("stop");
+		timersCommands.add("remove");
+		timersCommands.add("list");
 		
 		specCommands.add("add");
 		specCommands.add("remove");
@@ -253,6 +267,7 @@ public class UHPluginCommand implements CommandExecutor {
 				sender.sendMessage(i.t("cmd.helpFreeze"));
 				sender.sendMessage(i.t("cmd.helpFinish"));
 				sender.sendMessage(i.t("cmd.helpTP"));
+				sender.sendMessage(i.t("cmd.helpTimers"));
 				sender.sendMessage(i.t("cmd.helpAbout"));
 				break;
 		}
@@ -1176,6 +1191,221 @@ public class UHPluginCommand implements CommandExecutor {
 						}
 					}
 				}
+			}
+		}
+	}
+	
+	
+	/**
+	 * This command manages timers.
+	 * 
+	 * Usage: /uh timers < add | set | display | hide | start | pause | restart | stop | remove | list >
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doTimers(CommandSender sender, Command command, String label, String[] args) throws NumberFormatException {
+		if(args.length == 1) { // No action provided: doc
+			if(sender instanceof Player) sender.sendMessage("");
+			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+			sender.sendMessage(i.t("cmd.legendHelp"));
+
+			sender.sendMessage(i.t("cmd.timersHelpTitle"));
+			sender.sendMessage(i.t("cmd.timersHelpAdd"));
+			sender.sendMessage(i.t("cmd.timersHelpSet"));
+			sender.sendMessage(i.t("cmd.timersHelpDisplay"));
+			sender.sendMessage(i.t("cmd.timersHelpHide"));
+			sender.sendMessage(i.t("cmd.timersHelpStart"));
+			sender.sendMessage(i.t("cmd.timersHelpPause"));
+			sender.sendMessage(i.t("cmd.timersHelpRestart"));
+			sender.sendMessage(i.t("cmd.timersHelpStop"));
+			sender.sendMessage(i.t("cmd.timersHelpRemove"));
+			sender.sendMessage(i.t("cmd.timersHelpList"));
+			sender.sendMessage(i.t("cmd.timersHelpDurations"));
+		}
+		else {
+			String subcommand = args[1];
+			
+			if(subcommand.equalsIgnoreCase("add")) { // /uh timers add <duration> <name ...>
+				if(args.length < 4) {
+					sender.sendMessage(i.t("timers.syntaxError"));
+				}
+				else {
+					try {
+						Integer duration = UHUtils.string2time(args[2]);
+						String timerName = UHUtils.getStringFromCommandArguments(args, 3);
+						
+						if(p.getTimerManager().getTimer(timerName) != null) {
+							sender.sendMessage(i.t("timers.alreadyExists", timerName));
+							return;
+						}
+						
+						UHTimer timer = new UHTimer(timerName);
+						timer.setDuration(duration);
+						
+						p.getTimerManager().registerTimer(timer);
+						sender.sendMessage(i.t("timers.added", timer.getName(), args[2]));
+						
+					} catch(IllegalArgumentException e) {
+						sender.sendMessage(i.t("timers.durationSyntaxError"));
+					}
+				}
+			}
+			
+			else if(subcommand.equalsIgnoreCase("set")) { // /uh timers set <duration> <name ...>
+				if(args.length < 4) {
+					sender.sendMessage(i.t("timers.syntaxError"));
+				}
+				else {
+					try {
+						Integer duration = UHUtils.string2time(args[2]);
+						String timerName = UHUtils.getStringFromCommandArguments(args, 3);
+						
+						UHTimer timer = p.getTimerManager().getTimer(timerName);
+						if(timer == null) {
+							sender.sendMessage(i.t("timers.timerDoesNotExists"));
+							return;
+						}
+						
+						timer.setDuration(duration);
+						sender.sendMessage(i.t("timers.set", timer.getName(), args[2]));
+						
+					} catch(IllegalArgumentException e) {
+						sender.sendMessage(i.t("timers.durationSyntaxError"));
+					}
+				}
+			}
+			
+			else if(subcommand.equalsIgnoreCase("display")) { // /uh timers display <name ...>
+				String timerName = UHUtils.getStringFromCommandArguments(args, 2);
+				
+				UHTimer timer = p.getTimerManager().getTimer(timerName);
+				if(timer == null) {
+					sender.sendMessage(i.t("timers.timerDoesNotExists"));
+					return;
+				}
+				
+				p.getGameManager().getScoreboardManager().displayTimer(timer);
+				sender.sendMessage(i.t("timers.displayed", timer.getName()));
+			}
+			
+			else if(subcommand.equalsIgnoreCase("hide")) { // /uh timers hide <name ...>
+				String timerName = UHUtils.getStringFromCommandArguments(args, 2);
+				
+				UHTimer timer = p.getTimerManager().getTimer(timerName);
+				if(timer == null) {
+					sender.sendMessage(i.t("timers.timerDoesNotExists"));
+					return;
+				}
+				
+				p.getGameManager().getScoreboardManager().hideTimer(timer);
+				sender.sendMessage(i.t("timers.hidden", timer.getName()));
+			}
+			
+			else if(subcommand.equalsIgnoreCase("start")) { // /uh timers start <name ...>
+				String timerName = UHUtils.getStringFromCommandArguments(args, 2);
+				
+				UHTimer timer = p.getTimerManager().getTimer(timerName);
+				if(timer == null) {
+					sender.sendMessage(i.t("timers.timerDoesNotExists"));
+					return;
+				}
+				
+				if(timer.isRunning()) {
+					timer.stop();
+				}
+				
+				timer.start();
+				sender.sendMessage(i.t("timers.started", timer.getName()));
+			}
+			
+			else if(subcommand.equalsIgnoreCase("pause")) { // /uh timers pause <name ...>
+				String timerName = UHUtils.getStringFromCommandArguments(args, 2);
+				
+				UHTimer timer = p.getTimerManager().getTimer(timerName);
+				if(timer == null) {
+					sender.sendMessage(i.t("timers.timerDoesNotExists"));
+					return;
+				}
+				
+				timer.setPaused(true);
+				sender.sendMessage(i.t("timers.paused", timer.getName()));
+			}
+			
+			else if(subcommand.equalsIgnoreCase("restart")) { // /uh timers restart <name ...>
+				String timerName = UHUtils.getStringFromCommandArguments(args, 2);
+				
+				UHTimer timer = p.getTimerManager().getTimer(timerName);
+				if(timer == null) {
+					sender.sendMessage(i.t("timers.timerDoesNotExists"));
+					return;
+				}
+				
+				timer.setPaused(false);
+				sender.sendMessage(i.t("timers.restarted", timer.getName()));
+			}
+			
+			else if(subcommand.equalsIgnoreCase("stop")) { // /uh timers stop <name ...>
+				String timerName = UHUtils.getStringFromCommandArguments(args, 2);
+				
+				UHTimer timer = p.getTimerManager().getTimer(timerName);
+				if(timer == null) {
+					sender.sendMessage(i.t("timers.timerDoesNotExists"));
+					return;
+				}
+				
+				timer.stop();
+				sender.sendMessage(i.t("timers.stopped", timer.getName()));
+			}
+			
+			else if(subcommand.equalsIgnoreCase("remove")) { // /uh timers remove <name ...>
+				String timerName = UHUtils.getStringFromCommandArguments(args, 2);
+				
+				UHTimer timer = p.getTimerManager().getTimer(timerName);
+				if(timer == null) {
+					sender.sendMessage(i.t("timers.timerDoesNotExists"));
+					return;
+				}
+				
+				p.getGameManager().getScoreboardManager().hideTimer(timer);
+				p.getTimerManager().unregisterTimer(timer);
+				sender.sendMessage(i.t("timers.removed", timer.getName()));
+			}
+			
+			else if(subcommand.equalsIgnoreCase("list")) { // /uh timers list
+				Collection<UHTimer> timers = p.getTimerManager().getTimers();
+				
+				sender.sendMessage(i.t("timers.list.count", String.valueOf(timers.size())));
+				
+				for(UHTimer timer : timers) {
+					if(timer.isRunning()) {
+						if(timer.isPaused()) {
+							sender.sendMessage(i.t("timers.list.itemPaused", 
+									timer.getName(),
+									String.valueOf(timer.getDuration()),
+									p.getGameManager().getScoreboardManager().getTimerText(timer, false, false)));
+						}
+						else {
+							sender.sendMessage(i.t("timers.list.itemRunning", 
+									timer.getName(),
+									String.valueOf(timer.getDuration()),
+									p.getGameManager().getScoreboardManager().getTimerText(timer, false, false)));
+
+						}
+					}
+					else {
+						sender.sendMessage(i.t("timers.list.itemStopped",
+								timer.getName(),
+								String.valueOf(timer.getDuration())));
+					}
+				}
+			}
+			
+			else {
+				sender.sendMessage(i.t("timers.syntaxError"));
 			}
 		}
 	}

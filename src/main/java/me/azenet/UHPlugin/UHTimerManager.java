@@ -88,7 +88,7 @@ public class UHTimerManager {
 	 * 
 	 * @param name The name of the timer.
 	 * 
-	 * @return The timer.
+	 * @return The timer, or null if there isn't any timer with this name.
 	 */
 	public UHTimer getTimer(String name) {
 		return timers.get(name);

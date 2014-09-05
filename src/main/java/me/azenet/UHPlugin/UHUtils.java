@@ -64,6 +64,40 @@ public class UHUtils {
 		return text;
 	}
 	
+	/**
+	 * Converts a string to a number of seconds.
+	 * <p>
+	 * Format:
+	 * <ul>
+	 *    <li><tt>mm</tt> – number of minutes;</li>
+	 *    <li><tt>mm:ss</tt> – minutes and seconds;</li>
+	 *    <li><tt>hh:mm:ss</tt> – hours, minutes and seconds.</li>
+	 * </ul>
+	 * 
+	 * 
+	 * @param text The text to be converted.
+	 * @return The number of seconds represented by this string.
+	 * 
+	 * @throws IllegalArgumentException if the text is not formatted as above.
+	 * @throws NumberFormatException if the text between the colons cannot be converted in integers.
+	 */
+	public static int string2time(String text) {
+		String[] splitted = text.split(":");
+		
+		if(splitted.length > 3) {
+			throw new IllegalArgumentException("Badely formatted string in string2time, formats allowed are mm, mm:ss or hh:mm:ss.");
+		}
+		
+		if(splitted.length == 1) { // "mm"
+			return Integer.valueOf(splitted[0]) * 60;
+		}
+		else if(splitted.length == 2) { // "mm:ss"
+			return Integer.valueOf(splitted[0]) * 60 + Integer.valueOf(splitted[1]);
+		}
+		else { // "hh:mm:ss"
+			return Integer.valueOf(splitted[0]) * 3600 + Integer.valueOf(splitted[1]) * 60 + Integer.valueOf(splitted[2]);
+		}
+	}
 	
 	
 	/**

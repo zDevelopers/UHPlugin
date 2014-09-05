@@ -53,6 +53,7 @@ keys:
         helpFreeze: "{cc}/uh freeze {ci}: (dés)immobilise l'ensemble du jeu, ou un joueur. Consultez /uh freeze pour plus de détails."
         helpFinish: "{cc}/uh finish {ci}: affiche le nom du/des vainqueurs et lance des feux d'artifices."
         helpTP: "{cc}/uh tp {ci}: téléporte les spectateurs ou une équipe. Consultez /uh tp pour plus de détails."
+        helpTimers: "{cc}/uh tp {ci}: gère les comptes à rebours. Consultez /uh timers pour plus de détails."
         helpAbout: "{cc}/uh about {ci}: informations à propos du plugin et des traductions."
         
         teamHelpTitle: "{aqua}------ Commandes liées aux équipes ------"
@@ -86,7 +87,19 @@ keys:
         tpHelpTitle: "{aqua}------ Commandes de téléportation ------"
         tpHelpTeam: "{cc}/uh tp team <x> <y> <z> | <target> <team ...> {ci}: téléporte une équipe au lieu ou au joueur indiqué."
         tpHelpSpectators: "{cc}/uh tp spectators <x> <y> <z> | <target> {ci}: téléporte les spectateurs (i.e. les joueurs non-vivants) au lieu ou au joueur indiqué."
-
+        
+        timersHelpTitle: "{aqua}------ Commandes liées aux comptes à rebours ------"
+        timersHelpAdd: "{cc}/uh timers add <durée> <titre ...> {ci}: ajoute un compte à rebours."
+        timersHelpSet: "{cc}/uh timers set <durée> <titre ...> {ci}: modifie la durée d'un compte à rebours."
+        timersHelpDisplay: "{cc}/uh timers display <titre ...> {ci}: affiche un compteur dans le scoreboard. Automatique au démarrage du compteur."
+        timersHelpHide: "{cc}/uh timers hide <titre ...> {ci}: retire un compteur du scoreboard. N'arrête pas le compteur."
+        timersHelpStart: "{cc}/uh timers start <titre ...> {ci}: démarre un compte à rebours."
+        timersHelpPause: "{cc}/uh timers pause <titre ...> {ci}: met en pause un comparateur."
+        timersHelpRestart: "{cc}/uh timers restart <title ...> {ci}: redémarre un compteur après une pause."
+        timersHelpStop: "{cc}/uh timers stop <title ...> {ci}: force l'arrêt d'un compteur. Il est retiré du scoraboard."
+        timersHelpRemove: "{cc}/uh timers remove <title ...> {ci}: supprime un compteur."
+        timersHelpList: "{cc}/uh timers list {ci}: liste les compteurs enregistrés."
+        timersHelpDurations: "{gray}Format des durées : mm, mm:ss ou hh:mm:ss."
     
     about:
         authors: "Plugin réalisé avec amour par {0}."
@@ -330,6 +343,28 @@ keys:
             itemPlayerFar: "{lightpurple} - {red}{0}{ci} (loin de la bordure)"
             itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (proche de la bordure)"
             itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (très proche de la bordure)"
+    
+    timers:
+        syntaxError: "{ce}Erreur de syntaxe, consultez /uh timers."
+        durationSyntaxError: "{ce}La syntaxe de la durée entrée est invalide, les formats acceptés sont mm, mm:ss ou hh:mm:ss."
+        timerDoesNotExists: "{ce}Ce compteur n'est pas enregistré."
+        alreadyExists: "{ce}Un compteur nommé {0} existe déjà, choisissez un autre nom."
+        
+        added: "{cs}Le compteur {0}, de durée {1}, a bien été enregistré."
+        set: "{cs}La durée du compteur {0} est désormais {1}."
+        displayed: "{cs}Le compteur {0}{cs} est désormais affiché."
+        hidden: "{cs}Le compteur {0}{cs} est désormais masqué."
+        started: "{cs}Le compteur {0}{cs} a démarré."
+        paused: "{cs}Le compteur {0}{cs} est désormais en pause."
+        restarted: "{cs}Le compteur {0}{cs} n'est plus en pause."
+        stopped: "{cs}Le compteur {0}{cs} a été arrêté."
+        removed: "{cs}Le compteur {0}{cs} a été supprimé."
+        
+        list:
+            count: "{ci}Il y a {0} compteur(s) enregistré(s)."
+            itemRunning: "{green} • {ci}{0}{ci} - {1} secondes au total - {2}"
+            itemPaused: "{yellow} • {{ci}{0}{ci} - {1} secondes au total - {2}"
+            itemStopped: "{red} • {ci}{0}{ci} - {1} secondes au total"
     
     protips:
         base: "{darkpurple}Astuce !"
