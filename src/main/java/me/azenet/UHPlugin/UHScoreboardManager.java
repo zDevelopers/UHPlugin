@@ -181,7 +181,7 @@ public class UHScoreboardManager {
 		
 		// Effective display
 		objective.getScore(getValidScoreName(generateSpaces(numberOfSpacesInSeparator.get(timer)))).setScore(position);
-		objective.getScore(getValidScoreName(timer.getName())).setScore(position - 1);
+		objective.getScore(getValidScoreName(timer.getDisplayName())).setScore(position - 1);
 		objective.getScore(getValidScoreName(getTimerText(timer, false, false))).setScore(position - 2);
 	}
 	
@@ -200,7 +200,7 @@ public class UHScoreboardManager {
 		
 		// The timer is hidden
 		sb.resetScores(getValidScoreName(generateSpaces(numberOfSpacesInSeparator.get(timer))));
-		sb.resetScores(getValidScoreName(timer.getName()));
+		sb.resetScores(getValidScoreName(timer.getDisplayName()));
 		sb.resetScores(getValidScoreName(getTimerText(timer, false, false)));
 		sb.resetScores(getValidScoreName(getTimerText(timer, false, true)));
 		
@@ -223,7 +223,7 @@ public class UHScoreboardManager {
 				// Effective display
 				sb.resetScores(getValidScoreName(generateSpaces(numberOfSpacesInSeparator.get(thisTimer) + 1))); // resets the old "space" score
 				objective.getScore(getValidScoreName(generateSpaces(numberOfSpacesInSeparator.get(thisTimer)))).setScore(newPosition);
-				objective.getScore(getValidScoreName(thisTimer.getName())).setScore(newPosition - 1);
+				objective.getScore(getValidScoreName(thisTimer.getDisplayName())).setScore(newPosition - 1);
 				objective.getScore(getValidScoreName(getTimerText(thisTimer, false, false))).setScore(newPosition - 2);
 			}
 		}

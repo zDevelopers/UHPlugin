@@ -7,6 +7,7 @@ import me.azenet.UHPlugin.events.TimerStartsEvent;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 
 /**
@@ -195,6 +196,18 @@ public class UHTimer {
 	public String getName() {
 		return name;
 	}
+	
+	/**
+	 * Returns the display name of the timer.
+	 * <p>
+	 * The display name is the name with all &-based color codes replaced by §-based ones.
+	 * 
+	 * @return The name.
+	 */
+	public String getDisplayName() {
+		return ChatColor.translateAlternateColorCodes('&', name);
+	}
+
 
 	/**
 	 * Checks if the timer is currently running.

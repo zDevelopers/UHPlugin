@@ -1247,7 +1247,7 @@ public class UHPluginCommand implements CommandExecutor {
 						timer.setDuration(duration);
 						
 						p.getTimerManager().registerTimer(timer);
-						sender.sendMessage(i.t("timers.added", timer.getName(), args[2]));
+						sender.sendMessage(i.t("timers.added", timer.getDisplayName(), args[2]));
 						
 					} catch(IllegalArgumentException e) {
 						sender.sendMessage(i.t("timers.durationSyntaxError"));
@@ -1271,7 +1271,7 @@ public class UHPluginCommand implements CommandExecutor {
 						}
 						
 						timer.setDuration(duration);
-						sender.sendMessage(i.t("timers.set", timer.getName(), args[2]));
+						sender.sendMessage(i.t("timers.set", timer.getDisplayName(), args[2]));
 						
 					} catch(IllegalArgumentException e) {
 						sender.sendMessage(i.t("timers.durationSyntaxError"));
@@ -1289,7 +1289,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				
 				p.getGameManager().getScoreboardManager().displayTimer(timer);
-				sender.sendMessage(i.t("timers.displayed", timer.getName()));
+				sender.sendMessage(i.t("timers.displayed", timer.getDisplayName()));
 			}
 			
 			else if(subcommand.equalsIgnoreCase("hide")) { // /uh timers hide <name ...>
@@ -1302,7 +1302,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				
 				p.getGameManager().getScoreboardManager().hideTimer(timer);
-				sender.sendMessage(i.t("timers.hidden", timer.getName()));
+				sender.sendMessage(i.t("timers.hidden", timer.getDisplayName()));
 			}
 			
 			else if(subcommand.equalsIgnoreCase("start")) { // /uh timers start <name ...>
@@ -1319,7 +1319,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				
 				timer.start();
-				sender.sendMessage(i.t("timers.started", timer.getName()));
+				sender.sendMessage(i.t("timers.started", timer.getDisplayName()));
 			}
 			
 			else if(subcommand.equalsIgnoreCase("pause")) { // /uh timers pause <name ...>
@@ -1332,7 +1332,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				
 				timer.setPaused(true);
-				sender.sendMessage(i.t("timers.paused", timer.getName()));
+				sender.sendMessage(i.t("timers.paused", timer.getDisplayName()));
 			}
 			
 			else if(subcommand.equalsIgnoreCase("restart")) { // /uh timers restart <name ...>
@@ -1345,7 +1345,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				
 				timer.setPaused(false);
-				sender.sendMessage(i.t("timers.restarted", timer.getName()));
+				sender.sendMessage(i.t("timers.restarted", timer.getDisplayName()));
 			}
 			
 			else if(subcommand.equalsIgnoreCase("stop")) { // /uh timers stop <name ...>
@@ -1358,7 +1358,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				
 				timer.stop();
-				sender.sendMessage(i.t("timers.stopped", timer.getName()));
+				sender.sendMessage(i.t("timers.stopped", timer.getDisplayName()));
 			}
 			
 			else if(subcommand.equalsIgnoreCase("remove")) { // /uh timers remove <name ...>
@@ -1372,7 +1372,7 @@ public class UHPluginCommand implements CommandExecutor {
 				
 				p.getGameManager().getScoreboardManager().hideTimer(timer);
 				p.getTimerManager().unregisterTimer(timer);
-				sender.sendMessage(i.t("timers.removed", timer.getName()));
+				sender.sendMessage(i.t("timers.removed", timer.getDisplayName()));
 			}
 			
 			else if(subcommand.equalsIgnoreCase("list")) { // /uh timers list
@@ -1384,13 +1384,13 @@ public class UHPluginCommand implements CommandExecutor {
 					if(timer.isRunning()) {
 						if(timer.isPaused()) {
 							sender.sendMessage(i.t("timers.list.itemPaused", 
-									timer.getName(),
+									timer.getDisplayName(),
 									String.valueOf(timer.getDuration()),
 									p.getGameManager().getScoreboardManager().getTimerText(timer, false, false)));
 						}
 						else {
 							sender.sendMessage(i.t("timers.list.itemRunning", 
-									timer.getName(),
+									timer.getDisplayName(),
 									String.valueOf(timer.getDuration()),
 									p.getGameManager().getScoreboardManager().getTimerText(timer, false, false)));
 
@@ -1398,7 +1398,7 @@ public class UHPluginCommand implements CommandExecutor {
 					}
 					else {
 						sender.sendMessage(i.t("timers.list.itemStopped",
-								timer.getName(),
+								timer.getDisplayName(),
 								String.valueOf(timer.getDuration())));
 					}
 				}
