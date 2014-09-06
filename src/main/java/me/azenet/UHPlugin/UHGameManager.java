@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -51,7 +52,6 @@ public class UHGameManager {
 	private Boolean damageIsOn = false;
 	private UHScoreboardManager scoreboardManager = null;
 
-	private LinkedList<Location> spawnPoints = new LinkedList<Location>();
 	private HashSet<String> players = new HashSet<String>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available 
 	private HashSet<UUID> alivePlayers = new HashSet<UUID>();
 	private HashSet<UUID> spectators = new HashSet<UUID>();
@@ -273,7 +273,7 @@ public class UHGameManager {
 		
 		this.aliveTeamsCount = tm.getTeams().size();
 		
-		if(spawnPoints.size() < tm.getTeams().size()) {
+		if(p.getSpawnsManager().getSpawnPoints().size() < tm.getTeams().size()) {
 			sender.sendMessage(i.t("start.notEnoughTP"));
 			
 			// We clears the teams if the game was in solo-mode, to avoid a team-counter to be displayed on the next start
@@ -294,7 +294,7 @@ public class UHGameManager {
 		
 		// Standard mode
 		if(slow == false) {
-			LinkedList<Location> unusedTP = spawnPoints;
+			List<Location> unusedTP = p.getSpawnsManager().getSpawnPoints();
 			for (final UHTeam t : tm.getTeams()) {
 				final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
 				
@@ -329,7 +329,7 @@ public class UHGameManager {
 			
 			// TP
 			
-			LinkedList<Location> unusedTP = spawnPoints;
+			List<Location> unusedTP = p.getSpawnsManager().getSpawnPoints();
 			Integer teamsTeleported = 1;
 			Integer delayBetweenTP = p.getConfig().getInt("slow-start.delayBetweenTP");
 			
@@ -693,44 +693,6 @@ public class UHGameManager {
 		}
 		
 		return spectatorNames;
-	}
-	
-	
-	/**
-	 * Adds a spawn point.
-	 * 
-	 * @param x
-	 * @param z
-	 */
-	public void addSpawnpoint(int x, int z) {
-		spawnPoints.add(new Location(p.getServer().getWorlds().get(0), x, p.getServer().getWorlds().get(0).getHighestBlockYAt(x,z)+120, z));
-	}
-	
-	/**
-	 * Imports spawn points from the configuration.
-	 * 
-	 * @return The number of spawn points imported.
-	 */
-	public int importSpawnPointsFromConfig() {
-		if(p.getConfig().getList("spawnpoints") != null) {
-			int spawnCount = 0;
-			for(Object position : p.getConfig().getList("spawnpoints")) {
-				if(position instanceof String && position != null) {
-					String[] coords = ((String) position).split(",");
-					try {
-						addSpawnpoint(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
-						p.getLogger().info(i.t("load.spawnPointAdded", coords[0], coords[1]));
-						spawnCount++;
-					} catch(Exception e) { // Not an integer or not enough coords
-						p.getLogger().warning(i.t("load.invalidSpawnPoint", (String) position));
-					}
-				}
-			}
-			
-			return spawnCount;
-		}
-		
-		return 0;
 	}
 	
 	/**

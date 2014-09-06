@@ -442,8 +442,12 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 			else {
 				Player pl = (Player) sender; // Just a way to avoid casts everywhere.
-				p.getGameManager().addSpawnpoint(pl.getLocation().getBlockX(), pl.getLocation().getBlockZ());
-				sender.sendMessage(i.t("addspawn.added", String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
+				try {
+					p.getSpawnsManager().addSpawnPoint(pl.getLocation());
+					sender.sendMessage(i.t("addspawn.added", pl.getWorld().getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
+				} catch(IllegalArgumentException e) {
+					sender.sendMessage(i.t("addspawn.outOfLimits"));
+				}
 			}
 		}
 		else if(args.length == 2) { // Two coordinates needed!
@@ -451,11 +455,15 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("addspawn.usage"));
 		}
 		else {
-			p.getGameManager().addSpawnpoint(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
-			sender.sendMessage(i.t("addspawn.added", args[1], args[2]));
+			try {
+				p.getSpawnsManager().addSpawnPoint(Double.parseDouble(args[1]), Double.parseDouble(args[2]));
+				sender.sendMessage(i.t("addspawn.added", p.getServer().getWorlds().get(0).getName(), args[1], args[2]));
+			} catch(IllegalArgumentException e) {
+				sender.sendMessage(i.t("addspawn.outOfLimits"));
+			}
 		}
 	}
-	
+
 	/**
 	 * This command is used to manage the teams.
 	 * 

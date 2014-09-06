@@ -187,7 +187,8 @@ keys:
         errorCoords: "{ce}Vous devez spécifier les coordonnées depuis la console."
         error2Coords: "{ce}Vous devez spécifier deux coordonnées."
         usage: "{ce}Utilisation : /uh addspawn <x> <z>"
-        added: "{cs}Point de démarrage ajouté : {0};{1}"
+        added: "{cs}Point de démarrage ajouté dans le monde {0} : {1};{2}"
+        outOfLimits: "{ce}Vous ne pouvez pas ajouter un point de démarrage hors des bordures."
     
     team:
         syntaxError: "{ce}Erreur de syntaxe, consultez /uh team."
@@ -348,10 +349,10 @@ keys:
         syntaxError: "{ce}Erreur de syntaxe, consultez /uh timers."
         durationSyntaxError: "{ce}La syntaxe de la durée entrée est invalide, les formats acceptés sont mm, mm:ss ou hh:mm:ss."
         timerDoesNotExists: "{ce}Ce compteur n'est pas enregistré."
-        alreadyExists: "{ce}Un compteur nommé {0} existe déjà, choisissez un autre nom."
+        alreadyExists: "{ce}Un compteur nommé {0}{ce} existe déjà, choisissez un autre nom."
         
-        added: "{cs}Le compteur {0}, de durée {1}, a bien été enregistré."
-        set: "{cs}La durée du compteur {0} est désormais {1}."
+        added: "{cs}Le compteur {0}{cs}, de durée {1}, a bien été enregistré."
+        set: "{cs}La durée du compteur {0}{cs} est désormais {1}."
         displayed: "{cs}Le compteur {0}{cs} est désormais affiché."
         hidden: "{cs}Le compteur {0}{cs} est désormais masqué."
         started: "{cs}Le compteur {0}{cs} a démarré."

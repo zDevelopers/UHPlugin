@@ -38,6 +38,7 @@ public final class UHPlugin extends JavaPlugin {
 	private UHTabCompleter tabCompleter = null;
 	
 	private UHTeamManager teamManager = null;
+	private UHSpawnsManager spawnsManager = null;
 	private UHGameManager gameManager = null;
 	private UHBorderManager borderManager = null;
 	private UHRecipeManager recipeManager = null;
@@ -68,6 +69,7 @@ public final class UHPlugin extends JavaPlugin {
 		
 		teamManager = new UHTeamManager(this);
 		gameManager = new UHGameManager(this);
+		spawnsManager = new UHSpawnsManager(this);
 		borderManager = new UHBorderManager(this);
 		recipeManager = new UHRecipeManager(this);
 		teamChatManager = new UHTeamChatManager(this);
@@ -112,7 +114,7 @@ public final class UHPlugin extends JavaPlugin {
 		}
 		
 		// Imports spawnpoints from the config.
-		this.gameManager.importSpawnPointsFromConfig();
+		this.spawnsManager.importSpawnPointsFromConfig();
 		
 		// Imports teams from the config.
 		this.teamManager.importTeamsFromConfig();
@@ -144,6 +146,15 @@ public final class UHPlugin extends JavaPlugin {
 	 */
 	public UHGameManager getGameManager() {
 		return gameManager;
+	}
+	
+	/**
+	 * Returns the spawns points manager.
+	 * 
+	 * @return
+	 */
+	public UHSpawnsManager getSpawnsManager() {
+		return spawnsManager;
 	}
 	
 	/**

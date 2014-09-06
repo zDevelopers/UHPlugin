@@ -187,7 +187,8 @@ keys:
         errorCoords: "{ce}You need to specify the coordinates from the console."
         error2Coords: "{ce}You need to specify two coordinates."
         usage: "{ce}Usage: /uh addspawn <x> <z>"
-        added: "{cs}Spawn added: {0},{1}"
+        added: "{cs}Spawn added in the world {0}: {1};{2}"
+        outOfLimits: "{ce}You cannot add a spawn point out of the borders."
     
     team:
         syntaxError: "{ce}Syntax error, see /uh team."
@@ -348,15 +349,15 @@ keys:
         syntaxError: "{ce}Syntax error, see /uh timers."
         durationSyntaxError: "{ce}The duration' syntax is invalid; accepted formats are mm, mm:ss or hh:mm:ss."
         timerDoesNotExists: "{ce}This timer is not registered."
-        alreadyExists: "{ce}A timer called {0} already exists; please choose another name."
+        alreadyExists: "{ce}A timer called {0}{ce} already exists; please choose another name."
         
-        added: "{cs}The timer {0} (duration {1}) has been registered."
-        set: "{cs}The duration of the timer {0} is now {1}."
+        added: "{cs}The timer {0}{cs} (duration {1}) has been registered."
+        set: "{cs}The duration of the timer {0}{cs} is now {1}."
         displayed: "{cs}The timer {0}{cs} is now displayed."
         hidden: "{cs}The timer {0}{cs} is now hidden."
         started: "{cs}The timer {0}{cs} was started."
         paused: "{cs}The timer {0}{cs} is now paused."
-        restarted: "{cs}The timer {0}{cs} is now unpaused"
+        restarted: "{cs}The timer {0}{cs} is now unpaused."
         stopped: "{cs}The timer {0}{cs} was stopped."
         removed: "{cs}The timer {0}{cs} has been deleted."
         
