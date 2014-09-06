@@ -415,7 +415,7 @@ public class UHGameManager {
 			// An empty string is used for the name of the main timer, because
 			// such a name can't be used by players.
 			UHTimer mainTimer = new UHTimer("");
-			mainTimer.setDuration(this.getEpisodeLength() * 60);
+			mainTimer.setDuration(this.getEpisodeLength());
 			
 			p.getTimerManager().registerMainTimer(mainTimer);
 			
@@ -880,12 +880,18 @@ public class UHGameManager {
 	}
 	
 	/**
-	 * Returns the length of one episode, in minutes.
+	 * Returns the length of one episode, in seconds.
 	 * 
 	 * @return
 	 */
 	public Integer getEpisodeLength() {
-		return p.getConfig().getInt("episodes.length");
+		try {
+			p.getLogger().info("'" + p.getConfig().getString("episodes.length") + "'");
+			p.getLogger().info("" + UHUtils.string2time(p.getConfig().getString("episodes.length")));
+			return UHUtils.string2time(p.getConfig().getString("episodes.length"));
+		} catch(IllegalArgumentException e) {
+			return 20 * 60; // default value, 20 minutes
+		}
 	}
 	
 	/**

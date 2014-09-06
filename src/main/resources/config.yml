@@ -3,7 +3,10 @@ lang: en_US
 
 episodes:
     enabled: true
-    length: 20  # minutes
+    
+    # Format: "mm", "mm:ss" or "hh:mm:ss". If invalid, 20 minutes.
+    # Don't remove the "quotes" (because of the commas)!
+    length: "20:00"
     syncTimer: true  # if true, the timer will be synchronized with a clock to avoid having long episodes because of lag
 
 map:
