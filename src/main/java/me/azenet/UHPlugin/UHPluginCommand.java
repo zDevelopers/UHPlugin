@@ -77,8 +77,8 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		teamCommands.add("add");
 		teamCommands.add("remove");
-		teamCommands.add("addplayer");
-		teamCommands.add("removeplayer");
+		teamCommands.add("join");
+		teamCommands.add("leave");
 		teamCommands.add("list");
 		teamCommands.add("reset");
 		
@@ -479,8 +479,8 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.teamHelpAdd"));
 			sender.sendMessage(i.t("cmd.teamHelpAddName"));
 			sender.sendMessage(i.t("cmd.teamHelpRemove"));
-			sender.sendMessage(i.t("cmd.teamHelpAddplayer"));
-			sender.sendMessage(i.t("cmd.teamHelpRemoveplayer"));
+			sender.sendMessage(i.t("cmd.teamHelpJoin"));
+			sender.sendMessage(i.t("cmd.teamHelpLeave"));
 			sender.sendMessage(i.t("cmd.teamHelpList"));
 			sender.sendMessage(i.t("cmd.teamHelpReset"));
 		}
@@ -552,8 +552,8 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 			
 			
-			else if(subcommand.equalsIgnoreCase("addplayer")) {
-				if(args.length >= 4) { // /uh team addplayer <player> <teamName>
+			else if(subcommand.equalsIgnoreCase("join")) {
+				if(args.length >= 4) { // /uh team join <player> <teamName>
 					
 					Player player = p.getServer().getPlayer(args[2]);
 					String teamName = UHUtils.getStringFromCommandArguments(args, 3);
@@ -578,8 +578,8 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 			
 			
-			else if(subcommand.equalsIgnoreCase("removeplayer")) {
-				if(args.length == 3) { // /uh team removeplayer <player>
+			else if(subcommand.equalsIgnoreCase("leave")) {
+				if(args.length == 3) { // /uh team leave <player>
 					
 					Player player = p.getServer().getPlayer(args[2]);
 					

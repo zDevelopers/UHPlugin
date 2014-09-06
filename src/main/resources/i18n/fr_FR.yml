@@ -60,8 +60,8 @@ keys:
         teamHelpAdd: "{cc}/uh team add <couleur> {ci}: ajoute une équipe de la couleur donnée."
         teamHelpAddName: "{cc}/uh team add <couleur> <nom ...> {ci}: ajoute une équipe avec le nom et la couleur donnés."
         teamHelpRemove: "{cc}/uh team remove <nom ...> {ci}: supprime une équipe."
-        teamHelpAddplayer: "{cc}/uh team addplayer <joueur> <nomÉquipe ...> {ci}: ajoute un joueur dans l'équipe donnée. Le nom de l'équipe est sa couleur, ou le nom explicite donné."
-        teamHelpRemoveplayer: "{cc}/uh team removeplayer <joueur> {ci}: retire un joueur de son équipe."
+        teamHelpJoin: "{cc}/uh team join <joueur> <nomÉquipe ...> {ci}: ajoute un joueur dans l'équipe donnée. Le nom de l'équipe est sa couleur, ou le nom explicite donné."
+        teamHelpLeave: "{cc}/uh team leave <joueur> {ci}: retire un joueur de son équipe."
         teamHelpList: "{cc}/uh team list {ci}: liste toutes les équipes et leurs membres."
         teamHelpReset: "{cc}/uh team reset {ci}: supprime toutes les équipes."
         
