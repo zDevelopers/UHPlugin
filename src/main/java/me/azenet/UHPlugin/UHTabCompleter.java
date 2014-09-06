@@ -173,6 +173,45 @@ public class UHTabCompleter implements TabCompleter {
 			}
 		}
 		
+		/** Autocompletion for /uh timers **/
+		else if(args[0].equalsIgnoreCase("timers")) {
+			// /uh timers <?>
+			if(args.length == 2) {
+				return getAutocompleteSuggestions(args[1], p.getCommandManager().getTimersCommands());
+			}
+			
+			int timerNameIndex = 0;
+			if(args.length >= 3) { // /uh timers <subcommand> <timer name ...>
+				if(args[1].equalsIgnoreCase("display")
+						|| args[1].equalsIgnoreCase("hide")
+						|| args[1].equalsIgnoreCase("start")
+						|| args[1].equalsIgnoreCase("pause")
+						|| args[1].equalsIgnoreCase("restart")
+						|| args[1].equalsIgnoreCase("stop")
+						|| args[1].equalsIgnoreCase("remove")) {
+					timerNameIndex = 2;
+				}
+			}
+			
+			if(args.length >= 4) {
+				if(args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("add")) {
+					timerNameIndex = 3;
+				}
+			}
+			
+			if(timerNameIndex != 0) {
+				List<String> timersName = new ArrayList<String>();
+				for(UHTimer timer : p.getTimerManager().getTimers()) {
+					timersName.add(timer.getName());
+				}
+				
+				p.getLogger().info("" + timerNameIndex);
+				p.getLogger().info("" + args.length);
+				
+				return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, timerNameIndex), timersName, args.length - timerNameIndex - 1);
+			}
+		}
+		
 		/** Autocompletion for /uh spec **/
 		else if(args[0].equalsIgnoreCase("spec")) {
 			

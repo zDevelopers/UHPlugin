@@ -1605,6 +1605,10 @@ public class UHPluginCommand implements CommandExecutor {
 		return tpCommands;
 	}
 	
+	public ArrayList<String> getTimersCommands() {
+		return timersCommands;
+	}
+	
 	public ArrayList<String> getSpecCommands() {
 		return specCommands;
 	}
