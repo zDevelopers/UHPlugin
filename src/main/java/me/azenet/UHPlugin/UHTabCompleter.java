@@ -194,7 +194,7 @@ public class UHTabCompleter implements TabCompleter {
 				}
 			}
 			
-			if(args.length >= 4) {
+			if(args.length >= 4) { // /uh timers <subcommand> <duration> <timer name ...>
 				if(args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("add")) {
 					timerNameIndex = 3;
 				}
@@ -205,9 +205,6 @@ public class UHTabCompleter implements TabCompleter {
 				for(UHTimer timer : p.getTimerManager().getTimers()) {
 					timersName.add(timer.getName());
 				}
-				
-				p.getLogger().info("" + timerNameIndex);
-				p.getLogger().info("" + args.length);
 				
 				return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, timerNameIndex), timersName, args.length - timerNameIndex - 1);
 			}

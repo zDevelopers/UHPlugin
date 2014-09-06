@@ -120,26 +120,17 @@ public class UHTimer {
 			oldMinutesLeft = minutesLeft;
 			oldSecondsLeft = secondsLeft;
 			
-			long timeSinceStart = System.currentTimeMillis() - this.startTime;
-			long diffSeconds = timeSinceStart / 1000 % 60;
-			long diffMinutes = timeSinceStart / (60 * 1000) % 60;
+			long timeSinceStart = System.currentTimeMillis() - this.startTime; // ms
 			
-			double durationInMinutes = Math.floor(this.duration / 60);
-			
-			if(diffMinutes >= durationInMinutes) {			
+			if(timeSinceStart >= getDuration() * 1000) {
 				stop(true);
 			}
 			else {
-				if(displayHoursInTimer) {
-					int rawMinutesLeft = (int) ((durationInMinutes - diffMinutes) - 1);
-					hoursLeft   = (int) Math.floor(rawMinutesLeft / 60);
-					minutesLeft = (int) rawMinutesLeft - (60 * hoursLeft);
-					secondsLeft = (int) (60 - diffSeconds) - 1;
-				}
-				else {
-					minutesLeft = (int) (durationInMinutes - diffMinutes) - 1;
-					secondsLeft = (int) (60 - diffSeconds) - 1;
-				}
+				Integer countSecondsLeft = (int) (getDuration() - Math.floor(timeSinceStart / 1000));
+				
+				secondsLeft = countSecondsLeft % 60;
+				minutesLeft = (countSecondsLeft % 3600) / 60;
+				hoursLeft   = (int) Math.floor(countSecondsLeft / 3600);
 			}
 		}
 	}
@@ -219,7 +210,7 @@ public class UHTimer {
 	}
 
 	/**
-	 * Returns the duration if the timer, in seconds.
+	 * Returns the duration of the timer, in seconds.
 	 * 
 	 * @return The duration.
 	 */
@@ -303,6 +294,25 @@ public class UHTimer {
 	 */
 	public Boolean getDisplayHoursInTimer() {
 		return displayHoursInTimer;
+	}
+	
+	@Override
+	public String toString() {
+		String repr = "{UHTimer " + getName() + " - " + getDuration() + "s";
+		if(isRunning()) {
+			repr += " - running - current ";
+			repr += getHoursLeft() + "h " + getMinutesLeft() + "m " + getSecondsLeft() + "s";
+			repr += " - started at " + this.startTime;
+		}
+		if(isPaused()) {
+			repr += " - paused";
+		}
+		if(isRegistered()) {
+			repr += " - registered";
+		}
+		
+		repr += "}";
+		return repr;
 	}
 	
 	
