@@ -62,7 +62,7 @@ public class UHPluginCommand implements CommandExecutor {
 		commands.add("start");
 		commands.add("shift");
 		commands.add("team");
-		commands.add("addspawn");
+		commands.add("spawns");
 		commands.add("generatewalls");
 		commands.add("border");
 		commands.add("heal");
@@ -249,8 +249,7 @@ public class UHPluginCommand implements CommandExecutor {
 				sender.sendMessage(i.t("cmd.helpStartSlow"));
 				sender.sendMessage(i.t("cmd.helpShift"));
 				sender.sendMessage(i.t("cmd.helpTeam"));
-				sender.sendMessage(i.t("cmd.helpAddspawn"));
-				sender.sendMessage(i.t("cmd.helpAddspawnXZ"));
+				sender.sendMessage(i.t("cmd.helpSpawns"));
 				sender.sendMessage(i.t("cmd.helpSpec"));
 				sender.sendMessage(i.t("cmd.helpWall"));
 				sender.sendMessage(i.t("cmd.helpBorder"));
@@ -424,8 +423,8 @@ public class UHPluginCommand implements CommandExecutor {
 	/**
 	 * This command adds a spawn point for a team or a player.
 	 * 
-	 * Usage: /uh addspawn (as a player).
-	 * Usage: /uh addspawn <x> <z> (as everyone).
+	 * Usage: /uh spawns add (as a player, adds the current location, world included).
+	 * Usage: /uh spawns add <x> <z> (as everyone, adds the specified coordinates in the default world).
 	 * 
 	 * @param sender
 	 * @param command
@@ -433,33 +432,79 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param args
 	 */
 	@SuppressWarnings("unused")
-	private void doAddspawn(CommandSender sender, Command command, String label, String[] args) {	
-		if(args.length == 1) { // No coordinates given.
-			if(!(sender instanceof Player)) {
-				sender.sendMessage(i.t("addspawn.errorCoords"));
-				sender.sendMessage(i.t("addspawn.usage"));
-				return;
-			}
-			else {
-				Player pl = (Player) sender; // Just a way to avoid casts everywhere.
-				try {
-					p.getSpawnsManager().addSpawnPoint(pl.getLocation());
-					sender.sendMessage(i.t("addspawn.added", pl.getWorld().getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
-				} catch(IllegalArgumentException e) {
-					sender.sendMessage(i.t("addspawn.outOfLimits"));
-				}
-			}
-		}
-		else if(args.length == 2) { // Two coordinates needed!
-			sender.sendMessage(i.t("addspawn.error2Coords"));
-			sender.sendMessage(i.t("addspawn.usage"));
+	private void doSpawns(CommandSender sender, Command command, String label, String[] args) {	
+		if(args.length == 1) { // No subcommand given: doc
+			if(sender instanceof Player) sender.sendMessage("");
+			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+			sender.sendMessage(i.t("cmd.legendHelp"));
+
+			sender.sendMessage(i.t("cmd.spawnsHelpTitle"));
+			sender.sendMessage(i.t("cmd.spawnsHelpAdd"));
+			sender.sendMessage(i.t("cmd.spawnsHelpAddXZ"));
+			sender.sendMessage(i.t("cmd.spawnsHelpGenerate"));
+			sender.sendMessage(i.t("cmd.spawnsHelpList"));
+			sender.sendMessage(i.t("cmd.spawnsHelpReset"));
 		}
 		else {
-			try {
-				p.getSpawnsManager().addSpawnPoint(Double.parseDouble(args[1]), Double.parseDouble(args[2]));
-				sender.sendMessage(i.t("addspawn.added", p.getServer().getWorlds().get(0).getName(), args[1], args[2]));
-			} catch(IllegalArgumentException e) {
-				sender.sendMessage(i.t("addspawn.outOfLimits"));
+			String subcommand = args[1];
+			
+			if(subcommand.equalsIgnoreCase("add")) { // /uh spawns add <?>
+				if(args.length == 2) { // /uh spawns add
+					if(!(sender instanceof Player)) {
+						sender.sendMessage(i.t("spawns.add.errorCoords"));
+						sender.sendMessage(i.t("spawns.add.usage"));
+						return;
+					}
+					else {
+						Player pl = (Player) sender; // Just a way to avoid casts everywhere.
+						try {
+							p.getSpawnsManager().addSpawnPoint(pl.getLocation());
+							sender.sendMessage(i.t("spawns.add.added", pl.getWorld().getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
+						} catch(IllegalArgumentException e) {
+							sender.sendMessage(i.t("spawns.add.outOfLimits"));
+						}
+					}
+				}
+				else if(args.length == 3) { // /uh spawns add <x>: Two coordinates needed!
+					sender.sendMessage(i.t("spawns.add.error2Coords"));
+					sender.sendMessage(i.t("spawns.add.usage"));
+				}
+				else { // /uh spawns add <x> <z>
+					try {
+						p.getSpawnsManager().addSpawnPoint(Double.parseDouble(args[2]), Double.parseDouble(args[3]));
+						sender.sendMessage(i.t("spawns.add.added", p.getServer().getWorlds().get(0).getName(), args[2], args[3]));
+					} catch(NumberFormatException e) {
+						sender.sendMessage(i.t("spawns.NaN"));
+					} catch(IllegalArgumentException e) {
+						sender.sendMessage(i.t("spawns.add.outOfLimits"));
+					}
+				}
+			}
+			
+			else if(subcommand.equalsIgnoreCase("list")) { // /uh spawns list
+				List<Location> spawnPoints = p.getSpawnsManager().getSpawnPoints();
+				
+				if(spawnPoints.size() == 0) {
+					sender.sendMessage(i.t("spawns.list.nothing"));
+				}
+				else {
+					sender.sendMessage(i.t("spawns.list.count", String.valueOf(spawnPoints.size())));
+					
+					// Displaying this number of spawn points per line
+					final Integer spawnsPerLine = 6;
+					
+					for(int j = 0; j < Math.ceil(Double.valueOf(spawnPoints.size()) / spawnsPerLine); j++) {
+						String line = "";
+						
+						for(int k = 0; k < spawnsPerLine; k++) {
+							if(spawnPoints.size() > j*spawnsPerLine + k) {
+								line += i.t("spawns.list.item", String.valueOf(spawnPoints.get(j*spawnsPerLine + k).getBlockX()), String.valueOf(spawnPoints.get(j*spawnsPerLine + k).getBlockZ())) + "  ";
+							}
+						}
+						
+						sender.sendMessage(line);
+					}
+				}
 			}
 		}
 	}

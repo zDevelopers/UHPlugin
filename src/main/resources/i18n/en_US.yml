@@ -37,8 +37,7 @@ keys:
         helpStartSlow: "{cc}/uh start slow {ci}: launches the game slowly, in two steps, for smaller servers."
         helpShift: "{cc}/uh shift {ci}: shifts an episode."
         helpTeam: "{cc}/uh team {ci}: manages the teams. Execute /uh team for details."
-        helpAddspawn: "{cc}/uh addspawn {ci}: adds a spawn point for a team or a player, at the current location of the sender."
-        helpAddspawnXZ: "{cc}/uh addspawn <x> <z> {ci}: adds a spawn point for a team or a player, at the provided coordinates."
+        helpSpawns: "{cc}/uh spawns {ci}: manages the spawn points. Execute /uh spawns for details."
         helpSpec: "{cc}/uh spec {ci}: manages the spectators. Execute /uh spec for details."
         helpWall: "{cc}/uh generatewalls {ci}: generates the walls according to the configuration."
         helpBorder: "{cc}/uh border {ci}: manages borders. Execute /uh border for details."
@@ -53,7 +52,7 @@ keys:
         helpFreeze: "{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."
         helpFinish: "{cc}/uh finish {ci}: displays the name of the winner(s) and launches some fireworks."
         helpTP: "{cc}/uh tp {ci}: teleports the spectators or an entire team. See /uh tp for details."
-        helpTP: "{cc}/uh tp {ci}: manages the timers. See /uh timers for details."
+        helpTimers: "{cc}/uh timers {ci}: manages the timers. See /uh timers for details."
         helpAbout: "{cc}/uh about {ci}: informations about the plugin and the translation."
         
         teamHelpTitle: "{aqua}------ Team commands ------"
@@ -64,6 +63,13 @@ keys:
         teamHelpLeave: "{cc}/uh team leave <player> {ci}: removes a player from his team."
         teamHelpList: "{cc}/uh team list {ci}: lists the teams and their players."
         teamHelpReset: "{cc}/uh team reset {ci}: removes all teams."
+        
+        spawnsHelpTitle: "{aqua}------ Spawns points commands ------"
+        spawnsHelpAdd: "{cc}/uh spawns add {ci}: adds a spawn point for a team or a player, at the current location of the sender."
+        spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: adds a spawn point for a team or a player, at the provided coordinates, in the default world."
+        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|squared|random> [size = current size] [distanceMin = 250] [count = teams count] {ci}: automagically generates the spawn points following the given shape."
+        spawnsHelpList: "{cc}/uh spawns list {ci}: lists the registered spawn points."
+        spawnsHelpReset: "{cc}/uh spawns reset {ci}: removes all registered spawn points."
         
         specHelpTitle: "{aqua}------ Spectator commands ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Please note{ci}: because SpectatorPlus is not present, a spectator is {italic}only{ci} an ignored player."
@@ -183,12 +189,20 @@ keys:
         blocksError: "Unable to build the wall, the blocks set in the config file are invalid."
         done: "{cst}Generation done."
     
-    addspawn:
-        errorCoords: "{ce}You need to specify the coordinates from the console."
-        error2Coords: "{ce}You need to specify two coordinates."
-        usage: "{ce}Usage: /uh addspawn <x> <z>"
-        added: "{cs}Spawn added in the world {0}: {1};{2}"
-        outOfLimits: "{ce}You cannot add a spawn point out of the borders."
+    spawns:
+        NaN: "{ce}This is not a number!"
+        
+        add:
+            errorCoords: "{ce}You need to specify the coordinates from the console."
+            error2Coords: "{ce}You need to specify two coordinates."
+            usage: "{ce}Usage: /uh spawns add <x> <z>"
+            added: "{cs}Spawn added in the world {0}: {1};{2}"
+            outOfLimits: "{ce}You cannot add a spawn point out of the borders."
+        
+        list:
+            nothing: "{ce}There isn't any registered spawn point."
+            count: "{ci}There are {0} registered spawn points."
+            item: "{green}{0}{darkgreen};{green}{1}"
     
     team:
         syntaxError: "{ce}Syntax error, see /uh team."
