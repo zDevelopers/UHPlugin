@@ -363,7 +363,6 @@ public class UHPluginCommand implements CommandExecutor {
 			try {
 				p.getGameManager().start(sender, false);
 			} catch(RuntimeException e) {
-				e.printStackTrace();
 				sender.sendMessage(i.t("start.already"));
 			}
 		}
