@@ -886,8 +886,6 @@ public class UHGameManager {
 	 */
 	public Integer getEpisodeLength() {
 		try {
-			p.getLogger().info("'" + p.getConfig().getString("episodes.length") + "'");
-			p.getLogger().info("" + UHUtils.string2time(p.getConfig().getString("episodes.length")));
 			return UHUtils.string2time(p.getConfig().getString("episodes.length"));
 		} catch(IllegalArgumentException e) {
 			return 20 * 60; // default value, 20 minutes
