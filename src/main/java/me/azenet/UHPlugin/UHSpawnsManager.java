@@ -47,7 +47,8 @@ public class UHSpawnsManager {
 	/**
 	 * Adds a spawn point from a location.
 	 * 
-	 * @param location The location.
+	 * @param location The location. Cloned, so you can use the same location object with
+	 * modifications between two calls.
 	 */
 	public void addSpawnPoint(final Location location) {
 		Location spawnPoint = location.clone();
@@ -140,7 +141,7 @@ public class UHSpawnsManager {
 	 * of a squared map, following the shape of the world set in the configuration.
 	 * @param minimalDistanceBetweenTwoPoints The minimal distance between two points.
 	 * 
-	 * @return false if there's too many spawn points / not enough surface to generate them.
+	 * @return False if there's too many spawn points / not enough surface to generate them.
 	 * True of the generation succeeded.
 	 */
 	public boolean generateRandomSpawnPoints(int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
@@ -185,7 +186,7 @@ public class UHSpawnsManager {
 		generationLoop: while(generatedSpawnPoints != spawnCount) {
 			
 			// "Too many fails" test
-			if(currentErrorCount > 15) { // restart
+			if(currentErrorCount >= 16) { // restart
 				randomSpawnPoints = new LinkedList<Location>();
 				generatedSpawnPoints = 0;
 				currentErrorCount = 0;
@@ -227,5 +228,133 @@ public class UHSpawnsManager {
 		}
 		
 		return true;
+	}
+	
+
+	/**
+	 * Generates spawn points in a grid.
+	 * 
+	 * @param spawnCount The number of spawn points to generate.
+	 * @param regionDiameter The diameter of the region where the spawn points will be generated.<br>
+	 * This is limited by the size of the map. This will be seen as the diameter of a circular or
+	 * of a squared map, following the shape of the world set in the configuration.
+	 * @param minimalDistanceBetweenTwoPoints The minimal distance between two points.
+	 * 
+	 * @return False if there's too many spawn points / not enough surface to generate them.
+	 * True of the generation succeeded.
+	 */
+	public boolean generateGridSpawnPoints(int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
+		
+		// We starts the generation on a smaller grid, to avoid false outside tests if the point is on the edge
+		int usedRegionDiameter = regionDiameter - 1;
+		
+		// To check the possibility of the generation, we calculates the maximal number of columns/rows
+		// possible, based on the minimal distance between two points.
+		int maxColumnsCount = (int) Math.ceil(usedRegionDiameter / minimalDistanceBetweenTwoPoints);
+		
+		// The points are on a grid
+		int neededColumnsCount = (int) Math.ceil(Math.sqrt(spawnCount));
+		if(p.getBorderManager().isCircularBorder()) {
+			// If the border is circular, the distance between two points needs to be decreased.
+			// The space available is divided by PI/4, so the column count is multiplied by
+			// this number.
+			neededColumnsCount = (int) Math.ceil(neededColumnsCount / (Math.PI / 4));
+		}
+		
+		// IS impossible.
+		if(neededColumnsCount > maxColumnsCount) {
+			return false;
+		}
+		// If the map is circular, the generation may be impossible, because this check was
+		// performed for a squared map.
+		// The test will be done after the generation.
+		
+		
+		// We generates the points on a grid in squares, starting by the biggest square.
+		int distanceBetweenTwoPoints = (int) (Double.valueOf(usedRegionDiameter) / (Double.valueOf(neededColumnsCount - 1)));
+		
+		// Check related to the case the column count was increased.
+		if(distanceBetweenTwoPoints < minimalDistanceBetweenTwoPoints) {
+			return false;
+		}
+		
+		
+		int countGeneratedPoints = 0;
+		LinkedList<Location> generatedPoints = new LinkedList<Location>();
+
+		World world = p.getServer().getWorlds().get(0);
+		int halfDiameter = (int) Math.floor(usedRegionDiameter / 2);
+		int xSpawn = world.getSpawnLocation().getBlockX();
+		int zSpawn = world.getSpawnLocation().getBlockZ();
+		
+		Integer  currentSquareSize       = usedRegionDiameter;
+		Location currentSquareStartPoint = new Location(world, xSpawn + halfDiameter, 0, zSpawn - halfDiameter);
+		Location currentPoint;
+		
+		// Represents the location to add on each side of the squares
+		Location[] addOnSide = new Location[4];
+		addOnSide[0] = new Location(world, -distanceBetweenTwoPoints, 0, 0); // North side, direction east
+		addOnSide[1] = new Location(world, 0, 0, distanceBetweenTwoPoints);  // East side,  direction south
+		addOnSide[2] = new Location(world, distanceBetweenTwoPoints, 0, 0);  // South side, direction west
+		addOnSide[3] = new Location(world, 0, 0, -distanceBetweenTwoPoints); // West side,  direction north
+		
+		// We generates the points until there isn't any point left to place. The loop will be broken.
+		// On each step of this loop, a square is generated.
+		generationLoop: while(true) {
+			currentPoint = currentSquareStartPoint.clone();
+			
+			// First point
+			if(p.getBorderManager().isInsideBorder(currentPoint, regionDiameter)) {
+				generatedPoints.add(currentPoint.clone());
+				countGeneratedPoints++;
+				
+				if(countGeneratedPoints >= spawnCount) {
+					break generationLoop;
+				}
+			}
+			
+			for(int j = 0; j < 4; j++) { // A step for each side, j is the side (see addOnSide).
+				int plottedSize = 0;
+				
+				sideLoop: while(plottedSize < currentSquareSize) {
+					currentPoint.add(addOnSide[j]);
+					plottedSize += distanceBetweenTwoPoints;
+
+					if(!p.getBorderManager().isInsideBorder(currentPoint, regionDiameter)) {
+						continue sideLoop;
+					}
+					
+					generatedPoints.add(currentPoint.clone());
+					countGeneratedPoints++;
+					
+					if(countGeneratedPoints >= spawnCount) {
+						break generationLoop;
+					}
+				}
+			}
+			
+			// This square is complete; preparing the next one...
+			currentSquareSize -= 2 * distanceBetweenTwoPoints;
+			currentSquareStartPoint.add(new Location(world, -distanceBetweenTwoPoints, 0, distanceBetweenTwoPoints));
+			
+			if(currentSquareSize < distanceBetweenTwoPoints) {
+				// This may happens if we generates the points for a circular world
+				break generationLoop;
+			}
+		}
+		
+		// If the generation was broken (circular world, not enough positions),
+		// the generation was incomplete.
+		if(countGeneratedPoints >= spawnCount) {
+			// Generation OK
+			for(Location spawn : generatedPoints) {
+				addSpawnPoint(spawn);
+			}
+			
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }

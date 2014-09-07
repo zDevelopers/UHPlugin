@@ -426,7 +426,7 @@ public class UHPluginCommand implements CommandExecutor {
 	 * Usage: /uh spawns add (as a player, adds the current location, world included).
 	 * Usage: /uh spawns add <x> <z> (as everyone, adds the specified coordinates in the default world).
 	 * Usage: /uh spawns list (lists the spawn points).
-	 * Usage: /uh spawns generate <circular|squared|random> [size = current size of the map] [distanceMin = 250] [count = number of teams registered]
+	 * Usage: /uh spawns generate <circular|grid|random> [size = current size of the map] [distanceMin = 250] [count = number of teams registered]
 	 * 
 	 * @param sender
 	 * @param command
@@ -520,7 +520,7 @@ public class UHPluginCommand implements CommandExecutor {
 				String generationMethod = args[2];
 				
 				// Default values
-				Integer size = p.getBorderManager().getCurrentBorderDiameter();
+				Integer size = p.getBorderManager().getCurrentBorderDiameter() - 25; // Avoid spawn points being too close to the border
 				Integer distanceMinBetweenTwoPoints = 250;
 				Integer spawnsCount = p.getTeamManager().getTeams().size();
 				
@@ -554,6 +554,10 @@ public class UHPluginCommand implements CommandExecutor {
 						success = p.getSpawnsManager().generateRandomSpawnPoints(spawnsCount, size, distanceMinBetweenTwoPoints);
 						break;
 					
+					case "grid":
+						success = p.getSpawnsManager().generateGridSpawnPoints(spawnsCount, size, distanceMinBetweenTwoPoints);
+						break;
+					
 					default:
 						sender.sendMessage(i.t("spawns.generate.unsupportedMethod", generationMethod));
 						return;
@@ -565,6 +569,16 @@ public class UHPluginCommand implements CommandExecutor {
 				else {
 					sender.sendMessage(i.t("spawns.generate.impossible"));
 				}
+			}
+			
+			else if(subcommand.equalsIgnoreCase("dump")) {
+				String dump = "";
+				
+				for(Location spawn : p.getSpawnsManager().getSpawnPoints()) {
+					dump += spawn.getBlockX() + "," + spawn.getBlockZ() + "\n";
+				}
+				
+				sender.sendMessage(dump);
 			}
 		}
 	}
