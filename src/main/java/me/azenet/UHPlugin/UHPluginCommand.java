@@ -493,7 +493,7 @@ public class UHPluginCommand implements CommandExecutor {
 					sender.sendMessage(i.t("spawns.list.count", String.valueOf(spawnPoints.size())));
 					
 					// Displaying this number of spawn points per line
-					final Integer spawnsPerLine = 6;
+					final Integer spawnsPerLine = 5;
 					
 					for(int j = 0; j < Math.ceil(Double.valueOf(spawnPoints.size()) / spawnsPerLine); j++) {
 						String line = "";

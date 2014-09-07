@@ -151,16 +151,16 @@ public class UHSpawnsManager {
 		// around each spawn point (a circle with, as radius, the minimal distance between two spawn
 		// points), the generation will fail.
 		
-		int surfacePrivatePartsAroundSpawnPoints = (int) (spawnCount * (Math.PI * Math.pow(minimalDistanceBetweenTwoPoints, 2)));
-		int surfaceRegion;
+		double surfacePrivatePartsAroundSpawnPoints = (int) (spawnCount * (Math.PI * Math.pow(minimalDistanceBetweenTwoPoints, 2)));
+		double surfaceRegion;
 		if(p.getBorderManager().isCircularBorder()) {
-			surfaceRegion = (int) ((Math.PI * Math.pow(regionDiameter, 2)) / 4);
+			surfaceRegion = (Math.PI * Math.pow(regionDiameter, 2)) / 4;
 		}
 		else {
-			surfaceRegion = (int) Math.pow(regionDiameter, 2);
+			surfaceRegion = Math.pow(regionDiameter, 2);
 		}
 		
-		Double packingDensity = Double.valueOf(surfacePrivatePartsAroundSpawnPoints) / Double.valueOf(surfaceRegion);
+		Double packingDensity = surfacePrivatePartsAroundSpawnPoints / surfaceRegion;
 		
 		// According to Lagrange and Thue's works on circle packagings, the highest density possible is
 		// approximately 0.9069 (with an hexagonal arrangement of the circles).
@@ -176,7 +176,22 @@ public class UHSpawnsManager {
 		LinkedList<Location> randomSpawnPoints = new LinkedList<Location>();
 		int generatedSpawnPoints = 0;
 		
+		// If the first points are badly located, and if the density is high, the generation may
+		// be impossible to end.
+		// So, after 15 generation fails of a point due to this point being placed too close
+		// of other ones, we restarts all the generation.
+		int currentErrorCount = 0;
+		
 		generationLoop: while(generatedSpawnPoints != spawnCount) {
+			
+			// "Too many fails" test
+			if(currentErrorCount > 15) { // restart
+				randomSpawnPoints = new LinkedList<Location>();
+				generatedSpawnPoints = 0;
+				currentErrorCount = 0;
+			}
+			
+			
 			// We generates a point in the square of side regionDiameter.
 			// In case of a circular world, if the point was generated out of the circle, it will be
 			// excluded when his presence inside the region will be checked.
@@ -188,14 +203,13 @@ public class UHSpawnsManager {
 			
 			// Inside the region?
 			if(!p.getBorderManager().isInsideBorder(randomPoint, regionDiameter)) {
-				p.getLogger().info("outside");
 				continue generationLoop; // outside: nope
 			}
 			
 			// Is that point at a correct distance of the other ones?
 			for(Location spawn : randomSpawnPoints) {
 				if(spawn.distance(randomPoint) < minimalDistanceBetweenTwoPoints) {
-					p.getLogger().info("too close");
+					currentErrorCount++;
 					continue generationLoop; // too close: nope
 				}
 			}
@@ -203,6 +217,7 @@ public class UHSpawnsManager {
 			// Well, all done.
 			randomSpawnPoints.add(randomPoint);
 			generatedSpawnPoints++;
+			currentErrorCount = 0;
 		}
 		
 		// Generation done, let's register these points.
