@@ -425,6 +425,8 @@ public class UHPluginCommand implements CommandExecutor {
 	 * 
 	 * Usage: /uh spawns add (as a player, adds the current location, world included).
 	 * Usage: /uh spawns add <x> <z> (as everyone, adds the specified coordinates in the default world).
+	 * Usage: /uh spawns list (lists the spawn points).
+	 * Usage: /uh spawns generate <circular|squared|random> [size = current size of the map] [distanceMin = 250] [count = number of teams registered]
 	 * 
 	 * @param sender
 	 * @param command
@@ -504,6 +506,64 @@ public class UHPluginCommand implements CommandExecutor {
 						
 						sender.sendMessage(line);
 					}
+				}
+			}
+			
+			else if(subcommand.equalsIgnoreCase("generate")) { // /uh spawns generate
+				// Usage: /uh spawns generate <circular|squared|random> [size = current size of the map] [distanceMin = 250] [count = number of teams registered]
+				
+				if(args.length < 3) { // No enough arguments.
+					sender.sendMessage(i.t("spawns.syntaxError"));
+					return;
+				}
+				
+				String generationMethod = args[2];
+				
+				// Default values
+				Integer size = p.getBorderManager().getCurrentBorderDiameter();
+				Integer distanceMinBetweenTwoPoints = 250;
+				Integer spawnsCount = p.getTeamManager().getTeams().size();
+				
+				try {
+					if(args.length >= 4) { // size included
+						size = Integer.valueOf(args[3]);
+						
+						if(args.length >= 5) { // distance min included
+							distanceMinBetweenTwoPoints = Integer.valueOf(args[4]);
+							
+							if(args.length >= 6) { // spawn count included
+								spawnsCount = Integer.valueOf(args[5]);
+							}
+						}
+					}
+				} catch(NumberFormatException e) {
+					sender.sendMessage(i.t("spawns.NaN"));
+					return;
+				}
+				
+				
+				if(spawnsCount <= 0) {
+					sender.sendMessage(i.t("spawns.generate.nothingToDo"));
+					return;
+				}
+				
+				
+				boolean success;
+				switch(generationMethod) {
+					case "random":
+						success = p.getSpawnsManager().generateRandomSpawnPoints(spawnsCount, size, distanceMinBetweenTwoPoints);
+						break;
+					
+					default:
+						sender.sendMessage(i.t("spawns.generate.unsupportedMethod", generationMethod));
+						return;
+				}
+				
+				if(success) {
+					sender.sendMessage(i.t("spawns.generate.success"));
+				}
+				else {
+					sender.sendMessage(i.t("spawns.generate.impossible"));
 				}
 			}
 		}
