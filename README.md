@@ -2,6 +2,8 @@
 
 C'est très la source.
 
+Development builds available for each commit [on our Jenkins server](http://jenkins.carrade.eu/job/UltraHardcoreReloaded/).
+
 This plugin is [available on BukkitDev](http://dev.bukkit.org/bukkit-plugins/uhc/).  
 Please note, this README reflects the last development version. Some features listed here may not be in the version published on BukkitDev.
 
