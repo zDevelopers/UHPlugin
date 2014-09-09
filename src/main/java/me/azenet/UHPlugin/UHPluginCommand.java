@@ -558,6 +558,10 @@ public class UHPluginCommand implements CommandExecutor {
 						success = p.getSpawnsManager().generateGridSpawnPoints(spawnsCount, size, distanceMinBetweenTwoPoints);
 						break;
 					
+					case "circular":
+						success = p.getSpawnsManager().generateCircularSpawnPoints(spawnsCount, size, distanceMinBetweenTwoPoints);
+						break;
+					
 					default:
 						sender.sendMessage(i.t("spawns.generate.unsupportedMethod", generationMethod));
 						return;

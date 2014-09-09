@@ -142,7 +142,7 @@ public class UHSpawnsManager {
 	 * @param minimalDistanceBetweenTwoPoints The minimal distance between two points.
 	 * 
 	 * @return False if there's too many spawn points / not enough surface to generate them.
-	 * True of the generation succeeded.
+	 * True if the generation succeeded.
 	 */
 	public boolean generateRandomSpawnPoints(int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
 		
@@ -241,7 +241,7 @@ public class UHSpawnsManager {
 	 * @param minimalDistanceBetweenTwoPoints The minimal distance between two points.
 	 * 
 	 * @return False if there's too many spawn points / not enough surface to generate them.
-	 * True of the generation succeeded.
+	 * True if the generation succeeded.
 	 */
 	public boolean generateGridSpawnPoints(int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
 		
@@ -355,6 +355,105 @@ public class UHSpawnsManager {
 		}
 		else {
 			return false;
+		}
+	}
+	
+	/**
+	 * Generates spawn points in concentric circles.
+	 * 
+	 * @param spawnCount The number of spawn points to generate.
+	 * @param regionDiameter The diameter of the region where the spawn points will be generated.<br>
+	 * This is limited by the size of the map. This will be seen as the diameter of a circular or
+	 * of a squared map, following the shape of the world set in the configuration.
+	 * @param minimalDistanceBetweenTwoPoints The minimal distance between two points.
+	 * 
+	 * @return False if there's too many spawn points / not enough surface to generate them.
+	 * True if the generation succeeded.
+	 */
+	public boolean generateCircularSpawnPoints(int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
+		
+		// We starts the generation on a smaller grid, to avoid false outside tests if the point is on the edge
+		int usedRegionDiameter = regionDiameter - 1;
+		
+		int countGeneratedPoints = 0;
+		LinkedList<Location> generatedPoints = new LinkedList<Location>();
+
+		World world = p.getServer().getWorlds().get(0);
+		int xSpawn = world.getSpawnLocation().getBlockX();
+		int zSpawn = world.getSpawnLocation().getBlockZ();
+		
+		int currentCircleDiameter = usedRegionDiameter;
+		
+		// The generation loop. Each step generates a circle.
+		generationLoop: while(currentCircleDiameter >= minimalDistanceBetweenTwoPoints) {
+			// First step. We want to know if all the points left can be in one circle.
+			// We calculates the maximal number of points in a circle, taking into account the
+			// minimal distance between two points.
+			
+			// The link between the angle between two points and the fly distance between them
+			// is, where R is the radius, d the fly distance, and a the angle:
+			// a = 2 Arcsin((d/2)/R)
+			// (Just draw the situation, you'll see.)
+			
+			double denseCircleAngle = 2 * Math.asin((Double.valueOf(minimalDistanceBetweenTwoPoints) / 2) / (Double.valueOf(currentCircleDiameter) / 2));
+			int pointsPerDenseCircles = (int) Math.floor(2 * Math.PI / denseCircleAngle);
+			
+			double angleBetweenTwoPoints;
+			
+			// Not all the points can be in this circle. We generate the densiest circle.
+			if(pointsPerDenseCircles < spawnCount - countGeneratedPoints) {
+				angleBetweenTwoPoints = denseCircleAngle;
+			}
+			// All the remaining points can be in this circle. We generates the less dense circle with
+			// these points.
+			else {
+				angleBetweenTwoPoints = 2 * Math.PI / (Double.valueOf(spawnCount - countGeneratedPoints));
+			}
+			
+			// Let's generate these points.
+			double currentAngle = 0d;
+			
+			circleLoop: while(currentAngle <= 2 * Math.PI) {
+				// The coordinates of a point in the circle.
+				// Cf. your trigonometry! ;)
+				Location point = new Location(
+						world,
+						(currentCircleDiameter / 2) * Math.cos(currentAngle) + xSpawn,
+						0,
+						(currentCircleDiameter / 2) * Math.sin(currentAngle) + zSpawn
+				);
+				
+				if(!p.getBorderManager().isInsideBorder(point, regionDiameter)) { // Just in case
+					continue circleLoop;
+				}
+				
+				generatedPoints.add(point);
+				countGeneratedPoints++;
+				
+				if(countGeneratedPoints >= spawnCount) {
+					break generationLoop;
+				}
+				
+				currentAngle += angleBetweenTwoPoints;
+			}
+			
+			// So, this circle is done.
+			// We prepares the next one.
+			currentCircleDiameter -= 2 *minimalDistanceBetweenTwoPoints;
+		}
+		
+		
+		// Generation done or failed (not enough space)?
+		if(generatedPoints.size() < spawnCount) {
+			return false; // Failed!
+		}
+		
+		else {
+			for(Location spawn : generatedPoints) {
+				addSpawnPoint(spawn);
+			}
+			
+			return true;
 		}
 	}
 }
