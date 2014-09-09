@@ -216,7 +216,12 @@ keys:
         list:
             nothing: "{ce}Il n'y a pas de point de démarrage enregistré."
             count: "{ci}Il y a {0} points de démarrage enregistrés."
-            item: "{green}{0}{darkgreen};{green}{1}"
+            world: "{lightpurple}Monde {0}"
+            item:
+                overworld: "{green}{0}{darkgreen};{green}{1}"
+                nether: "{red}{0}{darkred};{red}{1}"
+                end: "{yellow}{0}{gold};{yellow}{1}"
+                other: "{gray}{0}{darkgray};{gray}{1}"
         
         remove:
             removed: "{cs}Le point de démarrage {1};{2} du monde {0} a été supprimé."

@@ -23,8 +23,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import me.azenet.UHPlugin.i18n.I18n;
 
@@ -32,6 +36,7 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -509,19 +514,51 @@ public class UHPluginCommand implements CommandExecutor {
 				else {
 					sender.sendMessage(i.t("spawns.list.count", String.valueOf(spawnPoints.size())));
 					
-					// Displaying this number of spawn points per line
-					final Integer spawnsPerLine = 5;
+					// We want one list per world
+					Map<World,List<Location>> spanwsInWorlds = new HashMap<World,List<Location>>();
+					for(World world : p.getServer().getWorlds()) {
+						spanwsInWorlds.put(world, new LinkedList<Location>());
+					}
 					
-					for(int j = 0; j < Math.ceil(Double.valueOf(spawnPoints.size()) / spawnsPerLine); j++) {
-						String line = "";
-						
-						for(int k = 0; k < spawnsPerLine; k++) {
-							if(spawnPoints.size() > j*spawnsPerLine + k) {
-								line += i.t("spawns.list.item", String.valueOf(spawnPoints.get(j*spawnsPerLine + k).getBlockX()), String.valueOf(spawnPoints.get(j*spawnsPerLine + k).getBlockZ())) + "  ";
-							}
+					for(Location spawn : spawnPoints) {
+						spanwsInWorlds.get(spawn.getWorld()).add(spawn);
+					}
+					
+					for(Entry<World, List<Location>> spanwsInWorld : spanwsInWorlds.entrySet()) {
+						if(spanwsInWorld.getValue().size() == 0) {
+							continue;
 						}
 						
-						sender.sendMessage(line);
+						sender.sendMessage(i.t("spawns.list.world", spanwsInWorld.getKey().getName()));
+						
+						String itemDisplay;
+						if(spanwsInWorld.getKey().getEnvironment() == Environment.NORMAL) {
+							itemDisplay = "spawns.list.item.overworld";
+						}
+						else if(spanwsInWorld.getKey().getEnvironment() == Environment.NETHER) {
+							itemDisplay = "spawns.list.item.nether";
+						}
+						else if(spanwsInWorld.getKey().getEnvironment() == Environment.THE_END) {
+							itemDisplay = "spawns.list.item.end";
+						}
+						else {
+							itemDisplay = "spawns.list.item.other";
+						}
+						
+						// Displaying this number of spawn points per line
+						final Integer spawnsPerLine = 5;
+						
+						for(int j = 0; j < Math.ceil(Double.valueOf(spanwsInWorld.getValue().size()) / spawnsPerLine); j++) {
+							String line = "";
+							
+							for(int k = 0; k < spawnsPerLine; k++) {
+								if(spawnPoints.size() > j*spawnsPerLine + k) {
+									line += i.t(itemDisplay, String.valueOf(spanwsInWorld.getValue().get(j*spawnsPerLine + k).getBlockX()), String.valueOf(spanwsInWorld.getValue().get(j*spawnsPerLine + k).getBlockZ())) + "  ";
+								}
+							}
+							
+							sender.sendMessage(line);
+						}
 					}
 				}
 			}

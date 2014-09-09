@@ -216,7 +216,12 @@ keys:
         list:
             nothing: "{ce}There isn't any registered spawn point."
             count: "{ci}There are {0} registered spawn points."
-            item: "{green}{0}{darkgreen};{green}{1}"
+            world: "{lightpurple}World {0}"
+            item:
+                overworld: "{green}{0}{darkgreen};{green}{1}"
+                nether: "{red}{0}{darkred};{red}{1}"
+                end: "{yellow}{0}{gold};{yellow}{1}"
+                other: "{gray}{0}{darkgray};{gray}{1}"
         
         remove:
             removed: "{cs}The spawn point {1};{2} in the world {0} was removed."
