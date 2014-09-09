@@ -75,33 +75,6 @@ public class UHSpawnsManager {
 	}
 	
 	/**
-	 * Imports spawn points from the configuration.
-	 * 
-	 * @return The number of spawn points imported.
-	 */
-	public int importSpawnPointsFromConfig() {
-		if(p.getConfig().getList("spawnpoints") != null) {
-			int spawnCount = 0;
-			for(Object position : p.getConfig().getList("spawnpoints")) {
-				if(position instanceof String && position != null) {
-					String[] coords = ((String) position).split(",");
-					try {
-						addSpawnPoint(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
-						p.getLogger().info(i.t("load.spawnPointAdded", coords[0], coords[1]));
-						spawnCount++;
-					} catch(Exception e) { // Not an integer or not enough coords
-						p.getLogger().warning(i.t("load.invalidSpawnPoint", (String) position));
-					}
-				}
-			}
-			
-			return spawnCount;
-		}
-		
-		return 0;
-	}
-	
-	/**
 	 * Removes all spawn points with the same coordinates as the given location object
 	 * (X, Z, world).
 	 * 
@@ -143,6 +116,35 @@ public class UHSpawnsManager {
 	public void reset() {
 		spawnPoints = new LinkedList<Location>();
 	}
+	
+	
+	/**
+	 * Imports spawn points from the configuration.
+	 * 
+	 * @return The number of spawn points imported.
+	 */
+	public int importSpawnPointsFromConfig() {
+		if(p.getConfig().getList("spawnpoints") != null) {
+			int spawnCount = 0;
+			for(Object position : p.getConfig().getList("spawnpoints")) {
+				if(position instanceof String && position != null) {
+					String[] coords = ((String) position).split(",");
+					try {
+						addSpawnPoint(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
+						p.getLogger().info(i.t("load.spawnPointAdded", coords[0], coords[1]));
+						spawnCount++;
+					} catch(Exception e) { // Not an integer or not enough coords
+						p.getLogger().warning(i.t("load.invalidSpawnPoint", (String) position));
+					}
+				}
+			}
+			
+			return spawnCount;
+		}
+		
+		return 0;
+	}
+	
 	
 	/**
 	 * Generates a random number between min and max.
