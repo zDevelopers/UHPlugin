@@ -537,7 +537,7 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 			
 			else if(subcommand.equalsIgnoreCase("generate")) { // /uh spawns generate
-				// Usage: /uh spawns generate <circular|squared|random> [size = current size of the map] [distanceMin = 250] [count = number of teams registered]
+				// Usage: /uh spawns generate <circular|squared|random> [size = current size of the map] [distanceMin = 250] [count = number of teams registered] [xCenter = xSpawn] [zCenter = zSpawn] [world = sender's world]
 				
 				if(args.length < 3) { // No enough arguments.
 					sender.sendMessage(i.t("spawns.syntaxError"));
@@ -550,16 +550,23 @@ public class UHPluginCommand implements CommandExecutor {
 				Integer size = p.getBorderManager().getCurrentBorderDiameter() - 25; // Avoid spawn points being too close to the border
 				Integer distanceMinBetweenTwoPoints = 250;
 				Integer spawnsCount = p.getTeamManager().getTeams().size();
-				World world;
+				World world = p.getServer().getWorlds().get(0);
+				Double xCenter = world.getSpawnLocation().getX();
+				Double zCenter = world.getSpawnLocation().getZ();
 				
-				if(sender instanceof Player) {
-					world = ((Player) sender).getWorld();
-				}
-				else if(sender instanceof BlockCommandSender) {
-					world = ((BlockCommandSender) sender).getBlock().getWorld();
-				}
-				else {
-					world = p.getServer().getWorlds().get(0);
+				if(args.length < 9) {
+					if(sender instanceof Player) {
+						world = ((Player) sender).getWorld();
+					}
+					else if(sender instanceof BlockCommandSender) {
+						world = ((BlockCommandSender) sender).getBlock().getWorld();
+					}
+					else {
+						world = p.getServer().getWorlds().get(0);
+					}
+					
+					xCenter = world.getSpawnLocation().getX();
+					zCenter = world.getSpawnLocation().getZ();
 				}
 				
 				// What if the game is in solo, or some players are out of all team?
@@ -585,15 +592,36 @@ public class UHPluginCommand implements CommandExecutor {
 						}
 					}
 				}
+				
 				try {
 					if(args.length >= 4) { // size included
 						size = Integer.valueOf(args[3]);
 						
-						if(args.length >= 5) { // distance min included
+						if(args.length >= 5) { // distance minimal included
 							distanceMinBetweenTwoPoints = Integer.valueOf(args[4]);
 							
 							if(args.length >= 6) { // spawn count included
 								spawnsCount = Integer.valueOf(args[5]);
+								
+								if(args.length >= 7) { // xCenter included
+									xCenter = Double.parseDouble(args[6]);
+									
+									if(args.length >= 8) { // zCenter included
+										zCenter = Double.parseDouble(args[7]);
+										
+										if(args.length >= 9) { // world included
+											World inputWorld = p.getServer().getWorld(args[8]);
+											
+											if(inputWorld != null) {
+												world = inputWorld;
+											}
+											else {
+												sender.sendMessage(i.t("spawns.generate.unknownWorld", args[8]));
+												return;
+											}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -612,15 +640,15 @@ public class UHPluginCommand implements CommandExecutor {
 				boolean success;
 				switch(generationMethod) {
 					case "random":
-						success = p.getSpawnsManager().generateRandomSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints);
+						success = p.getSpawnsManager().generateRandomSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints, xCenter, zCenter);
 						break;
 					
 					case "grid":
-						success = p.getSpawnsManager().generateGridSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints);
+						success = p.getSpawnsManager().generateGridSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints, xCenter, zCenter);
 						break;
 					
 					case "circular":
-						success = p.getSpawnsManager().generateCircularSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints);
+						success = p.getSpawnsManager().generateCircularSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints, xCenter, zCenter);
 						break;
 					
 					default:

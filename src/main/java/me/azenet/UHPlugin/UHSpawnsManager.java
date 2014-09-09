@@ -191,16 +191,19 @@ public class UHSpawnsManager {
 	/**
 	 * Generates randomly some spawn points in the map, with a minimal distance.
 	 * 
+	 * @param world The world where the spawn points will be generated.
 	 * @param spawnCount The number of spawn points to generate.
 	 * @param regionDiameter The diameter of the region where the spawn points will be generated.<br>
 	 * This is limited by the size of the map. This will be seen as the diameter of a circular or
 	 * of a squared map, following the shape of the world set in the configuration.
 	 * @param minimalDistanceBetweenTwoPoints The minimal distance between two points.
+	 * @param xCenter The x coordinate of the point in the center of the region where the points will be generated.
+	 * @param zCenter The z coordinate of the point in the center of the region where the points will be generated.
 	 * 
 	 * @return False if there's too many spawn points / not enough surface to generate them.
 	 * True if the generation succeeded.
 	 */
-	public boolean generateRandomSpawnPoints(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
+	public boolean generateRandomSpawnPoints(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter) {
 		
 		/** Possible? **/
 		
@@ -253,9 +256,9 @@ public class UHSpawnsManager {
 			// excluded when his presence inside the region will be checked.
 			
 			Location randomPoint = new Location(world,
-					random((int) (-1 * Math.floor(regionDiameter / 2)), (int) Math.floor(regionDiameter / 2)),
+					random((int) (xCenter - Math.floor(regionDiameter / 2)), (int) (xCenter + (int) Math.floor(regionDiameter / 2))),
 					0,
-					random((int) (-1 * Math.floor(regionDiameter / 2)), (int) Math.floor(regionDiameter / 2)));
+					random((int) (zCenter - Math.floor(regionDiameter / 2)), (int) (zCenter + (int) Math.floor(regionDiameter / 2))));
 			
 			// Inside the region?
 			if(!p.getBorderManager().isInsideBorder(randomPoint, regionDiameter)) {
@@ -294,16 +297,20 @@ public class UHSpawnsManager {
 	/**
 	 * Generates spawn points in a grid.
 	 * 
+	 * @param world The world where the spawn points will be generated.
 	 * @param spawnCount The number of spawn points to generate.
 	 * @param regionDiameter The diameter of the region where the spawn points will be generated.<br>
 	 * This is limited by the size of the map. This will be seen as the diameter of a circular or
 	 * of a squared map, following the shape of the world set in the configuration.
 	 * @param minimalDistanceBetweenTwoPoints The minimal distance between two points.
+	 * @param xCenter The x coordinate of the point in the center of the region where the points will be generated.
+	 * @param zCenter The z coordinate of the point in the center of the region where the points will be generated.
+
 	 * 
 	 * @return False if there's too many spawn points / not enough surface to generate them.
 	 * True if the generation succeeded.
 	 */
-	public boolean generateGridSpawnPoints(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
+	public boolean generateGridSpawnPoints(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter) {
 		
 		// We starts the generation on a smaller grid, to avoid false outside tests if the point is on the edge
 		int usedRegionDiameter = regionDiameter - 1;
@@ -343,11 +350,9 @@ public class UHSpawnsManager {
 		LinkedList<Location> generatedPoints = new LinkedList<Location>();
 		
 		int halfDiameter = (int) Math.floor(usedRegionDiameter / 2);
-		int xSpawn = world.getSpawnLocation().getBlockX();
-		int zSpawn = world.getSpawnLocation().getBlockZ();
 		
 		Integer  currentSquareSize       = usedRegionDiameter;
-		Location currentSquareStartPoint = new Location(world, xSpawn + halfDiameter, 0, zSpawn - halfDiameter);
+		Location currentSquareStartPoint = new Location(world, xCenter + halfDiameter, 0, zCenter - halfDiameter);
 		Location currentPoint;
 		
 		// Represents the location to add on each side of the squares
@@ -426,25 +431,25 @@ public class UHSpawnsManager {
 	/**
 	 * Generates spawn points in concentric circles.
 	 * 
+	 * @param world The world where the spawn points will be generated.
 	 * @param spawnCount The number of spawn points to generate.
 	 * @param regionDiameter The diameter of the region where the spawn points will be generated.<br>
 	 * This is limited by the size of the map. This will be seen as the diameter of a circular or
 	 * of a squared map, following the shape of the world set in the configuration.
 	 * @param minimalDistanceBetweenTwoPoints The minimal distance between two points.
+	 * @param xCenter The x coordinate of the point in the center of the region where the points will be generated.
+	 * @param zCenter The z coordinate of the point in the center of the region where the points will be generated.
 	 * 
 	 * @return False if there's too many spawn points / not enough surface to generate them.
 	 * True if the generation succeeded.
 	 */
-	public boolean generateCircularSpawnPoints(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
+	public boolean generateCircularSpawnPoints(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter) {
 		
 		// We starts the generation on a smaller grid, to avoid false outside tests if the point is on the edge
 		int usedRegionDiameter = regionDiameter - 1;
 		
 		int countGeneratedPoints = 0;
 		LinkedList<Location> generatedPoints = new LinkedList<Location>();
-		
-		int xSpawn = world.getSpawnLocation().getBlockX();
-		int zSpawn = world.getSpawnLocation().getBlockZ();
 		
 		int currentCircleDiameter = usedRegionDiameter;
 		
@@ -482,9 +487,9 @@ public class UHSpawnsManager {
 				// Cf. your trigonometry! ;)
 				Location point = new Location(
 						world,
-						(currentCircleDiameter / 2) * Math.cos(currentAngle) + xSpawn,
+						(currentCircleDiameter / 2) * Math.cos(currentAngle) + xCenter,
 						0,
-						(currentCircleDiameter / 2) * Math.sin(currentAngle) + zSpawn
+						(currentCircleDiameter / 2) * Math.sin(currentAngle) + zCenter
 				);
 				
 				if(!p.getBorderManager().isInsideBorder(point, regionDiameter)) { // Just in case
