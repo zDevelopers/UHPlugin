@@ -524,6 +524,29 @@ public class UHPluginCommand implements CommandExecutor {
 				Integer distanceMinBetweenTwoPoints = 250;
 				Integer spawnsCount = p.getTeamManager().getTeams().size();
 				
+				// What if the game is in solo, or some players are out of all team?
+				// Only if the spawn count is not provided of course. Else, we don't care, this count
+				// will be overwritten.
+				if(args.length < 6) {
+					if(spawnsCount == 0) { // Solo mode?
+						sender.sendMessage(i.t("spawns.assumptions.solo"));
+						spawnsCount = p.getServer().getOnlinePlayers().length - p.getGameManager().getSpectators().size();
+					}
+					else {
+						// Trying to found players without team
+						int playersWithoutTeam = 0;
+						for(Player player : p.getServer().getOnlinePlayers()) {
+							if(p.getTeamManager().getTeamForPlayer(player) == null) {
+								playersWithoutTeam++;
+							}
+						}
+						
+						if(playersWithoutTeam != 0) {
+							sender.sendMessage(i.t("spawns.assumptions.partialSolo"));
+							spawnsCount += playersWithoutTeam;
+						}
+					}
+				}
 				try {
 					if(args.length >= 4) { // size included
 						size = Integer.valueOf(args[3]);
