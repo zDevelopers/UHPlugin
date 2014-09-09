@@ -453,6 +453,19 @@ public class UHPluginCommand implements CommandExecutor {
 			String subcommand = args[1];
 			
 			if(subcommand.equalsIgnoreCase("add")) { // /uh spawns add <?>
+				
+				// World?
+				World world;
+				if(sender instanceof Player) {
+					world = ((Player) sender).getWorld();
+				}
+				else if(sender instanceof BlockCommandSender) {
+					world = ((BlockCommandSender) sender).getBlock().getWorld();
+				}
+				else {
+					world = p.getServer().getWorlds().get(0);
+				}
+				
 				if(args.length == 2) { // /uh spawns add
 					if(!(sender instanceof Player)) {
 						sender.sendMessage(i.t("spawns.errorCoords"));
@@ -462,7 +475,7 @@ public class UHPluginCommand implements CommandExecutor {
 						Player pl = (Player) sender; // Just a way to avoid casts everywhere.
 						try {
 							p.getSpawnsManager().addSpawnPoint(pl.getLocation());
-							sender.sendMessage(i.t("spawns.add.added", pl.getWorld().getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
+							sender.sendMessage(i.t("spawns.add.added", world.getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
 						} catch(IllegalArgumentException e) {
 							sender.sendMessage(i.t("spawns.add.outOfLimits"));
 						} catch(RuntimeException e) {
@@ -475,8 +488,8 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				else { // /uh spawns add <x> <z>
 					try {
-						p.getSpawnsManager().addSpawnPoint(Double.parseDouble(args[2]), Double.parseDouble(args[3]));
-						sender.sendMessage(i.t("spawns.add.added", p.getServer().getWorlds().get(0).getName(), args[2], args[3]));
+						p.getSpawnsManager().addSpawnPoint(world, Double.parseDouble(args[2]), Double.parseDouble(args[3]));
+						sender.sendMessage(i.t("spawns.add.added", world.getName(), args[2], args[3]));
 					} catch(NumberFormatException e) {
 						sender.sendMessage(i.t("spawns.NaN"));
 					} catch(IllegalArgumentException e) {
