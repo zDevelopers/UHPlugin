@@ -124,6 +124,32 @@ public class UHUtils {
 			return true;
 		}
 		
+		Location safeSpot = findSafeSpot(location);
+		
+		// A spot was found, let's teleport.
+		if(safeSpot != null) {
+			player.teleport(safeSpot);
+			return true;
+		}
+		// No spot found; the teleportation is cancelled.
+		else {
+			return false;
+		}
+	}
+	
+	public static boolean safeTP(Player player, Location location) {
+		return safeTP(player, location, false);
+	}
+	
+	/**
+	 * Finds a safe spot in the given location.
+	 * 
+	 * The spot is in the same X;Z coordinates.
+	 * 
+	 * @param location The location where to find a safe spot.
+	 * @return A Location object representing the safe spot, or null if no safe spot is available.
+	 */
+	public static Location findSafeSpot(Location location) {
 		// We try to find a spot above or below the target (this is probably the good solution, because
 		// if the spot is obstrued, because this is mainly used to teleport players back after their
 		// death, the cause is likely to be a falling block or an arrow shot during a fall).
@@ -152,19 +178,13 @@ public class UHUtils {
 			}
 		}
 		
-		// A spot was found, let's teleport.
+		// A spot was found, we changes the pitch & yaw according to the original location.
 		if(safeSpot != null) {
-			player.teleport(safeSpot);
-			return true;
+			safeSpot.setPitch(location.getPitch());
+			safeSpot.setYaw(location.getYaw());
 		}
-		// No spot found; the teleportation is cancelled.
-		else {
-			return false;
-		}
-	}
-	
-	public static boolean safeTP(Player player, Location location) {
-		return safeTP(player, location, false);
+		
+		return safeSpot;
 	}
 	
 	/**
@@ -175,7 +195,7 @@ public class UHUtils {
 	 * @param location
 	 * @return true if the location is safe.
 	 */
-	private static boolean isSafeSpot(Location location) {		
+	public static boolean isSafeSpot(Location location) {
 		Block blockCenter = location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 		Block blockAbove = location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() + 1, location.getBlockZ());
 		Block blockBelow = location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() - 1, location.getBlockZ());

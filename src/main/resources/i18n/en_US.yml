@@ -200,6 +200,7 @@ keys:
         add:
             added: "{cs}Spawn added in the world {0}: {1};{2}"
             outOfLimits: "{ce}You cannot add a spawn point out of the borders."
+            noSafeSpot: "{ce}Unable to add this spawn point: no safe spot found in the Nether."
         
         assumptions:
             solo: "{ci}No team found: assuming the game is a solo game."

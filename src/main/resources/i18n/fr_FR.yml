@@ -200,6 +200,7 @@ keys:
         add:
             added: "{cs}Point de démarrage ajouté dans le monde {0} : {1};{2}"
             outOfLimits: "{ce}Vous ne pouvez pas ajouter un point de démarrage hors des bordures."
+            noSafeSpot: "{ce}Impossible d'ajouter ce point de démarrage : aucun endroit sûr trouvé dans le Nether."
         
         assumptions:
             solo: "{ci}Aucune équipe trouvée : le jeu est considéré comme solo."

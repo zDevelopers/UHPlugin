@@ -49,6 +49,9 @@ public class UHSpawnsManager {
 	 * 
 	 * @param location The location. Cloned, so you can use the same location object with
 	 * modifications between two calls.
+	 * 
+	 * @throws RuntimeException If the spawn point is in the Nether and no safe spot was found.
+	 * @throws IllegalArgumentException If the spawn point is out of the current border.
 	 */
 	public void addSpawnPoint(final Location location) {
 		Location spawnPoint = location.clone();
@@ -56,6 +59,14 @@ public class UHSpawnsManager {
 		// Initial fall, except in the nether.
 		if(!(spawnPoint.getWorld().getEnvironment() == Environment.NETHER)) {
 			spawnPoint.setY(location.getWorld().getHighestBlockYAt(location.getBlockX(), location.getBlockZ()) + 120);
+		}
+		else {
+			Location safeSpot = UHUtils.findSafeSpot(location);
+			if(safeSpot == null) {
+				throw new RuntimeException("Unable to find a safe spot to set the spawn point " + location.toString());
+			}
+			
+			spawnPoint.setY(safeSpot.getY());
 		}
 		
 		if(!p.getBorderManager().isInsideBorder(spawnPoint)) {
@@ -251,6 +262,11 @@ public class UHSpawnsManager {
 				continue generationLoop; // outside: nope
 			}
 			
+			// Safe spot available?
+			if(UHUtils.findSafeSpot(randomPoint) == null) {
+				continue generationLoop; // not safe: nope
+			}
+			
 			// Is that point at a correct distance of the other ones?
 			for(Location spawn : randomSpawnPoints) {
 				if(spawn.distance(randomPoint) < minimalDistanceBetweenTwoPoints) {
@@ -347,7 +363,7 @@ public class UHSpawnsManager {
 			currentPoint = currentSquareStartPoint.clone();
 			
 			// First point
-			if(p.getBorderManager().isInsideBorder(currentPoint, regionDiameter)) {
+			if(p.getBorderManager().isInsideBorder(currentPoint, regionDiameter) && UHUtils.findSafeSpot(currentPoint) != null) {
 				generatedPoints.add(currentPoint.clone());
 				countGeneratedPoints++;
 				
@@ -362,9 +378,15 @@ public class UHSpawnsManager {
 				sideLoop: while(plottedSize < currentSquareSize) {
 					currentPoint.add(addOnSide[j]);
 					plottedSize += distanceBetweenTwoPoints;
-
+					
+					// Inside the border?
 					if(!p.getBorderManager().isInsideBorder(currentPoint, regionDiameter)) {
 						continue sideLoop;
+					}
+					
+					// Safe spot available?
+					if(UHUtils.findSafeSpot(currentPoint) == null) {
+						continue sideLoop; // not safe: nope
 					}
 					
 					generatedPoints.add(currentPoint.clone());
@@ -466,6 +488,11 @@ public class UHSpawnsManager {
 				);
 				
 				if(!p.getBorderManager().isInsideBorder(point, regionDiameter)) { // Just in case
+					continue circleLoop;
+				}
+				
+				// Safe?
+				if(UHUtils.findSafeSpot(point) == null) {
 					continue circleLoop;
 				}
 				

@@ -465,6 +465,8 @@ public class UHPluginCommand implements CommandExecutor {
 							sender.sendMessage(i.t("spawns.add.added", pl.getWorld().getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
 						} catch(IllegalArgumentException e) {
 							sender.sendMessage(i.t("spawns.add.outOfLimits"));
+						} catch(RuntimeException e) {
+							sender.sendMessage(i.t("spawns.add.noSafeSpot"));
 						}
 					}
 				}
@@ -479,6 +481,8 @@ public class UHPluginCommand implements CommandExecutor {
 						sender.sendMessage(i.t("spawns.NaN"));
 					} catch(IllegalArgumentException e) {
 						sender.sendMessage(i.t("spawns.add.outOfLimits"));
+					} catch(RuntimeException e) {
+						sender.sendMessage(i.t("spawns.add.noSafeSpot"));
 					}
 				}
 			}
