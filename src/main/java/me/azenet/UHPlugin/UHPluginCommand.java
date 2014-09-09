@@ -533,6 +533,17 @@ public class UHPluginCommand implements CommandExecutor {
 				Integer size = p.getBorderManager().getCurrentBorderDiameter() - 25; // Avoid spawn points being too close to the border
 				Integer distanceMinBetweenTwoPoints = 250;
 				Integer spawnsCount = p.getTeamManager().getTeams().size();
+				World world;
+				
+				if(sender instanceof Player) {
+					world = ((Player) sender).getWorld();
+				}
+				else if(sender instanceof BlockCommandSender) {
+					world = ((BlockCommandSender) sender).getBlock().getWorld();
+				}
+				else {
+					world = p.getServer().getWorlds().get(0);
+				}
 				
 				// What if the game is in solo, or some players are out of all team?
 				// Only if the spawn count is not provided of course. Else, we don't care, this count
@@ -584,15 +595,15 @@ public class UHPluginCommand implements CommandExecutor {
 				boolean success;
 				switch(generationMethod) {
 					case "random":
-						success = p.getSpawnsManager().generateRandomSpawnPoints(spawnsCount, size, distanceMinBetweenTwoPoints);
+						success = p.getSpawnsManager().generateRandomSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints);
 						break;
 					
 					case "grid":
-						success = p.getSpawnsManager().generateGridSpawnPoints(spawnsCount, size, distanceMinBetweenTwoPoints);
+						success = p.getSpawnsManager().generateGridSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints);
 						break;
 					
 					case "circular":
-						success = p.getSpawnsManager().generateCircularSpawnPoints(spawnsCount, size, distanceMinBetweenTwoPoints);
+						success = p.getSpawnsManager().generateCircularSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints);
 						break;
 					
 					default:

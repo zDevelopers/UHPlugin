@@ -189,7 +189,7 @@ public class UHSpawnsManager {
 	 * @return False if there's too many spawn points / not enough surface to generate them.
 	 * True if the generation succeeded.
 	 */
-	public boolean generateRandomSpawnPoints(int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
+	public boolean generateRandomSpawnPoints(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
 		
 		/** Possible? **/
 		
@@ -218,7 +218,6 @@ public class UHSpawnsManager {
 		
 		/** Generation **/
 		
-		World world = p.getServer().getWorlds().get(0);
 		LinkedList<Location> randomSpawnPoints = new LinkedList<Location>();
 		int generatedSpawnPoints = 0;
 		
@@ -288,7 +287,7 @@ public class UHSpawnsManager {
 	 * @return False if there's too many spawn points / not enough surface to generate them.
 	 * True if the generation succeeded.
 	 */
-	public boolean generateGridSpawnPoints(int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
+	public boolean generateGridSpawnPoints(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
 		
 		// We starts the generation on a smaller grid, to avoid false outside tests if the point is on the edge
 		int usedRegionDiameter = regionDiameter - 1;
@@ -326,8 +325,7 @@ public class UHSpawnsManager {
 		
 		int countGeneratedPoints = 0;
 		LinkedList<Location> generatedPoints = new LinkedList<Location>();
-
-		World world = p.getServer().getWorlds().get(0);
+		
 		int halfDiameter = (int) Math.floor(usedRegionDiameter / 2);
 		int xSpawn = world.getSpawnLocation().getBlockX();
 		int zSpawn = world.getSpawnLocation().getBlockZ();
@@ -415,15 +413,14 @@ public class UHSpawnsManager {
 	 * @return False if there's too many spawn points / not enough surface to generate them.
 	 * True if the generation succeeded.
 	 */
-	public boolean generateCircularSpawnPoints(int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
+	public boolean generateCircularSpawnPoints(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints) {
 		
 		// We starts the generation on a smaller grid, to avoid false outside tests if the point is on the edge
 		int usedRegionDiameter = regionDiameter - 1;
 		
 		int countGeneratedPoints = 0;
 		LinkedList<Location> generatedPoints = new LinkedList<Location>();
-
-		World world = p.getServer().getWorlds().get(0);
+		
 		int xSpawn = world.getSpawnLocation().getBlockX();
 		int zSpawn = world.getSpawnLocation().getBlockZ();
 		
