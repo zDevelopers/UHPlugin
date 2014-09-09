@@ -101,6 +101,16 @@ public class UHSpawnsManager {
 		return 0;
 	}
 	
+	
+	/**
+	 * Removes all registered spawn points.
+	 * 
+	 * CANNOT BE CANCELLED.
+	 */
+	public void reset() {
+		spawnPoints = new LinkedList<Location>();
+	}
+	
 	/**
 	 * Generates a random number between min and max.
 	 * 

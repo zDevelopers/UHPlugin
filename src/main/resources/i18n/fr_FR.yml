@@ -215,6 +215,8 @@ keys:
             nothing: "{ce}Il n'y a pas de point de démarrage enregistré."
             count: "{ci}Il y a {0} points de démarrage enregistrés."
             item: "{green}{0}{darkgreen};{green}{1}"
+        
+        reset: "{cs}Tous les points de démarrage ont été supprimés."
     
     team:
         syntaxError: "{ce}Erreur de syntaxe, consultez /uh team."

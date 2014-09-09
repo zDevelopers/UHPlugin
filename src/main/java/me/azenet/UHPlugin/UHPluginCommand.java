@@ -510,6 +510,16 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 			}
 			
+			else if(subcommand.equalsIgnoreCase("dump")) { // /uh spawns dump
+				String dump = "";
+				
+				for(Location spawn : p.getSpawnsManager().getSpawnPoints()) {
+					dump += spawn.getBlockX() + "," + spawn.getBlockZ() + "\n";
+				}
+				
+				sender.sendMessage(dump);
+			}
+			
 			else if(subcommand.equalsIgnoreCase("generate")) { // /uh spawns generate
 				// Usage: /uh spawns generate <circular|squared|random> [size = current size of the map] [distanceMin = 250] [count = number of teams registered]
 				
@@ -599,14 +609,9 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 			}
 			
-			else if(subcommand.equalsIgnoreCase("dump")) { // /uh dump
-				String dump = "";
-				
-				for(Location spawn : p.getSpawnsManager().getSpawnPoints()) {
-					dump += spawn.getBlockX() + "," + spawn.getBlockZ() + "\n";
-				}
-				
-				sender.sendMessage(dump);
+			else if(subcommand.equalsIgnoreCase("reset")) { // /uh spawns reset
+				p.getSpawnsManager().reset();
+				sender.sendMessage(i.t("spawns.reset"));
 			}
 		}
 	}

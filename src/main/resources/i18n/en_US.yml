@@ -215,6 +215,8 @@ keys:
             nothing: "{ce}There isn't any registered spawn point."
             count: "{ci}There are {0} registered spawn points."
             item: "{green}{0}{darkgreen};{green}{1}"
+        
+        reset: "{cs}All the spawn points were removed."
     
     team:
         syntaxError: "{ce}Syntax error, see /uh team."
