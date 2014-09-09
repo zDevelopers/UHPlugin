@@ -101,6 +101,39 @@ public class UHSpawnsManager {
 		return 0;
 	}
 	
+	/**
+	 * Removes all spawn points with the same coordinates as the given location object
+	 * (X, Z, world).
+	 * 
+	 * @param location The location to be removed.
+	 * @param precise If true, only the spawn points at the exact same location will be removed.
+	 * Else, the points in the same block. 
+	 * @return true if something were removed.
+	 */
+	public boolean removeSpawnPoint(Location location, boolean precise) {
+		List<Location> toRemove = new LinkedList<Location>();
+		
+		for(Location spawn : getSpawnPoints()) {
+			if(location.getWorld().equals(spawn.getWorld())) {
+				if(precise
+						&& location.getX() == spawn.getX()
+						&& location.getZ() == spawn.getZ()) {
+					toRemove.add(spawn);
+				}
+				else if(!precise
+						&& location.getBlockX() == spawn.getBlockX()
+						&& location.getBlockZ() == spawn.getBlockZ()) {
+					toRemove.add(spawn);
+				}
+			}
+		}
+		
+		for(Location spawnToRemove : toRemove) {
+			while(spawnPoints.remove(spawnToRemove)); // Used to remove all occurrences of the spawn point
+		}
+		
+		return toRemove.size() != 0;
+	}
 	
 	/**
 	 * Removes all registered spawn points.

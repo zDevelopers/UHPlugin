@@ -446,6 +446,7 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.spawnsHelpGenerate"));
 			sender.sendMessage(i.t("cmd.spawnsHelpList"));
 			sender.sendMessage(i.t("cmd.spawnsHelpDump"));
+			sender.sendMessage(i.t("cmd.spawnsHelpRemove"));
 			sender.sendMessage(i.t("cmd.spawnsHelpReset"));
 		}
 		else {
@@ -454,8 +455,7 @@ public class UHPluginCommand implements CommandExecutor {
 			if(subcommand.equalsIgnoreCase("add")) { // /uh spawns add <?>
 				if(args.length == 2) { // /uh spawns add
 					if(!(sender instanceof Player)) {
-						sender.sendMessage(i.t("spawns.add.errorCoords"));
-						sender.sendMessage(i.t("spawns.add.usage"));
+						sender.sendMessage(i.t("spawns.errorCoords"));
 						return;
 					}
 					else {
@@ -469,8 +469,7 @@ public class UHPluginCommand implements CommandExecutor {
 					}
 				}
 				else if(args.length == 3) { // /uh spawns add <x>: Two coordinates needed!
-					sender.sendMessage(i.t("spawns.add.error2Coords"));
-					sender.sendMessage(i.t("spawns.add.usage"));
+					sender.sendMessage(i.t("spawns.error2Coords"));
 				}
 				else { // /uh spawns add <x> <z>
 					try {
@@ -606,6 +605,39 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				else {
 					sender.sendMessage(i.t("spawns.generate.impossible"));
+				}
+			}
+			
+			else if(subcommand.equalsIgnoreCase("remove")) { // /uh spawns remove <x> <z>
+				if(args.length == 2) { // /uh spawns remove
+					if(!(sender instanceof Player)) {
+						sender.sendMessage(i.t("spawns.errorCoords"));
+						return;
+					}
+					else {
+						Player pl = (Player) sender; // Just a way to avoid casts everywhere.
+						p.getSpawnsManager().removeSpawnPoint(pl.getLocation(), false);
+						sender.sendMessage(i.t("spawns.remove.removed", pl.getWorld().getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
+					}
+				}
+				else if(args.length == 3) { // /uh spawns add <x>: Two coordinates needed!
+					sender.sendMessage(i.t("spawns.error2Coords"));
+				}
+				else { // /uh spawns remove <x> <z>
+					try {
+						World world;
+						if(sender instanceof Player) {
+							world = ((Player) sender).getWorld();
+						}
+						else {
+							world = p.getServer().getWorlds().get(0);
+						}
+						
+						p.getSpawnsManager().removeSpawnPoint(new Location(world, Double.parseDouble(args[2]), 0, Double.parseDouble(args[3])), true);
+						sender.sendMessage(i.t("spawns.remove.removed", p.getServer().getWorlds().get(0).getName(), args[2], args[3]));
+					} catch(NumberFormatException e) {
+						sender.sendMessage(i.t("spawns.NaN"));
+					}
 				}
 			}
 			

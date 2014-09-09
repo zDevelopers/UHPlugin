@@ -70,7 +70,8 @@ keys:
         spawnsHelpGenerate: "{cc}/uh spawns generate <circular|squared|random> [size = current size] [distanceMin = 250] [count = teams count] {ci}: automagically generates the spawn points following the given shape."
         spawnsHelpList: "{cc}/uh spawns list {ci}: lists the registered spawn points."
         spawnsHelpDump: "{cc}/uh spawns dump {ci}: displays the registered spawn points in an exportable format. {gray}Use this to plot the spawn points, as example."
-        sspawnsHelpReset: "{cc}/uh spawns reset {ci}: removes all registered spawn points."
+        spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: removes the spawn points at the specified coordinates, or at the current location if the sender without coordinates."
+        spawnsHelpReset: "{cc}/uh spawns reset {ci}: removes all registered spawn points."
         
         specHelpTitle: "{aqua}------ Spectator commands ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Please note{ci}: because SpectatorPlus is not present, a spectator is {italic}only{ci} an ignored player."
@@ -193,11 +194,10 @@ keys:
     spawns:
         NaN: "{ce}This is not a number!"
         syntaxError: "{ce}Syntax error; see /uh spawns."
+        errorCoords: "{ce}You need to specify the coordinates from the console."
+        error2Coords: "{ce}You need to specify two coordinates."
         
         add:
-            errorCoords: "{ce}You need to specify the coordinates from the console."
-            error2Coords: "{ce}You need to specify two coordinates."
-            usage: "{ce}Usage: /uh spawns add <x> <z>"
             added: "{cs}Spawn added in the world {0}: {1};{2}"
             outOfLimits: "{ce}You cannot add a spawn point out of the borders."
         
@@ -215,6 +215,9 @@ keys:
             nothing: "{ce}There isn't any registered spawn point."
             count: "{ci}There are {0} registered spawn points."
             item: "{green}{0}{darkgreen};{green}{1}"
+        
+        remove:
+            removed: "{cs}The spawn point {1};{2} in the world {0} was removed."
         
         reset: "{cs}All the spawn points were removed."
     

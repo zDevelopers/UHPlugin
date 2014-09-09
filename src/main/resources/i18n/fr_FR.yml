@@ -70,6 +70,7 @@ keys:
         spawnsHelpGenerate: "{cc}/uh spawns generate <circular|squared|random> [taille = taille actuelle] [distanceMin = 250] [nombre = nombre d'équipes] {ci}: génère automagiquement des points de démarrage selon la forme donnée."
         spawnsHelpList: "{cc}/uh spawns list {ci}: liste les points de démarrage enregistrés."
         spawnsHelpDump: "{cc}/uh spawns dump {ci}: affiche les points de démarrage dans un format exportable. {gray}Utilisez ceci pour afficher les points sur un graph, par exemple."
+        spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: supprime les points de démarrage aux coordonnées spécifiées, ou à la position de l'envoyeur sans coordonnées."
         spawnsHelpReset: "{cc}/uh spawns reset {ci}: supprime tous les points de démarrage enregistrés."
         
         specHelpTitle: "{aqua}------ Commandes liées aux spectateurs ------"
@@ -193,11 +194,10 @@ keys:
     spawns:
         NaN: "{ce}Ceci n'est pas un nombre !"
         syntaxError: "{ce}Erreur de syntaxe ; consultez /uh spawns."
+        errorCoords: "{ce}Vous devez spécifier les coordonnées depuis la console."
+        error2Coords: "{ce}Vous devez spécifier deux coordonnées."
         
         add:
-            errorCoords: "{ce}Vous devez spécifier les coordonnées depuis la console."
-            error2Coords: "{ce}Vous devez spécifier deux coordonnées."
-            usage: "{ce}Utilisation : /uh spawns add <x> <z>"
             added: "{cs}Point de démarrage ajouté dans le monde {0} : {1};{2}"
             outOfLimits: "{ce}Vous ne pouvez pas ajouter un point de démarrage hors des bordures."
         
@@ -215,6 +215,9 @@ keys:
             nothing: "{ce}Il n'y a pas de point de démarrage enregistré."
             count: "{ci}Il y a {0} points de démarrage enregistrés."
             item: "{green}{0}{darkgreen};{green}{1}"
+        
+        remove:
+            removed: "{cs}Le point de démarrage {1};{2} du monde {0} a été supprimé."
         
         reset: "{cs}Tous les points de démarrage ont été supprimés."
     
