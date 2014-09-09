@@ -445,6 +445,7 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.spawnsHelpAddXZ"));
 			sender.sendMessage(i.t("cmd.spawnsHelpGenerate"));
 			sender.sendMessage(i.t("cmd.spawnsHelpList"));
+			sender.sendMessage(i.t("cmd.spawnsHelpDump"));
 			sender.sendMessage(i.t("cmd.spawnsHelpReset"));
 		}
 		else {
@@ -598,7 +599,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 			}
 			
-			else if(subcommand.equalsIgnoreCase("dump")) {
+			else if(subcommand.equalsIgnoreCase("dump")) { // /uh dump
 				String dump = "";
 				
 				for(Location spawn : p.getSpawnsManager().getSpawnPoints()) {

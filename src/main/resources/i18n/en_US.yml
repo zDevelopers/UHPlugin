@@ -69,7 +69,8 @@ keys:
         spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: adds a spawn point for a team or a player, at the provided coordinates, in the default world."
         spawnsHelpGenerate: "{cc}/uh spawns generate <circular|squared|random> [size = current size] [distanceMin = 250] [count = teams count] {ci}: automagically generates the spawn points following the given shape."
         spawnsHelpList: "{cc}/uh spawns list {ci}: lists the registered spawn points."
-        spawnsHelpReset: "{cc}/uh spawns reset {ci}: removes all registered spawn points."
+        spawnsHelpDump: "{cc}/uh spawns dump {ci}: displays the registered spawn points in an exportable format. {gray}Use this to plot the spawn points, as example."
+        sspawnsHelpReset: "{cc}/uh spawns reset {ci}: removes all registered spawn points."
         
         specHelpTitle: "{aqua}------ Spectator commands ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Please note{ci}: because SpectatorPlus is not present, a spectator is {italic}only{ci} an ignored player."
@@ -191,6 +192,7 @@ keys:
     
     spawns:
         NaN: "{ce}This is not a number!"
+        syntaxError: "{ce}Syntax error; see /uh spawns."
         
         add:
             errorCoords: "{ce}You need to specify the coordinates from the console."
@@ -198,6 +200,16 @@ keys:
             usage: "{ce}Usage: /uh spawns add <x> <z>"
             added: "{cs}Spawn added in the world {0}: {1};{2}"
             outOfLimits: "{ce}You cannot add a spawn point out of the borders."
+        
+        assumptions:
+            solo: "{ci}No team found: assuming the game is a solo game."
+            partialSolo: "{ci}Some players are not in a team; their number was added to the spawn count."
+        
+        generate:
+            nothingToDo: "{ci}You asked a void generation. Thus, the generation is empty."
+            unsupportedMethod: "{ce}The generation method “{0}” is not (yet?) supported."
+            success: "{cs}Successfully generated the asked spawn points."
+            impossible: "{ce}You asked for the impossible: there are too many spawn points on a too small surface. Decrease the spawn count or the minimal distance between two points."
         
         list:
             nothing: "{ce}There isn't any registered spawn point."

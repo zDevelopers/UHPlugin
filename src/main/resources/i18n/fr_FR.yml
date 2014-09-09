@@ -69,6 +69,7 @@ keys:
         spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: ajoute un point de démarrage aux coordonnées données, dans le monde principal."
         spawnsHelpGenerate: "{cc}/uh spawns generate <circular|squared|random> [taille = taille actuelle] [distanceMin = 250] [nombre = nombre d'équipes] {ci}: génère automagiquement des points de démarrage selon la forme donnée."
         spawnsHelpList: "{cc}/uh spawns list {ci}: liste les points de démarrage enregistrés."
+        spawnsHelpDump: "{cc}/uh spawns dump {ci}: affiche les points de démarrage dans un format exportable. {gray}Utilisez ceci pour afficher les points sur un graph, par exemple."
         spawnsHelpReset: "{cc}/uh spawns reset {ci}: supprime tous les points de démarrage enregistrés."
         
         specHelpTitle: "{aqua}------ Commandes liées aux spectateurs ------"
@@ -191,6 +192,7 @@ keys:
     
     spawns:
         NaN: "{ce}Ceci n'est pas un nombre !"
+        syntaxError: "{ce}Erreur de syntaxe ; consultez /uh spawns."
         
         add:
             errorCoords: "{ce}Vous devez spécifier les coordonnées depuis la console."
@@ -199,6 +201,16 @@ keys:
             added: "{cs}Point de démarrage ajouté dans le monde {0} : {1};{2}"
             outOfLimits: "{ce}Vous ne pouvez pas ajouter un point de démarrage hors des bordures."
         
+        assumptions:
+            solo: "{ci}Aucune équipe trouvée : le jeu est considéré comme solo."
+            partialSolo: "{ci}Certains joueurs ne sont pas dans une équipe ; leur nombre a été ajoutés aux points de démarrage à générer."
+        
+        generate:
+            nothingToDo: "{ci}Vous avez demandé de ne rien générer. Rien ne sera généré."
+            unsupportedMethod: "{ce}La méthode de génération « {0} » n'est actuellement pas supportée."
+            success: "{cs}Génération des points de démarrage effectuée avec succès."
+            impossible: "{ce}Vous avez demandé l'impossible : il y a trop de points sur une trop petite surface. Diminuez le nombre de points à générer ou la distance minimale entre deux points."
+                
         list:
             nothing: "{ce}Il n'y a pas de point de démarrage enregistré."
             count: "{ci}Il y a {0} points de démarrage enregistrés."
