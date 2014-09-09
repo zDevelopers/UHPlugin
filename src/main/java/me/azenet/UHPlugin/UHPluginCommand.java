@@ -564,10 +564,29 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 			
 			else if(subcommand.equalsIgnoreCase("dump")) { // /uh spawns dump
-				String dump = "";
+				
+				// We want one list per world
+				Map<World,List<Location>> spanwsInWorlds = new HashMap<World,List<Location>>();
+				for(World world : p.getServer().getWorlds()) {
+					spanwsInWorlds.put(world, new LinkedList<Location>());
+				}
 				
 				for(Location spawn : p.getSpawnsManager().getSpawnPoints()) {
-					dump += spawn.getBlockX() + "," + spawn.getBlockZ() + "\n";
+					spanwsInWorlds.get(spawn.getWorld()).add(spawn);
+				}
+				
+				String dump = "";
+				
+				for(Entry<World, List<Location>> spanwsInWorld : spanwsInWorlds.entrySet()) {
+					if(spanwsInWorld.getValue().size() == 0) {
+						continue;
+					}
+					
+					dump += "\n* " + spanwsInWorld.getKey().getName() + "\n";
+					
+					for(Location spawn : spanwsInWorld.getValue()) {
+						dump += spawn.getBlockX() + "," + spawn.getBlockZ() + "\n";
+					}
 				}
 				
 				sender.sendMessage(dump);
