@@ -492,6 +492,8 @@ public class UHSpawnsManager {
 						(currentCircleDiameter / 2) * Math.sin(currentAngle) + zCenter
 				);
 				
+				currentAngle += angleBetweenTwoPoints;
+				
 				if(!p.getBorderManager().isInsideBorder(point, regionDiameter)) { // Just in case
 					continue circleLoop;
 				}
@@ -507,8 +509,6 @@ public class UHSpawnsManager {
 				if(countGeneratedPoints >= spawnCount) {
 					break generationLoop;
 				}
-				
-				currentAngle += angleBetweenTwoPoints;
 			}
 			
 			// So, this circle is done.
