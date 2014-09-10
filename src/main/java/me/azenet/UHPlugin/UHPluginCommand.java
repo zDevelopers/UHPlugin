@@ -50,6 +50,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	private ArrayList<String> commands = new ArrayList<String>();
 	private ArrayList<String> teamCommands = new ArrayList<String>();
+	private ArrayList<String> spawnsCommands = new ArrayList<String>();
 	private ArrayList<String> tpCommands = new ArrayList<String>();
 	private ArrayList<String> timersCommands = new ArrayList<String>();
 	private ArrayList<String> specCommands = new ArrayList<String>();
@@ -86,6 +87,13 @@ public class UHPluginCommand implements CommandExecutor {
 		teamCommands.add("leave");
 		teamCommands.add("list");
 		teamCommands.add("reset");
+		
+		spawnsCommands.add("add");
+		spawnsCommands.add("generate");
+		spawnsCommands.add("remove");
+		spawnsCommands.add("list");
+		spawnsCommands.add("dump");
+		spawnsCommands.add("reset");
 		
 		tpCommands.add("team");
 		tpCommands.add("spectators");
@@ -1902,6 +1910,10 @@ public class UHPluginCommand implements CommandExecutor {
 
 	public ArrayList<String> getTeamCommands() {
 		return teamCommands;
+	}
+	
+	public ArrayList<String> getSpawnsCommands() {
+		return spawnsCommands;
 	}
 	
 	public ArrayList<String> getTPCommands() {

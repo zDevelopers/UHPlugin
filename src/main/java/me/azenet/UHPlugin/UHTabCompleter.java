@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -32,26 +33,12 @@ import org.bukkit.entity.Player;
 public class UHTabCompleter implements TabCompleter {
 	
 	private UHPlugin p = null;
-	
-	private ArrayList<String> commands = null;
-	private ArrayList<String> teamCommands = null;
-	private ArrayList<String> tpCommands = null;
-	private ArrayList<String> specCommands = null;
-	private ArrayList<String> borderCommands = null;
-	private ArrayList<String> freezeCommands = null;
 
 	private ArrayList<String> colors = new ArrayList<String>();
 	
 	
 	public UHTabCompleter(UHPlugin plugin) {
 		this.p = plugin;
-		
-		this.commands = p.getCommandManager().getCommands();
-		this.teamCommands = p.getCommandManager().getTeamCommands();
-		this.tpCommands = p.getCommandManager().getTPCommands();
-		this.specCommands = p.getCommandManager().getSpecCommands();
-		this.borderCommands = p.getCommandManager().getBorderCommands();
-		this.freezeCommands = p.getCommandManager().getFreezeCommands();
 		
 		this.colors.add("aqua");
 		this.colors.add("black");
@@ -96,7 +83,7 @@ public class UHTabCompleter implements TabCompleter {
 		
 		/** Autocompletion for subcommands **/
 		if(args.length == 1) {
-			return getAutocompleteSuggestions(args[0], this.commands);
+			return getAutocompleteSuggestions(args[0], p.getCommandManager().getCommands());
 		}
 		
 		/** Autocompletion for /uh team **/
@@ -105,7 +92,7 @@ public class UHTabCompleter implements TabCompleter {
 			
 			// /uh team <?>
 			if(args.length == 2) {
-				return getAutocompleteSuggestions(args[1], this.teamCommands);
+				return getAutocompleteSuggestions(args[1], p.getCommandManager().getTeamCommands());
 			}
 			
 			// /uh team subcommand <?>
@@ -139,11 +126,42 @@ public class UHTabCompleter implements TabCompleter {
 			}
 		}
 		
+		/** Autocompletion for /uh spawns **/
+		else if(args[0].equalsIgnoreCase("spawns")) {
+			// /uh spawns <?>
+			if(args.length == 2) {
+				return getAutocompleteSuggestions(args[1], p.getCommandManager().getSpawnsCommands());
+			}
+			
+			if(args.length >= 3 && args[1].equalsIgnoreCase("generate")) { // /uh spawns generate <?>
+				
+				// Generation methods - /uh spawns generate <?>
+				if(args.length == 3) {
+					ArrayList<String> suggested = new ArrayList<String>();
+					suggested.add("random");
+					suggested.add("circular");
+					suggested.add("grid");
+					
+					return getAutocompleteSuggestions(args[2], suggested);
+				}
+				
+				// Worlds - /uh spawns generate - - - - - - <?>
+				else if(args.length == 9) {
+					ArrayList<String> suggested = new ArrayList<String>();
+					for(World world : p.getServer().getWorlds()) {
+						suggested.add(world.getName());
+					}
+					
+					return getAutocompleteSuggestions(args[8], suggested);
+				}
+			}
+		}
+		
 		/** Autocompletion for /uh tp **/
 		else if(args[0].equalsIgnoreCase("tp")) {
 			// /uh tp <?>
 			if(args.length == 2) {
-				return getAutocompleteSuggestions(args[1], this.tpCommands);
+				return getAutocompleteSuggestions(args[1], p.getCommandManager().getTPCommands());
 			}
 			
 			// /uh tp spectators: no autocomplete needed (only pseudonyms).
@@ -215,7 +233,7 @@ public class UHTabCompleter implements TabCompleter {
 			
 			// /uh spec <?>
 			if(args.length == 2) {
-				return getAutocompleteSuggestions(args[1], this.specCommands);
+				return getAutocompleteSuggestions(args[1], p.getCommandManager().getSpecCommands());
 			}
 			
 			if(args.length == 3) {
@@ -260,7 +278,7 @@ public class UHTabCompleter implements TabCompleter {
 			
 			// /uh freeze <?>
 			if(args.length == 2) {
-				return getAutocompleteSuggestions(args[1], this.freezeCommands);
+				return getAutocompleteSuggestions(args[1], p.getCommandManager().getFreezeCommands());
 			}
 			
 		}
@@ -270,7 +288,7 @@ public class UHTabCompleter implements TabCompleter {
 			
 			// /uh border <?>
 			if(args.length == 2) {
-				return getAutocompleteSuggestions(args[1], this.borderCommands);
+				return getAutocompleteSuggestions(args[1], p.getCommandManager().getBorderCommands());
 			}
 			
 			else if(args[1].equalsIgnoreCase("warning") && args.length == 3) { // /uh border warning <?=cancel>
