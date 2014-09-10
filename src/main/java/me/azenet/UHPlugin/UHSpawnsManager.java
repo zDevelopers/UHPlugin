@@ -482,7 +482,7 @@ public class UHSpawnsManager {
 			// Let's generate these points.
 			double currentAngle = 0d;
 			
-			circleLoop: while(currentAngle <= 2 * Math.PI) {
+			circleLoop: while(currentAngle <= 2 * Math.PI - angleBetweenTwoPoints) {
 				// The coordinates of a point in the circle.
 				// Cf. your trigonometry! ;)
 				Location point = new Location(
