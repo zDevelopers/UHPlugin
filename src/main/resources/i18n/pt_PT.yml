@@ -37,8 +37,7 @@ keys:
         helpStartSlow: "{cc}/uh start slow {ci}: prepara o Jogo devagar, em 2 etapas, para servers pequenos."
         helpShift: "{cc}/uh shift {ci}: passa para o proximo episodio."
         helpTeam: "{cc}/uh team {ci}: edita as equipas. Faz /uh team para detalhes."
-        helpAddspawn: "{cc}/uh addspawn {ci}: adiciona um ponto de Spawn para um equipa ou jogador, no sitio onde e executado."
-        helpAddspawnXZ: "{cc}/uh addspawn <x> <z> {ci}: adiciona um ponto de Spawn para um equipa ou jogador, nas coordenadas indicadas."
+        helpSpawns: "{cc}/uh spawns {ci}: gere os pontos de spawn. Faz /uh spawns para detalhes."
         helpSpec: "{cc}/uh spec {ci}: edita os espectadores. Faz /uh spec para detalhes."
         helpWall: "{cc}/uh generatewalls {ci}: gera as paredes, segundo as configuracoes."
         helpBorder: "{cc}/uh border {ci}: edita os limites. Faz /uh border para detalhes."
@@ -53,6 +52,7 @@ keys:
         helpFreeze: "{cc}/uh freeze {ci}: (Des)Congela o Jogo todo, ou a um jogador. Faz /uh freeze para detalhes."
         helpFinish: "{cc}/uh finish {ci}: Exibe o nome do(s) Vencedor(es) e lanca alguns foguetes."
         helpTP: "{cc}/uh tp {ci}: teleporta os Espectadores ou uma Equipa inteira. Faz /uh tp para detalhes."
+        helpTimers: "{cc}/uh timers {ci}: manages the timers. See /uh timers for details."
         helpAbout: "{cc}/uh about {ci}: informacao sobre o Plugin e as Traducoes."
         
         teamHelpTitle: "{aqua}------ Comandos para Equipas ------"
@@ -63,6 +63,15 @@ keys:
         teamHelpLeave: "{cc}/uh team leave <jogador> {ci}: retira um jogador da sua equipa."
         teamHelpList: "{cc}/uh team list {ci}: lista das equipas e seus jogadores."
         teamHelpReset: "{cc}/uh team reset {ci}: elimina todas as equipas."
+        
+        spawnsHelpTitle: "{aqua}------ Comandos para os Spawns ------"
+        spawnsHelpAdd: "{cc}/uh spawns add {ci}: adiciona um ponto de spawn para uma equipa ou jogador, no local onde e executado."
+        spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: adiciona um ponto de spawn para uma equipa ou jogador, nas coordenadas inseridas, no Mundo Default."
+        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|squared|random> [Tamanho = Tamanho dos Limites] [DistanciaMin = 250] [pontos de spawn = Numero Equipas] [xCentro = xSpawn] [zCentro = zSpawn] [world = mundo onde e executado o comando] {ci}: gera automaticamente os pontos de Spawn com a forma inserida."
+        spawnsHelpList: "{cc}/uh spawns list {ci}: lista dos pontos de spawn registados."
+        spawnsHelpDump: "{cc}/uh spawns dump {ci}: mostra os pontos de spawn num formato exportavel. {gray}Pode ser usado em alguns sites para ver os pontos de Spawn, por exemplo."
+        spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: remove pontos de spawn com as coordenadas inseridas, ou o local onde o comando e executado se nao forem inseridas coordenadas."
+        spawnsHelpReset: "{cc}/uh spawns reset {ci}: remove todos os pontos de spawn registados.
         
         specHelpTitle: "{aqua}------ Comandos para Espectadores ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Atencao{ci}: como o SpectatorPlus nao esta instalado, um espectador e {italic}apenas{ci} um jogador ignorado (sem vanish)."
@@ -87,7 +96,19 @@ keys:
         tpHelpTeam: "{cc}/uh tp team <x> <y> <z> | <jogador de destino> <equipa ...> {ci}: teleportar uma equipa para um local ou jogador."
         tpHelpSpectators: "{cc}/uh tp spectators <x> <y> <z> | <jogador de destino> {ci}: teleporta os espectadores (tal como os jogadores mortos) para um local ou jogador."
         
-        
+        timersHelpTitle: "{aqua}------ Comandos para os Temporizadores ------"
+        timersHelpAdd: "{cc}/uh timers add <duracao> <titulo ...> {ci}: adiciona um temporizador."
+        timersHelpSet: "{cc}/uh timers set <duration> <titulo ...> {ci}: muda a duracao de um temporizador."
+        timersHelpDisplay: "{cc}/uh timers display <titulo ...> {ci}: mostra um temporizador no scoreboard. Automatico quando um temporizador e iniciado."
+        timersHelpHide: "{cc}/uh timers hide <titulo ...> {ci}: remove um temporizador do scoreboard. Nao para o temporizador."
+        timersHelpStart: "{cc}/uh timers start <titulo ...> {ci}: inicia um temporizador."
+        timersHelpPause: "{cc}/uh timers pause <titulo ...> {ci}: pausa um temporizador."
+        timersHelpRestart: "{cc}/uh timers restart <titulo ...> {ci}: retoma o temporizador."
+        timersHelpStop: "{cc}/uh timers stop <titulo ...> {ci}: para um temporizador. O temporizador e removido do scoreboard."
+        timersHelpRemove: "{cc}/uh timers remove <titulo ...> {ci}: remove um temporizador."
+        timersHelpList: "{cc}/uh timers list {ci}: lista de todos os temporizadores registados."
+        timersHelpDurations: "{gray}'<duracao>' formato : mm, mm:ss ou hh:mm:ss."
+
     about:
         authors: "Plugin feito com amor por {0}."
         and: "e"
@@ -115,7 +136,7 @@ keys:
         go: "{green}----- GO GO GO -----"
     
     finish:
-        notStarted: "{ce}O Jogo ainda nao começou!"
+        notStarted: "{ce}O Jogo ainda nao comecou!"
         notFinished: "{ce}Nao esta so uma Equipa Viva!"
         
         and: "e"
@@ -169,11 +190,42 @@ keys:
         blocksError: "Impossivel construir os Limites, os blocos nas configuracoes sao invalidos."
         done: "{cst}Limites Criados com Sucesso."
     
-    addspawn:
-        errorCoords: "{ce}Precisas de especificar as coordenadas apartir do Console."
-        error2Coords: "{ce}Precisas de especificar as Coordenadas."
-        usage: "{ce}Usa: /uh addspawn <x> <z>"
-        added: "{cs}Ponto de Spawn adicionado: {0},{1}"
+    spawns:
+        NaN: "{ce}Isto nao e um numero!"
+        syntaxError: "{ce}Syntax error; Faz /uh spawns."
+        errorCoords: "{ce}Tens de especificar as coordenadas a partir da Console."
+        error2Coords: "{ce}Precisas de especificar pelo menos duas coordenadas."
+        
+        add:
+            added: "{cs}Ponto de Spawn adicionado no Mundo {0}: {1};{2}"
+            outOfLimits: "{ce}Nao podes adicionar um ponto de spawn fora dos Limites."
+            noSafeSpot: "{ce}Impossivel adicionar este ponto de Spawn: nao foi encontrado um ponto de spawn no Nether."
+        
+        assumptions:
+            solo: "{ci}Nenhuma EQUIPA encontrada. Assumindo que o jogo e em modo SOLO."
+            partialSolo: "{ci}Alguns jogadores nao estao em nenhuma equipa; ficarao a jogar sozinhos; foram adicionados ao numero de Pontos de Spawn necessarios."
+        
+        generate:
+            nothingToDo: "{ci}You asked a void generation. Thus, the generation is empty."
+            unsupportedMethod: "{ce}The generation method “{0}” is not (yet?) supported."
+            unknownWorld: "{ce}O Mundo {0} nao existe."
+            success: "{cs}Pontos de Spawn gerados com sucesso."
+            impossible: "{ce}Pediste o Impossivel: existem demasiados pontos de spawn no espaco muito pequeno. Diminui os pontos de spawn ou o espaco minimo entre dois pontos."
+        
+        list:
+            nothing: "{ce}Nao esta nenhum Ponto de Spawn registado."
+            count: "{ci}Estao {0} Pontos de Spawn registados."
+            world: "{lightpurple}Mundo {0}"
+            item:
+                overworld: "{green}{0}{darkgreen};{green}{1}"
+                nether: "{red}{0}{darkred};{red}{1}"
+                end: "{yellow}{0}{gold};{yellow}{1}"
+                other: "{gray}{0}{darkgray};{gray}{1}"
+        
+        remove:
+            removed: "{cs}O Ponto de Spawn {1};{2} no Mundo {0} foi Removido."
+        
+        reset: "{cs}TODOS os Pontos de Spawn foram Removidos."
     
     team:
         syntaxError: "{ce}Syntax Error. Usa: /uh team para veres os Comandos."
@@ -311,10 +363,12 @@ keys:
             
             messageSquared: "{ce}Estas fora dos Futuros Limtes de {0}*{0}."
             messageCircular: "{ce}Estas fora do Futuro Limite de diametro {0}."
-            messageDistance: "{ci}Tens de andar {0} blocos para estares dentro dos Novos Limites."
-            messageDistanceTime: "{ci}Tens de andar {0} blocos para estares dentro dos Novos Limites e {1} minutos para o fazer."
             
-            timerUp: "{cs}Acabou o tempo para serem feitos os Novos Limites!"
+            messageDistance: "{ci}Tens de andar {0} blocos para estares dentro dos Novos Limites."
+            
+            nameTimer: "Proximos Limites"
+            
+            timerUp: "{cs}Acabou o tempo para os Novos Limites!"
         
         check:
             allPlayersInside: "{cs}Todos os Jogadores estao dentro dos Novos Limites."
@@ -323,6 +377,28 @@ keys:
             itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (Perto dos Novos Limites)"
             itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (Muito Perto dos Novos Limites)"
 
+    timers:
+        syntaxError: "{ce}Syntax error. Usa: /uh timers para detalhes."
+        durationSyntaxError: "{ce}A Duracao que inseriste e nao e valida. Os formatos que podes utilizar sao mm ou mm:ss ou hh:mm:ss."
+        timerDoesNotExists: "{ce}Este temporizador nao esta registado."
+        alreadyExists: "{ce}Um temporizador com o nome {0}{ce} ja existe; escolhe outro nome."
+        
+        added: "{cs}O temporizador {0}{cs} (duracao {1}) foi adicionado."
+        set: "{cs}A Duracao do temporizador {0}{cs} e agora {1}."
+        displayed: "{cs}O temporizador {0}{cs} e agora Exibido."
+        hidden: "{cs}O temporizador {0}{cs} esta agora Oculto."
+        started: "{cs}O temporizador {0}{cs} foi Iniciado."
+        paused: "{cs}O temporizador {0}{cs} foi Pausado."
+        restarted: "{cs}O temporizador {0}{cs} foi Retomado."
+        stopped: "{cs}O temporizador {0}{cs} foi Parado."
+        removed: "{cs}O temporizador {0}{cs} foi Removido."
+        
+        list:
+            count: "{ci}Estao registados {0} temporizadores."
+            itemRunning: "{green} â€¢ {ci}{0}{ci} - total {1} segundos - {2}"
+            itemPaused: "{yellow} â€¢ {{ci}{0}{ci} - total {1} segundos - {2}"
+            itemStopped: "{red} â€¢ {ci}{0}{ci} - total {1} segundos"
+
     protips:
         base: "{darkpurple}Dica!"
         
@@ -330,4 +406,3 @@ keys:
             lock: "{gray}Podes usar {cc}/togglechat{gray} para mudar e bloquear o chat entre o chat de Equipa e o chat Global."
             useTCommand: "{gray}Podes enviar uma mensagem rapida para a tua equipa com {cc}/t <mensagem>{gray}."
             useGCommand: "{gray}Pode enviar mensagens rapidas para todos {cc}/g <mensagem>{gray}."
-
