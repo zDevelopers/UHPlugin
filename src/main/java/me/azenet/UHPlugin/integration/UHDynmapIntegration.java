@@ -24,6 +24,7 @@ import me.azenet.UHPlugin.UHTeam;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -183,7 +184,13 @@ public class UHDynmapIntegration {
 		// Ref. https://github.com/webbukkit/dynmap/wiki/Using-markers
 		
 		MarkerIcon icon = null;
-		switch(team.getColor()) {
+		
+		ChatColor teamColor = team.getColor();
+		if(teamColor == null) {
+			teamColor = ChatColor.GREEN; // green flags for solo games
+		}
+		
+		switch(teamColor) {
 			case BLUE:
 			case DARK_BLUE:
 			case AQUA:
