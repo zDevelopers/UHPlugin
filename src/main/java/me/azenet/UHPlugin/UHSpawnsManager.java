@@ -480,9 +480,10 @@ public class UHSpawnsManager {
 			}
 			
 			// Let's generate these points.
-			double currentAngle = 0d;
+			double startAngle   = (new Random()).nextDouble() * 2 * Math.PI;
+			double currentAngle = startAngle;
 			
-			circleLoop: while(currentAngle <= 2 * Math.PI - angleBetweenTwoPoints) {
+			circleLoop: while(currentAngle <= 2 * Math.PI - angleBetweenTwoPoints + startAngle) {
 				// The coordinates of a point in the circle.
 				// Cf. your trigonometry! ;)
 				Location point = new Location(
