@@ -471,7 +471,7 @@ public class UHSpawnsManager {
 			
 			// Not all the points can be in this circle. We generate the densiest circle.
 			if(pointsPerDenseCircles < spawnCount - countGeneratedPoints) {
-				angleBetweenTwoPoints = denseCircleAngle;
+				angleBetweenTwoPoints = 2 * Math.PI / (Double.valueOf(pointsPerDenseCircles));
 			}
 			// All the remaining points can be in this circle. We generates the less dense circle with
 			// these points.
