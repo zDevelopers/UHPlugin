@@ -104,7 +104,7 @@ public class UHPluginCommand implements CommandExecutor {
 		timersCommands.add("hide");
 		timersCommands.add("start");
 		timersCommands.add("pause");
-		timersCommands.add("restart");
+		timersCommands.add("resume");
 		timersCommands.add("stop");
 		timersCommands.add("remove");
 		timersCommands.add("list");
@@ -1510,7 +1510,7 @@ public class UHPluginCommand implements CommandExecutor {
 	/**
 	 * This command manages timers.
 	 * 
-	 * Usage: /uh timers < add | set | display | hide | start | pause | restart | stop | remove | list >
+	 * Usage: /uh timers < add | set | display | hide | start | pause | resume | stop | remove | list >
 	 * 
 	 * @param sender
 	 * @param command
@@ -1531,7 +1531,7 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.timersHelpHide"));
 			sender.sendMessage(i.t("cmd.timersHelpStart"));
 			sender.sendMessage(i.t("cmd.timersHelpPause"));
-			sender.sendMessage(i.t("cmd.timersHelpRestart"));
+			sender.sendMessage(i.t("cmd.timersHelpResume"));
 			sender.sendMessage(i.t("cmd.timersHelpStop"));
 			sender.sendMessage(i.t("cmd.timersHelpRemove"));
 			sender.sendMessage(i.t("cmd.timersHelpList"));
@@ -1646,7 +1646,7 @@ public class UHPluginCommand implements CommandExecutor {
 				sender.sendMessage(i.t("timers.paused", timer.getDisplayName()));
 			}
 			
-			else if(subcommand.equalsIgnoreCase("restart")) { // /uh timers restart <name ...>
+			else if(subcommand.equalsIgnoreCase("resume")) { // /uh timers resume <name ...>
 				String timerName = UHUtils.getStringFromCommandArguments(args, 2);
 				
 				UHTimer timer = p.getTimerManager().getTimer(timerName);
@@ -1656,7 +1656,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				
 				timer.setPaused(false);
-				sender.sendMessage(i.t("timers.restarted", timer.getDisplayName()));
+				sender.sendMessage(i.t("timers.resumed", timer.getDisplayName()));
 			}
 			
 			else if(subcommand.equalsIgnoreCase("stop")) { // /uh timers stop <name ...>

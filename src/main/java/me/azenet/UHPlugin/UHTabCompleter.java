@@ -205,7 +205,7 @@ public class UHTabCompleter implements TabCompleter {
 						|| args[1].equalsIgnoreCase("hide")
 						|| args[1].equalsIgnoreCase("start")
 						|| args[1].equalsIgnoreCase("pause")
-						|| args[1].equalsIgnoreCase("restart")
+						|| args[1].equalsIgnoreCase("resume")
 						|| args[1].equalsIgnoreCase("stop")
 						|| args[1].equalsIgnoreCase("remove")) {
 					timerNameIndex = 2;

@@ -103,7 +103,7 @@ keys:
         timersHelpHide: "{cc}/uh timers hide <titre ...> {ci}: retire un compteur du scoreboard. N'arrête pas le compteur."
         timersHelpStart: "{cc}/uh timers start <titre ...> {ci}: démarre un compte à rebours."
         timersHelpPause: "{cc}/uh timers pause <titre ...> {ci}: met en pause un comparateur."
-        timersHelpRestart: "{cc}/uh timers restart <title ...> {ci}: redémarre un compteur après une pause."
+        timersHelpResume: "{cc}/uh timers resume <title ...> {ci}: redémarre un compteur après une pause."
         timersHelpStop: "{cc}/uh timers stop <title ...> {ci}: force l'arrêt d'un compteur. Il est retiré du scoraboard."
         timersHelpRemove: "{cc}/uh timers remove <title ...> {ci}: supprime un compteur."
         timersHelpList: "{cc}/uh timers list {ci}: liste les compteurs enregistrés."
@@ -395,7 +395,7 @@ keys:
         hidden: "{cs}Le compteur {0}{cs} est désormais masqué."
         started: "{cs}Le compteur {0}{cs} a démarré."
         paused: "{cs}Le compteur {0}{cs} est désormais en pause."
-        restarted: "{cs}Le compteur {0}{cs} n'est plus en pause."
+        resumed: "{cs}Le compteur {0}{cs} n'est plus en pause."
         stopped: "{cs}Le compteur {0}{cs} a été arrêté."
         removed: "{cs}Le compteur {0}{cs} a été supprimé."
         

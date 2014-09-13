@@ -103,7 +103,7 @@ keys:
         timersHelpHide: "{cc}/uh timers hide <title ...> {ci}: removes a timer from the scoreboard. Don't stops the timer."
         timersHelpStart: "{cc}/uh timers start <title ...> {ci}: starts a timer."
         timersHelpPause: "{cc}/uh timers pause <title ...> {ci}: pauses a timer."
-        timersHelpRestart: "{cc}/uh timers restart <title ...> {ci}: unpauses a timer."
+        timersHelpResume: "{cc}/uh timers resume <title ...> {ci}: resumes a timer."
         timersHelpStop: "{cc}/uh timers stop <title ...> {ci}: stops a timer. The timer will be removed from the scoreboard."
         timersHelpRemove: "{cc}/uh timers remove <title ...> {ci}: deletes a timer."
         timersHelpList: "{cc}/uh timers list {ci}: lists the registered timers."
@@ -395,7 +395,7 @@ keys:
         hidden: "{cs}The timer {0}{cs} is now hidden."
         started: "{cs}The timer {0}{cs} was started."
         paused: "{cs}The timer {0}{cs} is now paused."
-        restarted: "{cs}The timer {0}{cs} is now unpaused."
+        resumed: "{cs}The timer {0}{cs} was resumed."
         stopped: "{cs}The timer {0}{cs} was stopped."
         removed: "{cs}The timer {0}{cs} has been deleted."
         

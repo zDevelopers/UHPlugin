@@ -103,7 +103,7 @@ keys:
         timersHelpHide: "{cc}/uh timers hide <titulo ...> {ci}: remove um temporizador do scoreboard. Nao para o temporizador."
         timersHelpStart: "{cc}/uh timers start <titulo ...> {ci}: inicia um temporizador."
         timersHelpPause: "{cc}/uh timers pause <titulo ...> {ci}: pausa um temporizador."
-        timersHelpRestart: "{cc}/uh timers restart <titulo ...> {ci}: retoma o temporizador."
+        timersHelpResume: "{cc}/uh timers resume <titulo ...> {ci}: retoma o temporizador."
         timersHelpStop: "{cc}/uh timers stop <titulo ...> {ci}: para um temporizador. O temporizador e removido do scoreboard."
         timersHelpRemove: "{cc}/uh timers remove <titulo ...> {ci}: remove um temporizador."
         timersHelpList: "{cc}/uh timers list {ci}: lista de todos os temporizadores registados."
@@ -389,7 +389,7 @@ keys:
         hidden: "{cs}O temporizador {0}{cs} esta agora Oculto."
         started: "{cs}O temporizador {0}{cs} foi Iniciado."
         paused: "{cs}O temporizador {0}{cs} foi Pausado."
-        restarted: "{cs}O temporizador {0}{cs} foi Retomado."
+        resumed: "{cs}O temporizador {0}{cs} foi Retomado."
         stopped: "{cs}O temporizador {0}{cs} foi Parado."
         removed: "{cs}O temporizador {0}{cs} foi Removido."
         
