@@ -293,7 +293,7 @@ keys:
     
     resurrect:
         usage: "{ce}Utilisation : /uh resurrect <joueur>"
-        unknownOrDead: "{ce}Je joueur ne joue pas ou n'est pas mort !"
+        unknownOrDead: "{ce}Ce joueur ne joue pas ou n'est pas mort !"
         offlineOk: "{cs}Comme {0} est déconnecté, il sera ressuscité dés qu'il se connectera. S'il l'était, il n'est plus banni."
         notDead: "{ce}{0} n'est pas mort !"
         broadcastMessage: "{gold}{0} est revenu d'entre les morts !"
