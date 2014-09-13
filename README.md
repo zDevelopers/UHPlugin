@@ -17,6 +17,7 @@ Please note, this README reflects the last development version. Some features li
    1. [Border & wall](#border-manager-and-wall-generator-included)
    1. [Gameplay tweaks](#gameplay-tweaks)
    1. [Death](#death)
+   1. [Timers](#timers)
    1. [Other plugins](#integration-into-other-plugins)
    1. [Options against lag & bugs](#provided-with-options-to-deal-with-lag-and-other-bugs)
    1. [Miscellaneous](#miscellaneous-features)
