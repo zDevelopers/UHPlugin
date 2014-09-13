@@ -67,7 +67,7 @@ keys:
         spawnsHelpTitle: "{aqua}------ Spawns points commands ------"
         spawnsHelpAdd: "{cc}/uh spawns add {ci}: adds a spawn point for a team or a player, at the current location of the sender."
         spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: adds a spawn point for a team or a player, at the provided coordinates, in the default world."
-        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|squared|random> [size = current size] [distanceMin = 250] [count = teams count] [xCenter = xSpawn] [zCenter = zSpawn] [world = sender's world] {ci}: automagically generates the spawn points following the given shape."
+        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|grid|random> [size = current size] [distanceMin = 250] [count = teams count] [xCenter = xSpawn] [zCenter = zSpawn] [world = sender's world] {ci}: automagically generates the spawn points following the given shape."
         spawnsHelpList: "{cc}/uh spawns list {ci}: lists the registered spawn points."
         spawnsHelpDump: "{cc}/uh spawns dump {ci}: displays the registered spawn points in an exportable format. {gray}Use this to plot the spawn points, as example."
         spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: removes the spawn points at the specified coordinates, or at the current location if the sender without coordinates."

@@ -44,7 +44,9 @@ For available configuration, please [see directly the configuration file](https:
 ### Automatic teleportation of the players
 
 - Manual teleportation spots set in the config, in game, or both.
-- Automatic set of teleportation spots is not supported.
+- Automatic set of teleportation spots following various shapes: `random`, `grid` or `circular`.  
+  All these shapes come with a minimal distance between two points, and the spots can be generated with any center, in any world (default: the sender's world, centered on the spawn of this world).
+- You can remove a spawn point, or all.
 - The teams (or players, if solo) are automatically teleported to a random teleportation spot.
 - Two teleportation modes available:
    - a “direct” one, all players are teleported in the same time;
@@ -132,8 +134,15 @@ All these gameplay tweaks are optional — see [the configuration file](https://
  - Announcements:
    - The death messages can be more visible (format can be set in the config, including color).
    - A team-death message can be sent when an entire team is dead.
-   - A death sound can be played (by default, WITHER_SPAWN) or not.
+   - A death sound can be played (by default, WITHER_SPAWN), or not.
    - You can send a lightning strike (only an effect, not a “real” one) when a player die, at the location of his death point.
+
+### Timers
+
+ - You can add arbitrary countdowns in game, displayed in the scoreboard or hidden.
+ - The timers are added in one time; started in another. So you can prepare all timers before the game.
+ - Each timer come with a title, displayed in the scoreboard; this title can be in colors using Minecraft's color codes with `&` (e.g. `&4` for dark red).
+ - You can pause a timer, resume it after; if you freeze the entire game all timers are paused.
 
 ### Integration into other plugins
 
@@ -192,9 +201,8 @@ Legend: `/uh command <required> [optional=default]`.
  - `/uh start slow` : launches the game slowly, in two steps, for smaller servers.
  - `/uh shift` : shifts an episode.
  - `/uh team` : manages the teams (add/remove team, add/remove a player into a team, list, reset).
- - `/uh addspawn` : adds a spawn point for a team or a player, at the current location of the sender.
- - `/uh addspawn <x> <z>` : adds a spawn point for a team or a player, at the provided coordinates.
- - `/uh spec` : manages the spectators (aka players ignored by /uh start) (add, remove, list).
+ - `/uh spawns` : manages the spawn points (add, generate, list, dump, remove, reset).
+ - `/uh spec` : manages the startup spectators (aka players ignored by /uh start) (add, remove, list).
  - `/uh border`: manages the border (current, set, warning, check)
  - `/uh generatewalls` : generates the walls according to the configuration.
 
@@ -221,7 +229,7 @@ Legend: `/uh command <required> [optional=default]`.
  - `uh.build`:  allows an user to build before the beginning of the game. Default: operator.
  - `uh.teamchat.self`: allows an user to send a private message to his own team. Default: everyone.
  - `uh.teamchat.others`: allows an user to enter into the private chat of another team. Default: operator.
- - `uh.<command>`: allows an user to use the command `/uh <command>`. Default: operator.
+ - `uh.<command>`: allows an user to use the command `/uh <command>`. Default: everyone for `uh.about`, operator else.
 
 If you don't want to bother with permissions: the operators can do anything; the non-ops, nothing (except play and use the team-chat with `/t`, `/togglechat` and `/g` — not `/togglechat <team ...>`).
 

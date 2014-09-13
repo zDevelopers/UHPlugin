@@ -67,7 +67,7 @@ keys:
         spawnsHelpTitle: "{aqua}------ Commandes de gestion des points de démarrage ------"
         spawnsHelpAdd: "{cc}/uh spawns add {ci}: ajoute un point de démarrage à la position de l'exécutant."
         spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: ajoute un point de démarrage aux coordonnées données, dans le monde principal."
-        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|squared|random> [taille = taille actuelle] [distanceMin = 250] [nombre = nombre d'équipes] [xCentre = xSpawn] [zCentre = zSpawn] [monde = monde de l'envoyeur] {ci}: génère automagiquement des points de démarrage selon la forme donnée."
+        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|grid|random> [taille = taille actuelle] [distanceMin = 250] [nombre = nombre d'équipes] [xCentre = xSpawn] [zCentre = zSpawn] [monde = monde de l'envoyeur] {ci}: génère automagiquement des points de démarrage selon la forme donnée."
         spawnsHelpList: "{cc}/uh spawns list {ci}: liste les points de démarrage enregistrés."
         spawnsHelpDump: "{cc}/uh spawns dump {ci}: affiche les points de démarrage dans un format exportable. {gray}Utilisez ceci pour afficher les points sur un graph, par exemple."
         spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: supprime les points de démarrage aux coordonnées spécifiées, ou à la position de l'envoyeur sans coordonnées."

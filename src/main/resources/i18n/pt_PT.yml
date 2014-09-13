@@ -67,7 +67,7 @@ keys:
         spawnsHelpTitle: "{aqua}------ Comandos para os Spawns ------"
         spawnsHelpAdd: "{cc}/uh spawns add {ci}: adiciona um ponto de spawn para uma equipa ou jogador, no local onde e executado."
         spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: adiciona um ponto de spawn para uma equipa ou jogador, nas coordenadas inseridas, no Mundo Default."
-        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|squared|random> [Tamanho = Tamanho dos Limites] [DistanciaMin = 250] [pontos de spawn = Numero Equipas] [xCentro = xSpawn] [zCentro = zSpawn] [world = mundo onde e executado o comando] {ci}: gera automaticamente os pontos de Spawn com a forma inserida."
+        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|grid|random> [Tamanho = Tamanho dos Limites] [DistanciaMin = 250] [pontos de spawn = Numero Equipas] [xCentro = xSpawn] [zCentro = zSpawn] [world = mundo onde e executado o comando] {ci}: gera automaticamente os pontos de Spawn com a forma inserida."
         spawnsHelpList: "{cc}/uh spawns list {ci}: lista dos pontos de spawn registados."
         spawnsHelpDump: "{cc}/uh spawns dump {ci}: mostra os pontos de spawn num formato exportavel. {gray}Pode ser usado em alguns sites para ver os pontos de Spawn, por exemplo."
         spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: remove pontos de spawn com as coordenadas inseridas, ou o local onde o comando e executado se nao forem inseridas coordenadas."
