@@ -22,7 +22,7 @@ keys:
         PLNotInstalled2: "{gray}As seguintes opcoes precisam do ProtocolLib:"
         PLNotInstalledItem: "{darkgray} - {gray}{0}"
         PLNotInstalled3: "{gray}ProtocolLib esta disponivel aqui: {0}"
-        
+    
     cmd:
         errorLoad: "{ce}Ocorreu um Erro, ve a console para detalhes. Provavelmente sera um Bug."
         errorUnknown: "{ce}Este comando nao existe. Faz /uh para veres os comandos existentes."
@@ -71,7 +71,7 @@ keys:
         spawnsHelpList: "{cc}/uh spawns list {ci}: lista dos pontos de spawn registados."
         spawnsHelpDump: "{cc}/uh spawns dump {ci}: mostra os pontos de spawn num formato exportavel. {gray}Pode ser usado em alguns sites para ver os pontos de Spawn, por exemplo."
         spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: remove pontos de spawn com as coordenadas inseridas, ou o local onde o comando e executado se nao forem inseridas coordenadas."
-        spawnsHelpReset: "{cc}/uh spawns reset {ci}: remove todos os pontos de spawn registados.
+        spawnsHelpReset: "{cc}/uh spawns reset {ci}: remove todos os pontos de spawn registados."
         
         specHelpTitle: "{aqua}------ Comandos para Espectadores ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Atencao{ci}: como o SpectatorPlus nao esta instalado, um espectador e {italic}apenas{ci} um jogador ignorado (sem vanish)."

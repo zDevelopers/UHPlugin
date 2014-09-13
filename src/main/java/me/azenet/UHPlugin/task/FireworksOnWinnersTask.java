@@ -44,7 +44,7 @@ public class FireworksOnWinnersTask extends BukkitRunnable {
 	@Override
 	public void run() {
 		for(Player winner : winners) {
-			UHUtils.generateRandomFirework(winner.getLocation().add(0.5, 0.5, 0.5), 0, 5);
+			UHUtils.generateRandomFirework(winner.getLocation(), 0, 5);
 		}
 		
 		if((System.currentTimeMillis() - startTime) / 1000 > p.getConfig().getInt("finish.fireworks.duration", 10)) {
