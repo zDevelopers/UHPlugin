@@ -157,6 +157,7 @@ finish:
     fireworks:
         enabled: true  # If true, some fireworks will be launched at the location of the winners.
         duration: 10   # In seconds.
+        areaSize: 6    # The size of the square, centered on each player, where the fireworks will be launched.
 
 
 dynmap:
