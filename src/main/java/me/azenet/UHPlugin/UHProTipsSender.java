@@ -51,9 +51,7 @@ public class UHProTipsSender {
 	
 	Map<String,ArrayList<UUID>> protipsGiven = new HashMap<String,ArrayList<UUID>>(); 
 	
-	Sound proTipsSound = null;
-	Float proTipsSoundVolume = 1f;
-	Float proTipsSoundPitch = 1f;
+	UHSound proTipsSound = null;
 	
 	public static final String PROTIP_LOCK_CHAT = "teamchat.lock";
 	public static final String PROTIP_USE_G_COMMAND = "teamchat.useGCommand";
@@ -69,9 +67,9 @@ public class UHProTipsSender {
 		protipsGiven.put(PROTIP_USE_T_COMMAND, new ArrayList<UUID>());
 		
 		// Sound
-		proTipsSound = UHUtils.string2Sound(p.getConfig().getString("protips.sound.name"));
-		proTipsSoundVolume = (float) p.getConfig().getDouble("protips.sound.volume");
-		proTipsSoundPitch = (float) p.getConfig().getDouble("protips.sound.pitch");
+		proTipsSound = new UHSound(UHUtils.string2Sound(p.getConfig().getString("protips.sound.name")));
+		proTipsSound.setVolume((float) p.getConfig().getDouble("protips.sound.volume"));
+		proTipsSound.setPitch((float) p.getConfig().getDouble("protips.sound.pitch"));
 		
 	}
 	
@@ -104,7 +102,7 @@ public class UHProTipsSender {
 		
 		
 		player.sendMessage(i.t("protips.base") + " " + ChatColor.RESET + i.t("protips." + protip));
-		player.playSound(player.getLocation(), proTipsSound, proTipsSoundVolume, proTipsSoundPitch);
+		proTipsSound.play(player);
 
 		return false;
 	}
