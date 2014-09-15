@@ -27,6 +27,7 @@ import java.util.UUID;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 
@@ -50,6 +51,10 @@ public class UHProTipsSender {
 	
 	Map<String,ArrayList<UUID>> protipsGiven = new HashMap<String,ArrayList<UUID>>(); 
 	
+	Sound proTipsSound = null;
+	Float proTipsSoundVolume = 1f;
+	Float proTipsSoundPitch = 1f;
+	
 	public static final String PROTIP_LOCK_CHAT = "teamchat.lock";
 	public static final String PROTIP_USE_G_COMMAND = "teamchat.useGCommand";
 	public static final String PROTIP_USE_T_COMMAND = "teamchat.useTCommand";
@@ -59,10 +64,15 @@ public class UHProTipsSender {
 		this.i = p.getI18n();
 		
 		// Initialization of the "protips" map
-		
 		protipsGiven.put(PROTIP_LOCK_CHAT, new ArrayList<UUID>());
 		protipsGiven.put(PROTIP_USE_G_COMMAND, new ArrayList<UUID>());
 		protipsGiven.put(PROTIP_USE_T_COMMAND, new ArrayList<UUID>());
+		
+		// Sound
+		proTipsSound = UHUtils.string2Sound(p.getConfig().getString("protips.sound.name"));
+		proTipsSoundVolume = (float) p.getConfig().getDouble("protips.sound.volume");
+		proTipsSoundPitch = (float) p.getConfig().getDouble("protips.sound.pitch");
+		
 	}
 	
 	
@@ -92,8 +102,10 @@ public class UHProTipsSender {
 		
 		protipsGiven.get(protip).add(player.getUniqueId());
 		
-		player.sendMessage(i.t("protips.base") + " " + ChatColor.RESET + i.t("protips." + protip));
 		
+		player.sendMessage(i.t("protips.base") + " " + ChatColor.RESET + i.t("protips." + protip));
+		player.playSound(player.getLocation(), proTipsSound, proTipsSoundVolume, proTipsSoundPitch);
+
 		return false;
 	}
 	

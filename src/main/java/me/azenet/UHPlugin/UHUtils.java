@@ -26,6 +26,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -65,6 +66,29 @@ public class UHUtils {
 	}
 	
 	/**
+	 * Converts a string to a Sound.
+	 * <p>
+	 * "AMBIENCE_THUNDER", "ambiance thunder" and "AMBIENCE THunDER" are recognized as
+	 * Sound.AMBIENCE_THUNDER, as example.
+	 * 
+	 * @param soundName The text to be converted.
+	 * @return The corresponding Sound, or null if there isn't any match.
+	 */
+	public static Sound string2Sound(String soundName) {
+		if(soundName != null) {
+			soundName = soundName.trim().toUpperCase().replace(" ", "_");
+			try {
+				return Sound.valueOf(soundName);
+			} catch(IllegalArgumentException e) {
+				// Non-existent sound
+				return null;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Converts a string to a number of seconds.
 	 * <p>
 	 * Format:
@@ -81,7 +105,7 @@ public class UHUtils {
 	 * @throws IllegalArgumentException if the text is not formatted as above.
 	 * @throws NumberFormatException if the text between the colons cannot be converted in integers.
 	 */
-	public static int string2time(String text) {
+	public static int string2Time(String text) {
 		String[] splitted = text.split(":");
 		
 		if(splitted.length > 3) {

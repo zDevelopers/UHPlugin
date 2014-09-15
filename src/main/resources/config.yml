@@ -168,6 +168,11 @@ dynmap:
 logTeamChat: false
 
 protips:
+    sound:
+        name: NOTE_PLING  # Cf. http://l.carrade.eu/bukkit-sounds ; "NONE" if you don't want a sound.
+        volume: 2
+        pitch: 3
+    
     teamchat:
         useTCommand: true  # Protip: team-chat command
         lock: true         # Protip: can lock the team-chat

@@ -1546,7 +1546,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				else {
 					try {
-						Integer duration = UHUtils.string2time(args[2]);
+						Integer duration = UHUtils.string2Time(args[2]);
 						String timerName = UHUtils.getStringFromCommandArguments(args, 3);
 						
 						if(p.getTimerManager().getTimer(timerName) != null) {
@@ -1572,7 +1572,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				else {
 					try {
-						Integer duration = UHUtils.string2time(args[2]);
+						Integer duration = UHUtils.string2Time(args[2]);
 						String timerName = UHUtils.getStringFromCommandArguments(args, 3);
 						
 						UHTimer timer = p.getTimerManager().getTimer(timerName);

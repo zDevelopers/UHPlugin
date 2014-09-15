@@ -22,7 +22,6 @@ package me.azenet.UHPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -87,16 +86,7 @@ public class UHGameManager {
 		
 		
 		// Registers the death sound
-		String nameDeathSound = p.getConfig().getString("death.announcements.sound");
-		if(nameDeathSound != null) {
-			nameDeathSound = nameDeathSound.trim().toUpperCase().replace(" ", "_");
-			try {
-				this.deathSound = Sound.valueOf(nameDeathSound);
-			} catch(IllegalArgumentException ignored) {
-				// Non-existent death sound
-				// The value of this.deathSound is kept to null.
-			}
-		}
+		this.deathSound = UHUtils.string2Sound(p.getConfig().getString("death.announcements.sound"));
 	}
 
 	/**
@@ -848,7 +838,7 @@ public class UHGameManager {
 	 */
 	public Integer getEpisodeLength() {
 		try {
-			return UHUtils.string2time(p.getConfig().getString("episodes.length"));
+			return UHUtils.string2Time(p.getConfig().getString("episodes.length"));
 		} catch(IllegalArgumentException e) {
 			return 20 * 60; // default value, 20 minutes
 		}
