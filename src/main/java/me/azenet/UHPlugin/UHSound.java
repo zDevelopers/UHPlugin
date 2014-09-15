@@ -35,6 +35,11 @@ public class UHSound {
 	private Float volume = 1f;
 	private Float pitch = 1f;
 
+	/**
+	 * Constructs a sound with volume = 1f and pitch = 1f.
+	 * 
+	 * @param sound The sound.
+	 */
 	public UHSound(Sound sound) {
 		this.sound = sound;
 	}
@@ -47,7 +52,10 @@ public class UHSound {
 
 	/**
 	 * Play the sound for the specified player.
+	 * <p>
 	 * The sound is played at the current location of the player.
+	 * <p>
+	 * If the sound is null, fails silently.
 	 * 
 	 * @param player The player.
 	 */
@@ -57,6 +65,8 @@ public class UHSound {
 
 	/**
 	 * Plays the sound for the specified player, at the specified location.
+	 * <p>
+	 * If the sound is null, fails silently.
 	 * 
 	 * @param player The player.
 	 * @param location The location of the sound.
@@ -101,5 +111,47 @@ public class UHSound {
 	@Override
 	public String toString() {
 		return "UHSound [sound=" + sound + ", volume=" + volume + ", pitch=" + pitch + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((pitch == null) ? 0 : pitch.hashCode());
+		result = prime * result + ((sound == null) ? 0 : sound.hashCode());
+		result = prime * result + ((volume == null) ? 0 : volume.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof UHSound)) {
+			return false;
+		}
+		UHSound other = (UHSound) obj;
+		if (pitch == null) {
+			if (other.pitch != null) {
+				return false;
+			}
+		} else if (!pitch.equals(other.pitch)) {
+			return false;
+		}
+		if (sound != other.sound) {
+			return false;
+		}
+		if (volume == null) {
+			if (other.volume != null) {
+				return false;
+			}
+		} else if (!volume.equals(other.volume)) {
+			return false;
+		}
+		return true;
 	}
 }
