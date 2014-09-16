@@ -224,6 +224,7 @@ protips:
         useGCommand: true  # Protip: global-chat command
         
     crafts:
+        goldenHead: true        # ProTip: craft of golden apples with an head
         compassEasy: true       # Protip: "easy" compass craft
         compassMedium: true     # Protip: "medium" compass craft
         compassHard: true       # Protip: "hard" compass craft

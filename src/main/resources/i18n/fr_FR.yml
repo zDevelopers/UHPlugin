@@ -414,6 +414,7 @@ keys:
             useGCommand: "{gray}Vous pouvez envoyer un message à tout le monde avec {cc}/g <message>{gray}."
             
         crafts:
+            goldenHead: "{gray}Vous pouvez fabriquer des pommes d'or avec les têtes (même recette avec une tête à la place de la pomme)."
             compassEasy: "{gray}La boussole se fabrique avec dans les coins un os, une chaire de zombie, un œil d'araignée et une poudre à canon."
             compassMedium: "{gray}La boussole se fabrique avec dans les coins un os, une chaire de zombie, un œil d'araignée et une poudre à canon ; au centre une Perle du Néant."
             compassHard: "{gray}La boussole se fabrique avec dans les coins un os, une chaire de zombie, un œil d'araignée et une poudre à canon ; au centre un Œil du Néant."

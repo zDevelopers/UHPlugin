@@ -22,6 +22,7 @@ package me.azenet.UHPlugin.listeners;
 import java.util.List;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.UHProTipsSender;
 import me.azenet.UHPlugin.UHTeam;
 import me.azenet.UHPlugin.events.TimerEndsEvent;
 import me.azenet.UHPlugin.events.TimerStartsEvent;
@@ -72,6 +73,7 @@ public class UHGameListener implements Listener {
 	 *  - broadcast a team-death message (if needed);
 	 *  - increase visibility of the death message (if needed);
 	 *  - drop the skull of the dead player (if needed);
+	 *  - send a ProTip to the killer about the "golden heads" (if needed);
 	 *  - update the number of alive players/teams;
 	 *  - save the location of the death of the player, to allow a teleportation later;
 	 *  - show the death location on the dynmap (if needed);
@@ -124,6 +126,18 @@ public class UHGameListener implements Listener {
 					skullMeta.setDisplayName(ChatColor.RESET + ((Player)ev.getEntity()).getName());
 					skull.setItemMeta(skullMeta);
 					l.getWorld().dropItem(l, skull);
+					
+					// Protip
+					if(ev.getEntity().getKiller() instanceof Player) {
+						final Player killer = (Player) ev.getEntity().getKiller();
+						Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+							@Override
+							public void run() {
+								p.getProtipsSender().sendProtip(killer, UHProTipsSender.PROTIP_CRAFT_GOLDEN_HEAD);
+							}
+						}, 200L);
+					}
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

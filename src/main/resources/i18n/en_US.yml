@@ -414,6 +414,7 @@ keys:
             useGCommand: "{gray}You can send a global message using {cc}/g <message>{gray}."
         
         crafts:
+            goldenHead: "{gray}You can craft golden apples with heads (same recipe with a head instead of an apple)."
             compassEasy: "{gray}The compass is crafted with, in the corners, a bone, a rotten flesh, a spider eye and a gunpowder."
             compassMedium: "{gray}The compass is crafted with, in the corners, a bone, a rotten flesh, a spider eye and a gunpowder; in the center, an ender pearl."
             compassHard: "{gray}The compass is crafted with, in the corners, a bone, a rotten flesh, a spider eye and a gunpowder; in the center, an Eye of Ender."

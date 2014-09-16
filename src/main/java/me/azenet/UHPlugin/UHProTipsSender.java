@@ -57,6 +57,7 @@ public class UHProTipsSender {
 	public static final String PROTIP_USE_G_COMMAND = "teamchat.useGCommand";
 	public static final String PROTIP_USE_T_COMMAND = "teamchat.useTCommand";
 
+	public static final String PROTIP_CRAFT_GOLDEN_HEAD = "crafts.goldenHead";
 	public static final String PROTIP_CRAFT_COMPASS_EASY = "crafts.compassEasy";
 	public static final String PROTIP_CRAFT_COMPASS_MEDIUM = "crafts.compassMedium";
 	public static final String PROTIP_CRAFT_COMPASS_HARD = "crafts.compassHard";

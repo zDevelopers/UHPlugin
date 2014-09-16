@@ -55,6 +55,7 @@ public class UHCraftingListener implements Listener {
 	/**
 	 * Used to:
 	 *  - prevent items to be crafted;
+	 *  - send a ProTip containing the craft to use, if an error occurred;
 	 *  - add a lure to the golden apples crafted from a head;
 	 *  - keep the name of the item when the anti-lore craft is used.
 	 *  
