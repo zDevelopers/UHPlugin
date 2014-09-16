@@ -173,7 +173,8 @@ All these gameplay tweaks are optional — see [the configuration file](https://
  - You can display hardcore hearts instead of normal ones.
    ![Hardcore hearts](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_HardcoreHearts.png)
  - Possible automatic respawn after a delay, to avoid the interrogation about “Can I respawn?” (the client thinks the server is in hardcore mode, and so displays an hardcore death screen).
- - ProTips can be sent automatically, at the good moment, to the players. *Currently, ProTips about the team-chat are sent.*
+ - ProTips can be sent automatically, at the good moment, to the players. A sound can be added (default: high-pitched `NOTE_PLING`)  
+   *Currently, ProTips about the team-chat, the crafts and the startup invincibility are sent.*
    ![ProTips](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_ProTips.png)
  - The commands can be accessed using permissions (see subsection below).
  - Autocompletion everywhere.
