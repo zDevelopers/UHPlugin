@@ -451,6 +451,9 @@ public class UHGameManager {
 		
 		p.getFreezer().setGlobalFreezeState(false);
 		
+		// Start sound
+		new UHSound(p.getConfig().getConfigurationSection("start.sound")).broadcast();
+		
 		this.gameRunning = true;
 		
 		// The updateCounters method needs to be executed when the game is marked

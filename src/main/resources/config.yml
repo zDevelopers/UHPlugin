@@ -57,6 +57,11 @@ scoreboard:
 start:
     slow:
         delayBetweenTP: 3  # in seconds
+        
+    sound:
+        name: NONE
+        volume: 1
+        pitch: 1
 
 death:
     messages:
