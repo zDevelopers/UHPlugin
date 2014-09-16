@@ -183,8 +183,8 @@ public class UHSound {
 	/**
 	 * Converts a string to a Sound.
 	 * <p>
-	 * "AMBIENCE_THUNDER", "ambiance thunder" and "AMBIENCE THunDER" are recognized as
-	 * Sound.AMBIENCE_THUNDER, as example.
+	 * "<code>ANVIL_LAND</code>", "<code>Anvil Land</code>" and "<code>ANVIL Land</code>" are recognized as
+	 * <code>Sound.ANVIL_LAND</code>, as example.
 	 * 
 	 * @param soundName The text to be converted.
 	 * @return The corresponding Sound, or null if there isn't any match.
