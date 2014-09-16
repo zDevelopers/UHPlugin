@@ -1,3 +1,15 @@
+# 
+# ## Welcome on the UltraHardcore Reloaded configuration file ##
+# 
+# 
+# About the "sound" configuration, the format is always the same:
+# sound:
+#     name:   The name of the sound. Names: see http://l.carrade.eu/bukkit-sounds . Set to "NONE" to disable.
+#     volume: The volume of the sound. 1 is the normal volume. You can use a decimal value.
+#     pitch:  The pitch of the sound.  1 is the normal volume. You can use a decimal value.
+# 
+
+
 # Available languages: en_US, fr_FR, pt_PT.
 lang: en_US
 
@@ -64,9 +76,10 @@ death:
     announcements:
         lightning-strike: false
         
-        # Don't want any sound? Set this field to "NONE" (or any other value which is not a sound).
-        # The available sounds can be found here: http://l.carrade.eu/bukkit-sounds .
-        sound: WITHER_SPAWN
+        sound: 
+            name: WITHER_SPAWN
+            volume: 1
+            pitch: 1
 
 # If true, the name of the players will be colorized according to the teams.
 colorizeChat: true

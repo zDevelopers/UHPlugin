@@ -69,7 +69,7 @@ public class UHGameManager {
 	
 	private Boolean gameRunning = false;
 	private Integer episode = 0;
-	private Sound deathSound = null;
+	private UHSound deathSound = null;
 	
 	// Used to send a contextual error message in UHCommandManager, using only one exception,
 	// by checking the message. (Used in this.finishGame().)
@@ -86,7 +86,9 @@ public class UHGameManager {
 		
 		
 		// Registers the death sound
-		this.deathSound = UHUtils.string2Sound(p.getConfig().getString("death.announcements.sound"));
+		this.deathSound = new UHSound(UHUtils.string2Sound(p.getConfig().getString("death.announcements.sound.name")));
+		this.deathSound.setVolume((float) p.getConfig().getDouble("death.announcements.sound.volume"));
+		this.deathSound.setPitch((float) p.getConfig().getDouble("death.announcements.sound.pitch"));
 	}
 
 	/**
@@ -827,7 +829,7 @@ public class UHGameManager {
 	 * 
 	 * @return
 	 */
-	public Sound getDeathSound() {
+	public UHSound getDeathSound() {
 		return deathSound;
 	}
 	
