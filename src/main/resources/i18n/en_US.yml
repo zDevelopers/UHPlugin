@@ -412,4 +412,11 @@ keys:
             lock: "{gray}You can lock and unlock the team chat with {cc}/togglechat{gray}."
             useTCommand: "{gray}You can send a team-chat message with {cc}/t <message>{gray}."
             useGCommand: "{gray}You can send a global message using {cc}/g <message>{gray}."
+        
+        crafts:
+            compassEasy: "{gray}The compass is crafted with, in the corners, a bone, a rotten flesh, a spider eye and a gunpowder."
+            compassMedium: "{gray}The compass is crafted with, in the corners, a bone, a rotten flesh, a spider eye and a gunpowder; in the center, an ender pearl."
+            compassHard: "{gray}The compass is crafted with, in the corners, a bone, a rotten flesh, a spider eye and a gunpowder; in the center, an Eye of Ender."
+            glisteringMelon: "{gray}The glistering melon is crafted with a melon and a gold block."
+            noEnchGoldenApple: "{gray}The enchanted golden apple is disabled for this game."
 

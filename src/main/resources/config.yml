@@ -214,7 +214,7 @@ logTeamChat: false
 
 protips:
     sound:
-        name: NOTE_PLING  # Cf. http://l.carrade.eu/bukkit-sounds ; "NONE" if you don't want a sound.
+        name: NOTE_PLING
         volume: 2
         pitch: 3
     
@@ -222,6 +222,14 @@ protips:
         useTCommand: true  # Protip: team-chat command
         lock: true         # Protip: can lock the team-chat
         useGCommand: true  # Protip: global-chat command
+        
+    crafts:
+        compassEasy: true       # Protip: "easy" compass craft
+        compassMedium: true     # Protip: "medium" compass craft
+        compassHard: true       # Protip: "hard" compass craft
+        glisteringMelon: true   # Protip: glistering melon crafted with a gold block
+        noEnchGoldenApple: true # Protip: enchanted golden apple disabled
+        
 
 
 

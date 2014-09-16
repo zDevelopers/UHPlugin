@@ -21,7 +21,10 @@ package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import me.azenet.UHPlugin.i18n.I18n;
 
@@ -41,7 +44,19 @@ public class UHRecipeManager {
 	private UHPlugin p = null;
 	private I18n i = null;
 	
-	Material compassCentralIngredient = null;
+	private Material compassCentralIngredient = null;
+	
+	public static final String RECIPE_COMPASS = "compass";
+	public static final String RECIPE_GLISTERING_MELON = "glistering";
+	public static final String RECIPE_ENCHANTED_GOLDEN_APPLE = "EGA";
+	
+	public static final String COMPASS_DISABLED = "no";
+	public static final String COMPASS_EASY = "easy";
+	public static final String COMPASS_MEDIUM = "medium";
+	public static final String COMPASS_HARD = "hard";
+	
+	private String lastFailedRecipe = null;
+	
 	
 	public UHRecipeManager(UHPlugin plugin) {
 		this.p = plugin;
@@ -76,19 +91,17 @@ public class UHRecipeManager {
 		// (I don't want to register 16 recipes for each difficulty).
 		// Instead, using the inventoryClickEvent/inventoryDragEvent, we checks manually if the
 		// recipe is valid.
-		if (p.getConfig().getBoolean("gameplay-changes.compass.enabled")) {
-			switch(p.getConfig().getString("gameplay-changes.compass.recipe")) {
-				case "easy":
-					compassCentralIngredient = Material.REDSTONE;
-					break;
-				case "hard":
-					compassCentralIngredient = Material.EYE_OF_ENDER;
-					break;
-				default:
-					compassCentralIngredient = Material.ENDER_PEARL;
-			}
+		switch(this.getCompassRecipeType()) {
+			case COMPASS_EASY:
+				compassCentralIngredient = Material.REDSTONE;
+				break;
+			case COMPASS_MEDIUM:
+				compassCentralIngredient = Material.ENDER_PEARL;
+				break;
+			case COMPASS_HARD:
+				compassCentralIngredient = Material.EYE_OF_ENDER;
+				break;
 		}
-		
 	}
 	
 	/**
@@ -101,11 +114,13 @@ public class UHRecipeManager {
 		
 		// Vanilla compass recipe is disabled if the special compass is used.
 		if(p.getConfig().getBoolean("gameplay-changes.compass.enabled") && RecipeUtil.areSimilar(recipe, getVanillaCompassRecipe())) {
+			this.lastFailedRecipe = RECIPE_COMPASS;
 			return false;
 		}
 		
 		// Vanilla golden melon recipe is disabled if the craft with a gold block is enabled.
 		if(p.getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock") && RecipeUtil.areSimilar(recipe, getVanillaGoldenMelonRecipe())) {
+			this.lastFailedRecipe = RECIPE_GLISTERING_MELON;
 			return false;
 		}
 		
@@ -116,6 +131,7 @@ public class UHRecipeManager {
 				for(ItemStack item : RecipeUtil.getListOfIngredients(recipe)) {
 					if(item.getType() == Material.GOLD_BLOCK) {
 						// There is a gold block in a recipe for a golden apple - NOPE NOPE NOPE
+						this.lastFailedRecipe = RECIPE_ENCHANTED_GOLDEN_APPLE;
 						return false;
 					}
 				}
@@ -280,6 +296,30 @@ public class UHRecipeManager {
 	
 	
 	/**
+	 * Returns the current compass recipe.
+	 * 
+	 * @return {@link UHRecipeManager#COMPASS_DISABLED}, {@link UHRecipeManager#COMPASS_EASY},
+	 * {@link UHRecipeManager#COMPASS_MEDIUM} or {@link UHRecipeManager#COMPASS_HARD}.  
+	 */
+	public String getCompassRecipeType() {
+		if (p.getConfig().getBoolean("gameplay-changes.compass.enabled")) {
+			switch(p.getConfig().getString("gameplay-changes.compass.recipe")) {
+				case "easy":
+					return COMPASS_EASY;
+					
+				case "hard":
+					return COMPASS_HARD;
+					
+				default:
+					return COMPASS_MEDIUM;
+			}
+		}
+		else {
+			return COMPASS_DISABLED;
+		}
+	}
+	
+	/**
 	 * Returns the recipe that transforms 8 gold ingots and 1 human head into
 	 * a golden apple.
 	 * 
@@ -405,5 +445,18 @@ public class UHRecipeManager {
 		vanillaGoldenMelonRecipe.setIngredient('M', Material.MELON);
 		
 		return vanillaGoldenMelonRecipe;
+	}
+
+
+	/**
+	 * Returns the last failed recipe.
+	 * 
+	 * Use {@link UHRecipeManager#RECIPE_COMPASS}, {@link UHRecipeManager#RECIPE_GLISTERING_MELON} and
+	 * {@link UHRecipeManager#RECIPE_ENCHANTED_GOLDEN_APPLE} to get the type of the failed recipe.
+	 * 
+	 * @return the lastFailedRecipe
+	 */
+	public String getLastFailedRecipe() {
+		return lastFailedRecipe;
 	}
 }

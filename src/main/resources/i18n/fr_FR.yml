@@ -412,4 +412,11 @@ keys:
             lock: "{gray}Verrouillez le chat d'équipe avec {cc}/togglechat{gray}, qui permet de passer d'un chat à l'autre."
             useTCommand: "{gray}Vous pouvez envoyer un message à votre équipe avec {cc}/t <message>{gray}."
             useGCommand: "{gray}Vous pouvez envoyer un message à tout le monde avec {cc}/g <message>{gray}."
+            
+        crafts:
+            compassEasy: "{gray}La boussole se fabrique avec dans les coins un os, une chaire de zombie, un œil d'araignée et une poudre à canon."
+            compassMedium: "{gray}La boussole se fabrique avec dans les coins un os, une chaire de zombie, un œil d'araignée et une poudre à canon ; au centre une Perle du Néant."
+            compassHard: "{gray}La boussole se fabrique avec dans les coins un os, une chaire de zombie, un œil d'araignée et une poudre à canon ; au centre un Œil du Néant."
+            glisteringMelon: "{gray}La pastèque scintillante se fabrique avec une pastèque et un bloc d'or."
+            noEnchGoldenApple: "{gray}La pomme d'or enchantée est désactivée pour cette partie."
 

@@ -20,6 +20,8 @@
 package me.azenet.UHPlugin.listeners;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.UHProTipsSender;
+import me.azenet.UHPlugin.UHRecipeManager;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Bukkit;
@@ -70,6 +72,40 @@ public class UHCraftingListener implements Listener {
 		
 		if(!p.getRecipeManager().isRecipeAllowed(recipe)) {
 			ev.getInventory().setResult(new ItemStack(Material.AIR));
+			
+			// ProTips
+			final String failedRecipe = p.getRecipeManager().getLastFailedRecipe();
+			final Player player = (Player) ev.getViewers().get(0); // crafting inventory: only one viewer in all cases.
+			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+				@Override
+				public void run() {
+					switch(failedRecipe) {
+						case UHRecipeManager.RECIPE_COMPASS:
+							switch(p.getRecipeManager().getCompassRecipeType()) {
+								case UHRecipeManager.COMPASS_EASY:
+									p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_COMPASS_EASY);
+									break;
+								case UHRecipeManager.COMPASS_MEDIUM:
+									p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_COMPASS_MEDIUM);
+									break;
+								case UHRecipeManager.COMPASS_HARD:
+									p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_COMPASS_HARD);
+									break;
+							}
+							
+							break;
+						
+						case UHRecipeManager.RECIPE_GLISTERING_MELON:
+							p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_GLISTERING_MELON);
+							break;
+						
+						case UHRecipeManager.RECIPE_ENCHANTED_GOLDEN_APPLE:
+							p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_NO_ENCHANTED_GOLDEN_APPLE);
+							break;
+					}
+				}
+			}, 40L);
+			
 			return;
 		}
 		

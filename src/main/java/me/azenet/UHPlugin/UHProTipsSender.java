@@ -56,6 +56,13 @@ public class UHProTipsSender {
 	public static final String PROTIP_LOCK_CHAT = "teamchat.lock";
 	public static final String PROTIP_USE_G_COMMAND = "teamchat.useGCommand";
 	public static final String PROTIP_USE_T_COMMAND = "teamchat.useTCommand";
+
+	public static final String PROTIP_CRAFT_COMPASS_EASY = "crafts.compassEasy";
+	public static final String PROTIP_CRAFT_COMPASS_MEDIUM = "crafts.compassMedium";
+	public static final String PROTIP_CRAFT_COMPASS_HARD = "crafts.compassHard";
+	public static final String PROTIP_CRAFT_GLISTERING_MELON = "crafts.glisteringMelon";
+	public static final String PROTIP_CRAFT_NO_ENCHANTED_GOLDEN_APPLE = "crafts.noEnchGoldenApple";
+	
 	
 	public UHProTipsSender(UHPlugin p) {
 		this.p = p;
@@ -65,6 +72,13 @@ public class UHProTipsSender {
 		protipsGiven.put(PROTIP_LOCK_CHAT, new ArrayList<UUID>());
 		protipsGiven.put(PROTIP_USE_G_COMMAND, new ArrayList<UUID>());
 		protipsGiven.put(PROTIP_USE_T_COMMAND, new ArrayList<UUID>());
+		
+		protipsGiven.put(PROTIP_CRAFT_COMPASS_EASY, new ArrayList<UUID>());
+		protipsGiven.put(PROTIP_CRAFT_COMPASS_MEDIUM, new ArrayList<UUID>());
+		protipsGiven.put(PROTIP_CRAFT_COMPASS_HARD, new ArrayList<UUID>());
+		protipsGiven.put(PROTIP_CRAFT_GLISTERING_MELON, new ArrayList<UUID>());
+		protipsGiven.put(PROTIP_CRAFT_NO_ENCHANTED_GOLDEN_APPLE, new ArrayList<UUID>());
+		
 		
 		// Sound
 		proTipsSound = new UHSound(p.getConfig().getConfigurationSection("protips.sound"));
