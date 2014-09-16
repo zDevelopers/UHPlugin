@@ -54,6 +54,10 @@ scoreboard:
     # Health in the list of the players
     health: true
 
+start:
+    slow:
+        delayBetweenTP: 3  # in seconds
+
 death:
     messages:
         notifyIfTeamHasFallen: true
@@ -137,9 +141,6 @@ gameplay-changes:
 teams-options:
     canSeeFriendlyInvisibles: true
     allowFriendlyFire: true
-
-slow-start:
-    delayBetweenTP: 3  # in seconds
 
 
 hardcore-hearts:

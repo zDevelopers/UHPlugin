@@ -321,7 +321,7 @@ public class UHGameManager {
 			
 			List<Location> unusedTP = p.getSpawnsManager().getSpawnPoints();
 			Integer teamsTeleported = 1;
-			Integer delayBetweenTP = p.getConfig().getInt("slow-start.delayBetweenTP");
+			Integer delayBetweenTP = p.getConfig().getInt("start.slow.delayBetweenTP");
 			
 			for (final UHTeam t : tm.getTeams()) {
 				final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
