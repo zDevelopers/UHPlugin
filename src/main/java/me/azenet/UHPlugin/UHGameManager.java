@@ -427,9 +427,12 @@ public class UHGameManager {
 	}
 	
 	/**
-	 * Sends a ProTip about the team chat, to all players, a few seconds after the beginning of the game.
+	 * Sends two ProTips:
+	 *  - about the team chat, to all players, 20 seconds after the beginning of the game;
+	 *  - about the invincibility, 5 seconds after the beginning of the game.
 	 */
 	public void sendStartupProTips() {
+		// Team chat - 20 seconds after
 		if(this.isGameWithTeams()) {
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 				@Override
@@ -440,6 +443,16 @@ public class UHGameManager {
 				}
 			}, 400L);
 		}
+		
+		// Invincibility - 5 seconds after
+		Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+			@Override
+			public void run() {
+				for(Player player : getAlivePlayers()) {
+					p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_STARTUP_INVINCIBILITY);
+				}
+			}
+		}, 100L);
 	}
 	
 	/**

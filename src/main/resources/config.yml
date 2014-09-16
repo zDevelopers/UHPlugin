@@ -230,7 +230,9 @@ protips:
         compassHard: true       # Protip: "hard" compass craft
         glisteringMelon: true   # Protip: glistering melon crafted with a gold block
         noEnchGoldenApple: true # Protip: enchanted golden apple disabled
-        
+    
+    start:
+        invincibility: true  # Protip: 30 seconds (25 after the message) of invincibility.
 
 
 

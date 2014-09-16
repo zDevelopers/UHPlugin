@@ -420,4 +420,6 @@ keys:
             compassHard: "{gray}The compass is crafted with, in the corners, a bone, a rotten flesh, a spider eye and a gunpowder; in the center, an Eye of Ender."
             glisteringMelon: "{gray}The glistering melon is crafted with a melon and a gold block."
             noEnchGoldenApple: "{gray}The enchanted golden apple is disabled for this game."
-
+        
+        start:
+            invincibility: "{gray}Fallen on a tree? Jump, you have 25 seconds of invisibility."

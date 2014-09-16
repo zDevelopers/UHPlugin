@@ -63,7 +63,8 @@ public class UHProTipsSender {
 	public static final String PROTIP_CRAFT_COMPASS_HARD = "crafts.compassHard";
 	public static final String PROTIP_CRAFT_GLISTERING_MELON = "crafts.glisteringMelon";
 	public static final String PROTIP_CRAFT_NO_ENCHANTED_GOLDEN_APPLE = "crafts.noEnchGoldenApple";
-	
+
+	public static final String PROTIP_STARTUP_INVINCIBILITY = "start.invincibility";
 	
 	public UHProTipsSender(UHPlugin p) {
 		this.p = p;
@@ -73,12 +74,15 @@ public class UHProTipsSender {
 		protipsGiven.put(PROTIP_LOCK_CHAT, new ArrayList<UUID>());
 		protipsGiven.put(PROTIP_USE_G_COMMAND, new ArrayList<UUID>());
 		protipsGiven.put(PROTIP_USE_T_COMMAND, new ArrayList<UUID>());
-		
+
+		protipsGiven.put(PROTIP_CRAFT_GOLDEN_HEAD, new ArrayList<UUID>());
 		protipsGiven.put(PROTIP_CRAFT_COMPASS_EASY, new ArrayList<UUID>());
 		protipsGiven.put(PROTIP_CRAFT_COMPASS_MEDIUM, new ArrayList<UUID>());
 		protipsGiven.put(PROTIP_CRAFT_COMPASS_HARD, new ArrayList<UUID>());
 		protipsGiven.put(PROTIP_CRAFT_GLISTERING_MELON, new ArrayList<UUID>());
 		protipsGiven.put(PROTIP_CRAFT_NO_ENCHANTED_GOLDEN_APPLE, new ArrayList<UUID>());
+
+		protipsGiven.put(PROTIP_STARTUP_INVINCIBILITY, new ArrayList<UUID>());
 		
 		
 		// Sound

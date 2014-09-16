@@ -420,4 +420,6 @@ keys:
             compassHard: "{gray}La boussole se fabrique avec dans les coins un os, une chaire de zombie, un œil d'araignée et une poudre à canon ; au centre un Œil du Néant."
             glisteringMelon: "{gray}La pastèque scintillante se fabrique avec une pastèque et un bloc d'or."
             noEnchGoldenApple: "{gray}La pomme d'or enchantée est désactivée pour cette partie."
-
+        
+        start:
+            invincibility: "{gray}Tombé(e) sur un arbre ? Sautez, il vous reste 25 secondes d'invincibilité."
