@@ -76,7 +76,7 @@ death:
     announcements:
         lightning-strike: false
         
-        sound: 
+        sound:
             name: WITHER_SPAWN
             volume: 1
             pitch: 1

@@ -67,10 +67,7 @@ public class UHProTipsSender {
 		protipsGiven.put(PROTIP_USE_T_COMMAND, new ArrayList<UUID>());
 		
 		// Sound
-		proTipsSound = new UHSound(UHUtils.string2Sound(p.getConfig().getString("protips.sound.name")));
-		proTipsSound.setVolume((float) p.getConfig().getDouble("protips.sound.volume"));
-		proTipsSound.setPitch((float) p.getConfig().getDouble("protips.sound.pitch"));
-		
+		proTipsSound = new UHSound(p.getConfig().getConfigurationSection("protips.sound"));
 	}
 	
 	

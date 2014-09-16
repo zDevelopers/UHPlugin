@@ -66,29 +66,6 @@ public class UHUtils {
 	}
 	
 	/**
-	 * Converts a string to a Sound.
-	 * <p>
-	 * "AMBIENCE_THUNDER", "ambiance thunder" and "AMBIENCE THunDER" are recognized as
-	 * Sound.AMBIENCE_THUNDER, as example.
-	 * 
-	 * @param soundName The text to be converted.
-	 * @return The corresponding Sound, or null if there isn't any match.
-	 */
-	public static Sound string2Sound(String soundName) {
-		if(soundName != null) {
-			soundName = soundName.trim().toUpperCase().replace(" ", "_");
-			try {
-				return Sound.valueOf(soundName);
-			} catch(IllegalArgumentException e) {
-				// Non-existent sound
-				return null;
-			}
-		}
-		
-		return null;
-	}
-	
-	/**
 	 * Converts a string to a number of seconds.
 	 * <p>
 	 * Format:

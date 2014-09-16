@@ -22,6 +22,7 @@ package me.azenet.UHPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 /**
@@ -51,7 +52,30 @@ public class UHSound {
 	}
 
 	/**
-	 * Play the sound for the specified player.
+	 * Constructs a sound from a configuration section.
+	 * <p>
+	 * Format:
+	 * <pre>
+	 * key:
+	 *     name: string parsable as a sound. If not parsable, null used (i.e. no sound played).
+	 *     volume: decimal number
+	 *     pitch: decimal number
+	 * </pre>
+	 * 
+	 * @param config The configuration section.
+	 */
+	public UHSound(ConfigurationSection config) {
+		if(config == null) {
+			return;
+		}
+		
+		this.sound = string2Sound(config.getString("name"));
+		this.volume = (float) config.getDouble("volume");
+		this.pitch = (float) config.getDouble("pitch");
+	}
+
+	/**
+	 * Plays the sound for the specified player.
 	 * <p>
 	 * The sound is played at the current location of the player.
 	 * <p>
@@ -76,7 +100,7 @@ public class UHSound {
 	}
 
 	/**
-	 * Play this sound for all players, at the current location of the players.
+	 * Plays this sound for all players, at the current location of the players.
 	 */
 	public void broadcast() {
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
@@ -153,5 +177,29 @@ public class UHSound {
 			return false;
 		}
 		return true;
+	}
+
+
+	/**
+	 * Converts a string to a Sound.
+	 * <p>
+	 * "AMBIENCE_THUNDER", "ambiance thunder" and "AMBIENCE THunDER" are recognized as
+	 * Sound.AMBIENCE_THUNDER, as example.
+	 * 
+	 * @param soundName The text to be converted.
+	 * @return The corresponding Sound, or null if there isn't any match.
+	 */
+	public static Sound string2Sound(String soundName) {
+		if(soundName != null) {
+			soundName = soundName.trim().toUpperCase().replace(" ", "_");
+			try {
+				return Sound.valueOf(soundName);
+			} catch(IllegalArgumentException e) {
+				// Non-existent sound
+				return null;
+			}
+		}
+		
+		return null;
 	}
 }

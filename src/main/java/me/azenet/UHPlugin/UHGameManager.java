@@ -86,9 +86,7 @@ public class UHGameManager {
 		
 		
 		// Registers the death sound
-		this.deathSound = new UHSound(UHUtils.string2Sound(p.getConfig().getString("death.announcements.sound.name")));
-		this.deathSound.setVolume((float) p.getConfig().getDouble("death.announcements.sound.volume"));
-		this.deathSound.setPitch((float) p.getConfig().getDouble("death.announcements.sound.pitch"));
+		this.deathSound = new UHSound(p.getConfig().getConfigurationSection("death.announcements.sound"));
 	}
 
 	/**
