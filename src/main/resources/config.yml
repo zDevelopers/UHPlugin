@@ -13,12 +13,16 @@
 # Available languages: en_US, fr_FR, pt_PT.
 lang: en_US
 
+
+
 episodes:
     enabled: true
     
     # Format: "mm", "mm:ss" or "hh:mm:ss". If invalid, 20 minutes.
     # Don't remove the "quotes" (because of the commas)!
     length: "20:00"
+
+
 
 map:
     size: 2000
@@ -35,9 +39,12 @@ map:
         # (this warning is set using /uh border warning <futureDiameter>).
         warningInterval: 90  # seconds
 
+
+
 daylightCycle:
     do: false
     time: 6000  # Initial time (or game time if the daylight cycle is disabled) in ticks. 6000 = noon.
+
 
 
 scoreboard:
@@ -54,6 +61,8 @@ scoreboard:
     # Health in the list of the players
     health: true
 
+
+
 start:
     slow:
         delayBetweenTP: 3  # in seconds
@@ -62,6 +71,8 @@ start:
         name: NONE
         volume: 1
         pitch: 1
+
+
 
 death:
     messages:
@@ -90,8 +101,12 @@ death:
             volume: 1
             pitch: 1
 
+
+
 # If true, the name of the players will be colorized according to the teams.
 colorizeChat: true
+
+
 
 gameplay-changes:
     weather: true  # If false, the "bad" weather (rain, thunder) is disabled.
@@ -143,9 +158,12 @@ gameplay-changes:
         # "hard": eye of ender.
         recipe: "medium"
 
+
+
 teams-options:
     canSeeFriendlyInvisibles: true
     allowFriendlyFire: true
+
 
 
 hardcore-hearts:
@@ -159,11 +177,14 @@ hardcore-hearts:
     # Notice: this will be disabled even with this set to true if the hardcore hearts are not enabled (useless).
     respawnMessage: true
 
+
+
 # Automatically respawn the player after his death.
 # Avoid the interrogation about the ability to respawn, if hardcore hearts are enabled.
 auto-respawn:
     do: true
     delay: 6  # seconds
+
 
 
 # Controls the behavior of the /uh finish command
@@ -179,12 +200,17 @@ finish:
         areaSize: 6    # The size of the square, centered on each player, where the fireworks will be launched.
 
 
+
 dynmap:
     showSpawnLocations: true
     showDeathLocations: true
 
+
+
 # Log the private team-chat in the console?
 logTeamChat: false
+
+
 
 protips:
     sound:
@@ -197,9 +223,12 @@ protips:
         lock: true         # Protip: can lock the team-chat
         useGCommand: true  # Protip: global-chat command
 
+
+
 # Use this to set the spawnpoints of the teams (or the players)
-# You can also use the command /uh addspawn (see /uh for documentation) to add temporary spawn points.
-# (The spawn points added through /uh addspawn are deleted when the server is stopped.)
+# You can also use the command `/uh spawns add` to add temporary spawn points,
+# and `/uh spawns generate` to automatically generate them. (See `/uh spawns` for documentation.)
+# (The spawn points added through `/uh spawns` are deleted when the server is stopped.)
 #
 # Format:
 #     - x,z
@@ -208,6 +237,8 @@ protips:
 
 spawnpoints:
     -
+
+
 
 # Use this to pre-register the teams.
 # Format:
