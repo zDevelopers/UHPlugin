@@ -1,3 +1,9 @@
+This TOTO file is outdated. Please see the issues.
+
+
+=======================================================================================
+
+
 - [OK] Synchroniser l'horloge des épisodes avec une vraie horloge (évite le décalage 
   à cause du lag).
   
@@ -6,7 +12,7 @@
 - [OK] Optimiser la vérification de position des joueurs (ou se reposer uniquement 
   sur WorldBorder, via son API).
   
-- Mettre à jour le code pour considérer les UUID (si besoin est).
+- [Partiel] Mettre à jour le code pour considérer les UUID (si besoin est).
 
 - [Supprimée] Mettre à jour le code : l'interface de gestion des équipes ne marche 
   pas en 1.7.9. (Ou suppression ? Elle est jolie mais peu efficace en pratique.)
@@ -34,7 +40,7 @@
 
 - [OK] Option pour annuler les dégâts des ender pearls
 
-- Option pour annuler le spawn des sorcières (non utilisée par moi mais peut être utile)
+- [OK] Option pour annuler le spawn des sorcières (non utilisée par moi mais peut être utile)
 
 - [OK] Mettre les restrictions en option (notamment celle des potions II, des 
   ghasts qui ne dropent pas des larmes)
@@ -47,7 +53,7 @@
   faire /uh revive et les re-TP même en cas de solo. 
   (Quid des morts dans la lave ? Donner 30 sec d'invulnérabilité au joueur en question ?)
 
-- Ne pas couper le titre du jeu (actuellement coupé à 16 caractères) si possible.
+- [OK 32c.]Ne pas couper le titre du jeu (actuellement coupé à 16 caractères) si possible.
 
 - [OK] Corriger le bug d'arrondi des cœurs.
 
@@ -72,17 +78,17 @@
 
 - [OK] Ajouter un moyen de générer des murs ronds, et non uniquement carrés.
 
-- Optimiser la manière dont le blockage des potions est fait (empêcher de mettre
+- [OK] Optimiser la manière dont le blockage des potions est fait (empêcher de mettre
   la glowstone plutôt qu'annuler la fabrication de la potion, l'annulation étant
   faite après l'attente d'infusion).
 
 - Ajouter un moyen de configurer le nombre de cœurs régénérés par une pomme d'or 
   classique/une pomme d'or faite depuis une tête
 	→ [OK] Se baser sur le nom de la pomme d'or faite à partir d'une tête
-	→ Modifier le craft anti-lore pour qu'il ne change pas le nom
-	→ Empêcher le renommage d'une pomme d'or en le nom d'une pomme d'or de tête
+	→ [OK] Modifier le craft anti-lore pour qu'il ne change pas le nom
+	→ [OK] Empêcher le renommage d'une pomme d'or en le nom d'une pomme d'or de tête
 
-- Ajouter un moyen de désactiver les pommes de Notch (désactivé par défaut)
+- [OK] Ajouter un moyen de désactiver les pommes de Notch (désactivé par défaut)
 
-- Ajouter un moyen de mettre le jeu en pause (immobilise les joueurs, les mobs, le timer).
-	→ Passer par une classe dédiée pour gérer l'immobilisation (que ce soit celui du début ou celui-là).
+- [OK] Ajouter un moyen de mettre le jeu en pause (immobilise les joueurs, les mobs, le timer).
+	→ [OK] Passer par une classe dédiée pour gérer l'immobilisation (que ce soit celui du début ou celui-là).
