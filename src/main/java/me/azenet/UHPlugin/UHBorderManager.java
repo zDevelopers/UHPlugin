@@ -65,6 +65,8 @@ public class UHBorderManager {
 	 */
 	public void setCircular(boolean circular) {
 		this.isCircularBorder = circular;
+		
+		p.getWorldBorderIntegration().setupBorders(); // Updates the WB border if needed
 	}
 	
 	/**
@@ -293,7 +295,7 @@ public class UHBorderManager {
 		cancelWarning();
 		this.currentBorderDiameter = diameter;
 		
-		p.getWorldBorderIntegration().setupBorders(); // Update the WB border if needed
+		p.getWorldBorderIntegration().setupBorders(); // Updates the WB border if needed
 	}
 	
 	
