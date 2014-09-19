@@ -114,6 +114,9 @@ public class UHWallGenerator {
 		}
 		
 		switch(blockType) {
+			case GLASS:
+			case STAINED_GLASS:
+			case THIN_GLASS:
 			case LEAVES:
 			case LEAVES_2:
 			case LOG:
