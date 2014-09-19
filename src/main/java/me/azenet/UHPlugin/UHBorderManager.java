@@ -58,6 +58,15 @@ public class UHBorderManager {
 	}
 	
 	/**
+	 * Changes the shape of the border.
+	 * 
+	 * @param circular If true the border is circular. Else, squared.
+	 */
+	public void setCircular(boolean circular) {
+		this.isCircularBorder = circular;
+	}
+	
+	/**
 	 * Checks if a given location is inside the border with the given diameter.
 	 * The check is performed for a circular or squared border, following the configuration.
 	 * 

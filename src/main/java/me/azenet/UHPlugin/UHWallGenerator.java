@@ -47,6 +47,7 @@ public class UHWallGenerator {
 	/**
 	 * Generates the walls around the map, following the configuration.
 	 * 
+	 * @return True if the wall was built. False else (block invalid/not solid).
 	 */
 	public boolean build() {
 		Integer wallHeight = p.getConfig().getInt("map.wall.height");
@@ -72,7 +73,6 @@ public class UHWallGenerator {
 		
 		return true;
 	}
-	
 	
 	/**
 	 * Sets a block according to his environment.
