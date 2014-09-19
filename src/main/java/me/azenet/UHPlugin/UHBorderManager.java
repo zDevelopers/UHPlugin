@@ -26,6 +26,7 @@ import me.azenet.UHPlugin.task.BorderWarningTask;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -75,7 +76,7 @@ public class UHBorderManager {
 	 * @return
 	 */
 	public boolean isInsideBorder(Location location, int diameter) {
-		if(!location.getWorld().equals(Bukkit.getWorlds().get(0))) { // The nether is not limited.
+		if(!location.getWorld().getEnvironment().equals(Environment.NORMAL)) { // The nether/end are not limited.
 			return true;
 		}
 		
@@ -441,7 +442,7 @@ public class UHBorderManager {
 	 * @return the distance from the given location to the border.
 	 */
 	private int getDistanceToCircularBorder(Location location, int diameter) {
-		if(!location.getWorld().equals(Bukkit.getWorlds().get(0))) { // The nether is not limited.
+		if(!location.getWorld().getEnvironment().equals(Environment.NORMAL)) { // The nether/end are not limited.
 			return 0;
 		}
 		if(isInsideBorder(location, diameter)) {
