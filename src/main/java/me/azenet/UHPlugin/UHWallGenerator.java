@@ -262,7 +262,7 @@ public class UHWallGenerator {
 	/**
 	 * Builds a circular wall around the map.
 	 * 
-	 * @param w The wall will be built in this world.
+	 * @param world The wall will be built in this world.
 	 * @param diameter The size of the wall.
 	 * @param wallHeight The height of the wall.
 	 */
@@ -342,8 +342,8 @@ public class UHWallGenerator {
 		WallPosition positionSymmetricZ = null;
 		WallPosition positionOpposite = null;
 		
-		Integer xSpawn = Bukkit.getWorlds().get(0).getSpawnLocation().getBlockX();
-		Integer zSpawn = Bukkit.getWorlds().get(0).getSpawnLocation().getBlockZ();
+		Integer xSpawn = world.getSpawnLocation().getBlockX();
+		Integer zSpawn = world.getSpawnLocation().getBlockZ();
 		
 		// We generates first the bedrock at y=0
 		world.getBlockAt(x, 0, z).setType(Material.BEDROCK);
@@ -369,10 +369,10 @@ public class UHWallGenerator {
 		
 		// The 4 towers are built.
 		for(int y = 1; y <= wallHeight; y++) {
-			this.setBlock(world.getBlockAt(x,                  y, z                 ), positionOriginal);
-			this.setBlock(world.getBlockAt(x - 2*(x - xSpawn), y, z                 ), positionSymmetricX);
-			this.setBlock(world.getBlockAt(x,                  y, z + 2*(zSpawn - z)), positionSymmetricZ);
-			this.setBlock(world.getBlockAt(x - 2*(x - xSpawn), y, z + 2*(zSpawn - z)), positionOpposite);
+			setBlock(world.getBlockAt(x,                  y, z                 ), positionOriginal);
+			setBlock(world.getBlockAt(x - 2*(x - xSpawn), y, z                 ), positionSymmetricX);
+			setBlock(world.getBlockAt(x,                  y, z + 2*(zSpawn - z)), positionSymmetricZ);
+			setBlock(world.getBlockAt(x - 2*(x - xSpawn), y, z + 2*(zSpawn - z)), positionOpposite);
 		}
 	}
 }
