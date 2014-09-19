@@ -391,11 +391,17 @@ public class UHBorderManager {
 		spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
 		Integer limitZSup = spawn.add(0, 0, halfMapSize).getBlockZ();
 		
-		if((x > limitXSup || x < limitXInf) && z < limitZSup && z > limitZInf) { // east or west of the border
+		if(x > limitXSup && z < limitZSup && z > limitZInf) { // East of the border
 			return Math.abs(x - limitXSup);
 		}
-		else if((z > limitZSup || z < limitZInf) && x < limitXSup && x > limitXInf) { // north or south of the border
+		else if(x < limitXInf && z < limitZSup && z > limitZInf) { // West of the border
+			return Math.abs(x - limitXInf);
+		}
+		else if(z > limitZSup && x < limitXSup && x > limitXInf) { // South of the border
 			return Math.abs(z - limitZSup);
+		}
+		else if(z < limitZInf && x < limitXSup && x > limitXInf) { // North of the border
+			return Math.abs(z - limitZInf);
 		}
 		else if(x > limitXSup && z < limitZInf) { // N-E
 			return (int) location.distance(new Location(location.getWorld(), limitXSup, location.getBlockY(), limitZInf));
