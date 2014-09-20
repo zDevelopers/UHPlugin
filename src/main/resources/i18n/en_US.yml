@@ -422,4 +422,5 @@ keys:
             noEnchGoldenApple: "{gray}The enchanted golden apple is disabled for this game."
         
         start:
-            invincibility: "{gray}Fallen on a tree? Jump, you have 25 seconds of invisibility."
+            invincibility: "{gray}Fallen on a tree? Jump, you have 25 seconds left to remain invincible."
+
