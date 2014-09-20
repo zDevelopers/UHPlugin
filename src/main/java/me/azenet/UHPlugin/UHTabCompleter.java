@@ -111,12 +111,12 @@ public class UHTabCompleter implements TabCompleter {
 			}
 			
 			else if(args.length >= 4) { // Autocompletion for team names – multiple words autocompletion
-				if(args[1].equalsIgnoreCase("addplayer") || args[1].equalsIgnoreCase("remove")) {
+				if(args[1].equalsIgnoreCase("join") || args[1].equalsIgnoreCase("remove")) {
 					ArrayList<String> teamNames = new ArrayList<String>();
 					for(UHTeam team : this.p.getTeamManager().getTeams()) {
 						teamNames.add(team.getName());
 					}
-					if(args[1].equalsIgnoreCase("addplayer")) { // /uh team addplayer <player> <?>
+					if(args[1].equalsIgnoreCase("join")) { // /uh team join <player> <?>
 						return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 3), teamNames, args.length - 4);
 					}
 					else if(args[1].equalsIgnoreCase("remove")) { // /uh team remove <?>
