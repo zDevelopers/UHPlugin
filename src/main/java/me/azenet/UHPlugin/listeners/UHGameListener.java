@@ -71,6 +71,7 @@ public class UHGameListener implements Listener {
 	 *  - update the scoreboard;
 	 *  - kick the player (if needed);
 	 *  - broadcast a team-death message (if needed);
+	 *  - highlight the death message in the console;
 	 *  - increase visibility of the death message (if needed);
 	 *  - drop the skull of the dead player (if needed);
 	 *  - send a ProTip to the killer about the "golden heads" (if needed);
@@ -183,6 +184,9 @@ public class UHGameListener implements Listener {
 				}
 			}
 		}
+		
+		// Highlights the death message in the console
+		p.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "-- Death of " + ev.getEntity().getDisplayName() + ChatColor.GOLD + " --");
 		
 		// Customizes the death message
 		ev.setDeathMessage(ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.deathMessagesFormat", "")) + ev.getDeathMessage());
