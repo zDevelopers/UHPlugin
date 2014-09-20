@@ -29,6 +29,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class TeamStartTask extends BukkitRunnable {
@@ -72,13 +73,15 @@ public class TeamStartTask extends BukkitRunnable {
 			
 			player.setHealth(20D);
 			player.setFoodLevel(20);
-			player.setSaturation(14);
+			player.setSaturation(20);
 			player.getInventory().clear();
 			player.getInventory().setArmorContents(new ItemStack[] {new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
 			player.setExp(0L+0F);
 			player.setLevel(0);
 			player.closeInventory();
-			player.getActivePotionEffects().clear();
+			for(PotionEffect effect : player.getActivePotionEffects()) {
+				player.removePotionEffect(effect.getType());
+			}
 			player.setCompassTarget(startPoint);
 		}
 		
