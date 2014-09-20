@@ -818,7 +818,7 @@ public class UHPluginCommand implements CommandExecutor {
 					}
 				
 				}
-				else { // /uh team add <color> <name ...>
+				else if(args.length >= 4) { // /uh team add <color> <name ...>
 					
 					ChatColor color = p.getTeamManager().getChatColorByName(args[2]);
 					
@@ -843,6 +843,9 @@ public class UHPluginCommand implements CommandExecutor {
 						sender.sendMessage(i.t("team.add.added", color.toString() + name));
 					}
 					
+				}
+				else {
+					sender.sendMessage(i.t("team.syntaxError"));
 				}
 			}
 			
