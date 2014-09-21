@@ -145,13 +145,13 @@ public class UHBorderManager {
 	 * If the wall is circular, the diameter used to check must be bigger to avoid false positives
 	 * if a player is in an angle of the circular wall.
 	 * 
-	 * “+4” ? Experimental.
+	 * “+3” ? Experimental.
 	 * 
 	 * @return
 	 */
 	public int getCheckDiameter() {
 		if(this.isCircularBorder()) {
-			return this.getCurrentBorderDiameter() + 4;
+			return this.getCurrentBorderDiameter() + 3;
 		}
 		else {
 			return this.getCurrentBorderDiameter();
@@ -344,16 +344,16 @@ public class UHBorderManager {
 		Integer x = location.getBlockX();
 		Integer z = location.getBlockZ();
 		
-		Location spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+		Location spawn = location.getWorld().getSpawnLocation();
 		Integer limitXInf = spawn.add(-halfMapSize, 0, 0).getBlockX();
 		
-		spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+		spawn = location.getWorld().getSpawnLocation();
 		Integer limitXSup = spawn.add(halfMapSize, 0, 0).getBlockX();
 		
-		spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+		spawn = location.getWorld().getSpawnLocation();
 		Integer limitZInf = spawn.add(0, 0, -halfMapSize).getBlockZ();
 		
-		spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+		spawn = location.getWorld().getSpawnLocation();
 		Integer limitZSup = spawn.add(0, 0, halfMapSize).getBlockZ();
 		
 		return !(x < limitXInf || x > limitXSup || z < limitZInf || z > limitZSup);
@@ -435,8 +435,10 @@ public class UHBorderManager {
 	 */
 	private boolean isInsideCircularBorder(Location location, int diameter) {
 		Double radius = Math.floor(diameter/2);
+		Location spawn = location.getWorld().getSpawnLocation().clone();
+		spawn.setY(location.getY());
 		
-		return !(location.distance(Bukkit.getWorlds().get(0).getSpawnLocation()) >= radius);
+		return (location.distance(spawn) <= radius);
 	}
 	
 	/**
