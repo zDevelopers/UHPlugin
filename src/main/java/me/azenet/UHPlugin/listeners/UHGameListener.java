@@ -410,7 +410,7 @@ public class UHGameListener implements Listener {
 			p.getGameManager().getScoreboardManager().hideTimer(ev.getTimer());
 		}
 		
-		if(ev.getTimer().equals(p.getBorderManager().getWarningTimer())) {
+		if(ev.getTimer().equals(p.getBorderManager().getWarningTimer()) && ev.wasTimerUp()) {
 			p.getBorderManager().getWarningSender().sendMessage(i.t("borders.warning.timerUp"));
 			p.getBorderManager().sendCheckMessage(p.getBorderManager().getWarningSender(), p.getBorderManager().getWarningSize());
 		}
