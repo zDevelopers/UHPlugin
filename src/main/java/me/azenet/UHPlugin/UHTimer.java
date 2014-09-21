@@ -297,26 +297,6 @@ public class UHTimer {
 	}
 	
 	@Override
-	public String toString() {
-		String repr = "{UHTimer " + getName() + " - " + getDuration() + "s";
-		if(isRunning()) {
-			repr += " - running - current ";
-			repr += getHoursLeft() + "h " + getMinutesLeft() + "m " + getSecondsLeft() + "s";
-			repr += " - started at " + this.startTime;
-		}
-		if(isPaused()) {
-			repr += " - paused";
-		}
-		if(isRegistered()) {
-			repr += " - registered";
-		}
-		
-		repr += "}";
-		return repr;
-	}
-	
-	
-	@Override
 	public boolean equals(Object other) {
 		if(!(other instanceof UHTimer)) {
 			return false;
@@ -325,6 +305,19 @@ public class UHTimer {
 		return ((UHTimer) other).getName().equals(this.getName());
 	}
 	
+	@Override
+	public String toString() {
+		return "UHTimer ["
+				+ (name != null ? "name=" + name + ", " : "")
+				+ (registered != null ? "registered=" + registered + ", " : "")
+				+ (isRunning() ? "running, " : "")
+				+ (startTime != null ? "startTime=" + startTime + ", " : "")
+				+ (duration != null ? "duration=" + duration + ", " : "")
+				+ (isRunning() ? "currentTime=" + getHoursLeft() + "h" + getMinutesLeft() + "m" + getSecondsLeft() + "s" : "")
+				+ (isRunning() && paused != null ? "paused=" + paused + ", " : "")
+				+ (isRunning() && paused && pauseTime != null ? "pauseTime=" + pauseTime : "") + "]";
+	}
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();
