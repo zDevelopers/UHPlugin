@@ -90,7 +90,7 @@ public class UHTeamManager {
 	 * @throws IllegalArgumentException if the team does not exists.
 	 */
 	public void addPlayerToTeam(String teamName, Player player) {
-		removePlayerFromTeam(player);
+		removePlayerFromTeam(player, true);
 		
 		UHTeam team = getTeam(teamName);
 		
@@ -99,18 +99,33 @@ public class UHTeamManager {
 		}
 		
 		team.addPlayer(player);
+		player.sendMessage(i.t("team.addplayer.added", team.getDisplayName()));
 	}
 
 	/**
 	 * Removes a player from his team.
 	 * 
 	 * @param player The player to remove.
+	 * @param change If true, the player was removed from the team
+	 * because he joined another one.
 	 */
-	public void removePlayerFromTeam(Player player) {
+	public void removePlayerFromTeam(Player player, boolean change) {
 		UHTeam team = getTeamForPlayer(player);
 		if(team != null) {
 			team.removePlayer(player);
+			if(!change) {
+				player.sendMessage(i.t("team.removeplayer.removed", team.getDisplayName()));
+			}
 		}
+	}
+	
+	/**
+	 * Removes a player from his team.
+	 * 
+	 * @param player The player to remove.
+	 */
+	public void removePlayerFromTeam(Player player) {
+		removePlayerFromTeam(player, false);
 	}
 
 

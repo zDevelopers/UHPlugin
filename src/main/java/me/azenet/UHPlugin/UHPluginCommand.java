@@ -772,7 +772,7 @@ public class UHPluginCommand implements CommandExecutor {
 	 * This command is used to manage the teams.
 	 * 
 	 * Usage: /uh team (for the doc).
-	 * Usage: /uh team <add|remove|addplayer|removeplayer|list|reset> (see doc for details).
+	 * Usage: /uh team <add|remove|join|leave|list|reset> (see doc for details).
 	 * 	
 	 * @param sender
 	 * @param command

@@ -159,7 +159,10 @@ public class UHTeam {
 	public void deleteTeam() {
 		// We removes the players from the team (scoreboard team too)
 		for(UUID id : players) {
-			unregisterPlayer(plugin.getServer().getPlayer(id));
+			Player player = plugin.getServer().getPlayer(id);
+			
+			player.sendMessage(plugin.getI18n().t("team.removeplayer.removed", getDisplayName()));
+			unregisterPlayer(player);
 		}
 		
 		this.players.clear();

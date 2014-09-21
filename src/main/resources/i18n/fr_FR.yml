@@ -245,11 +245,13 @@ keys:
         addplayer:
             disconnected: "{ce}Impossible d'ajouter le joueur {0} dans l'équipe {1}. Le joueur doit être connecté."
             success: "{cs}Le joueur {0} a été ajouté à l'équipe {1}{cs} avec succès."
+            added: "{aqua}Vous faites désormais partie de l'équipe {0}{aqua}."
             doesNotExists: "{ce}Cette équipe n'existe pas."
         
         removeplayer:
             disconnected: "{ce}Le joueur {0} est déconnecté !"
             success: "{cs}Le joueur {0} a été retiré de son équipe avec succès."
+            removed: "{darkaqua}Vous ne faites plus partie de l'équipe {0}{darkaqua}."
         
         list:
             nothing: "{ce}Il n'y a pas d'équipe à lister."
