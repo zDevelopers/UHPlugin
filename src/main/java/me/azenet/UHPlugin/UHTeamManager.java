@@ -32,10 +32,14 @@ public class UHTeamManager {
 	private I18n i = null;
 	private ArrayList<UHTeam> teams = new ArrayList<UHTeam>();
 	
+	private int maxPlayersPerTeam;
+	
 	
 	public UHTeamManager(UHPlugin plugin) {
 		this.p = plugin;
 		this.i = p.getI18n();
+		
+		this.maxPlayersPerTeam = p.getConfig().getInt("teams-options.maxPlayersPerTeam");
 	}
 
 	
@@ -90,14 +94,17 @@ public class UHTeamManager {
 	 * @throws IllegalArgumentException if the team does not exists.
 	 */
 	public void addPlayerToTeam(String teamName, Player player) {
-		removePlayerFromTeam(player, true);
-		
 		UHTeam team = getTeam(teamName);
 		
 		if(team == null) {
 			throw new IllegalArgumentException("There isn't any team named" + teamName + " registered!");
 		}
 		
+		if(this.maxPlayersPerTeam != 0 && team.getPlayers().size() >= this.maxPlayersPerTeam) {
+			throw new RuntimeException("The team " + teamName + " is full");
+		}
+		
+		removePlayerFromTeam(player, true);
 		team.addPlayer(player);
 		player.sendMessage(i.t("team.addplayer.added", team.getDisplayName()));
 	}

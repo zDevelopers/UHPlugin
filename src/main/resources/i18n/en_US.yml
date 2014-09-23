@@ -247,6 +247,7 @@ keys:
             success: "{cs}The player {0} was successfully added to the team {1}"
             added: "{aqua}You are now in the {0}{aqua} team."
             doesNotExists: "{ce}This team does not exists."
+            full: "{ce}The team {0}{ce} is full!"
         
         removeplayer:
             disconnected: "{ce}The player {0} is disconnected!"

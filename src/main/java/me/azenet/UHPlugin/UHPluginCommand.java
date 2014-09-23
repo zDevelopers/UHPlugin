@@ -882,6 +882,10 @@ public class UHPluginCommand implements CommandExecutor {
 							sender.sendMessage(i.t("team.addplayer.doesNotExists"));
 							return;
 						}
+						catch(RuntimeException e) {
+							sender.sendMessage(i.t("team.addplayer.full", teamName));
+							return;
+						}
 						UHTeam team = p.getTeamManager().getTeam(teamName);
 						sender.sendMessage(i.t("team.addplayer.success", args[2], team.getDisplayName()));
 					}
