@@ -75,15 +75,53 @@ public class UHTeamManager {
 	/**
 	 * Deletes a team.
 	 * 
+	 * @param team The team to delete.
+	 * @param dontNotify If true, the player will not be notified about the leave.
+	 * @return boolean True if a team was removed.
+	 */
+	public boolean removeTeam(UHTeam team, boolean dontNotify) {
+		if(team != null) {
+			if(dontNotify) {
+				for(Player player : team.getPlayers()) {
+					this.removePlayerFromTeam(player, true);
+				}
+			}
+			
+			team.deleteTeam();
+		}
+		
+		return teams.remove(team);
+	}
+	
+	/**
+	 * Deletes a team.
+	 * 
+	 * @param team The team to delete.
+	 * @return boolean True if a team was removed.
+	 */
+	public boolean removeTeam(UHTeam team) {
+		return removeTeam(team, false);
+	}
+	
+	/**
+	 * Deletes a team.
+	 * 
 	 * @param name The name of the team to delete.
 	 * @return boolean True if a team was removed.
 	 */
 	public boolean removeTeam(String name) {
-		UHTeam team = getTeam(name);
-		if(team != null) {
-			team.deleteTeam();
-		}
-		return teams.remove(team);
+		return removeTeam(getTeam(name), false);
+	}
+	
+	/**
+	 * Deletes a team.
+	 * 
+	 * @param name The name of the team to delete.
+	 * @param dontNotify If true, the player will not be notified about the leave.
+	 * @return boolean True if a team was removed.
+	 */
+	public boolean removeTeam(String name, boolean dontNotify) {
+		return removeTeam(getTeam(name), dontNotify);
 	}
 
 	/**
@@ -113,14 +151,13 @@ public class UHTeamManager {
 	 * Removes a player from his team.
 	 * 
 	 * @param player The player to remove.
-	 * @param change If true, the player was removed from the team
-	 * because he joined another one.
+	 * @param dontNotify If true, the player will not be notified about the leave.
 	 */
-	public void removePlayerFromTeam(Player player, boolean change) {
+	public void removePlayerFromTeam(Player player, boolean dontNotify) {
 		UHTeam team = getTeamForPlayer(player);
 		if(team != null) {
 			team.removePlayer(player);
-			if(!change) {
+			if(!dontNotify) {
 				player.sendMessage(i.t("team.removeplayer.removed", team.getDisplayName()));
 			}
 		}
@@ -138,11 +175,25 @@ public class UHTeamManager {
 
 	/**
 	 * Removes all teams.
+	 * 
+	 * @param dontNotify If true, the player will not be notified when they leave the destroyed team.
+	 */
+	public void reset(boolean dontNotify) {
+		// 1: scoreboard reset
+		for(UHTeam team : teams) {
+			this.removeTeam(team, dontNotify);
+		}
+		// 2: internal list reset
+		teams = new ArrayList<UHTeam>();
+	}
+	
+	/**
+	 * Removes all teams.
 	 */
 	public void reset() {
 		// 1: scoreboard reset
 		for(UHTeam team : teams) {
-			team.deleteTeam();
+			this.removeTeam(team, false);
 		}
 		// 2: internal list reset
 		teams = new ArrayList<UHTeam>();
