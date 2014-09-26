@@ -236,7 +236,6 @@ keys:
             errorColor: "{ce}Impossible d'ajouter l'équipe ; vérifiez le nom de la couleur. Conseil : utilisez l'autocomplétion."
             errorExists: "{ce}Cette équipe existe déjà."
             added: "{cs}Équipe {0}{cs} ajoutée."
-            nameTooLong: "{ce}Impossible d'ajouter l'équipe : le nom est trop long (maximum 16 caractères)."
         
         remove:
             doesNotExists: "{ce}Cette équipe n'existe pas."

@@ -20,6 +20,7 @@
 package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 import org.apache.commons.lang.Validate;
@@ -33,6 +34,7 @@ public class UHTeam {
 	private UHPlugin plugin = null;
 	
 	private String name = null;
+	private String internalName = null;
 	private String displayName = null;
 	private ChatColor color = null;
 	
@@ -48,6 +50,11 @@ public class UHTeam {
 		this.name = name;
 		this.color = color;
 		
+		// We use a random internal name because the name of a team, in Minecraft vanilla, is limited
+		// (16 characters max).
+		Random rand = new Random();
+		this.internalName = String.valueOf(rand.nextInt(99999999)) + String.valueOf(rand.nextInt(99999999));
+		
 		if(this.color != null) {
 			this.displayName = color + name + ChatColor.RESET;
 		}
@@ -57,10 +64,8 @@ public class UHTeam {
 		
 		Scoreboard sb = this.plugin.getGameManager().getScoreboardManager().getScoreboard();
 		
-		sb.registerNewTeam(this.name);
-		Team t = sb.getTeam(this.name);
-		
-		t.setDisplayName(this.displayName);
+		sb.registerNewTeam(this.internalName);
+		Team t = sb.getTeam(this.internalName);
 		
 		if(this.color != null) {
 			t.setPrefix(this.color.toString());
@@ -119,7 +124,7 @@ public class UHTeam {
 		Validate.notNull(player, "The player cannot be null.");
 		
 		players.add(player.getUniqueId());
-		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).addPlayer(player);
+		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.internalName).addPlayer(player);
 		
 		plugin.getTeamManager().colorizePlayer(player);
 	}
@@ -147,7 +152,7 @@ public class UHTeam {
 	 * @param player
 	 */
 	private void unregisterPlayer(Player player) {
-		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).removePlayer(player);
+		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.internalName).removePlayer(player);
 		plugin.getTeamManager().colorizePlayer(player);
 	}
 	
@@ -168,7 +173,7 @@ public class UHTeam {
 		this.players.clear();
 		
 		// Then the scoreboard team is deleted.
-		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.name).unregister();
+		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.internalName).unregister();
 		
 	}
 	
