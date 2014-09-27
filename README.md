@@ -41,7 +41,8 @@ For available configuration, please [see directly the configuration file](https:
 - The names of the players can be colored, according to the team, in the chat.
 - The teams can be registered in the config file, in game, or both.
 - The teams are managed through commands (to allow the use of command blocks).
-    
+- You can set a maximum size for the teams (to be able to give players command blocks to join the teams, without manual check, as example).
+
 ### Automatic teleportation of the players
 
 - Manual teleportation spots set in the config, in game, or both.

@@ -163,6 +163,9 @@ gameplay-changes:
 teams-options:
     canSeeFriendlyInvisibles: true
     allowFriendlyFire: true
+    
+    # 0 = unlimited.
+    maxPlayersPerTeam: 0
 
 
 

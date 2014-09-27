@@ -268,12 +268,12 @@ public class UHGameManager {
 			
 			// We clears the teams if the game was in solo-mode, to avoid a team-counter to be displayed on the next start
 			if(!this.gameWithTeams) {
-				tm.reset();
+				tm.reset(true);
 			}
 			// We removes the teams automatically added, to avoid a bad team count.
 			else {
 				for(String teamName : onTheFlyTeams) {
-					tm.removeTeam(teamName);
+					tm.removeTeam(teamName, true);
 				}
 			}
 			
