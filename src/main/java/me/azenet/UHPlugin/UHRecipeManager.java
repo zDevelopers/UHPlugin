@@ -167,6 +167,10 @@ public class UHRecipeManager {
 	 * @return true if the recipe is an alternate recipe for the compass.
 	 */
 	public boolean isValidCompassRecipe(ItemStack[] matrix) {
+		if(matrix.length <= 4) {
+			return false; // Small crafting grid
+		}
+		
 		
 		// 1: check of the static part (central ingredient + iron)
 		
