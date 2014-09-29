@@ -280,8 +280,8 @@ public class UHGameplayListener implements Listener {
 			
 			Player nearest = null;
 			Double distance = 99999D;
-			for (Player player2 : p.getGameManager().getAlivePlayers()) {
-				try {	
+			for (Player player2 : p.getGameManager().getOnlineAlivePlayers()) {
+				try {
 					Double calc = player1.getLocation().distance(player2.getLocation());
 					
 					if (calc > 1 && calc < distance) {

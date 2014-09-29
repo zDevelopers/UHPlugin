@@ -32,8 +32,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.SkullType;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -165,8 +165,8 @@ public class UHGameListener implements Listener {
 			if(team != null) {
 				boolean isAliveTeam = false;
 				
-				for(Player player : team.getPlayers()) {
-					if(!p.getGameManager().isPlayerDead(player)) {
+				for(OfflinePlayer player : team.getPlayers()) {
+					if(!p.getGameManager().isPlayerDead(player.getUniqueId())) {
 						isAliveTeam = true;
 						break;
 					}

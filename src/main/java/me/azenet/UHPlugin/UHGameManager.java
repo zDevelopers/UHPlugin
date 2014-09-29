@@ -35,7 +35,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -437,7 +437,7 @@ public class UHGameManager {
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 				@Override
 				public void run() {
-					for(Player player : getAlivePlayers()) {
+					for(Player player : getOnlineAlivePlayers()) {
 						p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_USE_T_COMMAND);
 					}
 				}
@@ -448,7 +448,7 @@ public class UHGameManager {
 		Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 			@Override
 			public void run() {
-				for(Player player : getAlivePlayers()) {
+				for(Player player : getOnlineAlivePlayers()) {
 					p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_STARTUP_INVINCIBILITY);
 				}
 			}
@@ -732,7 +732,7 @@ public class UHGameManager {
 	/**
 	 * Returns true if the given player is dead.
 	 * 
-	 * @param name The name of the player.
+	 * @param player The player.
 	 * @return True if the player is dead.
 	 */
 	public boolean isPlayerDead(Player player) {
@@ -740,12 +740,31 @@ public class UHGameManager {
 	}
 	
 	/**
+	 * Returns true if the given player is dead.
+	 * 
+	 * @param player The UUID of the player.
+	 * @return True if the player is dead.
+	 */
+	public boolean isPlayerDead(UUID player) {
+		return !alivePlayers.contains(player);
+	}
+	
+	/**
 	 * Registers a player as dead.
 	 * 
-	 * @param name The name of the player to mark as dead.
+	 * @param player The player to mark as dead.
 	 */
 	public void addDead(Player player) {
 		alivePlayers.remove(player.getUniqueId());
+	}
+	
+	/**
+	 * Registers a player as dead.
+	 * 
+	 * @param player The UUID of the player to mark as dead.
+	 */
+	public void addDead(UUID player) {
+		alivePlayers.remove(player);
 	}
 
 	
@@ -767,13 +786,13 @@ public class UHGameManager {
 		
 		// There's only one team.
 		UHTeam winnerTeam = p.getGameManager().getAliveTeams().get(0);
-		ArrayList<Player> listWinners = winnerTeam.getPlayers();
+		ArrayList<OfflinePlayer> listWinners = winnerTeam.getPlayers();
 		
 		if(p.getConfig().getBoolean("finish.message")) {
 			if(p.getGameManager().isGameWithTeams()) {
 				String winners = "";
 				
-				for(Player winner : listWinners) {
+				for(OfflinePlayer winner : listWinners) {
 					if(winner == listWinners.get(0)) {
 						// Nothing
 					}
@@ -783,6 +802,7 @@ public class UHGameManager {
 					else {
 						winners += ", ";
 					}
+					
 					winners += winner.getName();
 				}
 				
@@ -806,10 +826,11 @@ public class UHGameManager {
 	public ArrayList<UHTeam> getAliveTeams() {
 		ArrayList<UHTeam> aliveTeams = new ArrayList<UHTeam>();
 		for (UHTeam t : tm.getTeams()) {
-			for (Player p : t.getPlayers()) {
-				if (!this.isPlayerDead(p) && !aliveTeams.contains(t)) aliveTeams.add(t);
+			for (OfflinePlayer p : t.getPlayers()) {
+				if (!this.isPlayerDead(p.getUniqueId()) && !aliveTeams.contains(t)) aliveTeams.add(t);
 			}
 		}
+		
 		return aliveTeams;
 	}
 	
@@ -818,12 +839,31 @@ public class UHGameManager {
 	 * 
 	 * @return The list.
 	 */
-	public HashSet<Player> getAlivePlayers() {
+	public HashSet<OfflinePlayer> getAlivePlayers() {
+		
+		HashSet<OfflinePlayer> alivePlayersList = new HashSet<OfflinePlayer>();
+		
+		for(UUID id : alivePlayers) {
+			alivePlayersList.add(p.getServer().getOfflinePlayer(id));
+		}
+		
+		return alivePlayersList;
+	}
+	
+	/**
+	 * Returns a list of the currently alive and online players.
+	 * 
+	 * @return The list.
+	 */
+	public HashSet<Player> getOnlineAlivePlayers() {
 		
 		HashSet<Player> alivePlayersList = new HashSet<Player>();
 		
 		for(UUID id : alivePlayers) {
-			alivePlayersList.add(p.getServer().getPlayer(id));
+			Player player = p.getServer().getPlayer(id);
+			if(player != null) {
+				alivePlayersList.add(player);
+			}
 		}
 		
 		return alivePlayersList;

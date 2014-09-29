@@ -35,6 +35,7 @@ import me.azenet.UHPlugin.i18n.I18n;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.command.BlockCommandSender;
@@ -918,17 +919,23 @@ public class UHPluginCommand implements CommandExecutor {
 				
 				for(final UHTeam team : tm.getTeams()) {
 					sender.sendMessage(i.t("team.list.itemTeam",  team.getDisplayName(), ((Integer) team.getPlayers().size()).toString()));
-					for(final Player player : team.getPlayers()) {
-						if(!p.getGameManager().isGameRunning()) {
-							sender.sendMessage(i.t("team.list.itemPlayer", player.getName()));
-						}
-						else {
-							if(p.getGameManager().isPlayerDead(player)) {
-								sender.sendMessage(i.t("team.list.itemPlayerDead", player.getName()));
+					for(final OfflinePlayer offlinePlayer : team.getPlayers()) {
+						if(offlinePlayer.isOnline()) {
+							Player player = (Player) offlinePlayer;
+							if(!p.getGameManager().isGameRunning()) {
+								sender.sendMessage(i.t("team.list.itemPlayer", player.getName()));
 							}
 							else {
-								sender.sendMessage(i.t("team.list.itemPlayerAlive", player.getName()));
+								if(p.getGameManager().isPlayerDead(player)) {
+									sender.sendMessage(i.t("team.list.itemPlayerDead", player.getName()));
+								}
+								else {
+									sender.sendMessage(i.t("team.list.itemPlayerAlive", player.getName()));
+								}
 							}
+						}
+						else {
+							sender.sendMessage(i.t("team.list.itemPlayerOffline", offlinePlayer.getName()));
 						}
 					}
 				}
@@ -1434,7 +1441,7 @@ public class UHPluginCommand implements CommandExecutor {
 							double y = Integer.parseInt(args[3]) + 0.5;
 							double z = Integer.parseInt(args[4]) + 0.5;
 							
-							for(Player player : team.getPlayers()) {
+							for(Player player : team.getOnlinePlayers()) {
 								player.teleport(new Location(targetWorld, x, y, z), TeleportCause.PLUGIN);
 							}
 							
@@ -1466,7 +1473,7 @@ public class UHPluginCommand implements CommandExecutor {
 							sender.sendMessage(i.t("tp.targetOffline", args[2]));
 						}
 						else {
-							for(Player player : team.getPlayers()) {
+							for(Player player : team.getOnlinePlayers()) {
 								player.teleport(target.getLocation(), TeleportCause.PLUGIN);
 							}
 						}

@@ -26,6 +26,7 @@ import java.util.UUID;
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -103,13 +104,38 @@ public class UHTeam {
 	
 	/**
 	 * Returns the players inside this team.
+	 * 
 	 * @return
 	 */
-	public ArrayList<Player> getPlayers() {
+	public ArrayList<OfflinePlayer> getPlayers() {
+		ArrayList<OfflinePlayer> playersList = new ArrayList<OfflinePlayer>();
+		
+		for(UUID id : players) {
+			Player player = plugin.getServer().getPlayer(id);
+			if(player != null) {
+				playersList.add(player);
+			}
+			else {
+				playersList.add(plugin.getServer().getOfflinePlayer(id));
+			}
+		}
+		
+		return playersList;
+	}
+	
+	/**
+	 * Returns the online players inside this team.
+	 * 
+	 * @return
+	 */
+	public ArrayList<Player> getOnlinePlayers() {
 		ArrayList<Player> playersList = new ArrayList<Player>();
 		
 		for(UUID id : players) {
-			playersList.add(plugin.getServer().getPlayer(id));
+			Player player = plugin.getServer().getPlayer(id);
+			if(player != null) {
+				playersList.add(player);
+			}
 		}
 		
 		return playersList;
@@ -136,7 +162,7 @@ public class UHTeam {
 	 * 
 	 * @param player The player to remove.
 	 */
-	public void removePlayer(Player player) {
+	public void removePlayer(OfflinePlayer player) {
 		Validate.notNull(player, "The player cannot be null.");
 		
 		players.remove(player.getUniqueId());
@@ -151,7 +177,7 @@ public class UHTeam {
 	 * 
 	 * @param player
 	 */
-	private void unregisterPlayer(Player player) {
+	private void unregisterPlayer(OfflinePlayer player) {
 		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.internalName).removePlayer(player);
 		plugin.getTeamManager().colorizePlayer(player);
 	}

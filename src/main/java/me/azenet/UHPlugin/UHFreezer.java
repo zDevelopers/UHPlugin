@@ -86,7 +86,7 @@ public class UHFreezer {
 		this.globalFreeze = frozen;
 		
 		if(frozen) {
-			for(Player player : p.getGameManager().getAlivePlayers()) {
+			for(Player player : p.getGameManager().getOnlineAlivePlayers()) {
 				this.setPlayerFreezeState(player, true);
 			}
 			
