@@ -255,10 +255,15 @@ keys:
         
         list:
             nothing: "{ce}There isn't any team to show."
-            itemTeam: "{0} - {1} players"
-            itemPlayer: "{lightpurple} - {0}"
-            itemPlayerDead: "{lightpurple} - {0} {reset}({red}dead{reset})"
-            itemPlayerAlive: "{lightpurple} - {0} {reset}({green}alive{reset})"
+            
+            itemTeam: "{0} ({1} players)"
+            
+            bulletPlayerOnline: "{green} • "
+            bulletPlayerOffline: "{red} • "
+            
+            itemPlayer: "{0}"
+            itemPlayerDead: "{0} {reset}({red}dead{reset})"
+            itemPlayerAlive: "{0} {reset}({green}alive{reset})"
         
         reset:
             success: "{cs}All teams where removed."

@@ -919,23 +919,25 @@ public class UHPluginCommand implements CommandExecutor {
 				
 				for(final UHTeam team : tm.getTeams()) {
 					sender.sendMessage(i.t("team.list.itemTeam",  team.getDisplayName(), ((Integer) team.getPlayers().size()).toString()));
-					for(final OfflinePlayer offlinePlayer : team.getPlayers()) {
-						if(offlinePlayer.isOnline()) {
-							Player player = (Player) offlinePlayer;
-							if(!p.getGameManager().isGameRunning()) {
-								sender.sendMessage(i.t("team.list.itemPlayer", player.getName()));
-							}
-							else {
-								if(p.getGameManager().isPlayerDead(player)) {
-									sender.sendMessage(i.t("team.list.itemPlayerDead", player.getName()));
-								}
-								else {
-									sender.sendMessage(i.t("team.list.itemPlayerAlive", player.getName()));
-								}
-							}
+					for(final OfflinePlayer player : team.getPlayers()) {
+						String bullet = null;
+						if(player.isOnline()) {
+							bullet = i.t("team.list.bulletPlayerOnline");
 						}
 						else {
-							sender.sendMessage(i.t("team.list.itemPlayerOffline", offlinePlayer.getName()));
+							bullet = i.t("team.list.bulletPlayerOffline");
+						}
+						
+						if(!p.getGameManager().isGameRunning()) {
+							sender.sendMessage(bullet + i.t("team.list.itemPlayer", player.getName()));
+						}
+						else {
+							if(p.getGameManager().isPlayerDead(player.getUniqueId())) {
+								sender.sendMessage(bullet + i.t("team.list.itemPlayerDead", player.getName()));
+							}
+							else {
+								sender.sendMessage(bullet + i.t("team.list.itemPlayerAlive", player.getName()));
+							}
 						}
 					}
 				}

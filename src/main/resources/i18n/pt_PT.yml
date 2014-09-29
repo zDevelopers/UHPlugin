@@ -251,10 +251,14 @@ keys:
         
         list:
             nothing: "{ce}Nao existe nenhuma Equipa para ser Mostrada."
-            itemTeam: "{0} - {1} Jogadores"
-            itemPlayer: "{lightpurple} - {0}"
-            itemPlayerDead: "{lightpurple} - {0} {reset}({red}Morto{reset})"
-            itemPlayerAlive: "{lightpurple} - {0} {reset}({green}Vivo{reset})"
+            itemTeam: "{0} ({1} Jogadores)"
+            
+            bulletPlayerOnline: "{green} • "
+            bulletPlayerOffline: "{red} • "
+            
+            itemPlayer: "{0}"
+            itemPlayerDead: "{0} {reset}({red}Morto{reset})"
+            itemPlayerAlive: "{0} {reset}({green}Vivo{reset})"
         
         reset:
             success: "{cs}Todas as Equipas foram Removidas."
