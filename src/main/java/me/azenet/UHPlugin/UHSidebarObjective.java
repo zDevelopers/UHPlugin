@@ -33,9 +33,9 @@ import org.bukkit.scoreboard.Scoreboard;
  * smallest positive numbers possible.
  * <p>
  * <strong>WARNING</strong>: in this class, the <em>index</em> of an entry is
- * 0 for the first one (at the top of the sidebar), and the number of entries - 1
+ * 0 for the first one (at the top of the sidebar), and <tt>the number of entries - 1</tt>
  * for the last one.<br />
- * It is NOT the index used as a score in the objective. 
+ * It is NOT the index used as a score in the objective.
  * 
  * @author Amaury Carrade
  */
@@ -60,7 +60,7 @@ public class UHSidebarObjective {
 	 * @param displayName The display name.
 	 */
 	public void setDisplayName(String displayName) {
-		objective.setDisplayName(displayName);
+		objective.setDisplayName(displayName.substring(0, Math.min(displayName.length(), 32)));
 	}
 	
 	/**
@@ -92,7 +92,8 @@ public class UHSidebarObjective {
 	/**
 	 * Adds an entry at the bottom of the sidebar.
 	 * <p>
-	 * An entry is a line in the sidebar.
+	 * An entry is a line in the sidebar.<br />
+	 * The entry is truncated at 16 characters (Minecraft limitation).
 	 * <p>
 	 * If an entry with this text is already registered, nothing is done.
 	 * 
@@ -103,6 +104,8 @@ public class UHSidebarObjective {
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
 	public boolean addEntry(String entry, boolean dontReconstruct) {
+		entry = truncateEntry(entry);
+		
 		if(!entries.contains(entry)) {
 			this.entries.add(entry);
 			
@@ -117,7 +120,8 @@ public class UHSidebarObjective {
 	/**
 	 * Adds an entry at the bottom of the sidebar.
 	 * <p>
-	 * An entry is a line in the sidebar.
+	 * An entry is a line in the sidebar.<br />
+	 * The entry is truncated at 16 characters (Minecraft limitation).
 	 * <p>
 	 * If an entry with this text is already registered, nothing is done.
 	 * 
@@ -135,6 +139,8 @@ public class UHSidebarObjective {
 	 * Shifts the element currently at that position
 	 * (if any) and any subsequent elements to the bottom
 	 * (adds one to their indexes).
+	 * <p>
+	 * The entry is truncated at 16 characters (Minecraft limitation).
 	 * 
 	 * @param index Where
 	 * @param entry What
@@ -144,6 +150,8 @@ public class UHSidebarObjective {
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
 	public boolean addEntryAtIndex(int index, String entry, boolean dontReconstruct) {
+		entry = truncateEntry(entry);
+		
 		if(!entries.contains(entry)) {
 			this.entries.add(index, entry);
 			
@@ -168,6 +176,8 @@ public class UHSidebarObjective {
 	 * Shifts the element currently at that position
 	 * (if any) and any subsequent elements to the right
 	 * (adds one to their indices).
+	 * <p>
+	 * The entry is truncated at 16 characters (Minecraft limitation).
 	 * 
 	 * @param index Where
 	 * @param entry What
@@ -183,6 +193,8 @@ public class UHSidebarObjective {
 	 * <p>
 	 * If the string <tt>afterThis</tt> is not registered, the entry is added at the bottom
 	 * of the sidebar.
+	 * <p>
+	 * The entries are truncated at 16 characters (Minecraft limitation).
 	 * 
 	 * @param afterThis The entry will be added after this entry.
 	 * @param entry The entry to add.
@@ -192,8 +204,10 @@ public class UHSidebarObjective {
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
 	public boolean addEntryAfter(String afterThis, String entry, boolean dontReconstruct) {
+		entry = truncateEntry(entry);
+		
 		if(!entries.contains(entry)) {
-			int beforeIndex = entries.indexOf(afterThis);
+			int beforeIndex = entries.indexOf(truncateEntry(afterThis));
 			
 			if(beforeIndex == -1 || beforeIndex == entries.size()) {
 				return addEntry(entry, dontReconstruct);
@@ -212,6 +226,8 @@ public class UHSidebarObjective {
 	 * <p>
 	 * If the string <tt>afterThis</tt> is not registered, the entry is added at the bottom
 	 * of the sidebar.
+	 * <p>
+	 * The entries are truncated at 16 characters (Minecraft limitation).
 	 * 
 	 * @param afterThis The entry will be added after this entry.
 	 * @param entry The entry to add.
@@ -227,6 +243,8 @@ public class UHSidebarObjective {
 	 * <p>
 	 * If the string <tt>beforeThis</tt> is not registered, the entry is added at the top
 	 * of the sidebar.
+	 * <p>
+	 * The entries are truncated at 16 characters (Minecraft limitation).
 	 * 
 	 * @param beforeThis The entry will be added before this entry.
 	 * @param entry The entry to add.
@@ -236,8 +254,10 @@ public class UHSidebarObjective {
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
 	public boolean addEntryBefore(String beforeThis, String entry, boolean dontReconstruct) {
+		entry = truncateEntry(entry);
+		
 		if(!entries.contains(entry)) {
-			int afterIndex = entries.indexOf(beforeThis);
+			int afterIndex = entries.indexOf(truncateEntry(beforeThis));
 			
 			if(afterIndex == -1 || afterIndex == entries.size()) {
 				return addEntryAtIndex(0, entry, dontReconstruct);
@@ -256,6 +276,8 @@ public class UHSidebarObjective {
 	 * <p>
 	 * If the string <tt>beforeThis</tt> is not registered, the entry is added at the top
 	 * of the sidebar.
+	 * <p>
+	 * The entry are truncated at 16 characters (Minecraft limitation).
 	 * 
 	 * @param beforeThis The entry will be added before this entry.
 	 * @param entry The entry to add.
@@ -268,6 +290,8 @@ public class UHSidebarObjective {
 	
 	/**
 	 * Updates the entry <tt>oldEntry</tt> with the text <tt>newEntry</tt>.
+	 * <p>
+	 * The entries are truncated at 16 characters (Minecraft limitation).
 	 * 
 	 * @param oldEntry The text to be updated.
 	 * @param newEntry The updated text.
@@ -292,12 +316,33 @@ public class UHSidebarObjective {
 	
 	/**
 	 * Removes the given entry from the sidebar.
+	 * <p>
+	 * The entry is truncated at 16 characters (Minecraft limitation).
 	 * 
 	 * @param entry The entry to remove.
-	 * @return
+	 * @param dontReconstruct If true, the objective will not been automatically
+	 * reconstructed. You will need to call {@link #reconstructSidebar()} to do so.
+	 * 
+	 * @return <tt>True</tt> if an entry was removed.
+	 */
+	public boolean removeEntry(String entry, boolean dontReconstruct) {
+		boolean removed = entries.remove(truncateEntry(entry));
+		if(!dontReconstruct) reconstructSidebar();
+		
+		return removed;
+	}
+	
+	/**
+	 * Removes the given entry from the sidebar.
+	 * <p>
+	 * The entry is truncated at 16 characters (Minecraft limitation).
+	 * 
+	 * @param entry The entry to remove.
+	 * 
+	 * @return <tt>True</tt> if an entry was removed.
 	 */
 	public boolean removeEntry(String entry) {
-		return entries.remove(entry);
+		return removeEntry(entry, false);
 	}
 	
 	
@@ -320,5 +365,16 @@ public class UHSidebarObjective {
 		for(int i = 0; i < maxScore; i++) {
 			objective.getScore(entries.get(i)).setScore(maxScore - i);
 		}
+	}
+	
+	/**
+	 * Truncates the given entry at 16 characters, the maximal size allowed by
+	 * Minecraft.
+	 * 
+	 * @param entry The entry to truncate.
+	 * @return The truncated entry.
+	 */
+	private String truncateEntry(String entry) {
+		return entry.substring(0, Math.min(entry.length(), 16));
 	}
 }
