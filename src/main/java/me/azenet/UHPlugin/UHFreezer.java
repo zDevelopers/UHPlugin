@@ -123,11 +123,11 @@ public class UHFreezer {
 			
 			// Unfreezes the timers.
 			p.getTimerManager().pauseAll(false);
-			p.getGameManager().getScoreboardManager().restartTimers();
+			p.getScoreboardManager().restartTimers();
 		}
 		
 		if(showStateInScoreboard || !frozen) {
-			this.p.getGameManager().getScoreboardManager().displayFreezeState();
+			p.getScoreboardManager().displayFreezeState();
 		}
 		
 		updateListenerRegistration();

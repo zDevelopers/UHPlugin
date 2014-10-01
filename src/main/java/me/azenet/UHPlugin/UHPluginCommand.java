@@ -1610,7 +1610,7 @@ public class UHPluginCommand implements CommandExecutor {
 					return;
 				}
 				
-				p.getGameManager().getScoreboardManager().displayTimer(timer);
+				p.getScoreboardManager().displayTimer(timer);
 				sender.sendMessage(i.t("timers.displayed", timer.getDisplayName()));
 			}
 			
@@ -1623,7 +1623,7 @@ public class UHPluginCommand implements CommandExecutor {
 					return;
 				}
 				
-				p.getGameManager().getScoreboardManager().hideTimer(timer);
+				p.getScoreboardManager().hideTimer(timer);
 				sender.sendMessage(i.t("timers.hidden", timer.getDisplayName()));
 			}
 			
@@ -1692,7 +1692,7 @@ public class UHPluginCommand implements CommandExecutor {
 					return;
 				}
 				
-				p.getGameManager().getScoreboardManager().hideTimer(timer);
+				p.getScoreboardManager().hideTimer(timer);
 				p.getTimerManager().unregisterTimer(timer);
 				sender.sendMessage(i.t("timers.removed", timer.getDisplayName()));
 			}
@@ -1708,13 +1708,13 @@ public class UHPluginCommand implements CommandExecutor {
 							sender.sendMessage(i.t("timers.list.itemPaused", 
 									timer.getDisplayName(),
 									String.valueOf(timer.getDuration()),
-									p.getGameManager().getScoreboardManager().getTimerText(timer, false, false)));
+									p.getScoreboardManager().getTimerText(timer, false, false)));
 						}
 						else {
 							sender.sendMessage(i.t("timers.list.itemRunning", 
 									timer.getDisplayName(),
 									String.valueOf(timer.getDuration()),
-									p.getGameManager().getScoreboardManager().getTimerText(timer, false, false)));
+									p.getScoreboardManager().getTimerText(timer, false, false)));
 
 						}
 					}

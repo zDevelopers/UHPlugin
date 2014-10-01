@@ -39,6 +39,6 @@ public class UpdateTimerTask extends BukkitRunnable {
 			timer.update();
 		}
 		
-		p.getGameManager().getScoreboardManager().updateTimers();
+		p.getScoreboardManager().updateTimers();
 	}
 }

@@ -300,7 +300,7 @@ public class UHGameListener implements Listener {
 		}
 		
 		// Mainly useful on the first join.
-		p.getGameManager().getScoreboardManager().setScoreboardForPlayer(ev.getPlayer());
+		p.getScoreboardManager().setScoreboardForPlayer(ev.getPlayer());
 		
 		// The display name is reset when the player logs off.
 		p.getTeamManager().colorizePlayer(ev.getPlayer());
@@ -407,7 +407,7 @@ public class UHGameListener implements Listener {
 			ev.setRestart(true);
 		}
 		else {
-			p.getGameManager().getScoreboardManager().hideTimer(ev.getTimer());
+			p.getScoreboardManager().hideTimer(ev.getTimer());
 		}
 		
 		if(ev.getTimer().equals(p.getBorderManager().getWarningTimer()) && ev.wasTimerUp()) {
@@ -427,7 +427,7 @@ public class UHGameListener implements Listener {
 		p.getTimerManager().updateStartedTimersList();
 		
 		if(!ev.getTimer().equals(p.getTimerManager().getMainTimer())) {
-			p.getGameManager().getScoreboardManager().displayTimer(ev.getTimer());
+			p.getScoreboardManager().displayTimer(ev.getTimer());
 		}
 	}
 }

@@ -63,7 +63,7 @@ public class UHTeam {
 			this.displayName = name;
 		}
 		
-		Scoreboard sb = this.plugin.getGameManager().getScoreboardManager().getScoreboard();
+		Scoreboard sb = this.plugin.getScoreboardManager().getScoreboard();
 		
 		sb.registerNewTeam(this.internalName);
 		Team t = sb.getTeam(this.internalName);
@@ -150,7 +150,7 @@ public class UHTeam {
 		Validate.notNull(player, "The player cannot be null.");
 		
 		players.add(player.getUniqueId());
-		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.internalName).addPlayer(player);
+		plugin.getScoreboardManager().getScoreboard().getTeam(this.internalName).addPlayer(player);
 		
 		plugin.getTeamManager().colorizePlayer(player);
 	}
@@ -178,7 +178,7 @@ public class UHTeam {
 	 * @param player
 	 */
 	private void unregisterPlayer(OfflinePlayer player) {
-		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.internalName).removePlayer(player);
+		plugin.getScoreboardManager().getScoreboard().getTeam(this.internalName).removePlayer(player);
 		plugin.getTeamManager().colorizePlayer(player);
 	}
 	
@@ -199,7 +199,7 @@ public class UHTeam {
 		this.players.clear();
 		
 		// Then the scoreboard team is deleted.
-		plugin.getGameManager().getScoreboardManager().getScoreboard().getTeam(this.internalName).unregister();
+		plugin.getScoreboardManager().getScoreboard().getTeam(this.internalName).unregister();
 		
 	}
 	

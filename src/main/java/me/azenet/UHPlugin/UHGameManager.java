@@ -49,7 +49,6 @@ public class UHGameManager {
 	private Random random = null;
 	
 	private Boolean damageIsOn = false;
-	private UHScoreboardManager scoreboardManager = null;
 
 	private HashSet<String> players = new HashSet<String>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available 
 	private HashSet<UUID> alivePlayers = new HashSet<UUID>();
@@ -100,18 +99,6 @@ public class UHGameManager {
 	}
 
 	/**
-	 * Initializes the scoreboard.
-	 * 
-	 * If the scoreboard manager is instanced in the constructor, when the
-	 * scoreboard manager try to get the game manager through UHPlugin.getGameManager(),
-	 * the value returned is "null" (because the object is not yet constructed).
-	 * This is why we initializes the scoreboard manager later, in this method.
-	 */
-	public void initScoreboard() {
-		this.scoreboardManager = new UHScoreboardManager(p);
-	}
-
-	/**
 	 * Initializes the given player.
 	 * 
 	 *  - Teleportation to the default world's spawn point.
@@ -131,7 +118,7 @@ public class UHGameManager {
 		player.setSaturation(14f);
 		player.setHealth(20d);
 		
-		p.getGameManager().getScoreboardManager().setScoreboardForPlayer(player);
+		p.getScoreboardManager().setScoreboardForPlayer(player);
 		
 		// Used to update the "health" objective, to avoid a null one.
 		// Launched later because else, the health is constantly set to 20,
@@ -139,7 +126,7 @@ public class UHGameManager {
 		Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 			@Override
 			public void run() {
-				p.getGameManager().getScoreboardManager().updateHealthScore(player);
+				p.getScoreboardManager().updateHealthScore(player);
 			}
 		}, 20L);
 		
@@ -311,7 +298,7 @@ public class UHGameManager {
 			
 			// Used to display the number of teams, players... in the scoreboard instead of 0
 			// while the players are teleported.
-			scoreboardManager.updateCounters();
+			p.getScoreboardManager().updateCounters();
 			
 			// A simple information, because this start is slower (yeah, Captain Obvious here)
 			p.getServer().broadcastMessage(i.t("start.teleportationInProgress"));
@@ -400,7 +387,7 @@ public class UHGameManager {
 			this.episode = 1;
 			
 			// Removes the fake timer displayed before the start of the game.
-			scoreboardManager.startTimer();
+			p.getScoreboardManager().startTimer();
 			
 			// An empty string is used for the name of the main timer, because
 			// such a name can't be used by players.
@@ -471,8 +458,8 @@ public class UHGameManager {
 		
 		// The updateCounters method needs to be executed when the game is marked
 		// as running, in order to display the team count.
-		this.scoreboardManager.updateCounters();
-		this.scoreboardManager.updateTimers();
+		p.getScoreboardManager().updateCounters();
+		p.getScoreboardManager().updateTimers();
 	}
 	
 	
@@ -493,7 +480,7 @@ public class UHGameManager {
 		this.alivePlayersCount = alivePlayers.size();
 		this.aliveTeamsCount = getAliveTeams().size();
 		
-		this.scoreboardManager.updateCounters();
+		p.getScoreboardManager().updateCounters();
 	}
 	
 	
@@ -518,11 +505,11 @@ public class UHGameManager {
 			// Restarts the timer.
 			// Useless for a normal start (restarted in the event), but needed if the episode was shifted.
 			if(!shifter.equals("")) {
-				scoreboardManager.restartTimers();
+				p.getScoreboardManager().restartTimers();
 				p.getTimerManager().getMainTimer().start();
 			}
 			
-			this.scoreboardManager.updateCounters();
+			p.getScoreboardManager().updateCounters();
 		}
 	}
 	
@@ -867,15 +854,6 @@ public class UHGameManager {
 		}
 		
 		return alivePlayersList;
-	}
-	
-	/**
-	 * Returns the scoreboard manager.
-	 * 
-	 * @return
-	 */
-	public UHScoreboardManager getScoreboardManager() {
-		return scoreboardManager;
 	}
 	
 	/**
