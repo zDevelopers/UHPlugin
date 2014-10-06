@@ -1694,6 +1694,8 @@ public class UHPluginCommand implements CommandExecutor {
 				
 				p.getScoreboardManager().hideTimer(timer);
 				p.getTimerManager().unregisterTimer(timer);
+				timer.stop();
+				
 				sender.sendMessage(i.t("timers.removed", timer.getDisplayName()));
 			}
 			

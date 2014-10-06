@@ -225,7 +225,7 @@ public class UHGameManager {
 					// A team with that name may already exists.
 					// Tries:
 					// 1. The name of the player;
-					// 2. TheName (bigRandomNumberHere).
+					// 2. TheName bigRandomNumberHere.
 					
 					String teamName = player.getName();
 					
@@ -386,9 +386,6 @@ public class UHGameManager {
 		if(p.getConfig().getBoolean("episodes.enabled")) {
 			this.episode = 1;
 			
-			// Removes the fake timer displayed before the start of the game.
-			p.getScoreboardManager().startTimer();
-			
 			// An empty string is used for the name of the main timer, because
 			// such a name can't be used by players.
 			UHTimer mainTimer = new UHTimer("");
@@ -450,16 +447,12 @@ public class UHGameManager {
 		Bukkit.getServer().broadcastMessage(i.t("start.go"));
 		
 		p.getFreezer().setGlobalFreezeState(false);
+		p.getScoreboardManager().initScoreboardAfterStart();
 		
 		// Start sound
 		new UHSound(p.getConfig().getConfigurationSection("start.sound")).broadcast();
 		
 		this.gameRunning = true;
-		
-		// The updateCounters method needs to be executed when the game is marked
-		// as running, in order to display the team count.
-		p.getScoreboardManager().updateCounters();
-		p.getScoreboardManager().updateTimers();
 	}
 	
 	

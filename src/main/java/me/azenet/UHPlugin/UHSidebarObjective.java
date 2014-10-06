@@ -21,6 +21,7 @@ package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -37,6 +38,27 @@ import org.bukkit.scoreboard.Scoreboard;
  * for the last one.<br />
  * It is NOT the index used as a score in the objective.
  * 
+ * <h3>About separators</h3>
+ * <em>(<tt>so</tt> is a UHSidebarObjective object.)</em>
+ * <p>
+ * To add a separator (blank line on the sidebar), use
+ * <tt>so.{@link #addEntry(String) addEntry}(UHSidebarObjective.SEPARATOR);</tt>.<br />
+ * This class will automatically use a different number of spaces to allow you to use
+ * multiple separators (hard vanilla limit: 17 separators per scoreboard).
+ * <p>
+ * To remove a separator, it's a bit more complicated, because separators are not unique.
+ * <ul>
+ * 	<li>If there is only one separator in the scoreboard, you can safely use
+ *      <tt>so.{@link #removeEntry(String) removeEntry}(UHSidebarObjective.SEPARATOR);</tt>.</li>
+ * 	<li>Else, this method will remove the <em>first separator</em> only.<br />
+ *      To remove a specific separator, use {@link #removeEntryAtIndex(int)}, using the index
+ *      of an entry just before or after the space you want to remove as a reference.<br />
+ *      this index can be retrieved using
+ *      <tt>so.{@link #getEntryIndex(String) getEntryIndex}("the entry before/after")</tt>.<br />
+ *      Just add or remove <tt>1</tt> to get the index of the separator.
+ *  </li>
+ * </ul>
+ * 
  * @author Amaury Carrade
  */
 public class UHSidebarObjective {
@@ -45,11 +67,18 @@ public class UHSidebarObjective {
 	
 	private Scoreboard scoreboard = null;
 	private String objectiveName = null;
+	private String displayName = null;
 	private Objective objective = null;
+	
+	/**
+	 * Represents an entry used as a separator.
+	 */
+	public static final String SEPARATOR = "";
 	
 	public UHSidebarObjective(Scoreboard scoreboard, String objectiveName) {
 		this.objectiveName = objectiveName;
 		this.scoreboard = scoreboard;
+		this.displayName = objectiveName;
 		
 		registerObjective();
 	}
@@ -60,6 +89,19 @@ public class UHSidebarObjective {
 	 * @param displayName The display name.
 	 */
 	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+		setDisplayName();
+	}
+	
+	/**
+	 * Sets the display name of this objective (aka the title of the displayed table), using the
+	 * stored display name.
+	 * 
+	 * Used when the scoreboard is reconstructed.
+	 * 
+	 * @param displayName The display name.
+	 */
+	private void setDisplayName() {
 		objective.setDisplayName(displayName.substring(0, Math.min(displayName.length(), 32)));
 	}
 	
@@ -85,6 +127,7 @@ public class UHSidebarObjective {
 	 */
 	public void registerObjective() {
 		this.objective = scoreboard.registerNewObjective(objectiveName, "dummy");
+		setDisplayName();
 		display();
 	}
 	
@@ -99,17 +142,17 @@ public class UHSidebarObjective {
 	 * 
 	 * @param entry The entry to add.
 	 * @param dontReconstruct If true, the objective will not been automatically
-	 * reconstructed. You will need to call {@link #reconstructSidebar()} to do so.
+	 * reconstructed. You will need to call {@link #reconstruct()} to do so.
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
 	public boolean addEntry(String entry, boolean dontReconstruct) {
 		entry = truncateEntry(entry);
 		
-		if(!entries.contains(entry)) {
+		if(!entries.contains(entry) || entry.equals(SEPARATOR)) { // Multiple separators are allowed.
 			this.entries.add(entry);
 			
-			if(!dontReconstruct) reconstructSidebar();
+			if(!dontReconstruct) reconstruct();
 			
 			return true;
 		}
@@ -145,22 +188,23 @@ public class UHSidebarObjective {
 	 * @param index Where
 	 * @param entry What
 	 * @param dontReconstruct If true, the objective will not been automatically
-	 * reconstructed. You will need to call {@link #reconstructSidebar()} to do so.
+	 * reconstructed. You will need to call {@link #reconstruct()} to do so.
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
 	public boolean addEntryAtIndex(int index, String entry, boolean dontReconstruct) {
 		entry = truncateEntry(entry);
 		
-		if(!entries.contains(entry)) {
-			this.entries.add(index, entry);
+		if(!entries.contains(entry) || entry.equals(SEPARATOR)) {
+			ensureSize(entries, index + 1);
+			entries.add(index, entry);
 			
 			if(!dontReconstruct) {
 				if(index == 0) { // Top - we just need to add a score higher than the other ones.
 					objective.getScore(entry).setScore(entries.size());
 				}
 				else {
-					reconstructSidebar();
+					reconstruct();
 				}
 			}
 			
@@ -196,17 +240,17 @@ public class UHSidebarObjective {
 	 * <p>
 	 * The entries are truncated at 16 characters (Minecraft limitation).
 	 * 
-	 * @param afterThis The entry will be added after this entry.
+	 * @param afterThis The entry will be added after this entry. Don't use a separator for this!
 	 * @param entry The entry to add.
 	 * @param dontReconstruct If true, the objective will not been automatically
-	 * reconstructed. You will need to call {@link #reconstructSidebar()} to do so.
+	 * reconstructed. You will need to call {@link #reconstruct()} to do so.
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
 	public boolean addEntryAfter(String afterThis, String entry, boolean dontReconstruct) {
 		entry = truncateEntry(entry);
 		
-		if(!entries.contains(entry)) {
+		if(!entries.contains(entry) || entry.equals(SEPARATOR)) {
 			int beforeIndex = entries.indexOf(truncateEntry(afterThis));
 			
 			if(beforeIndex == -1 || beforeIndex == entries.size()) {
@@ -249,14 +293,14 @@ public class UHSidebarObjective {
 	 * @param beforeThis The entry will be added before this entry.
 	 * @param entry The entry to add.
 	 * @param dontReconstruct If true, the objective will not been automatically
-	 * reconstructed. You will need to call {@link #reconstructSidebar()} to do so.
+	 * reconstructed. You will need to call {@link #reconstruct()} to do so.
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
 	public boolean addEntryBefore(String beforeThis, String entry, boolean dontReconstruct) {
 		entry = truncateEntry(entry);
 		
-		if(!entries.contains(entry)) {
+		if(!entries.contains(entry) || entry.equals(SEPARATOR)) {
 			int afterIndex = entries.indexOf(truncateEntry(beforeThis));
 			
 			if(afterIndex == -1 || afterIndex == entries.size()) {
@@ -293,7 +337,7 @@ public class UHSidebarObjective {
 	 * <p>
 	 * The entries are truncated at 16 characters (Minecraft limitation).
 	 * 
-	 * @param oldEntry The text to be updated.
+	 * @param oldEntry The text to be updated. Don't use a separator here!
 	 * @param newEntry The updated text.
 	 * 
 	 * @return <tt>True</tt> if the text was updated (aka <tt>true</tt> if an
@@ -314,6 +358,41 @@ public class UHSidebarObjective {
 		return false;
 	}
 	
+	
+	/**
+	 * Removes the entry at the given index from the sidebar.
+	 * 
+	 * @param index The index of the entry to remove.
+	 * @param dontReconstruct If true, the objective will not been automatically
+	 * reconstructed. You will need to call {@link #reconstruct()} to do so.
+	 * 
+	 * @return <tt>True</tt> if an entry was removed.
+	 */
+	public boolean removeEntryAtIndex(int index, boolean dontReconstruct) {
+		try {
+			if(entries.get(index) != null) {
+				entries.remove(index);
+				if(!dontReconstruct) reconstruct();
+				return true;
+			}
+		} catch(ArrayIndexOutOfBoundsException e) {
+			// Entry not defined
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes the entry at the given index from the sidebar.
+	 * 
+	 * @param index The index of the entry to remove.
+	 * 
+	 * @return <tt>True</tt> if an entry was removed.
+	 */
+	public boolean removeEntryAtIndex(int index) {
+		return removeEntryAtIndex(index, false);
+	}
+	
 	/**
 	 * Removes the given entry from the sidebar.
 	 * <p>
@@ -321,15 +400,12 @@ public class UHSidebarObjective {
 	 * 
 	 * @param entry The entry to remove.
 	 * @param dontReconstruct If true, the objective will not been automatically
-	 * reconstructed. You will need to call {@link #reconstructSidebar()} to do so.
+	 * reconstructed. You will need to call {@link #reconstruct()} to do so.
 	 * 
 	 * @return <tt>True</tt> if an entry was removed.
 	 */
 	public boolean removeEntry(String entry, boolean dontReconstruct) {
-		boolean removed = entries.remove(truncateEntry(entry));
-		if(!dontReconstruct) reconstructSidebar();
-		
-		return removed;
+		return removeEntryAtIndex(entries.indexOf(entry), dontReconstruct);
 	}
 	
 	/**
@@ -347,25 +423,84 @@ public class UHSidebarObjective {
 	
 	
 	/**
+	 * Resets the sidebar, removing all entries.
+	 * 
+	 * @param dontReconstruct If true, the objective will not been automatically
+	 * reconstructed. You will need to call {@link #reconstruct()} to do so.
+	 */
+	public void reset(boolean dontReconstruct) {
+		entries.clear();
+		
+		if(!dontReconstruct) reconstruct();
+	}
+	
+	/**
+	 * Resets the sidebar, removing all entries.
+	 */
+	public void reset() {
+		reset(false);
+	}
+	
+	
+	/**
+	 * Returns the index of the given entry.
+	 * <p>
+	 * The entry is truncated at 16 characters (Minecraft limitation).
+	 * 
+	 * @param entry The entry.
+	 * @return The index, or {@code -1} if the given {@code entry} is not registered.
+	 */
+	public int getEntryIndex(String entry) {
+		return entries.indexOf(truncateEntry(entry));
+	}
+	
+	/**
+	 * Returns the (truncated) entry at the given index.
+	 * 
+	 * @param index The index.
+	 * @return The entry.
+	 */
+	public String getEntry(int index) {
+		return entries.get(index);
+	}
+	
+	
+	/**
 	 * Reconstructs the sidebar from scratch, with recalculated scores
 	 * following the number of entries.
 	 * Automatically called when an entry is added/removed, except if the reconstruction
 	 * is explicitly disabled using the dontReconstruct parameter.
 	 */
-	public void reconstructSidebar() {
+	public void reconstruct() {
 		// First: the objective is removed, then recreated, to reset it.
 		this.unregisterObjective();
 		this.registerObjective();
 		
 		// We don't want a "0" score, because these scores need a special
 		// initialization (set to 1, and to 0 one tick later).
-		int maxScore = entries.size();
+		int score = entries.size();
+		int maxScore = score;
 		
-		// entries.get(i) -> score maxScore - i
-		for(int i = 0; i < maxScore; i++) {
-			objective.getScore(entries.get(i)).setScore(maxScore - i);
+		// We use this to generate a different number of spaces for each separator.
+		int separatorSpacesCount = 0;
+		
+		for(int i = 0 ; i < maxScore ; i++) {
+			String entry = entries.get(i);
+			
+			if(entry == null) continue;
+			
+			if(entry.equals(SEPARATOR)) {
+				objective.getScore(generateSpaces(separatorSpacesCount)).setScore(score);
+				separatorSpacesCount++;
+			}
+			else {
+				objective.getScore(entries.get(i)).setScore(score);
+			}
+			
+			score--;
 		}
 	}
+	
 	
 	/**
 	 * Truncates the given entry at 16 characters, the maximal size allowed by
@@ -376,5 +511,39 @@ public class UHSidebarObjective {
 	 */
 	private String truncateEntry(String entry) {
 		return entry.substring(0, Math.min(entry.length(), 16));
+	}
+	
+	/**
+	 * Generates a string containing {@code spaces} spaces.
+	 * 
+	 * @param spaces The number of spaces in the string.
+	 * 
+	 * @return The string.
+	 */
+	protected String generateSpaces(int spaces) {
+		String space = "";
+		
+		for(int i = 0; i < spaces; i++) {
+			space += " ";
+		}
+		
+		return space;
+	}
+	
+	/**
+	 * Increases the size of the given {@code ArrayList} if needed.
+	 * 
+	 * @param list The list.
+	 * @param size The size.
+	 */
+	private void ensureSize(ArrayList<?> list, int size) {
+		if(list.size() < size) {
+		    // Prevent excessive copying while we're adding
+		    list.ensureCapacity(size);
+		    
+		    while (list.size() < size) {
+		        list.add(null);
+		    }
+		}
 	}
 }

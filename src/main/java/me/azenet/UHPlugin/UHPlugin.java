@@ -70,7 +70,6 @@ public final class UHPlugin extends JavaPlugin {
 		
 		teamManager = new UHTeamManager(this);
 		gameManager = new UHGameManager(this);
-		scoreboardManager = new UHScoreboardManager(this);
 		spawnsManager = new UHSpawnsManager(this);
 		borderManager = new UHBorderManager(this);
 		recipeManager = new UHRecipeManager(this);
@@ -80,6 +79,8 @@ public final class UHPlugin extends JavaPlugin {
 		freezer = new UHFreezer(this);
 		
 		protipsSender = new UHProTipsSender(this);
+		
+		scoreboardManager = new UHScoreboardManager(this);
 		
 		wbintegration = new UHWorldBorderIntegration(this);
 		spintegration = new UHSpectatorPlusIntegration(this);
