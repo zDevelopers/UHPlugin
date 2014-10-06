@@ -248,23 +248,30 @@ public class UHScoreboardManager {
 	 */
 	public void updateCounters() {
 		if(p.getConfig().getBoolean("scoreboard.enabled")) {
+			p.getLogger().info("Update counters");
 			Integer episode = gm.getEpisode();
 			Integer alivePlayersCount = gm.getAlivePlayersCount();
 			Integer aliveTeamsCount = gm.getAliveTeamsCount();
 			
 			if(!episode.equals(oldEpisode) && p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.episode")) {
+				if(oldEpisode == -1) oldEpisode = 0; // May happens the first time
+				
 				sidebar.updateEntry(getText("episode", oldEpisode), getText("episode", episode));
 				oldEpisode = episode;
 			}
 			
 			if(!alivePlayersCount.equals(oldAlivePlayersCount) && p.getConfig().getBoolean("scoreboard.players")) {
+				// Needed if the game is launched without any player, and players are marked as alive later.
+				if(oldAlivePlayersCount == -1) oldAlivePlayersCount = 0;
+				
 				sidebar.updateEntry(getText("players", oldAlivePlayersCount), getText("players", alivePlayersCount));
 				oldAlivePlayersCount = alivePlayersCount;
 			}
 			
-			// This is displayed when the game is running to avoid a special case used to remove it
-			// if the game is without teams.
 			if(gm.isGameWithTeams() && !aliveTeamsCount.equals(oldAliveTeamsCount) && p.getConfig().getBoolean("scoreboard.teams")) {
+				// Needed if the game is launched without any player, and players are marked as alive later.
+				if(oldAliveTeamsCount == -1) oldAliveTeamsCount = 0;
+				
 				sidebar.updateEntry(getText("teams", oldAliveTeamsCount), getText("teams", aliveTeamsCount));
 				oldAliveTeamsCount = aliveTeamsCount;
 			}
