@@ -102,9 +102,7 @@ public class UHUtils {
 	
 	/**
 	 * Finds a safe spot where teleport the player, and teleport the player to that spot.
-	 * If a spot is not found, the player is not teleported, except if the force arg is set to true.
-	 * 
-	 * Inspiration took in the WorldBorder plugin.
+	 * If a spot is not found, the player is not teleported, except if {@code force} is set to true.
 	 * 
 	 * @param player
 	 * @param location
@@ -124,7 +122,7 @@ public class UHUtils {
 			return true;
 		}
 		
-		Location safeSpot = findSafeSpot(location);
+		Location safeSpot = searchSafeSpot(location);
 		
 		// A spot was found, let's teleport.
 		if(safeSpot != null) {
@@ -137,26 +135,31 @@ public class UHUtils {
 		}
 	}
 	
+	/**
+	 * Searches a safe spot where teleport the player, and teleport the player to that spot.
+	 * If a spot is not found, the player is not teleported, except if {@code force} is set to true.
+	 * 
+	 * @param player
+	 * @param location
+	 * @return true if the player was effectively teleported.
+	 */
 	public static boolean safeTP(Player player, Location location) {
 		return safeTP(player, location, false);
 	}
 	
 	/**
-	 * Finds a safe spot in the given location.
+	 * Searches a safe spot in the given location.
 	 * 
 	 * The spot is in the same X;Z coordinates.
 	 * 
 	 * @param location The location where to find a safe spot.
 	 * @return A Location object representing the safe spot, or null if no safe spot is available.
 	 */
-	public static Location findSafeSpot(Location location) {
-		// We try to find a spot above or below the target (this is probably the good solution, because
-		// if the spot is obstrued, because this is mainly used to teleport players back after their
-		// death, the cause is likely to be a falling block or an arrow shot during a fall).
+	public static Location searchSafeSpot(Location location) {
+		// We try to find a spot above or below the target
 		
 		Location safeSpot = null;
-		// Max height (thx to WorldBorder)
-		final int maxHeight = (location.getWorld().getEnvironment() == World.Environment.NETHER) ? 125 : location.getWorld().getMaxHeight() - 2;
+		final int maxHeight = (location.getWorld().getEnvironment() == World.Environment.NETHER) ? 125 : location.getWorld().getMaxHeight() - 2; // (thx to WorldBorder)
 		
 		for(int yGrow = (int) location.getBlockY(), yDecr = (int) location.getBlockY(); yDecr >= 1 || yGrow <= maxHeight; yDecr--, yGrow++) {
 			// Above?

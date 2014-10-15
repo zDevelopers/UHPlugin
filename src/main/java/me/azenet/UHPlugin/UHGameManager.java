@@ -111,11 +111,13 @@ public class UHGameManager {
 	 * @param player
 	 */
 	public void initPlayer(final Player player) {
-		Location l = player.getWorld().getSpawnLocation();
-		player.teleport(l.add(0,1,0));
+		Location l = player.getWorld().getSpawnLocation().add(0.5, 0.5, 0.5);
+		if(!UHUtils.safeTP(player, l)) {
+			player.teleport(l.add(0,1,0));
+		}
 		
 		player.setFoodLevel(20);
-		player.setSaturation(14f);
+		player.setSaturation(20f);
 		player.setHealth(20d);
 		
 		p.getScoreboardManager().setScoreboardForPlayer(player);

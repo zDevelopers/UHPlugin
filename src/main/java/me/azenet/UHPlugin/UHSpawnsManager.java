@@ -61,7 +61,7 @@ public class UHSpawnsManager {
 			spawnPoint.setY(location.getWorld().getHighestBlockYAt(location.getBlockX(), location.getBlockZ()) + 120);
 		}
 		else {
-			Location safeSpot = UHUtils.findSafeSpot(location);
+			Location safeSpot = UHUtils.searchSafeSpot(location);
 			if(safeSpot == null) {
 				throw new RuntimeException("Unable to find a safe spot to set the spawn point " + location.toString());
 			}
@@ -266,7 +266,7 @@ public class UHSpawnsManager {
 			}
 			
 			// Safe spot available?
-			if(UHUtils.findSafeSpot(randomPoint) == null) {
+			if(UHUtils.searchSafeSpot(randomPoint) == null) {
 				continue generationLoop; // not safe: nope
 			}
 			
@@ -368,7 +368,7 @@ public class UHSpawnsManager {
 			currentPoint = currentSquareStartPoint.clone();
 			
 			// First point
-			if(p.getBorderManager().isInsideBorder(currentPoint, regionDiameter) && UHUtils.findSafeSpot(currentPoint) != null) {
+			if(p.getBorderManager().isInsideBorder(currentPoint, regionDiameter) && UHUtils.searchSafeSpot(currentPoint) != null) {
 				generatedPoints.add(currentPoint.clone());
 				countGeneratedPoints++;
 				
@@ -390,7 +390,7 @@ public class UHSpawnsManager {
 					}
 					
 					// Safe spot available?
-					if(UHUtils.findSafeSpot(currentPoint) == null) {
+					if(UHUtils.searchSafeSpot(currentPoint) == null) {
 						continue sideLoop; // not safe: nope
 					}
 					
@@ -500,7 +500,7 @@ public class UHSpawnsManager {
 				}
 				
 				// Safe?
-				if(UHUtils.findSafeSpot(point) == null) {
+				if(UHUtils.searchSafeSpot(point) == null) {
 					continue circleLoop;
 				}
 				
