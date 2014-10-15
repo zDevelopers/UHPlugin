@@ -63,6 +63,13 @@ scoreboard:
 
 
 
+# Teleport the players to the spawn point on login if the game is not started?
+# Avoids the random spawn point of Minecraft, and teleports them back to
+# there if they log out then in.
+teleportToSpawnIfNotStarted: true
+
+
+
 start:
     slow:
         delayBetweenTP: 3  # in seconds

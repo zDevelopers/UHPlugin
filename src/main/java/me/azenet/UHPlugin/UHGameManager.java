@@ -111,9 +111,12 @@ public class UHGameManager {
 	 * @param player
 	 */
 	public void initPlayer(final Player player) {
-		Location l = player.getWorld().getSpawnLocation().add(0.5, 0.5, 0.5);
-		if(!UHUtils.safeTP(player, l)) {
-			player.teleport(l.add(0,1,0));
+		
+		if(p.getConfig().getBoolean("teleportToSpawnIfNotStarted")) {
+			Location l = player.getWorld().getSpawnLocation().add(0.5, 0.5, 0.5);
+			if(!UHUtils.safeTP(player, l)) {
+				player.teleport(l.add(0,1,0));
+			}
 		}
 		
 		player.setFoodLevel(20);
