@@ -248,7 +248,6 @@ public class UHScoreboardManager {
 	 */
 	public void updateCounters() {
 		if(p.getConfig().getBoolean("scoreboard.enabled")) {
-			p.getLogger().info("Update counters");
 			Integer episode = gm.getEpisode();
 			Integer alivePlayersCount = gm.getAlivePlayersCount();
 			Integer aliveTeamsCount = gm.getAliveTeamsCount();

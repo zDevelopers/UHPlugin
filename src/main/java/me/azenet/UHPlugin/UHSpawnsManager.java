@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.block.Block;
 
 public class UHSpawnsManager {
 	
@@ -280,15 +281,16 @@ public class UHSpawnsManager {
 				continue generationLoop; // outside: nope
 			}
 			
+			Block surfaceBlock = world.getHighestBlockAt(randomPoint);
+			
 			// Safe spot available?
-			if(UHUtils.searchSafeSpot(randomPoint) == null) {
+			if(!UHUtils.isSafeSpot(surfaceBlock.getLocation())) {
 				continue generationLoop; // not safe: nope
 			}
 			
 			// Not above the water?
 			if(avoidWater) {
-				Material surfaceBlockType = world.getHighestBlockAt(randomPoint).getType();
-				if(surfaceBlockType == Material.WATER || surfaceBlockType == Material.STATIONARY_WATER) {
+				if(surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.STATIONARY_WATER) {
 					pointsAboveWater++;
 					continue generationLoop;
 				}
@@ -413,15 +415,16 @@ public class UHSpawnsManager {
 						continue sideLoop;
 					}
 					
+					Block surfaceBlock = world.getHighestBlockAt(currentPoint);
+					
 					// Safe spot available?
-					if(UHUtils.searchSafeSpot(currentPoint) == null) {
+					if(!UHUtils.isSafeSpot(surfaceBlock.getLocation())) {
 						continue sideLoop; // not safe: nope
 					}
 					
 					// Not above the water?
 					if(avoidWater) {
-						Material surfaceBlockType = world.getHighestBlockAt(currentPoint).getType();
-						if(surfaceBlockType == Material.WATER || surfaceBlockType == Material.STATIONARY_WATER) {
+						if(surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.STATIONARY_WATER) {
 							continue sideLoop;
 						}
 					}
@@ -531,15 +534,16 @@ public class UHSpawnsManager {
 					continue circleLoop;
 				}
 				
-				// Safe?
-				if(UHUtils.searchSafeSpot(point) == null) {
-					continue circleLoop;
+				Block surfaceBlock = world.getHighestBlockAt(point);
+				
+				// Safe spot available?
+				if(!UHUtils.isSafeSpot(surfaceBlock.getLocation())) {
+					continue circleLoop; // not safe: nope
 				}
 				
 				// Not above the water?
 				if(avoidWater) {
-					Material surfaceBlockType = world.getHighestBlockAt(point).getType();
-					if(surfaceBlockType == Material.WATER || surfaceBlockType == Material.STATIONARY_WATER) {
+					if(surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.STATIONARY_WATER) {
 						continue circleLoop;
 					}
 				}
