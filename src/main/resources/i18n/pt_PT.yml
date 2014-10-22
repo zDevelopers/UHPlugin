@@ -26,7 +26,7 @@ keys:
     cmd:
         errorLoad: "{ce}Ocorreu um Erro, ve a console para detalhes. Provavelmente sera um Bug."
         errorUnknown: "{ce}Este comando nao existe. Faz /uh para veres os comandos existentes."
-        errorUnauthorized: "{ce}LOL Nope"
+        errorUnauthorized: "{ce}lolnope"
         
         titleHelp: "{yellow}{0} - versao {1}"
         legendHelp: "{ci}Legenda: {cc}/uh command <necessario> [opcional=default] <espacos sao validos ...>{ci}."
@@ -43,8 +43,8 @@ keys:
         helpBorder: "{cc}/uh border {ci}: edita os limites. Faz /uh border para detalhes."
         
         titleBugCmd: "{aqua}------ Comandos para Bugs ------"
-        helpHeal: "{cc}/uh heal <jogador> [meios-coracoes=20] {ci}: regenera vida de um jogador para os meio-coracoes indicados (default 20)."
-        helpHealall: "{cc}/uh healall [meios-coracoes=20] {ci}: regenera todos os jogadores."
+        helpHeal: "{cc}/uh heal <jogador> [meios-coracoes=20|±diferença] {ci}: regenera vida de um jogador para os meio-coracoes indicados (default 20)."
+        helpHealall: "{cc}/uh healall [meios-coracoes=20|±diferença] {ci}: regenera todos os jogadores."
         helpResurrect: "{cc}/uh resurrect <jogador> {ci}: ressuscita o jogador."
         helpTpback: "{cc}/uh tpback <jogador> [force] {ci}: teleporta em seguranca um jogador para o local da sua morte. Quando especificado - force - teleporta mesmo que nao seja seguro."
         

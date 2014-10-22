@@ -1004,18 +1004,33 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		
 		double health = 0D;
+		String action = "raw"; // "raw", "add"
 		
 		if(args.length == 2) { // /uh heal <player> : full life for player.
 			health = 20D;
 		}
 		else { // /uh heal <player> <hearts>
+			double diffHealth = 0D;
+			
 			try {
-				health = Double.parseDouble(args[2]);
+				if(args[2].startsWith("+")) {
+					diffHealth = Double.parseDouble(args[2].substring(1));
+					action = "add";
+				}
+				else if(args[2].startsWith("-")) {
+					diffHealth = -1 * Double.parseDouble(args[2].substring(1));
+					action = "add";
+				}
+				else {
+					diffHealth = Double.parseDouble(args[2]);
+				}
 			}
 			catch(NumberFormatException e) {
 				sender.sendMessage(i.t("heal.errorNaN"));
 				return;
 			}
+			
+			health = action.equals("raw") ? diffHealth : player.getHealth() + diffHealth;
 			
 			if(health <= 0D) {
 				sender.sendMessage(i.t("heal.errorNoKill"));
@@ -1051,7 +1066,7 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		
 		try {
-			if(Double.parseDouble(healthArg) <= 0D) {
+			if((!(healthArg.startsWith("+") || healthArg.startsWith("-")) && Double.parseDouble(healthArg) <= 0D) || Double.parseDouble(healthArg.substring(1)) <= 0D) {
 				sender.sendMessage(i.t("heal.allErrorNoKill"));
 				return;
 			}

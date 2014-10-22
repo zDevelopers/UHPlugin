@@ -43,8 +43,8 @@ keys:
         helpBorder: "{cc}/uh border {ci}: manages borders. Execute /uh border for details."
         
         titleBugCmd: "{aqua}------ Bugs-related commands ------"
-        helpHeal: "{cc}/uh heal <player> [half-hearts=20] {ci}: heals a player to the number of half-hearts provided (default 20)."
-        helpHealall: "{cc}/uh healall [half-hearts=20] {ci}: heals all players instead of only one."
+        helpHeal: "{cc}/uh heal <player> [half-hearts=20|±diff] {ci}: heals a player to the number of half-hearts provided (default 20)."
+        helpHealall: "{cc}/uh healall [half-hearts=20|±diff] {ci}: heals all players instead of only one."
         helpResurrect: "{cc}/uh resurrect <player> {ci}: resurrects a player."
         helpTpback: "{cc}/uh tpback <player> [force] {ci}: safely teleports back a player to his death location."
         
