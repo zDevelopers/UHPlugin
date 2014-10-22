@@ -38,6 +38,10 @@ map:
         # The delay between two warning messages sent to the players out of a future border 
         # (this warning is set using /uh border warning <futureDiameter>).
         warningInterval: 90  # seconds
+    
+    spawnPoints:
+        # Don't generate the spawn points (with /uh spawns generate) above the water?
+        dontGenerateAboveWater: true
 
 
 

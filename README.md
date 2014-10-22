@@ -210,8 +210,8 @@ Legend: `/uh command <required> [optional=default]`.
  - `/uh generatewalls` : generates the walls according to the configuration.
 
 ### Bugs-related commands
- - `/uh heal <player> [half-hearts=20]` : heals a player to the number of half-hearts provided (default 20).
- - `/uh healall [half-hearts=20]` : heals all players instead of only one.
+ - `/uh heal <player> [half-hearts=20|±diff]` : heals a player to the number of half-hearts provided (default 20).
+ - `/uh healall [half-hearts=20|±diff]` : heals all players instead of only one.
  - `/uh resurrect <player>` : resurrects a player.
  - `/uh tpback <player> [force]` : safely teleports back a player to his death point.
 

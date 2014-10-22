@@ -7,6 +7,7 @@ import java.util.Random;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 
@@ -17,10 +18,14 @@ public class UHSpawnsManager {
 	
 	private LinkedList<Location> spawnPoints = new LinkedList<Location>();
 	
+	private boolean avoidWater;
+	
 	
 	public UHSpawnsManager(UHPlugin plugin) {
 		this.p = plugin;
 		this.i = p.getI18n();
+		
+		avoidWater = p.getConfig().getBoolean("map.spawnPoints.dontGenerateAboveWater");
 	}
 	
 	/**
@@ -241,6 +246,11 @@ public class UHSpawnsManager {
 		// of other ones, we restarts all the generation.
 		int currentErrorCount = 0;
 		
+		// With the "avoid above water" option, if there's a lot of water, the ganaration may
+		// fail even if the surface seems to be ok to host the requested spawn points.
+		// So, after 2*{points requested} points above the water, we cancels the generation.
+		int pointsAboveWater = 0;
+		
 		generationLoop: while(generatedSpawnPoints != spawnCount) {
 			
 			// "Too many fails" test
@@ -248,6 +258,11 @@ public class UHSpawnsManager {
 				randomSpawnPoints = new LinkedList<Location>();
 				generatedSpawnPoints = 0;
 				currentErrorCount = 0;
+			}
+			
+			// "Too many points above the water" test
+			if(pointsAboveWater >= 2*spawnCount) {
+				return false;
 			}
 			
 			
@@ -268,6 +283,15 @@ public class UHSpawnsManager {
 			// Safe spot available?
 			if(UHUtils.searchSafeSpot(randomPoint) == null) {
 				continue generationLoop; // not safe: nope
+			}
+			
+			// Not above the water?
+			if(avoidWater) {
+				Material surfaceBlockType = world.getHighestBlockAt(randomPoint).getType();
+				if(surfaceBlockType == Material.WATER || surfaceBlockType == Material.STATIONARY_WATER) {
+					pointsAboveWater++;
+					continue generationLoop;
+				}
 			}
 			
 			// Is that point at a correct distance of the other ones?
@@ -394,6 +418,14 @@ public class UHSpawnsManager {
 						continue sideLoop; // not safe: nope
 					}
 					
+					// Not above the water?
+					if(avoidWater) {
+						Material surfaceBlockType = world.getHighestBlockAt(currentPoint).getType();
+						if(surfaceBlockType == Material.WATER || surfaceBlockType == Material.STATIONARY_WATER) {
+							continue sideLoop;
+						}
+					}
+					
 					generatedPoints.add(currentPoint.clone());
 					countGeneratedPoints++;
 					
@@ -502,6 +534,14 @@ public class UHSpawnsManager {
 				// Safe?
 				if(UHUtils.searchSafeSpot(point) == null) {
 					continue circleLoop;
+				}
+				
+				// Not above the water?
+				if(avoidWater) {
+					Material surfaceBlockType = world.getHighestBlockAt(point).getType();
+					if(surfaceBlockType == Material.WATER || surfaceBlockType == Material.STATIONARY_WATER) {
+						continue circleLoop;
+					}
 				}
 				
 				generatedPoints.add(point);
