@@ -143,7 +143,7 @@ gameplay-changes:
         
         disableNotchApples: false
     
-    disableEnderpearlsDamages: true
+    disableEnderpearlsDamages: false
     
     disableLevelIIPotions: false
     
