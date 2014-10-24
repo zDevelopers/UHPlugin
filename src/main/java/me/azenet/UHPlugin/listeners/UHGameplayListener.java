@@ -134,7 +134,7 @@ public class UHGameplayListener implements Listener {
 		if(p.getConfig().getBoolean("gameplay-changes.disableEnderpearlsDamages")) {
 			if(ev.getCause() == TeleportCause.ENDER_PEARL) {
 				ev.setCancelled(true);
-				ev.getPlayer().teleport(ev.getTo(), TeleportCause.ENDER_PEARL);
+				ev.getPlayer().teleport(ev.getTo(), TeleportCause.PLUGIN);
 			}
 		}
 	}
