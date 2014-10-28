@@ -95,7 +95,6 @@ public class UHScoreboardManager {
 			sidebar.addEntry(this.getText("episode", 0), true);
 			sidebar.addEntry(this.getText("players", 0), true);
 			
-			// The "space" score needs to be registered only one time, and only if the episodes/timer are enabled.
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
 				sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
 				
@@ -129,14 +128,17 @@ public class UHScoreboardManager {
 			
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.episode")) {
 				sidebar.addEntry(this.getText("episode", 1), true);
+				oldEpisode = 1;
 			}
 			
 			if(p.getConfig().getBoolean("scoreboard.players")) {
 				sidebar.addEntry(this.getText("players", p.getGameManager().getAlivePlayersCount()), true);
+				oldAlivePlayersCount = p.getGameManager().getAlivePlayersCount();
 			}
 			
 			if(gm.isGameWithTeams() && p.getConfig().getBoolean("scoreboard.teams")) {
 				sidebar.addEntry(this.getText("teams", p.getGameManager().getAliveTeamsCount()), true);
+				oldAliveTeamsCount = p.getGameManager().getAliveTeamsCount();
 			}
 			
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer") && p.getTimerManager().getMainTimer() != null) {
