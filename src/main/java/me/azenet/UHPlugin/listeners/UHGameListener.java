@@ -186,7 +186,7 @@ public class UHGameListener implements Listener {
 		}
 		
 		// Highlights the death message in the console
-		p.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "-- Death of " + ev.getEntity().getDisplayName() + ChatColor.GOLD + " --");
+		p.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "-- Death of " + ev.getEntity().getDisplayName() + ChatColor.GOLD + " (" + ev.getDeathMessage() + ") --");
 		
 		// Customizes the death message
 		ev.setDeathMessage(ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.deathMessagesFormat", "")) + ev.getDeathMessage());
