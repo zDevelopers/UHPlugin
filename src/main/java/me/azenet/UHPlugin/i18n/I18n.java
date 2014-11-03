@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -79,14 +80,20 @@ public class I18n {
 	public I18n(Plugin plugin, String selectedLanguage, String defaultLanguage) {
 		this.p = plugin;
 		
+		// Write the manifest
 		try {
-			reloadManifest(false);
-		} catch (InvalidConfigurationException e) {
+			p.saveResource(getLanguageFilePath("manifest"), false);
+			reloadManifest();
+		} catch (IllegalArgumentException e) {
+			p.getLogger().log(Level.SEVERE, "Unable to read the in-JAR i18n manifest! YOU DOWNLOADED A MALFORMED JAR, PLEASE RE-DOWNLOAD IT.", e);
+			return;
+		}
+		catch (InvalidConfigurationException e) {
 			p.getLogger().log(Level.SEVERE, "Unable to load a malformed i18n manifest", e);
 			return;
 		}
 		
-		// The language files needs to be written
+		// The language files need to be written
 		// and to be overwritten if the plugin was updated (== different version)
 		writeFilesIfNeeded();
 		
@@ -108,10 +115,19 @@ public class I18n {
 		}
 		
 		try {
-			this.reloadLanguageFile(this.selectedLanguage, false, false);
-			this.reloadLanguageFile(this.defaultLanguage, false, false);
+			this.reloadLanguageFile(this.selectedLanguage);
+			this.reloadLanguageFile(this.defaultLanguage);
 		} catch (InvalidConfigurationException e) {
-			p.getLogger().log(Level.SEVERE, "Unable to load malformed language files (" + this.selectedLanguage + " or " + this.defaultLanguage + ")", e);
+			p.getLogger().log(Level.SEVERE, "Unable to load malformed language files (" + this.selectedLanguage + " or " + this.defaultLanguage + ").", e);
+			return;
+		} catch (IllegalArgumentException e) {
+			p.getLogger().log(Level.SEVERE, "Unable to load unregistered language files (" + this.selectedLanguage + " or " + this.defaultLanguage + ").", e);
+			return;
+		} catch (FileNotFoundException e) {
+			p.getLogger().log(Level.SEVERE, "Language file not found (" + this.selectedLanguage + " or " + this.defaultLanguage + ").", e);
+			return;
+		} catch (IOException e) {
+			p.getLogger().log(Level.SEVERE, "I/O exception while loading a language file (" + this.selectedLanguage + " or " + this.defaultLanguage + ").", e);
 			return;
 		}
 	}
@@ -233,35 +249,35 @@ public class I18n {
 	private String replaceStandardKeys(String text) {
 		
 		return text.replace("{black}", ChatColor.BLACK.toString())
-					.replace("{darkblue}", ChatColor.DARK_BLUE.toString())
-					.replace("{darkgreen}", ChatColor.DARK_GREEN.toString())
-					.replace("{darkaqua}", ChatColor.DARK_AQUA.toString())
-					.replace("{darkred}", ChatColor.DARK_RED.toString())
-					.replace("{darkpurple}", ChatColor.DARK_PURPLE.toString())
-					.replace("{gold}", ChatColor.GOLD.toString())
-					.replace("{gray}", ChatColor.GRAY.toString())
-					.replace("{darkgray}", ChatColor.DARK_GRAY.toString())
-					.replace("{blue}", ChatColor.BLUE.toString())
-					.replace("{green}", ChatColor.GREEN.toString())
-					.replace("{aqua}", ChatColor.AQUA.toString())
-					.replace("{red}", ChatColor.RED.toString())
-					.replace("{lightpurple}", ChatColor.LIGHT_PURPLE.toString())
-					.replace("{yellow}", ChatColor.YELLOW.toString())
-					.replace("{white}", ChatColor.WHITE.toString())
-					
-					.replace("{bold}", ChatColor.BOLD.toString())
-					.replace("{strikethrough}", ChatColor.STRIKETHROUGH.toString())
-					.replace("{underline}", ChatColor.UNDERLINE.toString())
-					.replace("{italic}", ChatColor.ITALIC.toString())
-					.replace("{obfuscated}", ChatColor.MAGIC.toString())
-					
-					.replace("{reset}", ChatColor.RESET.toString())
-					
-					.replace("{ce}", ChatColor.RED.toString()) // error
-					.replace("{cc}", ChatColor.GOLD.toString()) // command
-					.replace("{ci}", ChatColor.WHITE.toString()) // info
-					.replace("{cs}", ChatColor.GREEN.toString()) // success
-					.replace("{cst}", ChatColor.DARK_GRAY.toString()); // status
+		           .replace("{darkblue}", ChatColor.DARK_BLUE.toString())
+		           .replace("{darkgreen}", ChatColor.DARK_GREEN.toString())
+		           .replace("{darkaqua}", ChatColor.DARK_AQUA.toString())
+		           .replace("{darkred}", ChatColor.DARK_RED.toString())
+		           .replace("{darkpurple}", ChatColor.DARK_PURPLE.toString())
+		           .replace("{gold}", ChatColor.GOLD.toString())
+		           .replace("{gray}", ChatColor.GRAY.toString())
+		           .replace("{darkgray}", ChatColor.DARK_GRAY.toString())
+		           .replace("{blue}", ChatColor.BLUE.toString())
+		           .replace("{green}", ChatColor.GREEN.toString())
+		           .replace("{aqua}", ChatColor.AQUA.toString())
+		           .replace("{red}", ChatColor.RED.toString())
+		           .replace("{lightpurple}", ChatColor.LIGHT_PURPLE.toString())
+		           .replace("{yellow}", ChatColor.YELLOW.toString())
+		           .replace("{white}", ChatColor.WHITE.toString())
+		           
+		           .replace("{bold}", ChatColor.BOLD.toString())
+		           .replace("{strikethrough}", ChatColor.STRIKETHROUGH.toString())
+		           .replace("{underline}", ChatColor.UNDERLINE.toString())
+		           .replace("{italic}", ChatColor.ITALIC.toString())
+		           .replace("{obfuscated}", ChatColor.MAGIC.toString())
+		           
+		           .replace("{reset}", ChatColor.RESET.toString())
+		           
+		           .replace("{ce}", ChatColor.RED.toString()) // error
+		           .replace("{cc}", ChatColor.GOLD.toString()) // command
+		           .replace("{ci}", ChatColor.WHITE.toString()) // info
+		           .replace("{cs}", ChatColor.GREEN.toString()) // success
+		           .replace("{cst}", ChatColor.DARK_GRAY.toString()); // status
 	}
 	
 	/**
@@ -296,12 +312,12 @@ public class I18n {
 	 * (Re)loads a language file.
 	 * 
 	 * @param lang The language to (re)load.
-	 * @param write If true the file will be written to the disk.
-	 * @param writeOnly If true, the language file will not be kept in memory.
-	 * @throws IllegalArgumentException if the language file does not exists for the given language.
-	 * @throws InvalidConfigurationException if the language file is malformed (not a valid YML file).
+	 * @throws IllegalArgumentException if the language is not registered.
+	 * @throws FileNotFoundException if the language file does not exists in the server's plugins directory.
+	 * @throws IOException if an I/O problem happen.
+	 * @throws InvalidConfigurationException if the language file is malformed (not a valid YAML file).
 	 */
-	private void reloadLanguageFile(String lang, boolean write, boolean writeOnly) throws InvalidConfigurationException, IllegalArgumentException {
+	private void reloadLanguageFile(String lang) throws InvalidConfigurationException, IllegalArgumentException, FileNotFoundException, IOException {
 		lang = this.cleanLanguageName(lang);
 		
 		if(!isLanguageAvailable(lang)) { // Unknown language
@@ -311,25 +327,15 @@ public class I18n {
 		if(this.languageFile.get(lang) == null) {
 			this.languageFile.put(lang, new File(p.getDataFolder() + "/" + getLanguageFilePath(lang)));
 		}
-		 
 		
 		
 		// The YAML configuration is loaded using a Reader, to specify the encoding to be used,
 		// to be able to force UTF-8.
 		// An InputStream of the language file is needed for this.
 		InputStream languageFileInputStream = null;
-		try {
-			languageFileInputStream = languageFile.get(lang).toURI().toURL().openConnection().getInputStream();
-			this.languageSource.put(lang, YamlConfiguration.loadConfiguration(new InputStreamReader(languageFileInputStream, Charsets.UTF_8)));
-			
-		} catch (FileNotFoundException e) {
-			p.getLogger().log(Level.INFO, "Writing the language file for " + lang + "...");
-			this.languageSource.put(lang, new YamlConfiguration());
-			
-		} catch (IOException e) {
-			p.getLogger().log(Level.SEVERE, "Unable to load the language " + lang + ": input/output error. Please check if the file is readable.", e);
-			return;
-		}
+		languageFileInputStream = languageFile.get(lang).toURI().toURL().openConnection().getInputStream();
+		this.languageSource.put(lang, YamlConfiguration.loadConfiguration(new InputStreamReader(languageFileInputStream, Charsets.UTF_8)));
+		
 		
 		// Default config
 		try {
@@ -341,53 +347,18 @@ public class I18n {
 		} catch(NullPointerException ignored) {
 			// No "default" translation file available: user-only language file.
 		}
-		if(write) {
-			try {
-				if(!languageFile.get(lang).exists()) {
-					p.saveResource(getLanguageFilePath(lang), false);
-				}
-				else {
-					languageSource.get(lang).save(languageFile.get(lang));
-				}
-			} catch(IOException e) {
-				p.getLogger().log(Level.SEVERE, "Unable to write the language file " + p.getDataFolder() + "/" + getLanguageFilePath(lang) + " to the disk, check the write permissions.", e);
-			}
-		}
-		
-		if(writeOnly) {
-			languageSource.remove(lang);
-			languageFile.remove(lang);
-		}
 	}
 	
 	/**
 	 * Reloads the manifest.
 	 * @return 
 	 */
-	private void reloadManifest(boolean write) throws InvalidConfigurationException {
+	private void reloadManifest() throws InvalidConfigurationException {
 		if(manifestFile == null) {
 			manifestFile = new File(p.getDataFolder() + "/" + this.getLanguageFilePath("manifest"));
 		}
+		
 		manifest = YamlConfiguration.loadConfiguration(manifestFile);
-		
-		Reader manifestReader = new InputStreamReader(p.getResource(getLanguageFilePath("manifest")));
-		if(manifestReader != null) {
-			YamlConfiguration manifestJar = YamlConfiguration.loadConfiguration(manifestReader);
-			manifest.setDefaults(manifestJar);
-		}
-		
-		if(write || !manifestFile.exists()) {
-			try {
-				if(!manifestFile.exists()) {
-					p.saveResource(getLanguageFilePath("manifest"), false);
-				}
-				else {
-					manifest.save(manifestFile);
-				}
-			} catch(IOException e) {
-				p.getLogger().log(Level.SEVERE, "Unable to write the manifest file " + p.getDataFolder() + "/" + getLanguageFilePath("manifest") + " to the disk, check the write permissions.", e);
-			}
-		}
 	}
 	
 	/**
@@ -405,6 +376,7 @@ public class I18n {
 			if(manifest != null) {
 				if(!manifest.getString("version").equals(p.getDescription().getVersion())) {
 					writeLanguageFiles(true);
+					p.saveResource(getLanguageFilePath("manifest"), true);
 				}
 			}
 		}
@@ -412,40 +384,26 @@ public class I18n {
 	
 	/**
 	 * Writes the language files to the disk, on the {PluginFolder}/i18n/ directory.
-	 * @param overwrite
+	 * <p>
+	 * (The manifest is not written here, but in the {@link #I18n(Plugin, String, String) constructor},
+	 * because it is needed here.)
+	 * 
+	 * @param overwrite If true, the language files will be overwritten.
 	 */
 	private void writeLanguageFiles(boolean overwrite) {
 		// Normal language files
 		for(Object lang : manifest.getList("languages")) {
 			if(lang != null && lang instanceof String && !((String) lang).isEmpty()) {
 				try {
-					if(overwrite) {
-						reloadLanguageFile((String) lang, true, true);
-					}
-					else {
-						File testFile = new File(p.getDataFolder() + "/" + this.getLanguageFilePath((String) lang));
-						if(!testFile.exists()) {
-							reloadLanguageFile((String) lang, true, true);
-						}
-					}
+					if(overwrite) p.getLogger().log(Level.INFO, "Updating the language file for " + lang + "...");
+					else          p.getLogger().log(Level.INFO, "Writing the language file for " + lang + "...");
+					
+					p.saveResource(getLanguageFilePath((String) lang), overwrite);
 				} catch(IllegalArgumentException e) {
 					p.getLogger().severe("Unable to load the language file for " + lang + ": the file does not exists.");
 				}
-				catch(InvalidConfigurationException e) {
-					p.getLogger().log(Level.SEVERE, "Unable to load a malformed language file for " + lang, e);
-				}
 			}
 		}
-		
-		// Manifest
-		if(overwrite) {
-			try {
-				reloadManifest(true);
-			} catch (InvalidConfigurationException e) {
-				p.getLogger().severe("Unable to load a malformed manifest.");
-			}
-		}
-		// Else, the manifest has already been written.
 	}
 	
 	/**
