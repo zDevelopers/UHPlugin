@@ -103,7 +103,7 @@ public class UHTeamChatManager {
 	private void sendRawTeamMessage(final Player sender, String rawMessage, UHTeam team) {
 		
 		// The message is sent to the players of the team...
-		for(final Player player : team.getPlayers()) {
+		for(final Player player : team.getOnlinePlayers()) {
 			player.sendMessage(rawMessage);
 		}
 		

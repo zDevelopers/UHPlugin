@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class UHTeamManager {
@@ -82,7 +83,7 @@ public class UHTeamManager {
 	public boolean removeTeam(UHTeam team, boolean dontNotify) {
 		if(team != null) {
 			if(dontNotify) {
-				for(Player player : team.getPlayers()) {
+				for(OfflinePlayer player : team.getPlayers()) {
 					this.removePlayerFromTeam(player, true);
 				}
 			}
@@ -153,12 +154,12 @@ public class UHTeamManager {
 	 * @param player The player to remove.
 	 * @param dontNotify If true, the player will not be notified about the leave.
 	 */
-	public void removePlayerFromTeam(Player player, boolean dontNotify) {
+	public void removePlayerFromTeam(OfflinePlayer player, boolean dontNotify) {
 		UHTeam team = getTeamForPlayer(player);
 		if(team != null) {
 			team.removePlayer(player);
-			if(!dontNotify) {
-				player.sendMessage(i.t("team.removeplayer.removed", team.getDisplayName()));
+			if(!dontNotify && player.isOnline()) {
+				((Player) player).sendMessage(i.t("team.removeplayer.removed", team.getDisplayName()));
 			}
 		}
 	}
@@ -168,7 +169,7 @@ public class UHTeamManager {
 	 * 
 	 * @param player The player to remove.
 	 */
-	public void removePlayerFromTeam(Player player) {
+	public void removePlayerFromTeam(OfflinePlayer player) {
 		removePlayerFromTeam(player, false);
 	}
 
@@ -204,10 +205,16 @@ public class UHTeamManager {
 	 * 
 	 * @param player
 	 */
-	public void colorizePlayer(Player player) {
+	public void colorizePlayer(OfflinePlayer offlinePlayer) {
 		if(!p.getConfig().getBoolean("colorizeChat")) {
 			return;
 		}
+		
+		if(!offlinePlayer.isOnline()) {
+			return;
+		}
+		
+		Player player = (Player) offlinePlayer;
 		
 		UHTeam team = getTeamForPlayer(player);
 		
@@ -254,9 +261,9 @@ public class UHTeamManager {
 	 * @param player The player.
 	 * @return The team of this player.
 	 */
-	public UHTeam getTeamForPlayer(Player p) {
+	public UHTeam getTeamForPlayer(OfflinePlayer player) {
 		for(UHTeam t : teams) {
-			if (t.containsPlayer(p)) return t;
+			if (t.containsPlayer(player.getUniqueId())) return t;
 		}
 		return null;
 	}

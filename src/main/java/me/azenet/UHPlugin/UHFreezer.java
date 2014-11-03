@@ -86,7 +86,7 @@ public class UHFreezer {
 		this.globalFreeze = frozen;
 		
 		if(frozen) {
-			for(Player player : p.getGameManager().getAlivePlayers()) {
+			for(Player player : p.getGameManager().getOnlineAlivePlayers()) {
 				this.setPlayerFreezeState(player, true);
 			}
 			
@@ -123,11 +123,11 @@ public class UHFreezer {
 			
 			// Unfreezes the timers.
 			p.getTimerManager().pauseAll(false);
-			p.getGameManager().getScoreboardManager().restartTimers();
+			p.getScoreboardManager().restartTimers();
 		}
 		
 		if(showStateInScoreboard || !frozen) {
-			this.p.getGameManager().getScoreboardManager().displayFreezeState();
+			p.getScoreboardManager().displayFreezeState();
 		}
 		
 		updateListenerRegistration();

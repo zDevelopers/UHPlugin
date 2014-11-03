@@ -57,6 +57,13 @@ public class UHTimer {
 	 */
 	public void setDuration(int seconds) {
 		this.duration = seconds;
+		
+		this.hoursLeft   = (int) Math.floor(this.duration / 3600);
+		this.minutesLeft = (int) (Math.floor(this.duration / 60) - (this.hoursLeft * 60));
+		this.secondsLeft = this.duration - (this.minutesLeft * 60 + this.hoursLeft * 3600);
+		
+		// Lower than 100 because else the counter text is longer than 16 characters.
+		this.displayHoursInTimer = (this.hoursLeft != 0 && this.hoursLeft < 100);
 	}
 
 	/**
@@ -67,13 +74,6 @@ public class UHTimer {
 	public void start() {		
 		this.running = true;
 		this.startTime = System.currentTimeMillis();
-		
-		this.hoursLeft   = (int) Math.floor(this.duration / 3600);
-		this.minutesLeft = (int) (Math.floor(this.duration / 60) - (this.hoursLeft * 60));
-		this.secondsLeft = this.duration - (this.minutesLeft * 60 + this.hoursLeft * 3600);
-		
-		// Lower than 100 because else the counter text is longer than 16 characters.
-		this.displayHoursInTimer = (this.hoursLeft != 0 && this.hoursLeft < 100);
 		
 		Bukkit.getServer().getPluginManager().callEvent(new TimerStartsEvent(this));
 	}
@@ -94,20 +94,22 @@ public class UHTimer {
 		TimerEndsEvent event = new TimerEndsEvent(this, wasUp);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		
-		if(event.getRestart()) {
-			start();
-		}
-		else {
-			this.running = false;
-			this.startTime = 0l;
-			
-			this.hoursLeft   = 0;
-			this.minutesLeft = 0;
-			this.secondsLeft = 0;
-			
-			this.oldHoursLeft   = 0;
-			this.oldMinutesLeft = 0;
-			this.oldSecondsLeft = 0;
+		if(isRegistered()) {
+			if(event.getRestart()) {
+				start();
+			}
+			else {
+				this.running = false;
+				this.startTime = 0l;
+				
+				this.hoursLeft   = 0;
+				this.minutesLeft = 0;
+				this.secondsLeft = 0;
+				
+				this.oldHoursLeft   = 0;
+				this.oldMinutesLeft = 0;
+				this.oldSecondsLeft = 0;
+			}
 		}
 	}
 

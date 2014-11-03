@@ -63,7 +63,7 @@ public class TeamStartTask extends BukkitRunnable {
 	public void run() {
 		team.teleportTo(startPoint);
 		
-		for (Player player : team.getPlayers()) {
+		for (Player player : team.getOnlinePlayers()) {
 			player.setGameMode(GameMode.SURVIVAL);
 			
 			if(slow) {

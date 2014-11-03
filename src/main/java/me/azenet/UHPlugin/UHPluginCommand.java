@@ -35,6 +35,7 @@ import me.azenet.UHPlugin.i18n.I18n;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.command.BlockCommandSender;
@@ -918,16 +919,24 @@ public class UHPluginCommand implements CommandExecutor {
 				
 				for(final UHTeam team : tm.getTeams()) {
 					sender.sendMessage(i.t("team.list.itemTeam",  team.getDisplayName(), ((Integer) team.getPlayers().size()).toString()));
-					for(final Player player : team.getPlayers()) {
-						if(!p.getGameManager().isGameRunning()) {
-							sender.sendMessage(i.t("team.list.itemPlayer", player.getName()));
+					for(final OfflinePlayer player : team.getPlayers()) {
+						String bullet = null;
+						if(player.isOnline()) {
+							bullet = i.t("team.list.bulletPlayerOnline");
 						}
 						else {
-							if(p.getGameManager().isPlayerDead(player)) {
-								sender.sendMessage(i.t("team.list.itemPlayerDead", player.getName()));
+							bullet = i.t("team.list.bulletPlayerOffline");
+						}
+						
+						if(!p.getGameManager().isGameRunning()) {
+							sender.sendMessage(bullet + i.t("team.list.itemPlayer", player.getName()));
+						}
+						else {
+							if(p.getGameManager().isPlayerDead(player.getUniqueId())) {
+								sender.sendMessage(bullet + i.t("team.list.itemPlayerDead", player.getName()));
 							}
 							else {
-								sender.sendMessage(i.t("team.list.itemPlayerAlive", player.getName()));
+								sender.sendMessage(bullet + i.t("team.list.itemPlayerAlive", player.getName()));
 							}
 						}
 					}
@@ -995,18 +1004,33 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		
 		double health = 0D;
+		String action = "raw"; // "raw", "add"
 		
 		if(args.length == 2) { // /uh heal <player> : full life for player.
 			health = 20D;
 		}
 		else { // /uh heal <player> <hearts>
+			double diffHealth = 0D;
+			
 			try {
-				health = Double.parseDouble(args[2]);
+				if(args[2].startsWith("+")) {
+					diffHealth = Double.parseDouble(args[2].substring(1));
+					action = "add";
+				}
+				else if(args[2].startsWith("-")) {
+					diffHealth = -1 * Double.parseDouble(args[2].substring(1));
+					action = "add";
+				}
+				else {
+					diffHealth = Double.parseDouble(args[2]);
+				}
 			}
 			catch(NumberFormatException e) {
 				sender.sendMessage(i.t("heal.errorNaN"));
 				return;
 			}
+			
+			health = action.equals("raw") ? diffHealth : player.getHealth() + diffHealth;
 			
 			if(health <= 0D) {
 				sender.sendMessage(i.t("heal.errorNoKill"));
@@ -1042,7 +1066,7 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		
 		try {
-			if(Double.parseDouble(healthArg) <= 0D) {
+			if((!(healthArg.startsWith("+") || healthArg.startsWith("-")) && Double.parseDouble(healthArg) <= 0D) || Double.parseDouble(healthArg.substring(1)) <= 0D) {
 				sender.sendMessage(i.t("heal.allErrorNoKill"));
 				return;
 			}
@@ -1434,7 +1458,7 @@ public class UHPluginCommand implements CommandExecutor {
 							double y = Integer.parseInt(args[3]) + 0.5;
 							double z = Integer.parseInt(args[4]) + 0.5;
 							
-							for(Player player : team.getPlayers()) {
+							for(Player player : team.getOnlinePlayers()) {
 								player.teleport(new Location(targetWorld, x, y, z), TeleportCause.PLUGIN);
 							}
 							
@@ -1466,7 +1490,7 @@ public class UHPluginCommand implements CommandExecutor {
 							sender.sendMessage(i.t("tp.targetOffline", args[2]));
 						}
 						else {
-							for(Player player : team.getPlayers()) {
+							for(Player player : team.getOnlinePlayers()) {
 								player.teleport(target.getLocation(), TeleportCause.PLUGIN);
 							}
 						}
@@ -1601,7 +1625,7 @@ public class UHPluginCommand implements CommandExecutor {
 					return;
 				}
 				
-				p.getGameManager().getScoreboardManager().displayTimer(timer);
+				p.getScoreboardManager().displayTimer(timer);
 				sender.sendMessage(i.t("timers.displayed", timer.getDisplayName()));
 			}
 			
@@ -1614,7 +1638,7 @@ public class UHPluginCommand implements CommandExecutor {
 					return;
 				}
 				
-				p.getGameManager().getScoreboardManager().hideTimer(timer);
+				p.getScoreboardManager().hideTimer(timer);
 				sender.sendMessage(i.t("timers.hidden", timer.getDisplayName()));
 			}
 			
@@ -1683,8 +1707,10 @@ public class UHPluginCommand implements CommandExecutor {
 					return;
 				}
 				
-				p.getGameManager().getScoreboardManager().hideTimer(timer);
+				p.getScoreboardManager().hideTimer(timer);
 				p.getTimerManager().unregisterTimer(timer);
+				timer.stop();
+				
 				sender.sendMessage(i.t("timers.removed", timer.getDisplayName()));
 			}
 			
@@ -1699,13 +1725,13 @@ public class UHPluginCommand implements CommandExecutor {
 							sender.sendMessage(i.t("timers.list.itemPaused", 
 									timer.getDisplayName(),
 									String.valueOf(timer.getDuration()),
-									p.getGameManager().getScoreboardManager().getTimerText(timer, false, false)));
+									p.getScoreboardManager().getTimerText(timer, false, false)));
 						}
 						else {
 							sender.sendMessage(i.t("timers.list.itemRunning", 
 									timer.getDisplayName(),
 									String.valueOf(timer.getDuration()),
-									p.getGameManager().getScoreboardManager().getTimerText(timer, false, false)));
+									p.getScoreboardManager().getTimerText(timer, false, false)));
 
 						}
 					}

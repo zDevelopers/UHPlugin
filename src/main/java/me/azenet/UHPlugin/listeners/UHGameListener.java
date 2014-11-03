@@ -32,8 +32,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.SkullType;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -165,8 +165,8 @@ public class UHGameListener implements Listener {
 			if(team != null) {
 				boolean isAliveTeam = false;
 				
-				for(Player player : team.getPlayers()) {
-					if(!p.getGameManager().isPlayerDead(player)) {
+				for(OfflinePlayer player : team.getPlayers()) {
+					if(!p.getGameManager().isPlayerDead(player.getUniqueId())) {
 						isAliveTeam = true;
 						break;
 					}
@@ -186,7 +186,7 @@ public class UHGameListener implements Listener {
 		}
 		
 		// Highlights the death message in the console
-		p.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "-- Death of " + ev.getEntity().getDisplayName() + ChatColor.GOLD + " --");
+		p.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "-- Death of " + ev.getEntity().getDisplayName() + ChatColor.GOLD + " (" + ev.getDeathMessage() + ") --");
 		
 		// Customizes the death message
 		ev.setDeathMessage(ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.deathMessagesFormat", "")) + ev.getDeathMessage());
@@ -300,7 +300,7 @@ public class UHGameListener implements Listener {
 		}
 		
 		// Mainly useful on the first join.
-		p.getGameManager().getScoreboardManager().setScoreboardForPlayer(ev.getPlayer());
+		p.getScoreboardManager().setScoreboardForPlayer(ev.getPlayer());
 		
 		// The display name is reset when the player logs off.
 		p.getTeamManager().colorizePlayer(ev.getPlayer());
@@ -407,7 +407,7 @@ public class UHGameListener implements Listener {
 			ev.setRestart(true);
 		}
 		else {
-			p.getGameManager().getScoreboardManager().hideTimer(ev.getTimer());
+			p.getScoreboardManager().hideTimer(ev.getTimer());
 		}
 		
 		if(ev.getTimer().equals(p.getBorderManager().getWarningTimer()) && ev.wasTimerUp()) {
@@ -427,7 +427,7 @@ public class UHGameListener implements Listener {
 		p.getTimerManager().updateStartedTimersList();
 		
 		if(!ev.getTimer().equals(p.getTimerManager().getMainTimer())) {
-			p.getGameManager().getScoreboardManager().displayTimer(ev.getTimer());
+			p.getScoreboardManager().displayTimer(ev.getTimer());
 		}
 	}
 }

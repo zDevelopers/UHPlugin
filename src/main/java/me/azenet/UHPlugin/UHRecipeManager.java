@@ -21,10 +21,7 @@ package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import me.azenet.UHPlugin.i18n.I18n;
 
@@ -45,15 +42,16 @@ public class UHRecipeManager {
 	private I18n i = null;
 	
 	private Material compassCentralIngredient = null;
+	private int compassRecipeType = -1;
 	
 	public static final String RECIPE_COMPASS = "compass";
 	public static final String RECIPE_GLISTERING_MELON = "glistering";
 	public static final String RECIPE_ENCHANTED_GOLDEN_APPLE = "EGA";
 	
-	public static final String COMPASS_DISABLED = "no";
-	public static final String COMPASS_EASY = "easy";
-	public static final String COMPASS_MEDIUM = "medium";
-	public static final String COMPASS_HARD = "hard";
+	public static final int COMPASS_DISABLED = 0;
+	public static final int COMPASS_EASY = 1;
+	public static final int COMPASS_MEDIUM = 2;
+	public static final int COMPASS_HARD = 3;
 	
 	private String lastFailedRecipe = null;
 	
@@ -100,6 +98,8 @@ public class UHRecipeManager {
 				break;
 			case COMPASS_HARD:
 				compassCentralIngredient = Material.EYE_OF_ENDER;
+				break;
+			case COMPASS_DISABLED:
 				break;
 		}
 	}
@@ -169,6 +169,15 @@ public class UHRecipeManager {
 	public boolean isValidCompassRecipe(ItemStack[] matrix) {
 		if(matrix.length <= 4) {
 			return false; // Small crafting grid
+		}
+		
+		
+		if(matrix.length <= 5) {
+			return false; // Small crafting grid
+		}
+		
+		if(this.getCompassRecipeType() == COMPASS_DISABLED) {
+			return false;
 		}
 		
 		
@@ -305,22 +314,28 @@ public class UHRecipeManager {
 	 * @return {@link UHRecipeManager#COMPASS_DISABLED}, {@link UHRecipeManager#COMPASS_EASY},
 	 * {@link UHRecipeManager#COMPASS_MEDIUM} or {@link UHRecipeManager#COMPASS_HARD}.  
 	 */
-	public String getCompassRecipeType() {
+	public int getCompassRecipeType() {
+		if(compassRecipeType != -1) {
+			return compassRecipeType;
+		}
+		
 		if (p.getConfig().getBoolean("gameplay-changes.compass.enabled")) {
 			switch(p.getConfig().getString("gameplay-changes.compass.recipe")) {
 				case "easy":
-					return COMPASS_EASY;
+					compassRecipeType = COMPASS_EASY;
 					
 				case "hard":
-					return COMPASS_HARD;
+					compassRecipeType = COMPASS_HARD;
 					
 				default:
-					return COMPASS_MEDIUM;
+					compassRecipeType = COMPASS_MEDIUM;
 			}
 		}
 		else {
-			return COMPASS_DISABLED;
+			compassRecipeType = COMPASS_DISABLED;
 		}
+		
+		return compassRecipeType;
 	}
 	
 	/**

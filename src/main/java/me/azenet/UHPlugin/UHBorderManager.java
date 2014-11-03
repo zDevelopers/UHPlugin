@@ -130,7 +130,7 @@ public class UHBorderManager {
 	public HashSet<Player> getPlayersOutside(int diameter) {
 		HashSet<Player> playersOutside = new HashSet<Player>();
 		
-		for(final Player player : p.getGameManager().getAlivePlayers()) {
+		for(final Player player : p.getGameManager().getOnlineAlivePlayers()) {
 			if(!isInsideBorder(player.getLocation(), diameter)) {
 				playersOutside.add(player);
 			}

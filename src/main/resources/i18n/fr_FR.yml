@@ -43,8 +43,8 @@ keys:
         helpBorder: "{cc}/uh border {ci}: gère la bordure. Exécutez /uh border pour plus de détails."
         
         titleBugCmd: "{aqua}------ Commandes liées aux bugs ------"
-        helpHeal: "{cc}/uh heal <joueur> [demi-coeurs=20] {ci}: change la vie d'un joueur avec le nombre de demi-coeurs donné (par défaut, 20)."
-        helpHealall: "{cc}/uh healall [demi-coeurs=20] {ci}: change la vie de tous les joueurs, et non d'un seul."
+        helpHeal: "{cc}/uh heal <joueur> [demi-coeurs=20|±diff] {ci}: change la vie d'un joueur avec le nombre de demi-coeurs donné (par défaut, 20)."
+        helpHealall: "{cc}/uh healall [demi-coeurs=20|±diff] {ci}: change la vie de tous les joueurs, et non d'un seul."
         helpResurrect: "{cc}/uh resurrect <joueur> {ci}: fait revivre un joueur."
         helpTpback: "{cc}/uh tpback <joueur> [force] {ci}: téléporte un joueur au lieu de sa mort en toute sécurité."
         
@@ -255,10 +255,15 @@ keys:
         
         list:
             nothing: "{ce}Il n'y a pas d'équipe à lister."
-            itemTeam: "{0} - {1} joueurs"
-            itemPlayer: "{lightpurple} - {0}"
-            itemPlayerDead: "{lightpurple} - {0} {reset}({red}mort{reset})"
-            itemPlayerAlive: "{lightpurple} - {0} {reset}({green}vivant{reset})"
+            
+            itemTeam: "{0} ({1} joueurs)"
+            
+            bulletPlayerOnline: "{green} • "
+            bulletPlayerOffline: "{red} • "
+            
+            itemPlayer: "{0}"
+            itemPlayerDead: "{0} {reset}({red}mort{reset})"
+            itemPlayerAlive: "{0} {reset}({green}vivant{reset})"
         
         reset:
             success: "{cs}Toutes les équipes ont été supprimées."

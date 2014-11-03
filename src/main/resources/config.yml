@@ -38,6 +38,10 @@ map:
         # The delay between two warning messages sent to the players out of a future border 
         # (this warning is set using /uh border warning <futureDiameter>).
         warningInterval: 90  # seconds
+    
+    spawnPoints:
+        # Don't generate the spawn points (with /uh spawns generate) above the water?
+        dontGenerateAboveWater: true
 
 
 
@@ -60,6 +64,13 @@ scoreboard:
     
     # Health in the list of the players
     health: true
+
+
+
+# Teleport the players to the spawn point on login if the game is not started?
+# Avoids the random spawn point of Minecraft, and teleports them back to
+# there if they log out then in.
+teleportToSpawnIfNotStarted: true
 
 
 

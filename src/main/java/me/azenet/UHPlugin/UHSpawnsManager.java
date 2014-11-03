@@ -7,8 +7,10 @@ import java.util.Random;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.block.Block;
 
 public class UHSpawnsManager {
 	
@@ -17,10 +19,14 @@ public class UHSpawnsManager {
 	
 	private LinkedList<Location> spawnPoints = new LinkedList<Location>();
 	
+	private boolean avoidWater;
+	
 	
 	public UHSpawnsManager(UHPlugin plugin) {
 		this.p = plugin;
 		this.i = p.getI18n();
+		
+		avoidWater = p.getConfig().getBoolean("map.spawnPoints.dontGenerateAboveWater");
 	}
 	
 	/**
@@ -61,7 +67,7 @@ public class UHSpawnsManager {
 			spawnPoint.setY(location.getWorld().getHighestBlockYAt(location.getBlockX(), location.getBlockZ()) + 120);
 		}
 		else {
-			Location safeSpot = UHUtils.findSafeSpot(location);
+			Location safeSpot = UHUtils.searchSafeSpot(location);
 			if(safeSpot == null) {
 				throw new RuntimeException("Unable to find a safe spot to set the spawn point " + location.toString());
 			}
@@ -241,6 +247,11 @@ public class UHSpawnsManager {
 		// of other ones, we restarts all the generation.
 		int currentErrorCount = 0;
 		
+		// With the "avoid above water" option, if there's a lot of water, the ganaration may
+		// fail even if the surface seems to be ok to host the requested spawn points.
+		// So, after 2*{points requested} points above the water, we cancels the generation.
+		int pointsAboveWater = 0;
+		
 		generationLoop: while(generatedSpawnPoints != spawnCount) {
 			
 			// "Too many fails" test
@@ -248,6 +259,11 @@ public class UHSpawnsManager {
 				randomSpawnPoints = new LinkedList<Location>();
 				generatedSpawnPoints = 0;
 				currentErrorCount = 0;
+			}
+			
+			// "Too many points above the water" test
+			if(pointsAboveWater >= 2*spawnCount) {
+				return false;
 			}
 			
 			
@@ -265,9 +281,19 @@ public class UHSpawnsManager {
 				continue generationLoop; // outside: nope
 			}
 			
+			Block surfaceBlock = world.getHighestBlockAt(randomPoint);
+			
 			// Safe spot available?
-			if(UHUtils.findSafeSpot(randomPoint) == null) {
+			if(!UHUtils.isSafeSpot(surfaceBlock.getLocation())) {
 				continue generationLoop; // not safe: nope
+			}
+			
+			// Not above the water?
+			if(avoidWater) {
+				if(surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.STATIONARY_WATER) {
+					pointsAboveWater++;
+					continue generationLoop;
+				}
 			}
 			
 			// Is that point at a correct distance of the other ones?
@@ -368,7 +394,7 @@ public class UHSpawnsManager {
 			currentPoint = currentSquareStartPoint.clone();
 			
 			// First point
-			if(p.getBorderManager().isInsideBorder(currentPoint, regionDiameter) && UHUtils.findSafeSpot(currentPoint) != null) {
+			if(p.getBorderManager().isInsideBorder(currentPoint, regionDiameter) && UHUtils.searchSafeSpot(currentPoint) != null) {
 				generatedPoints.add(currentPoint.clone());
 				countGeneratedPoints++;
 				
@@ -389,9 +415,18 @@ public class UHSpawnsManager {
 						continue sideLoop;
 					}
 					
+					Block surfaceBlock = world.getHighestBlockAt(currentPoint);
+					
 					// Safe spot available?
-					if(UHUtils.findSafeSpot(currentPoint) == null) {
+					if(!UHUtils.isSafeSpot(surfaceBlock.getLocation())) {
 						continue sideLoop; // not safe: nope
+					}
+					
+					// Not above the water?
+					if(avoidWater) {
+						if(surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.STATIONARY_WATER) {
+							continue sideLoop;
+						}
 					}
 					
 					generatedPoints.add(currentPoint.clone());
@@ -499,9 +534,18 @@ public class UHSpawnsManager {
 					continue circleLoop;
 				}
 				
-				// Safe?
-				if(UHUtils.findSafeSpot(point) == null) {
-					continue circleLoop;
+				Block surfaceBlock = world.getHighestBlockAt(point);
+				
+				// Safe spot available?
+				if(!UHUtils.isSafeSpot(surfaceBlock.getLocation())) {
+					continue circleLoop; // not safe: nope
+				}
+				
+				// Not above the water?
+				if(avoidWater) {
+					if(surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.STATIONARY_WATER) {
+						continue circleLoop;
+					}
 				}
 				
 				generatedPoints.add(point);

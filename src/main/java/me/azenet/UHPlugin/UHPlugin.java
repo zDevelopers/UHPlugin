@@ -40,6 +40,7 @@ public final class UHPlugin extends JavaPlugin {
 	private UHTeamManager teamManager = null;
 	private UHSpawnsManager spawnsManager = null;
 	private UHGameManager gameManager = null;
+	private UHScoreboardManager scoreboardManager = null;
 	private UHBorderManager borderManager = null;
 	private UHRecipeManager recipeManager = null;
 	private UHTeamChatManager teamChatManager = null;
@@ -79,6 +80,8 @@ public final class UHPlugin extends JavaPlugin {
 		
 		protipsSender = new UHProTipsSender(this);
 		
+		scoreboardManager = new UHScoreboardManager(this);
+		
 		wbintegration = new UHWorldBorderIntegration(this);
 		spintegration = new UHSpectatorPlusIntegration(this);
 		dynmapintegration = new UHDynmapIntegration(this);
@@ -104,9 +107,7 @@ public final class UHPlugin extends JavaPlugin {
 		// The freezer listener is registered by the freezer when it is needed.
 		
 		recipeManager.registerRecipes();
-		
 		gameManager.initEnvironment();
-		gameManager.initScoreboard();
 		
 		// In case of reload
 		for(Player player : getServer().getOnlinePlayers()) {
@@ -139,13 +140,19 @@ public final class UHPlugin extends JavaPlugin {
 	/**
 	 * Returns the game manager.
 	 * 
-	 * The scoreboard manager is available through the game manager.
-	 * Use <code>plugin.getGameManager().getScoreboardManager();</code>.
-	 * 
 	 * @return
 	 */
 	public UHGameManager getGameManager() {
 		return gameManager;
+	}
+	
+	/**
+	 * Returns the scoreboard manager.
+	 * 
+	 * @return
+	 */
+	public UHScoreboardManager getScoreboardManager() {
+		return scoreboardManager;
 	}
 	
 	/**

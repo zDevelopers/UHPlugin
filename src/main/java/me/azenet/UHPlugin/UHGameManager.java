@@ -35,7 +35,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -49,7 +49,6 @@ public class UHGameManager {
 	private Random random = null;
 	
 	private Boolean damageIsOn = false;
-	private UHScoreboardManager scoreboardManager = null;
 
 	private HashSet<String> players = new HashSet<String>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available 
 	private HashSet<UUID> alivePlayers = new HashSet<UUID>();
@@ -100,18 +99,6 @@ public class UHGameManager {
 	}
 
 	/**
-	 * Initializes the scoreboard.
-	 * 
-	 * If the scoreboard manager is instanced in the constructor, when the
-	 * scoreboard manager try to get the game manager through UHPlugin.getGameManager(),
-	 * the value returned is "null" (because the object is not yet constructed).
-	 * This is why we initializes the scoreboard manager later, in this method.
-	 */
-	public void initScoreboard() {
-		this.scoreboardManager = new UHScoreboardManager(p);
-	}
-
-	/**
 	 * Initializes the given player.
 	 * 
 	 *  - Teleportation to the default world's spawn point.
@@ -124,14 +111,19 @@ public class UHGameManager {
 	 * @param player
 	 */
 	public void initPlayer(final Player player) {
-		Location l = player.getWorld().getSpawnLocation();
-		player.teleport(l.add(0,1,0));
+		
+		if(p.getConfig().getBoolean("teleportToSpawnIfNotStarted")) {
+			Location l = player.getWorld().getSpawnLocation().add(0.5, 0.5, 0.5);
+			if(!UHUtils.safeTP(player, l)) {
+				player.teleport(l.add(0,1,0));
+			}
+		}
 		
 		player.setFoodLevel(20);
-		player.setSaturation(14f);
+		player.setSaturation(20f);
 		player.setHealth(20d);
 		
-		p.getGameManager().getScoreboardManager().setScoreboardForPlayer(player);
+		p.getScoreboardManager().setScoreboardForPlayer(player);
 		
 		// Used to update the "health" objective, to avoid a null one.
 		// Launched later because else, the health is constantly set to 20,
@@ -139,7 +131,7 @@ public class UHGameManager {
 		Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 			@Override
 			public void run() {
-				p.getGameManager().getScoreboardManager().updateHealthScore(player);
+				p.getScoreboardManager().updateHealthScore(player);
 			}
 		}, 20L);
 		
@@ -238,7 +230,7 @@ public class UHGameManager {
 					// A team with that name may already exists.
 					// Tries:
 					// 1. The name of the player;
-					// 2. TheName (bigRandomNumberHere).
+					// 2. TheName bigRandomNumberHere.
 					
 					String teamName = player.getName();
 					
@@ -311,7 +303,7 @@ public class UHGameManager {
 			
 			// Used to display the number of teams, players... in the scoreboard instead of 0
 			// while the players are teleported.
-			scoreboardManager.updateCounters();
+			p.getScoreboardManager().updateCounters();
 			
 			// A simple information, because this start is slower (yeah, Captain Obvious here)
 			p.getServer().broadcastMessage(i.t("start.teleportationInProgress"));
@@ -399,9 +391,6 @@ public class UHGameManager {
 		if(p.getConfig().getBoolean("episodes.enabled")) {
 			this.episode = 1;
 			
-			// Removes the fake timer displayed before the start of the game.
-			scoreboardManager.startTimer();
-			
 			// An empty string is used for the name of the main timer, because
 			// such a name can't be used by players.
 			UHTimer mainTimer = new UHTimer("");
@@ -437,7 +426,7 @@ public class UHGameManager {
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 				@Override
 				public void run() {
-					for(Player player : getAlivePlayers()) {
+					for(Player player : getOnlineAlivePlayers()) {
 						p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_USE_T_COMMAND);
 					}
 				}
@@ -448,7 +437,7 @@ public class UHGameManager {
 		Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 			@Override
 			public void run() {
-				for(Player player : getAlivePlayers()) {
+				for(Player player : getOnlineAlivePlayers()) {
 					p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_STARTUP_INVINCIBILITY);
 				}
 			}
@@ -463,16 +452,12 @@ public class UHGameManager {
 		Bukkit.getServer().broadcastMessage(i.t("start.go"));
 		
 		p.getFreezer().setGlobalFreezeState(false);
+		p.getScoreboardManager().initScoreboardAfterStart();
 		
 		// Start sound
 		new UHSound(p.getConfig().getConfigurationSection("start.sound")).broadcast();
 		
 		this.gameRunning = true;
-		
-		// The updateCounters method needs to be executed when the game is marked
-		// as running, in order to display the team count.
-		this.scoreboardManager.updateCounters();
-		this.scoreboardManager.updateTimers();
 	}
 	
 	
@@ -493,7 +478,7 @@ public class UHGameManager {
 		this.alivePlayersCount = alivePlayers.size();
 		this.aliveTeamsCount = getAliveTeams().size();
 		
-		this.scoreboardManager.updateCounters();
+		p.getScoreboardManager().updateCounters();
 	}
 	
 	
@@ -518,11 +503,11 @@ public class UHGameManager {
 			// Restarts the timer.
 			// Useless for a normal start (restarted in the event), but needed if the episode was shifted.
 			if(!shifter.equals("")) {
-				scoreboardManager.restartTimers();
+				p.getScoreboardManager().restartTimers();
 				p.getTimerManager().getMainTimer().start();
 			}
 			
-			this.scoreboardManager.updateCounters();
+			p.getScoreboardManager().updateCounters();
 		}
 	}
 	
@@ -732,7 +717,7 @@ public class UHGameManager {
 	/**
 	 * Returns true if the given player is dead.
 	 * 
-	 * @param name The name of the player.
+	 * @param player The player.
 	 * @return True if the player is dead.
 	 */
 	public boolean isPlayerDead(Player player) {
@@ -740,12 +725,31 @@ public class UHGameManager {
 	}
 	
 	/**
+	 * Returns true if the given player is dead.
+	 * 
+	 * @param player The UUID of the player.
+	 * @return True if the player is dead.
+	 */
+	public boolean isPlayerDead(UUID player) {
+		return !alivePlayers.contains(player);
+	}
+	
+	/**
 	 * Registers a player as dead.
 	 * 
-	 * @param name The name of the player to mark as dead.
+	 * @param player The player to mark as dead.
 	 */
 	public void addDead(Player player) {
 		alivePlayers.remove(player.getUniqueId());
+	}
+	
+	/**
+	 * Registers a player as dead.
+	 * 
+	 * @param player The UUID of the player to mark as dead.
+	 */
+	public void addDead(UUID player) {
+		alivePlayers.remove(player);
 	}
 
 	
@@ -767,13 +771,13 @@ public class UHGameManager {
 		
 		// There's only one team.
 		UHTeam winnerTeam = p.getGameManager().getAliveTeams().get(0);
-		ArrayList<Player> listWinners = winnerTeam.getPlayers();
+		ArrayList<OfflinePlayer> listWinners = winnerTeam.getPlayers();
 		
 		if(p.getConfig().getBoolean("finish.message")) {
 			if(p.getGameManager().isGameWithTeams()) {
 				String winners = "";
 				
-				for(Player winner : listWinners) {
+				for(OfflinePlayer winner : listWinners) {
 					if(winner == listWinners.get(0)) {
 						// Nothing
 					}
@@ -783,6 +787,7 @@ public class UHGameManager {
 					else {
 						winners += ", ";
 					}
+					
 					winners += winner.getName();
 				}
 				
@@ -806,10 +811,11 @@ public class UHGameManager {
 	public ArrayList<UHTeam> getAliveTeams() {
 		ArrayList<UHTeam> aliveTeams = new ArrayList<UHTeam>();
 		for (UHTeam t : tm.getTeams()) {
-			for (Player p : t.getPlayers()) {
-				if (!this.isPlayerDead(p) && !aliveTeams.contains(t)) aliveTeams.add(t);
+			for (OfflinePlayer p : t.getPlayers()) {
+				if (!this.isPlayerDead(p.getUniqueId()) && !aliveTeams.contains(t)) aliveTeams.add(t);
 			}
 		}
+		
 		return aliveTeams;
 	}
 	
@@ -818,24 +824,34 @@ public class UHGameManager {
 	 * 
 	 * @return The list.
 	 */
-	public HashSet<Player> getAlivePlayers() {
+	public HashSet<OfflinePlayer> getAlivePlayers() {
 		
-		HashSet<Player> alivePlayersList = new HashSet<Player>();
+		HashSet<OfflinePlayer> alivePlayersList = new HashSet<OfflinePlayer>();
 		
 		for(UUID id : alivePlayers) {
-			alivePlayersList.add(p.getServer().getPlayer(id));
+			alivePlayersList.add(p.getServer().getOfflinePlayer(id));
 		}
 		
 		return alivePlayersList;
 	}
 	
 	/**
-	 * Returns the scoreboard manager.
+	 * Returns a list of the currently alive and online players.
 	 * 
-	 * @return
+	 * @return The list.
 	 */
-	public UHScoreboardManager getScoreboardManager() {
-		return scoreboardManager;
+	public HashSet<Player> getOnlineAlivePlayers() {
+		
+		HashSet<Player> alivePlayersList = new HashSet<Player>();
+		
+		for(UUID id : alivePlayers) {
+			Player player = p.getServer().getPlayer(id);
+			if(player != null) {
+				alivePlayersList.add(player);
+			}
+		}
+		
+		return alivePlayersList;
 	}
 	
 	/**

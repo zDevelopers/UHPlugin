@@ -19,6 +19,7 @@
 
 package me.azenet.UHPlugin.task;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -26,22 +27,23 @@ import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHUtils;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class FireworksOnWinnersTask extends BukkitRunnable {
 
 	private UHPlugin p = null;
-	private List<Player> winners = null;
+	private List<OfflinePlayer> winners = null;
 	
 	private Double areaSize;
 	private Random rand;
 	
 	private long startTime = 0L;
 	
-	public FireworksOnWinnersTask(UHPlugin p, List<Player> winners) {
+	public FireworksOnWinnersTask(UHPlugin p, ArrayList<OfflinePlayer> listWinners) {
 		this.p = p;
-		this.winners = winners;
+		this.winners = listWinners;
 		
 		this.areaSize = p.getConfig().getDouble("finish.fireworks.areaSize");
 		this.rand = new Random();
@@ -54,19 +56,20 @@ public class FireworksOnWinnersTask extends BukkitRunnable {
 		// The fireworks are launched in a square centered on the player.
 		Double halfAreaSize = areaSize / 2;
 		
-		for(Player winner : winners) {
-			Location fireworkLocation = winner.getLocation();
-			
-			fireworkLocation.add(rand.nextDouble() * areaSize - halfAreaSize, // a number between -halfAreaSize and halfAreaSize 
-					2, // y+2 for a clean vision of the winner.
-					rand.nextDouble() * areaSize - halfAreaSize);
-			
-			UHUtils.generateRandomFirework(fireworkLocation, 0, 5);
+		for(OfflinePlayer winner : winners) {
+			if(winner.isOnline()) {
+				Location fireworkLocation = ((Player) winner).getLocation();
+				
+				fireworkLocation.add(rand.nextDouble() * areaSize - halfAreaSize, // a number between -halfAreaSize and halfAreaSize 
+						2, // y+2 for a clean vision of the winner.
+						rand.nextDouble() * areaSize - halfAreaSize);
+				
+				UHUtils.generateRandomFirework(fireworkLocation, 0, 5);
+			}
 		}
 		
 		if((System.currentTimeMillis() - startTime) / 1000 > p.getConfig().getInt("finish.fireworks.duration", 10)) {
 			this.cancel();
 		}
 	}
-
 }
