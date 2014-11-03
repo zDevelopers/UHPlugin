@@ -296,6 +296,7 @@ keys:
         offline: "{ce}Ce joueur n'est pas connecté."
         errorNaN: "{ce}Hey, ce n'est pas un nombre de demi-coeurs... C'est un texte... Pfff."
         errorNoKill: "{ce}Vous ne pouvez pas tuer un joueur avec cette commande, pour éviter toute faute de frappe."
+        errorHealthNotUpdatedNoKill: "{ce}La vie de {0} n'a pas été changée, pour ne pas le/la tuer."
         allErrorNoKill: "{ce}S'pèce de tueur en série !"
     
     resurrect:

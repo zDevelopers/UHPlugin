@@ -296,6 +296,7 @@ keys:
         offline: "{ce}This player is offline."
         errorNaN: "{ce}Hey, this is not a number of half-hearts. It's a text. Pfff."
         errorNoKill: "{ce}You can't kill a player with this command, to avoid typo fails."
+        errorHealthNotUpdatedNoKill: "{ce}The health of {0} was not updated to avoid a kill."
         allErrorNoKill: "{ce}Serial killer!"
     
     resurrect:

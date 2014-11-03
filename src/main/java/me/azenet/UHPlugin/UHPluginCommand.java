@@ -1004,7 +1004,7 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		
 		double health = 0D;
-		String action = "raw"; // "raw", "add"
+		boolean add = false; // "add" (±, true) or "raw" (exact health, false) mode
 		
 		if(args.length == 2) { // /uh heal <player> : full life for player.
 			health = 20D;
@@ -1015,11 +1015,11 @@ public class UHPluginCommand implements CommandExecutor {
 			try {
 				if(args[2].startsWith("+")) {
 					diffHealth = Double.parseDouble(args[2].substring(1));
-					action = "add";
+					add = true;
 				}
 				else if(args[2].startsWith("-")) {
 					diffHealth = -1 * Double.parseDouble(args[2].substring(1));
-					action = "add";
+					add = true;
 				}
 				else {
 					diffHealth = Double.parseDouble(args[2]);
@@ -1030,7 +1030,7 @@ public class UHPluginCommand implements CommandExecutor {
 				return;
 			}
 			
-			health = action.equals("raw") ? diffHealth : player.getHealth() + diffHealth;
+			health = !add ? diffHealth : player.getHealth() + diffHealth;
 			
 			if(health <= 0D) {
 				sender.sendMessage(i.t("heal.errorNoKill"));
@@ -1057,28 +1057,50 @@ public class UHPluginCommand implements CommandExecutor {
 	 */
 	@SuppressWarnings("unused")
 	private void doHealall(CommandSender sender, Command command, String label, String[] args) {
-		String healthArg = null;
-		if(args.length == 1) {
-			healthArg = "20";
-		}
-		else {
-			healthArg = args[1];
-		}
+		double diffHealth = 0D;
+		double health = 0D;
+		boolean add = false; // "add" (±, true) or "raw" (exact health, false) mode
 		
-		try {
-			if((!(healthArg.startsWith("+") || healthArg.startsWith("-")) && Double.parseDouble(healthArg) <= 0D) || Double.parseDouble(healthArg.substring(1)) <= 0D) {
-				sender.sendMessage(i.t("heal.allErrorNoKill"));
+		if(args.length == 1) { // /uh healall : full life for all players.
+			diffHealth = 20D;
+		}
+		else { // /uh heal <player> <hearts>
+			try {
+				if(args[1].startsWith("+")) {
+					diffHealth = Double.parseDouble(args[1].substring(1));
+					add = true;
+				}
+				else if(args[1].startsWith("-")) {
+					diffHealth = -1 * Double.parseDouble(args[1].substring(1));
+					add = true;
+				}
+				else {
+					diffHealth = Double.parseDouble(args[1]);
+				}
+			}
+			catch(NumberFormatException e) {
+				sender.sendMessage(i.t("heal.errorNaN"));
 				return;
 			}
 		}
-		catch(NumberFormatException e) {
-			sender.sendMessage(i.t("heal.errorNaN"));
+		
+		if((!add && diffHealth <= 0) || diffHealth <= -20) {
+			sender.sendMessage(i.t("heal.allErrorNoKill"));
 			return;
 		}
 		
 		for(final Player player : p.getServer().getOnlinePlayers()) {
-			String[] argsToHeal = {"heal", player.getName(), healthArg};
-			doHeal(sender, command, label, argsToHeal);
+			health = !add ? diffHealth : player.getHealth() + diffHealth;
+			
+			if(health <= 0D) {
+				sender.sendMessage(i.t("heal.errorHealthNotUpdatedNoKill", player.getName()));
+				continue;
+			}
+			else if(health > 20D) {
+				health = 20D;
+			}
+			
+			player.setHealth(health);
 		}
 	}
 	
