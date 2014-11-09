@@ -26,6 +26,9 @@ import me.azenet.UHPlugin.UHProTipsSender;
 import me.azenet.UHPlugin.UHTeam;
 import me.azenet.UHPlugin.events.TimerEndsEvent;
 import me.azenet.UHPlugin.events.TimerStartsEvent;
+import me.azenet.UHPlugin.events.UHGameEndsEvent;
+import me.azenet.UHPlugin.events.UHPlayerDeathEvent;
+import me.azenet.UHPlugin.events.UHTeamDeathEvent;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Bukkit;
@@ -67,6 +70,7 @@ public class UHGameListener implements Listener {
 	
 	/**
 	 * Used to:
+	 *  - call events;
 	 *  - play the death sound;
 	 *  - update the scoreboard;
 	 *  - kick the player (if needed);
@@ -92,6 +96,8 @@ public class UHGameListener implements Listener {
 		if(p.getGameManager().isPlayerDead(ev.getEntity()) || !p.getGameManager().isGameRunning()) {
 			return;
 		}
+		
+		p.getServer().getPluginManager().callEvent(new UHPlayerDeathEvent(ev.getEntity(), ev));
 		
 		// Plays sound.
 		p.getGameManager().getDeathSound().broadcast();
@@ -159,20 +165,22 @@ public class UHGameListener implements Listener {
 			}
 		}
 		
-		// Sends a team-death message if needed.
-		if(p.getConfig().getBoolean("death.messages.notifyIfTeamHasFallen", false)) {
-			final UHTeam team = p.getTeamManager().getTeamForPlayer((Player) ev.getEntity());
-			if(team != null) {
-				boolean isAliveTeam = false;
-				
-				for(OfflinePlayer player : team.getPlayers()) {
-					if(!p.getGameManager().isPlayerDead(player.getUniqueId())) {
-						isAliveTeam = true;
-						break;
-					}
+		// Sends a team-death message & event if needed.
+		final UHTeam team = p.getTeamManager().getTeamForPlayer((Player) ev.getEntity());
+		if(team != null) {
+			boolean isAliveTeam = false;
+			
+			for(OfflinePlayer player : team.getPlayers()) {
+				if(!p.getGameManager().isPlayerDead(player.getUniqueId())) {
+					isAliveTeam = true;
+					break;
 				}
+			}
+			
+			if(!isAliveTeam) {
+				p.getServer().getPluginManager().callEvent(new UHTeamDeathEvent(team));
 				
-				if(!isAliveTeam) {
+				if(p.getConfig().getBoolean("death.messages.notifyIfTeamHasFallen", false)) {
 					// Used to display this message after the death message.
 					Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 						@Override
@@ -212,6 +220,12 @@ public class UHGameListener implements Listener {
 					}
 				}
 			}, p.getConfig().getInt("finish.auto.timeAfterLastDeath", 3) * 20L);
+		}
+		
+		// Is the game ended? If so, we need to call an event.
+		if(p.getGameManager().getAliveTeamsCount() == 1) {
+			// There's only one team alive, so the winner team is the first one.
+			p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().get(0)));
 		}
 		
 		// Notifies the player about the possibility of respawn if hardcore hearts are enabled

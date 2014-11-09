@@ -10,8 +10,7 @@ import org.bukkit.event.HandlerList;
  * 
  * @author Amaury Carrade
  */
-public final class TimerStartsEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+public final class TimerStartsEvent extends UHEvent {
     private UHTimer timer;
  
     public TimerStartsEvent(UHTimer timer) {
@@ -25,13 +24,5 @@ public final class TimerStartsEvent extends Event {
      */
     public UHTimer getTimer() {
     	return timer;
-    }
-    
-    public HandlerList getHandlers() {
-        return handlers;
-    }
- 
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

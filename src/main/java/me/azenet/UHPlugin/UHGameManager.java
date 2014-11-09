@@ -27,6 +27,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import me.azenet.UHPlugin.events.EpisodeChangedCause;
+import me.azenet.UHPlugin.events.UHEpisodeChangedEvent;
+import me.azenet.UHPlugin.events.UHGameStartsEvent;
+import me.azenet.UHPlugin.events.UHPlayerResurrectedEvent;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.task.FireworksOnWinnersTask;
 import me.azenet.UHPlugin.task.TeamStartTask;
@@ -458,6 +462,9 @@ public class UHGameManager {
 		new UHSound(p.getConfig().getConfigurationSection("start.sound")).broadcast();
 		
 		this.gameRunning = true;
+		
+		// Fires the event
+		p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
 	}
 	
 	
@@ -508,6 +515,11 @@ public class UHGameManager {
 			}
 			
 			p.getScoreboardManager().updateCounters();
+			
+			EpisodeChangedCause cause;
+			if(shifter.equals("")) cause = EpisodeChangedCause.FINISHED;
+			else                   cause = EpisodeChangedCause.SHIFTED;
+			p.getServer().getPluginManager().callEvent(new UHEpisodeChangedEvent(episode, cause));
 		}
 	}
 	
@@ -569,6 +581,9 @@ public class UHGameManager {
 		if(!players.contains(player.getName())) {
 			players.add(player.getName());
 		}
+		
+		// Event
+		p.getServer().getPluginManager().callEvent(new UHPlayerResurrectedEvent(player));
 		
 		// Spectator disabled
 		if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
