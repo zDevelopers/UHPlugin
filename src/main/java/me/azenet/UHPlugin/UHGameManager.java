@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import me.azenet.UHPlugin.events.UHGameStartsEvent;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.task.FireworksOnWinnersTask;
 import me.azenet.UHPlugin.task.TeamStartTask;
@@ -458,6 +459,9 @@ public class UHGameManager {
 		new UHSound(p.getConfig().getConfigurationSection("start.sound")).broadcast();
 		
 		this.gameRunning = true;
+		
+		// Fires the event
+		p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
 	}
 	
 	
