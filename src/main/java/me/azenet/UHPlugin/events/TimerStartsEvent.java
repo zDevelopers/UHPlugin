@@ -2,9 +2,6 @@ package me.azenet.UHPlugin.events;
 
 import me.azenet.UHPlugin.UHTimer;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-
 /**
  * This event is fired when a timer ends.
  * 

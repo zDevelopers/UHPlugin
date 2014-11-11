@@ -23,11 +23,16 @@ import java.util.List;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHProTipsSender;
+import me.azenet.UHPlugin.UHSound;
 import me.azenet.UHPlugin.UHTeam;
+import me.azenet.UHPlugin.events.EpisodeChangedCause;
 import me.azenet.UHPlugin.events.TimerEndsEvent;
 import me.azenet.UHPlugin.events.TimerStartsEvent;
+import me.azenet.UHPlugin.events.UHEpisodeChangedEvent;
 import me.azenet.UHPlugin.events.UHGameEndsEvent;
+import me.azenet.UHPlugin.events.UHGameStartsEvent;
 import me.azenet.UHPlugin.events.UHPlayerDeathEvent;
+import me.azenet.UHPlugin.events.UHPlayerResurrectedEvent;
 import me.azenet.UHPlugin.events.UHTeamDeathEvent;
 import me.azenet.UHPlugin.i18n.I18n;
 
@@ -70,6 +75,7 @@ public class UHGameListener implements Listener {
 	
 	/**
 	 * Used to:
+	 *  - call events (UHPlayerDeathEvent, UHTeamDeathEvent, UHGameEndsEvent);
 	 *  - play the death sound;
 	 *  - update the scoreboard;
 	 *  - kick the player (if needed);
@@ -82,12 +88,10 @@ public class UHGameListener implements Listener {
 	 *  - save the location of the death of the player, to allow a teleportation later;
 	 *  - show the death location on the dynmap (if needed);
 	 *  - give XP to the killer (if needed);
-	 *  - broadcast the winners and launch the fireworks if needed;
 	 *  - notify the player about the possibility of respawn if hardcore hearts are enabled.
 	 *  
 	 * @param ev
 	 */
-	
 	@EventHandler
 	public void onPlayerDeath(final PlayerDeathEvent ev) {
 		// This needs to be executed only if the player die as a player, not a spectator.
@@ -207,18 +211,10 @@ public class UHGameListener implements Listener {
 		// Shows the death location on the dynmap
 		p.getDynmapIntegration().showDeathLocation(ev.getEntity());
 		
-		// Broadcasts the winner(s) and launches some fireworks if needed, a few seconds later
-		if(p.getConfig().getBoolean("finish.auto.do")) {
-			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
-				@Override
-				public void run() {
-					try {
-						p.getGameManager().finishGame();
-					} catch(IllegalStateException ignored) {
-						// The game is not finished.
-					}
-				}
-			}, p.getConfig().getInt("finish.auto.timeAfterLastDeath", 3) * 20L);
+		// Is the game ended? If so, we need to call an event.
+		if(p.getGameManager().getAliveTeamsCount() == 1) {
+			// There's only one team alive, so the winner team is the first one.
+			p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().get(0)));
 		}
 		
 		// Is the game ended? If so, we need to call an event.
@@ -240,7 +236,7 @@ public class UHGameListener implements Listener {
 	
 	
 	/**
-	 * Used to disable any damages if the game has not started.
+	 * Used to disable ell damages if the game is not started.
 	 * 
 	 * @param ev
 	 */
@@ -260,7 +256,7 @@ public class UHGameListener implements Listener {
 	 * @param ev
 	 */
 	@EventHandler
-	public void onEntityRegainHealth(final EntityRegainHealthEvent ev) {
+	public void onEntityRegainHealth(EntityRegainHealthEvent ev) {
 		if (ev.getRegainReason() == RegainReason.SATIATED) {
 			ev.setCancelled(true);
 		}
@@ -442,5 +438,81 @@ public class UHGameListener implements Listener {
 		if(!ev.getTimer().equals(p.getTimerManager().getMainTimer())) {
 			p.getScoreboardManager().displayTimer(ev.getTimer());
 		}
+	}
+	
+	/**
+	 * Used to broadcast the episode change.
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onEpisodeChange(UHEpisodeChangedEvent ev) {
+		String message = null;
+		if(ev.getCause() == EpisodeChangedCause.SHIFTED) {
+			message = i.t("episodes.endForced", String.valueOf(ev.getNewEpisode() - 1), ev.getShifter());
+		}
+		else {
+			message = i.t("episodes.end", String.valueOf(ev.getNewEpisode() - 1));
+		}
+		p.getServer().broadcastMessage(message);
+	}
+	
+	
+	/**
+	 * Used to broadcast the beginning of a game, with sound & message.
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onGameStarts(UHGameStartsEvent ev) {
+		// Start sound
+		new UHSound(p.getConfig().getConfigurationSection("start.sound")).broadcast();
+		
+		// Broadcast
+		Bukkit.getServer().broadcastMessage(i.t("start.go"));
+	}
+	
+	/**
+	 * Used to broadcasts the winner(s) and launches some fireworks if needed, a few seconds later.
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onGameEnd(UHGameEndsEvent ev) {
+		if(p.getConfig().getBoolean("finish.auto.do")) {
+			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+				@Override
+				public void run() {
+					try {
+						p.getGameManager().finishGame();
+					} catch(IllegalStateException ignored) {
+						// The game is not finished.
+					}
+				}
+			}, p.getConfig().getInt("finish.auto.timeAfterLastDeath", 3) * 20L);
+		}
+	}
+	
+	
+	/**
+	 * Used to:
+	 *  - disable the spectator mode;
+	 *  - hide the death point from the dynmap;
+	 *  - broadcast this resurrection to all players.
+	 *  
+	 * @param ev
+	 */
+	@EventHandler
+	public void onPlayerResurrected(UHPlayerResurrectedEvent ev) {
+		// Spectator mode disabled
+		if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
+			p.getSpectatorPlusIntegration().getSPAPI().setSpectating(ev.getPlayer(), false);
+		}
+		
+		// Death point removed on the dynmap
+		p.getDynmapIntegration().hideDeathLocation(ev.getPlayer());
+		
+		// All players are notified
+		this.p.getServer().broadcastMessage(i.t("resurrect.broadcastMessage", ev.getPlayer().getName()));
 	}
 }

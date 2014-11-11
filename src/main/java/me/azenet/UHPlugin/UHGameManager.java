@@ -27,7 +27,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import me.azenet.UHPlugin.events.EpisodeChangedCause;
+import me.azenet.UHPlugin.events.UHEpisodeChangedEvent;
 import me.azenet.UHPlugin.events.UHGameStartsEvent;
+import me.azenet.UHPlugin.events.UHPlayerResurrectedEvent;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.task.FireworksOnWinnersTask;
 import me.azenet.UHPlugin.task.TeamStartTask;
@@ -450,13 +453,8 @@ public class UHGameManager {
 	 * Also, forces the global freeze start to false, to avoid toggle bugs (like inverted state).
 	 */
 	public void finalizeStart() {
-		Bukkit.getServer().broadcastMessage(i.t("start.go"));
-		
 		p.getFreezer().setGlobalFreezeState(false);
 		p.getScoreboardManager().initScoreboardAfterStart();
-		
-		// Start sound
-		new UHSound(p.getConfig().getConfigurationSection("start.sound")).broadcast();
 		
 		this.gameRunning = true;
 		
@@ -493,25 +491,22 @@ public class UHGameManager {
 	 */
 	public void shiftEpisode(String shifter) {
 		if(p.getConfig().getBoolean("episodes.enabled")) {
-			String message = null;
-			if(!shifter.equals("")) {
-				message = i.t("episodes.endForced", String.valueOf(episode), shifter);
-			}
-			else {
-				message = i.t("episodes.end", String.valueOf(episode));
-			}
-			p.getServer().broadcastMessage(message);
-			
 			this.episode++;
+			
+			EpisodeChangedCause cause;
+			if(shifter.equals("")) cause = EpisodeChangedCause.FINISHED;
+			else                   cause = EpisodeChangedCause.SHIFTED;
 			
 			// Restarts the timer.
 			// Useless for a normal start (restarted in the event), but needed if the episode was shifted.
-			if(!shifter.equals("")) {
+			if(cause == EpisodeChangedCause.SHIFTED) {
 				p.getScoreboardManager().restartTimers();
 				p.getTimerManager().getMainTimer().start();
 			}
 			
 			p.getScoreboardManager().updateCounters();
+			
+			p.getServer().getPluginManager().callEvent(new UHEpisodeChangedEvent(episode, cause, shifter));
 		}
 	}
 	
@@ -574,16 +569,8 @@ public class UHGameManager {
 			players.add(player.getName());
 		}
 		
-		// Spectator disabled
-		if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
-			p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, false);
-		}
-		
-		// Death point removed on the dynmap
-		p.getDynmapIntegration().hideDeathLocation(player);
-		
-		// All players are notified
-		this.p.getServer().broadcastMessage(i.t("resurrect.broadcastMessage", player.getName()));
+		// Event
+		p.getServer().getPluginManager().callEvent(new UHPlayerResurrectedEvent(player));
 		
 		return true;
 	}
