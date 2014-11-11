@@ -440,6 +440,7 @@ public class UHGameListener implements Listener {
 		}
 	}
 	
+	
 	/**
 	 * Used to broadcast the episode change.
 	 * 
@@ -473,7 +474,7 @@ public class UHGameListener implements Listener {
 	}
 	
 	/**
-	 * Used to broadcasts the winner(s) and launches some fireworks if needed, a few seconds later.
+	 * Used to broadcast the winner(s) and launch some fireworks if needed, a few seconds later.
 	 * 
 	 * @param ev
 	 */
@@ -485,8 +486,9 @@ public class UHGameListener implements Listener {
 				public void run() {
 					try {
 						p.getGameManager().finishGame();
-					} catch(IllegalStateException ignored) {
-						// The game is not finished.
+					} catch(IllegalStateException e) {
+						// The game is not finished (..what?).
+						e.printStackTrace();
 					}
 				}
 			}, p.getConfig().getInt("finish.auto.timeAfterLastDeath", 3) * 20L);

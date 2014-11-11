@@ -375,8 +375,10 @@ public class UHPluginCommand implements CommandExecutor {
 		if(args.length == 1) { // /uh start (standard mode)
 			try {
 				p.getGameManager().start(sender, false);
-			} catch(RuntimeException e) {
+			} catch(IllegalStateException e) {
 				sender.sendMessage(i.t("start.already"));
+			} catch(Exception e) {
+				e.printStackTrace();
 			}
 		}
 		else if(args.length == 2 && args[1].equalsIgnoreCase("slow")) { // /uh start slow
@@ -384,6 +386,8 @@ public class UHPluginCommand implements CommandExecutor {
 				p.getGameManager().start(sender, true);
 			} catch(IllegalStateException e) {
 				sender.sendMessage(i.t("start.already"));
+			} catch(Exception e) {
+				e.printStackTrace();
 			}
 		}
 		else if(args.length == 3 && args[1].equalsIgnoreCase("slow") && args[2].equalsIgnoreCase("go")) { // /uh start slow go

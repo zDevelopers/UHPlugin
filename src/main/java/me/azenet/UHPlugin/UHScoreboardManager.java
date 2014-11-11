@@ -51,15 +51,6 @@ public class UHScoreboardManager {
 	private Integer oldAliveTeamsCount = -1;
 	
 	// Timers
-	
-	/**
-	 * Represents the position of each displayed timer.
-	 * <ul>
-	 *  <li><tt>This position</tt>: the space before the timer.</li>
-	 *  <li><tt>This position - 1</tt>: the name of the timer.</li>
-	 *  <li><tt>This position - 2</tt>: the timer.</li>
-	 * </ul>
-	 */
 	private List<UHTimer> displayedTimers = new ArrayList<UHTimer>();
 	
 	
@@ -170,27 +161,29 @@ public class UHScoreboardManager {
 	 * @param force If true, this timer will be displayed even if it is marked as displayed.
 	 */
 	private void displayTimer(UHTimer timer, boolean force) {
-		if(displayedTimers.contains(timer) && !force) {
-			return; // already displayed
+		if(p.getConfig().getBoolean("scoreboard.enabled")) {
+			if(displayedTimers.contains(timer) && !force) {
+				return; // already displayed
+			}
+			
+			if(p.getFreezer().getGlobalFreezeState()) {
+				// If the global freeze is ON, because I want the "Game frozen" entry kept
+				// at the bottom of the scoreboard, I remove and after add again this text.
+				this.displayFreezeState(false);
+			}
+			
+			// Effective display
+			sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
+			sidebar.addEntry(timer.getDisplayName(), true);
+			sidebar.addEntry(getTimerText(timer, false, false), true);
+			sidebar.reconstruct();
+			
+			if(p.getFreezer().getGlobalFreezeState()) {
+				this.displayFreezeState(true);
+			}
+			
+			if(!displayedTimers.contains(timer)) displayedTimers.add(timer);
 		}
-		
-		if(p.getFreezer().getGlobalFreezeState()) {
-			// If the global freeze is ON, because I want the "Game frozen" entry kept
-			// at the bottom of the scoreboard, I remove and after add again this text.
-			this.displayFreezeState(false);
-		}
-		
-		// Effective display
-		sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
-		sidebar.addEntry(timer.getDisplayName(), true);
-		sidebar.addEntry(getTimerText(timer, false, false), true);
-		sidebar.reconstruct();
-		
-		if(p.getFreezer().getGlobalFreezeState()) {
-			this.displayFreezeState(true);
-		}
-		
-		if(!displayedTimers.contains(timer)) displayedTimers.add(timer);
 	}
 	
 	/**
@@ -199,22 +192,24 @@ public class UHScoreboardManager {
 	 * @param timer
 	 */
 	public void hideTimer(UHTimer timer) {
-		// The timer is removed from the lists of the displayed timers.
-		// All the positions of the displayed timers are changed, as well as the number of spaces used.
-		
-		if(!displayedTimers.contains(timer)) {
-			return;
+		if(p.getConfig().getBoolean("scoreboard.enabled")) {
+			// The timer is removed from the lists of the displayed timers.
+			// All the positions of the displayed timers are changed, as well as the number of spaces used.
+			
+			if(!displayedTimers.contains(timer)) {
+				return;
+			}
+			
+			// The timer is hidden
+			int sepIndex = sidebar.getEntryIndex(timer.getDisplayName()) - 1; // Test useless, this exists because the timer is displayed.
+			sidebar.removeEntryAtIndex(sepIndex, true);
+			sidebar.removeEntry(timer.getDisplayName(), true);
+			sidebar.removeEntry(getTimerText(timer, false, false), true);
+			sidebar.removeEntry(getTimerText(timer, false, true), true);
+			sidebar.reconstruct();
+			
+			displayedTimers.remove(timer);
 		}
-		
-		// The timer is hidden
-		int sepIndex = sidebar.getEntryIndex(timer.getDisplayName()) - 1; // Test useless, this exists because the timer is displayed.
-		sidebar.removeEntryAtIndex(sepIndex, true);
-		sidebar.removeEntry(timer.getDisplayName(), true);
-		sidebar.removeEntry(getTimerText(timer, false, false), true);
-		sidebar.removeEntry(getTimerText(timer, false, true), true);
-		sidebar.reconstruct();
-		
-		displayedTimers.remove(timer);
 	}
 	
 	/**
@@ -222,7 +217,9 @@ public class UHScoreboardManager {
 	 * duplicated values.
 	 */
 	public void restartTimers() {
-		sidebar.reconstruct();
+		if(p.getConfig().getBoolean("scoreboard.enabled")) {
+			sidebar.reconstruct();
+		}
 	}
 	
 	/**
