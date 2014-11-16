@@ -96,7 +96,7 @@ public class UHGameListener implements Listener {
 	public void onPlayerDeath(final PlayerDeathEvent ev) {
 		// This needs to be executed only if the player die as a player, not a spectator.
 		// Also, the game needs to be started.
-		if(p.getGameManager().isPlayerDead(ev.getEntity()) || !p.getGameManager().isGameRunning()) {
+		if(p.getGameManager().isPlayerDead(ev.getEntity()) || !p.getGameManager().isGameStarted()) {
 			return;
 		}
 		
@@ -306,7 +306,7 @@ public class UHGameListener implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerJoin(final PlayerJoinEvent ev) {
-		if (!this.p.getGameManager().isGameRunning()) {
+		if (!this.p.getGameManager().isGameStarted()) {
 			p.getGameManager().initPlayer(ev.getPlayer());
 		}
 		
@@ -316,7 +316,7 @@ public class UHGameListener implements Listener {
 		// The display name is reset when the player logs off.
 		p.getTeamManager().colorizePlayer(ev.getPlayer());
 		
-		if(!p.getGameManager().isGameRunning() && ev.getPlayer().hasPermission("uh.*")) {
+		if(!p.getGameManager().isGameStarted() && ev.getPlayer().hasPermission("uh.*")) {
 			// A warning to the administrators if WorldBorder is not present.
 			if(!p.getWorldBorderIntegration().isWBIntegrationEnabled()) {
 				ev.getPlayer().sendMessage(i.t("load.WBNotInstalled1"));
@@ -360,7 +360,7 @@ public class UHGameListener implements Listener {
 	 */
 	@EventHandler
 	public void onBlockBreakEvent(final BlockBreakEvent ev) {
-		if (!this.p.getGameManager().isGameRunning() && !((Player)ev.getPlayer()).hasPermission("uh.build")) {
+		if (!this.p.getGameManager().isGameStarted() && !((Player)ev.getPlayer()).hasPermission("uh.build")) {
 			ev.setCancelled(true);
 		}
 	}
@@ -372,7 +372,7 @@ public class UHGameListener implements Listener {
 	 */
 	@EventHandler
 	public void onBlockPlaceEvent(final BlockPlaceEvent ev) {
-		if (!this.p.getGameManager().isGameRunning() && !((Player)ev.getPlayer()).hasPermission("uh.build")) {
+		if (!this.p.getGameManager().isGameStarted() && !((Player)ev.getPlayer()).hasPermission("uh.build")) {
 			ev.setCancelled(true);
 		}
 	}
