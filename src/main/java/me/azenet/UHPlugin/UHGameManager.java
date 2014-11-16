@@ -70,7 +70,8 @@ public class UHGameManager {
 	private Boolean slowStartInProgress = false;
 	private Boolean slowStartTPFinished = false;
 	
-	private Boolean gameRunning = false;
+	private Boolean gameStarted = false;
+	private Boolean gameFinished = false;
 	private Integer episode = 0;
 	private UHSound deathSound = null;
 	
@@ -172,7 +173,7 @@ public class UHGameManager {
 	public void start(CommandSender sender, Boolean slow) throws IllegalStateException {
 		
 		if(isGameRunning()) {
-			throw new IllegalStateException("The game is already started!");
+			throw new IllegalStateException("The game is currently running!");
 		}
 		
 		/** Initialization of the players and the teams **/
@@ -456,7 +457,8 @@ public class UHGameManager {
 		p.getFreezer().setGlobalFreezeState(false);
 		p.getScoreboardManager().initScoreboardAfterStart();
 		
-		this.gameRunning = true;
+		this.gameStarted = true;
+		this.gameFinished = false;
 		
 		// Fires the event
 		p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
@@ -678,12 +680,38 @@ public class UHGameManager {
 	}
 	
 	/**
-	 * Returns true if the game was launched.
+	 * Returns true if the game was launched and is not finished.
 	 * 
 	 * @return The running state.
 	 */
 	public boolean isGameRunning() {
-		return gameRunning;
+		return gameStarted && !gameFinished;
+	}
+	
+	/**
+	 * Returns true if the game is started.
+	 * 
+	 * @return
+	 */
+	public boolean isGameStarted() {
+		return gameStarted;
+	}
+	
+	/**
+	 * Returns true if the game is finished.
+	 * @return
+	 */
+	public boolean isGameFinished() {
+		return gameFinished;
+	}
+	
+	/**
+	 * Registers the state of the game.
+	 * 
+	 * @param finished If true, the game will be marked as finished.
+	 */
+	public void setGameFinished(boolean finished) {
+		gameFinished = finished;
 	}
 	
 	/**
@@ -752,7 +780,7 @@ public class UHGameManager {
 	 * or {@link #FINISH_ERROR_NOT_FINISHED}).
 	 */
 	public void finishGame() {
-		if(!p.getGameManager().isGameRunning()) {
+		if(!p.getGameManager().isGameStarted()) {
 			throw new IllegalStateException(FINISH_ERROR_NOT_STARTED);
 		}
 		

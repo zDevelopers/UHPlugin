@@ -218,7 +218,9 @@ public class UHGameListener implements Listener {
 		}
 		
 		// Is the game ended? If so, we need to call an event.
-		if(p.getGameManager().getAliveTeamsCount() == 1) {
+		if(p.getGameManager().isGameRunning() && p.getGameManager().getAliveTeamsCount() == 1) {
+			p.getGameManager().setGameFinished(true);
+			
 			// There's only one team alive, so the winner team is the first one.
 			p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().get(0)));
 		}
