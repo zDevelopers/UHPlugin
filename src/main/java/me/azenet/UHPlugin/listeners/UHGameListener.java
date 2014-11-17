@@ -238,7 +238,7 @@ public class UHGameListener implements Listener {
 	
 	
 	/**
-	 * Used to disable ell damages if the game is not started.
+	 * Used to disable all damages if the game is not started.
 	 * 
 	 * @param ev
 	 */
@@ -300,11 +300,12 @@ public class UHGameListener implements Listener {
 	 *  - change the gamemode of the player, if the game is not running;
 	 *  - teleport the player to the spawn, if the game is not running;
 	 *  - update the scoreboard;
+	 *  - put a new player in spectator mode if the game is started (following the config);
 	 *  - resurrect a player (if the player was offline).
 	 * 
 	 * @param ev
 	 */
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onPlayerJoin(final PlayerJoinEvent ev) {
 		if (!this.p.getGameManager().isGameStarted()) {
 			p.getGameManager().initPlayer(ev.getPlayer());
@@ -349,6 +350,13 @@ public class UHGameListener implements Listener {
 		if(p.getGameManager().isDeadPlayersToBeResurrected(ev.getPlayer())) {
 			p.getGameManager().resurrectPlayerOnlineTask(ev.getPlayer());
 			p.getGameManager().markPlayerAsResurrected(ev.getPlayer());
+		}
+		
+		// If the player is a new one, the game is started, and the option is set to true...
+		if(p.getGameManager().isGameRunning() && p.getConfig().getBoolean("spectatorModeWhenNewPlayerJoinAfterStart")
+				&& !p.getGameManager().getAlivePlayers().contains((OfflinePlayer) ev.getPlayer())
+				&&  p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
+			p.getSpectatorPlusIntegration().getSPAPI().setSpectating(ev.getPlayer(), true);
 		}
 	}
 	

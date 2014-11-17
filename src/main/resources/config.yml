@@ -226,6 +226,12 @@ logTeamChat: false
 
 
 
+# Enable spectator mode for player joining the game after the beginning
+# (only for out-of-the-UHC players of course)?
+spectatorModeWhenNewPlayerJoinAfterStart: true
+
+
+
 protips:
     sound:
         name: NOTE_PLING
