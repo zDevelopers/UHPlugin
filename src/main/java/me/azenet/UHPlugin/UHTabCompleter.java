@@ -56,6 +56,7 @@ public class UHTabCompleter implements TabCompleter {
 		this.colors.add("red");
 		this.colors.add("white");
 		this.colors.add("yellow");
+		this.colors.add("?");
 	}
 
 	@Override
