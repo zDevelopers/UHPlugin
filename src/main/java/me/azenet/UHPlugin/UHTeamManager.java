@@ -364,13 +364,13 @@ public class UHTeamManager {
 					}
 					else {
 						if(teamRawSeparated.length == 2) { // "color,name"
-							addTeam(color, teamRawSeparated[1]);
-							p.getLogger().info(i.t("load.namedTeamAdded", teamRawSeparated[1],teamRawSeparated[0]));
+							UHTeam newTeam = addTeam(color, teamRawSeparated[1]);
+							p.getLogger().info(i.t("load.namedTeamAdded", newTeam.getName(), newTeam.getColor().toString()));
 							teamsCount++;
 						}
 						else if(teamRawSeparated.length == 1) { // "color"
-							addTeam(color, teamRawSeparated[0]);
-							p.getLogger().info(i.t("load.teamAdded", teamRawSeparated[0]));
+							UHTeam newTeam = addTeam(color, teamRawSeparated[0]);
+							p.getLogger().info(i.t("load.teamAdded", newTeam.getColor().toString()));
 							teamsCount++;
 						}
 						else {

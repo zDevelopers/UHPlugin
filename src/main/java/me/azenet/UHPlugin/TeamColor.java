@@ -67,6 +67,11 @@ public enum TeamColor {
 			return valueOf(name.trim().toUpperCase());
 		}
 		catch(IllegalArgumentException e) {
+			// Maybe a color without underscore
+			for(TeamColor color : values()) {
+				if(color.name.equalsIgnoreCase(name)) return color;
+			}
+			
 			return null;
 		}
 	}
