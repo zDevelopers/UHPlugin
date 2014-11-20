@@ -49,7 +49,11 @@ public class UHTeam {
 		this.plugin = plugin;
 		
 		this.name = name;
-		this.color = color;
+		
+		// We don't use generateColor directly because we want to keep the "null" color.
+		if(color == TeamColor.RANDOM) this.color = plugin.getTeamManager().generateColor(color);
+		else                          this.color = color;
+		
 		
 		// We use a random internal name because the name of a team, in Minecraft vanilla, is limited
 		// (16 characters max).
@@ -57,7 +61,7 @@ public class UHTeam {
 		this.internalName = String.valueOf(rand.nextInt(99999999)) + String.valueOf(rand.nextInt(99999999));
 		
 		if(this.color != null) {
-			this.displayName = color.toChatColor() + name + ChatColor.RESET;
+			this.displayName = this.color.toChatColor() + name + ChatColor.RESET;
 		}
 		else {
 			this.displayName = name;
@@ -69,7 +73,7 @@ public class UHTeam {
 		Team t = sb.getTeam(this.internalName);
 		
 		if(this.color != null) {
-			t.setPrefix(this.color.toString());
+			t.setPrefix(this.color.toChatColor().toString());
 		}
 		
 		t.setCanSeeFriendlyInvisibles(plugin.getConfig().getBoolean("teams-options.canSeeFriendlyInvisibles", true));

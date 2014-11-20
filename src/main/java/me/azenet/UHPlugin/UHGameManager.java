@@ -206,6 +206,7 @@ public class UHGameManager {
 		
 		// This is used to be able to delete the teams created on-the-fly
 		ArrayList<String> onTheFlyTeams = new ArrayList<String>();
+		boolean useColors = p.getConfig().getBoolean("teams-options.randomColors");
 		
 		
 		// No team? We creates a team per player.
@@ -218,7 +219,11 @@ public class UHGameManager {
 					String teamName = player.getName();
 					teamName = teamName.substring(0, Math.min(teamName.length(), 16));
 					
-					UHTeam team = new UHTeam(teamName, null, this.p);
+					TeamColor color;
+					if(useColors) color = TeamColor.RANDOM;
+					else          color = null;
+					
+					UHTeam team = new UHTeam(teamName, color, this.p);
 					team.addPlayer(player);
 					
 					tm.addTeam(team);
@@ -242,12 +247,14 @@ public class UHGameManager {
 					if(tm.getTeam(teamName) != null) { // Team registered
 						// The probability of a conflict here is so small...
 						// I will not take this possibility into account.
-						teamName = player.getName() + " " + this.random.nextInt(1000000);
+						teamName = player.getName() + this.random.nextInt(1000000);
 					}
 					
-					teamName = teamName.substring(0, Math.min(teamName.length(), 16));
+					TeamColor color;
+					if(useColors) color = TeamColor.RANDOM;
+					else          color = null;
 					
-					UHTeam team = new UHTeam(teamName, null, this.p);
+					UHTeam team = new UHTeam(teamName, color, this.p);
 					team.addPlayer(player);
 					
 					tm.addTeam(team);

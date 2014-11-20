@@ -177,6 +177,10 @@ teams-options:
     
     # 0 = unlimited.
     maxPlayersPerTeam: 0
+    
+    # Randoms colors for solo games and solo teams (i.e. all the teams generated when the game starts)?
+    # If false, no color (aka white) used.
+    randomColors: true
 
 
 
