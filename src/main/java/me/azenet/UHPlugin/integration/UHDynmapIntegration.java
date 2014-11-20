@@ -19,12 +19,12 @@
 
 package me.azenet.UHPlugin.integration;
 
+import me.azenet.UHPlugin.TeamColor;
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHTeam;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -185,9 +185,9 @@ public class UHDynmapIntegration {
 		
 		MarkerIcon icon = null;
 		
-		ChatColor teamColor = team.getColor();
+		TeamColor teamColor = team.getColor();
 		if(teamColor == null) {
-			teamColor = ChatColor.GREEN; // green flags for solo games
+			teamColor = TeamColor.GREEN; // green flags for solo games without colors
 		}
 		
 		switch(teamColor) {
@@ -231,16 +231,13 @@ public class UHDynmapIntegration {
 				break;
 				
 			case WHITE: // There is nothing better than pink I think...
+			default:
 				icon = markerAPI.getMarkerIcon("pinkflag");
 				break;
-				
-			default:
-				break;
-			
 		}
 		
 		String markerID = getSpawnMarkerName(team);
-		String markerLabel = "";
+		String markerLabel = null;
 		if(p.getGameManager().isGameWithTeams()) {
 			markerLabel = i.t("dynmap.markerLabelSpawn", team.getName());
 		}

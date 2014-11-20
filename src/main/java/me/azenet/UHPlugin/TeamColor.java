@@ -34,6 +34,10 @@ public enum TeamColor {
 		this.color = color;
 	}
 	
+	public ChatColor toChatColor() {
+		return this.color;
+	}
+	
 	/**
 	 * Returns a ChatColor object from a string.
 	 * 
@@ -55,6 +59,15 @@ public enum TeamColor {
 	 * @return A TeamColor value, or null if no value found.
 	 */
 	public static TeamColor fromString(String name) {
-		return valueOf(name.trim().toUpperCase());
+		if(name.equals("?")) {
+			return RANDOM;
+		}
+		
+		try {
+			return valueOf(name.trim().toUpperCase());
+		}
+		catch(IllegalArgumentException e) {
+			return null;
+		}
 	}
 }

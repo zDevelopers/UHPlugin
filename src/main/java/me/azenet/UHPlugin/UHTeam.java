@@ -37,12 +37,12 @@ public class UHTeam {
 	private String name = null;
 	private String internalName = null;
 	private String displayName = null;
-	private ChatColor color = null;
+	private TeamColor color = null;
 	
 	private ArrayList<UUID> players = new ArrayList<UUID>();
 	
 	
-	public UHTeam(String name, ChatColor color, UHPlugin plugin) {
+	public UHTeam(String name, TeamColor color, UHPlugin plugin) {
 		Validate.notNull(name, "The name cannot be null.");
 		Validate.notNull(plugin, "The plugin cannot be null.");
 		
@@ -57,7 +57,7 @@ public class UHTeam {
 		this.internalName = String.valueOf(rand.nextInt(99999999)) + String.valueOf(rand.nextInt(99999999));
 		
 		if(this.color != null) {
-			this.displayName = color + name + ChatColor.RESET;
+			this.displayName = color.toChatColor() + name + ChatColor.RESET;
 		}
 		else {
 			this.displayName = name;
@@ -250,7 +250,7 @@ public class UHTeam {
 	 * 
 	 * @return
 	 */
-	public ChatColor getColor() {
+	public TeamColor getColor() {
 		return color;
 	}
 	

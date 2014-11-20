@@ -20,6 +20,9 @@
 package me.azenet.UHPlugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Random;
 
 import me.azenet.UHPlugin.i18n.I18n;
 
@@ -49,28 +52,64 @@ public class UHTeamManager {
 	 * 
 	 * @param color The color.
 	 * @param name The name of the team.
+	 * 
+	 * @return The new team.
+	 * 
 	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */
-	public void addTeam(ChatColor color, String name) {
+	public UHTeam addTeam(TeamColor color, String name) {
 		if(this.getTeam(name) != null) {
 			throw new IllegalArgumentException("There is already a team named " + name + " registered!");
 		}
 		
-		teams.add(new UHTeam(name, color, p));
+		UHTeam team = new UHTeam(name, generateColor(color), p);
+		teams.add(team);
+		
+		return team;
+	}
+	
+	/**
+	 * Adds a team. A name is generated based on the color.
+	 * 
+	 * @param color The color.
+	 * 
+	 * @return The new team.
+	 * 
+	 * @throws IllegalArgumentException if a team with the same name already exists.
+	 */
+	public UHTeam addTeam(TeamColor color) {
+		
+		color = generateColor(color);
+		String teamName = color.toString().toLowerCase();
+		
+		if(getTeam(teamName) != null) { // Taken!
+			Random rand = new Random();
+			do {
+				teamName = color.toString().toLowerCase() + rand.nextInt(1000);
+			} while(getTeam(teamName) != null);
+		}
+		
+		UHTeam team = new UHTeam(teamName, color, p);
+		teams.add(team);
+		
+		return team;
 	}
 	
 	/**
 	 * Adds a team from an UHTeam object.
 	 * 
 	 * @param team The team.
+	 * @return The new team.
+	 * 
 	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */
-	public void addTeam(UHTeam team) {
+	public UHTeam addTeam(UHTeam team) {
 		if(this.getTeam(team.getName()) != null) {
 			throw new IllegalArgumentException("There is already a team named " + team.getName() + " registered!");
 		}
 		
 		teams.add(team);
+		return team;
 	}
 
 	/**
@@ -223,7 +262,7 @@ public class UHTeamManager {
 		}
 		else {
 			if(team.getColor() != null) {
-				player.setDisplayName(team.getColor() + player.getName() + ChatColor.RESET);
+				player.setDisplayName(team.getColor().toChatColor() + player.getName() + ChatColor.RESET);
 			}
 			else {
 				player.setDisplayName(player.getName());
@@ -280,6 +319,35 @@ public class UHTeamManager {
 	}
 	
 	/**
+	 * Generates a color from the given color.
+	 * <p>
+	 * If the color is neither {@link TeamColor#RANDOM} nor {@code null}, returns the given color.<br />
+	 * Else, generates a random unused (if possible) color.
+	 * @param color
+	 * @return
+	 */
+	public TeamColor generateColor(TeamColor color) {
+		if(color != null && color != TeamColor.RANDOM) {
+			return color;
+		}
+		
+		// A list of the currently used colors.
+		HashSet<TeamColor> availableColors = new HashSet<TeamColor>(Arrays.asList(TeamColor.values()));
+		availableColors.remove(TeamColor.RANDOM);
+		for(UHTeam team : getTeams()) {
+			availableColors.remove(team.getColor());
+		}
+		
+		if(availableColors.size() != 0) {
+			return (TeamColor) availableColors.toArray()[(new Random()).nextInt(availableColors.size())];
+		}
+		else {
+			// length-1 so the RANDOM option is never selected.
+			return TeamColor.values()[(new Random()).nextInt(TeamColor.values().length - 1)];
+		}
+	}
+	
+	/**
 	 * Imports the teams from the configuration.
 	 * 
 	 * @return The number of teams imported.
@@ -290,7 +358,7 @@ public class UHTeamManager {
 			for(Object teamRaw : p.getConfig().getList("teams")) {
 				if(teamRaw instanceof String && teamRaw != null) {
 					String[] teamRawSeparated = ((String) teamRaw).split(",");
-					ChatColor color = TeamColor.getChatColorByName(teamRawSeparated[0]);
+					TeamColor color = TeamColor.fromString(teamRawSeparated[0]);
 					if(color == null) {
 						p.getLogger().warning(i.t("load.invalidTeam", (String) teamRaw));
 					}

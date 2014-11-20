@@ -807,25 +807,29 @@ public class UHPluginCommand implements CommandExecutor {
 			if(subcommand.equalsIgnoreCase("add")) {
 				if(args.length == 3) { // /uh team add <color>
 					
-					ChatColor color = TeamColor.getChatColorByName(args[2]);
+					TeamColor color = TeamColor.fromString(args[2]);
+					UHTeam team;
 					
 					if(color == null) {
 						sender.sendMessage(i.t("team.add.errorColor"));
 					}
 					else {
 						try {
-							tm.addTeam(color, args[2].toLowerCase());
+							team = tm.addTeam(color);
 						}
 						catch(IllegalArgumentException e) {
 							sender.sendMessage(i.t("team.add.errorExists"));
+							return;
 						}
-						sender.sendMessage(i.t("team.add.added", color.toString() + args[2]));
+						
+						sender.sendMessage(i.t("team.add.added", team.getDisplayName()));
 					}
 				
 				}
 				else if(args.length >= 4) { // /uh team add <color> <name ...>
 					
-					ChatColor color = TeamColor.getChatColorByName(args[2]);
+					TeamColor color = TeamColor.fromString(args[2]);
+					UHTeam team;
 					
 					if(color == null) {
 						sender.sendMessage(i.t("team.add.errorColor"));
@@ -834,13 +838,15 @@ public class UHPluginCommand implements CommandExecutor {
 						String name = UHUtils.getStringFromCommandArguments(args, 3);
 						
 						try {
-							tm.addTeam(color, name);
+							team = tm.addTeam(color, name);
 						}
 						catch(IllegalArgumentException e) {
+							e.printStackTrace();
 							sender.sendMessage(i.t("team.add.errorExists"));
 							return;
 						}
-						sender.sendMessage(i.t("team.add.added", color.toString() + name));
+						
+						sender.sendMessage(i.t("team.add.added", team.getDisplayName()));
 					}
 					
 				}
