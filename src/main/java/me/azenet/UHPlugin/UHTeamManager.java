@@ -290,7 +290,7 @@ public class UHTeamManager {
 			for(Object teamRaw : p.getConfig().getList("teams")) {
 				if(teamRaw instanceof String && teamRaw != null) {
 					String[] teamRawSeparated = ((String) teamRaw).split(",");
-					ChatColor color = getChatColorByName(teamRawSeparated[0]);
+					ChatColor color = TeamColor.getChatColorByName(teamRawSeparated[0]);
 					if(color == null) {
 						p.getLogger().warning(i.t("load.invalidTeam", (String) teamRaw));
 					}
@@ -317,53 +317,4 @@ public class UHTeamManager {
 		
 		return 0;
 	}
-	
-	
-	
-	/**
-	 * Used to convert a string to a ChatColor object.
-	 */
-	private enum StringToChatColor {
-		AQUA("Aqua", ChatColor.AQUA),
-		BLACK("Black", ChatColor.BLACK),
-		BLUE("Blue", ChatColor.BLUE),
-		DARK_AQUA("Darkaqua", ChatColor.DARK_AQUA),
-		DARK_BLUE("Darkblue", ChatColor.DARK_BLUE),
-		DARK_GRAY("Darkgray", ChatColor.DARK_GRAY),
-		DARK_GREEN("Darkgreen", ChatColor.DARK_GREEN),
-		DARK_PURPLE("Darkpurple", ChatColor.DARK_PURPLE),
-		DARK_RED("Darkred", ChatColor.DARK_RED),
-		GOLD("Gold", ChatColor.GOLD),
-		GRAY("Gray", ChatColor.GRAY),
-		GREEN("Green", ChatColor.GREEN),
-		LIGHT_PURPLE("Lightpurple", ChatColor.LIGHT_PURPLE),
-		RED("Red", ChatColor.RED),
-		WHITE("White", ChatColor.WHITE),
-		YELLOW("Yellow", ChatColor.YELLOW);
-
-		private String name;
-		private ChatColor color;
-
-		StringToChatColor(String name, ChatColor color) {
-			this.name = name;
-			this.color = color;
-		}
-
-		public static ChatColor getChatColorByName(String name) {
-			for(StringToChatColor stcc : values()) {
-				if (stcc.name.equalsIgnoreCase(name)) return stcc.color;
-			}
-			return null;
-		}
-	}
-	
-	/**
-	 * Utility: return the ChatColor version of a color, or null if the provided color is invalid.
-	 * @param name The name of the color.
-	 * @return ChatColor
-	 */
-	public ChatColor getChatColorByName(String name) {
-		return StringToChatColor.getChatColorByName(name);
-	}
-	
 }

@@ -807,7 +807,7 @@ public class UHPluginCommand implements CommandExecutor {
 			if(subcommand.equalsIgnoreCase("add")) {
 				if(args.length == 3) { // /uh team add <color>
 					
-					ChatColor color = p.getTeamManager().getChatColorByName(args[2]);
+					ChatColor color = TeamColor.getChatColorByName(args[2]);
 					
 					if(color == null) {
 						sender.sendMessage(i.t("team.add.errorColor"));
@@ -825,7 +825,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				else if(args.length >= 4) { // /uh team add <color> <name ...>
 					
-					ChatColor color = p.getTeamManager().getChatColorByName(args[2]);
+					ChatColor color = TeamColor.getChatColorByName(args[2]);
 					
 					if(color == null) {
 						sender.sendMessage(i.t("team.add.errorColor"));
