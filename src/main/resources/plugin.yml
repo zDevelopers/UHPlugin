@@ -33,6 +33,10 @@ commands:
    join:
        description: Use this to join an UltraHardcore team.
        usage: /join [player] <team>
+   
+   leave:
+       description: Use this to quit your current UltraHardcore team.
+       usage: /leave [player]
 
 permissions:
 
@@ -118,7 +122,14 @@ permissions:
         default: op
     
     
-    # Permissions for the /join command
+    # Permissions for the /join & /leave commands
+    
+    uh.player:
+        description: Allows the full use of both /join and /leave.
+        children:
+            uh.player.join: true
+            uh.player.leave: true
+    
     
     uh.player.join.*:
         description: Allows the full use of /join.
@@ -131,4 +142,18 @@ permissions:
         default: true
     uh.player.join.others:
         description: Allows a player to use /join <player> <team>.
+        default: op
+    
+    
+    uh.player.leave.*:
+        description: Allows the full use of /leave.
+        children:
+            uh.player.leave.self: true
+            uh.player.leave.others: true
+    
+    uh.player.leave.self:
+        description: Allows a player to use /leave (quits his own team).
+        default: true
+    uh.player.leave.others:
+        description: Allows a player to use /leave <player>.
         default: op

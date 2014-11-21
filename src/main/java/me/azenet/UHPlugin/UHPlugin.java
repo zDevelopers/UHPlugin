@@ -98,6 +98,7 @@ public final class UHPlugin extends JavaPlugin {
 		getCommand("g").setExecutor(commandManager);
 		getCommand("togglechat").setExecutor(commandManager);
 		getCommand("join").setExecutor(commandManager);
+		getCommand("leave").setExecutor(commandManager);
 		
 		getCommand("uh").setTabCompleter(tabCompleter);
 		getCommand("togglechat").setTabCompleter(tabCompleter);

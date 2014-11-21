@@ -33,7 +33,6 @@ import java.util.Map.Entry;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -167,10 +166,14 @@ public class UHPluginCommand implements CommandExecutor {
 			return true;
 		}
 		
-		/** /join command **/
+		/** /join & /leave commands **/
 		
 		if(command.getName().equalsIgnoreCase("join")) {
 			doJoin(sender, command, label, args);
+			return true;
+		}
+		if(command.getName().equalsIgnoreCase("leave")) {
+			doLeave(sender, command, label, args);
 			return true;
 		}
 		
@@ -221,6 +224,7 @@ public class UHPluginCommand implements CommandExecutor {
 			return false;
 		}
 	}
+
 
 
 	/**
@@ -2034,6 +2038,45 @@ public class UHPluginCommand implements CommandExecutor {
 			else {
 				sender.sendMessage(i.t("cmd.errorUnauthorized"));
 			}
+		}
+	}
+	
+	/**
+	 * This command is used to allow a player to quit his team.
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void doLeave(CommandSender sender, Command command, String label, String[] args) {
+		
+		Player target = null;
+		
+		if(args.length >= 1 && sender.hasPermission("uh.player.leave.others")) {
+			if((target = p.getServer().getPlayer(args[0])) == null) {
+				sender.sendMessage(i.t("team.removeplayer.disconnected", args[0]));
+				return;
+			}
+		}
+		else if(args.length == 0 && sender.hasPermission("uh.player.leave.self")) {
+			if(sender instanceof Player) {
+				target = (Player) sender;
+			}
+			else {
+				sender.sendMessage(i.t("team.onlyAsAPlayer"));
+				return;
+			}
+		}
+		else {
+			sender.sendMessage(i.t("cmd.errorUnauthorized"));
+			return;
+		}
+		
+		p.getTeamManager().removePlayerFromTeam(target);
+		
+		if(!target.equals(sender)) {
+			sender.sendMessage(i.t("team.removeplayer.success", args[0]));
 		}
 	}
 	
