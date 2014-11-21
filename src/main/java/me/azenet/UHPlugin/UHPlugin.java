@@ -97,9 +97,11 @@ public final class UHPlugin extends JavaPlugin {
 		getCommand("t").setExecutor(commandManager);
 		getCommand("g").setExecutor(commandManager);
 		getCommand("togglechat").setExecutor(commandManager);
+		getCommand("join").setExecutor(commandManager);
 		
 		getCommand("uh").setTabCompleter(tabCompleter);
 		getCommand("togglechat").setTabCompleter(tabCompleter);
+		getCommand("join").setTabCompleter(tabCompleter);
 		
 		getServer().getPluginManager().registerEvents(new UHGameListener(this), this);
 		getServer().getPluginManager().registerEvents(new UHGameplayListener(this), this);

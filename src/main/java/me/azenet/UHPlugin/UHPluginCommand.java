@@ -167,6 +167,14 @@ public class UHPluginCommand implements CommandExecutor {
 			return true;
 		}
 		
+		/** /join command **/
+		
+		if(command.getName().equalsIgnoreCase("join")) {
+			doJoin(sender, command, label, args);
+			return true;
+		}
+		
+		
 		if(args.length == 0) {
 			help(sender, args, false);
 			return true;
@@ -213,6 +221,7 @@ public class UHPluginCommand implements CommandExecutor {
 			return false;
 		}
 	}
+
 
 	/**
 	 * Prints the help.
@@ -1001,6 +1010,7 @@ public class UHPluginCommand implements CommandExecutor {
 	 * @param label
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	private void doHeal(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length < 2 || args.length > 3) {
 			sender.sendMessage(i.t("heal.usage"));
@@ -1957,6 +1967,72 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 			else {
 				sender.sendMessage(i.t("team.message.toggle.unknownTeam"));
+			}
+		}
+	}
+	
+	
+	
+	/**
+	 * This command is used to allow a player to join a team.
+	 * <p>
+	 * Usage: /join [player] &lt;team&gt;
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void doJoin(CommandSender sender, Command command, String label, String[] args) {
+		
+		if(args.length == 0) {
+			sender.sendMessage(i.t("team.syntaxError"));
+			return;
+		}
+		
+		UHTeam  team   = null;
+		Player  target = null;
+		Boolean self   = null;
+		
+		// /join <team>?
+		team = p.getTeamManager().getTeam(UHUtils.getStringFromCommandArguments(args, 0));
+		if(team != null) {
+			if(sender instanceof Player) {
+				target = (Player) sender;
+				self = true;
+			}
+			else {
+				sender.sendMessage(i.t("team.onlyAsAPlayer"));
+				return;
+			}
+		}
+		else if(args.length >= 2) {
+			// /join <player> <team>?
+			team = p.getTeamManager().getTeam(UHUtils.getStringFromCommandArguments(args, 1));
+			if(team != null) {
+				target = p.getServer().getPlayer(args[0]);
+				self = false;
+				if(target == null) {
+					sender.sendMessage(i.t("team.addplayer.disconnected", args[0], team.getName()));
+					return;
+				}
+			}
+		}
+		
+		if(team == null) {
+			sender.sendMessage(i.t("team.addplayer.doesNotExists"));
+		}
+		else {
+			if((self && sender.hasPermission("uh.player.join.self"))
+					|| (!self && sender.hasPermission("uh.player.join.others"))) {
+				team.addPlayer(target);
+				
+				if(!sender.equals(target)) {
+					sender.sendMessage(i.t("team.addplayer.success", target.getName(), team.getName()));
+				}
+			}
+			else {
+				sender.sendMessage(i.t("cmd.errorUnauthorized"));
 			}
 		}
 	}

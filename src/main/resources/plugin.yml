@@ -29,8 +29,15 @@ commands:
    togglechat:
        description: Allows an user to toggle the chat between the global chat and a team chat.
        usage: /togglechat
+   
+   join:
+       description: Use this to join an UltraHardcore team.
+       usage: /join [player] <team>
 
 permissions:
+
+    # Permissions for the /uh command
+    
     uh.*:
         description: Gives access to all Ultra Hardcore commands.
         children:
@@ -48,12 +55,6 @@ permissions:
             uh.tpback: true
             uh.resurrect: true
             uh.spec: true
-            uh.teamchat.self: true
-            uh.teamchat.others: true
-    
-    uh.teamchat.*:
-        description: Allows an user to use the team chat for both his own team and other teams.
-        children:
             uh.teamchat.self: true
             uh.teamchat.others: true
     
@@ -100,9 +101,34 @@ permissions:
         description: Allows an user to manage spectators using /uh spec *
         default: op
     
+    
+    # Permissions for the team-only chat
+    
+    uh.teamchat.*:
+        description: Allows an user to use the team chat for both his own team and other teams.
+        children:
+            uh.teamchat.self: true
+            uh.teamchat.others: true
+    
     uh.teamchat.self:
         description: Allows an user to send a private message to their team.
         default: true
     uh.teamchat.others:
         description: Allows an user to send a private message to other team, and to see the private chat of any team.
+        default: op
+    
+    
+    # Permissions for the /join command
+    
+    uh.player.join.*:
+        description: Allows the full use of /join.
+        children:
+            uh.player.join.self: true
+            uh.player.join.others: true
+    
+    uh.player.join.self:
+        description: Allows a player to use /join <team> (changes his own team).
+        default: true
+    uh.player.join.others:
+        description: Allows a player to use /join <player> <team>.
         default: op

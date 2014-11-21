@@ -61,7 +61,9 @@ public class UHTabCompleter implements TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		if (!command.getName().equalsIgnoreCase("uh") && !command.getName().equalsIgnoreCase("togglechat")) {
+		if (!command.getName().equalsIgnoreCase("uh")
+				&& !command.getName().equalsIgnoreCase("togglechat")
+				&& !command.getName().equalsIgnoreCase("join")) {
 			return null;
 		}
 		
@@ -70,13 +72,33 @@ public class UHTabCompleter implements TabCompleter {
 		if(command.getName().equalsIgnoreCase("togglechat")) {
 			if(sender instanceof Player && ((Player) sender).hasPermission("uh.teamchat.others")) {
 				ArrayList<String> teamNames = new ArrayList<String>();
-				for(UHTeam team : this.p.getTeamManager().getTeams()) {
+				for(UHTeam team : p.getTeamManager().getTeams()) {
 					teamNames.add(team.getName());
 				}
 				
 				return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 0), teamNames, args.length - 1);
 			}
 			return null;
+		}
+		
+		/** ** Autocompletion for the /join command ** **/
+		
+		if(command.getName().equalsIgnoreCase("join")) {
+			if(sender.hasPermission("uh.player.join.self") || sender.hasPermission("uh.player.join.others")) {
+				ArrayList<String> teamNames = new ArrayList<String>();
+				for(UHTeam team : p.getTeamManager().getTeams()) {
+					teamNames.add(team.getName());
+				}
+				
+				// /join <team>
+				if(args.length == 1 || (args.length > 1 && p.getServer().getPlayer(args[0]) == null)) {
+					return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 0), teamNames, args.length - 1);
+				}
+				// /join <player> <team>
+				else if(args.length > 1) {
+					return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 1), teamNames, args.length - 2);
+				}
+			}
 		}
 		
 		

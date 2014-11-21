@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
+import me.azenet.UHPlugin.i18n.I18n;
+
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -33,6 +35,7 @@ import org.bukkit.scoreboard.Team;
 
 public class UHTeam {
 	private UHPlugin plugin = null;
+	private I18n i = null;
 	
 	private String name = null;
 	private String internalName = null;
@@ -47,6 +50,7 @@ public class UHTeam {
 		Validate.notNull(plugin, "The plugin cannot be null.");
 		
 		this.plugin = plugin;
+		this.i = plugin.getI18n();
 		
 		this.name = name;
 		
@@ -153,10 +157,20 @@ public class UHTeam {
 	public void addPlayer(Player player) {
 		Validate.notNull(player, "The player cannot be null.");
 		
+		if(plugin.getTeamManager().getMaxPlayersPerTeam() != 0
+				&& this.players.size() >= plugin.getTeamManager().getMaxPlayersPerTeam()) {
+			
+			throw new RuntimeException("The team " + getName() + " is full");
+		}
+		
+		plugin.getTeamManager().removePlayerFromTeam(player, true);
+		
 		players.add(player.getUniqueId());
 		plugin.getScoreboardManager().getScoreboard().getTeam(this.internalName).addPlayer(player);
 		
 		plugin.getTeamManager().colorizePlayer(player);
+		
+		player.sendMessage(i.t("team.addplayer.added", getDisplayName()));
 	}
 	
 	/**

@@ -231,6 +231,7 @@ keys:
     team:
         syntaxError: "{ce}Syntax error, see /uh team."
         unknownCommand: "{ce}Unknown command. See /uh team for available commands."
+        onlyAsAPlayer: "{ce}This command can only be executed this way as a player."
         
         add:
             errorColor: "{ce}Unable to add the team, check the color name. Tip: use Tab to autocomplete."
