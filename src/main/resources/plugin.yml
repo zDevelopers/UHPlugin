@@ -16,7 +16,7 @@ softdepend:
 
 commands:
    uh:
-      description: Ultra Harcore base command
+      description: UltraHardcore Reloaded base command
       usage: /uh <subcommand> - see /uh for available subcommands.
    t:
       description: Allows an user to send a message to his team.
