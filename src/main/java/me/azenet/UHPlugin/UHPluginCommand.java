@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.apache.commons.lang.WordUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -239,7 +240,8 @@ public class UHPluginCommand implements CommandExecutor {
 			return;
 		}
 		
-		if(sender instanceof Player) sender.sendMessage("");
+		displaySeparator(sender);
+		
 		sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 		
 		sender.sendMessage(i.t("cmd.legendHelp"));
@@ -257,9 +259,12 @@ public class UHPluginCommand implements CommandExecutor {
 			else {
 				page = Integer.valueOf(args[0]) <= 3 ? Integer.valueOf(args[0]) : 3;
 			}
+			
 			helpPage(sender, page);
 			if(page < 3) sender.sendMessage(i.t("cmd.helpNextPage", String.valueOf(page + 1)));
 		}
+		
+		displaySeparator(sender);
 	}
 	
 	/**
@@ -467,7 +472,7 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doSpawns(CommandSender sender, Command command, String label, String[] args) {	
 		if(args.length == 1) { // No subcommand given: doc
-			if(sender instanceof Player) sender.sendMessage("");
+			displaySeparator(sender);
 			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 			sender.sendMessage(i.t("cmd.legendHelp"));
 
@@ -479,6 +484,7 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.spawnsHelpDump"));
 			sender.sendMessage(i.t("cmd.spawnsHelpRemove"));
 			sender.sendMessage(i.t("cmd.spawnsHelpReset"));
+			displaySeparator(sender);
 		}
 		else {
 			String subcommand = args[1];
@@ -800,7 +806,7 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doTeam(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // No action provided: doc
-			if(sender instanceof Player) sender.sendMessage("");
+			displaySeparator(sender);
 			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 			sender.sendMessage(i.t("cmd.legendHelp"));
 
@@ -814,6 +820,7 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.teamHelpReset"));
 			sender.sendMessage(i.t("cmd.teamHelpJoinCmd"));
 			sender.sendMessage(i.t("cmd.teamHelpLeaveCmd"));
+			displaySeparator(sender);
 		}
 		else {
 			UHTeamManager tm = p.getTeamManager();
@@ -1226,7 +1233,7 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doSpec(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // /uh spec
-			if(sender instanceof Player) sender.sendMessage("");
+			displaySeparator(sender);
 			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 			
 			sender.sendMessage(i.t("cmd.legendHelp"));
@@ -1238,6 +1245,8 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.specHelpAdd"));
 			sender.sendMessage(i.t("cmd.specHelpRemove"));
 			sender.sendMessage(i.t("cmd.specHelpList"));
+			
+			displaySeparator(sender);
 		}
 		else {
 			String subcommand = args[1];
@@ -1306,7 +1315,7 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doBorder(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // /uh border
-			if(sender instanceof Player) sender.sendMessage("");
+			displaySeparator(sender);
 			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 			sender.sendMessage(i.t("cmd.legendHelp"));
 
@@ -1316,6 +1325,7 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.borderHelpWarning"));
 			sender.sendMessage(i.t("cmd.borderHelpWarningCancel"));
 			sender.sendMessage(i.t("cmd.borderHelpCheck"));
+			displaySeparator(sender);
 		}
 		else {
 			String subcommand = args[1];
@@ -1471,13 +1481,14 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doTp(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // No action provided: doc
-			if(sender instanceof Player) sender.sendMessage("");
+			displaySeparator(sender);
 			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 			sender.sendMessage(i.t("cmd.legendHelp"));
 
 			sender.sendMessage(i.t("cmd.tpHelpTitle"));
 			sender.sendMessage(i.t("cmd.tpHelpTeam"));
 			sender.sendMessage(i.t("cmd.tpHelpSpectators"));
+			displaySeparator(sender);
 		}
 		else {
 			String subcommand = args[1];
@@ -1594,7 +1605,7 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doTimers(CommandSender sender, Command command, String label, String[] args) throws NumberFormatException {
 		if(args.length == 1) { // No action provided: doc
-			if(sender instanceof Player) sender.sendMessage("");
+			displaySeparator(sender);
 			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 			sender.sendMessage(i.t("cmd.legendHelp"));
 
@@ -1610,6 +1621,7 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.timersHelpRemove"));
 			sender.sendMessage(i.t("cmd.timersHelpList"));
 			sender.sendMessage(i.t("cmd.timersHelpDurations"));
+			displaySeparator(sender);
 		}
 		else {
 			String subcommand = args[1];
@@ -1816,7 +1828,7 @@ public class UHPluginCommand implements CommandExecutor {
 	@SuppressWarnings("unused")
 	private void doFreeze(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 1) { // /uh freeze
-			if(sender instanceof Player) sender.sendMessage("");
+			displaySeparator(sender);
 			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 			sender.sendMessage(i.t("cmd.legendHelp"));
 			
@@ -1825,6 +1837,7 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.freezeHelpOff"));
 			sender.sendMessage(i.t("cmd.freezeHelpAll"));
 			sender.sendMessage(i.t("cmd.freezeHelpNone"));
+			displaySeparator(sender);
 		}
 		else {
 			String subcommand = args[1];
@@ -2082,6 +2095,22 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 	}
 	
+	
+	
+	/**
+	 * Displays a separator around the output of the commands.
+	 * <p>
+	 * To be called before and after the output (prints a line only).
+	 * 
+	 * @param sender The line will be displayed for this sender.
+	 */
+	private void displaySeparator(CommandSender sender) {
+		if(!(sender instanceof Player)) {
+			return;
+		}
+		
+		sender.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
+	}
 	
 	
 	
