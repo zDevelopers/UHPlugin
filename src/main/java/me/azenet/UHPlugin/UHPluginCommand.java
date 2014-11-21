@@ -812,6 +812,8 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.teamHelpLeave"));
 			sender.sendMessage(i.t("cmd.teamHelpList"));
 			sender.sendMessage(i.t("cmd.teamHelpReset"));
+			sender.sendMessage(i.t("cmd.teamHelpJoinCmd"));
+			sender.sendMessage(i.t("cmd.teamHelpLeaveCmd"));
 		}
 		else {
 			UHTeamManager tm = p.getTeamManager();
@@ -1990,7 +1992,7 @@ public class UHPluginCommand implements CommandExecutor {
 	private void doJoin(CommandSender sender, Command command, String label, String[] args) {
 		
 		if(args.length == 0) {
-			sender.sendMessage(i.t("team.syntaxError"));
+			sender.sendMessage(i.t("team.addplayer.joinhelp"));
 			return;
 		}
 		

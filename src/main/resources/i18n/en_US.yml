@@ -59,10 +59,12 @@ keys:
         teamHelpAdd: "{cc}/uh team add <color> {ci}: adds a team with the provided color."
         teamHelpAddName: "{cc}/uh team add <color> <name ...> {ci}: adds a named team with the provided name and color."
         teamHelpRemove: "{cc}/uh team remove <name ...> {ci}: removes a team"
-        teamHelpJoin: "{cc}/uh team join <player> <teamName ...>{ci}: adds a player inside the given team. The name of the team is it color, or the explicit name given."
+        teamHelpJoin: "{cc}/uh team join <player> <teamName ...> {ci}: adds a player inside the given team. The name of the team is it color, or the explicit name given."
         teamHelpLeave: "{cc}/uh team leave <player> {ci}: removes a player from his team."
         teamHelpList: "{cc}/uh team list {ci}: lists the teams and their players."
         teamHelpReset: "{cc}/uh team reset {ci}: removes all teams."
+        teamHelpJoinCmd: "{cc}/join [player] <team ...> {ci}: adds “player” (or the sender) inside the given team."
+        teamHelpLeaveCmd: "{cc}/leave [player] {ci}: removes “player” (or the sender) from his team."
         
         spawnsHelpTitle: "{aqua}------ Spawns points commands ------"
         spawnsHelpAdd: "{cc}/uh spawns add {ci}: adds a spawn point for a team or a player, at the current location of the sender."
@@ -248,6 +250,8 @@ keys:
             added: "{aqua}You are now in the {0}{aqua} team."
             doesNotExists: "{ce}This team does not exists."
             full: "{ce}The team {0}{ce} is full!"
+            
+            joinhelp: "{ce}Usage: {cc}/join [player] <team>{ce}."
         
         removeplayer:
             disconnected: "{ce}The player {0} is disconnected!"
