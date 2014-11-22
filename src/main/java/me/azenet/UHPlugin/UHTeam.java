@@ -148,13 +148,23 @@ public class UHTeam {
 		
 		return playersList;
 	}
-
+	
 	/**
 	 * Adds a player inside this team.
 	 * 
 	 * @param player The player to add.
 	 */
 	public void addPlayer(Player player) {
+		addPlayer(player, false);
+	}
+	
+	/**
+	 * Adds a player inside this team.
+	 * 
+	 * @param player The player to add.
+	 * @param silent If true, the player will not be notified about this.
+	 */
+	public void addPlayer(Player player, boolean silent) {
 		Validate.notNull(player, "The player cannot be null.");
 		
 		if(plugin.getTeamManager().getMaxPlayersPerTeam() != 0
@@ -170,7 +180,7 @@ public class UHTeam {
 		
 		plugin.getTeamManager().colorizePlayer(player);
 		
-		player.sendMessage(i.t("team.addplayer.added", getDisplayName()));
+		if(!silent) player.sendMessage(i.t("team.addplayer.added", getDisplayName()));
 	}
 	
 	/**
