@@ -42,6 +42,8 @@ For available configuration, please [see directly the configuration file](https:
 - The teams can be registered in the config file, in game, or both.
 - The teams are managed through commands (to allow the use of command blocks).
 - You can set a maximum size for the teams (to be able to give players command blocks to join the teams, without manual check, as example).
+- Players can join a team using `/join <teamName>` or a nice chat-based GUI.  
+  ![Chat-based GUI to select a team](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_TeamsMenu.png)
 
 ### Automatic teleportation of the players
 
