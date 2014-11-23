@@ -160,8 +160,8 @@ All these gameplay tweaks are optional — see [the configuration file](https://
 
 ### Provided with options to deal with lag and other bugs
 
-- `/uh heal <player> [half-hearts=20]` to heal a player to the exact number of hearts given. Avoid trying to find the good health effect level/duration, the id of the effect, etc.
-- `/uh healall [half-hearts=20]`: the same, for all players, because Bukkit does not allow the use of the @a selector out of a command block.
+- `/uh heal <player> [half-hearts=20|±diff]` to heal a player to the exact number of hearts given, or to add/remove the given number of life points. Avoid trying to find the good health effect level/duration, the id of the effect, etc.
+- `/uh healall [half-hearts=20|±diff]`: the same, for all players, because Bukkit does not allow the use of the @a selector out of a command block.
 - You cannot kill a player with these commands.
 - With `/uh resurrect <player>`, you can resurrect (and deban, if he was banned) a player killed by lag (or other bug).
 - With `/uh tpback <player>`, you can teleport a player back to his death location.
