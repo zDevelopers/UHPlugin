@@ -309,6 +309,17 @@ public class UHGameListener implements Listener {
 	public void onPlayerJoin(final PlayerJoinEvent ev) {
 		if (!this.p.getGameManager().isGameStarted()) {
 			p.getGameManager().initPlayer(ev.getPlayer());
+			
+			if(p.getConfig().getBoolean("teams-options.gui.auto-display")) {
+				p.getServer().getScheduler().runTaskLater(p, new Runnable() {
+					@Override
+					public void run() {
+						if(p.getTeamManager().getTeamForPlayer(ev.getPlayer()) == null) {
+							p.getTeamManager().displayTeamChooserChatGUI(ev.getPlayer());
+						}
+					}
+				}, 20l * p.getConfig().getInt("teams-options.gui.delay"));
+			}
 		}
 		
 		// Mainly useful on the first join.
