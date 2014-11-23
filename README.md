@@ -255,7 +255,7 @@ You can also install these plugins:
 
 This plugin is needed for some options:
 
- - [ProtocolLib](http://dev.bukkit.org/bukkit-plugins/protocollib/), for the hardcore hearts and the automatic respawn.
+ - [ProtocolLib](http://dev.bukkit.org/bukkit-plugins/protocollib/), for the hardcore hearts, the automatic respawn and the team-selector GUI.
 
 After the installation, I recommend you to:
 
