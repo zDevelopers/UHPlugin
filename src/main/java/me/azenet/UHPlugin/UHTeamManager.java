@@ -212,7 +212,7 @@ public class UHTeamManager {
 	 */
 	public void reset(boolean dontNotify) {
 		// 1: scoreboard reset
-		for(UHTeam team : teams) {
+		for(UHTeam team : new ArrayList<UHTeam>(teams)) {
 			this.removeTeam(team, dontNotify);
 		}
 		// 2: internal list reset
@@ -223,12 +223,7 @@ public class UHTeamManager {
 	 * Removes all teams.
 	 */
 	public void reset() {
-		// 1: scoreboard reset
-		for(UHTeam team : teams) {
-			this.removeTeam(team, false);
-		}
-		// 2: internal list reset
-		teams = new ArrayList<UHTeam>();
+		reset(false);
 	}
 	
 	/**
