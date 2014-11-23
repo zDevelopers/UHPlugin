@@ -310,7 +310,7 @@ public class UHGameListener implements Listener {
 		if (!this.p.getGameManager().isGameStarted()) {
 			p.getGameManager().initPlayer(ev.getPlayer());
 			
-			if(p.getConfig().getBoolean("teams-options.gui.autoDisplay")) {
+			if(p.getConfig().getBoolean("teams-options.gui.autoDisplay") && p.getTeamManager().getTeams().size() != 0) {
 				p.getServer().getScheduler().runTaskLater(p, new Runnable() {
 					@Override
 					public void run() {
