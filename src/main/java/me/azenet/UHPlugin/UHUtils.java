@@ -19,8 +19,11 @@
 
 package me.azenet.UHPlugin;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
+import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Builder;
@@ -32,6 +35,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
+
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
 public class UHUtils {
 	
@@ -96,6 +104,37 @@ public class UHUtils {
 		}
 		else { // "hh:mm:ss"
 			return Integer.valueOf(splitted[0]) * 3600 + Integer.valueOf(splitted[1]) * 60 + Integer.valueOf(splitted[2]);
+		}
+	}
+	
+	/**
+	 * Sends a JSON-formatted message to player.
+	 * <p>
+	 * If ProtocolLib is not available, nothing is sent.
+	 * 
+	 * @param player The receiver of the message.
+	 * @param json The message.
+	 * @return true if the message was sent.
+	 */
+	public static boolean sendJSONMessage(Player player, String json) {
+		try {
+			Class.forName("com.comphenix.protocol.ProtocolLibrary");
+			
+			PacketContainer message = new PacketContainer(PacketType.Play.Server.CHAT);
+			message.getChatComponents().write(0, WrappedChatComponent.fromJson(json));
+			
+			try {
+				ProtocolLibrary.getProtocolManager().sendServerPacket(player, message);
+				return true;
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+				return false;
+			}
+		
+		} catch (ClassNotFoundException e) {
+			Bukkit.getLogger().log(Level.SEVERE, "Cannot send JSON-formatted message without ProtocolLib");
+			e.printStackTrace();
+			return false;
 		}
 	}
 	

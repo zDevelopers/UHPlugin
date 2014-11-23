@@ -7,8 +7,8 @@
   <description>Ultra Hardcore plugin</description>
   <url>https://github.com/AmauryCarrade/UHPlugin/</url>
   <issueManagement>
-  	<system>GitHub</system>
-  	<url>https://github.com/AmauryCarrade/UHPlugin/issues</url>
+    <system>GitHub</system>
+    <url>https://github.com/AmauryCarrade/UHPlugin/issues</url>
   </issueManagement>
   
   <build>
@@ -52,16 +52,16 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-    	<groupId>com.wimbli.WorldBorder</groupId>
-    	<artifactId>WorldBorder</artifactId>
-        <version>1.8.0</version>
-        <scope>provided</scope>
+      <groupId>com.wimbli.WorldBorder</groupId>
+      <artifactId>WorldBorder</artifactId>
+      <version>1.8.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-    	<groupId>com.pgcraft</groupId>
-    	<artifactId>SpectatorPlus</artifactId>
-        <version>1.9.2</version>
-        <scope>provided</scope>
+      <groupId>com.pgcraft</groupId>
+      <artifactId>SpectatorPlus</artifactId>
+      <version>1.9.2</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.dynmap</groupId>

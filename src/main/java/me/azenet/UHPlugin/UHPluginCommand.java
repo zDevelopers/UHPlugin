@@ -2005,7 +2005,23 @@ public class UHPluginCommand implements CommandExecutor {
 	private void doJoin(CommandSender sender, Command command, String label, String[] args) {
 		
 		if(args.length == 0) {
-			sender.sendMessage(i.t("team.addplayer.joinhelp"));
+			if(sender instanceof Player) {
+				if(sender.hasPermission("uh.player.join.self")) {
+					p.getTeamManager().displayTeamChooserChatGUI((Player) sender);
+				}
+				else {
+					if(sender.hasPermission("uh.player.join.others")) {
+						sender.sendMessage(i.t("team.addplayer.joinhelp"));
+					}
+					else {
+						unauthorized(sender, command);
+					}
+				}
+			}
+			else {
+				sender.sendMessage(i.t("team.addplayer.joinhelp"));
+			}
+			
 			return;
 		}
 		
@@ -2051,7 +2067,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 			}
 			else {
-				sender.sendMessage(i.t("cmd.errorUnauthorized"));
+				unauthorized(sender, command);
 			}
 		}
 	}

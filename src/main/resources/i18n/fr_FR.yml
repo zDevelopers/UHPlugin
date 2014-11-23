@@ -270,6 +270,16 @@ keys:
             itemPlayerDead: "{0} {reset}({red}mort{reset})"
             itemPlayerAlive: "{0} {reset}({green}vivant{reset})"
         
+        gui:
+            choose: "{gold}Cliquez ci-dessous pour rejoindre une équipe"
+            playersCount: "{gray}[{white}{0}{gray}/{white}{1}{gray}]"
+            playersCountUnlimited: "{gray}[{white}{0}{gray}]"
+            tooltipCount: "{0} joueur(s) dans cette équipe"
+            tooltipJoin: "Cliquez ici pour rejoindre l'équipe {0}"
+            tooltipJoinInside: "Vous êtes dans l'équipe {0}"
+            leaveTeam: "{darkred}[\u00D7] {red}Cliquez ici pour quitter votre équipe"
+            howToDisplayAgain: "{gray}Exécutez /join pour réafficher ceci"
+        
         reset:
             success: "{cs}Toutes les équipes ont été supprimées."
             

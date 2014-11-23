@@ -191,10 +191,26 @@ public class UHTeam {
 	 * @param player The player to remove.
 	 */
 	public void removePlayer(OfflinePlayer player) {
+		removePlayer(player, false);
+	}
+	
+	/**
+	 * Removes a player from this team.
+	 * 
+	 * Nothing is done if the player wasn't in this team.
+	 * 
+	 * @param player The player to remove.
+	 * @param silent If true, the player will not be notified.
+	 */
+	public void removePlayer(OfflinePlayer player, boolean silent) {
 		Validate.notNull(player, "The player cannot be null.");
 		
 		players.remove(player.getUniqueId());
 		unregisterPlayer(player);
+		
+		if(!silent && player.isOnline()) {
+			((Player) player).sendMessage(i.t("team.removeplayer.removed", getDisplayName()));
+		}
 	}
 	
 	/**
