@@ -188,7 +188,7 @@ teams-options:
         displayPlayersInTeams: true
         
         # Display the GUI when a player login out of any team?
-        auto-display: true
+        autoDisplay: true
         # Delay between the login and the display? (Seconds)
         delay: 4
 
