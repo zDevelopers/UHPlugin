@@ -37,6 +37,7 @@ For available configuration, please [see directly the configuration file](https:
 ### Manages teams
 
 - Creation/deletion of colored teams, with or without name. Spaces allowed in the names.
+- You can create a team with a random color using `?` as the color.
 - Players can be added to a team, or not (solo mode supported).
 - The names of the players can be colored, according to the team, in the chat.
 - The teams can be registered in the config file, in game, or both.
