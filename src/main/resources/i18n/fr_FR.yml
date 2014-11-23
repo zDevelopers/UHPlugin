@@ -63,7 +63,7 @@ keys:
         teamHelpLeave: "{cc}/uh team leave <joueur> {ci}: retire un joueur de son équipe."
         teamHelpList: "{cc}/uh team list {ci}: liste toutes les équipes et leurs membres."
         teamHelpReset: "{cc}/uh team reset {ci}: supprime toutes les équipes."
-        teamHelpJoinCmd: "{cc}/join [joueur] <équipe ...> {ci}: ajoute “joueur” (ou l'envoyeur) dans l'équipe donnée."
+        teamHelpJoinCmd: "{cc}/join [joueur] <équipe ...> {ci}: ajoute “joueur” (ou l'envoyeur) dans l'équipe donnée. Sans argument, affiche le sélecteur d'équipe."
         teamHelpLeaveCmd: "{cc}/leave [joueur] {ci}: retire “joueur” (ou l'envoyeur) de son équipe."
         
         spawnsHelpTitle: "{aqua}------ Commandes de gestion des points de démarrage ------"

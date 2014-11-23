@@ -63,7 +63,7 @@ keys:
         teamHelpLeave: "{cc}/uh team leave <player> {ci}: removes a player from his team."
         teamHelpList: "{cc}/uh team list {ci}: lists the teams and their players."
         teamHelpReset: "{cc}/uh team reset {ci}: removes all teams."
-        teamHelpJoinCmd: "{cc}/join [player] <team ...> {ci}: adds “player” (or the sender) inside the given team."
+        teamHelpJoinCmd: "{cc}/join [player] <team ...> {ci}: adds “player” (or the sender) inside the given team. Without arguments, displays the chat-based team selector."
         teamHelpLeaveCmd: "{cc}/leave [player] {ci}: removes “player” (or the sender) from his team."
         
         spawnsHelpTitle: "{aqua}------ Spawns points commands ------"
