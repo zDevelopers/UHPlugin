@@ -406,6 +406,8 @@ public class UHTeamManager {
 		if(p.getTeamManager().getTeams().size() != 0) {
 			player.sendMessage(i.t("team.gui.choose"));
 			
+			boolean displayPlayers = p.getConfig().getBoolean("teams-options.gui.displayPlayersInTeams");
+			
 			for(UHTeam team : p.getTeamManager().getTeams()) {
 				
 				String text = "{\"text\":\"\",\"extra\":[";
@@ -418,7 +420,25 @@ public class UHTeamManager {
 				else {
 					text += "\"text\": \"" + i.t("team.gui.playersCountUnlimited", String.valueOf(team.getPlayers().size())) + "\", ";
 				}
-				text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipCount", String.valueOf(team.getPlayers().size())) + "\"}";
+				
+				String players = "";
+				if(displayPlayers) {
+					String bullet = "\n - ";
+					for(OfflinePlayer opl : team.getPlayers()) {
+						if(!p.getGameManager().isGameRunning()) {
+							players += bullet + i.t("team.list.itemPlayer", opl.getName());
+						}
+						else {
+							if(p.getGameManager().isPlayerDead(opl.getUniqueId())) {
+								players += bullet + i.t("team.list.itemPlayerDead", opl.getName());
+							}
+							else {
+								players += bullet + i.t("team.list.itemPlayerAlive", opl.getName());
+							}
+						}
+					}
+				}
+				text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipCount", String.valueOf(team.getPlayers().size())) + players + "\"}";
 				text += "},";
 				
 				text += "{\"text\":\" \"},{";

@@ -184,6 +184,9 @@ teams-options:
     
     # Chat-based GUI to choose a team
     gui:
+        # Display the players in each team, in the tooltip linked to the players count?
+        displayPlayersInTeams: true
+        
         # Display the GUI when a player login out of any team?
         auto-display: true
         # Delay between the login and the display? (Seconds)
