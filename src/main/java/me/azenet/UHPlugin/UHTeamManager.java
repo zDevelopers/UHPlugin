@@ -395,57 +395,67 @@ public class UHTeamManager {
 			p.getLogger().log(Level.SEVERE, "Cannot display team-chooser GUI without ProtocolLib");
 			return;
 		}
+		if(p.getGameManager().isGameRunning()) {
+			if(!p.getGameManager().isGameWithTeams()) {
+				return;
+			}
+		}
 		
 		player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
-		player.sendMessage(i.t("team.gui.choose"));
 		
-		for(UHTeam team : p.getTeamManager().getTeams()) {
+		if(p.getTeamManager().getTeams().size() != 0) {
+			player.sendMessage(i.t("team.gui.choose"));
 			
-			//{"text":"","extra":[{"text":"","color":"white"},{"text":"§7[§f0§7/§f3§7]","color":"white","hoverEvent":{"action":"show_text","value":"0 joueur(s) dans cette équipe"}},{"text":" ","color":"white"},{"text":"dark_gray","color":"dark_gray","clickEvent":{"action":"run_command","value":"/join dark_gray"},"hoverEvent":{"action":"show_text","value":"Cliquez ici pour rejoindre l'équipe §8dark_gray§r"}}]}
-
-			String text = "{\"text\":\"\",\"extra\":[";
+			for(UHTeam team : p.getTeamManager().getTeams()) {
+				
+				String text = "{\"text\":\"\",\"extra\":[";
+				
+				// Team count (something like "[2/5]”)
+				text += "{";
+				if(maxPlayersPerTeam != 0) {
+					text += "\"text\": \"" + i.t("team.gui.playersCount", String.valueOf(team.getPlayers().size()), String.valueOf(maxPlayersPerTeam)) + "\", ";
+				}
+				else {
+					text += "\"text\": \"" + i.t("team.gui.playersCountUnlimited", String.valueOf(team.getPlayers().size())) + "\", ";
+				}
+				text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipCount", String.valueOf(team.getPlayers().size())) + "\"}";
+				text += "},";
+				
+				text += "{\"text\":\" \"},{";
+				
+				// Team name (click event is here)
+				text += "\"text\":\"" + team.getName() + "\",";
+				text += "\"color\":\"" + team.getColor().toString().toLowerCase() + "\",";
+				text += "\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/join " + team.getName() + "\"},";
+				if(team.containsPlayer(player)) {
+					text += "\"bold\":\"true\",";
+					text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipJoinInside", team.getDisplayName()) + "\"}";
+				}
+				else {
+					text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipJoin", team.getDisplayName()) + "\"}";
+				}
+				text += "}";
+				
+				text += "]}";
+				
+				UHUtils.sendJSONMessage(player, text);
+			}
 			
-			// Team count (something like "[2/5]”)
-			text += "{";
-			if(maxPlayersPerTeam != 0) {
-				text += "\"text\": \"" + i.t("team.gui.playersCount", String.valueOf(team.getPlayers().size()), String.valueOf(maxPlayersPerTeam)) + "\", ";
+			if(p.getTeamManager().getTeamForPlayer(player) != null && player.hasPermission("uh.player.leave.self")) {
+				String text = "{";
+					text += "\"text\":\"" + i.t("team.gui.leaveTeam") + "\",";
+					text += "\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/leave\"}";
+				text += "}";
+				
+				UHUtils.sendJSONMessage(player, text);
 			}
 			else {
-				text += "\"text\": \"" + i.t("team.gui.playersCountUnlimited", String.valueOf(team.getPlayers().size())) + "\", ";
+				player.sendMessage(i.t("team.gui.howToDisplayAgain"));
 			}
-			text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipCount", String.valueOf(team.getPlayers().size())) + "\"}";
-			text += "},";
-			
-			text += "{\"text\":\" \"},{";
-			
-			// Team name (click event is here)
-			text += "\"text\":\"" + team.getName() + "\",";
-			text += "\"color\":\"" + team.getColor().toString().toLowerCase() + "\",";
-			text += "\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/join " + team.getName() + "\"},";
-			if(team.containsPlayer(player)) {
-				text += "\"bold\":\"true\",";
-				text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipJoinInside", team.getDisplayName()) + "\"}";
-			}
-			else {
-				text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipJoin", team.getDisplayName()) + "\"}";
-			}
-			text += "}";
-			
-			text += "]}";
-			
-			UHUtils.sendJSONMessage(player, text);
-		}
-		
-		if(p.getTeamManager().getTeamForPlayer(player) != null && player.hasPermission("uh.player.leave.self")) {
-			String text = "{";
-				text += "\"text\":\"" + i.t("team.gui.leaveTeam") + "\",";
-				text += "\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/leave\"}";
-			text += "}";
-			
-			UHUtils.sendJSONMessage(player, text);
 		}
 		else {
-			player.sendMessage(i.t("team.gui.howToDisplayAgain"));
+			// No teams.
+			player.sendMessage(i.t("team.gui.noTeams"));
 		}
 		
 		player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");

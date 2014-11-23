@@ -279,6 +279,7 @@ keys:
             tooltipJoinInside: "You are in the team {0}"
             leaveTeam: "{darkred}[\u00D7] {red}Click here to leave your team"
             howToDisplayAgain: "{gray}Run /join to display this again"
+            noTeams: "{ce}There isn't any team available."
         
         reset:
             success: "{cs}All teams where removed."
