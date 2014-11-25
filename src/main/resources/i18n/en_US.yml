@@ -110,10 +110,14 @@ keys:
         timersHelpRemove: "{cc}/uh timers remove <title ...> {ci}: deletes a timer."
         timersHelpList: "{cc}/uh timers list {ci}: lists the registered timers."
         timersHelpDurations: "{gray}Durations' format : mm, mm:ss or hh:mm:ss."
-        
+    
     about:
         authors: "Plugin made with love by {0}."
         and: "and"
+        
+        build:
+            number: "Build number: {0}."
+            notAvailable: "Build number not available."
         
         i18n:
             title: "{aqua}------ Translations ------"

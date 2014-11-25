@@ -115,6 +115,10 @@ keys:
         authors: "Plugin réalisé avec amour par {0}."
         and: "et"
         
+        build:
+            number: "Numéro de construction : {0}."
+            notAvailable: "Numéro de construction indisponible."
+        
         i18n:
             title: "{aqua}------ Traductions ------"
             selected: "Langue courante : {0} (traduit par {1})."
