@@ -181,6 +181,16 @@ teams-options:
     # Randoms colors for solo games and solo teams (i.e. all the teams generated when the game starts)?
     # If false, no color (aka white) used.
     randomColors: true
+    
+    # Chat-based GUI to choose a team
+    gui:
+        # Display the players in each team, in the tooltip linked to the players count?
+        displayPlayersInTeams: true
+        
+        # Display the GUI when a player login out of any team?
+        autoDisplay: true
+        # Delay between the login and the display? (Seconds)
+        delay: 4
 
 
 

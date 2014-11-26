@@ -37,11 +37,14 @@ For available configuration, please [see directly the configuration file](https:
 ### Manages teams
 
 - Creation/deletion of colored teams, with or without name. Spaces allowed in the names.
+- You can create a team with a random color using `?` as the color.
 - Players can be added to a team, or not (solo mode supported).
 - The names of the players can be colored, according to the team, in the chat.
 - The teams can be registered in the config file, in game, or both.
 - The teams are managed through commands (to allow the use of command blocks).
 - You can set a maximum size for the teams (to be able to give players command blocks to join the teams, without manual check, as example).
+- Players can join a team using `/join <teamName>` or a nice chat-based GUI.  
+  ![Chat-based GUI to select a team](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_TeamsMenu.png)
 
 ### Automatic teleportation of the players
 
@@ -157,8 +160,8 @@ All these gameplay tweaks are optional — see [the configuration file](https://
 
 ### Provided with options to deal with lag and other bugs
 
-- `/uh heal <player> [half-hearts=20]` to heal a player to the exact number of hearts given. Avoid trying to find the good health effect level/duration, the id of the effect, etc.
-- `/uh healall [half-hearts=20]`: the same, for all players, because Bukkit does not allow the use of the @a selector out of a command block.
+- `/uh heal <player> [half-hearts=20|±diff]` to heal a player to the exact number of hearts given, or to add/remove the given number of life points. Avoid trying to find the good health effect level/duration, the id of the effect, etc.
+- `/uh healall [half-hearts=20|±diff]`: the same, for all players, because Bukkit does not allow the use of the @a selector out of a command block.
 - You cannot kill a player with these commands.
 - With `/uh resurrect <player>`, you can resurrect (and deban, if he was banned) a player killed by lag (or other bug).
 - With `/uh tpback <player>`, you can teleport a player back to his death location.
@@ -252,7 +255,7 @@ You can also install these plugins:
 
 This plugin is needed for some options:
 
- - [ProtocolLib](http://dev.bukkit.org/bukkit-plugins/protocollib/), for the hardcore hearts and the automatic respawn.
+ - [ProtocolLib](http://dev.bukkit.org/bukkit-plugins/protocollib/), for the hardcore hearts, the automatic respawn and the team-selector GUI.
 
 After the installation, I recommend you to:
 

@@ -19,8 +19,11 @@
 
 package me.azenet.UHPlugin;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,6 +32,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 import me.azenet.UHPlugin.i18n.I18n;
 
@@ -354,6 +359,8 @@ public class UHPluginCommand implements CommandExecutor {
 		if(sender instanceof Player) sender.sendMessage("");
 		sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 		
+		// Authors
+		
 		String authors = "";
 		List<String> listAuthors = p.getDescription().getAuthors();
 		for(String author : listAuthors) {
@@ -369,6 +376,34 @@ public class UHPluginCommand implements CommandExecutor {
 			authors += author;
 		}
 		sender.sendMessage(i.t("about.authors", authors));
+		
+		// Build number
+		
+		String build = null;
+		try {
+			Class<? extends UHPlugin> clazz = p.getClass();
+			String className = clazz.getSimpleName() + ".class";
+			String classPath = clazz.getResource(className).toString();
+			if (classPath.startsWith("jar")) { // Class from JAR
+				String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + 
+				    "/META-INF/MANIFEST.MF";
+				Manifest manifest = new Manifest(new URL(manifestPath).openStream());
+				Attributes attr = manifest.getMainAttributes();
+				
+				build = attr.getValue("Git-Commit");
+			}
+		} catch (IOException e) {
+			// Build not available.
+		}
+		
+		if(build != null) {
+			sender.sendMessage(i.t("about.build.number", build));
+		}
+		else {
+			sender.sendMessage(i.t("about.build.notAvailable"));
+		}
+		
+		// Translation
 		
 		sender.sendMessage(i.t("about.i18n.title"));
 		sender.sendMessage(i.t("about.i18n.selected", i.getSelectedLanguage(), i.getTranslator(i.getSelectedLanguage())));
@@ -2005,7 +2040,23 @@ public class UHPluginCommand implements CommandExecutor {
 	private void doJoin(CommandSender sender, Command command, String label, String[] args) {
 		
 		if(args.length == 0) {
-			sender.sendMessage(i.t("team.addplayer.joinhelp"));
+			if(sender instanceof Player) {
+				if(sender.hasPermission("uh.player.join.self")) {
+					p.getTeamManager().displayTeamChooserChatGUI((Player) sender);
+				}
+				else {
+					if(sender.hasPermission("uh.player.join.others")) {
+						sender.sendMessage(i.t("team.addplayer.joinhelp"));
+					}
+					else {
+						unauthorized(sender, command);
+					}
+				}
+			}
+			else {
+				sender.sendMessage(i.t("team.addplayer.joinhelp"));
+			}
+			
 			return;
 		}
 		
@@ -2051,7 +2102,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 			}
 			else {
-				sender.sendMessage(i.t("cmd.errorUnauthorized"));
+				unauthorized(sender, command);
 			}
 		}
 	}
@@ -2109,7 +2160,7 @@ public class UHPluginCommand implements CommandExecutor {
 			return;
 		}
 		
-		sender.sendMessage(ChatColor.DARK_GREEN + "" + ChatColor.STRIKETHROUGH + "=====================================================");
+		sender.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
 	}
 	
 	

@@ -63,7 +63,7 @@ keys:
         teamHelpLeave: "{cc}/uh team leave <joueur> {ci}: retire un joueur de son équipe."
         teamHelpList: "{cc}/uh team list {ci}: liste toutes les équipes et leurs membres."
         teamHelpReset: "{cc}/uh team reset {ci}: supprime toutes les équipes."
-        teamHelpJoinCmd: "{cc}/join [joueur] <équipe ...> {ci}: ajoute “joueur” (ou l'envoyeur) dans l'équipe donnée."
+        teamHelpJoinCmd: "{cc}/join [joueur] <équipe ...> {ci}: ajoute “joueur” (ou l'envoyeur) dans l'équipe donnée. Sans argument, affiche le sélecteur d'équipe."
         teamHelpLeaveCmd: "{cc}/leave [joueur] {ci}: retire “joueur” (ou l'envoyeur) de son équipe."
         
         spawnsHelpTitle: "{aqua}------ Commandes de gestion des points de démarrage ------"
@@ -114,6 +114,10 @@ keys:
     about:
         authors: "Plugin réalisé avec amour par {0}."
         and: "et"
+        
+        build:
+            number: "Numéro de construction : {0}."
+            notAvailable: "Numéro de construction indisponible."
         
         i18n:
             title: "{aqua}------ Traductions ------"
@@ -269,6 +273,17 @@ keys:
             itemPlayer: "{0}"
             itemPlayerDead: "{0} {reset}({red}mort{reset})"
             itemPlayerAlive: "{0} {reset}({green}vivant{reset})"
+        
+        gui:
+            choose: "{gold}Cliquez ci-dessous pour rejoindre une équipe"
+            playersCount: "{gray}[{white}{0}{gray}/{white}{1}{gray}]"
+            playersCountUnlimited: "{gray}[{white}{0}{gray}]"
+            tooltipCount: "{0} joueur(s) dans cette équipe"
+            tooltipJoin: "Cliquez ici pour rejoindre l'équipe {0}"
+            tooltipJoinInside: "Vous êtes dans l'équipe {0}"
+            leaveTeam: "{darkred}[\u00D7] {red}Cliquez ici pour quitter votre équipe"
+            howToDisplayAgain: "{gray}Exécutez /join pour réafficher ceci"
+            noTeams: "{ce}Il n'y a aucune équipe disponible."
         
         reset:
             success: "{cs}Toutes les équipes ont été supprimées."

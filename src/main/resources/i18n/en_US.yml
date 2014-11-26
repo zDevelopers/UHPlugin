@@ -63,7 +63,7 @@ keys:
         teamHelpLeave: "{cc}/uh team leave <player> {ci}: removes a player from his team."
         teamHelpList: "{cc}/uh team list {ci}: lists the teams and their players."
         teamHelpReset: "{cc}/uh team reset {ci}: removes all teams."
-        teamHelpJoinCmd: "{cc}/join [player] <team ...> {ci}: adds “player” (or the sender) inside the given team."
+        teamHelpJoinCmd: "{cc}/join [player] <team ...> {ci}: adds “player” (or the sender) inside the given team. Without arguments, displays the chat-based team selector."
         teamHelpLeaveCmd: "{cc}/leave [player] {ci}: removes “player” (or the sender) from his team."
         
         spawnsHelpTitle: "{aqua}------ Spawns points commands ------"
@@ -110,10 +110,14 @@ keys:
         timersHelpRemove: "{cc}/uh timers remove <title ...> {ci}: deletes a timer."
         timersHelpList: "{cc}/uh timers list {ci}: lists the registered timers."
         timersHelpDurations: "{gray}Durations' format : mm, mm:ss or hh:mm:ss."
-        
+    
     about:
         authors: "Plugin made with love by {0}."
         and: "and"
+        
+        build:
+            number: "Build number: {0}."
+            notAvailable: "Build number not available."
         
         i18n:
             title: "{aqua}------ Translations ------"
@@ -269,6 +273,17 @@ keys:
             itemPlayer: "{0}"
             itemPlayerDead: "{0} {reset}({red}dead{reset})"
             itemPlayerAlive: "{0} {reset}({green}alive{reset})"
+        
+        gui:
+            choose: "{gold}Click on the names below to join a team"
+            playersCount: "{gray}[{white}{0}{gray}/{white}{1}{gray}]"
+            playersCountUnlimited: "{gray}[{white}{0}{gray}]"
+            tooltipCount: "{0} player(s) in this team"
+            tooltipJoin: "Click here to join the team {0}"
+            tooltipJoinInside: "You are in the team {0}"
+            leaveTeam: "{darkred}[\u00D7] {red}Click here to leave your team"
+            howToDisplayAgain: "{gray}Run /join to display this again"
+            noTeams: "{ce}There isn't any team available."
         
         reset:
             success: "{cs}All teams where removed."

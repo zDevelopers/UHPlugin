@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.logging.Level;
 
 import me.azenet.UHPlugin.i18n.I18n;
 
@@ -190,10 +191,7 @@ public class UHTeamManager {
 	public void removePlayerFromTeam(OfflinePlayer player, boolean dontNotify) {
 		UHTeam team = getTeamForPlayer(player);
 		if(team != null) {
-			team.removePlayer(player);
-			if(!dontNotify && player.isOnline()) {
-				((Player) player).sendMessage(i.t("team.removeplayer.removed", team.getDisplayName()));
-			}
+			team.removePlayer(player, dontNotify);
 		}
 	}
 	
@@ -214,7 +212,7 @@ public class UHTeamManager {
 	 */
 	public void reset(boolean dontNotify) {
 		// 1: scoreboard reset
-		for(UHTeam team : teams) {
+		for(UHTeam team : new ArrayList<UHTeam>(teams)) {
 			this.removeTeam(team, dontNotify);
 		}
 		// 2: internal list reset
@@ -225,12 +223,7 @@ public class UHTeamManager {
 	 * Removes all teams.
 	 */
 	public void reset() {
-		// 1: scoreboard reset
-		for(UHTeam team : teams) {
-			this.removeTeam(team, false);
-		}
-		// 2: internal list reset
-		teams = new ArrayList<UHTeam>();
+		reset(false);
 	}
 	
 	/**
@@ -387,5 +380,104 @@ public class UHTeamManager {
 		}
 		
 		return 0;
+	}
+	
+	/**
+	 * Displays a chat-based GUI (using tellraw formatting) to player to select a team.
+	 * <p>
+	 * Nothing is displayed if the player cannot use the /join command.
+	 * 
+	 * @param player The receiver of the chat-GUI.
+	 */
+	public void displayTeamChooserChatGUI(Player player) {
+		if(!player.hasPermission("uh.player.join.self")) return;
+		if(!p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled()) {
+			p.getLogger().log(Level.SEVERE, "Cannot display team-chooser GUI without ProtocolLib");
+			return;
+		}
+		if(p.getGameManager().isGameRunning()) {
+			if(!p.getGameManager().isGameWithTeams()) {
+				return;
+			}
+		}
+		
+		player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
+		
+		if(p.getTeamManager().getTeams().size() != 0) {
+			player.sendMessage(i.t("team.gui.choose"));
+			
+			boolean displayPlayers = p.getConfig().getBoolean("teams-options.gui.displayPlayersInTeams");
+			
+			for(UHTeam team : p.getTeamManager().getTeams()) {
+				
+				String text = "{\"text\":\"\",\"extra\":[";
+				
+				// Team count (something like "[2/5]”)
+				text += "{";
+				if(maxPlayersPerTeam != 0) {
+					text += "\"text\": \"" + i.t("team.gui.playersCount", String.valueOf(team.getPlayers().size()), String.valueOf(maxPlayersPerTeam)) + "\", ";
+				}
+				else {
+					text += "\"text\": \"" + i.t("team.gui.playersCountUnlimited", String.valueOf(team.getPlayers().size())) + "\", ";
+				}
+				
+				String players = "";
+				if(displayPlayers) {
+					String bullet = "\n - ";
+					for(OfflinePlayer opl : team.getPlayers()) {
+						if(!p.getGameManager().isGameRunning()) {
+							players += bullet + i.t("team.list.itemPlayer", opl.getName());
+						}
+						else {
+							if(p.getGameManager().isPlayerDead(opl.getUniqueId())) {
+								players += bullet + i.t("team.list.itemPlayerDead", opl.getName());
+							}
+							else {
+								players += bullet + i.t("team.list.itemPlayerAlive", opl.getName());
+							}
+						}
+					}
+				}
+				text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipCount", String.valueOf(team.getPlayers().size())) + players + "\"}";
+				text += "},";
+				
+				text += "{\"text\":\" \"},{";
+				
+				// Team name (click event is here)
+				text += "\"text\":\"" + team.getName() + "\",";
+				text += "\"color\":\"" + team.getColor().toString().toLowerCase() + "\",";
+				text += "\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/join " + team.getName() + "\"},";
+				if(team.containsPlayer(player)) {
+					text += "\"bold\":\"true\",";
+					text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipJoinInside", team.getDisplayName()) + "\"}";
+				}
+				else {
+					text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipJoin", team.getDisplayName()) + "\"}";
+				}
+				text += "}";
+				
+				text += "]}";
+				
+				UHUtils.sendJSONMessage(player, text);
+			}
+			
+			if(p.getTeamManager().getTeamForPlayer(player) != null && player.hasPermission("uh.player.leave.self")) {
+				String text = "{";
+					text += "\"text\":\"" + i.t("team.gui.leaveTeam") + "\",";
+					text += "\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/leave\"}";
+				text += "}";
+				
+				UHUtils.sendJSONMessage(player, text);
+			}
+			else {
+				player.sendMessage(i.t("team.gui.howToDisplayAgain"));
+			}
+		}
+		else {
+			// No teams.
+			player.sendMessage(i.t("team.gui.noTeams"));
+		}
+		
+		player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
 	}
 }
