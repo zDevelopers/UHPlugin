@@ -1299,7 +1299,7 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		else {
 			p.getGameManager().addDead(player.getUniqueId());
-			p.getGameManager().updateAliveCounters();
+			p.getGameManager().updateAliveCache();
 		}
 		
 		sender.sendMessage(i.t("kill.killed", player.getName()));

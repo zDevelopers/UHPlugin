@@ -57,6 +57,7 @@ public class UHGameManager {
 
 	private HashSet<String> players = new HashSet<String>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available 
 	private HashSet<UUID> alivePlayers = new HashSet<UUID>();
+	private HashSet<UHTeam> aliveTeams = new HashSet<UHTeam>();
 	private HashSet<UUID> spectators = new HashSet<UUID>();
 	private Map<UUID,Location> deathLocations = new HashMap<UUID,Location>();
 
@@ -484,14 +485,32 @@ public class UHGameManager {
 	}
 	
 	/**
-	 * Updates the cached values of the numbers of alive players
-	 * and teams.
+	 * Updates the cached values of the alive players and teams.
 	 */
-	public void updateAliveCounters() {
+	public void updateAliveCache() {
+		// Alive teams
+		aliveTeams.clear();
+		for (UHTeam t : tm.getTeams()) {
+			for (UUID pid : t.getPlayersUUID()) {
+				if (!this.isPlayerDead(pid) && !aliveTeams.contains(t)) aliveTeams.add(t);
+			}
+		}
+		
+		// Counters
 		this.alivePlayersCount = alivePlayers.size();
-		this.aliveTeamsCount = getAliveTeams().size();
+		this.aliveTeamsCount   = aliveTeams.size();
 		
 		p.getScoreboardManager().updateCounters();
+	}
+	
+	/**
+	 * Updates the cached values of the alive players and teams.
+	 * 
+	 * @deprecated Use {@link #updateAliveCache()} instead.
+	 */
+	@Deprecated
+	public void updateAliveCounters() {
+		updateAliveCache();
 	}
 	
 	
@@ -573,7 +592,7 @@ public class UHGameManager {
 		
 		// Player registered as alive
 		this.alivePlayers.add(player.getUniqueId());
-		this.updateAliveCounters();
+		this.updateAliveCache();
 		
 		// This method can be used to add a player after the game has started.
 		if(!players.contains(player.getName())) {
@@ -839,13 +858,6 @@ public class UHGameManager {
 	 * @return The list.
 	 */
 	public Set<UHTeam> getAliveTeams() {
-		Set<UHTeam> aliveTeams = new HashSet<UHTeam>();
-		for (UHTeam t : tm.getTeams()) {
-			for (UUID pid : t.getPlayersUUID()) {
-				if (!this.isPlayerDead(pid) && !aliveTeams.contains(t)) aliveTeams.add(t);
-			}
-		}
-		
 		return aliveTeams;
 	}
 	

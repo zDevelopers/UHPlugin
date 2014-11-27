@@ -204,7 +204,7 @@ public class UHGameListener implements Listener {
 		ev.setDeathMessage(ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.deathMessagesFormat", "")) + ev.getDeathMessage());
 		
 		// Updates the number of alive players/teams
-		p.getGameManager().updateAliveCounters();
+		p.getGameManager().updateAliveCache();
 		
 		// Saves the location of the death
 		p.getGameManager().addDeathLocation(ev.getEntity(), ev.getEntity().getLocation());
