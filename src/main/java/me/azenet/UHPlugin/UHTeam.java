@@ -333,16 +333,26 @@ public class UHTeam {
 	}
 	
 	
+	
 	@Override
-	public boolean equals(Object otherTeam) {
-		if(!(otherTeam instanceof UHTeam)) {
+	public int hashCode() {
+		return ((name == null) ? 0 : name.hashCode());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
 			return false;
-		}
-		
-		if(!((UHTeam) otherTeam).getName().equals(this.getName())) {
+		if (!(obj instanceof UHTeam))
 			return false;
-		}
-		
+		UHTeam other = (UHTeam) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		return true;
 	}
 }

@@ -268,7 +268,7 @@ public class UHGameManager {
 		
 		this.aliveTeamsCount = tm.getTeams().size();
 		
-		if(p.getSpawnsManager().getSpawnPoints().size() < tm.getTeams().size()) {
+		if(p.getSpawnsManager().getSpawnPoints().size() < aliveTeamsCount) {
 			sender.sendMessage(i.t("start.notEnoughTP"));
 			
 			// We clears the teams if the game was in solo-mode, to avoid a team-counter to be displayed on the next start
@@ -282,6 +282,8 @@ public class UHGameManager {
 				}
 			}
 			
+			aliveTeamsCount   = 0;
+			alivePlayersCount = 0;
 			return;
 		}
 		
@@ -328,14 +330,13 @@ public class UHGameManager {
 			Integer teamsTeleported = 1;
 			Integer delayBetweenTP = p.getConfig().getInt("start.slow.delayBetweenTP");
 			
-			for (final UHTeam t : tm.getTeams()) {
-				final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
+			for (UHTeam t : tm.getTeams()) {
+				Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
 				
 				BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo, true, sender, teamsTeleported);
 				teamStartTask.runTaskLater(p, 20L * teamsTeleported * delayBetweenTP);
 				
 				teamsTeleported++;
-
 				
 				unusedTP.remove(lo);
 			}
@@ -797,7 +798,7 @@ public class UHGameManager {
 		}
 		
 		// There's only one team.
-		UHTeam winnerTeam = p.getGameManager().getAliveTeams().get(0);
+		UHTeam winnerTeam = p.getGameManager().getAliveTeams().iterator().next();
 		Set<OfflinePlayer> listWinners = winnerTeam.getPlayers();
 		
 		if(p.getConfig().getBoolean("finish.message")) {
@@ -837,8 +838,8 @@ public class UHGameManager {
 	 * 
 	 * @return The list.
 	 */
-	public ArrayList<UHTeam> getAliveTeams() {
-		ArrayList<UHTeam> aliveTeams = new ArrayList<UHTeam>();
+	public Set<UHTeam> getAliveTeams() {
+		Set<UHTeam> aliveTeams = new HashSet<UHTeam>();
 		for (UHTeam t : tm.getTeams()) {
 			for (UUID pid : t.getPlayersUUID()) {
 				if (!this.isPlayerDead(pid) && !aliveTeams.contains(t)) aliveTeams.add(t);
@@ -853,7 +854,7 @@ public class UHGameManager {
 	 * 
 	 * @return The list.
 	 */
-	public HashSet<OfflinePlayer> getAlivePlayers() {
+	public Set<OfflinePlayer> getAlivePlayers() {
 		
 		HashSet<OfflinePlayer> alivePlayersList = new HashSet<OfflinePlayer>();
 		

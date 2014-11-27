@@ -76,7 +76,6 @@ public class UHTabCompleter implements TabCompleter {
 				for(UHTeam team : p.getTeamManager().getTeams()) {
 					teamNames.add(team.getName());
 				}
-				
 				return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 0), teamNames, args.length - 1);
 			}
 			return null;

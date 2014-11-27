@@ -213,17 +213,11 @@ public class UHGameListener implements Listener {
 		p.getDynmapIntegration().showDeathLocation(ev.getEntity());
 		
 		// Is the game ended? If so, we need to call an event.
-		if(p.getGameManager().getAliveTeamsCount() == 1) {
-			// There's only one team alive, so the winner team is the first one.
-			p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().get(0)));
-		}
-		
-		// Is the game ended? If so, we need to call an event.
 		if(p.getGameManager().isGameRunning() && p.getGameManager().getAliveTeamsCount() == 1) {
 			p.getGameManager().setGameFinished(true);
 			
 			// There's only one team alive, so the winner team is the first one.
-			p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().get(0)));
+			p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().iterator().next()));
 		}
 		
 		// Notifies the player about the possibility of respawn if hardcore hearts are enabled
@@ -396,6 +390,7 @@ public class UHGameListener implements Listener {
 			ev.setCancelled(true);
 		}
 	}
+	
 	
 	/**
 	 * Used to send the chat to the team-chat if this team-chat is enabled.
