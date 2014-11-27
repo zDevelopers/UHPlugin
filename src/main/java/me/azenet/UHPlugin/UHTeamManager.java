@@ -79,7 +79,7 @@ public class UHTeamManager {
 	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */
 	public UHTeam addTeam(TeamColor color, String name) {
-		if(this.getTeam(name) != null) {
+		if(isTeamRegistered(name)) {
 			throw new IllegalArgumentException("There is already a team named " + name + " registered!");
 		}
 		
@@ -103,11 +103,11 @@ public class UHTeamManager {
 		color = generateColor(color);
 		String teamName = color.toString().toLowerCase();
 		
-		if(getTeam(teamName) != null) { // Taken!
+		if(isTeamRegistered(teamName)) { // Taken!
 			Random rand = new Random();
 			do {
 				teamName = color.toString().toLowerCase() + rand.nextInt(1000);
-			} while(getTeam(teamName) != null);
+			} while(isTeamRegistered(teamName));
 		}
 		
 		UHTeam team = new UHTeam(teamName, color, p);

@@ -1684,9 +1684,7 @@ public class UHPluginCommand implements CommandExecutor {
 							double y = Integer.parseInt(args[3]) + 0.5;
 							double z = Integer.parseInt(args[4]) + 0.5;
 							
-							for(Player player : team.getOnlinePlayers()) {
-								player.teleport(new Location(targetWorld, x, y, z), TeleportCause.PLUGIN);
-							}
+							team.teleportTo(new Location(targetWorld, x, y, z));
 							
 							return;
 						} catch(NumberFormatException e) {
@@ -1716,9 +1714,7 @@ public class UHPluginCommand implements CommandExecutor {
 							sender.sendMessage(i.t("tp.targetOffline", args[2]));
 						}
 						else {
-							for(Player player : team.getOnlinePlayers()) {
-								player.teleport(target.getLocation(), TeleportCause.PLUGIN);
-							}
+							team.teleportTo(target.getLocation());
 						}
 					}
 				}

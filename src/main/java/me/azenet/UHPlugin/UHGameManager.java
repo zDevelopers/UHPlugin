@@ -245,7 +245,7 @@ public class UHGameManager {
 					
 					String teamName = player.getName();
 					
-					if(tm.getTeam(teamName) != null) { // Team registered
+					if(tm.isTeamRegistered(teamName)) {
 						// The probability of a conflict here is so small...
 						// I will not take this possibility into account.
 						teamName = player.getName() + this.random.nextInt(1000000);

@@ -319,7 +319,10 @@ public class UHTeam {
 		Validate.notNull(lo, "The location cannot be null.");
 		
 		for (UUID id : players) {
-			plugin.getServer().getPlayer(id).teleport(lo, TeleportCause.PLUGIN);
+			Player player = plugin.getServer().getPlayer(id);
+			if(player != null && player.isOnline()) {
+				player.teleport(lo, TeleportCause.PLUGIN);
+			}
 		}
 	}
 
