@@ -47,6 +47,7 @@ keys:
         helpHealall: "{cc}/uh healall [half-hearts=20|±diff] {ci}: heals all players instead of only one."
         helpFeed: "{cc}/uh feed <player> [foodPoints=20] [saturation=max] {ci}: feeds a player."
         helpFeedall: "{cc}/uh feedall [foodPoints=20] [saturation=max] {ci}: feeds all players."
+        helpKill: "{cc}/uh kill <player> {ci}: mark a player as dead, even if he is offline."
         helpResurrect: "{cc}/uh resurrect <player> {ci}: resurrects a player."
         helpTpback: "{cc}/uh tpback <player> [force] {ci}: safely teleports back a player to his death location."
         
@@ -325,6 +326,11 @@ keys:
         usage: "{ce}Usage: /uh feed <player> [foodPoints = 20] [saturation = max]"
         offline: "{ce}This player is offline."
         errorNaN: "{ce}Food points and saturation must be numbers (floats for the saturation)!"
+    
+    kill:
+        usage: "{ce}Usage : /uh kill <player>"
+        neverPlayed: "{ce}This player was never seen on this server."
+        killed: "{cs}The player {0} is now marked as dead."
     
     resurrect:
         usage: "{ce}Usage: /uh resurrect <player>"

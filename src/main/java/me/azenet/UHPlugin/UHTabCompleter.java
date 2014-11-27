@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -293,6 +294,17 @@ public class UHTabCompleter implements TabCompleter {
 				ArrayList<String> tpBackSuggest = new ArrayList<String>();
 				tpBackSuggest.add("force");
 				return getAutocompleteSuggestions(args[2], tpBackSuggest);
+			}
+		}
+		
+		/** Autocompletion for /uh kill **/
+		else if(args[0].equalsIgnoreCase("kill")) {
+			if(args.length == 2) { // /uh kill <?>
+				ArrayList<String> suggestions = new ArrayList<String>();
+				for(OfflinePlayer player : p.getGameManager().getAlivePlayers()) {
+					suggestions.add(player.getName());
+				}
+				return getAutocompleteSuggestions(args[1], suggestions);
 			}
 		}
 		

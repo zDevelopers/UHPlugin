@@ -47,6 +47,7 @@ keys:
         helpHealall: "{cc}/uh healall [demi-coeurs=20|±diff] {ci}: change la vie de tous les joueurs, et non d'un seul."
         helpFeed: "{cc}/uh feed <joueur> [faim=20] [saturation=max] {ci}: nourrit un joueur."
         helpFeedall: "{cc}/uh feedall [faim=20] [saturation=max] {ci}: nourrit tous les joueurs."
+        helpKill: "{cc}/uh kill <joueur> {ci}: marque un joueur comme mort, même s'il est hors-ligne."
         helpResurrect: "{cc}/uh resurrect <joueur> {ci}: fait revivre un joueur."
         helpTpback: "{cc}/uh tpback <joueur> [force] {ci}: téléporte un joueur au lieu de sa mort en toute sécurité."
         
@@ -325,6 +326,11 @@ keys:
         usage: "{ce}Utilisation : /uh feed <joueur> [faim = 20] [saturation = max]"
         offline: "{ce}Ce joueur n'est pas connecté."
         errorNaN: "{ce}Les valeurs de faim et de saturation doivent être des nombres (possiblement à virgule pour la saturation) !"
+    
+    kill:
+        usage: "{ce}Utilisation : /uh kill <joueur>"
+        neverPlayed: "{ce}Cette personne n'a jamais été vue sur le serveur."
+        killed: "{cs}Le joueur {0} est désormais marqué comme mort."
     
     resurrect:
         usage: "{ce}Utilisation : /uh resurrect <joueur>"

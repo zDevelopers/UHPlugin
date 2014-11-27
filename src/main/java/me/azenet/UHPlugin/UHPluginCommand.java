@@ -81,6 +81,7 @@ public class UHPluginCommand implements CommandExecutor {
 		commands.add("feed");
 		commands.add("feedall");
 		commands.add("freeze");
+		commands.add("kill");
 		commands.add("resurrect");
 		commands.add("tpback");
 		commands.add("spec");
@@ -298,6 +299,7 @@ public class UHPluginCommand implements CommandExecutor {
 				sender.sendMessage(i.t("cmd.helpHealall"));
 				sender.sendMessage(i.t("cmd.helpFeed"));
 				sender.sendMessage(i.t("cmd.helpFeedall"));
+				sender.sendMessage(i.t("cmd.helpKill"));
 				sender.sendMessage(i.t("cmd.helpResurrect"));
 				sender.sendMessage(i.t("cmd.helpTpback"));
 				break;
@@ -1265,6 +1267,43 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 	}
 	
+	
+	/**
+	 * This command marks a player as dead, even if he is offline.
+	 * <p>
+	 * If the player is online, this has the same effect as {@code /kill}.
+	 * <p>
+	 * Usage: /uh kill &lt;player>
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doKill(CommandSender sender, Command command, String label, String[] args) {
+		if(args.length < 2) {
+			sender.sendMessage(i.t("kill.usage"));
+			return;
+		}
+		
+		OfflinePlayer player = p.getServer().getOfflinePlayer(args[1]);
+		
+		if(player == null) {
+			sender.sendMessage(i.t("kill.neverPlayed"));
+			return;
+		}
+		
+		if(player.isOnline()) {
+			((Player) player).setHealth(0);
+		}
+		else {
+			p.getGameManager().addDead(player.getUniqueId());
+			p.getGameManager().updateAliveCounters();
+		}
+		
+		sender.sendMessage(i.t("kill.killed", player.getName()));
+	}
 	
 	/**
 	 * This command resurrects a player.
