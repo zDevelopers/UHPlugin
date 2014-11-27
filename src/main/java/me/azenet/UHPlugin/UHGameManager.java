@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import me.azenet.UHPlugin.events.EpisodeChangedCause;
@@ -797,17 +798,18 @@ public class UHGameManager {
 		
 		// There's only one team.
 		UHTeam winnerTeam = p.getGameManager().getAliveTeams().get(0);
-		ArrayList<OfflinePlayer> listWinners = winnerTeam.getPlayers();
+		Set<OfflinePlayer> listWinners = winnerTeam.getPlayers();
 		
 		if(p.getConfig().getBoolean("finish.message")) {
 			if(p.getGameManager().isGameWithTeams()) {
 				String winners = "";
+				int j = 0;
 				
 				for(OfflinePlayer winner : listWinners) {
-					if(winner == listWinners.get(0)) {
+					if(j == 0) {
 						// Nothing
 					}
-					else if(winner == listWinners.get(listWinners.size() - 1)) {
+					else if(j == listWinners.size() - 1) {
 						winners += " " + i.t("finish.and") + " ";
 					}
 					else {
@@ -815,6 +817,7 @@ public class UHGameManager {
 					}
 					
 					winners += winner.getName();
+					j++;
 				}
 				
 				p.getServer().broadcastMessage(i.t("finish.broadcast.withTeams", winners, winnerTeam.getDisplayName()));
