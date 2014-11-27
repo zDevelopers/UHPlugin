@@ -20,6 +20,7 @@
 package me.azenet.UHPlugin.listeners;
 
 import java.util.List;
+import java.util.UUID;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHProTipsSender;
@@ -173,8 +174,8 @@ public class UHGameListener implements Listener {
 		if(team != null) {
 			boolean isAliveTeam = false;
 			
-			for(OfflinePlayer player : team.getPlayers()) {
-				if(!p.getGameManager().isPlayerDead(player.getUniqueId())) {
+			for(UUID playerID : team.getPlayersUUID()) {
+				if(!p.getGameManager().isPlayerDead(playerID)) {
 					isAliveTeam = true;
 					break;
 				}

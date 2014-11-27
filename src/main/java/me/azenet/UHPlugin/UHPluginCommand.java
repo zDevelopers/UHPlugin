@@ -990,7 +990,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				
 				for(final UHTeam team : tm.getTeams()) {
-					sender.sendMessage(i.t("team.list.itemTeam",  team.getDisplayName(), ((Integer) team.getPlayers().size()).toString()));
+					sender.sendMessage(i.t("team.list.itemTeam",  team.getDisplayName(), ((Integer) team.getSize()).toString()));
 					for(final OfflinePlayer player : team.getPlayers()) {
 						String bullet = null;
 						if(player.isOnline()) {

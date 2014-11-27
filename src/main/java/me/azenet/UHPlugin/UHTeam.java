@@ -150,6 +150,43 @@ public class UHTeam {
 	}
 	
 	/**
+	 * Returns the UUIDs of the players inside this team.
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public ArrayList<UUID> getPlayersUUID() {
+		return (ArrayList<UUID>) players.clone();
+	}
+	
+	/**
+	 * Returns the UUIDs of the online players inside this team.
+	 * 
+	 * @return
+	 */
+	public ArrayList<UUID> getOnlinePlayersUUID() {
+		ArrayList<UUID> playersList = new ArrayList<UUID>();
+		
+		for(UUID id : players) {
+			Player player = plugin.getServer().getPlayer(id);
+			if(player != null) {
+				playersList.add(id);
+			}
+		}
+		
+		return playersList;
+	}
+	
+	/**
+	 * Returns the size of this team.
+	 * 
+	 * @return The size.
+	 */
+	public int getSize() {
+		return players.size();
+	}
+	
+	/**
 	 * Adds a player inside this team.
 	 * 
 	 * @param player The player to add.

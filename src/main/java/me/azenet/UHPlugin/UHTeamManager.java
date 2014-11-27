@@ -415,10 +415,10 @@ public class UHTeamManager {
 				// Team count (something like "[2/5]”)
 				text += "{";
 				if(maxPlayersPerTeam != 0) {
-					text += "\"text\": \"" + i.t("team.gui.playersCount", String.valueOf(team.getPlayers().size()), String.valueOf(maxPlayersPerTeam)) + "\", ";
+					text += "\"text\": \"" + i.t("team.gui.playersCount", String.valueOf(team.getSize()), String.valueOf(maxPlayersPerTeam)) + "\", ";
 				}
 				else {
-					text += "\"text\": \"" + i.t("team.gui.playersCountUnlimited", String.valueOf(team.getPlayers().size())) + "\", ";
+					text += "\"text\": \"" + i.t("team.gui.playersCountUnlimited", String.valueOf(team.getSize())) + "\", ";
 				}
 				
 				String players = "";

@@ -837,8 +837,8 @@ public class UHGameManager {
 	public ArrayList<UHTeam> getAliveTeams() {
 		ArrayList<UHTeam> aliveTeams = new ArrayList<UHTeam>();
 		for (UHTeam t : tm.getTeams()) {
-			for (OfflinePlayer p : t.getPlayers()) {
-				if (!this.isPlayerDead(p.getUniqueId()) && !aliveTeams.contains(t)) aliveTeams.add(t);
+			for (UUID pid : t.getPlayersUUID()) {
+				if (!this.isPlayerDead(pid) && !aliveTeams.contains(t)) aliveTeams.add(t);
 			}
 		}
 		
