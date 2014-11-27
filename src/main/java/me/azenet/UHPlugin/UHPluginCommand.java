@@ -1224,6 +1224,47 @@ public class UHPluginCommand implements CommandExecutor {
 		target.setSaturation(saturation);
 	}
 	
+	/**
+	 * This command feeds all player.
+	 * <p>
+	 * Usage: /uh feed &lt;player> [foodLevel=20] [saturation=20]
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doFeedall(CommandSender sender, Command command, String label, String[] args) {
+		
+		int   foodLevel  = 20;
+		float saturation = 20f;
+		
+		if(args.length > 1) { // /uh feedall <foodLevel>
+			try {
+				foodLevel = Integer.valueOf(args[1]);
+			} catch(NumberFormatException e) {
+				sender.sendMessage(i.t("feed.errorNaN"));
+				return;
+			}
+			
+			if(args.length > 2) { // /uh feedall <foodLevel> <saturation>
+				try {
+					// The saturation value cannot be more than the food level.
+					saturation = Math.min(foodLevel, Float.valueOf(args[2]));
+				} catch(NumberFormatException e) {
+					sender.sendMessage(i.t("feed.errorNaN"));
+					return;
+				}
+			}
+		}
+		
+		for(Player player : p.getServer().getOnlinePlayers()) {
+			player.setFoodLevel(foodLevel);
+			player.setSaturation(saturation);
+		}
+	}
+	
 	
 	/**
 	 * This command resurrects a player.
