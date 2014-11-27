@@ -22,7 +22,6 @@ package me.azenet.UHPlugin;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -79,6 +78,8 @@ public class UHPluginCommand implements CommandExecutor {
 		commands.add("border");
 		commands.add("heal");
 		commands.add("healall");
+		commands.add("feed");
+		commands.add("feedall");
 		commands.add("freeze");
 		commands.add("resurrect");
 		commands.add("tpback");
@@ -295,6 +296,8 @@ public class UHPluginCommand implements CommandExecutor {
 				sender.sendMessage(i.t("cmd.titleBugCmd"));
 				sender.sendMessage(i.t("cmd.helpHeal"));
 				sender.sendMessage(i.t("cmd.helpHealall"));
+				sender.sendMessage(i.t("cmd.helpFeed"));
+				sender.sendMessage(i.t("cmd.helpFeedall"));
 				sender.sendMessage(i.t("cmd.helpResurrect"));
 				sender.sendMessage(i.t("cmd.helpTpback"));
 				break;
@@ -1170,6 +1173,55 @@ public class UHPluginCommand implements CommandExecutor {
 			
 			player.setHealth(health);
 		}
+	}
+	
+	/**
+	 * This command feeds a player.
+	 * <p>
+	 * Usage: /uh feed &lt;player> [foodLevel=20] [saturation=20]
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doFeed(CommandSender sender, Command command, String label, String[] args) {
+		if(args.length < 2) {
+			sender.sendMessage(i.t("feed.usage"));
+			return;
+		}
+		
+		Player target = p.getServer().getPlayer(args[1]);
+		if(target == null || !target.isOnline()) {
+			sender.sendMessage(i.t("feed.offline"));
+			return;
+		}
+		
+		int   foodLevel  = 20;
+		float saturation = 20f;
+		
+		if(args.length > 2) { // /uh feed <player> <foodLevel>
+			try {
+				foodLevel = Integer.valueOf(args[2]);
+			} catch(NumberFormatException e) {
+				sender.sendMessage(i.t("feed.errorNaN"));
+				return;
+			}
+			
+			if(args.length > 3) { // /uh feed <player> <foodLevel> <saturation>
+				try {
+					// The saturation value cannot be more than the food level.
+					saturation = Math.min(foodLevel, Float.valueOf(args[3]));
+				} catch(NumberFormatException e) {
+					sender.sendMessage(i.t("feed.errorNaN"));
+					return;
+				}
+			}
+		}
+		
+		target.setFoodLevel(foodLevel);
+		target.setSaturation(saturation);
 	}
 	
 	

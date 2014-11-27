@@ -45,6 +45,8 @@ keys:
         titleBugCmd: "{aqua}------ Commandes liées aux bugs ------"
         helpHeal: "{cc}/uh heal <joueur> [demi-coeurs=20|±diff] {ci}: change la vie d'un joueur avec le nombre de demi-coeurs donné (par défaut, 20)."
         helpHealall: "{cc}/uh healall [demi-coeurs=20|±diff] {ci}: change la vie de tous les joueurs, et non d'un seul."
+        helpFeed: "{cc}/uh feed <joueur> [faim=20] [saturation=max] {ci}: nourrit un joueur."
+        helpFeedall: "{cc}/uh feedall [faim=20] [saturation=max] {ci}: nourrit tous les joueurs."
         helpResurrect: "{cc}/uh resurrect <joueur> {ci}: fait revivre un joueur."
         helpTpback: "{cc}/uh tpback <joueur> [force] {ci}: téléporte un joueur au lieu de sa mort en toute sécurité."
         
@@ -318,6 +320,11 @@ keys:
         errorNoKill: "{ce}Vous ne pouvez pas tuer un joueur avec cette commande, pour éviter toute faute de frappe."
         errorHealthNotUpdatedNoKill: "{ce}La vie de {0} n'a pas été changée, pour ne pas le/la tuer."
         allErrorNoKill: "{ce}S'pèce de tueur en série !"
+    
+    feed:
+        usage: "{ce}Utilisation : /uh feed <joueur> [faim = 20] [saturation = max]"
+        offline: "{ce}Ce joueur n'est pas connecté."
+        errorNaN: "{ce}Les valeurs de faim et de saturation doivent être des nombres (possiblement à virgule pour la saturation) !"
     
     resurrect:
         usage: "{ce}Utilisation : /uh resurrect <joueur>"

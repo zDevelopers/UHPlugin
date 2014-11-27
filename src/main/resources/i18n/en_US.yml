@@ -45,6 +45,8 @@ keys:
         titleBugCmd: "{aqua}------ Bugs-related commands ------"
         helpHeal: "{cc}/uh heal <player> [half-hearts=20|±diff] {ci}: heals a player to the number of half-hearts provided (default 20)."
         helpHealall: "{cc}/uh healall [half-hearts=20|±diff] {ci}: heals all players instead of only one."
+        helpFeed: "{cc}/uh feed <player> [foodPoints=20] [saturation=max] {ci}: feeds a player."
+        helpFeedall: "{cc}/uh feedall [foodPoints=20] [saturation=max] {ci}: feeds all players."
         helpResurrect: "{cc}/uh resurrect <player> {ci}: resurrects a player."
         helpTpback: "{cc}/uh tpback <player> [force] {ci}: safely teleports back a player to his death location."
         
@@ -318,6 +320,11 @@ keys:
         errorNoKill: "{ce}You can't kill a player with this command, to avoid typo fails."
         errorHealthNotUpdatedNoKill: "{ce}The health of {0} was not updated to avoid a kill."
         allErrorNoKill: "{ce}Serial killer!"
+    
+    feed:
+        usage: "{ce}Usage: /uh feed <player> [foodPoints = 20] [saturation = max]"
+        offline: "{ce}This player is offline."
+        errorNaN: "{ce}Food points and saturation must be numbers (floats for the saturation)!"
     
     resurrect:
         usage: "{ce}Usage: /uh resurrect <player>"
