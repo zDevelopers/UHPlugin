@@ -78,11 +78,11 @@ keys:
         spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: removes the spawn points at the specified coordinates, or at the current location if the sender without coordinates."
         spawnsHelpReset: "{cc}/uh spawns reset {ci}: removes all registered spawn points."
         
-        specHelpTitle: "{aqua}------ Spectator commands ------"
+        specHelpTitle: "{aqua}------ Startup spectators commands ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Please note{ci}: because SpectatorPlus is not present, a spectator is {italic}only{ci} an ignored player."
-        specHelpAdd: "{cc}/uh spec add <player>{ci}: adds a spectator."
-        specHelpRemove: "{cc}/uh spec remove <player>{ci}: removes a spectator."
-        specHelpList: "{cc}/uh spec list{ci}: lists the spectators."
+        specHelpAdd: "{cc}/uh spec add <player>{ci}: adds a startup spectator."
+        specHelpRemove: "{cc}/uh spec remove <player>{ci}: removes a startup spectator."
+        specHelpList: "{cc}/uh spec list{ci}: lists the startup spectators."
         
         freezeHelpTitle: "{aqua}------ Freeze commands ------"
         freezeHelpOn: "{cc}/uh freeze on [player]{ci}: freezes a player, or the sender without a specified player."

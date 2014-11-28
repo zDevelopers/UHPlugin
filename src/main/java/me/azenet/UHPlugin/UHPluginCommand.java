@@ -1387,7 +1387,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	
 	/**
-	 * This command manages spectators (aka ignored players).
+	 * This command manages startup spectators (aka ignored players).
 	 * 
 	 * Usage: /uh spec (doc)
 	 * Usage: /uh spec <add|remove|list>

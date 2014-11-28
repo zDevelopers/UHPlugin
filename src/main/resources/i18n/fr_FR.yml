@@ -78,11 +78,11 @@ keys:
         spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: supprime les points de démarrage aux coordonnées spécifiées, ou à la position de l'envoyeur sans coordonnées."
         spawnsHelpReset: "{cc}/uh spawns reset {ci}: supprime tous les points de démarrage enregistrés."
         
-        specHelpTitle: "{aqua}------ Commandes liées aux spectateurs ------"
+        specHelpTitle: "{aqua}------ Commandes liées aux spectateurs initiaux ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Attention{ci}: SpectatorPlus n'étant pas installé, un spectateur n'est qu'un joueur ignoré."
-        specHelpAdd: "{cc}/uh spec add <joueur>{ci}: ajoute un spectateur."
-        specHelpRemove: "{cc}/uh spec remove <joueur>{ci}: supprime un spectateur."
-        specHelpList: "{cc}/uh spec list{ci}: liste les spectateurs."
+        specHelpAdd: "{cc}/uh spec add <joueur>{ci}: ajoute un spectateur initial."
+        specHelpRemove: "{cc}/uh spec remove <joueur>{ci}: supprime un spectateur initial."
+        specHelpList: "{cc}/uh spec list{ci}: liste les spectateurs initiaux."
         
         specHelpTitle: "{aqua}------ Commandes liées à l'immobilisation ------"
         freezeHelpOn: "{cc}/uh freeze on [joueur]{ci}: immobilise un joueur, ou l'exécuteur sans joueur spécifié."
