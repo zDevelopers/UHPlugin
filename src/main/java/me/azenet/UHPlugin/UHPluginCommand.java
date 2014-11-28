@@ -703,7 +703,7 @@ public class UHPluginCommand implements CommandExecutor {
 				if(args.length < 6) {
 					if(spawnsCount == 0) { // Solo mode?
 						sender.sendMessage(i.t("spawns.assumptions.solo"));
-						spawnsCount = p.getServer().getOnlinePlayers().length - p.getGameManager().getSpectators().size();
+						spawnsCount = p.getServer().getOnlinePlayers().length - p.getGameManager().getStartupSpectators().size();
 					}
 					else {
 						// Trying to found players without team
@@ -1428,7 +1428,7 @@ public class UHPluginCommand implements CommandExecutor {
 						sender.sendMessage(i.t("spectators.offline", args[2]));
 					}
 					else {
-						p.getGameManager().addSpectator(newSpectator);
+						p.getGameManager().addStartupSpectator(newSpectator);
 						sender.sendMessage(i.t("spectators.add.success", args[2]));
 					}
 				}
@@ -1444,14 +1444,14 @@ public class UHPluginCommand implements CommandExecutor {
 						sender.sendMessage(i.t("spectators.offline", args[2]));
 					}
 					else {
-						p.getGameManager().removeSpectator(oldSpectator);
+						p.getGameManager().removeStartupSpectator(oldSpectator);
 						sender.sendMessage(i.t("spectators.remove.success", args[2]));
 					}
 				}
 			}
 			
 			else if(subcommand.equalsIgnoreCase("list")) {
-				HashSet<String> spectators = p.getGameManager().getSpectators();
+				HashSet<String> spectators = p.getGameManager().getStartupSpectators();
 				if(spectators.size() == 0) {
 					sender.sendMessage(i.t("spectators.list.nothing"));
 				}

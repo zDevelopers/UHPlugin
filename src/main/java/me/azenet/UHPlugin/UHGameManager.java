@@ -673,7 +673,7 @@ public class UHGameManager {
 	 * 
 	 * @param player The player to register as a spectator.
 	 */
-	public void addSpectator(Player player) {
+	public void addStartupSpectator(Player player) {
 		spectators.add(player.getUniqueId());
 		tm.removePlayerFromTeam(player);
 	}
@@ -683,7 +683,7 @@ public class UHGameManager {
 	 * 
 	 * @param player
 	 */
-	public void removeSpectator(Player player) {
+	public void removeStartupSpectator(Player player) {
 		spectators.remove(player.getUniqueId());
 	}
 	
@@ -696,7 +696,7 @@ public class UHGameManager {
 	 * 
 	 * @return The initial spectators.
 	 */
-	public HashSet<String> getSpectators() {
+	public HashSet<String> getStartupSpectators() {
 		
 		HashSet<String> spectatorNames = new HashSet<String>();
 		
@@ -943,5 +943,47 @@ public class UHGameManager {
 	 */
 	public Integer getEpisode() {
 		return episode;
+	}
+	
+	
+	/**
+	 * Adds a spectator. When the game is started, spectators are ignored 
+	 * and the spectator mode is enabled if SpectatorPlus is present.
+	 * 
+	 * @param player The player to register as a spectator.
+	 * 
+	 * @deprecated Use {@link #addStartupSpectator(Player)} instead.
+	 */
+	@Deprecated
+	public void addSpectator(Player player) {
+		addStartupSpectator(player);
+	}
+	
+	/**
+	 * Removes a spectator.
+	 * 
+	 * @param player
+	 * 
+	 * @deprecated Use {@link #removeStartupSpectator(Player)} instead.
+	 */
+	@Deprecated
+	public void removeSpectator(Player player) {
+		removeStartupSpectator(player);
+	}
+	
+	/**
+	 * Returns a list of the current registered spectators.
+	 * 
+	 * This returns only a list of the <em>initial</em> spectators.
+	 * Use {@link UHGameManager.getAlivePlayers()} to get the alive players, and remove
+	 * the elements of this list from the online players to get the spectators.
+	 * 
+	 * @return The initial spectators.
+	 * 
+	 * @deprecated Use {@link #getStartupSpectators()} instead.
+	 */
+	@Deprecated
+	public HashSet<String> getSpectators() {
+		return getStartupSpectators();
 	}
 }

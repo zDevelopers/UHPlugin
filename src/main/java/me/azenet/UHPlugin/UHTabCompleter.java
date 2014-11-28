@@ -263,7 +263,7 @@ public class UHTabCompleter implements TabCompleter {
 				
 				if(args[1].equalsIgnoreCase("remove")) { // /uh spec remove <?>: autocompletion for spectators only (not all players)
 					ArrayList<String> spectatorsList = new ArrayList<String>();
-					for(String spectator : p.getGameManager().getSpectators()) {
+					for(String spectator : p.getGameManager().getStartupSpectators()) {
 						spectatorsList.add(spectator);
 					}
 					return getAutocompleteSuggestions(args[2], spectatorsList);
