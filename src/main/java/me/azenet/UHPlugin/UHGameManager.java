@@ -54,13 +54,13 @@ public class UHGameManager {
 	private Random random = null;
 	
 	private Boolean damageIsOn = false;
-
+	
 	private HashSet<String> players = new HashSet<String>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available 
 	private HashSet<UUID> alivePlayers = new HashSet<UUID>();
 	private HashSet<UHTeam> aliveTeams = new HashSet<UHTeam>();
 	private HashSet<UUID> spectators = new HashSet<UUID>();
 	private Map<UUID,Location> deathLocations = new HashMap<UUID,Location>();
-
+	
 	private HashSet<String> deadPlayersToBeResurrected = new HashSet<String>(); // Same
 	
 	private Integer alivePlayersCount = 0;
@@ -388,7 +388,7 @@ public class UHGameManager {
 	/**
 	 * Initializes the environment at the beginning of the game.
 	 */
-	public void startEnvironment() {
+	private void startEnvironment() {
 		World w = p.getServer().getWorlds().get(0);
 		
 		w.setGameRuleValue("doDaylightCycle", ((Boolean) p.getConfig().getBoolean("daylightCycle.do")).toString());
@@ -402,7 +402,7 @@ public class UHGameManager {
 	/**
 	 * Launches the timer by launching the task that updates the scoreboard every second.
 	 */
-	public void startTimer() {
+	private void startTimer() {
 		if(p.getConfig().getBoolean("episodes.enabled")) {
 			this.episode = 1;
 			
@@ -420,7 +420,7 @@ public class UHGameManager {
 	/**
 	 * Enables the damages 30 seconds (600 ticks) later.
 	 */
-	public void scheduleDamages() {
+	private void scheduleDamages() {
 		// 30 seconds later, damages are enabled.
 		Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 			@Override
@@ -435,7 +435,7 @@ public class UHGameManager {
 	 *  - about the team chat, to all players, 20 seconds after the beginning of the game;
 	 *  - about the invincibility, 5 seconds after the beginning of the game.
 	 */
-	public void sendStartupProTips() {
+	private void sendStartupProTips() {
 		// Team chat - 20 seconds after
 		if(this.isGameWithTeams()) {
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
@@ -463,7 +463,7 @@ public class UHGameManager {
 	 * Broadcasts the start message and change the state of the game.
 	 * Also, forces the global freeze start to false, to avoid toggle bugs (like inverted state).
 	 */
-	public void finalizeStart() {
+	private void finalizeStart() {
 		p.getFreezer().setGlobalFreezeState(false);
 		p.getScoreboardManager().initScoreboardAfterStart();
 		
