@@ -78,6 +78,7 @@ public class UHTeam {
 		
 		if(this.color != null) {
 			t.setPrefix(this.color.toChatColor().toString());
+			t.setSuffix(ChatColor.RESET.toString());
 		}
 		
 		t.setCanSeeFriendlyInvisibles(plugin.getConfig().getBoolean("teams-options.canSeeFriendlyInvisibles", true));
