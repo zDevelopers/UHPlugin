@@ -22,7 +22,6 @@ package me.azenet.UHPlugin;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -79,7 +78,10 @@ public class UHPluginCommand implements CommandExecutor {
 		commands.add("border");
 		commands.add("heal");
 		commands.add("healall");
+		commands.add("feed");
+		commands.add("feedall");
 		commands.add("freeze");
+		commands.add("kill");
 		commands.add("resurrect");
 		commands.add("tpback");
 		commands.add("spec");
@@ -295,6 +297,9 @@ public class UHPluginCommand implements CommandExecutor {
 				sender.sendMessage(i.t("cmd.titleBugCmd"));
 				sender.sendMessage(i.t("cmd.helpHeal"));
 				sender.sendMessage(i.t("cmd.helpHealall"));
+				sender.sendMessage(i.t("cmd.helpFeed"));
+				sender.sendMessage(i.t("cmd.helpFeedall"));
+				sender.sendMessage(i.t("cmd.helpKill"));
 				sender.sendMessage(i.t("cmd.helpResurrect"));
 				sender.sendMessage(i.t("cmd.helpTpback"));
 				break;
@@ -698,7 +703,7 @@ public class UHPluginCommand implements CommandExecutor {
 				if(args.length < 6) {
 					if(spawnsCount == 0) { // Solo mode?
 						sender.sendMessage(i.t("spawns.assumptions.solo"));
-						spawnsCount = p.getServer().getOnlinePlayers().length - p.getGameManager().getSpectators().size();
+						spawnsCount = p.getServer().getOnlinePlayers().length - p.getGameManager().getStartupSpectators().size();
 					}
 					else {
 						// Trying to found players without team
@@ -985,7 +990,7 @@ public class UHPluginCommand implements CommandExecutor {
 				}
 				
 				for(final UHTeam team : tm.getTeams()) {
-					sender.sendMessage(i.t("team.list.itemTeam",  team.getDisplayName(), ((Integer) team.getPlayers().size()).toString()));
+					sender.sendMessage(i.t("team.list.itemTeam",  team.getDisplayName(), ((Integer) team.getSize()).toString()));
 					for(final OfflinePlayer player : team.getPlayers()) {
 						String bullet = null;
 						if(player.isOnline()) {
@@ -1172,6 +1177,133 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 	}
 	
+	/**
+	 * This command feeds a player.
+	 * <p>
+	 * Usage: /uh feed &lt;player> [foodLevel=20] [saturation=20]
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doFeed(CommandSender sender, Command command, String label, String[] args) {
+		if(args.length < 2) {
+			sender.sendMessage(i.t("feed.usage"));
+			return;
+		}
+		
+		Player target = p.getServer().getPlayer(args[1]);
+		if(target == null || !target.isOnline()) {
+			sender.sendMessage(i.t("feed.offline"));
+			return;
+		}
+		
+		int   foodLevel  = 20;
+		float saturation = 20f;
+		
+		if(args.length > 2) { // /uh feed <player> <foodLevel>
+			try {
+				foodLevel = Integer.valueOf(args[2]);
+			} catch(NumberFormatException e) {
+				sender.sendMessage(i.t("feed.errorNaN"));
+				return;
+			}
+			
+			if(args.length > 3) { // /uh feed <player> <foodLevel> <saturation>
+				try {
+					// The saturation value cannot be more than the food level.
+					saturation = Math.min(foodLevel, Float.valueOf(args[3]));
+				} catch(NumberFormatException e) {
+					sender.sendMessage(i.t("feed.errorNaN"));
+					return;
+				}
+			}
+		}
+		
+		target.setFoodLevel(foodLevel);
+		target.setSaturation(saturation);
+	}
+	
+	/**
+	 * This command feeds all player.
+	 * <p>
+	 * Usage: /uh feed &lt;player> [foodLevel=20] [saturation=20]
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doFeedall(CommandSender sender, Command command, String label, String[] args) {
+		
+		int   foodLevel  = 20;
+		float saturation = 20f;
+		
+		if(args.length > 1) { // /uh feedall <foodLevel>
+			try {
+				foodLevel = Integer.valueOf(args[1]);
+			} catch(NumberFormatException e) {
+				sender.sendMessage(i.t("feed.errorNaN"));
+				return;
+			}
+			
+			if(args.length > 2) { // /uh feedall <foodLevel> <saturation>
+				try {
+					// The saturation value cannot be more than the food level.
+					saturation = Math.min(foodLevel, Float.valueOf(args[2]));
+				} catch(NumberFormatException e) {
+					sender.sendMessage(i.t("feed.errorNaN"));
+					return;
+				}
+			}
+		}
+		
+		for(Player player : p.getServer().getOnlinePlayers()) {
+			player.setFoodLevel(foodLevel);
+			player.setSaturation(saturation);
+		}
+	}
+	
+	
+	/**
+	 * This command marks a player as dead, even if he is offline.
+	 * <p>
+	 * If the player is online, this has the same effect as {@code /kill}.
+	 * <p>
+	 * Usage: /uh kill &lt;player>
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doKill(CommandSender sender, Command command, String label, String[] args) {
+		if(args.length < 2) {
+			sender.sendMessage(i.t("kill.usage"));
+			return;
+		}
+		
+		OfflinePlayer player = p.getServer().getOfflinePlayer(args[1]);
+		
+		if(player == null) {
+			sender.sendMessage(i.t("kill.neverPlayed"));
+			return;
+		}
+		
+		if(player.isOnline()) {
+			((Player) player).setHealth(0);
+		}
+		else {
+			p.getGameManager().addDead(player.getUniqueId());
+			p.getGameManager().updateAliveCache();
+		}
+		
+		sender.sendMessage(i.t("kill.killed", player.getName()));
+	}
 	
 	/**
 	 * This command resurrects a player.
@@ -1255,7 +1387,7 @@ public class UHPluginCommand implements CommandExecutor {
 	
 	
 	/**
-	 * This command manages spectators (aka ignored players).
+	 * This command manages startup spectators (aka ignored players).
 	 * 
 	 * Usage: /uh spec (doc)
 	 * Usage: /uh spec <add|remove|list>
@@ -1296,7 +1428,7 @@ public class UHPluginCommand implements CommandExecutor {
 						sender.sendMessage(i.t("spectators.offline", args[2]));
 					}
 					else {
-						p.getGameManager().addSpectator(newSpectator);
+						p.getGameManager().addStartupSpectator(newSpectator);
 						sender.sendMessage(i.t("spectators.add.success", args[2]));
 					}
 				}
@@ -1312,14 +1444,14 @@ public class UHPluginCommand implements CommandExecutor {
 						sender.sendMessage(i.t("spectators.offline", args[2]));
 					}
 					else {
-						p.getGameManager().removeSpectator(oldSpectator);
+						p.getGameManager().removeStartupSpectator(oldSpectator);
 						sender.sendMessage(i.t("spectators.remove.success", args[2]));
 					}
 				}
 			}
 			
 			else if(subcommand.equalsIgnoreCase("list")) {
-				HashSet<String> spectators = p.getGameManager().getSpectators();
+				HashSet<String> spectators = p.getGameManager().getStartupSpectators();
 				if(spectators.size() == 0) {
 					sender.sendMessage(i.t("spectators.list.nothing"));
 				}
@@ -1552,9 +1684,7 @@ public class UHPluginCommand implements CommandExecutor {
 							double y = Integer.parseInt(args[3]) + 0.5;
 							double z = Integer.parseInt(args[4]) + 0.5;
 							
-							for(Player player : team.getOnlinePlayers()) {
-								player.teleport(new Location(targetWorld, x, y, z), TeleportCause.PLUGIN);
-							}
+							team.teleportTo(new Location(targetWorld, x, y, z));
 							
 							return;
 						} catch(NumberFormatException e) {
@@ -1584,9 +1714,7 @@ public class UHPluginCommand implements CommandExecutor {
 							sender.sendMessage(i.t("tp.targetOffline", args[2]));
 						}
 						else {
-							for(Player player : team.getOnlinePlayers()) {
-								player.teleport(target.getLocation(), TeleportCause.PLUGIN);
-							}
+							team.teleportTo(target.getLocation());
 						}
 					}
 				}

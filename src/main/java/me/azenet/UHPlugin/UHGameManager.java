@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import me.azenet.UHPlugin.events.EpisodeChangedCause;
@@ -53,12 +54,13 @@ public class UHGameManager {
 	private Random random = null;
 	
 	private Boolean damageIsOn = false;
-
+	
 	private HashSet<String> players = new HashSet<String>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available 
 	private HashSet<UUID> alivePlayers = new HashSet<UUID>();
+	private HashSet<UHTeam> aliveTeams = new HashSet<UHTeam>();
 	private HashSet<UUID> spectators = new HashSet<UUID>();
 	private Map<UUID,Location> deathLocations = new HashMap<UUID,Location>();
-
+	
 	private HashSet<String> deadPlayersToBeResurrected = new HashSet<String>(); // Same
 	
 	private Integer alivePlayersCount = 0;
@@ -244,7 +246,7 @@ public class UHGameManager {
 					
 					String teamName = player.getName();
 					
-					if(tm.getTeam(teamName) != null) { // Team registered
+					if(tm.isTeamRegistered(teamName)) {
 						// The probability of a conflict here is so small...
 						// I will not take this possibility into account.
 						teamName = player.getName() + this.random.nextInt(1000000);
@@ -267,7 +269,7 @@ public class UHGameManager {
 		
 		this.aliveTeamsCount = tm.getTeams().size();
 		
-		if(p.getSpawnsManager().getSpawnPoints().size() < tm.getTeams().size()) {
+		if(p.getSpawnsManager().getSpawnPoints().size() < aliveTeamsCount) {
 			sender.sendMessage(i.t("start.notEnoughTP"));
 			
 			// We clears the teams if the game was in solo-mode, to avoid a team-counter to be displayed on the next start
@@ -281,6 +283,8 @@ public class UHGameManager {
 				}
 			}
 			
+			aliveTeamsCount   = 0;
+			alivePlayersCount = 0;
 			return;
 		}
 		
@@ -327,14 +331,13 @@ public class UHGameManager {
 			Integer teamsTeleported = 1;
 			Integer delayBetweenTP = p.getConfig().getInt("start.slow.delayBetweenTP");
 			
-			for (final UHTeam t : tm.getTeams()) {
-				final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
+			for (UHTeam t : tm.getTeams()) {
+				Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
 				
 				BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo, true, sender, teamsTeleported);
 				teamStartTask.runTaskLater(p, 20L * teamsTeleported * delayBetweenTP);
 				
 				teamsTeleported++;
-
 				
 				unusedTP.remove(lo);
 			}
@@ -385,7 +388,7 @@ public class UHGameManager {
 	/**
 	 * Initializes the environment at the beginning of the game.
 	 */
-	public void startEnvironment() {
+	private void startEnvironment() {
 		World w = p.getServer().getWorlds().get(0);
 		
 		w.setGameRuleValue("doDaylightCycle", ((Boolean) p.getConfig().getBoolean("daylightCycle.do")).toString());
@@ -399,7 +402,7 @@ public class UHGameManager {
 	/**
 	 * Launches the timer by launching the task that updates the scoreboard every second.
 	 */
-	public void startTimer() {
+	private void startTimer() {
 		if(p.getConfig().getBoolean("episodes.enabled")) {
 			this.episode = 1;
 			
@@ -417,7 +420,7 @@ public class UHGameManager {
 	/**
 	 * Enables the damages 30 seconds (600 ticks) later.
 	 */
-	public void scheduleDamages() {
+	private void scheduleDamages() {
 		// 30 seconds later, damages are enabled.
 		Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 			@Override
@@ -432,7 +435,7 @@ public class UHGameManager {
 	 *  - about the team chat, to all players, 20 seconds after the beginning of the game;
 	 *  - about the invincibility, 5 seconds after the beginning of the game.
 	 */
-	public void sendStartupProTips() {
+	private void sendStartupProTips() {
 		// Team chat - 20 seconds after
 		if(this.isGameWithTeams()) {
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
@@ -460,7 +463,7 @@ public class UHGameManager {
 	 * Broadcasts the start message and change the state of the game.
 	 * Also, forces the global freeze start to false, to avoid toggle bugs (like inverted state).
 	 */
-	public void finalizeStart() {
+	private void finalizeStart() {
 		p.getFreezer().setGlobalFreezeState(false);
 		p.getScoreboardManager().initScoreboardAfterStart();
 		
@@ -482,14 +485,32 @@ public class UHGameManager {
 	}
 	
 	/**
-	 * Updates the cached values of the numbers of alive players
-	 * and teams.
+	 * Updates the cached values of the alive players and teams.
 	 */
-	public void updateAliveCounters() {
+	public void updateAliveCache() {
+		// Alive teams
+		aliveTeams.clear();
+		for (UHTeam t : tm.getTeams()) {
+			for (UUID pid : t.getPlayersUUID()) {
+				if (!this.isPlayerDead(pid) && !aliveTeams.contains(t)) aliveTeams.add(t);
+			}
+		}
+		
+		// Counters
 		this.alivePlayersCount = alivePlayers.size();
-		this.aliveTeamsCount = getAliveTeams().size();
+		this.aliveTeamsCount   = aliveTeams.size();
 		
 		p.getScoreboardManager().updateCounters();
+	}
+	
+	/**
+	 * Updates the cached values of the alive players and teams.
+	 * 
+	 * @deprecated Use {@link #updateAliveCache()} instead.
+	 */
+	@Deprecated
+	public void updateAliveCounters() {
+		updateAliveCache();
 	}
 	
 	
@@ -571,7 +592,7 @@ public class UHGameManager {
 		
 		// Player registered as alive
 		this.alivePlayers.add(player.getUniqueId());
-		this.updateAliveCounters();
+		this.updateAliveCache();
 		
 		// This method can be used to add a player after the game has started.
 		if(!players.contains(player.getName())) {
@@ -652,7 +673,7 @@ public class UHGameManager {
 	 * 
 	 * @param player The player to register as a spectator.
 	 */
-	public void addSpectator(Player player) {
+	public void addStartupSpectator(Player player) {
 		spectators.add(player.getUniqueId());
 		tm.removePlayerFromTeam(player);
 	}
@@ -662,7 +683,7 @@ public class UHGameManager {
 	 * 
 	 * @param player
 	 */
-	public void removeSpectator(Player player) {
+	public void removeStartupSpectator(Player player) {
 		spectators.remove(player.getUniqueId());
 	}
 	
@@ -675,7 +696,7 @@ public class UHGameManager {
 	 * 
 	 * @return The initial spectators.
 	 */
-	public HashSet<String> getSpectators() {
+	public HashSet<String> getStartupSpectators() {
 		
 		HashSet<String> spectatorNames = new HashSet<String>();
 		
@@ -796,18 +817,19 @@ public class UHGameManager {
 		}
 		
 		// There's only one team.
-		UHTeam winnerTeam = p.getGameManager().getAliveTeams().get(0);
-		ArrayList<OfflinePlayer> listWinners = winnerTeam.getPlayers();
+		UHTeam winnerTeam = p.getGameManager().getAliveTeams().iterator().next();
+		Set<OfflinePlayer> listWinners = winnerTeam.getPlayers();
 		
 		if(p.getConfig().getBoolean("finish.message")) {
 			if(p.getGameManager().isGameWithTeams()) {
 				String winners = "";
+				int j = 0;
 				
 				for(OfflinePlayer winner : listWinners) {
-					if(winner == listWinners.get(0)) {
+					if(j == 0) {
 						// Nothing
 					}
-					else if(winner == listWinners.get(listWinners.size() - 1)) {
+					else if(j == listWinners.size() - 1) {
 						winners += " " + i.t("finish.and") + " ";
 					}
 					else {
@@ -815,6 +837,7 @@ public class UHGameManager {
 					}
 					
 					winners += winner.getName();
+					j++;
 				}
 				
 				p.getServer().broadcastMessage(i.t("finish.broadcast.withTeams", winners, winnerTeam.getDisplayName()));
@@ -834,14 +857,7 @@ public class UHGameManager {
 	 * 
 	 * @return The list.
 	 */
-	public ArrayList<UHTeam> getAliveTeams() {
-		ArrayList<UHTeam> aliveTeams = new ArrayList<UHTeam>();
-		for (UHTeam t : tm.getTeams()) {
-			for (OfflinePlayer p : t.getPlayers()) {
-				if (!this.isPlayerDead(p.getUniqueId()) && !aliveTeams.contains(t)) aliveTeams.add(t);
-			}
-		}
-		
+	public Set<UHTeam> getAliveTeams() {
 		return aliveTeams;
 	}
 	
@@ -850,7 +866,7 @@ public class UHGameManager {
 	 * 
 	 * @return The list.
 	 */
-	public HashSet<OfflinePlayer> getAlivePlayers() {
+	public Set<OfflinePlayer> getAlivePlayers() {
 		
 		HashSet<OfflinePlayer> alivePlayersList = new HashSet<OfflinePlayer>();
 		
@@ -927,5 +943,47 @@ public class UHGameManager {
 	 */
 	public Integer getEpisode() {
 		return episode;
+	}
+	
+	
+	/**
+	 * Adds a spectator. When the game is started, spectators are ignored 
+	 * and the spectator mode is enabled if SpectatorPlus is present.
+	 * 
+	 * @param player The player to register as a spectator.
+	 * 
+	 * @deprecated Use {@link #addStartupSpectator(Player)} instead.
+	 */
+	@Deprecated
+	public void addSpectator(Player player) {
+		addStartupSpectator(player);
+	}
+	
+	/**
+	 * Removes a spectator.
+	 * 
+	 * @param player
+	 * 
+	 * @deprecated Use {@link #removeStartupSpectator(Player)} instead.
+	 */
+	@Deprecated
+	public void removeSpectator(Player player) {
+		removeStartupSpectator(player);
+	}
+	
+	/**
+	 * Returns a list of the current registered spectators.
+	 * 
+	 * This returns only a list of the <em>initial</em> spectators.
+	 * Use {@link UHGameManager.getAlivePlayers()} to get the alive players, and remove
+	 * the elements of this list from the online players to get the spectators.
+	 * 
+	 * @return The initial spectators.
+	 * 
+	 * @deprecated Use {@link #getStartupSpectators()} instead.
+	 */
+	@Deprecated
+	public HashSet<String> getSpectators() {
+		return getStartupSpectators();
 	}
 }

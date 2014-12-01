@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -75,7 +76,6 @@ public class UHTabCompleter implements TabCompleter {
 				for(UHTeam team : p.getTeamManager().getTeams()) {
 					teamNames.add(team.getName());
 				}
-				
 				return getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 0), teamNames, args.length - 1);
 			}
 			return null;
@@ -263,7 +263,7 @@ public class UHTabCompleter implements TabCompleter {
 				
 				if(args[1].equalsIgnoreCase("remove")) { // /uh spec remove <?>: autocompletion for spectators only (not all players)
 					ArrayList<String> spectatorsList = new ArrayList<String>();
-					for(String spectator : p.getGameManager().getSpectators()) {
+					for(String spectator : p.getGameManager().getStartupSpectators()) {
 						spectatorsList.add(spectator);
 					}
 					return getAutocompleteSuggestions(args[2], spectatorsList);
@@ -293,6 +293,17 @@ public class UHTabCompleter implements TabCompleter {
 				ArrayList<String> tpBackSuggest = new ArrayList<String>();
 				tpBackSuggest.add("force");
 				return getAutocompleteSuggestions(args[2], tpBackSuggest);
+			}
+		}
+		
+		/** Autocompletion for /uh kill **/
+		else if(args[0].equalsIgnoreCase("kill")) {
+			if(args.length == 2) { // /uh kill <?>
+				ArrayList<String> suggestions = new ArrayList<String>();
+				for(OfflinePlayer player : p.getGameManager().getAlivePlayers()) {
+					suggestions.add(player.getName());
+				}
+				return getAutocompleteSuggestions(args[1], suggestions);
 			}
 		}
 		

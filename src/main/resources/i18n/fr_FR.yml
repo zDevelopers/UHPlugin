@@ -45,6 +45,9 @@ keys:
         titleBugCmd: "{aqua}------ Commandes liées aux bugs ------"
         helpHeal: "{cc}/uh heal <joueur> [demi-coeurs=20|±diff] {ci}: change la vie d'un joueur avec le nombre de demi-coeurs donné (par défaut, 20)."
         helpHealall: "{cc}/uh healall [demi-coeurs=20|±diff] {ci}: change la vie de tous les joueurs, et non d'un seul."
+        helpFeed: "{cc}/uh feed <joueur> [faim=20] [saturation=max] {ci}: nourrit un joueur."
+        helpFeedall: "{cc}/uh feedall [faim=20] [saturation=max] {ci}: nourrit tous les joueurs."
+        helpKill: "{cc}/uh kill <joueur> {ci}: marque un joueur comme mort, même s'il est hors-ligne."
         helpResurrect: "{cc}/uh resurrect <joueur> {ci}: fait revivre un joueur."
         helpTpback: "{cc}/uh tpback <joueur> [force] {ci}: téléporte un joueur au lieu de sa mort en toute sécurité."
         
@@ -75,11 +78,11 @@ keys:
         spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: supprime les points de démarrage aux coordonnées spécifiées, ou à la position de l'envoyeur sans coordonnées."
         spawnsHelpReset: "{cc}/uh spawns reset {ci}: supprime tous les points de démarrage enregistrés."
         
-        specHelpTitle: "{aqua}------ Commandes liées aux spectateurs ------"
+        specHelpTitle: "{aqua}------ Commandes liées aux spectateurs initiaux ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Attention{ci}: SpectatorPlus n'étant pas installé, un spectateur n'est qu'un joueur ignoré."
-        specHelpAdd: "{cc}/uh spec add <joueur>{ci}: ajoute un spectateur."
-        specHelpRemove: "{cc}/uh spec remove <joueur>{ci}: supprime un spectateur."
-        specHelpList: "{cc}/uh spec list{ci}: liste les spectateurs."
+        specHelpAdd: "{cc}/uh spec add <joueur>{ci}: ajoute un spectateur initial."
+        specHelpRemove: "{cc}/uh spec remove <joueur>{ci}: supprime un spectateur initial."
+        specHelpList: "{cc}/uh spec list{ci}: liste les spectateurs initiaux."
         
         specHelpTitle: "{aqua}------ Commandes liées à l'immobilisation ------"
         freezeHelpOn: "{cc}/uh freeze on [joueur]{ci}: immobilise un joueur, ou l'exécuteur sans joueur spécifié."
@@ -318,6 +321,16 @@ keys:
         errorNoKill: "{ce}Vous ne pouvez pas tuer un joueur avec cette commande, pour éviter toute faute de frappe."
         errorHealthNotUpdatedNoKill: "{ce}La vie de {0} n'a pas été changée, pour ne pas le/la tuer."
         allErrorNoKill: "{ce}S'pèce de tueur en série !"
+    
+    feed:
+        usage: "{ce}Utilisation : /uh feed <joueur> [faim = 20] [saturation = max]"
+        offline: "{ce}Ce joueur n'est pas connecté."
+        errorNaN: "{ce}Les valeurs de faim et de saturation doivent être des nombres (possiblement à virgule pour la saturation) !"
+    
+    kill:
+        usage: "{ce}Utilisation : /uh kill <joueur>"
+        neverPlayed: "{ce}Cette personne n'a jamais été vue sur le serveur."
+        killed: "{cs}Le joueur {0} est désormais marqué comme mort."
     
     resurrect:
         usage: "{ce}Utilisation : /uh resurrect <joueur>"

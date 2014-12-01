@@ -19,9 +19,8 @@
 
 package me.azenet.UHPlugin.task;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHUtils;
@@ -34,14 +33,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class FireworksOnWinnersTask extends BukkitRunnable {
 
 	private UHPlugin p = null;
-	private List<OfflinePlayer> winners = null;
+	private Set<OfflinePlayer> winners = null;
 	
 	private Double areaSize;
 	private Random rand;
 	
 	private long startTime = 0L;
 	
-	public FireworksOnWinnersTask(UHPlugin p, ArrayList<OfflinePlayer> listWinners) {
+	public FireworksOnWinnersTask(UHPlugin p, Set<OfflinePlayer> listWinners) {
 		this.p = p;
 		this.winners = listWinners;
 		

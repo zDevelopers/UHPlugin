@@ -20,6 +20,7 @@
 package me.azenet.UHPlugin.listeners;
 
 import java.util.List;
+import java.util.UUID;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHProTipsSender;
@@ -173,8 +174,8 @@ public class UHGameListener implements Listener {
 		if(team != null) {
 			boolean isAliveTeam = false;
 			
-			for(OfflinePlayer player : team.getPlayers()) {
-				if(!p.getGameManager().isPlayerDead(player.getUniqueId())) {
+			for(UUID playerID : team.getPlayersUUID()) {
+				if(!p.getGameManager().isPlayerDead(playerID)) {
 					isAliveTeam = true;
 					break;
 				}
@@ -203,7 +204,7 @@ public class UHGameListener implements Listener {
 		ev.setDeathMessage(ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.deathMessagesFormat", "")) + ev.getDeathMessage());
 		
 		// Updates the number of alive players/teams
-		p.getGameManager().updateAliveCounters();
+		p.getGameManager().updateAliveCache();
 		
 		// Saves the location of the death
 		p.getGameManager().addDeathLocation(ev.getEntity(), ev.getEntity().getLocation());
@@ -212,17 +213,11 @@ public class UHGameListener implements Listener {
 		p.getDynmapIntegration().showDeathLocation(ev.getEntity());
 		
 		// Is the game ended? If so, we need to call an event.
-		if(p.getGameManager().getAliveTeamsCount() == 1) {
-			// There's only one team alive, so the winner team is the first one.
-			p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().get(0)));
-		}
-		
-		// Is the game ended? If so, we need to call an event.
 		if(p.getGameManager().isGameRunning() && p.getGameManager().getAliveTeamsCount() == 1) {
 			p.getGameManager().setGameFinished(true);
 			
 			// There's only one team alive, so the winner team is the first one.
-			p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().get(0)));
+			p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().iterator().next()));
 		}
 		
 		// Notifies the player about the possibility of respawn if hardcore hearts are enabled
@@ -395,6 +390,7 @@ public class UHGameListener implements Listener {
 			ev.setCancelled(true);
 		}
 	}
+	
 	
 	/**
 	 * Used to send the chat to the team-chat if this team-chat is enabled.

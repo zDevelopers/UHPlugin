@@ -19,10 +19,10 @@
 
 package me.azenet.UHPlugin;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 
 import me.azenet.UHPlugin.i18n.I18n;
@@ -35,7 +35,7 @@ public class UHTeamManager {
 	
 	private UHPlugin p = null;
 	private I18n i = null;
-	private ArrayList<UHTeam> teams = new ArrayList<UHTeam>();
+	private HashSet<UHTeam> teams = new HashSet<UHTeam>();
 	
 	private int maxPlayersPerTeam;
 	
@@ -46,7 +46,27 @@ public class UHTeamManager {
 		
 		this.maxPlayersPerTeam = p.getConfig().getInt("teams-options.maxPlayersPerTeam");
 	}
-
+	
+	/**
+	 * Is the given team registered?
+	 * 
+	 * @param team The team.
+	 * @return {@code true} if the team is registered.
+	 */
+	public boolean isTeamRegistered(UHTeam team) {
+		return teams.contains(team);
+	}
+	
+	/**
+	 * Is the given team registered?
+	 * 
+	 * @param name The name of the team.
+	 * @return {@code true} if the team is registered.
+	 */
+	public boolean isTeamRegistered(String name) {
+		return getTeam(name) != null;
+	}
+	
 	
 	/**
 	 * Adds a team.
@@ -59,7 +79,7 @@ public class UHTeamManager {
 	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */
 	public UHTeam addTeam(TeamColor color, String name) {
-		if(this.getTeam(name) != null) {
+		if(isTeamRegistered(name)) {
 			throw new IllegalArgumentException("There is already a team named " + name + " registered!");
 		}
 		
@@ -83,11 +103,11 @@ public class UHTeamManager {
 		color = generateColor(color);
 		String teamName = color.toString().toLowerCase();
 		
-		if(getTeam(teamName) != null) { // Taken!
+		if(isTeamRegistered(teamName)) { // Taken!
 			Random rand = new Random();
 			do {
 				teamName = color.toString().toLowerCase() + rand.nextInt(1000);
-			} while(getTeam(teamName) != null);
+			} while(isTeamRegistered(teamName));
 		}
 		
 		UHTeam team = new UHTeam(teamName, color, p);
@@ -105,7 +125,7 @@ public class UHTeamManager {
 	 * @throws IllegalArgumentException if a team with the same name already exists.
 	 */
 	public UHTeam addTeam(UHTeam team) {
-		if(this.getTeam(team.getName()) != null) {
+		if(isTeamRegistered(team)) {
 			throw new IllegalArgumentException("There is already a team named " + team.getName() + " registered!");
 		}
 		
@@ -212,11 +232,12 @@ public class UHTeamManager {
 	 */
 	public void reset(boolean dontNotify) {
 		// 1: scoreboard reset
-		for(UHTeam team : new ArrayList<UHTeam>(teams)) {
+		for(UHTeam team : new HashSet<UHTeam>(teams)) {
 			this.removeTeam(team, dontNotify);
 		}
+		
 		// 2: internal list reset
-		teams = new ArrayList<UHTeam>();
+		teams.clear();
 	}
 	
 	/**
@@ -262,8 +283,8 @@ public class UHTeamManager {
 	 * 
 	 * @return The teams.
 	 */
-	public ArrayList<UHTeam> getTeams() {
-		return this.teams;
+	public Set<UHTeam> getTeams() {
+		return teams;
 	}
 	
 	/**
@@ -287,6 +308,7 @@ public class UHTeamManager {
 				return t;
 			}
 		}
+		
 		return null;
 	}
 	
@@ -300,6 +322,7 @@ public class UHTeamManager {
 		for(UHTeam t : teams) {
 			if (t.containsPlayer(player.getUniqueId())) return t;
 		}
+		
 		return null;
 	}
 	
@@ -415,10 +438,10 @@ public class UHTeamManager {
 				// Team count (something like "[2/5]”)
 				text += "{";
 				if(maxPlayersPerTeam != 0) {
-					text += "\"text\": \"" + i.t("team.gui.playersCount", String.valueOf(team.getPlayers().size()), String.valueOf(maxPlayersPerTeam)) + "\", ";
+					text += "\"text\": \"" + i.t("team.gui.playersCount", String.valueOf(team.getSize()), String.valueOf(maxPlayersPerTeam)) + "\", ";
 				}
 				else {
-					text += "\"text\": \"" + i.t("team.gui.playersCountUnlimited", String.valueOf(team.getPlayers().size())) + "\", ";
+					text += "\"text\": \"" + i.t("team.gui.playersCountUnlimited", String.valueOf(team.getSize())) + "\", ";
 				}
 				
 				String players = "";

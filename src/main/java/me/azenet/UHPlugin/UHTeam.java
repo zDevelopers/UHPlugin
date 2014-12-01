@@ -19,8 +19,9 @@
 
 package me.azenet.UHPlugin;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import me.azenet.UHPlugin.i18n.I18n;
@@ -30,6 +31,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -42,7 +44,7 @@ public class UHTeam {
 	private String displayName = null;
 	private TeamColor color = null;
 	
-	private ArrayList<UUID> players = new ArrayList<UUID>();
+	private HashSet<UUID> players = new HashSet<UUID>();
 	
 	
 	public UHTeam(String name, TeamColor color, UHPlugin plugin) {
@@ -90,7 +92,7 @@ public class UHTeam {
 	 * 
 	 * Can include spaces.
 	 * 
-	 * @return
+	 * @return The name.
 	 */
 	public String getName() {
 		return name;
@@ -105,7 +107,7 @@ public class UHTeam {
 	 *     - before, the color of the team;
 	 *     - after, the "reset" formatting mark (§r).
 	 * 
-	 * @return
+	 * @return The display name.
 	 */
 	public String getDisplayName() {
 		return displayName;
@@ -114,10 +116,10 @@ public class UHTeam {
 	/**
 	 * Returns the players inside this team.
 	 * 
-	 * @return
+	 * @return The players.
 	 */
-	public ArrayList<OfflinePlayer> getPlayers() {
-		ArrayList<OfflinePlayer> playersList = new ArrayList<OfflinePlayer>();
+	public Set<OfflinePlayer> getPlayers() {
+		HashSet<OfflinePlayer> playersList = new HashSet<OfflinePlayer>();
 		
 		for(UUID id : players) {
 			Player player = plugin.getServer().getPlayer(id);
@@ -135,10 +137,10 @@ public class UHTeam {
 	/**
 	 * Returns the online players inside this team.
 	 * 
-	 * @return
+	 * @return The online players.
 	 */
-	public ArrayList<Player> getOnlinePlayers() {
-		ArrayList<Player> playersList = new ArrayList<Player>();
+	public Set<Player> getOnlinePlayers() {
+		HashSet<Player> playersList = new HashSet<Player>();
 		
 		for(UUID id : players) {
 			Player player = plugin.getServer().getPlayer(id);
@@ -148,6 +150,43 @@ public class UHTeam {
 		}
 		
 		return playersList;
+	}
+	
+	/**
+	 * Returns the UUIDs of the players inside this team.
+	 * 
+	 * @return The UUIDs of the players.
+	 */
+	@SuppressWarnings("unchecked")
+	public Set<UUID> getPlayersUUID() {
+		return (HashSet<UUID>) players.clone();
+	}
+	
+	/**
+	 * Returns the UUIDs of the online players inside this team.
+	 * 
+	 * @return The UUID of the online players.
+	 */
+	public Set<UUID> getOnlinePlayersUUID() {
+		HashSet<UUID> playersList = new HashSet<UUID>();
+		
+		for(UUID id : players) {
+			Player player = plugin.getServer().getPlayer(id);
+			if(player != null) {
+				playersList.add(id);
+			}
+		}
+		
+		return playersList;
+	}
+	
+	/**
+	 * Returns the size of this team.
+	 * 
+	 * @return The size.
+	 */
+	public int getSize() {
+		return players.size();
 	}
 	
 	/**
@@ -257,12 +296,7 @@ public class UHTeam {
 	public boolean containsPlayer(Player player) {
 		Validate.notNull(player, "The player cannot be null.");
 		
-		for(UUID playerInTeamID : players) {
-			if(playerInTeamID.equals(player.getUniqueId())) {
-				return true;
-			}
-		}
-		return false;
+		return players.contains(player.getUniqueId());
 	}
 	
 	/**
@@ -286,7 +320,10 @@ public class UHTeam {
 		Validate.notNull(lo, "The location cannot be null.");
 		
 		for (UUID id : players) {
-			plugin.getServer().getPlayer(id).teleport(lo);
+			Player player = plugin.getServer().getPlayer(id);
+			if(player != null && player.isOnline()) {
+				player.teleport(lo, TeleportCause.PLUGIN);
+			}
 		}
 	}
 
@@ -300,16 +337,26 @@ public class UHTeam {
 	}
 	
 	
+	
 	@Override
-	public boolean equals(Object otherTeam) {
-		if(!(otherTeam instanceof UHTeam)) {
+	public int hashCode() {
+		return ((name == null) ? 0 : name.hashCode());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
 			return false;
-		}
-		
-		if(!((UHTeam) otherTeam).getName().equals(this.getName())) {
+		if (!(obj instanceof UHTeam))
 			return false;
-		}
-		
+		UHTeam other = (UHTeam) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		return true;
 	}
 }

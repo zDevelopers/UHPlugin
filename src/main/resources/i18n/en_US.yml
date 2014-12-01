@@ -45,6 +45,9 @@ keys:
         titleBugCmd: "{aqua}------ Bugs-related commands ------"
         helpHeal: "{cc}/uh heal <player> [half-hearts=20|±diff] {ci}: heals a player to the number of half-hearts provided (default 20)."
         helpHealall: "{cc}/uh healall [half-hearts=20|±diff] {ci}: heals all players instead of only one."
+        helpFeed: "{cc}/uh feed <player> [foodPoints=20] [saturation=max] {ci}: feeds a player."
+        helpFeedall: "{cc}/uh feedall [foodPoints=20] [saturation=max] {ci}: feeds all players."
+        helpKill: "{cc}/uh kill <player> {ci}: mark a player as dead, even if he is offline."
         helpResurrect: "{cc}/uh resurrect <player> {ci}: resurrects a player."
         helpTpback: "{cc}/uh tpback <player> [force] {ci}: safely teleports back a player to his death location."
         
@@ -75,11 +78,11 @@ keys:
         spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: removes the spawn points at the specified coordinates, or at the current location if the sender without coordinates."
         spawnsHelpReset: "{cc}/uh spawns reset {ci}: removes all registered spawn points."
         
-        specHelpTitle: "{aqua}------ Spectator commands ------"
+        specHelpTitle: "{aqua}------ Startup spectators commands ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Please note{ci}: because SpectatorPlus is not present, a spectator is {italic}only{ci} an ignored player."
-        specHelpAdd: "{cc}/uh spec add <player>{ci}: adds a spectator."
-        specHelpRemove: "{cc}/uh spec remove <player>{ci}: removes a spectator."
-        specHelpList: "{cc}/uh spec list{ci}: lists the spectators."
+        specHelpAdd: "{cc}/uh spec add <player>{ci}: adds a startup spectator."
+        specHelpRemove: "{cc}/uh spec remove <player>{ci}: removes a startup spectator."
+        specHelpList: "{cc}/uh spec list{ci}: lists the startup spectators."
         
         freezeHelpTitle: "{aqua}------ Freeze commands ------"
         freezeHelpOn: "{cc}/uh freeze on [player]{ci}: freezes a player, or the sender without a specified player."
@@ -318,6 +321,16 @@ keys:
         errorNoKill: "{ce}You can't kill a player with this command, to avoid typo fails."
         errorHealthNotUpdatedNoKill: "{ce}The health of {0} was not updated to avoid a kill."
         allErrorNoKill: "{ce}Serial killer!"
+    
+    feed:
+        usage: "{ce}Usage: /uh feed <player> [foodPoints = 20] [saturation = max]"
+        offline: "{ce}This player is offline."
+        errorNaN: "{ce}Food points and saturation must be numbers (floats for the saturation)!"
+    
+    kill:
+        usage: "{ce}Usage : /uh kill <player>"
+        neverPlayed: "{ce}This player was never seen on this server."
+        killed: "{cs}The player {0} is now marked as dead."
     
     resurrect:
         usage: "{ce}Usage: /uh resurrect <player>"
