@@ -1,7 +1,7 @@
 /**
- *  Plugin UltraHardcore (UHPlugin)
+ *  Plugin UltraHardcore Reloaded (UHPlugin)
  *  Copyright (C) 2013 azenet
- *  Copyright (C) 2014 Amaury Carrade
+ *  Copyright (C) 2014-2015 Amaury Carrade
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
