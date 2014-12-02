@@ -226,9 +226,9 @@ public class UHGameManager {
 					else          color = null;
 					
 					UHTeam team = new UHTeam(teamName, color, this.p);
-					team.addPlayer(player, true);
-					
 					tm.addTeam(team);
+					
+					team.addPlayer(player, true);
 				}
 			}
 		}
@@ -257,9 +257,9 @@ public class UHGameManager {
 					else          color = null;
 					
 					UHTeam team = new UHTeam(teamName, color, this.p);
-					team.addPlayer(player, true);
-					
 					tm.addTeam(team);
+					
+					team.addPlayer(player, true);
 					
 					onTheFlyTeams.add(teamName);
 				}
