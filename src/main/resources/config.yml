@@ -246,6 +246,23 @@ spectatorModeWhenNewPlayerJoinAfterStart: true
 
 
 
+# Execute commands during the game or after the end of it, and after a configurable delay?
+# Format explained below.
+# Respect the spaces before the keywords ("exec" and "delay" need to be aligned).
+commands:
+    # Commands executed after the beginning of the game.
+    # (The moment when /uh start or /uh start slow go is executed.)
+    execute-start:
+       #- exec: command args
+       #  delay: "40:00" (format: "mm", "mm:ss" or "hh:mm:ss". If invalid or not present, 0 seconds.)
+       - 
+    
+    # Commands executed after the end of the game.
+    # (After the last kill, when only one team is left.)
+    execute-finish:
+       - 
+
+
 protips:
     sound:
         name: NOTE_PLING

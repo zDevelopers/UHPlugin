@@ -477,7 +477,9 @@ public class UHGameListener implements Listener {
 	
 	
 	/**
-	 * Used to broadcast the beginning of a game, with sound & message.
+	 * Used to:
+	 *  - broadcast the beginning of a game, with sound & message;
+	 *  - schedule the commands executed after the beginning of the game.
 	 * 
 	 * @param ev
 	 */
@@ -488,10 +490,15 @@ public class UHGameListener implements Listener {
 		
 		// Broadcast
 		Bukkit.getServer().broadcastMessage(i.t("start.go"));
+		
+		// Commands
+		p.getRuntimeCommandsExecutor().registerStartCommandsInScheduler();
 	}
 	
 	/**
-	 * Used to broadcast the winner(s) and launch some fireworks if needed, a few seconds later.
+	 * Used to:
+	 *  - broadcast the winner(s) and launch some fireworks if needed, a few seconds later;
+	 *  - schedule the commands executed after the end of the game.
 	 * 
 	 * @param ev
 	 */
@@ -510,6 +517,9 @@ public class UHGameListener implements Listener {
 				}
 			}, p.getConfig().getInt("finish.auto.timeAfterLastDeath", 3) * 20L);
 		}
+		
+		// Commands
+		p.getRuntimeCommandsExecutor().registerEndCommandsInScheduler();
 	}
 	
 	

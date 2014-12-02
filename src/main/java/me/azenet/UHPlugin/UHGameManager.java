@@ -460,7 +460,7 @@ public class UHGameManager {
 	}
 	
 	/**
-	 * Broadcasts the start message and change the state of the game.
+	 * Changes the state of the game.
 	 * Also, forces the global freeze start to false, to avoid toggle bugs (like inverted state).
 	 */
 	private void finalizeStart() {

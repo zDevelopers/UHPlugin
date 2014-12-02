@@ -46,6 +46,8 @@ public final class UHPlugin extends JavaPlugin {
 	private UHTeamChatManager teamChatManager = null;
 	private UHTimerManager timerManager = null;
 	
+	private UHRuntimeCommandsExecutor runtimeCommandsExecutor = null;
+	
 	private UHFreezer freezer = null;
 	
 	private UHProTipsSender protipsSender = null;
@@ -75,6 +77,8 @@ public final class UHPlugin extends JavaPlugin {
 		recipeManager = new UHRecipeManager(this);
 		teamChatManager = new UHTeamChatManager(this);
 		timerManager = new UHTimerManager();
+		
+		runtimeCommandsExecutor = new UHRuntimeCommandsExecutor(this);
 		
 		freezer = new UHFreezer(this);
 		
@@ -207,6 +211,15 @@ public final class UHPlugin extends JavaPlugin {
 	 */
 	public UHTimerManager getTimerManager() {
 		return timerManager;
+	}
+	
+	/**
+	 * Returns the manager used to manage the commands executed after the start/the end of the
+	 * game (or any other moment using the generic API).
+	 * @return
+	 */
+	public UHRuntimeCommandsExecutor getRuntimeCommandsExecutor() {
+		return runtimeCommandsExecutor;
 	}
 	
 	/**
