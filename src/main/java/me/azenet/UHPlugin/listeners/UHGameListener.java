@@ -317,17 +317,26 @@ public class UHGameListener implements Listener {
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onPlayerJoin(final PlayerJoinEvent ev) {
 		if (!this.p.getGameManager().isGameStarted()) {
-			p.getGameManager().initPlayer(ev.getPlayer());
-			
-			if(p.getConfig().getBoolean("teams-options.gui.autoDisplay") && p.getTeamManager().getTeams().size() != 0) {
-				p.getServer().getScheduler().runTaskLater(p, new Runnable() {
-					@Override
-					public void run() {
-						if(p.getTeamManager().getTeamForPlayer(ev.getPlayer()) == null) {
-							p.getTeamManager().displayTeamChooserChatGUI(ev.getPlayer());
+			if(!p.getGameManager().isSlowStartInProgress()) {
+				// Initialization of the player (teleportation, life, health objective score...).
+				p.getGameManager().initPlayer(ev.getPlayer());
+				
+				// Teams selector.
+				if(p.getConfig().getBoolean("teams-options.gui.autoDisplay") && p.getTeamManager().getTeams().size() != 0) {
+					p.getServer().getScheduler().runTaskLater(p, new Runnable() {
+						@Override
+						public void run() {
+							if(p.getTeamManager().getTeamForPlayer(ev.getPlayer()) == null) {
+								p.getTeamManager().displayTeamChooserChatGUI(ev.getPlayer());
+							}
 						}
-					}
-				}, 20l * p.getConfig().getInt("teams-options.gui.delay"));
+					}, 20l * p.getConfig().getInt("teams-options.gui.delay"));
+				}
+			}
+			else {
+				// Without that the player will be kicked for flying.
+				ev.getPlayer().setAllowFlight(true);
+				ev.getPlayer().setFlying(true);
 			}
 		}
 		

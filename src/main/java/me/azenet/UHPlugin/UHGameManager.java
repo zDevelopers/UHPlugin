@@ -495,6 +495,15 @@ public class UHGameManager {
 	}
 	
 	/**
+	 * Returns true if the slow start is in progress.
+	 * 
+	 * @return
+	 */
+	public boolean isSlowStartInProgress() {
+		return slowStartInProgress;
+	}
+	
+	/**
 	 * Updates the cached values of the alive players and teams.
 	 */
 	public void updateAliveCache() {
