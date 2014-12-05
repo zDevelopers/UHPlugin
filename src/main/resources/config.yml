@@ -67,6 +67,17 @@ scoreboard:
 
 
 
+# Update the MOTD according to the current state of the game?
+# This will overwrite the original MOTD.
+motd:
+    enabled: false
+    
+    # Display the name of the match ("scoreboard.title") in the first line of the MOTD?
+    displayMatchName: true
+    # This will be displayed before the match name (formatting...)
+    matchNamePrefix: ""
+
+
 # Teleport the players to the spawn point on login if the game is not started?
 # Avoids the random spawn point of Minecraft, and teleports them back to
 # there if they log out then in.

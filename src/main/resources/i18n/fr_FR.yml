@@ -176,6 +176,14 @@ keys:
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
     
+    motd:
+        beforeStart: "En attente de joueurs..."
+        starting: "Démarrage en cours..."
+        runningSolo: "Partie en cours ! {0} joueurs encore en vie."
+        runningTeams: "Partie en cours ! {0} joueurs en vie répartis dans {1} équipes."
+        finishedSolo: "Partie terminée ; félicitation à {0} pour sa victoire !"
+        finishedTeams: "Partie terminée ; l'équipe {0} remporte la victoire !"
+    
     death:
         kickMessage: "jayjay"
         banMessage: "Vous êtes mort !"

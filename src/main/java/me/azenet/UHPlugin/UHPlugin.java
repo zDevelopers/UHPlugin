@@ -41,6 +41,7 @@ public final class UHPlugin extends JavaPlugin {
 	private UHSpawnsManager spawnsManager = null;
 	private UHGameManager gameManager = null;
 	private UHScoreboardManager scoreboardManager = null;
+	private UHMOTDManager motdManager = null;
 	private UHBorderManager borderManager = null;
 	private UHRecipeManager recipeManager = null;
 	private UHTeamChatManager teamChatManager = null;
@@ -85,6 +86,7 @@ public final class UHPlugin extends JavaPlugin {
 		protipsSender = new UHProTipsSender(this);
 		
 		scoreboardManager = new UHScoreboardManager(this);
+		motdManager = new UHMOTDManager(this);
 		
 		wbintegration = new UHWorldBorderIntegration(this);
 		spintegration = new UHSpectatorPlusIntegration(this);
@@ -115,6 +117,8 @@ public final class UHPlugin extends JavaPlugin {
 		
 		recipeManager.registerRecipes();
 		gameManager.initEnvironment();
+		
+		motdManager.updateMOTDBeforeStart();
 		
 		// In case of reload
 		for(Player player : getServer().getOnlinePlayers()) {
@@ -160,6 +164,15 @@ public final class UHPlugin extends JavaPlugin {
 	 */
 	public UHScoreboardManager getScoreboardManager() {
 		return scoreboardManager;
+	}
+	
+	/**
+	 * Returns the MOTD manager.
+	 * 
+	 * @return
+	 */
+	public UHMOTDManager getMOTDManager() {
+		return motdManager;
 	}
 	
 	/**

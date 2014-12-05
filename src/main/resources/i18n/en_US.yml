@@ -176,6 +176,14 @@ keys:
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
     
+    motd:
+        beforeStart: "Waiting for players..."
+        starting: "Starting in progress..."
+        runningSolo: "Game running! {0} players alive."
+        runningTeams: "Game running! {0} players alive in {1} teams."
+        finishedSolo: "Game finished; congratulation to {0} for his victory!"
+        finishedTeams: "Game finished; the team {0} win this match!"
+    
     death:
         kickMessage: "jayjay"
         banMessage: "You are dead!"

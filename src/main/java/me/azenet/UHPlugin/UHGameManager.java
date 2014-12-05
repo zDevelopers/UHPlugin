@@ -166,17 +166,19 @@ public class UHGameManager {
 	 *  
 	 * @param sender The player who launched the game.
 	 * @param slow If true, the slow mode is enabled.
-	 * With the slow mode, the players are, at first, teleported team by team with a 3-seconds delay,
+	 * With the slow mode, the players are, at first, teleported team by team with a configurable delay,
 	 * and with the fly.
 	 * Then, the fly is removed and the game starts.
 	 * 
-	 * @throws IllegalStateException if the game is already started.
+	 * @throws IllegalStateException if the game is running.
 	 */
 	public void start(CommandSender sender, Boolean slow) throws IllegalStateException {
 		
 		if(isGameRunning()) {
 			throw new IllegalStateException("The game is currently running!");
 		}
+		
+		p.getMOTDManager().updateMOTDDuringStart();
 		
 		/** Initialization of the players and the teams **/
 		
@@ -477,6 +479,9 @@ public class UHGameManager {
 		
 		// Fires the event
 		p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
+		
+		// Updates the MOTD.
+		p.getMOTDManager().updateMOTDDuringGame();
 	}
 	
 	

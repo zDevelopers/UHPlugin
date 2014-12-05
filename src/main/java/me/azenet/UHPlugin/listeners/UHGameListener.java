@@ -59,6 +59,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -89,7 +90,8 @@ public class UHGameListener implements Listener {
 	 *  - save the location of the death of the player, to allow a teleportation later;
 	 *  - show the death location on the dynmap (if needed);
 	 *  - give XP to the killer (if needed);
-	 *  - notify the player about the possibility of respawn if hardcore hearts are enabled.
+	 *  - notify the player about the possibility of respawn if hardcore hearts are enabled;
+	 *  - update the MOTD if needed.
 	 *  
 	 * @param ev
 	 */
@@ -226,6 +228,9 @@ public class UHGameListener implements Listener {
 				}
 			}, 2L);
 		}
+		
+		// Updates the MOTD.
+		p.getMOTDManager().updateMOTDDuringGame();
 	}
 	
 	
@@ -269,6 +274,18 @@ public class UHGameListener implements Listener {
 			((Player) ev.getEntity()).setSaturation(14);
 
 			ev.setCancelled(true);
+		}
+	}
+	
+	
+	/**
+	 * Used to display our custom state-based MOTD (if needed).
+	 * @param ev
+	 */
+	@EventHandler
+	public void onServerListPing(ServerListPingEvent ev) {
+		if(p.getMOTDManager().isEnabled()) {
+			ev.setMotd(p.getMOTDManager().getCurrentMOTD());
 		}
 	}
 	
@@ -517,6 +534,9 @@ public class UHGameListener implements Listener {
 		
 		// Commands
 		p.getRuntimeCommandsExecutor().registerEndCommandsInScheduler();
+		
+		// Updates the MOTD.
+		p.getMOTDManager().updateMOTDAfterGame(ev.getWinnerTeam());
 	}
 	
 	
@@ -524,8 +544,9 @@ public class UHGameListener implements Listener {
 	 * Used to:
 	 *  - disable the spectator mode;
 	 *  - hide the death point from the dynmap;
-	 *  - broadcast this resurrection to all players.
-	 *  
+	 *  - broadcast this resurrection to all players;
+	 *  - update the MOTD.
+	 * 
 	 * @param ev
 	 */
 	@EventHandler
@@ -540,5 +561,8 @@ public class UHGameListener implements Listener {
 		
 		// All players are notified
 		this.p.getServer().broadcastMessage(i.t("resurrect.broadcastMessage", ev.getPlayer().getName()));
+
+		// Updates the MOTD.
+		p.getMOTDManager().updateMOTDDuringGame();
 	}
 }
