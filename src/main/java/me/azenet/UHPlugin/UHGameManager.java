@@ -586,15 +586,15 @@ public class UHGameManager {
 	 */
 	public boolean resurrectPlayerOnlineTask(Player player) {
 		
-		if(this.alivePlayers.contains(player.getUniqueId())) {
+		if(alivePlayers.contains(player.getUniqueId())) {
 			return false;
 		}
 		
 		// Player registered as alive
-		this.alivePlayers.add(player.getUniqueId());
-		this.updateAliveCache();
+		alivePlayers.add(player.getUniqueId());
+		updateAliveCache();
 		
-		// This method can be used to add a player after the game has started.
+		// This method can be used to add a player after the game start.
 		if(!players.contains(player.getName())) {
 			players.add(player.getName());
 		}
@@ -788,6 +788,7 @@ public class UHGameManager {
 	 */
 	public void addDead(Player player) {
 		alivePlayers.remove(player.getUniqueId());
+		updateAliveCache();
 	}
 	
 	/**
@@ -797,6 +798,7 @@ public class UHGameManager {
 	 */
 	public void addDead(UUID player) {
 		alivePlayers.remove(player);
+		updateAliveCache();
 	}
 
 	
