@@ -677,10 +677,14 @@ public class UHPluginCommand implements CommandExecutor {
 				// Default values
 				Integer size = p.getBorderManager().getCurrentBorderDiameter() - 25; // Avoid spawn points being too close to the border
 				Integer distanceMinBetweenTwoPoints = 250;
-				Integer spawnsCount = p.getTeamManager().getTeams().size();
 				World world = p.getServer().getWorlds().get(0);
 				Double xCenter = world.getSpawnLocation().getX();
 				Double zCenter = world.getSpawnLocation().getZ();
+				
+				Integer spawnsCount = 0;
+				for(UHTeam team : p.getTeamManager().getTeams()) {
+					if(!team.isEmpty()) spawnsCount++;
+				}
 				
 				if(args.length < 9) {
 					if(sender instanceof Player) {
@@ -688,9 +692,6 @@ public class UHPluginCommand implements CommandExecutor {
 					}
 					else if(sender instanceof BlockCommandSender) {
 						world = ((BlockCommandSender) sender).getBlock().getWorld();
-					}
-					else {
-						world = p.getServer().getWorlds().get(0);
 					}
 					
 					xCenter = world.getSpawnLocation().getX();
@@ -706,7 +707,7 @@ public class UHPluginCommand implements CommandExecutor {
 						spawnsCount = p.getServer().getOnlinePlayers().length - p.getGameManager().getStartupSpectators().size();
 					}
 					else {
-						// Trying to found players without team
+						// Trying to find players without team
 						int playersWithoutTeam = 0;
 						for(Player player : p.getServer().getOnlinePlayers()) {
 							if(p.getTeamManager().getTeamForPlayer(player) == null) {

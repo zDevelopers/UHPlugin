@@ -266,8 +266,9 @@ public class UHGameManager {
 			}
 		}
 		
-		
-		this.aliveTeamsCount = tm.getTeams().size();
+		for(UHTeam team : tm.getTeams()) {
+			if(!team.isEmpty()) aliveTeamsCount++;
+		}
 		
 		if(p.getSpawnsManager().getSpawnPoints().size() < aliveTeamsCount) {
 			sender.sendMessage(i.t("start.notEnoughTP"));
@@ -294,6 +295,8 @@ public class UHGameManager {
 		if(slow == false) {
 			List<Location> unusedTP = p.getSpawnsManager().getSpawnPoints();
 			for (final UHTeam t : tm.getTeams()) {
+				if(t.isEmpty()) continue;
+				
 				final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
 				
 				BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo);
@@ -332,7 +335,9 @@ public class UHGameManager {
 			Integer delayBetweenTP = p.getConfig().getInt("start.slow.delayBetweenTP");
 			
 			for (UHTeam t : tm.getTeams()) {
-				Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
+				if(t.isEmpty()) continue;
+				
+				Location lo = unusedTP.get(random.nextInt(unusedTP.size()));
 				
 				BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo, true, sender, teamsTeleported);
 				teamStartTask.runTaskLater(p, 20L * teamsTeleported * delayBetweenTP);

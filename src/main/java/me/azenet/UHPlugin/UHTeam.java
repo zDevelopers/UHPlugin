@@ -190,6 +190,15 @@ public class UHTeam {
 	}
 	
 	/**
+	 * Returns true if the team is empty.
+	 * 
+	 * @return The emptiness.
+	 */
+	public boolean isEmpty() {
+		return getSize() == 0;
+	}
+	
+	/**
 	 * Adds a player inside this team.
 	 * 
 	 * @param player The player to add.
