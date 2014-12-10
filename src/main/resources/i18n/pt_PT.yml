@@ -43,8 +43,8 @@ keys:
         helpBorder: "{cc}/uh border {ci}: edita os limites. Faz /uh border para detalhes."
         
         titleBugCmd: "{aqua}------ Comandos para Bugs ------"
-        helpHeal: "{cc}/uh heal <jogador> [meios-coracoes=20|±diferença] {ci}: regenera vida de um jogador para os meio-coracoes indicados (default 20)."
-        helpHealall: "{cc}/uh healall [meios-coracoes=20|±diferença] {ci}: regenera todos os jogadores."
+        helpHeal: "{cc}/uh heal <jogador> [meios-coracoes=20|±diferenca] {ci}: regenera vida de um jogador para os meio-coracoes indicados (default 20)."
+        helpHealall: "{cc}/uh healall [meios-coracoes=20|±diferenca] {ci}: regenera todos os jogadores."
         helpResurrect: "{cc}/uh resurrect <jogador> {ci}: ressuscita o jogador."
         helpTpback: "{cc}/uh tpback <jogador> [force] {ci}: teleporta em seguranca um jogador para o local da sua morte. Quando especificado - force - teleporta mesmo que nao seja seguro."
         
@@ -93,8 +93,8 @@ keys:
         borderHelpCheck: "{cc}/uh border check <tamanho>{ci}: faz uma lista dos jogadores fora dos limites dados."
         
         tpHelpTitle: "{aqua}------ Comandos para Teleporte ------"
-        tpHelpTeam: "{cc}/uh tp team <x> <y> <z> | <jogador de destino> <equipa ...> {ci}: teleportar uma equipa para um local ou jogador."
-        tpHelpSpectators: "{cc}/uh tp spectators <x> <y> <z> | <jogador de destino> {ci}: teleporta os espectadores (tal como os jogadores mortos) para um local ou jogador."
+        tpHelpTeam: "{cc}/uh tp team <x> <y> <z> | <jogador> <equipa ...> {ci}: teleportar uma equipa para um local ou jogador."
+        tpHelpSpectators: "{cc}/uh tp spectators <x> <y> <z> | <jogador> {ci}: teleporta os espectadores (tal como os jogadores mortos) para um local ou jogador."
         
         timersHelpTitle: "{aqua}------ Comandos para os Temporizadores ------"
         timersHelpAdd: "{cc}/uh timers add <duracao> <titulo ...> {ci}: adiciona um temporizador."
@@ -124,7 +124,7 @@ keys:
         already: "{ce}O Jogo ja comecou! Faz Reload ou Reinicia o server para reiniciar o Jogo."
         syntax: "{ce}Syntax Error. Usa: /uh start [slow] ou /uh start slow go."
         
-        notEnoughTP: "{ce}Impossivel Comecar o Jogo: insuficientes pontos de Spawn."
+        notEnoughTP: "{ce}Impossivel Comecar o Jogo: pontos de Spawn insuficientes."
         
         teleportationInProgress: "{lightpurple}Teleporte em Progresso... Espera um Pouco."
         startSlowBeforeStartSlowGo: "{ce}Faz {cc}/uh start slow{ce} antes desse Comando."
@@ -173,7 +173,7 @@ keys:
             nameGoldenAppleFromHeadNotch: "{lightpurple}Maca Dourada"
     
     compass:
-        noRottenFlesh: "{gray}{italic}Precisas de Carne Podre para utilizares a Bussula."
+        noRottenFlesh: "{gray}{italic}Precisas de Carne Podre para utilizares a Bussola."
         nothingFound: "{gray}{italic}Nao foram encontrados jogadores por perto."
         success: "{gray}A Bussola aponta agora para o jogador mais proximo."
     
@@ -243,11 +243,14 @@ keys:
         addplayer:
             disconnected: "{ce}Impossivel adicionar {0} a Equipa {1}. O Jogador tem de estar Online."
             success: "{cs}O Jogador {0} foi adicionado com Sucesso a Equipa {1}"
+            added: "{aqua}Estass agora na {aqua}Equipa {reset}{0}."
             doesNotExists: "{ce}Esta Equipa nao Existe."
+            full: "{ce}A Equipa {0}{ce} esta Completa!"
         
         removeplayer:
             disconnected: "{ce}O Jogador {0} esta OFFLINE!"
             success: "{cs}O Jogador {0} foi removido com Sucesso da sua Equipa."
+            removed: "{darkaqua}Tu ja nao fazes parte da Equipa {0}{darkaqua}."
         
         list:
             nothing: "{ce}Nao existe nenhuma Equipa para ser Mostrada."
@@ -291,6 +294,7 @@ keys:
         offline: "{ce}Este Jogador esta OFFLINE."
         errorNaN: "{ce}Hey, isso nao e um numero de meios-coracoes. Isso e Texto. Pfff."
         errorNoKill: "{ce}Nao podes MATAR Jogadores com este comando, para evitar falhas na escrita."
+        errorHealthNotUpdatedNoKill: "{ce}A Vida de {0} nao foi atualizada para evitar a sua Morte."
         allErrorNoKill: "{ce}Assassino em Serie!"
     
     resurrect:
@@ -398,14 +402,25 @@ keys:
         
         list:
             count: "{ci}Estao registados {0} temporizadores."
-            itemRunning: "{green} â€¢ {ci}{0}{ci} - total {1} segundos - {2}"
-            itemPaused: "{yellow} â€¢ {{ci}{0}{ci} - total {1} segundos - {2}"
-            itemStopped: "{red} â€¢ {ci}{0}{ci} - total {1} segundos"
+            itemRunning: "{green} • {ci}{0}{ci} - total {1} segundos - {2}"
+            itemPaused: "{yellow} • {ci}{0}{ci} - total {1} segundos - {2}"
+            itemStopped: "{red} • {ci}{0}{ci} - total {1} segundos"
 
     protips:
         base: "{darkpurple}Dica!"
         
         teamchat:
             lock: "{gray}Podes usar {cc}/togglechat{gray} para mudar e bloquear o chat entre o chat de Equipa e o chat Global."
-            useTCommand: "{gray}Podes enviar uma mensagem rapida para a tua equipa com {cc}/t <mensagem>{gray}."
-            useGCommand: "{gray}Pode enviar mensagens rapidas para todos {cc}/g <mensagem>{gray}."
+            useTCommand: "{gray}Para enviares mensagens rapidas para a tua equipa usa {cc}/t <mensagem>{gray}."
+            useGCommand: "{gray}Para enviares mensagens rapidas para todos usa {cc}/g <mensagem>{gray}."
+        
+        crafts:
+            goldenHead: "{gray}Podes fazer Macas Douradas com cabecas (a mesma maneira mas com uma cabeca em vez de uma maca)."
+            compassEasy: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora."
+            compassMedium: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora; no centro, uma enderpearl."
+            compassHard: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora; no centro, um olho do fim."
+            glisteringMelon: "{gray}A melancia reluzente e feita com uma melancia e um bloco de ouro."
+            noEnchGoldenApple: "{gray}As Macas Douradas Encantadas estao desativadas para este jogo."
+        
+        start:
+            invincibility: "{gray}Caiste numa Arvore? Salta, ainda tens 25 segundos de invencibilidade."

@@ -166,17 +166,19 @@ public class UHGameManager {
 	 *  
 	 * @param sender The player who launched the game.
 	 * @param slow If true, the slow mode is enabled.
-	 * With the slow mode, the players are, at first, teleported team by team with a 3-seconds delay,
+	 * With the slow mode, the players are, at first, teleported team by team with a configurable delay,
 	 * and with the fly.
 	 * Then, the fly is removed and the game starts.
 	 * 
-	 * @throws IllegalStateException if the game is already started.
+	 * @throws IllegalStateException if the game is running.
 	 */
 	public void start(CommandSender sender, Boolean slow) throws IllegalStateException {
 		
 		if(isGameRunning()) {
 			throw new IllegalStateException("The game is currently running!");
 		}
+		
+		p.getMOTDManager().updateMOTDDuringStart();
 		
 		/** Initialization of the players and the teams **/
 		
@@ -266,8 +268,9 @@ public class UHGameManager {
 			}
 		}
 		
-		
-		this.aliveTeamsCount = tm.getTeams().size();
+		for(UHTeam team : tm.getTeams()) {
+			if(!team.isEmpty()) aliveTeamsCount++;
+		}
 		
 		if(p.getSpawnsManager().getSpawnPoints().size() < aliveTeamsCount) {
 			sender.sendMessage(i.t("start.notEnoughTP"));
@@ -294,6 +297,8 @@ public class UHGameManager {
 		if(slow == false) {
 			List<Location> unusedTP = p.getSpawnsManager().getSpawnPoints();
 			for (final UHTeam t : tm.getTeams()) {
+				if(t.isEmpty()) continue;
+				
 				final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
 				
 				BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo);
@@ -332,7 +337,9 @@ public class UHGameManager {
 			Integer delayBetweenTP = p.getConfig().getInt("start.slow.delayBetweenTP");
 			
 			for (UHTeam t : tm.getTeams()) {
-				Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
+				if(t.isEmpty()) continue;
+				
+				Location lo = unusedTP.get(random.nextInt(unusedTP.size()));
 				
 				BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo, true, sender, teamsTeleported);
 				teamStartTask.runTaskLater(p, 20L * teamsTeleported * delayBetweenTP);
@@ -472,6 +479,9 @@ public class UHGameManager {
 		
 		// Fires the event
 		p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
+		
+		// Updates the MOTD.
+		p.getMOTDManager().updateMOTDDuringGame();
 	}
 	
 	
@@ -482,6 +492,15 @@ public class UHGameManager {
 	 */
 	public void setSlowStartTPFinished(Boolean finished) {
 		this.slowStartTPFinished = finished;
+	}
+	
+	/**
+	 * Returns true if the slow start is in progress.
+	 * 
+	 * @return
+	 */
+	public boolean isSlowStartInProgress() {
+		return slowStartInProgress;
 	}
 	
 	/**
@@ -586,15 +605,15 @@ public class UHGameManager {
 	 */
 	public boolean resurrectPlayerOnlineTask(Player player) {
 		
-		if(this.alivePlayers.contains(player.getUniqueId())) {
+		if(alivePlayers.contains(player.getUniqueId())) {
 			return false;
 		}
 		
 		// Player registered as alive
-		this.alivePlayers.add(player.getUniqueId());
-		this.updateAliveCache();
+		alivePlayers.add(player.getUniqueId());
+		updateAliveCache();
 		
-		// This method can be used to add a player after the game has started.
+		// This method can be used to add a player after the game start.
 		if(!players.contains(player.getName())) {
 			players.add(player.getName());
 		}
@@ -788,6 +807,7 @@ public class UHGameManager {
 	 */
 	public void addDead(Player player) {
 		alivePlayers.remove(player.getUniqueId());
+		updateAliveCache();
 	}
 	
 	/**
@@ -797,6 +817,7 @@ public class UHGameManager {
 	 */
 	public void addDead(UUID player) {
 		alivePlayers.remove(player);
+		updateAliveCache();
 	}
 
 	

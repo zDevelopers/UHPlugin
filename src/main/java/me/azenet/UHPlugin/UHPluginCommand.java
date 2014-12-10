@@ -667,8 +667,24 @@ public class UHPluginCommand implements CommandExecutor {
 			else if(subcommand.equalsIgnoreCase("generate")) { // /uh spawns generate
 				// Usage: /uh spawns generate <circular|squared|random> [size = current size of the map] [distanceMin = 250] [count = number of teams registered] [xCenter = xSpawn] [zCenter = zSpawn] [world = sender's world]
 				
-				if(args.length < 3) { // No enough arguments.
-					sender.sendMessage(i.t("spawns.syntaxError"));
+				if(args.length < 3) { // Documentation
+					displaySeparator(sender);
+					sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+					sender.sendMessage(i.t("cmd.legendHelp"));
+					
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsCmd"));
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsShapesTitle"));
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsShapesRandom"));
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsShapesGrid"));
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsShapesCircular"));
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsArgsTitle"));
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsArgsSize"));
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsArgsDistanceMin"));
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsArgsCount"));
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsArgsCenter"));
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsArgsWorld"));
+					
+					displaySeparator(sender);
 					return;
 				}
 				
@@ -677,10 +693,14 @@ public class UHPluginCommand implements CommandExecutor {
 				// Default values
 				Integer size = p.getBorderManager().getCurrentBorderDiameter() - 25; // Avoid spawn points being too close to the border
 				Integer distanceMinBetweenTwoPoints = 250;
-				Integer spawnsCount = p.getTeamManager().getTeams().size();
 				World world = p.getServer().getWorlds().get(0);
 				Double xCenter = world.getSpawnLocation().getX();
 				Double zCenter = world.getSpawnLocation().getZ();
+				
+				Integer spawnsCount = 0;
+				for(UHTeam team : p.getTeamManager().getTeams()) {
+					if(!team.isEmpty()) spawnsCount++;
+				}
 				
 				if(args.length < 9) {
 					if(sender instanceof Player) {
@@ -688,9 +708,6 @@ public class UHPluginCommand implements CommandExecutor {
 					}
 					else if(sender instanceof BlockCommandSender) {
 						world = ((BlockCommandSender) sender).getBlock().getWorld();
-					}
-					else {
-						world = p.getServer().getWorlds().get(0);
 					}
 					
 					xCenter = world.getSpawnLocation().getX();
@@ -706,7 +723,7 @@ public class UHPluginCommand implements CommandExecutor {
 						spawnsCount = p.getServer().getOnlinePlayers().length - p.getGameManager().getStartupSpectators().size();
 					}
 					else {
-						// Trying to found players without team
+						// Trying to find players without team
 						int playersWithoutTeam = 0;
 						for(Player player : p.getServer().getOnlinePlayers()) {
 							if(p.getTeamManager().getTeamForPlayer(player) == null) {
@@ -1299,7 +1316,6 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		else {
 			p.getGameManager().addDead(player.getUniqueId());
-			p.getGameManager().updateAliveCache();
 		}
 		
 		sender.sendMessage(i.t("kill.killed", player.getName()));

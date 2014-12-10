@@ -21,6 +21,7 @@ package me.azenet.UHPlugin;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class UHTimerManager {
@@ -28,8 +29,18 @@ public class UHTimerManager {
 	private Map<String,UHTimer> timers = new HashMap<String,UHTimer>();
 	private UHTimer mainTimer = null;
 	
-	// Cached list of the running timers
+	/**
+	 * Cached list of the running timers
+	 */
 	private Map<String,UHTimer> runningTimers = new HashMap<String,UHTimer>();
+	
+	/**
+	 * List of the timers to resume if running timers are paused.
+	 * 
+	 * @see {@link #pauseAllRunning(boolean)}.
+	 */
+	private HashSet<UHTimer> timersToResume = new HashSet<UHTimer>();
+	
 	
 	public UHTimerManager() {
 		
@@ -132,13 +143,44 @@ public class UHTimerManager {
 	}
 	
 	/**
-	 * Pauses (or unpauses) all the running timers.
+	 * Pauses (or resumes) all the running timers.
 	 * 
-	 * @param paused If true, all the timers will be paused. Else, restarted.
+	 * @param paused If true, all the timers will be paused. Else, resumed.
 	 */
 	public void pauseAll(boolean paused) {
 		for(UHTimer timer : getRunningTimers()) {
 			timer.setPaused(paused);
+		}
+		
+		if(!paused) {
+			// If we restart all the timers regardless to their previous state,
+			// this data is meaningless.
+			timersToResume.clear();
+		}
+	}
+	
+	/**
+	 * Pauses (or resumes) all the running timers.
+	 * <p>
+	 * This method will only resume the previously-running timers.
+	 * 
+	 * @param paused If true, all the timers will be paused. Else, resumed.
+	 */
+	public void pauseAllRunning(boolean paused) {
+		if(paused) {
+			for(UHTimer timer : getRunningTimers()) {
+				if(!timer.isPaused()) {
+					timer.setPaused(true);
+					timersToResume.add(timer);
+				}
+			}
+		}
+		else {
+			for(UHTimer timer : timersToResume) {
+				timer.setPaused(false);
+			}
+			
+			timersToResume.clear();
 		}
 	}
 }

@@ -266,7 +266,7 @@ public class UHSpawnsManager {
 		// of other ones, we restarts all the generation.
 		int currentErrorCount = 0;
 		
-		// With the "avoid above water" option, if there's a lot of water, the ganaration may
+		// With the "avoid above water" option, if there's a lot of water, the genaration may
 		// fail even if the surface seems to be ok to host the requested spawn points.
 		// So, after 2*{points requested} points above the water, we cancels the generation.
 		int pointsAboveWater = 0;

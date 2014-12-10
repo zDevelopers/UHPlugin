@@ -100,7 +100,7 @@ public class UHFreezer {
 			}
 			
 			// Freezes the timers.
-			p.getTimerManager().pauseAll(true);
+			p.getTimerManager().pauseAllRunning(true);
 		}
 		
 		else {
@@ -122,7 +122,7 @@ public class UHFreezer {
 			}
 			
 			// Unfreezes the timers.
-			p.getTimerManager().pauseAll(false);
+			p.getTimerManager().pauseAllRunning(false);
 			p.getScoreboardManager().restartTimers();
 		}
 		
