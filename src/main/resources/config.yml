@@ -259,7 +259,7 @@ commands:
     
     # Commands executed after the end of the game.
     # (After the last kill, when only one team is left.)
-    execute-finish:
+    execute-end:
        - 
 
 
