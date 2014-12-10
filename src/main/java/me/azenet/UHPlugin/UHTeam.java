@@ -144,7 +144,7 @@ public class UHTeam {
 		
 		for(UUID id : players) {
 			Player player = plugin.getServer().getPlayer(id);
-			if(player != null) {
+			if(player != null && player.isOnline()) {
 				playersList.add(player);
 			}
 		}
