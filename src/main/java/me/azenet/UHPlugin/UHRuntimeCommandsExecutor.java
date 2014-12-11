@@ -48,6 +48,11 @@ public class UHRuntimeCommandsExecutor {
 	
 	
 	/**
+	 * The key for the commands executed when the server starts.
+	 */
+	public final static String AFTER_SERVER_START = "internal.server-start";
+	
+	/**
 	 * The key for the commands executed after the beginning of the game.
 	 */
 	public final static String AFTER_GAME_START = "internal.game-start";
@@ -61,8 +66,9 @@ public class UHRuntimeCommandsExecutor {
 	public UHRuntimeCommandsExecutor(UHPlugin plugin) {
 		p = plugin;
 		
-		importFromConfig("commands.execute-start", AFTER_GAME_START);
-		importFromConfig("commands.execute-end",   AFTER_GAME_END);
+		importFromConfig("commands.execute-server-start", AFTER_SERVER_START);
+		importFromConfig("commands.execute-start",        AFTER_GAME_START);
+		importFromConfig("commands.execute-end",          AFTER_GAME_END);
 	}
 	
 	/**
@@ -101,7 +107,7 @@ public class UHRuntimeCommandsExecutor {
 	 * <p>
 	 * To schedule a command executed by the plugin, like in the configuration file, you will have
 	 * to use the keys defined as static attributes of this class:
-	 * {@link #AFTER_GAME_END} and {@link #AFTER_GAME_START}.
+	 * {@link #AFTER_SERVER_START}, {@link #AFTER_GAME_END} and {@link #AFTER_GAME_START}.
 	 * 
 	 * @param key The command will be stored under this key.
 	 *    The keys internally used by the plugin start by "{@code internal.}".

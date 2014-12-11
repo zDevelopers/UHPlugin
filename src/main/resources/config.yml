@@ -261,11 +261,16 @@ spectatorModeWhenNewPlayerJoinAfterStart: true
 # Format explained below.
 # Respect the spaces before the keywords ("exec" and "delay" need to be aligned).
 commands:
+    # Commands executed when the server starts.
+    # These commands are also executed when the server is reloaded.
+    execute-server-start:
+       #- exec: command args
+       #  delay: "40:00" (format: "mm", "mm:ss" or "hh:mm:ss". If invalid or not present, 0 seconds.)
+       - 
+    
     # Commands executed after the beginning of the game.
     # (The moment when /uh start or /uh start slow go is executed.)
     execute-start:
-       #- exec: command args
-       #  delay: "40:00" (format: "mm", "mm:ss" or "hh:mm:ss". If invalid or not present, 0 seconds.)
        - 
     
     # Commands executed after the end of the game.

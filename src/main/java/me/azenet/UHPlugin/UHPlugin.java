@@ -136,6 +136,9 @@ public final class UHPlugin extends JavaPlugin {
 		// (example: countdown before the start).
 		new UpdateTimerTask(this).runTaskTimer(this, 20l, 20l);
 		
+		// Schedule commands
+		runtimeCommandsExecutor.registerCommandsInScheduler(UHRuntimeCommandsExecutor.AFTER_SERVER_START);
+		
 		getLogger().info(i18n.t("load.loaded"));
 	}
 	
