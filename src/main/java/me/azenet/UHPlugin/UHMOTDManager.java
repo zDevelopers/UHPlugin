@@ -84,7 +84,7 @@ public class UHMOTDManager {
 	 */
 	public void updateMOTDDuringGame() {
 		if(enabled) {
-			if(p.getGameManager().isGameWithTeams()) {
+			if(!p.getGameManager().isGameWithTeams()) {
 				currentMOTD = matchName + i.t("motd.runningSolo", String.valueOf(p.getGameManager().getAlivePlayersCount()));
 			}
 			else {
@@ -100,7 +100,7 @@ public class UHMOTDManager {
 	 */
 	public void updateMOTDAfterGame(UHTeam winner) {
 		if(enabled) {
-			if(p.getGameManager().isGameWithTeams()) {
+			if(!p.getGameManager().isGameWithTeams()) {
 				currentMOTD = matchName + i.t("motd.finishedSolo", winner.getName());
 			}
 			else {
