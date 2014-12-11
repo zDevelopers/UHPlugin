@@ -36,151 +36,53 @@ public class UHRuntimeCommandsExecutor {
 	
 	private UHPlugin p = null;
 	
-	private Map<Integer, HashSet<String>> scheduledAfterStart = new HashMap<Integer,HashSet<String>>();
-	private Map<Integer, HashSet<String>> scheduledAfterEnd   = new HashMap<Integer,HashSet<String>>();
+	/**
+	 * Stores the commands to be executed later.
+	 * <p>
+	 * The first map (String->HashMap) associates a key to a group of commands launched at the same time.<br>
+	 * The sub-map (Integer->HashSet) associates a delay, in seconds, with a set containing the commands to be
+	 * executed this number of seconds after the call of the {@link #registerCommandsInScheduler(String)}
+	 * method.
+	 */
+	private Map<String, HashMap<Integer, HashSet<String>>> scheduled = new HashMap<String, HashMap<Integer, HashSet<String>>>();
 	
-	private Boolean startCommandsScheduled = false;
-	private Boolean endCommandsScheduled = false;
+	
+	/**
+	 * The key for the commands executed after the beginning of the game.
+	 */
+	public final static String AFTER_GAME_START = "internal.game-start";
+	
+	/**
+	 * The key for the commands executed after the end of the game.
+	 */
+	public final static String AFTER_GAME_END = "internal.game-end";
 	
 	
 	public UHRuntimeCommandsExecutor(UHPlugin plugin) {
 		p = plugin;
 		
-		importFromConfig("commands.execute-start", scheduledAfterStart);
-		importFromConfig("commands.execute-end",   scheduledAfterEnd  );
+		importFromConfig("commands.execute-start", AFTER_GAME_START);
+		importFromConfig("commands.execute-end",   AFTER_GAME_END);
 	}
 	
 	/**
-	 * Schedules the commands executed after the beginning of the game in the Bukkit' scheduler.
+	 * Register the commands registered under the given key in the Bukkit' scheduler.
+	 * <p>
+	 * Delays are from the execution of this method.
 	 * 
-	 * After that, these command cannot be changed.
+	 * @param key The key to schedule. All commands previously registered under this key will be executed.
 	 */
-	public void registerStartCommandsInScheduler() {
-		registerCommandsInScheduler(scheduledAfterStart);
-		
-		startCommandsScheduled = true;
+	public void registerCommandsInScheduler(String key) {
+		registerCommandsInScheduler(scheduled.get(key));
 	}
-	
-	/**
-	 * Schedules the commands executed after the end of the game in the Bukkit' scheduler.
-	 * 
-	 * After that, these command cannot be changed.
-	 */
-	public void registerEndCommandsInScheduler() {
-		registerCommandsInScheduler(scheduledAfterEnd);
-		
-		endCommandsScheduled = true;
-	}
-	
-	
-	/**
-	 * Schedules a command after the beginning of the game.
-	 * 
-	 * @param command The command to be executed (by the console).
-	 * @param delay The delay between the beginning of the game and the execution (in seconds).
-	 * 
-	 * @throws IllegalStateException if the game is started (commands already scheduled).
-	 */
-	public void scheduleCommandAfterStart(String command, Integer delay) {
-		if(startCommandsScheduled) {
-			throw new IllegalStateException("The commands executed after the beginning of the game are already scheduled");
-		}
-		
-		scheduleCommand(scheduledAfterStart, command, delay);
-	}
-	
-	/**
-	 * Schedules a command after the end of the game.
-	 * 
-	 * @param command The command to be executed (by the console).
-	 * @param delay The delay between the beginning of the game and the execution (in seconds).
-	 * 
-	 * @throws IllegalStateException if the game is finished (commands already scheduled).
-	 */
-	public void scheduleCommandAfterEnd(String command, Integer delay) {		
-		if(endCommandsScheduled) {
-			throw new IllegalStateException("The commands executed after the end of the game are already scheduled");
-		}
-		
-		scheduleCommand(scheduledAfterEnd, command, delay);
-	}
-	
-	/**
-	 * Removes the given command from the commands scheduled after the beginning of the game,
-	 * for all delays.
-	 * 
-	 * @param command The command. Not case-sensitive.
-	 * 
-	 * @throws IllegalStateException if the game is started (commands already scheduled).
-	 */
-	public void removeScheduledStartCommand(String command) {
-		if(startCommandsScheduled) {
-			throw new IllegalStateException("The commands executed after the beginning of the game are already scheduled");
-		}
-		
-		removeScheduledCommand(scheduledAfterStart, command);
-	}
-	
-	/**
-	 * Removes the given command from the commands scheduled after the beginning of the game,
-	 * with the given delay.
-	 * 
-	 * @param command The command. Not case-sensitive.
-	 * @param delay The delay.
-	 * 
-	 * @throws IllegalStateException if the game is started (commands already scheduled).
-	 */
-	public void removeScheduledStartCommand(String command, Integer delay) {
-		if(startCommandsScheduled) {
-			throw new IllegalStateException("The commands executed after the beginning of the game are already scheduled");
-		}
-		
-		removeScheduledCommand(scheduledAfterStart, command, delay);
-	}
-	
-	/**
-	 * Removes the given command from the commands scheduled after the end of the game, for all delays.
-	 * 
-	 * @param command The command. Not case-sensitive.
-	 * 
-	 * @throws IllegalStateException if the game is finished (commands already scheduled).
-	 */
-	public void removeScheduledEndCommand(String command) {
-		if(endCommandsScheduled) {
-			throw new IllegalStateException("The commands executed after the end of the game are already scheduled");
-		}
-		
-		removeScheduledCommand(scheduledAfterEnd, command);
-	}
-	
-	/**
-	 * Removes the given command from the commands scheduled after the end of the game,
-	 * with the given delay.
-	 * 
-	 * @param command The command. Not case-sensitive.
-	 * @param delay The delay.
-	 * 
-	 * @throws IllegalStateException if the game is finished (commands already scheduled).
-	 */
-	public void removeScheduledEndCommand(String command, Integer delay) {
-		if(endCommandsScheduled) {
-			throw new IllegalStateException("The commands executed after the end of the game are already scheduled");
-		}
-		
-		removeScheduledCommand(scheduledAfterEnd, command, delay);
-	}
-	
-	
-	/* Generic methods */
-	
 	
 	/**
 	 * Register the given commands in the Bukkit' scheduler.
 	 * 
-	 * Delay is from the execution of this method.
+	 * Delays are from the execution of this method.
 	 * @param scheduledCommands
 	 */
-	public void registerCommandsInScheduler(Map<Integer, HashSet<String>> scheduledCommands) {
+	private void registerCommandsInScheduler(Map<Integer, HashSet<String>> scheduledCommands) {
 		if(scheduledCommands != null) {
 			for(Entry<Integer, HashSet<String>> scheduledCommandsStack : scheduledCommands.entrySet()) {
 				p.getServer().getScheduler().runTaskLater(
@@ -193,6 +95,27 @@ public class UHRuntimeCommandsExecutor {
 	}
 	
 	
+	
+	/**
+	 * Schedules a command.
+	 * <p>
+	 * To schedule a command executed by the plugin, like in the configuration file, you will have
+	 * to use the keys defined as static attributes of this class:
+	 * {@link #AFTER_GAME_END} and {@link #AFTER_GAME_START}.
+	 * 
+	 * @param key The command will be stored under this key.
+	 *    The keys internally used by the plugin start by "{@code internal.}".
+	 * @param command The command to add.
+	 * @param delay The delay (seconds).
+	 */
+	public void scheduleCommand(String key, String command, Integer delay) {
+		if(!scheduled.containsKey(key)) {
+			scheduled.put(key, new HashMap<Integer, HashSet<String>>());
+		}
+		
+		scheduleCommand(scheduled.get(key), command, delay);
+	}
+	
 	/**
 	 * Schedules a command.
 	 * 
@@ -200,7 +123,7 @@ public class UHRuntimeCommandsExecutor {
 	 * @param command The command to add.
 	 * @param delay The delay (seconds).
 	 */
-	public void scheduleCommand(Map<Integer, HashSet<String>> scheduledCommands, String command, Integer delay) {
+	private void scheduleCommand(Map<Integer, HashSet<String>> scheduledCommands, String command, Integer delay) {
 		HashSet<String> list = scheduledCommands.get(delay);
 		
 		if(list == null) {
@@ -211,13 +134,25 @@ public class UHRuntimeCommandsExecutor {
 		list.add(clearCommandName(command));
 	}
 	
+	
+	/**
+	 * Removes the given command from everywhere.
+	 * 
+	 * @param key The command will be stored under this key.
+	 *    The keys internally used by the plugin start by "{@code internal.}".
+	 * @param command The command. Not case-sensitive.
+	 */
+	public void removeScheduledCommand(String key, String command) {
+		removeScheduledCommand(scheduled.get(key), command);
+	}
+	
 	/**
 	 * Removes the given command from everywhere.
 	 * 
 	 * @param scheduledCommands A map containing the scheduled commands, sorted by delay.
 	 * @param command The command. Not case-sensitive.
 	 */
-	public void removeScheduledCommand(Map<Integer, HashSet<String>> scheduledCommands, String command) {
+	private void removeScheduledCommand(Map<Integer, HashSet<String>> scheduledCommands, String command) {
 		for(HashSet<String> commands : scheduledCommands.values()) {
 			for(String scheduledCommand : new HashSet<String>(commands)) {
 				if(scheduledCommand.equalsIgnoreCase(clearCommandName(command))) {
@@ -227,13 +162,25 @@ public class UHRuntimeCommandsExecutor {
 		}
 	}
 	
+	
+	/**
+	 * Removes the given command from everywhere.
+	 * 
+	 * @param key The command will be stored under this key.
+	 *    The keys internally used by the plugin start by "{@code internal.}".
+	 * @param command The command. Not case-sensitive.
+	 */
+	public void removeScheduledCommand(String key, String command, Integer delay) {
+		removeScheduledCommand(scheduled.get(key), command, delay);
+	}
+	
 	/**
 	 * Removes the given command from everywhere.
 	 * 
 	 * @param scheduledCommands A map containing the scheduled commands, sorted by delay.
 	 * @param command The command. Not case-sensitive.
 	 */
-	public void removeScheduledCommand(Map<Integer, HashSet<String>> scheduledCommands, String command, Integer delay) {
+	private void removeScheduledCommand(Map<Integer, HashSet<String>> scheduledCommands, String command, Integer delay) {
 		HashSet<String> commands = scheduledCommands.get(delay);
 		
 		if(commands != null) {
@@ -254,7 +201,7 @@ public class UHRuntimeCommandsExecutor {
 	 * @param path The path in the config file.
 	 * @param scheduledCommands A map containing the scheduled commands, sorted by delay.
 	 */
-	private void importFromConfig(String path, Map<Integer, HashSet<String>> scheduledCommands) {
+	private void importFromConfig(String path, String key) {
 		List<Map<?, ?>> rawCommands = p.getConfig().getMapList(path);
 		
 		if(rawCommands != null) {
@@ -270,7 +217,7 @@ public class UHRuntimeCommandsExecutor {
 					delay = 0;
 				}
 				
-				scheduleCommand(scheduledCommands, cmd, delay);
+				scheduleCommand(key, cmd, delay);
 			}
 		}
 	}

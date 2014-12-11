@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHProTipsSender;
+import me.azenet.UHPlugin.UHRuntimeCommandsExecutor;
 import me.azenet.UHPlugin.UHSound;
 import me.azenet.UHPlugin.UHTeam;
 import me.azenet.UHPlugin.events.EpisodeChangedCause;
@@ -515,7 +516,7 @@ public class UHGameListener implements Listener {
 		Bukkit.getServer().broadcastMessage(i.t("start.go"));
 		
 		// Commands
-		p.getRuntimeCommandsExecutor().registerStartCommandsInScheduler();
+		p.getRuntimeCommandsExecutor().registerCommandsInScheduler(UHRuntimeCommandsExecutor.AFTER_GAME_START);
 	}
 	
 	/**
@@ -542,7 +543,7 @@ public class UHGameListener implements Listener {
 		}
 		
 		// Commands
-		p.getRuntimeCommandsExecutor().registerEndCommandsInScheduler();
+		p.getRuntimeCommandsExecutor().registerCommandsInScheduler(UHRuntimeCommandsExecutor.AFTER_GAME_END);
 		
 		// Updates the MOTD.
 		p.getMOTDManager().updateMOTDAfterGame(ev.getWinnerTeam());
