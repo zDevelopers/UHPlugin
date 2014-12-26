@@ -371,7 +371,15 @@ public class UHGameListener implements Listener {
 					for(String option : enabledOptionsWithProtocolLibNeeded) {
 						ev.getPlayer().sendMessage(i.t("load.PLNotInstalledItem", option));
 					}
-					ev.getPlayer().sendMessage(i.t("load.PLNotInstalled3", "http://dev.bukkit.org/bukkit-plugins/protocollib/"));
+					
+					String pLibDownloadURL = "";
+					if(p.getServer().getBukkitVersion().contains("1.7")) { // 1.7.9 or 1.7.10
+						pLibDownloadURL = "http://dev.bukkit.org/bukkit-plugins/protocollib/";
+					}
+					else { // 1.8+
+						pLibDownloadURL = "http://www.spigotmc.org/resources/protocollib.1997/";
+					}
+					ev.getPlayer().sendMessage(i.t("load.PLNotInstalled3", pLibDownloadURL));
 				}
 			}
 		}
