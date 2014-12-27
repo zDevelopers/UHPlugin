@@ -38,7 +38,6 @@ import me.azenet.UHPlugin.events.UHPlayerResurrectedEvent;
 import me.azenet.UHPlugin.events.UHTeamDeathEvent;
 import me.azenet.UHPlugin.i18n.I18n;
 
-import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -65,6 +64,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -465,6 +465,18 @@ public class UHGameListener implements Listener {
 	@EventHandler
 	public void onPlayerAchievementAwarded(PlayerAchievementAwardedEvent ev) {
 		if(!p.getGameManager().isGameStarted() && p.getConfig().getBoolean("achievements.disableAchievementsBeforeStart", true)) {
+			ev.setCancelled(true);
+		}
+	}
+	
+	/**
+	 * Used to disable the statistics before the game.
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onPlayerStatisticIncrement(PlayerStatisticIncrementEvent ev) {
+		if(!p.getGameManager().isGameStarted() && p.getConfig().getBoolean("statistics.disableStatisticsBeforeStart", true)) {
 			ev.setCancelled(true);
 		}
 	}

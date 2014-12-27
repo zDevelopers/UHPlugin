@@ -94,6 +94,12 @@ achievements:
 
 
 
+statistics:    
+    # A player cannot increment a statistic if the game is not started?
+    disableStatisticsBeforeStart: true
+
+
+
 start:
     slow:
         delayBetweenTP: 3  # in seconds
