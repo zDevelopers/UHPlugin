@@ -86,7 +86,7 @@ public class UHScoreboardManager {
 				sidebar.addEntry(this.getText("episode", 0), true);
 			}
 			
-			sidebar.addEntry(this.getText("players", 0), true);
+			sidebar.addEntry(this.getText("players", p.getServer().getOnlinePlayers().length), true);
 			
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
 				sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
@@ -110,6 +110,26 @@ public class UHScoreboardManager {
 		else {
 			sb.clearSlot(DisplaySlot.PLAYER_LIST); // Just in case
 		}
+	}
+	
+	/**
+	 * Used to displays the player count before the beginning of the game.
+	 * 
+	 * To be called when a player joins.
+	 */
+	public void addPlayerBeforeStart() {
+		sidebar.updateEntry(this.getText("players", p.getServer().getOnlinePlayers().length - 1), 
+				this.getText("players", p.getServer().getOnlinePlayers().length));
+	}
+	
+	/**
+	 * Used to displays the player count before the beginning of the game.
+	 * 
+	 * To be called when a player leaves.
+	 */
+	public void removePlayerBeforeStart() {
+		sidebar.updateEntry(this.getText("players", p.getServer().getOnlinePlayers().length + 1), 
+				this.getText("players", p.getServer().getOnlinePlayers().length));
 	}
 	
 	/**

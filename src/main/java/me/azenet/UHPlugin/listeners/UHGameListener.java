@@ -62,6 +62,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -363,6 +364,9 @@ public class UHGameListener implements Listener {
 				// Initialization of the player (teleportation, life, health objective score...).
 				p.getGameManager().initPlayer(ev.getPlayer());
 				
+				// Scoreboard update
+				p.getScoreboardManager().addPlayerBeforeStart();
+				
 				// Teams selector.
 				if(p.getConfig().getBoolean("teams-options.gui.autoDisplay") && p.getTeamManager().getTeams().size() != 0) {
 					p.getServer().getScheduler().runTaskLater(p, new Runnable() {
@@ -436,6 +440,17 @@ public class UHGameListener implements Listener {
 				&& !p.getGameManager().getAlivePlayers().contains((OfflinePlayer) ev.getPlayer())
 				&&  p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
 			p.getSpectatorPlusIntegration().getSPAPI().setSpectating(ev.getPlayer(), true);
+		}
+	}
+	
+	/**
+	 * Used to update the scoreboard before the beginning of the game.
+	 * @param ev
+	 */
+	public void onPlayerLeave(PlayerQuitEvent ev) {
+		if(!p.getGameManager().isGameStarted()) {
+			// Scoreboard update
+			p.getScoreboardManager().removePlayerBeforeStart();
 		}
 	}
 	
