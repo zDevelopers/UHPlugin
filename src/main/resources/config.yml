@@ -8,6 +8,7 @@
 #     volume: The volume of the sound. 1 is the normal volume. You can use a decimal value.
 #     pitch:  The pitch of the sound.  1 is the normal pitch.  You can use a decimal value.
 # 
+# Warning: NEVER USE TABS in this file, always spaces, to indent.
 
 
 # Available languages: en_US, fr_FR, pt_PT.
@@ -118,7 +119,7 @@ death:
         teamDeathMessagesFormat: "§6"
         
     kick:
-        do: true
+        do: false
         time: 30
         allow-reconnect: true
         
@@ -229,7 +230,7 @@ hardcore-hearts:
     # « Respawn ».
     # With this option enabled, a short message will notify the player about that.
     # Notice: this will be disabled even with this set to true if the hardcore hearts are not enabled (useless).
-    respawnMessage: true
+    respawnMessage: false
 
 
 
