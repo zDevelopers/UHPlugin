@@ -271,9 +271,6 @@ public class UHGameListener implements Listener {
 	@EventHandler
 	public void onFoodUpdate(FoodLevelChangeEvent ev) {
 		if(!p.getGameManager().isGameRunning()) {
-			((Player) ev.getEntity()).setFoodLevel(20);
-			((Player) ev.getEntity()).setSaturation(14);
-
 			ev.setCancelled(true);
 		}
 	}
