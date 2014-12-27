@@ -27,12 +27,15 @@ import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
@@ -131,6 +134,9 @@ public class UHCraftingListener implements Listener {
 	
 	
 	/**
+	 *   - Workaround to fix the crafting grid being not updated when the item is taken
+	 *     from the grid.
+	 *     <p>
 	 *   - Prevents an apple to be renamed to/from the name of an head apple.
 	 *    
 	 *     (In vanilla clients, it is not possible to rename an apple to that name because of the
@@ -147,20 +153,67 @@ public class UHCraftingListener implements Listener {
 		if(ev.getWhoClicked() instanceof Player) { // Just in case
 			final Inventory inventory = ev.getInventory();
 			
-			/** Allows any shape for the loots in the compass recipe. **/
-			
-			if(inventory instanceof CraftingInventory) {				
-				Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+			/** Workaround to fix the crafting grid being not updated when the item is taken
+			    from the grid. **/
+			if(inventory instanceof CraftingInventory && ev.getSlotType() == SlotType.RESULT) {
+				p.getServer().getScheduler().runTaskLater(p, new BukkitRunnable() {
+
 					@Override
 					public void run() {
-						if(p.getRecipeManager().isValidCompassRecipe(((CraftingInventory) inventory).getMatrix())) {
-							((CraftingInventory) inventory).setResult(new ItemStack(Material.COMPASS));
-							((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
-						}					
+						for(HumanEntity viewer : ev.getViewers()) {
+							if(viewer instanceof Player) {
+								((Player) viewer).updateInventory();
+							}
+						}
 					}
 				}, 1L);
+			}
+			
+			
+			/** Allows any shape for the loots in the compass recipe. **/
+			
+			if(inventory instanceof CraftingInventory) {
 				
-				return;
+				if(p.getRecipeManager().isValidCompassRecipe(((CraftingInventory) inventory).getMatrix())) {
+					
+					// Puts the compass in the result slot
+					if(ev.getSlotType() == SlotType.CRAFTING) {
+						Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+							@Override
+							public void run() {
+								((CraftingInventory) inventory).setResult(new ItemStack(Material.COMPASS));
+								ev.setResult(Result.ALLOW);
+								((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
+							}
+						}, 1L);
+					}
+					
+					// Consumes the materials in the crafting grid.
+					// Because this is not an "official" recipe, we need to do that manually.
+					else if(ev.getSlotType() == SlotType.RESULT) {
+						int index = 1;
+						for(ItemStack stack : ((CraftingInventory) inventory).getMatrix()) {
+							if(stack == null) continue;
+							
+							if(stack.getAmount() != 1) {
+								stack.setAmount(stack.getAmount() - 1);
+								inventory.setItem(index, stack);
+							}
+							else {
+								inventory.setItem(index, new ItemStack(Material.AIR));
+							}
+							
+							index++;
+						}
+						
+						((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
+						
+						ev.setCurrentItem(new ItemStack(Material.COMPASS));
+						ev.setResult(Result.ALLOW);
+					}
+					
+					return;
+				}
 			}
 			
 			
