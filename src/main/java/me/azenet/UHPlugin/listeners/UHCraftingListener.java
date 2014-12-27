@@ -19,6 +19,8 @@
 
 package me.azenet.UHPlugin.listeners;
 
+import java.util.HashSet;
+
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHProTipsSender;
 import me.azenet.UHPlugin.UHRecipeManager;
@@ -34,8 +36,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
@@ -229,24 +231,22 @@ public class UHCraftingListener implements Listener {
 						if(item != null) { // result slot non empty
 							ItemMeta meta = item.getItemMeta();
 							
-							String prohibedNameNormal = ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal");
-							String prohibedNameNotch  = ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch");
+							HashSet<String> prohibed = new HashSet<String>();
+							
+							prohibed.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"));
+							prohibed.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch"));
 							
 							// It is possible that the client filters the name of the golden apple in the anvil UI,
 							// removing all §.
-							String filteredProhibedNameNormal = prohibedNameNormal.replace("§", "");
-							String filteredProhibedNameNotch  = prohibedNameNotch.replace("§", "");
+							for(String prohibition : new HashSet<String>(prohibed)) {
+								prohibed.add(prohibition.replace("§", ""));
+							}
 							
 							
 							// An item can't be renamed to the name of a golden head
 							if(meta != null && meta.hasDisplayName()) {
-								if(meta.getDisplayName().equals(prohibedNameNormal)
-										|| meta.getDisplayName().equals(prohibedNameNotch)
-										|| meta.getDisplayName().equals(filteredProhibedNameNormal)
-										|| meta.getDisplayName().equals(filteredProhibedNameNotch)) {
-									
+								if(prohibed.contains(meta.getDisplayName())) {
 									ev.setCancelled(true); // nope nope nope
-									
 								}
 							}
 							
@@ -255,13 +255,8 @@ public class UHCraftingListener implements Listener {
 								ItemMeta metaOriginal = view.getItem(0).getItemMeta();
 								
 								if(metaOriginal != null && metaOriginal.hasDisplayName()) {
-									if(metaOriginal.getDisplayName().equals(prohibedNameNormal)
-											|| metaOriginal.getDisplayName().equals(prohibedNameNotch)
-											|| metaOriginal.getDisplayName().equals(filteredProhibedNameNormal)
-											|| metaOriginal.getDisplayName().equals(filteredProhibedNameNotch)) {
-										
+									if(prohibed.contains(metaOriginal.getDisplayName())) {
 										ev.setCancelled(true);
-										
 									}
 								}
 							}
