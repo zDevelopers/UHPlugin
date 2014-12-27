@@ -38,6 +38,7 @@ import me.azenet.UHPlugin.events.UHPlayerResurrectedEvent;
 import me.azenet.UHPlugin.events.UHTeamDeathEvent;
 import me.azenet.UHPlugin.i18n.I18n;
 
+import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -59,6 +60,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
@@ -447,10 +449,23 @@ public class UHGameListener implements Listener {
 	 * Used to update the scoreboard before the beginning of the game.
 	 * @param ev
 	 */
+	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent ev) {
 		if(!p.getGameManager().isGameStarted()) {
 			// Scoreboard update
 			p.getScoreboardManager().removePlayerBeforeStart();
+		}
+	}
+	
+	/**
+	 * Used to disable the achievements before the game.
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onPlayerAchievementAwarded(PlayerAchievementAwardedEvent ev) {
+		if(!p.getGameManager().isGameStarted() && p.getConfig().getBoolean("achievements.disableAchievementsBeforeStart", true)) {
+			ev.setCancelled(true);
 		}
 	}
 	

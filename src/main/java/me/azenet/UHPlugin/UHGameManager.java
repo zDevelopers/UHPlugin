@@ -36,6 +36,7 @@ import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.task.FireworksOnWinnersTask;
 import me.azenet.UHPlugin.task.TeamStartTask;
 
+import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
@@ -145,6 +146,11 @@ public class UHGameManager {
 		// Disable the spectator mode if the game is not started.
 		if(p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
 			p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, false);
+		}
+		
+		// Resets the achievements
+		if(p.getConfig().getBoolean("achievements.resetAchievementsAtStartup", true)) {
+			player.removeAchievement(Achievement.OPEN_INVENTORY);
 		}
 		
 		// If the user has the permission to build before the game, he will probably needs

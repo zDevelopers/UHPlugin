@@ -85,6 +85,15 @@ teleportToSpawnIfNotStarted: true
 
 
 
+achievements:
+    # When a player joins the game before the beginning of the game, his achievements are reset?
+    resetAchievementsAtStartup: true
+    
+    # A player cannot award an achievement if the game is not started?
+    disableAchievementsBeforeStart: true
+
+
+
 start:
     slow:
         delayBetweenTP: 3  # in seconds
