@@ -82,8 +82,10 @@ public class UHScoreboardManager {
 			sidebar = new UHSidebarObjective(sb, objectiveName);
 			sidebar.setDisplayName(getScoreboardName());
 			
+			if(p.getConfig().getBoolean("episodes.enabled")) {
+				sidebar.addEntry(this.getText("episode", 0), true);
+			}
 			
-			sidebar.addEntry(this.getText("episode", 0), true);
 			sidebar.addEntry(this.getText("players", 0), true);
 			
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
