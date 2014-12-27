@@ -51,6 +51,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
@@ -271,7 +273,49 @@ public class UHGameListener implements Listener {
 	@EventHandler
 	public void onFoodUpdate(FoodLevelChangeEvent ev) {
 		if(!p.getGameManager().isGameRunning()) {
+			if(ev.getEntity() instanceof Player) {
+				((Player) ev.getEntity()).setFoodLevel(20);
+				((Player) ev.getEntity()).setSaturation(20f);
+			}
+			
 			ev.setCancelled(true);
+		}
+	}
+	
+	/**
+	 * Used to cancel the spawn of the creatures if the game is not started.
+	 * <p>
+	 * We don't use the peaceful difficulty for that because it causes bugs with Minecraft 1.8
+	 * (the difficulty is not correctly updated client-side when the game starts).
+	 * 
+	 * @param ev
+	 */
+	@EventHandler
+	public void onCreatureSpawn(CreatureSpawnEvent ev) {
+		if(!p.getGameManager().isGameStarted()
+				&& (ev.getSpawnReason() == SpawnReason.NATURAL
+					|| ev.getSpawnReason() == SpawnReason.NETHER_PORTAL
+					|| ev.getSpawnReason() == SpawnReason.LIGHTNING
+					|| ev.getSpawnReason() == SpawnReason.SPAWNER)) {
+			
+			switch(ev.getEntityType()) {
+				case ZOMBIE:
+				case CREEPER:
+				case SKELETON:
+				case SPIDER:
+				case ENDERMAN:
+				case BLAZE:
+				case CAVE_SPIDER:
+				case GHAST:
+				case SILVERFISH:
+				case SLIME:
+				case WITCH:
+					ev.setCancelled(true);
+					break;
+				
+				default:
+					break;
+			}
 		}
 	}
 	
