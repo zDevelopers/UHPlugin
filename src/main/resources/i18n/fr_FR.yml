@@ -349,6 +349,7 @@ keys:
     kill:
         usage: "{ce}Utilisation : /uh kill <joueur>"
         neverPlayed: "{ce}Cette personne n'a jamais été vue sur le serveur."
+        notAlive: "{ce}{0} n'est pas un joueur vivant."
         killed: "{cs}Le joueur {0} est désormais marqué comme mort."
     
     resurrect:

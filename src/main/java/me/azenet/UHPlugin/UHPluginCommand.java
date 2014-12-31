@@ -1311,14 +1311,19 @@ public class UHPluginCommand implements CommandExecutor {
 			return;
 		}
 		
-		if(player.isOnline()) {
-			((Player) player).setHealth(0);
+		if(!p.getGameManager().isPlayerDead(player.getUniqueId())) {
+			if(player.isOnline()) {
+				((Player) player).setHealth(0);
+			}
+			else {
+				p.getGameManager().addDead(player.getUniqueId());
+			}
+			
+			sender.sendMessage(i.t("kill.killed", player.getName()));
 		}
 		else {
-			p.getGameManager().addDead(player.getUniqueId());
+			sender.sendMessage(i.t("kill.notAlive", player.getName()));
 		}
-		
-		sender.sendMessage(i.t("kill.killed", player.getName()));
 	}
 	
 	/**
