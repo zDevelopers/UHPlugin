@@ -485,9 +485,6 @@ public class UHGameManager {
 		
 		// Fires the event
 		p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
-		
-		// Updates the MOTD.
-		p.getMOTDManager().updateMOTDDuringGame();
 	}
 	
 	
@@ -526,6 +523,8 @@ public class UHGameManager {
 		this.aliveTeamsCount   = aliveTeams.size();
 		
 		p.getScoreboardManager().updateCounters();
+		
+		p.getMOTDManager().updateMOTDDuringGame();
 	}
 	
 	/**

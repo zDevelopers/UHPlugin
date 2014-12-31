@@ -234,9 +234,6 @@ public class UHGameListener implements Listener {
 				}
 			}, 2L);
 		}
-		
-		// Updates the MOTD.
-		p.getMOTDManager().updateMOTDDuringGame();
 	}
 	
 	
@@ -608,6 +605,9 @@ public class UHGameListener implements Listener {
 		
 		// Commands
 		p.getRuntimeCommandsExecutor().registerCommandsInScheduler(UHRuntimeCommandsExecutor.AFTER_GAME_START);
+		
+		// MOTD
+		p.getMOTDManager().updateMOTDDuringGame();
 	}
 	
 	/**
