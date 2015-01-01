@@ -339,7 +339,11 @@ public class UHGameListener implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent ev) {
-		if (this.p.getGameManager().isPlayerDead(ev.getPlayer()) && !this.p.getConfig().getBoolean("death.kick.allow-reconnect", true)) {
+		if (p.getGameManager().isGameStarted()
+				&&  p.getGameManager().isPlayerDead(ev.getPlayer())
+				&& !p.getGameManager().isDeadPlayersToBeResurrected(ev.getPlayer())
+				&& !p.getConfig().getBoolean("death.kick.allow-reconnect", true)) {
+			
 			ev.setResult(Result.KICK_OTHER);
 			ev.setKickMessage(i.t("death.banMessage"));
 		}
