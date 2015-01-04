@@ -50,25 +50,29 @@ permissions:
             uh.start: true
             uh.shift: true
             uh.team: true
-            uh.addspawn: true
+            uh.spawns: true
             uh.generatewalls: true
             uh.freeze: true
             uh.border: true
             uh.heal: true
             uh.healall: true
+            uh.feed: true
+            uh.feedall: true
             uh.tpback: true
+            uh.kill: true
             uh.resurrect: true
             uh.spec: true
+            uh.finish: true
             uh.infos: true
-            uh.teamchat.self: true
-            uh.teamchat.others: true
+            uh.timers: true
+            uh.tp: true
+            
+            uh.teamchat: true
+            uh.player: true
     
     uh.build:
         description: Allows an user to build before the beginning of the game
         default: op
-    uh.about:
-        description: Prints some informations about the plugin and the translation.
-        default: true
     uh.start:
         description: Allows an user to start the game with /uh start
         default: op
@@ -78,8 +82,8 @@ permissions:
     uh.team:
         description: Allows an user to manage the teams with /uh team *
         default: op
-    uh.addspawn:
-        description: Allows an user to add a spawn point
+    uh.spawns:
+        description: Allows an user to manage the spawn points with /uh spawns *
         default: op
     uh.generatewalls:
         description: Allows an user to generate the walls around the map
@@ -96,6 +100,15 @@ permissions:
     uh.healall:
         description: Allows an user to heal ALL players using /uh healall [half-hearts]
         default: op
+    uh.feed:
+        description: Allows an user to feed a player using /uh feed <player> [food points] [saturation]
+        default: op
+    uh.feedall:
+        description: Allows an user to feed ALL players using /uh feedall [food points] [saturation]
+        default: op
+    uh.kill:
+        description: Allows an user to to mark another player as dead (even if offline) with /uh kill <player>
+        default: op
     uh.resurrect:
         description: Allows an user to resurrect another player with /uh resurrect <player>
         default: op
@@ -105,8 +118,20 @@ permissions:
     uh.spec:
         description: Allows an user to manage spectators using /uh spec *
         default: op
+    uh.finish:
+        description: Allows an user to broadcast the end of the game with fireworks and messages (see config), using /uh finish
+        default: op
+    uh.timers:
+        description: Allows an user to manage the timers with /uh timers *
+        default: op
+    uh.tp:
+        description: Allows an user to teleport a team or the spectators with /uh tp *
+        default: op
     uh.infos:
         description: Allows an user to get infos about the current game with /uh infos
+        default: true
+    uh.about:
+        description: Prints some informations about the plugin and the translation.
         default: true
     
     
@@ -128,7 +153,7 @@ permissions:
     
     # Permissions for the /join & /leave commands
     
-    uh.player:
+    uh.player.*:
         description: Allows the full use of both /join and /leave.
         children:
             uh.player.join: true
