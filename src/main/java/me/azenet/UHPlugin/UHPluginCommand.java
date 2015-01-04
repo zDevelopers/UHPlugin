@@ -673,7 +673,8 @@ public class UHPluginCommand implements CommandExecutor {
 					displaySeparator(sender);
 					sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 					sender.sendMessage(i.t("cmd.legendHelp"));
-					
+
+					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsCmdTitle"));
 					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsCmd"));
 					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsShapesTitle"));
 					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsShapesRandom"));

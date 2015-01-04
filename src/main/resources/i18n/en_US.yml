@@ -74,6 +74,7 @@ keys:
         spawnsHelpAdd: "{cc}/uh spawns add {ci}: adds a spawn point for a team or a player, at the current location of the sender."
         spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: adds a spawn point for a team or a player, at the provided coordinates, in the default world."
         spawnsHelpGenerate: "{cc}/uh spawns generate {ci}: automagically generates spawn points. See /uh spawns generate for details."
+        spawnsHelpGenerateDetailsCmdTitle: "{aqua}Command"
         spawnsHelpGenerateDetailsCmd: "{cc}/uh spawns generate <circular|grid|random> [size] [distanceMin] [count] [xCenter] [zCenter] [world]"
         spawnsHelpGenerateDetailsShapesTitle: "{aqua}Shapes"
         spawnsHelpGenerateDetailsShapesRandom: " - {cc}random{ci}: generates random spawn points on the map, with a minimal distance between them."
