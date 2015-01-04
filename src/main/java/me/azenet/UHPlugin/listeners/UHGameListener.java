@@ -209,7 +209,13 @@ public class UHGameListener implements Listener {
 		p.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "-- Death of " + ev.getEntity().getDisplayName() + ChatColor.GOLD + " (" + ev.getDeathMessage() + ") --");
 		
 		// Customizes the death message
-		ev.setDeathMessage(ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.deathMessagesFormat", "")) + ev.getDeathMessage());
+		String dmFormat = ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.deathMessagesFormat", ""));
+		String deathMessage = dmFormat + ev.getDeathMessage();
+		deathMessage = deathMessage.replace(ev.getEntity().getName(), ev.getEntity().getDisplayName() + dmFormat);
+		if(ev.getEntity().getKiller() != null) {
+			deathMessage = deathMessage.replace(ev.getEntity().getKiller().getName(), ev.getEntity().getKiller().getDisplayName() + dmFormat);
+		}
+		ev.setDeathMessage(deathMessage);
 		
 		// Saves the location of the death
 		p.getGameManager().addDeathLocation(ev.getEntity(), ev.getEntity().getLocation());
