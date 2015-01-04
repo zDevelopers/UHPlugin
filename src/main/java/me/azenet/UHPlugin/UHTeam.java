@@ -271,6 +271,8 @@ public class UHTeam {
 	 * @param player
 	 */
 	private void unregisterPlayer(OfflinePlayer player) {
+		if(player == null) return;
+		
 		plugin.getScoreboardManager().getScoreboard().getTeam(this.internalName).removePlayer(player);
 		plugin.getTeamManager().colorizePlayer(player);
 	}
@@ -283,9 +285,12 @@ public class UHTeam {
 	public void deleteTeam() {
 		// We removes the players from the team (scoreboard team too)
 		for(UUID id : players) {
-			Player player = plugin.getServer().getPlayer(id);
+			OfflinePlayer player = plugin.getServer().getOfflinePlayer(id);
 			
-			player.sendMessage(plugin.getI18n().t("team.removeplayer.removed", getDisplayName()));
+			if(player != null && player.isOnline()) {
+				((Player) player).sendMessage(plugin.getI18n().t("team.removeplayer.removed", getDisplayName()));
+			}
+			
 			unregisterPlayer(player);
 		}
 		
