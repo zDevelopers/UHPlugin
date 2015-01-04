@@ -74,6 +74,7 @@ public class UHPluginCommand implements CommandExecutor {
 		commands.add("shift");
 		commands.add("team");
 		commands.add("spawns");
+		commands.add("infos");
 		commands.add("generatewalls");
 		commands.add("border");
 		commands.add("heal");
@@ -309,6 +310,7 @@ public class UHPluginCommand implements CommandExecutor {
 				sender.sendMessage(i.t("cmd.helpFinish"));
 				sender.sendMessage(i.t("cmd.helpTP"));
 				sender.sendMessage(i.t("cmd.helpTimers"));
+				sender.sendMessage(i.t("cmd.helpInfos"));
 				sender.sendMessage(i.t("cmd.helpAbout"));
 				break;
 		}
@@ -1017,17 +1019,7 @@ public class UHPluginCommand implements CommandExecutor {
 							bullet = i.t("team.list.bulletPlayerOffline");
 						}
 						
-						if(!p.getGameManager().isGameRunning()) {
-							sender.sendMessage(bullet + i.t("team.list.itemPlayer", player.getName()));
-						}
-						else {
-							if(p.getGameManager().isPlayerDead(player.getUniqueId())) {
-								sender.sendMessage(bullet + i.t("team.list.itemPlayerDead", player.getName()));
-							}
-							else {
-								sender.sendMessage(bullet + i.t("team.list.itemPlayerAlive", player.getName()));
-							}
-						}
+						sender.sendMessage(bullet + i.t("team.list.itemPlayer", player.getName()));
 					}
 				}
 			}
@@ -1042,6 +1034,118 @@ public class UHPluginCommand implements CommandExecutor {
 			}
 		}
 	}
+	
+	
+	
+	/**
+	 * This command prints the status of the running game.
+	 * 
+	 * Usage: /uh infos
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
+	private void doInfos(CommandSender sender, Command command, String label, String[] args) {
+		
+		displaySeparator(sender);
+		
+		if(p.getGameManager().isGameStarted()) {
+			sender.sendMessage(i.t("infos.players", String.valueOf(p.getGameManager().getAlivePlayersCount()), String.valueOf(p.getGameManager().getAliveTeamsCount())));
+		}
+		else {
+			sender.sendMessage(i.t("infos.notStarted"));
+		}
+		
+		for(UHTeam team : p.getTeamManager().getTeams()) {
+			for(OfflinePlayer player : team.getPlayers()) {
+				if(p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled() && sender instanceof Player) {
+					/* We can use a JSON-based message */
+					
+					String json = "{\"text\":\"\",\"extra\":[";
+					
+					
+					// Online/offline bullet
+					json += "{";
+					if(player.isOnline()) {
+						json += "\"text\":\"" + i.t("infos.bulletOnline") + "\",";
+						json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("infos.tooltips.online") + "\"}";
+					}
+					else {
+						json += "\"text\":\"" + i.t("infos.bulletOffline") + "\",";
+						json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("infos.tooltips.offline") + "\"}";
+					}
+					json += "},";
+					
+					
+					// Name and team
+					json += "{";
+					json += "\"text\":\"" + team.getColor().toChatColor() + player.getName() + ChatColor.RESET + "\",";
+					json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("infos.tooltips.team", team.getDisplayName()) + "\"}";
+					json += "}";
+					
+					
+					if(p.getGameManager().isGameStarted()) {
+						// Separator
+						json += ",{\"text\":\"" + i.t("infos.separatorAliveState") + "\"},";
+						
+						// Alive state
+						json += "{";
+						if(!p.getGameManager().isPlayerDead(player.getUniqueId())) {
+							json += "\"text\":\"" + i.t("infos.alive") + "\",";
+							if(player.isOnline()) {
+								json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("infos.tooltips.health", String.valueOf((int) ((Player) player).getHealth())) + "\"}";
+							}
+						}
+						else {
+							json += "\"text\":\"" + i.t("infos.dead") + "\"";
+						}
+						json += "}";
+					}
+					
+					
+					// End
+					json += "]}";
+					
+					UHUtils.sendJSONMessage((Player) sender, json);
+				
+				} else {
+					/* Fallback to a simple display */
+					
+					String info = null;
+					
+					if(player.isOnline()) {
+						info = i.t("infos.bulletOnline");
+					}
+					else {
+						info = i.t("infos.bulletOffline");
+					}
+					
+					info += team.getColor().toChatColor() + player.getName() + ChatColor.RESET;
+					
+					if(p.getGameManager().isGameStarted()) {
+						info += i.t("infos.separatorAliveState");
+						
+						if(!p.getGameManager().isPlayerDead(player.getUniqueId())) {
+							info += i.t("infos.alive");
+						}
+						else {
+							info += i.t("infos.dead");
+						}
+					}
+					
+					sender.sendMessage(info);
+				}
+			}
+		}
+		
+		
+		displaySeparator(sender);
+	}
+	
+	
 	
 	/**
 	 * This command shifts an episode.

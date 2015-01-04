@@ -59,6 +59,7 @@ permissions:
             uh.tpback: true
             uh.resurrect: true
             uh.spec: true
+            uh.infos: true
             uh.teamchat.self: true
             uh.teamchat.others: true
     
@@ -104,6 +105,9 @@ permissions:
     uh.spec:
         description: Allows an user to manage spectators using /uh spec *
         default: op
+    uh.infos:
+        description: Allows an user to get infos about the current game with /uh infos
+        default: true
     
     
     # Permissions for the team-only chat

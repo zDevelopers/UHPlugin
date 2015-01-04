@@ -56,6 +56,7 @@ keys:
         helpFinish: "{cc}/uh finish {ci}: displays the name of the winner(s) and launches some fireworks."
         helpTP: "{cc}/uh tp {ci}: teleports the spectators or an entire team. See /uh tp for details."
         helpTimers: "{cc}/uh timers {ci}: manages the timers. See /uh timers for details."
+        helpInfos: "{cc}/uh infos {ci}: prints some infos about the current game."
         helpAbout: "{cc}/uh about {ci}: informations about the plugin and the translation."
         
         teamHelpTitle: "{aqua}------ Team commands ------"
@@ -293,8 +294,6 @@ keys:
             bulletPlayerOffline: "{red} • "
             
             itemPlayer: "{0}"
-            itemPlayerDead: "{0} {reset}({red}dead{reset})"
-            itemPlayerAlive: "{0} {reset}({green}alive{reset})"
         
         gui:
             choose: "{gold}Click on the names below to join a team"
@@ -328,7 +327,27 @@ keys:
             
             format: "{gold}[{0}{gold} -> his team] {reset}{1}"
             formatOtherTeam: "{gold}[{0}{gold} -> team {1}{gold}] {reset}{2}"
+    
+    infos:
+        notStarted: "{ci}The game is not stated."
+        players: "{ci}{0} players alive in {1} teams."
+        
+        bulletOnline: "{green} • "
+        bulletOffline: "{red} • "
+        
+        separatorAliveState: "{gray} - "
+        
+        dead: "{red}dead"
+        alive: "{green}alive"
+        
+        tooltips:
+            online: "Currently online"
+            offline: "Currently offline"
             
+            team: "Team: {0}"
+            
+            health: "{0} half-hearts"
+    
     shift:
         consoleName: "the console"
         cantNotStarted: "{ce}You can't shift the current episode because the game is not started."
