@@ -1,0 +1,444 @@
+author: "eraizel"
+keys:
+    load:
+        spawnPointAdded: "Ponto de Spawn {0},{1} adicionado à partir das configurações"
+        invalidSpawnPoint: "Ponto de Spawn inválido nas configurações: {0}"
+        teamAdded: "Equipe {0} adicionada à partir das configurações"
+        namedTeamAdded: "Equipe {0} ({1}) adicionada a partir das configurações"
+        invalidTeam: "Equipe inválida nas configurações: {0}"
+        recipeApple: "Adicionada nova receita para Maçã de Dourada."
+        recipeCompass: "Adicionada nova receita para Bússola."
+        recipeMelon: "Adicionada nova receita para Melancia Reluzente."
+        loaded: "plugin Ultra Difícil Carregado."
+        
+        WBNotInstalled1: "{darkred}[UHC] {ce}WorldBorder não está instalado: paredes não serão verificadas!"
+        WBNotInstalled2: "{gray}Também, sem WorldBorder, as paredes não podem ser diminuidas em Jogo (Avisos excluidos)."
+        WBNotInstalled3: "{gray}Instale somente o plugin; o UHPlugin automaticamente o configurará."
+        
+        SPNotInstalled1: "{darkred}[UHC] {ce}SpectatorPlus não está instalado."
+        SPNotInstalled2: "{gray}Se desejar ter o Modo de Espectador, instale o Plugin; o UHPlugin automaticamente o configurará."
+        
+        PLNotInstalled1: "{darkred}[UHC] {ce}ProtocolLib é mantadatório, porém, não está instalado!"
+        PLNotInstalled2: "{gray}As seguintes opções requerem a presença do ProtocolLib:"
+        PLNotInstalledItem: "{darkgray} - {gray}{0}"
+        PLNotInstalled3: "{gray}ProtocolLib está disponivel aqui: {0}"
+    
+    cmd:
+        errorLoad: "{ce}Ocorreu um Erro, verifique o console para maiores detalhes. Isto é provavelmente um Bug."
+        errorUnknown: "{ce}Comando não existente. Digite /uh para ver um lista dos comandos disponíveis."
+        errorUnauthorized: "{ce}lolnope"
+        
+        titleHelp: "{yellow}{0} - versão {1}"
+        legendHelp: "{ci}Legenda: {cc}/uh command <necessário> [opcional=valor padrão] <espaços são válidos ...>{ci}."
+        helpNextPage: "{gray}Próxima Página: /uh {0}"
+        
+        titleGameCmd: "{aqua}------ Comandos do Jogo ------"
+        helpStart: "{cc}/uh start {ci}: Inicia o Jogo."
+        helpStartSlow: "{cc}/uh start slow {ci}: Inicia o Jogo no modo lento, em 2 etapas, para servers pequenos."
+        helpShift: "{cc}/uh shift {ci}: passa para o próximo episódio."
+        helpTeam: "{cc}/uh team {ci}: Edita as equipes. Digite /uh team para detalhes."
+        helpSpawns: "{cc}/uh spawns {ci}: Gere os pontos de spawn. Digite /uh spawns para detalhes."
+        helpSpec: "{cc}/uh spec {ci}: Edita os espectadores. Digite /uh spec para detalhes."
+        helpWall: "{cc}/uh generatewalls {ci}: Gera as paredes, de acordo com as configurações."
+        helpBorder: "{cc}/uh border {ci}: Edita os limites. Digite /uh border para detalhes."
+        
+        titleBugCmd: "{aqua}------ Comandos para Bugs ------"
+        helpHeal: "{cc}/uh heal <jogador> [meios-corações=20|±diferença] {ci}: Regenera vida de um jogador para os meios-corações indicados (padrão 20)."
+        helpHealall: "{cc}/uh healall [meios-corações=20|±diferença] {ci}: Regenera todos os jogadores."
+        helpFeed: "{cc}/uh feed <jogador> [fome=20] [saturação=max] {ci}: Alimenta um jogador."
+        helpFeedall: "{cc}/uh feedall [fome=20] [saturação=max] {ci}: Alimenta todos os jogadores."
+        helpKill: "{cc}/uh kill <player> {ci}: Assinala o jogador como morto, mesmo que ele esteja offline."
+        helpResurrect: "{cc}/uh resurrect <jogador> {ci}: Ressuscita o jogador."
+        helpTpback: "{cc}/uh tpback <jogador> [force] {ci}: teleporta em segurança um jogador para o local da sua morte. Quando especificado - force - teleporta o jogador mesmo que não seja seguro."
+        
+        titleMiscCmd: "{aqua}------ Outros Comandos ------"
+        helpFreeze: "{cc}/uh freeze {ci}: (Des)Congela o Jogo todo, ou um jogador. Digite /uh freeze para detalhes."
+        helpFinish: "{cc}/uh finish {ci}: Exibe o nome do(s) vencedor(es) e lança foguetes."
+        helpTP: "{cc}/uh tp {ci}: Teleporta os espectadores ou uma equipe inteira. Digite /uh tp para detalhes."
+        helpTimers: "{cc}/uh timers {ci}: Configura os tempos. Digite /uh timers para detalhes."
+        helpInfos: "{cc}/uh infos {ci}: Printa somente as informações sobre o jogo atual."
+        helpAbout: "{cc}/uh about {ci}: Informação sobre o Plugin e as traduções."
+        
+        teamHelpTitle: "{aqua}------ Comandos para Equipes ------"
+        teamHelpAdd: "{cc}/uh team add <cor> {ci}: adiciona uma equipe com uma determinada cor."
+        teamHelpAddName: "{cc}/uh team add <cor> <nome ...> {ci}: adiciona uma equipe com um determinado nome e cor. Podem ser usados espacos."
+        teamHelpRemove: "{cc}/uh team remove <nome ...> {ci}: elimina uma equipe"
+        teamHelpJoin: "{cc}/uh team join <jogador> <equipe ...>{ci}: adiciona um jogador a uma equipe. O nome da equipe pode ser a cor ou o seu determinado nome."
+        teamHelpLeave: "{cc}/uh team leave <jogador> {ci}: retira um jogador da sua equipe."
+        teamHelpList: "{cc}/uh team list {ci}: lista das equipes e seus jogadores."
+        teamHelpReset: "{cc}/uh team reset {ci}: elimina todas as equipes."
+        teamHelpJoinCmd: "{cc}/join [player] <team ...> {ci}: Adiciona “jogador” (ou ele mesmo) para a equipe determinada. Sem argumentos, apresenta opção escolher time via chat (clicando na equipe)."
+        teamHelpLeaveCmd: "{cc}/leave [player] {ci}: Remove o “jogador” (ou ele mesmo) do seu time."
+        
+        spawnsHelpTitle: "{aqua}------ Comandos para os Spawns ------"
+        spawnsHelpAdd: "{cc}/uh spawns add {ci}: adiciona um ponto de spawn para uma equipe ou jogador, no local onde e executado."
+        spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: adiciona um ponto de spawn para uma equipe ou jogador, nas coordenadas inseridas, no Mundo Default."
+        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|grid|random> [Tamanho = Tamanho dos Limites] [DistanciaMin = 250] [pontos de spawn = Numero Equipes] [xCentro = xSpawn] [zCentro = zSpawn] [world = mundo onde e executado o comando] {ci}: gera automaticamente os pontos de Spawn com a forma inserida."
+        spawnsHelpGenerateDetailsCmdTitle: "{aqua}Command"
+        spawnsHelpGenerateDetailsCmd: "{cc}/uh spawns generate <circular|grid|random> [size] [distanceMin] [count] [xCenter] [zCenter] [world]"
+        spawnsHelpGenerateDetailsShapesTitle: "{aqua}Shapes"
+        spawnsHelpGenerateDetailsShapesRandom: " - {cc}random{ci}: generates random spawn points on the map, with a minimal distance between them."
+        spawnsHelpGenerateDetailsShapesGrid: " - {cc}grid{ci}: generates the spawn points on concentric squares, with a constant distance between two generated points."
+        spawnsHelpGenerateDetailsShapesCircular: " - {cc}circular{ci}: generates the spawn points on concentric circles, with a minimal distance between two generated points. In each circle, the angle (and the distance) between two spawn points is constant."
+        spawnsHelpGenerateDetailsArgsTitle: "{aqua}Arguments"
+        spawnsHelpGenerateDetailsArgsSize: " - {cc}size{ci}: the size of the region where the spawn points will be generated. Squared or circular, following the shape of the map. Default: map' size."
+        spawnsHelpGenerateDetailsArgsDistanceMin: " - {cc}distanceMin{ci}: the minimal distance between two spawn points. Default: 250 blocks."
+        spawnsHelpGenerateDetailsArgsCount: " - {cc}count{ci}: the number of spawn points to generate. Default: the number of players or teams."
+        spawnsHelpGenerateDetailsArgsCenter: " - {cc}xCenter{ci}, {cc}zCenter{ci}: the center of the region where the points are generated. Default: world' spawn point."
+        spawnsHelpGenerateDetailsArgsWorld: " - {cc}world{ci}: the world where the spawn points will be generated."
+        spawnsHelpList: "{cc}/uh spawns list {ci}: lista dos pontos de spawn registados."
+        spawnsHelpDump: "{cc}/uh spawns dump {ci}: mostra os pontos de spawn num formato exportavel. {gray}Pode ser usado em alguns sites para ver os pontos de Spawn, por exemplo."
+        spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: remove pontos de spawn com as coordenadas inseridas, ou o local onde o comando e executado se não forem inseridas coordenadas."
+        spawnsHelpReset: "{cc}/uh spawns reset {ci}: remove todos os pontos de spawn registados."
+        
+        specHelpTitle: "{aqua}------ Comandos para Espectadores ------"
+        specHelpNoticeSpectatorPlusNotInstalled: "{ce}Atencao{ci}: como o SpectatorPlus não está instalado, um espectador e {italic}apenas{ci} um jogador ignorado (sem vanish)."
+        specHelpAdd: "{cc}/uh spec add <jogador>{ci}: adiciona um espectador."
+        specHelpRemove: "{cc}/uh spec remove <jogador>{ci}: remove um espectador."
+        specHelpList: "{cc}/uh spec list{ci}: lista dos espectadores."
+        
+        freezeHelpTitle: "{aqua}------ Comandos para Congelar/Parar ------"
+        freezeHelpOn: "{cc}/uh freeze on [jogador]{ci}: congela um jogador, ou a si proprio se não tiver jogador especificado."
+        freezeHelpOff: "{cc}/uh freeze off [jogador]{ci}: descongela um jogador (ou a si), mesmo com o Jogo parado."
+        freezeHelpAll: "{cc}/uh freeze all{ci}: congela/pausa o Jogo Todo (jogadores, mobs, tempo)."
+        freezeHelpNone: "{cc}/uh freeze none{ci}: descongela/retoma o Jogo Todo. PRECISAS de fazer este comando para Retomar o tempo do Jogo."
+        
+        borderHelpTitle: "{aqua}------ Comandos para Limites ------"
+        borderHelpCurrent: "{cc}/uh border current{ci}: diz o tamanho dos limites atuais."
+        borderHelpSet: "{cc}/uh border set <tamanho> [force]{ci}: muda o limite das paredes. Se não for indicado o force, a operacao será cancelada se tiver algum jogador fora dos novos limites."
+        borderHelpWarning: "{cc}/uh border warning <tamanhofuturo> [minutos para a reducao]{ci}: avisa todos os jogadores fora dos futuros limites. E so um AVISO, não acontece nada."
+        borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: cancela os avisos do /uh border warning."
+        borderHelpCheck: "{cc}/uh border check <tamanho>{ci}: faz uma lista dos jogadores fora dos limites dados."
+        
+        tpHelpTitle: "{aqua}------ Comandos para Teleporte ------"
+        tpHelpTeam: "{cc}/uh tp team <x> <y> <z> | <jogador> <equipe ...> {ci}: teleportar uma equipe para um local ou jogador."
+        tpHelpSpectators: "{cc}/uh tp spectators <x> <y> <z> | <jogador> {ci}: teleporta os espectadores (tal como os jogadores mortos) para um local ou jogador."
+        
+        timersHelpTitle: "{aqua}------ Comandos para os Temporizadores ------"
+        timersHelpAdd: "{cc}/uh timers add <duracao> <titulo ...> {ci}: adiciona um temporizador."
+        timersHelpSet: "{cc}/uh timers set <duration> <titulo ...> {ci}: muda a duracao de um temporizador."
+        timersHelpDisplay: "{cc}/uh timers display <titulo ...> {ci}: mostra um temporizador no scoreboard. Automatico quando um temporizador e iniciado."
+        timersHelpHide: "{cc}/uh timers hide <titulo ...> {ci}: remove um temporizador do scoreboard. Não para o temporizador."
+        timersHelpStart: "{cc}/uh timers start <titulo ...> {ci}: inicia um temporizador."
+        timersHelpPause: "{cc}/uh timers pause <titulo ...> {ci}: pausa um temporizador."
+        timersHelpResume: "{cc}/uh timers resume <titulo ...> {ci}: retoma o temporizador."
+        timersHelpStop: "{cc}/uh timers stop <titulo ...> {ci}: para um temporizador. O temporizador e removido do scoreboard."
+        timersHelpRemove: "{cc}/uh timers remove <titulo ...> {ci}: remove um temporizador."
+        timersHelpList: "{cc}/uh timers list {ci}: lista de todos os temporizadores registados."
+        timersHelpDurations: "{gray}'<duracao>' formato : mm, mm:ss ou hh:mm:ss."
+
+    about:
+        authors: "Plugin feito com amor por {0}."
+        and: "e"
+        i18n:
+            title: "{aqua}------ Traducoes ------"
+            selected: "Linguagem Selecionada: {0} (traduzido por {1})."
+            fallback: "Linguagem para Erros: {0} (traduzido por {1})."
+        license:
+            title: "{aqua}------ Licenca ------"
+            license: "Publicado sobre a GNU General Public License (versão 3)."
+    
+    start:
+        already: "{ce}O Jogo ja comecou! Faz Reload ou Reinicia o server para reiniciar o Jogo."
+        syntax: "{ce}Syntax Error. Usa: /uh start [slow] ou /uh start slow go."
+        
+        notEnoughTP: "{ce}Impossivel Comecar o Jogo: pontos de Spawn insuficientes."
+        
+        teleportationInProgress: "{lightpurple}Teleporte em Progresso... Espera um Pouco."
+        startSlowBeforeStartSlowGo: "{ce}Faz {cc}/uh start slow{ce} antes desse Comando."
+        startSlowWaitBeforeGo: "{ce}Espera ate os jogadores estárem todos teleportados."
+        startSlowTeamTP: "{gray}Equipe {0}{gray} Teleportada."
+        startSlowAllTeamsTP: "{cs}Todas as Equipes foram Teleportadas."
+        startSlowAllTeamsTPCmd: "{gray}Usa {cc}/uh start slow go{gray} para comecar o Jogo."
+        
+        go: "{green}----- GO GO GO -----"
+    
+    finish:
+        notStarted: "{ce}O Jogo ainda não comecou!"
+        notFinished: "{ce}Não está so uma Equipe Viva!"
+        
+        and: "e"
+        
+        broadcast:
+            withTeams: "{darkgreen}{obfuscated}--{green} Parabens a {0} (da Equipe {1}{green}) pela sua Vitoria! {darkgreen}{obfuscated}--"
+            withoutTeams: "{darkgreen}{obfuscated}--{green} Parabens a {0} pela sua Vitoria! {darkgreen}{obfuscated}--"
+    
+    episodes:
+        end: "{aqua}-------- Fim do Episodio {0} --------"
+        endForced: "{aqua}-------- Fim do Episodio {0} [forcado por {1}] --------"
+    
+    scoreboard:
+        episode: "{gray}Episodio {white}{0}"
+        players: "{white}{0}{gray} Jogadores"
+        teams: "{white}{0}{gray} Equipes"
+        timer: "{white}{0}{gray}:{white}{1}"
+        timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
+    
+    death:
+        kickMessage: "Foste MORTO!"
+        banMessage: "Foste MORTO!"
+        teamHasFallen: "{0}A Equipe {1} foi extinguida!"
+        
+        canRespawn: "{darkpurple}{obfuscated}----{lightpurple}{italic} PODES RENASCER{lightpurple}, clica em {italic}Renascer {lightpurple}no proximo ecra."
+    
+    craft:
+        goldenApple:
+            loreLine1Player: "Feita da cabeca"
+            loreLine2Player: "de {0}"
+            loreLine1Monster: "Feita da cabeca"
+            loreLine2Monster: "de uma coisa Horrivel"
+            nameGoldenAppleFromHeadNormal: "{aqua}Maçã de Dourada"
+            nameGoldenAppleFromHeadNotch: "{lightpurple}Maçã de Dourada"
+    
+    compass:
+        noRottenFlesh: "{gray}{italic}Precisas de Carne Podre para utilizares a Bússola."
+        nothingFound: "{gray}{italic}Não foram encontrados jogadores por perto."
+        success: "{gray}A Bússola aponta agora para o jogador mais proximo."
+    
+    dynmap:
+        markerLabelDeath: "Ponto de Morte de {0}"
+        markerLabelSpawn: "Ponto de Spawn da Equipe {0}"
+        markerLabelSpawnNoTeam: "Ponto de Spawn de {0}"
+    
+    wall:
+        startGen: "{cst}A Gerar os Limites..."
+        consoleDefaultWorld: "{ci}Apartir do Console, a gerar os limites para o mundo Default, {0}"
+        error: "{ce}Impossivel Gerar os Limites: ve os logs para detalhes. Os blocos colocados nas configurações são provavelmente invalidos."
+        unknownError: "{ce}Ocorreu um Erro, ve a Console para detalhes."
+        blocksError: "Impossivel construir os Limites, os blocos nas configurações são invalidos."
+        done: "{cst}Limites Criados com Sucesso."
+    
+    spawns:
+        NaN: "{ce}Isto não e um número!"
+        syntaxError: "{ce}Syntax error; Faz /uh spawns."
+        errorCoords: "{ce}Tens de especificar as coordenadas a partir da Console."
+        error2Coords: "{ce}Precisas de especificar pelo menos duas coordenadas."
+        
+        add:
+            added: "{cs}Ponto de Spawn adicionado no Mundo {0}: {1};{2}"
+            outOfLimits: "{ce}Não podes adicionar um ponto de spawn fora dos Limites."
+            noSafeSpot: "{ce}Impossivel adicionar este ponto de Spawn: não foi encontrado um ponto de spawn no Nether."
+        
+        assumptions:
+            solo: "{ci}Nenhuma EQUIPA encontrada. Assumindo que o jogo e em modo SOLO."
+            partialSolo: "{ci}Alguns jogadores não estáo em nenhuma equipe; ficarao a jogar sozinhos; foram adicionados ao número de Pontos de Spawn necessários."
+        
+        generate:
+            nothingToDo: "{ci}You asked a void generation. Thus, the generation is empty."
+            unsupportedMethod: "{ce}The generation method “{0}” is not (yet?) supported."
+            unknownWorld: "{ce}O Mundo {0} não existe."
+            success: "{cs}Pontos de Spawn gerados com sucesso."
+            impossible: "{ce}Pediste o Impossivel: existem demasiados pontos de spawn no espaco muito pequeno. Diminui os pontos de spawn ou o espaco minimo entre dois pontos."
+        
+        list:
+            nothing: "{ce}Não está nenhum Ponto de Spawn registado."
+            count: "{ci}Estao {0} Pontos de Spawn registados."
+            world: "{lightpurple}Mundo {0}"
+            item:
+                overworld: "{green}{0}{darkgreen};{green}{1}"
+                nether: "{red}{0}{darkred};{red}{1}"
+                end: "{yellow}{0}{gold};{yellow}{1}"
+                other: "{gray}{0}{darkgray};{gray}{1}"
+        
+        remove:
+            removed: "{cs}O Ponto de Spawn {1};{2} no Mundo {0} foi Removido."
+        
+        reset: "{cs}TODOS os Pontos de Spawn foram Removidos."
+    
+    team:
+        syntaxError: "{ce}Syntax Error. Usa: /uh team para veres os Comandos."
+        unknownCommand: "{ce}Comando Desconhecido. Faz /uh team para Comandos Validos."
+        
+        add:
+            errorColor: "{ce}Impossivel criar a Equipe, verifica o nome da cor. Dica: usa Tab para auto completar."
+            errorExists: "{ce}Esta Equipe ja existe."
+            added: "{cs}Equipe {0}{cs} adicionada."
+        
+        remove:
+            doesNotExists: "{ce}Esta Equipe não Existe."
+            removed: "{cs}Equipe {0} Eliminada."
+        
+        addplayer:
+            disconnected: "{ce}Impossivel adicionar {0} a Equipe {1}. O Jogador tem de estár Online."
+            success: "{cs}O Jogador {0} foi adicionado com Sucesso a Equipe {1}"
+            added: "{aqua}Estass agora na {aqua}Equipe {reset}{0}."
+            doesNotExists: "{ce}Esta Equipe não Existe."
+            full: "{ce}A Equipe {0}{ce} está Completa!"
+        
+        removeplayer:
+            disconnected: "{ce}O Jogador {0} está OFFLINE!"
+            success: "{cs}O Jogador {0} foi removido com Sucesso da sua Equipe."
+            removed: "{darkaqua}Tu ja não fazes parte da Equipe {0}{darkaqua}."
+        
+        list:
+            nothing: "{ce}Não existe nenhuma Equipe para ser Mostrada."
+            itemTeam: "{0} ({1} Jogadores)"
+            
+            bulletPlayerOnline: "{green} • "
+            bulletPlayerOffline: "{red} • "
+            
+            itemPlayer: "{0}"
+            itemPlayerDead: "{0} {reset}({red}Morto{reset})"
+            itemPlayerAlive: "{0} {reset}({green}Vivo{reset})"
+        
+        reset:
+            success: "{cs}Todas as Equipes foram Removidas."
+        
+        message:
+            noConsole: "{ce}Não podes enviar uma mensagem de Equipe a partir da Console."
+            noTeam: "{ce}Não estás em nenhuma Equipe!"
+            usage: "{ce}Usa: /{0} <mensagem>"
+            
+            notAllowed: 
+                self: "{ce}Não te e permitido enviar mensagens privadas para a tua Equipe."
+                others: "{ce}Não te e permitido entrar no chat privado de outra equipe."
+            
+            toggle:
+                nowTeamChat: "{cs}Estas agora a falar apenas com a tua Equipe."
+                nowGlobalChat: "{cs}Estas agora a falar com Todos."
+                
+                nowOtherTeamChat: "{cs}Estas agora a falar com a Equipe {0}{cs}."
+                unknownTeam: "{ce}Esta Equipe não existe."
+            
+            format: "{gold}[{0}{gold} -> Equipe] {reset}{1}"
+            formatOtherTeam: "{gold}[{0}{gold} -> Equipe {1}{gold}] {reset}{2}"
+            
+    shift:
+        consoleName: Console
+        cantNotStarted: "{ce}Não podes passar para o próximo episódio porque o Jogo ainda não Comecou."
+    
+    heal:
+        usage: "{ce}Usa: /uh heal <jogador> [número de Meios-Coracoes = 20]"
+        offline: "{ce}Este Jogador está OFFLINE."
+        errorNaN: "{ce}Hey, isso não e um número de meios-coracoes. Isso e Texto. Pfff."
+        errorNoKill: "{ce}Não podes MATAR Jogadores com este comando, para evitar falhas na escrita."
+        errorHealthNotUpdatedNoKill: "{ce}A Vida de {0} não foi atualizada para evitar a sua Morte."
+        allErrorNoKill: "{ce}Assassino em Serie!"
+    
+    resurrect:
+        usage: "{ce}Usa: /uh resurrect <jogador>"
+        unknownOrDead: "{ce}Este Jogador não está a Jogar ou está MORTO!"
+        offlineOk: "{cs}Porque {0} está OFFLINE, vamos ressuscita lo quando ele ficar ONLINE. Se estáva Banido, ja não está."
+        notDead: "{ce}{0} não está MORTO!"
+        broadcastMessage: "{gold}{0} foi ressuscitado!"
+    
+    tpback:
+        usage: "{ce}Usa: /uh tpback <jogador> [force]"
+        offline: "{ce}O Jogador {0} não está ONLINE."
+        noDeathLocation: "{ce}Não existe ponto de Morte para {0}."
+        teleported: "{cs}O Jogador {0} foi teleportado para o local da sua Morte."
+        notTeleportedNoSafeSpot: "{ce}{0} não foi teleportado porque não foi encontrado um local seguro para o mesmo."
+        notTeleportedNoSafeSpotCmd: "{ci}Usa {cc}/uh tpback {0} force{ci} para teleportar o Jogador mesmo que o local não seja seguro."
+    
+    tp:
+        NaN: "{ce}As coordenadas tem que ser tres números validos."
+        targetOffline: "{ce}{0} está OFFLINE!"
+        teamDoesNotExists: "{ce}Esta Equipe não está Registada."
+    
+    spectators:
+        syntaxError: "{ce}Syntax Error. Usa: /uh spec para detalhes."
+        unknownCommand: "{ce}Comando Desconhecido. Faz /uh spec para os Comandos Disponiveis."
+        offline: "{ce}{0} está OFFLINE."
+        
+        add:
+            success: "{cs}{0} está agora em Modo Espectador."
+        
+        remove:
+            success: "{cs}{0} e agora um Jogador. Modo Espectador Desativado"
+        
+        list:
+            nothing: "{ce}Não existe nenhum Espectador."
+            countSpectators: "{ci}{0} Espectadores registados."
+            countOnlyInitial: "{ci}Este número inclui apenas os Espectadores Iniciais."
+            itemSpec: "{lightpurple} - {0}"
+    
+    freeze:
+        frozen: "{cst}Foste Congelado por {0}."
+        unfrozen: "{cst}Foste Descongelado por {0}."
+        playerFrozen: "{cs}{0} está agora Congelado."
+        playerUnfrozen: "{cs}{0} está agora Descongelado."
+        
+        playerOnly: "{ce}Precisas de ser um Jogador para fazeres este Comando destá Maneira."
+        offline: "{ce}{0} está OFFLINE!"
+        
+        scoreboard: "{darkaqua}JOGO PARADO"
+        
+        broadcast:
+            globalFreeze: "{darkaqua}O Jogo está agora PARADO."
+            globalUnfreeze: "{darkaqua}O Jogo foi Retomado."
+    
+    borders:
+        syntaxError: "{ce}Syntax Error. Usa: /uh border para detalhes."
+        NaN: "{ce}“{0}” não e um Numero..."
+        
+        current:
+            messageSquared: "{ci}O Tamanho atual do Limite e {0}*{0}."
+            messageCircular: "{ci}O Tamanho atual do Limite Circular e de {0} blocos."
+        
+        set:
+            playersOutsideCanceled: "{ce}Alguns jogadores estáo fora dos Futuros Limites. A operacao foi CANCELADA."
+            playersOutsideCanceledCmd: "{ci}Usa {cc}/uh border set {0} force{ci} para aplicares os Futuros Limites, mesmo com os jogadores Fora dos Limites."
+            playersOutsideCanceledWarnWorldBorder: "{ce}AVISO: {ci}WorldBorder não está Instalado, Jogadores fora dos Limites não serão Teleportados!"
+            broadcastSquared: "{lightpurple}O Tamanho dos Limites e agora {0}*{0}."
+            broadcastCircular: "{lightpurple}O Tamanho do Limte Circular e agora {0} blocos."
+        
+        warning:
+            canceled: "{cs}Avisos Cancelados."
+            set: "{cs}Limite Futuro Salvo. Todos os Jogadores fora dos Futuros Limites serão avisados a cada {0} segundos."
+            
+            messageSquared: "{ce}Estas fora dos Futuros Limtes de {0}*{0}."
+            messageCircular: "{ce}Estas fora do Futuro Limite de diametro {0}."
+            
+            messageDistance: "{ci}Tens de andar {0} blocos para estáres dentro dos Novos Limites."
+            
+            nameTimer: "Proximos Limites"
+            
+            timerUp: "{cs}Acabou o tempo para os Novos Limites!"
+        
+        check:
+            allPlayersInside: "{cs}Todos os Jogadores estáo dentro dos Novos Limites."
+            countPlayersOutside: "{ci}Estao {0} jogadores fora dos Novos Limites."
+            itemPlayerFar: "{lightpurple} - {red}{0}{ci} (Longe dos Novos Limites)"
+            itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (Perto dos Novos Limites)"
+            itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (Muito Perto dos Novos Limites)"
+
+    timers:
+        syntaxError: "{ce}Syntax error. Usa: /uh timers para detalhes."
+        durationSyntaxError: "{ce}A Duracao que inseriste e não e valida. Os formatos que podes utilizar são mm ou mm:ss ou hh:mm:ss."
+        timerDoesNotExists: "{ce}Este temporizador não está registado."
+        alreadyExists: "{ce}Um temporizador com o nome {0}{ce} ja existe; escolhe outro nome."
+        
+        added: "{cs}O temporizador {0}{cs} (duracao {1}) foi adicionado."
+        set: "{cs}A Duracao do temporizador {0}{cs} e agora {1}."
+        displayed: "{cs}O temporizador {0}{cs} e agora Exibido."
+        hidden: "{cs}O temporizador {0}{cs} está agora Oculto."
+        started: "{cs}O temporizador {0}{cs} foi Iniciado."
+        paused: "{cs}O temporizador {0}{cs} foi Pausado."
+        resumed: "{cs}O temporizador {0}{cs} foi Retomado."
+        stopped: "{cs}O temporizador {0}{cs} foi Parado."
+        removed: "{cs}O temporizador {0}{cs} foi Removido."
+        
+        list:
+            count: "{ci}Estao registados {0} temporizadores."
+            itemRunning: "{green} • {ci}{0}{ci} - total {1} segundos - {2}"
+            itemPaused: "{yellow} • {ci}{0}{ci} - total {1} segundos - {2}"
+            itemStopped: "{red} • {ci}{0}{ci} - total {1} segundos"
+
+    protips:
+        base: "{darkpurple}Dica!"
+        
+        teamchat:
+            lock: "{gray}Podes usar {cc}/togglechat{gray} para mudar e bloquear o chat entre o chat de Equipe e o chat Global."
+            useTCommand: "{gray}Para enviares mensagens rapidas para a tua equipe usa {cc}/t <mensagem>{gray}."
+            useGCommand: "{gray}Para enviares mensagens rapidas para todos usa {cc}/g <mensagem>{gray}."
+        
+        crafts:
+            goldenHead: "{gray}Podes fazer Macas Douradas com cabecas (a mesma maneira mas com uma cabeca em vez de uma maca)."
+            compassEasy: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora."
+            compassMedium: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora; no centro, uma enderpearl."
+            compassHard: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora; no centro, um olho do fim."
+            glisteringMelon: "{gray}A melancia reluzente e feita com uma melancia e um bloco de ouro."
+            noEnchGoldenApple: "{gray}As Macas Douradas Encantadas estáo desativadas para este jogo."
+        
+        start:
+            invincibility: "{gray}Caiste numa Arvore? Salta, ainda tens 25 segundos de invencibilidade."
