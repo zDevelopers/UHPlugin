@@ -3,9 +3,9 @@ keys:
     load:
         spawnPointAdded: "Ponto de Spawn {0},{1} adicionado a partir das configurações"
         invalidSpawnPoint: "Ponto de Spawn inválido nas configurações: {0}"
-        teamAdded: "Equipe {0} adicionada a partir das configurações"
-        namedTeamAdded: "Equipe {0} ({1}) adicionada a partir das configurações"
-        invalidTeam: "Equipe inválida nas configurações: {0}"
+        teamAdded: "equipe {0} adicionada a partir das configurações"
+        namedTeamAdded: "equipe {0} ({1}) adicionada a partir das configurações"
+        invalidTeam: "equipe inválida nas configurações: {0}"
         recipeApple: "Adicionada nova receita para Maçã de Dourada."
         recipeCompass: "Adicionada nova receita para Bússola."
         recipeMelon: "Adicionada nova receita para Melancia Reluzente."
@@ -59,7 +59,7 @@ keys:
         helpInfos: "{cc}/uh infos {ci}: Printa somente as informações sobre o jogo atual."
         helpAbout: "{cc}/uh about {ci}: Informação sobre o Plugin e as traduções."
         
-        teamHelpTitle: "{aqua}------ Comandos para Equipes ------"
+        teamHelpTitle: "{aqua}------ Comandos para equipes ------"
         teamHelpAdd: "{cc}/uh team add <cor> {ci}: Adiciona uma equipe com uma determinada cor."
         teamHelpAddName: "{cc}/uh team add <cor> <nome ...> {ci}: Adiciona uma equipe com um determinado nome e cor. Podem ser usados espaços."
         teamHelpRemove: "{cc}/uh team remove <nome ...> {ci}: elimina uma equipe"
@@ -73,7 +73,7 @@ keys:
         spawnsHelpTitle: "{aqua}------ Comandos para os Spawns ------"
         spawnsHelpAdd: "{cc}/uh spawns add {ci}: adiciona um ponto de spawn para uma equipe ou jogador, no local onde é executado."
         spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: adiciona um ponto de spawn para uma equipe ou jogador, nas coordenadas inseridas, no mundo padrão."
-        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|grid|random> [Tamanho = Tamanho dos Limites] [DistânciaMin = 250] [pontos de spawn = Número de Equipes] [xCentro = xSpawn] [zCentro = zSpawn] [world = mundo onde é executado o comando] {ci}: Gera automaticamente os pontos de spawn com a forma inserida."
+        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|grid|random> [Tamanho = Tamanho dos Limites] [DistânciaMin = 250] [pontos de spawn = Número de equipes] [xCentro = xSpawn] [zCentro = zSpawn] [world = mundo onde é executado o comando] {ci}: Gera automaticamente os pontos de spawn com a forma inserida."
         spawnsHelpGenerateDetailsCmdTitle: "{aqua}Comandos"
         spawnsHelpGenerateDetailsCmd: "{cc}/uh spawns generate <circular|grid|random> [size] [distanceMin] [count] [xCenter] [zCenter] [world]"
         spawnsHelpGenerateDetailsShapesTitle: "{aqua}Formatos"
@@ -151,7 +151,7 @@ keys:
         
         startSlowBeforeStartSlowGo: "{ce}Digite {cc}/uh start slow{ce} antes."
         startSlowWaitBeforeGo: "{ce}Por favor aguarde até os jogadores serem teletransportados."
-        startSlowTeamTP: "{gray}Equipe {0}{gray} teletransportada."
+        startSlowTeamTP: "{gray}equipe {0}{gray} teletransportada."
         startSlowAllTeamsTP: "{cs}Todas as equipes foram teletransportadas."
         startSlowAllTeamsTPCmd: "{gray}Digite {cc}/uh start slow go{gray} para iniciar a partida."
         
@@ -173,8 +173,8 @@ keys:
     
     scoreboard:
         episode: "{gray}Episódio {white}{0}"
-        players: "{white}{0}{gray} Jogadores"
-        teams: "{white}{0}{gray} Equipes"
+        players: "{white}{0}{gray} jogadores"
+        teams: "{white}{0}{gray} equipes"
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
     
@@ -209,43 +209,43 @@ keys:
         success: "{gray}A bússola está apotando para o jogador mais próximo de você."
     
     dynmap:
-        markerLabelDeath: "{0} morreu aqui"
+        markerLabelDeath: "local onde {0} morreu"
         markerLabelSpawn: "Local de spawn da equipe {0}"
         markerLabelSpawnNoTeam: "Local de spawn de {0}"
     
     wall:
-        startGen: "{cst}A Gerar os Limites..."
-        consoleDefaultWorld: "{ci}Apartir do Console, a gerar os limites para o mundo Default, {0}"
-        error: "{ce}Impossivel Gerar os Limites: ve os logs para detalhes. Os blocos colocados nas configurações são provavelmente invalidos."
-        unknownError: "{ce}Ocorreu um Erro, ve a Console para detalhes."
-        blocksError: "Impossivel construir os Limites, os blocos nas configurações são invalidos."
-        done: "{cst}Limites Criados com Sucesso."
+        startGen: "{cst}Gerando os limites..."
+        consoleDefaultWorld: "{ci}A partir do Console, gerando os limites para o mundo padrão, {0}"
+        error: "{ce}Impossível gerar os limites: verifique os logs para detalhes. Os blocos configurados são provavelmente inválidos."
+        unknownError: "{ce}Ocorreu um erro, verifique o console para maiores detalhes."
+        blocksError: "Impossível construir as muralhas, os blocos nas configurações são inválidos."
+        done: "{cst}Muralhas criadas com sucesso."
     
     spawns:
         NaN: "{ce}Isto não e um número!"
-        syntaxError: "{ce}Syntax error; Faz /uh spawns."
-        errorCoords: "{ce}Tens de especificar as coordenadas a partir da Console."
-        error2Coords: "{ce}Precisas de especificar pelo menos duas coordenadas."
+        syntaxError: "{ce}Erro de sintaxe; Digite /uh spawns."
+        errorCoords: "{ce}As coordenadas precisam ser inseridas a partir do console."
+        error2Coords: "{ce}É necessária a especificação de pelo menos duas coordenadas."
         
         add:
-            added: "{cs}Ponto de Spawn adicionado no Mundo {0}: {1};{2}"
-            outOfLimits: "{ce}Não podes adicionar um ponto de spawn fora dos Limites."
-            noSafeSpot: "{ce}Impossivel adicionar este ponto de Spawn: não foi encontrado um ponto de spawn no Nether."
+            added: "{cs}Local de spawn adicionado ao mundo {0}: {1};{2}"
+            outOfLimits: "{ce}Locais de spawn só são possíveis dentro das muralhas."
+            noSafeSpot: "{ce}Impossível adicionar este ponto de spawn: não foi encontrado um local seguro no Inferno."
         
         assumptions:
-            solo: "{ci}Nenhuma EQUIPA encontrada. Assumindo que o jogo e em modo SOLO."
-            partialSolo: "{ci}Alguns jogadores não estáo em nenhuma equipe; ficarao a jogar sozinhos; foram adicionados ao número de Pontos de Spawn necessários."
+            solo: "{ci}Nenhuma equipe encontrada. Assumirei que o jogo e está em modo solo."
+            partialSolo: "{ci}Alguns jogadores não estão em nenhuma equipe; este número foi adicionada ao número de locais de spawn."
         
         generate:
-            nothingToDo: "{ci}You asked a void generation. Thus, the generation is empty."
-            unsupportedMethod: "{ce}The generation method “{0}” is not (yet?) supported."
-            unknownWorld: "{ce}O Mundo {0} não existe."
-            success: "{cs}Pontos de Spawn gerados com sucesso."
-            impossible: "{ce}Pediste o Impossivel: existem demasiados pontos de spawn no espaço muito pequeno. Diminui os pontos de spawn ou o espaço minimo entre dois pontos."
+            nothingToDo: "{ci}Você especificou uma geração nula. Portanto, a geração está vazia."
+            unsupportedMethod: "{ce}O método de geração “{0}” (ainda?) não foi implementado."
+            unknownWorld: "{ce}O mundo {0} não existe."
+            success: "{cs}Os Locais de spawn especificados foram gerados com sucesso."
+            impossible: "{ce}A sua especificação é impossível: existem muitos locais de spawn em um espaço limitado. Corrija este erro reduzindo o número de locais spawn ou o espaço mínimo entre dois pontos."
         
         list:
-            nothing: "{ce}Não está nenhum Ponto de Spawn registado."
-            count: "{ci}Estao {0} Pontos de Spawn registrados."
+            nothing: "{ce}Não existe nenhum local de spawn registrado."
+            count: "{ci}Existem {0} locais de spawn registrados."
             world: "{lightpurple}Mundo {0}"
             item:
                 overworld: "{green}{0}{darkgreen};{green}{1}"
@@ -254,38 +254,41 @@ keys:
                 other: "{gray}{0}{darkgray};{gray}{1}"
         
         remove:
-            removed: "{cs}O Ponto de Spawn {1};{2} no Mundo {0} foi Removido."
+            removed: "{cs}O local de spawn {1};{2} no mundo {0} foi removido."
         
-        reset: "{cs}TODOS os Pontos de Spawn foram Removidos."
+        reset: "{cs}Todos os locais de spawn foram removidos."
     
     team:
-        syntaxError: "{ce}Syntax Error. Usa: /uh team para veres os Comandos."
-        unknownCommand: "{ce}Comando Desconhecido. Faz /uh team para Comandos Validos."
+        syntaxError: "{ce}Erro de sintaxe. Digite: /uh team para ver os comandos disponíveis."
+        unknownCommand: "{ce}Comando desconhecido. Digite /uh team para ver os comandos disponíveis."
+        onlyAsAPlayer: "{ce}Este comando só pode ser executado dessa forma se você for um jogador."
         
         add:
-            errorColor: "{ce}Impossivel criar a Equipe, verifica o nome da cor. Dica: usa Tab para auto completar."
-            errorExists: "{ce}Esta Equipe ja existe."
-            added: "{cs}Equipe {0}{cs} adicionada."
+            errorColor: "{ce}Impossível criar a equipe, verifique a cor. Dica: use Tab para auto completar."
+            errorExists: "{ce}Esta equipe já existe."
+            added: "{cs}equipe {0}{cs} adicionada."
         
         remove:
-            doesNotExists: "{ce}Esta Equipe não Existe."
-            removed: "{cs}Equipe {0} Eliminada."
+            doesNotExists: "{ce}equipe inexistente."
+            removed: "{cs}equipe {0} removida."
         
         addplayer:
-            disconnected: "{ce}Impossivel adicionar {0} a Equipe {1}. O Jogador tem de estár Online."
-            success: "{cs}O Jogador {0} foi adicionado com Sucesso a Equipe {1}"
-            added: "{aqua}Estass agora na {aqua}Equipe {reset}{0}."
-            doesNotExists: "{ce}Esta Equipe não Existe."
-            full: "{ce}A Equipe {0}{ce} está Completa!"
+            disconnected: "{ce}Impossível adicionar {0} à equipe {1}. O jogador não está online."
+            success: "{cs}O jogador {0} foi adicionado com sucesso a equipe {1}"
+            added: "{aqua}Você foi adicionado à equipe {0}{aqua}."
+            doesNotExists: "{ce}Esta equipe não existe."
+            full: "{ce}A equipe {0}{ce} já está lotada!"
+            
+            joinhelp: "{ce}Digite: {cc}/join [jogador] <equipe>{ce}."
         
         removeplayer:
-            disconnected: "{ce}O Jogador {0} está OFFLINE!"
-            success: "{cs}O Jogador {0} foi removido com Sucesso da sua Equipe."
-            removed: "{darkaqua}Tu ja não fazes parte da Equipe {0}{darkaqua}."
+            disconnected: "{ce}O jogador {0} está desconectado!"
+            success: "{cs}O jogador {0} foi removido com sucesso da sua equipe."
+            removed: "{darkaqua}Você foi removido da equipe {0}{darkaqua}."
         
         list:
-            nothing: "{ce}Não existe nenhuma Equipe para ser Mostrada."
-            itemTeam: "{0} ({1} Jogadores)"
+            nothing: "{ce}Não existe nenhuma equipe para ser Mostrada."
+            itemTeam: "{0} ({1} jogadores)"
             
             bulletPlayerOnline: "{green} • "
             bulletPlayerOffline: "{red} • "
@@ -295,26 +298,26 @@ keys:
             itemPlayerAlive: "{0} {reset}({green}Vivo{reset})"
         
         reset:
-            success: "{cs}Todas as Equipes foram Removidas."
+            success: "{cs}Todas as equipes foram Removidas."
         
         message:
-            noConsole: "{ce}Não podes enviar uma mensagem de Equipe a partir da Console."
-            noTeam: "{ce}Não estás em nenhuma Equipe!"
+            noConsole: "{ce}Não podes enviar uma mensagem de equipe a partir da Console."
+            noTeam: "{ce}Não estás em nenhuma equipe!"
             usage: "{ce}Usa: /{0} <mensagem>"
             
             notAllowed: 
-                self: "{ce}Não te e permitido enviar mensagens privadas para a tua Equipe."
+                self: "{ce}Não te e permitido enviar mensagens privadas para a tua equipe."
                 others: "{ce}Não te e permitido entrar no chat privado de outra equipe."
             
             toggle:
-                nowTeamChat: "{cs}Estas agora a falar apenas com a tua Equipe."
+                nowTeamChat: "{cs}Estas agora a falar apenas com a tua equipe."
                 nowGlobalChat: "{cs}Estas agora a falar com Todos."
                 
-                nowOtherTeamChat: "{cs}Estas agora a falar com a Equipe {0}{cs}."
-                unknownTeam: "{ce}Esta Equipe não existe."
+                nowOtherTeamChat: "{cs}Estas agora a falar com a equipe {0}{cs}."
+                unknownTeam: "{ce}Esta equipe não existe."
             
-            format: "{gold}[{0}{gold} -> Equipe] {reset}{1}"
-            formatOtherTeam: "{gold}[{0}{gold} -> Equipe {1}{gold}] {reset}{2}"
+            format: "{gold}[{0}{gold} -> equipe] {reset}{1}"
+            formatOtherTeam: "{gold}[{0}{gold} -> equipe {1}{gold}] {reset}{2}"
             
     shift:
         consoleName: Console
@@ -322,31 +325,31 @@ keys:
     
     heal:
         usage: "{ce}Usa: /uh heal <jogador> [número de Meios-Coracoes = 20]"
-        offline: "{ce}Este Jogador está OFFLINE."
+        offline: "{ce}Este jogador está OFFLINE."
         errorNaN: "{ce}Hey, isso não e um número de meios-coracoes. Isso e Texto. Pfff."
-        errorNoKill: "{ce}Não podes MATAR Jogadores com este comando, para evitar falhas na escrita."
+        errorNoKill: "{ce}Não podes MATAR jogadores com este comando, para evitar falhas na escrita."
         errorHealthNotUpdatedNoKill: "{ce}A Vida de {0} não foi atualizada para evitar a sua Morte."
         allErrorNoKill: "{ce}Assassino em Serie!"
     
     resurrect:
         usage: "{ce}Usa: /uh resurrect <jogador>"
-        unknownOrDead: "{ce}Este Jogador não está a Jogar ou está MORTO!"
+        unknownOrDead: "{ce}Este jogador não está a Jogar ou está MORTO!"
         offlineOk: "{cs}Porque {0} está OFFLINE, vamos ressuscita lo quando ele ficar ONLINE. Se estáva Banido, ja não está."
         notDead: "{ce}{0} não está MORTO!"
         broadcastMessage: "{gold}{0} foi ressuscitado!"
     
     tpback:
         usage: "{ce}Usa: /uh tpback <jogador> [force]"
-        offline: "{ce}O Jogador {0} não está ONLINE."
+        offline: "{ce}O jogador {0} não está ONLINE."
         noDeathLocation: "{ce}Não existe ponto de Morte para {0}."
-        teleported: "{cs}O Jogador {0} foi teleportado para o local da sua Morte."
+        teleported: "{cs}O jogador {0} foi teleportado para o local da sua Morte."
         notTeleportedNoSafeSpot: "{ce}{0} não foi teleportado porque não foi encontrado um local seguro para o mesmo."
-        notTeleportedNoSafeSpotCmd: "{ci}Usa {cc}/uh tpback {0} force{ci} para teleportar o Jogador mesmo que o local não seja seguro."
+        notTeleportedNoSafeSpotCmd: "{ci}Usa {cc}/uh tpback {0} force{ci} para teleportar o jogador mesmo que o local não seja seguro."
     
     tp:
         NaN: "{ce}As coordenadas tem que ser tres números validos."
         targetOffline: "{ce}{0} está OFFLINE!"
-        teamDoesNotExists: "{ce}Esta Equipe não está Registada."
+        teamDoesNotExists: "{ce}Esta equipe não está Registada."
     
     spectators:
         syntaxError: "{ce}Syntax Error. Usa: /uh spec para detalhes."
@@ -357,7 +360,7 @@ keys:
             success: "{cs}{0} está agora em Modo Espectador."
         
         remove:
-            success: "{cs}{0} e agora um Jogador. Modo Espectador Desativado"
+            success: "{cs}{0} e agora um jogador. Modo Espectador Desativado"
         
         list:
             nothing: "{ce}Não existe nenhum Espectador."
@@ -371,7 +374,7 @@ keys:
         playerFrozen: "{cs}{0} está agora Congelado."
         playerUnfrozen: "{cs}{0} está agora Descongelado."
         
-        playerOnly: "{ce}Precisas de ser um Jogador para fazeres este Comando destá Maneira."
+        playerOnly: "{ce}Precisas de ser um jogador para fazeres este Comando destá Maneira."
         offline: "{ce}{0} está OFFLINE!"
         
         scoreboard: "{darkaqua}JOGO PARADO"
@@ -391,13 +394,13 @@ keys:
         set:
             playersOutsideCanceled: "{ce}Alguns jogadores estáo fora dos Futuros Limites. A operação foi CANCELADA."
             playersOutsideCanceledCmd: "{ci}Usa {cc}/uh border set {0} force{ci} para aplicares os Futuros Limites, mesmo com os jogadores Fora dos Limites."
-            playersOutsideCanceledWarnWorldBorder: "{ce}AVISO: {ci}WorldBorder não está Instalado, Jogadores fora dos Limites não serão Teleportados!"
+            playersOutsideCanceledWarnWorldBorder: "{ce}AVISO: {ci}WorldBorder não está Instalado, jogadores fora dos Limites não serão Teleportados!"
             broadcastSquared: "{lightpurple}O Tamanho dos Limites e agora {0}*{0}."
             broadcastCircular: "{lightpurple}O Tamanho do Limte Circular e agora {0} blocos."
         
         warning:
             canceled: "{cs}Avisos Cancelados."
-            set: "{cs}Limite Futuro Salvo. Todos os Jogadores fora dos Futuros Limites serão avisados a cada {0} segundos."
+            set: "{cs}Limite Futuro Salvo. Todos os jogadores fora dos Futuros Limites serão avisados a cada {0} segundos."
             
             messageSquared: "{ce}Estas fora dos Futuros Limtes de {0}*{0}."
             messageCircular: "{ce}Estas fora do Futuro Limite de diametro {0}."
@@ -409,7 +412,7 @@ keys:
             timerUp: "{cs}Acabou o tempo para os Novos Limites!"
         
         check:
-            allPlayersInside: "{cs}Todos os Jogadores estáo dentro dos Novos Limites."
+            allPlayersInside: "{cs}Todos os jogadores estáo dentro dos Novos Limites."
             countPlayersOutside: "{ci}Estao {0} jogadores fora dos Novos Limites."
             itemPlayerFar: "{lightpurple} - {red}{0}{ci} (Longe dos Novos Limites)"
             itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (Perto dos Novos Limites)"
@@ -418,7 +421,7 @@ keys:
     timers:
         syntaxError: "{ce}Syntax error. Usa: /uh timers para detalhes."
         durationSyntaxError: "{ce}A Duracao que inseriste e não e valida. Os formatos que podes utilizar são mm ou mm:ss ou hh:mm:ss."
-        timerDoesNotExists: "{ce}Este cronômetro não está registado."
+        timerDoesNotExists: "{ce}Este cronômetro não está registrado."
         alreadyExists: "{ce}Um cronômetro com o nome {0}{ce} ja existe; escolhe outro nome."
         
         added: "{cs}O cronômetro {0}{cs} (duração {1}) foi adicionado."
@@ -441,7 +444,7 @@ keys:
         base: "{darkpurple}Dica!"
         
         teamchat:
-            lock: "{gray}Podes usar {cc}/togglechat{gray} para mudar e bloquear o chat entre o chat de Equipe e o chat Global."
+            lock: "{gray}Podes usar {cc}/togglechat{gray} para mudar e bloquear o chat entre o chat de equipe e o chat Global."
             useTCommand: "{gray}Para enviares mensagens rapidas para a tua equipe usa {cc}/t <mensagem>{gray}."
             useGCommand: "{gray}Para enviares mensagens rapidas para todos usa {cc}/g <mensagem>{gray}."
         
