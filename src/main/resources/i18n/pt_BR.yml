@@ -6,7 +6,7 @@ keys:
         teamAdded: "equipe {0} adicionada a partir das configurações"
         namedTeamAdded: "equipe {0} ({1}) adicionada a partir das configurações"
         invalidTeam: "equipe inválida nas configurações: {0}"
-        recipeApple: "Adicionada nova receita para Maçã de Dourada."
+        recipeApple: "Adicionada nova receita para Maçã Dourada."
         recipeCompass: "Adicionada nova receita para Bússola."
         recipeMelon: "Adicionada nova receita para Melancia Reluzente."
         loaded: "plugin Ultra Difícil Carregado."
@@ -491,16 +491,16 @@ keys:
         
         teamchat:
             lock: "{gray}Você pode digitar {cc}/togglechat{gray} para mudar e bloquear o chat entre o chat de equipe e o chat global."
-            useTCommand: "{gray}Para enviar mensagens rápidas para a tua equipe digite: {cc}/t <mensagem>{gray}."
+            useTCommand: "{gray}Para enviar mensagens rápidas para a sua equipe digite: {cc}/t <mensagem>{gray}."
             useGCommand: "{gray}Para enviar mensagens rápidas para todos digite: {cc}/g <mensagem>{gray}."
         
         crafts:
-            goldenHead: "{gray}Podes fazer Macas Douradas com cabeças (a mesma maneira mas com uma cabeça em vez de uma maca)."
-            compassEasy: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora."
-            compassMedium: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora; no centro, uma enderpearl."
-            compassHard: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora; no centro, um olho do fim."
+            goldenHead: "{gray}Você pode fazer maçãs douradas com cabeças (da mesma maneira que você faria com uma maçã use a cabeça)."
+            compassEasy: "{gray}Para fazer uma bússola coloque, nos cantos, um osso, uma carne podre, um olho de aranha e uma pólvora."
+            compassMedium: "{gray}Para fazer uma bússola coloque, nos cantos, um osso, uma carne podre, um olho de aranha e uma pólvora; no centro, uma enderpearl."
+            compassHard: "{gray}Para fazer uma bússola coloque, nos cantos, um osso, uma carne podre, um olho de aranha e uma pólvora; no centro, um olho de ender."
             glisteringMelon: "{gray}A melancia reluzente e feita com uma melancia e um bloco de ouro."
-            noEnchGoldenApple: "{gray}As Macas Douradas Encantadas estáo desativadas para este jogo."
+            noEnchGoldenApple: "{gray}As maçãs douradas encantadas (ou do capiroto) estão desativadas para este jogo."
         
         start:
-            invincibility: "{gray}Caiste numa Arvore? Salta, ainda tens 25 segundos de invencibilidade."
+            invincibility: "{gray}Caiu em uma árvore? Pula, você ainda têm 25 segundos de invencibilidade."
