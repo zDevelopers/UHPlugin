@@ -54,7 +54,7 @@ keys:
         titleMiscCmd: "{aqua}------ Outros Comandos ------"
         helpFreeze: "{cc}/uh freeze {ci}: (Des)congela o jogo todo, ou um jogador. Digite /uh freeze para detalhes."
         helpFinish: "{cc}/uh finish {ci}: Exibe o nome do(s) vencedor(es) e lança foguetes."
-        helpTP: "{cc}/uh tp {ci}: Teleporta os espectadores ou uma equipe inteira. Digite /uh tp para detalhes."
+        helpTP: "{cc}/uh tp {ci}: Teletransporta os espectadores ou uma equipe inteira. Digite /uh tp para detalhes."
         helpTimers: "{cc}/uh timers {ci}: Configura os tempos. Digite /uh timers para detalhes."
         helpInfos: "{cc}/uh infos {ci}: Printa somente as informações sobre o jogo atual."
         helpAbout: "{cc}/uh about {ci}: Informação sobre o Plugin e as traduções."
@@ -130,75 +130,88 @@ keys:
     about:
         authors: "Plugin feito com amor por {0}."
         and: "e"
+        
+        build:
+            number: "Versão Número: {0}."
+            notAvailable: "O número da versão não está disponível."
+        
         i18n:
             title: "{aqua}------ Traduções ------"
             selected: "Linguagem Selecionada: {0} (traduzido por {1})."
-            fallback: "Linguagem para Erros: {0} (traduzido por {1})."
+            fallback: "Linguagem Secundária: {0} (traduzido por {1})."
         license:
             title: "{aqua}------ Licença ------"
             license: "Publicado sobre a GNU General Public License (versão 3)."
     
     start:
-        already: "{ce}O jogo já comecou! Faça um Reload ou Reinicie o server para reiniciar o jogo."
-        syntax: "{ce}Syntax Error. Usa: /uh start [slow] ou /uh start slow go."
+        already: "{ce}O jogo já comecou! Recarregue ou Reinicie o servidor para reiniciar o jogo."
+        syntax: "{ce}Erro de sintaxe. Digite: /uh start [slow] ou /uh start slow go."
+        notEnoughTP: "{ce}Impossível iniciar o jogo: pontos de teleportação insuficientes."
+        teleportationInProgress: "{lightpurple}Teleportação em progresso... Por favor aguarde."
         
-        notEnoughTP: "{ce}Impossivel Comecar o jogo: pontos de Spawn insuficientes."
+        startSlowBeforeStartSlowGo: "{ce}Digite {cc}/uh start slow{ce} antes."
+        startSlowWaitBeforeGo: "{ce}Por favor aguarde até os jogadores serem teletransportados."
+        startSlowTeamTP: "{gray}Equipe {0}{gray} teletransportada."
+        startSlowAllTeamsTP: "{cs}Todas as equipes foram teletransportadas."
+        startSlowAllTeamsTPCmd: "{gray}Digite {cc}/uh start slow go{gray} para iniciar a partida."
         
-        teleportationInProgress: "{lightpurple}Teleporte em Progresso... Espera um Pouco."
-        startSlowBeforeStartSlowGo: "{ce}Faz {cc}/uh start slow{ce} antes desse Comando."
-        startSlowWaitBeforeGo: "{ce}Espera ate os jogadores estárem todos teleportados."
-        startSlowTeamTP: "{gray}Equipe {0}{gray} Teleportada."
-        startSlowAllTeamsTP: "{cs}Todas as Equipes foram Teleportadas."
-        startSlowAllTeamsTPCmd: "{gray}Usa {cc}/uh start slow go{gray} para comecar o jogo."
-        
-        go: "{green}----- GO GO GO -----"
+        go: "{green}----- Começou! -----"
     
     finish:
-        notStarted: "{ce}O jogo ainda não comecou!"
-        notFinished: "{ce}Não está so uma Equipe Viva!"
+        notStarted: "{ce}A partida ainda não iniciou!"
+        notFinished: "{ce}Não há nenhuma equipe viva!"
         
         and: "e"
         
         broadcast:
-            withTeams: "{darkgreen}{obfuscated}--{green} Parabens a {0} (da Equipe {1}{green}) pela sua Vitoria! {darkgreen}{obfuscated}--"
-            withoutTeams: "{darkgreen}{obfuscated}--{green} Parabens a {0} pela sua Vitoria! {darkgreen}{obfuscated}--"
+            withTeams: "{darkgreen}{obfuscated}--{green} Parabéns à {0} (equipe {1}{green}) pela sua vitória! {darkgreen}{obfuscated}--"
+            withoutTeams: "{darkgreen}{obfuscated}--{green} Parabéns a {0} pela sua vitória! {darkgreen}{obfuscated}--"
     
     episodes:
-        end: "{aqua}-------- Fim do Episodio {0} --------"
-        endForced: "{aqua}-------- Fim do Episodio {0} [forcado por {1}] --------"
+        end: "{aqua}-------- Fim do Episódio {0} --------"
+        endForced: "{aqua}-------- Fim do Episódio {0} [forcado por {1}] --------"
     
     scoreboard:
-        episode: "{gray}Episodio {white}{0}"
+        episode: "{gray}Episódio {white}{0}"
         players: "{white}{0}{gray} Jogadores"
         teams: "{white}{0}{gray} Equipes"
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
     
-    death:
-        kickMessage: "Foste MORTO!"
-        banMessage: "Foste MORTO!"
-        teamHasFallen: "{0}A Equipe {1} foi extinguida!"
+    motd:
+        beforeStart: "Aguardando jogadores..."
+        starting: "Iniciando a partida..."
+        runningSolo: "Partida em andamento! {0} jogadores vivos."
+        runningTeams: "Partida em andamento! {0} jogadores vivos em {1} equipes."
+        finishedSolo: "Partida encerrada! Parabéns ao jogador {0} pela sua vitória!"
+        finishedTeams: "Partida encerrada! A equipe {0} foi a vencedora!"
         
-        canRespawn: "{darkpurple}{obfuscated}----{lightpurple}{italic} PODES RENASCER{lightpurple}, clica em {italic}Renascer {lightpurple}no proximo ecra."
+    death:
+        kickMessage: "Ha! Ha! Levou uma Butinada!"
+        banMessage: "Morreu :˜("
+        teamHasFallen: "{0}Todos os jogadores da equipe {1} morreram!"
+        
+        canRespawn: "{darkpurple}{obfuscated}----{lightpurple}{italic} VOCÊ PODE RENASCER{lightpurple}, clique em {italic}Renascer {lightpurple}na próxima tela."
     
     craft:
         goldenApple:
-            loreLine1Player: "Feita da cabeca"
+            loreLine1Player: "Feita da cabeça"
             loreLine2Player: "de {0}"
-            loreLine1Monster: "Feita da cabeca"
-            loreLine2Monster: "de uma coisa Horrivel"
-            nameGoldenAppleFromHeadNormal: "{aqua}Maçã de Dourada"
-            nameGoldenAppleFromHeadNotch: "{lightpurple}Maçã de Dourada"
+            loreLine1Monster: "Feita da cabeça"
+            loreLine2Monster: "de um monstro malígno"
+            
+            nameGoldenAppleFromHeadNormal: "{aqua}Maçã Dourada"
+            nameGoldenAppleFromHeadNotch: "{lightpurple}Maçã Dourada"
     
     compass:
-        noRottenFlesh: "{gray}{italic}Precisas de Carne Podre para utilizares a Bússola."
-        nothingFound: "{gray}{italic}Não foram encontrados jogadores por perto."
-        success: "{gray}A Bússola aponta agora para o jogador mais proximo."
+        noRottenFlesh: "{gray}{italic}Para a bússola é necessária carne podre."
+        nothingFound: "{gray}{italic}Nenhum jogador encontrado nas proximidades."
+        success: "{gray}A bússola está apotando para o jogador mais próximo de você."
     
     dynmap:
-        markerLabelDeath: "Ponto de Morte de {0}"
-        markerLabelSpawn: "Ponto de Spawn da Equipe {0}"
-        markerLabelSpawnNoTeam: "Ponto de Spawn de {0}"
+        markerLabelDeath: "{0} morreu aqui"
+        markerLabelSpawn: "Local de spawn da equipe {0}"
+        markerLabelSpawnNoTeam: "Local de spawn de {0}"
     
     wall:
         startGen: "{cst}A Gerar os Limites..."
@@ -433,7 +446,7 @@ keys:
             useGCommand: "{gray}Para enviares mensagens rapidas para todos usa {cc}/g <mensagem>{gray}."
         
         crafts:
-            goldenHead: "{gray}Podes fazer Macas Douradas com cabecas (a mesma maneira mas com uma cabeca em vez de uma maca)."
+            goldenHead: "{gray}Podes fazer Macas Douradas com cabeças (a mesma maneira mas com uma cabeça em vez de uma maca)."
             compassEasy: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora."
             compassMedium: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora; no centro, uma enderpearl."
             compassHard: "{gray}O Compasso e feito com, nos cantos, um osso, uma carne podre, um olho de aranha e uma polvora; no centro, um olho do fim."
