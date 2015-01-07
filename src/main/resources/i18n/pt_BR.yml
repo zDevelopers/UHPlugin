@@ -92,7 +92,7 @@ keys:
         spawnsHelpReset: "{cc}/uh spawns reset {ci}: Remove todos os pontos de spawn registrados."
         
         specHelpTitle: "{aqua}------ Comandos iniciais para Espectadores ------"
-        specHelpNoticeSpectatorPlusNotInstalled: "{ce}Atenção{ci}: como o Plugin SpectatorPlus não está instalado, um espectador é {italic}apenas{ci} um jogador ignorado."
+        specHelpNoticeSpectatorPlusNotInstalled: "{ce}ATENÇÃO{ci}: como o Plugin SpectatorPlus não está instalado, um espectador é {italic}apenas{ci} um jogador ignorado."
         specHelpAdd: "{cc}/uh spec add <jogador>{ci}: Adiciona um espectador."
         specHelpRemove: "{cc}/uh spec remove <jogador>{ci}: Remove um espectador."
         specHelpList: "{cc}/uh spec list{ci}: Lista dos espectadores."
@@ -435,61 +435,64 @@ keys:
         
         set:
             playersOutsideCanceled: "{ce}Alguns jogadores estão fora dos novos limites. A operação foi cancelada."
-            playersOutsideCanceledCmd: "{ci}Usa {cc}/uh border set {0} force{ci} para aplicares os Futuros Limites, mesmo com os jogadores Fora dos Limites."
-            playersOutsideCanceledWarnWorldBorder: "{ce}AVISO: {ci}WorldBorder não está Instalado, jogadores fora dos Limites não serão Teleportados!"
+            playersOutsideCanceledCmd: "{ci}Digite: {cc}/uh border set {0} force{ci} para estabelecer uma nova dimensão, mesmo que haja jogadores fora dos limites."
+            playersOutsideCanceledWarnWorldBorder: "{ce}ATENÇÃO: {ci}O Plugin WorldBorder não está instalado, jogadores que estejam fora dos limites não serão teletransportados!"
             
             broadcastSquared: "{lightpurple}A área atual do mapa quadrado é {0}*{0}."
             broadcastCircular: "{lightpurple}A área atual do mapa circular e de {0} blocos."
         
         warning:
             canceled: "{cs}Alertas cancelados."
-            set: "{cs}Limite Futuro Salvo. Todos os jogadores fora dos Futuros Limites serão avisados a cada {0} segundos."
             
-            messageSquared: "{ce}Estas fora dos Futuros Limtes de {0}*{0}."
-            messageCircular: "{ce}Estas fora do Futuro Limite de diametro {0}."
+            set: "{cs}Novas dimensões salvas. Todos os jogadores que estejam fora das novas dimensões serão avisados a cada {0} segundos."
             
-            messageDistance: "{ci}Tens de andar {0} blocos para estáres dentro dos Novos Limites."
+            messageSquared: "{ce}Você está fora das novas dimensões de {0}*{0} da área de jogo."
+            messageCircular: "{ce}Você está fora das novas dimensões do círculo {0} que agora é a área do jogo."
             
-            nameTimer: "Proximos Limites"
+            messageDistance: "{ci}Por favor mova-se {0} blocos para estar dentro das novas dimensões."
+            messageDistanceTime: "{ci}Ainda faltam {0} blocos para você estar dentro da área, e {1} minutos para que o seu tempo se esgote."
+           
+            nameTimer: "Dislocando as muralhas"
             
-            timerUp: "{cs}Acabou o tempo para os Novos Limites!"
+            timerUp: "{cs}Acabou o tempo para as novas dimensões!"
         
         check:
-            allPlayersInside: "{cs}Todos os jogadores estáo dentro dos Novos Limites."
-            countPlayersOutside: "{ci}Estao {0} jogadores fora dos Novos Limites."
-            itemPlayerFar: "{lightpurple} - {red}{0}{ci} (Longe dos Novos Limites)"
-            itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (Perto dos Novos Limites)"
-            itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (Muito Perto dos Novos Limites)"
+            allPlayersInside: "{cs}Todos os jogadores estão dentro das novas dimensões."
+            countPlayersOutside: "{ci}Existem {0} jogadores fora das novas dimensões."
+            
+            itemPlayerFar: "{lightpurple} - {red}{0}{ci} (Longe dos novas dimensões)"
+            itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (Perto dos novas dimensões)"
+            itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (Muito Perto dos novas dimensões)"
 
     timers:
-        syntaxError: "{ce}Syntax error. Usa: /uh timers para detalhes."
-        durationSyntaxError: "{ce}A Duracao que inseriste e não e valida. Os formatos que podes utilizar são mm ou mm:ss ou hh:mm:ss."
-        timerDoesNotExists: "{ce}Este cronômetro não está registrado."
-        alreadyExists: "{ce}Um cronômetro com o nome {0}{ce} ja existe; escolhe outro nome."
+        syntaxError: "{ce}Erro de sintaxe. Digite: /uh timers para detalhes."
+        durationSyntaxError: "{ce}A duração inserida é inválida. Os formatos aceitáveis são mm ou mm:ss ou hh:mm:ss."
+        timerDoesNotExists: "{ce}Este cronômetro é inexistente."
+        alreadyExists: "{ce}Um cronômetro com o nome {0}{ce} já existe; Por favor, renomeie o seu cronômetro."
         
-        added: "{cs}O cronômetro {0}{cs} (duração {1}) foi adicionado."
-        set: "{cs}A Duracao do cronômetro {0}{cs} e agora {1}."
-        displayed: "{cs}O cronômetro {0}{cs} e agora Exibido."
-        hidden: "{cs}O cronômetro {0}{cs} está agora Oculto."
-        started: "{cs}O cronômetro {0}{cs} foi Iniciado."
-        paused: "{cs}O cronômetro {0}{cs} foi Pausado."
-        resumed: "{cs}O cronômetro {0}{cs} foi Retomado."
-        stopped: "{cs}O cronômetro {0}{cs} foi Parado."
-        removed: "{cs}O cronômetro {0}{cs} foi Removido."
+        added: "{cs}O cronômetro {0}{cs} (com duração {1}) foi adicionado."
+        set: "{cs}A duração do cronômetro {0}{cs} é agora de {1}."
+        displayed: "{cs}O cronômetro {0}{cs} está sendo exibido."
+        hidden: "{cs}O cronômetro {0}{cs} está ocultado."
+        started: "{cs}O cronômetro {0}{cs} foi iniciado."
+        paused: "{cs}O cronômetro {0}{cs} foi parado."
+        resumed: "{cs}O cronômetro {0}{cs} foi retomado."
+        stopped: "{cs}O cronômetro {0}{cs} foi interrompido."
+        removed: "{cs}O cronômetro {0}{cs} foi removido."
         
         list:
-            count: "{ci}Estao registrados {0} cronômetroes."
-            itemRunning: "{green} • {ci}{0}{ci} - total {1} segundos - {2}"
-            itemPaused: "{yellow} • {ci}{0}{ci} - total {1} segundos - {2}"
-            itemStopped: "{red} • {ci}{0}{ci} - total {1} segundos"
+            count: "{ci}Ao todo foram registrados {0} cronômetroes."
+            itemRunning: "{green} • {ci}{0}{ci} - total de {1} segundos - {2}"
+            itemPaused: "{yellow} • {ci}{0}{ci} - total de {1} segundos - {2}"
+            itemStopped: "{red} • {ci}{0}{ci} - total de {1} segundos"
 
     protips:
         base: "{darkpurple}Dica!"
         
         teamchat:
-            lock: "{gray}Podes usar {cc}/togglechat{gray} para mudar e bloquear o chat entre o chat de equipe e o chat Global."
-            useTCommand: "{gray}Para enviares mensagens rapidas para a tua equipe usa {cc}/t <mensagem>{gray}."
-            useGCommand: "{gray}Para enviares mensagens rapidas para todos usa {cc}/g <mensagem>{gray}."
+            lock: "{gray}Você pode digitar {cc}/togglechat{gray} para mudar e bloquear o chat entre o chat de equipe e o chat global."
+            useTCommand: "{gray}Para enviar mensagens rápidas para a tua equipe digite: {cc}/t <mensagem>{gray}."
+            useGCommand: "{gray}Para enviar mensagens rápidas para todos digite: {cc}/g <mensagem>{gray}."
         
         crafts:
             goldenHead: "{gray}Podes fazer Macas Douradas com cabeças (a mesma maneira mas com uma cabeça em vez de uma maca)."
