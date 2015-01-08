@@ -330,7 +330,7 @@ keys:
             formatOtherTeam: "{gold}[{0}{gold} -> team {1}{gold}] {reset}{2}"
     
     infos:
-        notStarted: "{ci}The game is not stated."
+        notStarted: "{ci}The game is not started."
         players: "{ci}{0} players alive in {1} teams."
         
         bulletOnline: "{green} • "

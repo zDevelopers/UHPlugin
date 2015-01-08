@@ -11,7 +11,7 @@
 # Warning: NEVER USE TABS in this file, always spaces, to indent.
 
 
-# Available languages: en_US, fr_FR, pt_PT.
+# Available languages: en_US, fr_FR, pt_PT, pt_BR.
 lang: en_US
 
 
