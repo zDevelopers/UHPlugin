@@ -182,7 +182,7 @@ All these gameplay tweaks are optional — see [the configuration file](https://
    ![ProTips](http://amaury.carrade.eu/files/Minecraft/Plugins/UH/UHPlugin_ProTips.png)
  - The commands can be accessed using permissions (see subsection below).
  - Autocompletion everywhere.
- - Fully translated into English, French and Portuguese.
+ - Fully translated into English, French, Portuguese and Brazilian.
  - For developers:
     - the game can be controlled through the GameManager (`UHPlugin.getGameManager()`); 
     - the teams, using the TeamManager (`UHPlugin.getTeamManager()`);
@@ -282,6 +282,7 @@ It's pretty simple.
    languages:
     - en_US
     - fr_FR
+    - # ...
     - language_COUNTRY
    ```
 4. In the `config.yml`, **change the `lang` key** to the name of the new language. That's all!
