@@ -3,20 +3,20 @@ keys:
     load:
         spawnPointAdded: "Local de spawn {0},{1} adicionado a partir das configurações"
         invalidSpawnPoint: "Local de spawn inválido nas configurações: {0}"
-        teamAdded: "equipe {0} adicionada a partir das configurações"
-        namedTeamAdded: "equipe {0} ({1}) adicionada a partir das configurações"
-        invalidTeam: "equipe inválida nas configurações: {0}"
-        recipeApple: "Adicionada nova receita para Maçã Dourada."
-        recipeCompass: "Adicionada nova receita para Bússola."
-        recipeMelon: "Adicionada nova receita para Melancia Reluzente."
+        teamAdded: "Equipe {0} adicionada a partir das configurações"
+        namedTeamAdded: "Equipe {0} ({1}) adicionada a partir das configurações"
+        invalidTeam: "Equipe inválida nas configurações: {0}"
+        recipeApple: "Adicionada nova receita para maçã dourada."
+        recipeCompass: "Adicionada nova receita para bússola."
+        recipeMelon: "Adicionada nova receita para melancia reluzente."
         loaded: "plugin Ultra Difícil Carregado."
         
-        WBNotInstalled1: "{darkred}[UHC] {ce}WorldBorder não está instalado: paredes não serão verificadas!"
-        WBNotInstalled2: "{gray}Também, sem WorldBorder, as paredes não podem ser diminuidas em jogo (Avisos excluidos)."
+        WBNotInstalled1: "{darkred}[UHC] {ce}WorldBorder não está instalado: muralhas não serão verificadas!"
+        WBNotInstalled2: "{gray}Também, sem WorldBorder, as muralhas não poderão ser reduzidas durante a partida (avisos excluidos)."
         WBNotInstalled3: "{gray}Instale somente o plugin; o UHPlugin automaticamente o configurará."
         
         SPNotInstalled1: "{darkred}[UHC] {ce}SpectatorPlus não está instalado."
-        SPNotInstalled2: "{gray}Se desejar ter o Modo de Espectador, instale o Plugin; o UHPlugin automaticamente o configurará."
+        SPNotInstalled2: "{gray}Se desejar ter o modo de espectador, instale o Plugin; o UHPlugin automaticamente o configurará."
         
         PLNotInstalled1: "{darkred}[UHC] {ce}ProtocolLib é obrigatório, porém, não está instalado!"
         PLNotInstalled2: "{gray}As seguintes opções requerem a presença do ProtocolLib:"
@@ -26,7 +26,7 @@ keys:
     cmd:
         errorLoad: "{ce}Ocorreu um Erro, verifique o console para maiores detalhes. Isto provavelmente é um Bug."
         errorUnknown: "{ce}Comando não existente. Digite /uh para ver uma lista dos comandos disponíveis."
-        errorUnauthorized: "{ce}lolnope"
+        errorUnauthorized: "{ce}aqui não jacaré"
         
         titleHelp: "{yellow}{0} - versão {1}"
         legendHelp: "{ci}Legenda: {cc}/uh command <necessário> [opcional=valor padrão] <espaços são válidos ...>{ci}."
@@ -35,24 +35,24 @@ keys:
         titleGameCmd: "{aqua}------ Comandos do jogo ------"
         helpStart: "{cc}/uh start {ci}: Inicia o jogo."
         helpStartSlow: "{cc}/uh start slow {ci}: Inicia o jogo no modo lento, em 2 etapas, para servidores pequenos."
-        helpShift: "{cc}/uh shift {ci}: passa para o próximo episódio."
+        helpShift: "{cc}/uh shift {ci}: Passa para o próximo episódio."
         helpTeam: "{cc}/uh team {ci}: Edita as equipes. Digite /uh team para detalhes."
-        helpSpawns: "{cc}/uh spawns {ci}: Gere os pontos de spawn. Digite /uh spawns para detalhes."
+        helpSpawns: "{cc}/uh spawns {ci}: Gera os locais de spawn. Digite /uh spawns para detalhes."
         helpSpec: "{cc}/uh spec {ci}: Edita os espectadores. Digite /uh spec para detalhes."
-        helpWall: "{cc}/uh generatewalls {ci}: Gera as paredes, de acordo com as configurações."
-        helpBorder: "{cc}/uh border {ci}: Edita os limites. Digite /uh border para detalhes."
+        helpWall: "{cc}/uh generatewalls {ci}: Gera as muralhas, de acordo com as configurações."
+        helpBorder: "{cc}/uh border {ci}: Edita a área do jogo. Digite /uh border para detalhes."
         
         titleBugCmd: "{aqua}------ Comandos para Bugs ------"
         helpHeal: "{cc}/uh heal <jogador> [meios-corações=20|±diferença] {ci}: Regenera vida de um jogador para os meios-corações indicados (padrão 20)."
         helpHealall: "{cc}/uh healall [meios-corações=20|±diferença] {ci}: Regenera todos os jogadores."
         helpFeed: "{cc}/uh feed <jogador> [fome=20] [saturação=max] {ci}: Alimenta um jogador."
         helpFeedall: "{cc}/uh feedall [fome=20] [saturação=max] {ci}: Alimenta todos os jogadores."
-        helpKill: "{cc}/uh kill <player> {ci}: Assinala o jogador como morto, mesmo que ele esteja offline."
+        helpKill: "{cc}/uh kill <player> {ci}: Assinala o jogador como morto, mesmo que ele esteja desconecato."
         helpResurrect: "{cc}/uh resurrect <jogador> {ci}: Ressuscita o jogador."
-        helpTpback: "{cc}/uh tpback <jogador> [force] {ci}: teleporta em segurança um jogador para o local da sua morte. Quando especificado - force - teleporta o jogador mesmo que não seja seguro."
+        helpTpback: "{cc}/uh tpback <jogador> [force] {ci}: Teletransporta em segurança um jogador para o local da sua morte. Quando especificado - force - teletransporta o jogador mesmo que não seja seguro."
         
         titleMiscCmd: "{aqua}------ Outros Comandos ------"
-        helpFreeze: "{cc}/uh freeze {ci}: (Des)congela o jogo todo, ou um jogador. Digite /uh freeze para detalhes."
+        helpFreeze: "{cc}/uh freeze {ci}: (Des)congela o jogo todo, ou um jogador. Digite: /uh freeze para detalhes."
         helpFinish: "{cc}/uh finish {ci}: Exibe o nome do(s) vencedor(es) e lança foguetes."
         helpTP: "{cc}/uh tp {ci}: Teletransporta os espectadores ou uma equipe inteira. Digite /uh tp para detalhes."
         helpTimers: "{cc}/uh timers {ci}: Configura os tempos. Digite /uh timers para detalhes."
@@ -62,37 +62,37 @@ keys:
         teamHelpTitle: "{aqua}------ Comandos para equipes ------"
         teamHelpAdd: "{cc}/uh team add <cor> {ci}: Adiciona uma equipe com uma determinada cor."
         teamHelpAddName: "{cc}/uh team add <cor> <nome ...> {ci}: Adiciona uma equipe com um determinado nome e cor. Podem ser usados espaços."
-        teamHelpRemove: "{cc}/uh team remove <nome ...> {ci}: elimina uma equipe"
-        teamHelpJoin: "{cc}/uh team join <jogador> <equipe ...>{ci}: adiciona um jogador a uma equipe. O nome da equipe pode ser a cor ou o seu determinado nome."
-        teamHelpLeave: "{cc}/uh team leave <jogador> {ci}: retira um jogador da sua equipe."
-        teamHelpList: "{cc}/uh team list {ci}: lista das equipes e seus jogadores."
-        teamHelpReset: "{cc}/uh team reset {ci}: elimina todas as equipes."
-        teamHelpJoinCmd: "{cc}/join [player] <team ...> {ci}: Adiciona “jogador” (ou ele mesmo) para a equipe determinada. Sem argumentos, apresenta opção escolher time via chat (clicando na equipe)."
+        teamHelpRemove: "{cc}/uh team remove <nome ...> {ci}: Remove uma equipe"
+        teamHelpJoin: "{cc}/uh team join <jogador> <equipe ...>{ci}: Adiciona um jogador a uma equipe. O nome da equipe pode ser a cor ou o seu determinado nome."
+        teamHelpLeave: "{cc}/uh team leave <jogador> {ci}: Retira um jogador da sua equipe."
+        teamHelpList: "{cc}/uh team list {ci}: Lista das equipes e seus jogadores."
+        teamHelpReset: "{cc}/uh team reset {ci}: Elimina todas as equipes."
+        teamHelpJoinCmd: "{cc}/join [player] <team ...> {ci}: Adiciona “jogador” (ou ele mesmo) para a equipe determinada. Sem argumentos, apresenta opção escolher equipe via chat (clicando na equipe)."
         teamHelpLeaveCmd: "{cc}/leave [player] {ci}: Remove o “jogador” (ou ele mesmo) de seu time."
         
         spawnsHelpTitle: "{aqua}------ Comandos para os Spawns ------"
-        spawnsHelpAdd: "{cc}/uh spawns add {ci}: adiciona um ponto de spawn para uma equipe ou jogador, no local onde é executado."
-        spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: adiciona um ponto de spawn para uma equipe ou jogador, nas coordenadas inseridas, no mundo padrão."
-        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|grid|random> [Tamanho = Tamanho dos Limites] [DistânciaMin = 250] [pontos de spawn = Número de equipes] [xCentro = xSpawn] [zCentro = zSpawn] [world = mundo onde é executado o comando] {ci}: Gera automaticamente os pontos de spawn com a forma inserida."
+        spawnsHelpAdd: "{cc}/uh spawns add {ci}: Adiciona um local de spawn para uma equipe ou jogador, no local onde é executado."
+        spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: Adiciona um local de spawn para uma equipe ou jogador, nas coordenadas inseridas, no mundo padrão."
+        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|grid|random> [Tamanho = Tamanho dos Limites] [DistânciaMin = 250] [locais de spawn = Número de equipes] [xCentro = xSpawn] [zCentro = zSpawn] [world = mundo onde é executado o comando] {ci}: Gera automaticamente os locais de spawn com a forma inserida."
         spawnsHelpGenerateDetailsCmdTitle: "{aqua}Comandos"
         spawnsHelpGenerateDetailsCmd: "{cc}/uh spawns generate <circular|grid|random> [size] [distanceMin] [count] [xCenter] [zCenter] [world]"
         spawnsHelpGenerateDetailsShapesTitle: "{aqua}Formatos"
-        spawnsHelpGenerateDetailsShapesRandom: " - {cc}random{ci}: Gera pontos de spawn randomicos no mapa, com uma distância mínima entre eles."
-        spawnsHelpGenerateDetailsShapesGrid: " - {cc}grid{ci}: Gera pontos de spawn em forma de quadrados concêntricos, com uma distância constante entre dois pontos gerados."
-        spawnsHelpGenerateDetailsShapesCircular: " - {cc}circular{ci}: Gera pontos de spawn em forma de círculos concêntricos, com uma distância constante entre dois pontos gerados. Em cada círculo, o ângulo (e a distância) entre dois pontos de spawns é constante."
+        spawnsHelpGenerateDetailsShapesRandom: " - {cc}random{ci}: Gera locais de spawn randomicos no mapa, com uma distância mínima entre eles."
+        spawnsHelpGenerateDetailsShapesGrid: " - {cc}grid{ci}: Gera locais de spawn em forma de quadrados concêntricos, com uma distância constante entre dois pontos gerados."
+        spawnsHelpGenerateDetailsShapesCircular: " - {cc}circular{ci}: Gera locais de spawn em forma de círculos concêntricos, com uma distância constante entre dois pontos gerados. Em cada círculo, o ângulo (e a distância) entre dois locais de spawn é constante."
         spawnsHelpGenerateDetailsArgsTitle: "{aqua}Argumentos"
-        spawnsHelpGenerateDetailsArgsSize: " - {cc}size{ci}: É o tamanho da região onde os pontos de spawn serão gerados. Quadrado ou circular, seguindo o formato do mapa. O padrão é o tamanho do mapa."
-        spawnsHelpGenerateDetailsArgsDistanceMin: " - {cc}distanceMin{ci}: É a distância mínima entre dois pontos de spawn. Padrão: 250 blocos."
-        spawnsHelpGenerateDetailsArgsCount: " - {cc}count{ci}: É o número de pontos de spawn a serem gerados. Padrão: o número de jogadores ou de equipes."
-        spawnsHelpGenerateDetailsArgsCenter: " - {cc}xCenter{ci}, {cc}zCenter{ci}: O centro da região onde os pontos são gerados. Padrão: o ponto de spawn do mundo."
-        spawnsHelpGenerateDetailsArgsWorld: " - {cc}world{ci}: O mundo onde os pontos de spawn serão gerados."
-        spawnsHelpList: "{cc}/uh spawns list {ci}: Lista dos pontos de spawn registrados."
-        spawnsHelpDump: "{cc}/uh spawns dump {ci}: Mostra os pontos de spawn em um formato exportável. {gray}Podendo ser utilizados em alguns sites para ver os pontos de spawn por exemplo."
+        spawnsHelpGenerateDetailsArgsSize: " - {cc}size{ci}: É o tamanho da região onde os locais de spawn serão gerados. Quadrado ou circular, seguindo o formato do mapa. O padrão é o tamanho do mapa."
+        spawnsHelpGenerateDetailsArgsDistanceMin: " - {cc}distanceMin{ci}: É a distância mínima entre dois locais de spawn. Padrão: 250 blocos."
+        spawnsHelpGenerateDetailsArgsCount: " - {cc}count{ci}: É o número de locais de spawn a serem gerados. Padrão: o número de jogadores ou de equipes."
+        spawnsHelpGenerateDetailsArgsCenter: " - {cc}xCenter{ci}, {cc}zCenter{ci}: O centro da região onde os pontos são gerados. Padrão: o local de spawn do mundo."
+        spawnsHelpGenerateDetailsArgsWorld: " - {cc}world{ci}: O mundo onde os locais de spawn serão gerados."
+        spawnsHelpList: "{cc}/uh spawns list {ci}: Lista dos locais de spawn registrados."
+        spawnsHelpDump: "{cc}/uh spawns dump {ci}: Mostra os locais de spawn em um formato exportável. {gray}Podendo ser utilizados em alguns sites para ver os locais de spawn por exemplo."
         spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: Remove coordenadas de spawn inseridas, ou o local onde o comando é executado se não forem inseridas coordenadas."
-        spawnsHelpReset: "{cc}/uh spawns reset {ci}: Remove todos os pontos de spawn registrados."
+        spawnsHelpReset: "{cc}/uh spawns reset {ci}: Remove todos os locais de spawn registrados."
         
         specHelpTitle: "{aqua}------ Comandos iniciais para Espectadores ------"
-        specHelpNoticeSpectatorPlusNotInstalled: "{ce}ATENÇÃO{ci}: como o Plugin SpectatorPlus não está instalado, um espectador é {italic}apenas{ci} um jogador ignorado."
+        specHelpNoticeSpectatorPlusNotInstalled: "{ce}ATENÇÃO{ci}: Como o Plugin SpectatorPlus não está instalado, um espectador é {italic}apenas{ci} um jogador ignorado."
         specHelpAdd: "{cc}/uh spec add <jogador>{ci}: Adiciona um espectador."
         specHelpRemove: "{cc}/uh spec remove <jogador>{ci}: Remove um espectador."
         specHelpList: "{cc}/uh spec list{ci}: Lista dos espectadores."
@@ -103,16 +103,16 @@ keys:
         freezeHelpAll: "{cc}/uh freeze all{ci}: Congela o jogo todo (jogadores, mobs, tempo)."
         freezeHelpNone: "{cc}/uh freeze none{ci}: Descongela o jogo todo. Você DEVE executar este comando para que o tempo do jogo volte a contar."
         
-        borderHelpTitle: "{aqua}------ Comandos para Limites ------"
+        borderHelpTitle: "{aqua}------ Comandos para área do jogo ------"
         borderHelpCurrent: "{cc}/uh border current{ci}: Informa o tamanho atual do mapa."
-        borderHelpSet: "{cc}/uh border set <tamanho> [force]{ci}: Muda o tamanho do mapa. Se o comando force não for indicado, a operação será cancelada se houver algum jogador fora dos novos limites."
-        borderHelpWarning: "{cc}/uh border warning <tamanhofuturo> [minutos para a redução]{ci}: Informa todos os jogadores que estão fora dos futuros limites. É apenas um AVISO, nada acontece."
-        borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: Cancela os avisos da mudança de limites."
-        borderHelpCheck: "{cc}/uh border check <tamanho>{ci}: Retorna uma lista dos jogadores que se encontram fora dos limites especificados."
+        borderHelpSet: "{cc}/uh border set <tamanho> [force]{ci}: Muda o tamanho do mapa. Se o comando force não for indicado, a operação será cancelada se houver algum jogador fora da nova área."
+        borderHelpWarning: "{cc}/uh border warning <tamanhofuturo> [minutos para a redução]{ci}: Informa todos os jogadores que estão fora da futura área. É apenas um AVISO, nada acontece."
+        borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: Cancela os avisos da mudança na área de jogo."
+        borderHelpCheck: "{cc}/uh border check <tamanho>{ci}: Retorna uma lista dos jogadores que se encontram fora da área especificada."
         
-        tpHelpTitle: "{aqua}------ Comandos para Teleportação ------"
-        tpHelpTeam: "{cc}/uh tp team <x> <y> <z> | <jogador> <equipe ...> {ci}: Teleporta um jogador ou uma equipe toda para um determinado local."
-        tpHelpSpectators: "{cc}/uh tp spectators <x> <y> <z> | <jogador> {ci}: Teleporta os espectadores (assim como os jogadores mortos) para um jogador ou local."
+        tpHelpTitle: "{aqua}------ Comandos para Teletransporte ------"
+        tpHelpTeam: "{cc}/uh tp team <x> <y> <z> | <jogador> <equipe ...> {ci}: Teletransporta um jogador ou uma equipe toda para um determinado local."
+        tpHelpSpectators: "{cc}/uh tp spectators <x> <y> <z> | <jogador> {ci}: Teletransporta os espectadores (assim como os jogadores mortos) para um jogador ou local."
         
         timersHelpTitle: "{aqua}------ Comandos para a contagem de Tempo ------"
         timersHelpAdd: "{cc}/uh timers add <duração> <título ...> {ci}: Adiciona um cronômetro."
@@ -146,12 +146,12 @@ keys:
     start:
         already: "{ce}O jogo já comecou! Recarregue ou Reinicie o servidor para reiniciar o jogo."
         syntax: "{ce}Erro de sintaxe. Digite: /uh start [slow] ou /uh start slow go."
-        notEnoughTP: "{ce}Impossível iniciar o jogo: pontos de teleportação insuficientes."
-        teleportationInProgress: "{lightpurple}Teleportação em progresso... Por favor aguarde."
+        notEnoughTP: "{ce}Impossível iniciar o jogo: pontos de teletransporte insuficientes."
+        teleportationInProgress: "{lightpurple}Teletransporte em progresso... Por favor aguarde."
         
         startSlowBeforeStartSlowGo: "{ce}Digite {cc}/uh start slow{ce} antes."
         startSlowWaitBeforeGo: "{ce}Por favor aguarde até os jogadores serem teletransportados."
-        startSlowTeamTP: "{gray}equipe {0}{gray} teletransportada."
+        startSlowTeamTP: "{gray}Equipe {0}{gray} teletransportada."
         startSlowAllTeamsTP: "{cs}Todas as equipes foram teletransportadas."
         startSlowAllTeamsTPCmd: "{gray}Digite {cc}/uh start slow go{gray} para iniciar a partida."
         
@@ -164,8 +164,8 @@ keys:
         and: "e"
         
         broadcast:
-            withTeams: "{darkgreen}{obfuscated}--{green} Parabéns à {0} (equipe {1}{green}) pela sua vitória! {darkgreen}{obfuscated}--"
-            withoutTeams: "{darkgreen}{obfuscated}--{green} Parabéns a {0} pela sua vitória! {darkgreen}{obfuscated}--"
+            withTeams: "{darkgreen}{obfuscated}--{green} Parabéns à (equipe {1}{green}) {0} pela sua vitória! {darkgreen}{obfuscated}--"
+            withoutTeams: "{darkgreen}{obfuscated}--{green} Parabéns {0} pela sua vitória! {darkgreen}{obfuscated}--"
     
     episodes:
         end: "{aqua}-------- Fim do Episódio {0} --------"
@@ -173,8 +173,8 @@ keys:
     
     scoreboard:
         episode: "{gray}Episódio {white}{0}"
-        players: "{white}{0}{gray} jogadores"
-        teams: "{white}{0}{gray} equipes"
+        players: "{white}{0}{gray} Jogadores"
+        teams: "{white}{0}{gray} Equipes"
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
     
@@ -191,7 +191,7 @@ keys:
         banMessage: "Morreu :˜("
         teamHasFallen: "{0}Todos os jogadores da equipe {1} morreram!"
         
-        canRespawn: "{darkpurple}{obfuscated}----{lightpurple}{italic} VOCÊ PODE RENASCER{lightpurple}, clique em {italic}Renascer {lightpurple}na próxima tela."
+        canRespawn: "{darkpurple}{obfuscated}----{lightpurple}{italic} Você pode renascer{lightpurple}, clique em {italic}Renascer {lightpurple}na próxima tela."
     
     craft:
         goldenApple:
@@ -214,27 +214,27 @@ keys:
         markerLabelSpawnNoTeam: "Local de spawn de {0}"
     
     wall:
-        startGen: "{cst}Gerando os limites..."
-        consoleDefaultWorld: "{ci}A partir do Console, gerando os limites para o mundo padrão, {0}"
-        error: "{ce}Impossível gerar os limites: verifique os logs para detalhes. Os blocos configurados são provavelmente inválidos."
+        startGen: "{cst}Gerando as muralhas..."
+        consoleDefaultWorld: "{ci}A partir do console, gerando a área para o mundo padrão, {0}"
+        error: "{ce}Impossível gerar a área: verifique os logs para detalhes. Os blocos configurados são provavelmente inválidos."
         unknownError: "{ce}Ocorreu um erro, verifique o console para maiores detalhes."
         blocksError: "Impossível construir as muralhas, os blocos nas configurações são inválidos."
         done: "{cst}Muralhas criadas com sucesso."
     
     spawns:
-        NaN: "{ce}Isto não e um número!"
-        syntaxError: "{ce}Erro de sintaxe; Digite /uh spawns."
+        NaN: "{ce}Este não e um número!"
+        syntaxError: "{ce}Erro de sintaxe; Digite: /uh spawns."
         errorCoords: "{ce}As coordenadas precisam ser inseridas a partir do console."
         error2Coords: "{ce}É necessária a especificação de pelo menos duas coordenadas."
         
         add:
             added: "{cs}Local de spawn adicionado ao mundo {0}: {1};{2}"
             outOfLimits: "{ce}Locais de spawn só são possíveis dentro das muralhas."
-            noSafeSpot: "{ce}Impossível adicionar este ponto de spawn: não foi encontrado um local seguro no Inferno."
+            noSafeSpot: "{ce}Impossível adicionar este local de spawn: não foi encontrado um local seguro no Inferno."
         
         assumptions:
-            solo: "{ci}Nenhuma equipe encontrada. Assumirei que o jogo e está em modo solo."
-            partialSolo: "{ci}Alguns jogadores não estão em nenhuma equipe; este número foi adicionada ao número de locais de spawn."
+            solo: "{ci}Nenhuma equipe encontrada. Assumirei que o jogo está em modo solo."
+            partialSolo: "{ci}Alguns jogadores não estão em nenhuma equipe; este número foi adicionado ao número de locais de spawn."
         
         generate:
             nothingToDo: "{ci}Você especificou uma geração nula. Portanto, a geração está vazia."
@@ -274,7 +274,7 @@ keys:
         
         addplayer:
             disconnected: "{ce}Impossível adicionar {0} à equipe {1}. O jogador não está online."
-            success: "{cs}O jogador {0} foi adicionado com sucesso a equipe {1}"
+            success: "{cs}O jogador {0} foi adicionado com sucesso à equipe {1}"
             added: "{aqua}Você foi adicionado à equipe {0}{aqua}."
             doesNotExists: "{ce}Esta equipe não existe."
             full: "{ce}A equipe {0}{ce} já está lotada!"
@@ -283,7 +283,7 @@ keys:
         
         removeplayer:
             disconnected: "{ce}O jogador {0} está desconectado!"
-            success: "{cs}O jogador {0} foi removido com sucesso da sua equipe."
+            success: "{cs}O jogador {0} foi removido com sucesso de sua equipe."
             removed: "{darkaqua}Você não faz mais parte da equipe {0}{darkaqua}."
         
         list:
@@ -300,12 +300,12 @@ keys:
             choose: "{gold}Clique em um nome abaixo para se juntar a esta equipe"
             playersCount: "{gray}[{white}{0}{gray}/{white}{1}{gray}]"
             playersCountUnlimited: "{gray}[{white}{0}{gray}]"
-            tooltipCount: "{0} jogador(s) nesta equipe"
-            tooltipJoin: "Clique aqui para juntar-se a equipe {0}"
+            tooltipCount: "{0} jogador(es) nesta equipe"
+            tooltipJoin: "Clique aqui para juntar-se à equipe {0}"
             tooltipJoinInside: "Você agora faz parte da equipe {0}"
             leaveTeam: "{darkred}[\u00D7] {red}Clique aqui para deixar esta equipe"
             howToDisplayAgain: "{gray}Digite: /join para ver estas opções novamente"
-            noTeams: "{ce}Não há nenhum equipe disponível."
+            noTeams: "{ce}Não há nenhuma equipe disponível."
         
         reset:
             success: "{cs}Todas as equipes foram removidas."
@@ -323,7 +323,7 @@ keys:
                 nowTeamChat: "{cs}A partir de agora você está falando apenas com a sua equipe."
                 nowGlobalChat: "{cs}A partir de agora você pode falar com todos."
                 
-                nowOtherTeamChat: "{cs}Você esta falando com a equipe {0}{cs}."
+                nowOtherTeamChat: "{cs}Você está falando com a equipe {0}{cs}."
                 unknownTeam: "{ce}Equipe inexistente."
             
             format: "{gold}[{0}{gold} -> equipe dele] {reset}{1}"
@@ -364,13 +364,13 @@ keys:
     feed:
         usage: "{ce}Digite: /uh feed <jogador> [Pontos de alimentação = 20] [saturação = max]"
         offline: "{ce}Este jogador está desconectado."
-        errorNaN: "{ce}Pontos de alimentacão e saturacão precisar ser números (a saturacão em fração 2.2 por exemplo)!" 
+        errorNaN: "{ce}Pontos de alimentacão e saturacão precisam ser números (a saturacão em fração, por exemplo: 2.2)!" 
         
     kill:
         usage: "{ce}Digite: /uh kill <jogador>"
         neverPlayed: "{ce}Este jogador não existe no servidor."
         notAlive: "{ce}{0} não é um jogador vivo."
-        killed: "{cs}O jogador {0} agora esta morto."
+        killed: "{cs}O jogador {0} agora está morto."
         
     resurrect:
         usage: "{ce}Digite: /uh resurrect <jogador>"
@@ -384,7 +384,7 @@ keys:
         offline: "{ce}O jogador {0} não está online."
         noDeathLocation: "{ce}O jogador {0} não possui um local de morte."
         teleported: "{cs}O jogador {0} foi teletransportado para o local da sua morte."
-        notTeleportedNoSafeSpot: "{ce}O jogador {0} não foi teletransportado porque não foi encontrado um local seguro para esta operaçaõ."
+        notTeleportedNoSafeSpot: "{ce}O jogador {0} não foi teletransportado porque não foi encontrado um local seguro para esta operação."
         notTeleportedNoSafeSpotCmd: "{ci}Digite: {cc}/uh tpback {0} force{ci} para teletransportar o jogador mesmo que o local não seja seguro."
     
     tp:
@@ -427,16 +427,16 @@ keys:
     
     borders:
         syntaxError: "{ce}Erro de sintaxe. Digite: /uh border para detalhes."
-        NaN: "{ce}“{0}” não e um Número..."
+        NaN: "{ce}“{0}” não e um número..."
         
         current:
             messageSquared: "{ci}A área atual do mapa quadrado é {0}*{0}."
             messageCircular: "{ci}A área atual do mapa circular e de {0} blocos."
         
         set:
-            playersOutsideCanceled: "{ce}Alguns jogadores estão fora dos novos limites. A operação foi cancelada."
-            playersOutsideCanceledCmd: "{ci}Digite: {cc}/uh border set {0} force{ci} para estabelecer uma nova dimensão, mesmo que haja jogadores fora dos limites."
-            playersOutsideCanceledWarnWorldBorder: "{ce}ATENÇÃO: {ci}O Plugin WorldBorder não está instalado, jogadores que estejam fora dos limites não serão teletransportados!"
+            playersOutsideCanceled: "{ce}Alguns jogadores estão fora da nova área. A operação foi cancelada."
+            playersOutsideCanceledCmd: "{ci}Digite: {cc}/uh border set {0} force{ci} para estabelecer uma nova dimensão, mesmo que haja jogadores fora da área."
+            playersOutsideCanceledWarnWorldBorder: "{ce}ATENÇÃO: {ci}O Plugin WorldBorder não está instalado, jogadores que estejam fora da área não serão teletransportados!"
             
             broadcastSquared: "{lightpurple}A área atual do mapa quadrado é {0}*{0}."
             broadcastCircular: "{lightpurple}A área atual do mapa circular e de {0} blocos."
@@ -452,7 +452,7 @@ keys:
             messageDistance: "{ci}Por favor mova-se {0} blocos para estar dentro das novas dimensões."
             messageDistanceTime: "{ci}Ainda faltam {0} blocos para você estar dentro da área, e {1} minutos para que o seu tempo se esgote."
            
-            nameTimer: "Dislocando as muralhas"
+            nameTimer: "Diminuindo a área"
             
             timerUp: "{cs}Acabou o tempo para as novas dimensões!"
         
@@ -503,4 +503,4 @@ keys:
             noEnchGoldenApple: "{gray}As maçãs douradas encantadas (ou do capiroto) estão desativadas para este jogo."
         
         start:
-            invincibility: "{gray}Caiu em uma árvore? Pula, você ainda têm 25 segundos de invencibilidade."
+            invincibility: "{gray}Caiu em uma árvore? Pule, você ainda têm 25 segundos de invencibilidade."
