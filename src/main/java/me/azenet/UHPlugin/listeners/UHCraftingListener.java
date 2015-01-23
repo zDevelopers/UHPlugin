@@ -176,6 +176,9 @@ public class UHCraftingListener implements Listener {
 			
 			if(inventory instanceof CraftingInventory) {
 				
+				// This is ran one tick after the click because when the event is fired, the inventory 
+				// object is not updated, and so the result of the isValidCompassResult is invalid.
+				
 				Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 					@Override
 					public void run() {

@@ -206,7 +206,7 @@ public class UHSpawnsManager {
 			return rand.nextInt(max - min + 1) + min;
 		}
 		else if(min <= 0 && max <= 0) {
-			return -1 * (rand.nextInt(Math.abs(max) - Math.abs(min) + 1) + Math.abs(min));
+			return -1 * (rand.nextInt(Math.abs(min - max)) + Math.abs(max));
 		}
 		else { // min <= 0 && max >= 0
 			return rand.nextInt(Math.abs(min) + Math.abs(max)) - Math.abs(min);
