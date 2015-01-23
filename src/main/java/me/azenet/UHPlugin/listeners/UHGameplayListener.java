@@ -276,8 +276,6 @@ public class UHGameplayListener implements Listener {
 				return;
 			}
 			
-			player1.playSound(player1.getLocation(), Sound.BURP, 1F, 1F);
-			
 			Player nearest = null;
 			Double distance = 99999D;
 			for (Player player2 : p.getGameManager().getOnlineAlivePlayers()) {
@@ -297,11 +295,15 @@ public class UHGameplayListener implements Listener {
 			
 			if (nearest == null) {
 				player1.sendMessage(i.t("compass.nothingFound"));
+
+				player1.playSound(player1.getLocation(), Sound.STEP_WOOD, 1F, 1F);
 				return;
 			}
 			
 			player1.sendMessage(i.t("compass.success"));
 			player1.setCompassTarget(nearest.getLocation());
+
+			player1.playSound(player1.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);		
 		}
 	}
 	
