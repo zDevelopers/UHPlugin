@@ -185,6 +185,7 @@ public class UHCraftingListener implements Listener {
 							public void run() {
 								((CraftingInventory) inventory).setResult(new ItemStack(Material.COMPASS));
 								ev.setResult(Result.ALLOW);
+								
 								((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
 							}
 						}, 1L);
@@ -208,10 +209,10 @@ public class UHCraftingListener implements Listener {
 							index++;
 						}
 						
-						((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
-						
 						ev.setCurrentItem(new ItemStack(Material.COMPASS));
 						ev.setResult(Result.ALLOW);
+						
+						((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
 					}
 					
 					return;
