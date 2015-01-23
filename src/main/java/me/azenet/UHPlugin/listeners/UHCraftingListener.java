@@ -176,47 +176,48 @@ public class UHCraftingListener implements Listener {
 			
 			if(inventory instanceof CraftingInventory) {
 				
-				if(p.getRecipeManager().isValidCompassRecipe(((CraftingInventory) inventory).getMatrix())) {
-					
-					// Puts the compass in the result slot
-					if(ev.getSlotType() == SlotType.CRAFTING) {
-						Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
-							@Override
-							public void run() {
+				Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
+					@Override
+					public void run() {
+						if(p.getRecipeManager().isValidCompassRecipe(((CraftingInventory) inventory).getMatrix())) {
+							
+							// Puts the compass in the result slot
+							if(ev.getSlotType() == SlotType.CRAFTING) {
 								((CraftingInventory) inventory).setResult(new ItemStack(Material.COMPASS));
 								ev.setResult(Result.ALLOW);
 								
 								((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
 							}
-						}, 1L);
-					}
-					
-					// Consumes the materials in the crafting grid.
-					// Because this is not an "official" recipe, we need to do that manually.
-					else if(ev.getSlotType() == SlotType.RESULT) {
-						int index = 1;
-						for(ItemStack stack : ((CraftingInventory) inventory).getMatrix()) {
-							if(stack == null) continue;
 							
-							if(stack.getAmount() != 1) {
-								stack.setAmount(stack.getAmount() - 1);
-								inventory.setItem(index, stack);
-							}
-							else {
-								inventory.setItem(index, new ItemStack(Material.AIR));
+							// Consumes the materials in the crafting grid.
+							// Because this is not an "official" recipe, we need to do that manually.
+							else if(ev.getSlotType() == SlotType.RESULT) {
+								int index = 1;
+								for(ItemStack stack : ((CraftingInventory) inventory).getMatrix()) {
+									if(stack == null) continue;
+									
+									if(stack.getAmount() != 1) {
+										stack.setAmount(stack.getAmount() - 1);
+										inventory.setItem(index, stack);
+									}
+									else {
+										inventory.setItem(index, new ItemStack(Material.AIR));
+									}
+									
+									index++;
+								}
+								
+								ev.setCurrentItem(new ItemStack(Material.COMPASS));
+								ev.setResult(Result.ALLOW);
+								
+								((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
 							}
 							
-							index++;
+							return;
 						}
-						
-						ev.setCurrentItem(new ItemStack(Material.COMPASS));
-						ev.setResult(Result.ALLOW);
-						
-						((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
 					}
 					
-					return;
-				}
+				}, 1L);
 			}
 			
 			
