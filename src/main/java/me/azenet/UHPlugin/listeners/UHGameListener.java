@@ -97,7 +97,8 @@ public class UHGameListener implements Listener {
 	 *  - show the death location on the dynmap (if needed);
 	 *  - give XP to the killer (if needed);
 	 *  - notify the player about the possibility of respawn if hardcore hearts are enabled;
-	 *  - update the MOTD if needed.
+	 *  - update the MOTD if needed;
+	 *  - disable the team-chat-lock if needed.
 	 *  
 	 * @param ev
 	 */
@@ -239,6 +240,13 @@ public class UHGameListener implements Listener {
 					ev.getEntity().sendMessage(i.t("death.canRespawn"));
 				}
 			}, 2L);
+		}
+		
+		// Disables the team-chat-lock if needed
+		if(p.getConfig().getBoolean("teams-options.teamChat.disableLockOnDeath")) {
+			if(p.getTeamChatManager().isTeamChatEnabled(ev.getEntity())) {
+				p.getTeamChatManager().toggleChatForPlayer(ev.getEntity());
+			}
 		}
 	}
 	

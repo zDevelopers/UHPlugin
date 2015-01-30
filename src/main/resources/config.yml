@@ -218,6 +218,12 @@ teams-options:
         autoDisplay: true
         # Delay between the login and the display? (Seconds)
         delay: 4
+    
+    teamChat:
+        # Forces disable the team-chat when the player die.
+        # If you use SpectatorPlus with the block-commands option enabled, this will prevent spectators
+        # from using the team chat.
+        disableLockOnDeath: true
 
 
 
