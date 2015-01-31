@@ -192,7 +192,7 @@ public class UHTeamManager {
 	 * @param player The player to add.
 	 * @throws IllegalArgumentException if the team does not exists.
 	 */
-	public void addPlayerToTeam(String teamName, Player player) {
+	public void addPlayerToTeam(String teamName, OfflinePlayer player) {
 		UHTeam team = getTeam(teamName);
 		
 		if(team == null) {

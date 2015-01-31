@@ -273,7 +273,7 @@ keys:
             removed: "{cs}Equipe {0} removida."
         
         addplayer:
-            disconnected: "{ce}Impossível adicionar {0} à equipe {1}. O jogador não está online."
+            disconnected: "{ce}Impossível adicionar {0} à equipe {1}."
             success: "{cs}O jogador {0} foi adicionado com sucesso à equipe {1}"
             added: "{aqua}Você foi adicionado à equipe {0}{aqua}."
             doesNotExists: "{ce}Esta equipe não existe."

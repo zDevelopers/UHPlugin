@@ -273,7 +273,7 @@ keys:
             removed: "{cs}Équipe {0} supprimée."
         
         addplayer:
-            disconnected: "{ce}Impossible d'ajouter le joueur {0} dans l'équipe {1}. Le joueur doit être connecté."
+            disconnected: "{ce}Impossible d'ajouter le joueur {0} dans l'équipe {1}. Ce joueur n'est jamais venu sur ce serveur."
             success: "{cs}Le joueur {0} a été ajouté à l'équipe {1}{cs} avec succès."
             added: "{aqua}Vous faites désormais partie de l'équipe {0}{aqua}."
             doesNotExists: "{ce}Cette équipe n'existe pas."
@@ -282,7 +282,7 @@ keys:
             joinhelp: "{ce}Usage : {cc}/join [joueur] <équipe>{ce}."
         
         removeplayer:
-            disconnected: "{ce}Le joueur {0} est déconnecté !"
+            disconnected: "{ce}Le joueur {0} est déconnecté et ne s'est jamais connecté au serveur auparavant !"
             success: "{cs}Le joueur {0} a été retiré de son équipe avec succès."
             removed: "{darkaqua}Vous ne faites plus partie de l'équipe {0}{darkaqua}."
         
