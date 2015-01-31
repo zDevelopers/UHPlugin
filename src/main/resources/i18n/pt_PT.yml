@@ -45,6 +45,9 @@ keys:
         titleBugCmd: "{aqua}------ Comandos para Bugs ------"
         helpHeal: "{cc}/uh heal <jogador> [meios-coracoes=20|±diferenca] {ci}: regenera vida de um jogador para os meio-coracoes indicados (default 20)."
         helpHealall: "{cc}/uh healall [meios-coracoes=20|±diferenca] {ci}: regenera todos os jogadores."
+        helpFeed: "{cc}/uh feed <jogador> [Fome=20] [Saturacao=max] {ci}: alimenta os jogadores."
+        helpFeedall: "{cc}/uh feedall [Fome=20] [Saturacao=max] {ci}: alimenta todos os jogadores."
+        helpKill: "{cc}/uh kill <jogador> {ci}: marca um jogador como morto, mesmo que esteja offline."
         helpResurrect: "{cc}/uh resurrect <jogador> {ci}: ressuscita o jogador."
         helpTpback: "{cc}/uh tpback <jogador> [force] {ci}: teleporta em seguranca um jogador para o local da sua morte. Quando especificado - force - teleporta mesmo que nao seja seguro."
         
@@ -52,7 +55,8 @@ keys:
         helpFreeze: "{cc}/uh freeze {ci}: (Des)Congela o Jogo todo, ou a um jogador. Faz /uh freeze para detalhes."
         helpFinish: "{cc}/uh finish {ci}: Exibe o nome do(s) Vencedor(es) e lanca alguns foguetes."
         helpTP: "{cc}/uh tp {ci}: teleporta os Espectadores ou uma Equipa inteira. Faz /uh tp para detalhes."
-        helpTimers: "{cc}/uh timers {ci}: manages the timers. See /uh timers for details."
+        helpTimers: "{cc}/uh timers {ci}: controla os temporizadores. Faz /uh timers para detalhes."
+        helpInfos: "{cc}/uh infos {ci}: apresenta algumas infos sobre o jogo que esta a decorrer."
         helpAbout: "{cc}/uh about {ci}: informacao sobre o Plugin e as Traducoes."
         
         teamHelpTitle: "{aqua}------ Comandos para Equipas ------"
@@ -63,21 +67,35 @@ keys:
         teamHelpLeave: "{cc}/uh team leave <jogador> {ci}: retira um jogador da sua equipa."
         teamHelpList: "{cc}/uh team list {ci}: lista das equipas e seus jogadores."
         teamHelpReset: "{cc}/uh team reset {ci}: elimina todas as equipas."
+        teamHelpJoinCmd: "{cc}/join [jogador] <equipa ...> {ci}: adiciona o “jogador” (ou quem executou) na Equipa. Sem argumentos (/join), aparece um selecionador de equipas baseado ."
+        teamHelpLeaveCmd: "{cc}/leave [jogador] {ci}: remove o “jogador” (ou quem executou) da sua Equipa."
         
         spawnsHelpTitle: "{aqua}------ Comandos para os Spawns ------"
         spawnsHelpAdd: "{cc}/uh spawns add {ci}: adiciona um ponto de spawn para uma equipa ou jogador, no local onde e executado."
         spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: adiciona um ponto de spawn para uma equipa ou jogador, nas coordenadas inseridas, no Mundo Default."
-        spawnsHelpGenerate: "{cc}/uh spawns generate <circular|grid|random> [Tamanho = Tamanho dos Limites] [DistanciaMin = 250] [pontos de spawn = Numero Equipas] [xCentro = xSpawn] [zCentro = zSpawn] [world = mundo onde e executado o comando] {ci}: gera automaticamente os pontos de Spawn com a forma inserida."
+        spawnsHelpGenerate: "{cc}/uh spawns generate {ci}: gera automaticamente os pontos spawns. Faz /uh spawns generate para detalhes."
+        spawnsHelpGenerateDetailsCmdTitle: "{aqua}Comando"
+        spawnsHelpGenerateDetailsCmd: "{cc}/uh spawns generate <circular|grid|random> [Tamanho] [DistanciaMin] [Numero de Spawns] [xCentro] [zCentro] [Mundo]"
+        spawnsHelpGenerateDetailsShapesTitle: "{aqua}Formatos"
+        spawnsHelpGenerateDetailsShapesRandom: " - {cc}random{ci}: gera pontos de spawns ao calhas no mapa, com uma distancia minima entre eles."
+        spawnsHelpGenerateDetailsShapesGrid: " - {cc}grid{ci}: gera pontos de spawn em quadrados concentricos, com uma distancia constante entre dois pontos de spawn."
+        spawnsHelpGenerateDetailsShapesCircular: " - {cc}circular{ci}: gera pontos de spawn em circulos concentricos, com uma distancia minima entre dois pontos. Em cada circulo, o angulo (e a sua distancia) entre dois pontos e constante."
+        spawnsHelpGenerateDetailsArgsTitle: "{aqua}Argumentos"
+        spawnsHelpGenerateDetailsArgsSize: " - {cc}Tamanho{ci}: o tamanho da regiao onde os pontos de spawn vao ser gerados. Quadrangular ou circular, seguindo a forma do mapa. Default: Tamanho do Mapa."
+        spawnsHelpGenerateDetailsArgsDistanceMin: " - {cc}DistanciaMin{ci}: a distancia minima entre dois pontos de spawn. Default: 250 Blocos."
+        spawnsHelpGenerateDetailsArgsCount: " - {cc}Numero de Spawns{ci}: o numero de pontos a gerar. Default: o numero de jogadores ou equipas."
+        spawnsHelpGenerateDetailsArgsCenter: " - {cc}xCentro{ci}, {cc}zCentro{ci}: o centro da regiao onde os pontos sao gerados. Default: Spawn do Mundo."
+        spawnsHelpGenerateDetailsArgsWorld: " - {cc}Mundo{ci}: o mundo onde os pontos de spawn vao ser gerados."
         spawnsHelpList: "{cc}/uh spawns list {ci}: lista dos pontos de spawn registados."
         spawnsHelpDump: "{cc}/uh spawns dump {ci}: mostra os pontos de spawn num formato exportavel. {gray}Pode ser usado em alguns sites para ver os pontos de Spawn, por exemplo."
         spawnsHelpRemove: "{cc}/uh spawns remove [<x> <z>] {ci}: remove pontos de spawn com as coordenadas inseridas, ou o local onde o comando e executado se nao forem inseridas coordenadas."
         spawnsHelpReset: "{cc}/uh spawns reset {ci}: remove todos os pontos de spawn registados."
         
-        specHelpTitle: "{aqua}------ Comandos para Espectadores ------"
+        specHelpTitle: "{aqua}------ Comandos Espectadores Iniciais ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Atencao{ci}: como o SpectatorPlus nao esta instalado, um espectador e {italic}apenas{ci} um jogador ignorado (sem vanish)."
-        specHelpAdd: "{cc}/uh spec add <jogador>{ci}: adiciona um espectador."
-        specHelpRemove: "{cc}/uh spec remove <jogador>{ci}: remove um espectador."
-        specHelpList: "{cc}/uh spec list{ci}: lista dos espectadores."
+        specHelpAdd: "{cc}/uh spec add <jogador>{ci}: adiciona um espectador inicial (nao ira jogar)."
+        specHelpRemove: "{cc}/uh spec remove <jogador>{ci}: remove um espectador inicial."
+        specHelpList: "{cc}/uh spec list{ci}: lista dos espectadores iniciais."
         
         freezeHelpTitle: "{aqua}------ Comandos para Congelar/Parar ------"
         freezeHelpOn: "{cc}/uh freeze on [jogador]{ci}: congela um jogador, ou a si proprio se nao tiver jogador especificado."
@@ -112,6 +130,9 @@ keys:
     about:
         authors: "Plugin feito com amor por {0}."
         and: "e"
+        build:
+            number: "Numero da Build: {0}."
+            notAvailable: "Numero de Build nao Disponivel."
         i18n:
             title: "{aqua}------ Traducoes ------"
             selected: "Linguagem Selecionada: {0} (traduzido por {1})."
@@ -155,6 +176,14 @@ keys:
         teams: "{white}{0}{gray} Equipas"
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
+    
+    motd:
+        beforeStart: "A Espera de Jogadores..."
+        starting: "A Comecar..."
+        runningSolo: "Jogo a Decorrer! {0} jogadores vivos."
+        runningTeams: "Jogo a Decorrer! {0} jogadores vivos em {1} equipas."
+        finishedSolo: "Jogo Terminou; Parabens a {0} pela sua Vitoria!"
+        finishedTeams: "Jogo Terminou; A Equipa {0} ganhou o Jogo!"
     
     death:
         kickMessage: "Foste MORTO!"
@@ -230,6 +259,7 @@ keys:
     team:
         syntaxError: "{ce}Syntax Error. Usa: /uh team para veres os Comandos."
         unknownCommand: "{ce}Comando Desconhecido. Faz /uh team para Comandos Validos."
+        onlyAsAPlayer: "{ce}Este comando so pode ser executado, desta maneira, por um jogador."
         
         add:
             errorColor: "{ce}Impossivel criar a Equipa, verifica o nome da cor. Dica: usa Tab para auto completar."
@@ -246,6 +276,8 @@ keys:
             added: "{aqua}Estass agora na {aqua}Equipa {reset}{0}."
             doesNotExists: "{ce}Esta Equipa nao Existe."
             full: "{ce}A Equipa {0}{ce} esta Completa!"
+            
+            joinhelp: "{ce}Usa: {cc}/join [jogador] <Equipa>{ce}."
         
         removeplayer:
             disconnected: "{ce}O Jogador {0} esta OFFLINE!"
@@ -260,8 +292,17 @@ keys:
             bulletPlayerOffline: "{red} • "
             
             itemPlayer: "{0}"
-            itemPlayerDead: "{0} {reset}({red}Morto{reset})"
-            itemPlayerAlive: "{0} {reset}({green}Vivo{reset})"
+        
+        gui:
+            choose: "{gold}Clica nos nomes em baixo para juntar a uma equipa"
+            playersCount: "{gray}[{white}{0}{gray}/{white}{1}{gray}]"
+            playersCountUnlimited: "{gray}[{white}{0}{gray}]"
+            tooltipCount: "{0} jogador(es) nesta equipa"
+            tooltipJoin: "Clica aqui para juntares a equipa {0}"
+            tooltipJoinInside: "Estas agora na Equipa {0}"
+            leaveTeam: "{darkred}[\u00D7] {red}Clica aqui para saires da tua Equipa"
+            howToDisplayAgain: "{gray}Faz /join para mostrar isto outra vez."
+            noTeams: "{ce}Nao ha nenhuma Equipa registada."
         
         reset:
             success: "{cs}Todas as Equipas foram Removidas."
@@ -284,9 +325,29 @@ keys:
             
             format: "{gold}[{0}{gold} -> Equipa] {reset}{1}"
             formatOtherTeam: "{gold}[{0}{gold} -> Equipa {1}{gold}] {reset}{2}"
+    
+    infos:
+        notStarted: "{ci}O Jogo ainda nao comecou."
+        players: "{ci}{0} jogadores vivos em {1} teams."
+        
+        bulletOnline: "{green} • "
+        bulletOffline: "{red} • "
+        
+        separatorAliveState: "{gray} - "
+        
+        dead: "{red}Morto"
+        alive: "{green}Vivo"
+        
+        tooltips:
+            online: "Atualmente Online"
+            offline: "Atualmente Offline "
             
+            team: "Equipa: {0}"
+            
+            health: "{0} meios-coracoes"
+    
     shift:
-        consoleName: Console
+        consoleName: "Console"
         cantNotStarted: "{ce}Nao podes passar para o proximo episodio porque o Jogo ainda nao Comecou."
     
     heal:
@@ -296,6 +357,17 @@ keys:
         errorNoKill: "{ce}Nao podes MATAR Jogadores com este comando, para evitar falhas na escrita."
         errorHealthNotUpdatedNoKill: "{ce}A Vida de {0} nao foi atualizada para evitar a sua Morte."
         allErrorNoKill: "{ce}Assassino em Serie!"
+    
+    feed:
+        usage: "{ce}Usa: /uh feed <jogador> [Fome = 20] [Saturacao = max]"
+        offline: "{ce}Este jogador esta Offline."
+        errorNaN: "{ce}Fome e Saturacao tem de ser numeros!"
+    
+    kill:
+        usage: "{ce}Usa : /uh kill <jogador>"
+        neverPlayed: "{ce}Este jogador nunca foi visto neste server."
+        notAlive: "{ce}{0} nao e um jogador vivo."
+        killed: "{cs}O Jogador {0} foi marcado como Morto."
     
     resurrect:
         usage: "{ce}Usa: /uh resurrect <jogador>"
