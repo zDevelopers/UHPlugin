@@ -200,8 +200,8 @@ keys:
             loreLine1Monster: "Fabriquée depuis la tête tranchée"
             loreLine2Monster: "d'un monstre maléfique"
             
-            nameGoldenAppleFromHeadNormal: "{aqua}Tête tranchée"
-            nameGoldenAppleFromHeadNotch: "{lightpurple}Tête tranchée"
+            nameGoldenAppleFromHeadNormal: "{aqua}Tête d'or"
+            nameGoldenAppleFromHeadNotch: "{lightpurple}Tête d'or"
     
     compass:
         noRottenFlesh: "{gray}{italic}Vous n'avez pas de chair de zombie."
