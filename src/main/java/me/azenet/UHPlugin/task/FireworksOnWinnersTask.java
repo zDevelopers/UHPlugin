@@ -64,6 +64,8 @@ public class FireworksOnWinnersTask extends BukkitRunnable {
 						rand.nextDouble() * areaSize - halfAreaSize);
 				
 				UHUtils.generateRandomFirework(fireworkLocation, 0, 15);
+				UHUtils.generateRandomFirework(fireworkLocation.add(0.2, 0d, 0.2), 0, 15);
+				UHUtils.generateRandomFirework(fireworkLocation.add(-0.2, 0d, 0.2), 0, 15);
 			}
 		}
 		
