@@ -146,10 +146,10 @@ public final class UHPlugin extends JavaPlugin {
 		if(getConfig().getBoolean("metrics")) {
 			try {
 				MetricsLite metrics = new MetricsLite(this);
-		        metrics.start();
-		    } catch (IOException e) {
-		        // Failed to submit the stats :-(
-		    }
+				metrics.start();
+			} catch (IOException e) {
+				// Failed to submit the stats :-(
+			}
 		}
 		else {
 			getLogger().info("Metrics disabled for this plugin in the configuration: nothing was sent.");

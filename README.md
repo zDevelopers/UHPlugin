@@ -327,6 +327,7 @@ These values are replaced by the plugin; see below.
 ## Metrics
 
 This plugin uses metrics, [which can be found here](http://mcstats.org/plugin/UHPlugin).
+
 To opt out of metrics you can edit the `config.yml` file in the `PluginMetrics` folder inside your plugins folder (to opt-out for all plugins), or set the `metrics` option to `false` in the UltraHardcoreReloaded configuration file (to opt-out only for this plugin).
 
 ## Thanks
