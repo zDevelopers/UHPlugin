@@ -17,6 +17,11 @@ lang:
 
 
 
+# If this is set to false, no metrics are collected for this plugin.
+metrics: true
+
+
+
 episodes:
     enabled: true
     

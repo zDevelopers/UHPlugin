@@ -19,6 +19,8 @@
 
 package me.azenet.UHPlugin;
 
+import java.io.IOException;
+
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.integration.UHDynmapIntegration;
 import me.azenet.UHPlugin.integration.UHProtocolLibIntegrationWrapper;
@@ -31,6 +33,7 @@ import me.azenet.UHPlugin.task.UpdateTimerTask;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.MetricsLite;
 
 public final class UHPlugin extends JavaPlugin {
 	
@@ -138,6 +141,19 @@ public final class UHPlugin extends JavaPlugin {
 		
 		// Schedule commands
 		runtimeCommandsExecutor.registerCommandsInScheduler(UHRuntimeCommandsExecutor.AFTER_SERVER_START);
+		
+		// Launch metrics
+		if(getConfig().getBoolean("metrics")) {
+			try {
+				MetricsLite metrics = new MetricsLite(this);
+		        metrics.start();
+		    } catch (IOException e) {
+		        // Failed to submit the stats :-(
+		    }
+		}
+		else {
+			getLogger().info("Metrics disabled for this plugin in the configuration: nothing was sent.");
+		}
 		
 		getLogger().info(i18n.t("load.loaded"));
 	}
