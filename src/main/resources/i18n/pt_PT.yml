@@ -235,8 +235,8 @@ keys:
             partialSolo: "{ci}Alguns jogadores nao estao em nenhuma equipa; ficarao a jogar sozinhos; foram adicionados ao numero de Pontos de Spawn necessarios."
         
         generate:
-            nothingToDo: "{ci}You asked a void generation. Thus, the generation is empty."
-            unsupportedMethod: "{ce}The generation method “{0}” is not (yet?) supported."
+            nothingToDo: "{ci}Pediste uma geracao nula. Portanto, nao foram gerados pontos de spawn."
+            unsupportedMethod: "{ce}O Metodo de geração “{0}” nao e (ainda?) suportada."
             unknownWorld: "{ce}O Mundo {0} nao existe."
             success: "{cs}Pontos de Spawn gerados com sucesso."
             impossible: "{ce}Pediste o Impossivel: existem demasiados pontos de spawn no espaco muito pequeno. Diminui os pontos de spawn ou o espaco minimo entre dois pontos."
@@ -273,7 +273,7 @@ keys:
         addplayer:
             disconnected: "{ce}Impossivel adicionar {0} a Equipa {1}."
             success: "{cs}O Jogador {0} foi adicionado com Sucesso a Equipa {1}"
-            added: "{aqua}Estass agora na {aqua}Equipa {reset}{0}."
+            added: "{aqua}Estas agora na {aqua}Equipa {reset}{0}."
             doesNotExists: "{ce}Esta Equipa nao Existe."
             full: "{ce}A Equipa {0}{ce} esta Completa!"
             
@@ -285,7 +285,7 @@ keys:
             removed: "{darkaqua}Tu ja nao fazes parte da Equipa {0}{darkaqua}."
         
         list:
-            nothing: "{ce}Nao existe nenhuma Equipa para ser Mostrada."
+            nothing: "{ce}Nao existe nenhuma Equipa para ser mostrada."
             itemTeam: "{0} ({1} Jogadores)"
             
             bulletPlayerOnline: "{green} • "
