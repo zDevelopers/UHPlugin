@@ -5,3 +5,6 @@ target
 bin/
 screenshots/
 *~
+*.iml
+.idea/
+dependency-reduced-pom.xml
