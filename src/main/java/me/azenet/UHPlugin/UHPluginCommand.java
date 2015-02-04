@@ -1062,7 +1062,7 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		for(UHTeam team : p.getTeamManager().getTeams()) {
 			for(OfflinePlayer player : team.getPlayers()) {
-				if(p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled() && sender instanceof Player) {
+				if(sender instanceof Player) {
 					/* We can use a JSON-based message */
 					
 					String json = "{\"text\":\"\",\"extra\":[";
@@ -1113,7 +1113,7 @@ public class UHPluginCommand implements CommandExecutor {
 					UHUtils.sendJSONMessage((Player) sender, json);
 				
 				} else {
-					/* Fallback to a simple display */
+					/* Fallback to a simple display for the console */
 					
 					String info = null;
 					

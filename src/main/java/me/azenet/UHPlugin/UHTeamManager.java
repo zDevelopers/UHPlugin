@@ -414,10 +414,7 @@ public class UHTeamManager {
 	 */
 	public void displayTeamChooserChatGUI(Player player) {
 		if(!player.hasPermission("uh.player.join.self")) return;
-		if(!p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled()) {
-			p.getLogger().log(Level.SEVERE, "Cannot display team-chooser GUI without ProtocolLib");
-			return;
-		}
+
 		if(p.getGameManager().isGameRunning()) {
 			if(!p.getGameManager().isGameWithTeams()) {
 				return;

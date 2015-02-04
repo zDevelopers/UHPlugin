@@ -64,7 +64,6 @@ public class UHProtocolLibIntegrationWrapper {
 		ArrayList<String> options = new ArrayList<String>();
 		options.add("hardcore-hearts.display");
 		options.add("auto-respawn.do");
-		options.add("teams-options.gui.autoDisplay");
 		
 		ArrayList<String> enabledOptions = new ArrayList<String>();
 		

@@ -31,6 +31,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandException;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -110,7 +111,7 @@ public class UHUtils {
 	/**
 	 * Sends a JSON-formatted message to player.
 	 * <p>
-	 * If ProtocolLib is not available, nothing is sent.
+	 * If ProtocolLib is not available, fallback to the tellraw command.
 	 * 
 	 * @param player The receiver of the message.
 	 * @param json The message.
@@ -118,8 +119,6 @@ public class UHUtils {
 	 */
 	public static boolean sendJSONMessage(Player player, String json) {
 		try {
-			Class.forName("com.comphenix.protocol.ProtocolLibrary");
-			
 			PacketContainer message = new PacketContainer(PacketType.Play.Server.CHAT);
 			message.getChatComponents().write(0, WrappedChatComponent.fromJson(json));
 			
@@ -131,10 +130,15 @@ public class UHUtils {
 				return false;
 			}
 		
-		} catch (ClassNotFoundException e) {
-			Bukkit.getLogger().log(Level.SEVERE, "Cannot send JSON-formatted message without ProtocolLib");
-			e.printStackTrace();
-			return false;
+		} catch (NoClassDefFoundError e) {
+			// Fallback to the tellraw command
+			try {
+				return Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+						"tellraw " + player.getName() + " " + json);
+
+			} catch(CommandException cmde) {
+				return false;
+			}
 		}
 	}
 	
