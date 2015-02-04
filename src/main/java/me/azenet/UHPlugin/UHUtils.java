@@ -318,24 +318,8 @@ public class UHUtils {
 		}
 		
 		// Random shape
-		int shape = rand.nextInt(5);
-		switch(shape) {
-			case 0:
-				fireworkBuilder.with(FireworkEffect.Type.BALL);
-				break;
-			case 1:
-				fireworkBuilder.with(FireworkEffect.Type.BALL_LARGE);
-				break;
-			case 2:
-				fireworkBuilder.with(FireworkEffect.Type.BURST);
-				break;
-			case 3:
-				fireworkBuilder.with(FireworkEffect.Type.CREEPER);
-				break;
-			case 4:
-				fireworkBuilder.with(FireworkEffect.Type.STAR);
-				break;
-		}
+		FireworkEffect.Type[] types = FireworkEffect.Type.values();
+		fireworkBuilder.with(types[rand.nextInt(types.length)]);
 		
 		return fireworkBuilder.build();
 	}
