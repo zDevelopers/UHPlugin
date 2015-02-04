@@ -26,7 +26,7 @@ keys:
     cmd:
         errorLoad: "{ce}Une erreur est survenue, consultez la console pour plus de détails. Il s'agit probablement d'un bug."
         errorUnknown: "{ce}Cette commande n'existe pas. Tapez /uh pour la liste des commandes."
-        errorUnauthorized: "{ce}lolnope"
+        errorUnauthorized: "{ce}Vous n'avez pas le droit d'exécuter cette commande."
         
         titleHelp: "{yellow}{0} - version {1}"
         legendHelp: "{ci}Légende: {cc}/uh command <requis> [optionnel=valeur par défaut] <espaces autorisées ...>{ci}."
