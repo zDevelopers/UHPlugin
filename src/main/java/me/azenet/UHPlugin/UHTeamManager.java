@@ -192,7 +192,7 @@ public class UHTeamManager {
 	 * @param player The player to add.
 	 * @throws IllegalArgumentException if the team does not exists.
 	 */
-	public void addPlayerToTeam(String teamName, Player player) {
+	public void addPlayerToTeam(String teamName, OfflinePlayer player) {
 		UHTeam team = getTeam(teamName);
 		
 		if(team == null) {
@@ -414,10 +414,7 @@ public class UHTeamManager {
 	 */
 	public void displayTeamChooserChatGUI(Player player) {
 		if(!player.hasPermission("uh.player.join.self")) return;
-		if(!p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled()) {
-			p.getLogger().log(Level.SEVERE, "Cannot display team-chooser GUI without ProtocolLib");
-			return;
-		}
+
 		if(p.getGameManager().isGameRunning()) {
 			if(!p.getGameManager().isGameWithTeams()) {
 				return;

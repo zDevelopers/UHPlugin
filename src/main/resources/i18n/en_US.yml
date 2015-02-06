@@ -26,7 +26,7 @@ keys:
     cmd:
         errorLoad: "{ce}An error occurred, see console for details. This is probably a bug."
         errorUnknown: "{ce}This subcommand does not exists. See /uh for the available commands."
-        errorUnauthorized: "{ce}lolnope"
+        errorUnauthorized: "{ce}You are not allowed to execute this command."
         
         titleHelp: "{yellow}{0} - version {1}"
         legendHelp: "{ci}Legend: {cc}/uh command <required> [optional=default] <spaces allowed ...>{ci}."
@@ -273,7 +273,7 @@ keys:
             removed: "{cs}Team {0} deleted."
         
         addplayer:
-            disconnected: "{ce}Unable to add the player {0} to the team {1}. The player must be connected."
+            disconnected: "{ce}Unable to add the player {0} to the team {1}. This player is unknown in the server."
             success: "{cs}The player {0} was successfully added to the team {1}"
             added: "{aqua}You are now in the {0}{aqua} team."
             doesNotExists: "{ce}This team does not exists."
@@ -282,7 +282,7 @@ keys:
             joinhelp: "{ce}Usage: {cc}/join [player] <team>{ce}."
         
         removeplayer:
-            disconnected: "{ce}The player {0} is disconnected!"
+            disconnected: "{ce}The player {0} is disconnected and never logged in before!"
             success: "{cs}The player {0} was successfully removed from his team."
             removed: "{darkaqua}You are no longer part of the {0}{darkaqua} team."
         

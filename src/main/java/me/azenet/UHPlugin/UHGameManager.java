@@ -483,6 +483,8 @@ public class UHGameManager {
 		this.gameStarted = true;
 		this.gameFinished = false;
 		
+		updateAliveCache();
+		
 		// Fires the event
 		p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
 	}
@@ -843,6 +845,7 @@ public class UHGameManager {
 		}
 		
 		// There's only one team.
+		p.getLogger().info(p.getGameManager().getAliveTeams().toString());
 		UHTeam winnerTeam = p.getGameManager().getAliveTeams().iterator().next();
 		Set<OfflinePlayer> listWinners = winnerTeam.getPlayers();
 		

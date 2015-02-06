@@ -957,7 +957,7 @@ public class UHPluginCommand implements CommandExecutor {
 			else if(subcommand.equalsIgnoreCase("join")) {
 				if(args.length >= 4) { // /uh team join <player> <teamName>
 					
-					Player player = p.getServer().getPlayer(args[2]);
+					OfflinePlayer player = p.getServer().getOfflinePlayer(args[2]);
 					String teamName = UHUtils.getStringFromCommandArguments(args, 3);
 					
 					if(player == null || !player.isOnline()) {
@@ -987,9 +987,9 @@ public class UHPluginCommand implements CommandExecutor {
 			else if(subcommand.equalsIgnoreCase("leave")) {
 				if(args.length == 3) { // /uh team leave <player>
 					
-					Player player = p.getServer().getPlayer(args[2]);
+					OfflinePlayer player = p.getServer().getOfflinePlayer(args[2]);
 					
-					if(player == null || !player.isOnline()) {
+					if(player == null) {
 						sender.sendMessage(i.t("team.removeplayer.disconnected", args[2]));
 					}
 					else {
@@ -1062,7 +1062,7 @@ public class UHPluginCommand implements CommandExecutor {
 		
 		for(UHTeam team : p.getTeamManager().getTeams()) {
 			for(OfflinePlayer player : team.getPlayers()) {
-				if(p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled() && sender instanceof Player) {
+				if(sender instanceof Player) {
 					/* We can use a JSON-based message */
 					
 					String json = "{\"text\":\"\",\"extra\":[";
@@ -1113,7 +1113,7 @@ public class UHPluginCommand implements CommandExecutor {
 					UHUtils.sendJSONMessage((Player) sender, json);
 				
 				} else {
-					/* Fallback to a simple display */
+					/* Fallback to a simple display for the console */
 					
 					String info = null;
 					
@@ -2371,10 +2371,10 @@ public class UHPluginCommand implements CommandExecutor {
 	 */
 	private void doLeave(CommandSender sender, Command command, String label, String[] args) {
 		
-		Player target = null;
+		OfflinePlayer target = null;
 		
 		if(args.length >= 1 && sender.hasPermission("uh.player.leave.others")) {
-			if((target = p.getServer().getPlayer(args[0])) == null) {
+			if((target = p.getServer().getOfflinePlayer(args[0])) == null) {
 				sender.sendMessage(i.t("team.removeplayer.disconnected", args[0]));
 				return;
 			}

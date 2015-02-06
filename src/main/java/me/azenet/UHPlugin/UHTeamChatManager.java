@@ -118,7 +118,7 @@ public class UHTeamChatManager {
 		}
 		
 		// ... and to the console.
-		if(p.getConfig().getBoolean("logTeamChat")) {
+		if(p.getConfig().getBoolean("teams-options.teamChat.log")) {
 			p.getServer().getConsoleSender().sendMessage(rawMessage);
 		}
 		

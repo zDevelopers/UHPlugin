@@ -12,7 +12,13 @@
 
 
 # Available languages: en_US, fr_FR, pt_PT, pt_BR.
-lang: en_US
+# Empty value: system language.
+lang: 
+
+
+
+# If this is set to false, no metrics are collected for this plugin.
+metrics: true
 
 
 
@@ -218,6 +224,15 @@ teams-options:
         autoDisplay: true
         # Delay between the login and the display? (Seconds)
         delay: 4
+    
+    teamChat:
+        # Forces disable the team-chat when the player die.
+        # If you use SpectatorPlus with the block-commands option enabled, this will prevent spectators
+        # from using the team chat.
+        disableLockOnDeath: true
+        
+        # Log the private team-chat in the console?
+        log: false
 
 
 
@@ -259,11 +274,6 @@ finish:
 dynmap:
     showSpawnLocations: true
     showDeathLocations: true
-
-
-
-# Log the private team-chat in the console?
-logTeamChat: false
 
 
 

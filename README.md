@@ -24,6 +24,7 @@ Please note, this README reflects the last development version. Some features li
 1. [Commands & permissions](#commands--permissions)
 1. [Installation](#installation)
 1. [How to translate the plugin](#how-to-translate-the-plugin-in-your-own-language)
+1. [Metrics](#metrics)
 1. [Thanks](#thanks)
 1. [License](#license)
 
@@ -321,6 +322,13 @@ These values are replaced by the plugin; see below.
    `{cs}` | Success | Green
    `{cst}` | Status | Dark gray
    `{cc}` | Command | Gold
+
+
+## Metrics
+
+This plugin uses metrics, [which can be found here](http://mcstats.org/plugin/UHPlugin).
+
+To opt out of metrics you can edit the `config.yml` file in the `PluginMetrics` folder inside your plugins folder (to opt-out for all plugins), or set the `metrics` option to `false` in the UltraHardcoreReloaded configuration file (to opt-out only for this plugin).
 
 ## Thanks
 

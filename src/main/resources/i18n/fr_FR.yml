@@ -26,7 +26,7 @@ keys:
     cmd:
         errorLoad: "{ce}Une erreur est survenue, consultez la console pour plus de détails. Il s'agit probablement d'un bug."
         errorUnknown: "{ce}Cette commande n'existe pas. Tapez /uh pour la liste des commandes."
-        errorUnauthorized: "{ce}lolnope"
+        errorUnauthorized: "{ce}Vous n'avez pas le droit d'exécuter cette commande."
         
         titleHelp: "{yellow}{0} - version {1}"
         legendHelp: "{ci}Légende: {cc}/uh command <requis> [optionnel=valeur par défaut] <espaces autorisées ...>{ci}."
@@ -200,8 +200,8 @@ keys:
             loreLine1Monster: "Fabriquée depuis la tête tranchée"
             loreLine2Monster: "d'un monstre maléfique"
             
-            nameGoldenAppleFromHeadNormal: "{aqua}Tête tranchée"
-            nameGoldenAppleFromHeadNotch: "{lightpurple}Tête tranchée"
+            nameGoldenAppleFromHeadNormal: "{aqua}Tête d'or"
+            nameGoldenAppleFromHeadNotch: "{lightpurple}Tête d'or"
     
     compass:
         noRottenFlesh: "{gray}{italic}Vous n'avez pas de chair de zombie."
@@ -273,7 +273,7 @@ keys:
             removed: "{cs}Équipe {0} supprimée."
         
         addplayer:
-            disconnected: "{ce}Impossible d'ajouter le joueur {0} dans l'équipe {1}. Le joueur doit être connecté."
+            disconnected: "{ce}Impossible d'ajouter le joueur {0} dans l'équipe {1}. Ce joueur n'est jamais venu sur ce serveur."
             success: "{cs}Le joueur {0} a été ajouté à l'équipe {1}{cs} avec succès."
             added: "{aqua}Vous faites désormais partie de l'équipe {0}{aqua}."
             doesNotExists: "{ce}Cette équipe n'existe pas."
@@ -282,7 +282,7 @@ keys:
             joinhelp: "{ce}Usage : {cc}/join [joueur] <équipe>{ce}."
         
         removeplayer:
-            disconnected: "{ce}Le joueur {0} est déconnecté !"
+            disconnected: "{ce}Le joueur {0} est déconnecté et ne s'est jamais connecté au serveur auparavant !"
             success: "{cs}Le joueur {0} a été retiré de son équipe avec succès."
             removed: "{darkaqua}Vous ne faites plus partie de l'équipe {0}{darkaqua}."
         
