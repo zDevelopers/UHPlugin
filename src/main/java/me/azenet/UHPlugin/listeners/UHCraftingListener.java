@@ -23,7 +23,7 @@ import java.util.HashSet;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHProTipsSender;
-import me.azenet.UHPlugin.recipes.UHRecipeManager;
+import me.azenet.UHPlugin.recipes.RecipesManager;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Bukkit;
@@ -76,36 +76,36 @@ public class UHCraftingListener implements Listener {
 		
 		/** Prevents items to be crafted **/
 		
-		if(!p.getRecipeManager().isRecipeAllowed(recipe)) {
+		if(!p.getRecipesManager().isRecipeAllowed(recipe)) {
 			ev.getInventory().setResult(new ItemStack(Material.AIR));
 			
 			// ProTips
-			final String failedRecipe = p.getRecipeManager().getLastFailedRecipe();
+			final String failedRecipe = p.getRecipesManager().getLastFailedRecipe();
 			final Player player = (Player) ev.getViewers().get(0); // crafting inventory: only one viewer in all cases.
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 				@Override
 				public void run() {
 					switch(failedRecipe) {
-						case UHRecipeManager.RECIPE_COMPASS:
-							switch(p.getRecipeManager().getCompassRecipeType()) {
-								case UHRecipeManager.COMPASS_EASY:
+						case RecipesManager.RECIPE_COMPASS:
+							switch(p.getRecipesManager().getCompassRecipeType()) {
+								case RecipesManager.COMPASS_EASY:
 									p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_COMPASS_EASY);
 									break;
-								case UHRecipeManager.COMPASS_MEDIUM:
+								case RecipesManager.COMPASS_MEDIUM:
 									p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_COMPASS_MEDIUM);
 									break;
-								case UHRecipeManager.COMPASS_HARD:
+								case RecipesManager.COMPASS_HARD:
 									p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_COMPASS_HARD);
 									break;
 							}
 							
 							break;
 						
-						case UHRecipeManager.RECIPE_GLISTERING_MELON:
+						case RecipesManager.RECIPE_GLISTERING_MELON:
 							p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_GLISTERING_MELON);
 							break;
 						
-						case UHRecipeManager.RECIPE_ENCHANTED_GOLDEN_APPLE:
+						case RecipesManager.RECIPE_ENCHANTED_GOLDEN_APPLE:
 							p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_NO_ENCHANTED_GOLDEN_APPLE);
 							break;
 					}
@@ -118,7 +118,7 @@ public class UHCraftingListener implements Listener {
 		
 		/** Adds a lore to the golden apples crafted from a head **/
 		
-		ItemStack loreResult = p.getRecipeManager().addLore(recipe, ev.getInventory());
+		ItemStack loreResult = p.getRecipesManager().addLore(recipe, ev.getInventory());
 		if(loreResult != null) {
 			ev.getInventory().setResult(loreResult);
 			return;
@@ -127,7 +127,7 @@ public class UHCraftingListener implements Listener {
 		
 		/** The lore remover don't change the name of the item **/
 		
-		ItemStack keepNameResult = p.getRecipeManager().keepNameOnLoreRemover(recipe, ev.getInventory());
+		ItemStack keepNameResult = p.getRecipesManager().keepNameOnLoreRemover(recipe, ev.getInventory());
 		if(keepNameResult != null) {
 			ev.getInventory().setResult(keepNameResult);
 			return;
@@ -182,7 +182,7 @@ public class UHCraftingListener implements Listener {
 				Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 					@Override
 					public void run() {
-						if(p.getRecipeManager().isValidCompassRecipe(((CraftingInventory) inventory).getMatrix())) {
+						if(p.getRecipesManager().isValidCompassRecipe(((CraftingInventory) inventory).getMatrix())) {
 							
 							// Puts the compass in the result slot
 							if(ev.getSlotType() == SlotType.CRAFTING) {
@@ -284,7 +284,7 @@ public class UHCraftingListener implements Listener {
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 				@Override
 				public void run() {
-					if(p.getRecipeManager().isValidCompassRecipe(((CraftingInventory) ev.getInventory()).getMatrix())) {
+					if(p.getRecipesManager().isValidCompassRecipe(((CraftingInventory) ev.getInventory()).getMatrix())) {
 						((CraftingInventory) ev.getInventory()).setResult(new ItemStack(Material.COMPASS));
 						((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
 					}					

@@ -19,25 +19,20 @@
 
 package me.azenet.UHPlugin.recipes;
 
+import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.i18n.I18n;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.SkullType;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.i18n.I18n;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.SkullType;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-
-public class UHRecipeManager {
+public class RecipesManager {
 	
 	private UHPlugin p = null;
 	private I18n i = null;
@@ -57,7 +52,7 @@ public class UHRecipeManager {
 	private String lastFailedRecipe = null;
 	
 	
-	public UHRecipeManager(UHPlugin plugin) {
+	public RecipesManager(UHPlugin plugin) {
 		this.p = plugin;
 		this.i = p.getI18n();
 	}
@@ -312,8 +307,8 @@ public class UHRecipeManager {
 	/**
 	 * Returns the current compass recipe.
 	 * 
-	 * @return {@link UHRecipeManager#COMPASS_DISABLED}, {@link UHRecipeManager#COMPASS_EASY},
-	 * {@link UHRecipeManager#COMPASS_MEDIUM} or {@link UHRecipeManager#COMPASS_HARD}.  
+	 * @return {@link RecipesManager#COMPASS_DISABLED}, {@link RecipesManager#COMPASS_EASY},
+	 * {@link RecipesManager#COMPASS_MEDIUM} or {@link RecipesManager#COMPASS_HARD}.
 	 */
 	public int getCompassRecipeType() {
 		if(compassRecipeType != -1) {
@@ -471,8 +466,8 @@ public class UHRecipeManager {
 	/**
 	 * Returns the last failed recipe.
 	 * 
-	 * Use {@link UHRecipeManager#RECIPE_COMPASS}, {@link UHRecipeManager#RECIPE_GLISTERING_MELON} and
-	 * {@link UHRecipeManager#RECIPE_ENCHANTED_GOLDEN_APPLE} to get the type of the failed recipe.
+	 * Use {@link RecipesManager#RECIPE_COMPASS}, {@link RecipesManager#RECIPE_GLISTERING_MELON} and
+	 * {@link RecipesManager#RECIPE_ENCHANTED_GOLDEN_APPLE} to get the type of the failed recipe.
 	 * 
 	 * @return the lastFailedRecipe
 	 */

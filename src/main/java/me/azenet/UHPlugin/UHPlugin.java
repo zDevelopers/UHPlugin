@@ -19,8 +19,6 @@
 
 package me.azenet.UHPlugin;
 
-import java.io.IOException;
-
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.integration.UHDynmapIntegration;
 import me.azenet.UHPlugin.integration.UHProtocolLibIntegrationWrapper;
@@ -29,13 +27,14 @@ import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
 import me.azenet.UHPlugin.listeners.UHCraftingListener;
 import me.azenet.UHPlugin.listeners.UHGameListener;
 import me.azenet.UHPlugin.listeners.UHGameplayListener;
-import me.azenet.UHPlugin.recipes.UHRecipeManager;
+import me.azenet.UHPlugin.recipes.RecipesManager;
 import me.azenet.UHPlugin.spawns.SpawnsManager;
 import me.azenet.UHPlugin.task.UpdateTimerTask;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
+
+import java.io.IOException;
 
 public final class UHPlugin extends JavaPlugin {
 	
@@ -48,7 +47,7 @@ public final class UHPlugin extends JavaPlugin {
 	private UHScoreboardManager scoreboardManager = null;
 	private UHMOTDManager motdManager = null;
 	private UHBorderManager borderManager = null;
-	private UHRecipeManager recipeManager = null;
+	private RecipesManager recipesManager = null;
 	private UHTeamChatManager teamChatManager = null;
 	private UHTimerManager timerManager = null;
 	
@@ -80,7 +79,7 @@ public final class UHPlugin extends JavaPlugin {
 		gameManager = new UHGameManager(this);
 		spawnsManager = new SpawnsManager(this);
 		borderManager = new UHBorderManager(this);
-		recipeManager = new UHRecipeManager(this);
+		recipesManager = new RecipesManager(this);
 		teamChatManager = new UHTeamChatManager(this);
 		timerManager = new UHTimerManager();
 		
@@ -120,7 +119,7 @@ public final class UHPlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new UHCraftingListener(this), this);
 		// The freezer listener is registered by the freezer when it is needed.
 		
-		recipeManager.registerRecipes();
+		recipesManager.registerRecipes();
 		gameManager.initEnvironment();
 		
 		motdManager.updateMOTDBeforeStart();
@@ -227,8 +226,8 @@ public final class UHPlugin extends JavaPlugin {
 	 * Returns the recipe manager.
 	 * @return
 	 */
-	public UHRecipeManager getRecipeManager() {
-		return recipeManager;
+	public RecipesManager getRecipesManager() {
+		return recipesManager;
 	}
 	
 	/**
