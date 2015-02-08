@@ -17,7 +17,7 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package me.azenet.UHPlugin;
+package me.azenet.UHPlugin.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

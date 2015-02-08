@@ -19,6 +19,7 @@
 
 package me.azenet.UHPlugin;
 
+import me.azenet.UHPlugin.borders.UHBorderManager;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.integration.UHDynmapIntegration;
 import me.azenet.UHPlugin.integration.UHProtocolLibIntegrationWrapper;
@@ -27,9 +28,17 @@ import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
 import me.azenet.UHPlugin.listeners.UHCraftingListener;
 import me.azenet.UHPlugin.listeners.UHGameListener;
 import me.azenet.UHPlugin.listeners.UHGameplayListener;
+import me.azenet.UHPlugin.misc.UHFreezer;
+import me.azenet.UHPlugin.misc.UHMOTDManager;
+import me.azenet.UHPlugin.misc.UHProTipsSender;
+import me.azenet.UHPlugin.misc.UHRuntimeCommandsExecutor;
 import me.azenet.UHPlugin.recipes.RecipesManager;
+import me.azenet.UHPlugin.scoreboard.UHScoreboardManager;
 import me.azenet.UHPlugin.spawns.SpawnsManager;
 import me.azenet.UHPlugin.task.UpdateTimerTask;
+import me.azenet.UHPlugin.teams.UHTeamChatManager;
+import me.azenet.UHPlugin.teams.UHTeamManager;
+import me.azenet.UHPlugin.timers.UHTimerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;

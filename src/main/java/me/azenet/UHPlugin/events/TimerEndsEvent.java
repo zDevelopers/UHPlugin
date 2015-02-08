@@ -19,7 +19,7 @@
 
 package me.azenet.UHPlugin.events;
 
-import me.azenet.UHPlugin.UHTimer;
+import me.azenet.UHPlugin.timers.UHTimer;
 
 /**
  * This event is fired when a timer ends.

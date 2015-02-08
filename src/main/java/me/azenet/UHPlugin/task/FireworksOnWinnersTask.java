@@ -23,7 +23,7 @@ import java.util.Random;
 import java.util.Set;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.UHUtils;
+import me.azenet.UHPlugin.utils.UHUtils;
 
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;

@@ -17,8 +17,9 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package me.azenet.UHPlugin;
+package me.azenet.UHPlugin.borders;
 
+import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Bukkit;

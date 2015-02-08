@@ -17,15 +17,12 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package me.azenet.UHPlugin;
+package me.azenet.UHPlugin.scoreboard;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-
+import me.azenet.UHPlugin.UHGameManager;
+import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
-
+import me.azenet.UHPlugin.timers.UHTimer;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,6 +32,11 @@ import org.bukkit.scoreboard.Criterias;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UHScoreboardManager {
 	
@@ -360,7 +362,7 @@ public class UHScoreboardManager {
 	 * @param useOldValues if true, the old values of the timer will be used.
 	 * @return The text of the timer.
 	 */
-	protected String getTimerText(UHTimer timer, Boolean forceNonHoursTimer, Boolean useOldValues) {
+	public String getTimerText(UHTimer timer, Boolean forceNonHoursTimer, Boolean useOldValues) {
 		Validate.notNull(timer, "The timer cannot be null");
 		
 		if(timer.getDisplayHoursInTimer() && !forceNonHoursTimer) {

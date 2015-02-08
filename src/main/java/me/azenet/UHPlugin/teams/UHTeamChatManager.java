@@ -17,7 +17,7 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package me.azenet.UHPlugin;
+package me.azenet.UHPlugin.teams;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +25,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
 
+import me.azenet.UHPlugin.misc.UHProTipsSender;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

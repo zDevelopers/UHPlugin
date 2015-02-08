@@ -33,9 +33,16 @@ import me.azenet.UHPlugin.events.UHEpisodeChangedEvent;
 import me.azenet.UHPlugin.events.UHGameStartsEvent;
 import me.azenet.UHPlugin.events.UHPlayerResurrectedEvent;
 import me.azenet.UHPlugin.i18n.I18n;
+import me.azenet.UHPlugin.misc.UHProTipsSender;
 import me.azenet.UHPlugin.task.FireworksOnWinnersTask;
 import me.azenet.UHPlugin.task.TeamStartTask;
 
+import me.azenet.UHPlugin.teams.TeamColor;
+import me.azenet.UHPlugin.teams.UHTeam;
+import me.azenet.UHPlugin.teams.UHTeamManager;
+import me.azenet.UHPlugin.timers.UHTimer;
+import me.azenet.UHPlugin.utils.UHSound;
+import me.azenet.UHPlugin.utils.UHUtils;
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;

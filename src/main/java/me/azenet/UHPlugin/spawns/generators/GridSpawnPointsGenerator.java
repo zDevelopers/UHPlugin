@@ -2,7 +2,7 @@ package me.azenet.UHPlugin.spawns.generators;
 
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.UHUtils;
+import me.azenet.UHPlugin.utils.UHUtils;
 import me.azenet.UHPlugin.spawns.exceptions.CannotGenerateSpawnPointsException;
 import org.bukkit.Location;
 import org.bukkit.Material;

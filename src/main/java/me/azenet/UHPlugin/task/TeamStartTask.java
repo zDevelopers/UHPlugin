@@ -20,7 +20,7 @@
 package me.azenet.UHPlugin.task;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.UHTeam;
+import me.azenet.UHPlugin.teams.UHTeam;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.GameMode;

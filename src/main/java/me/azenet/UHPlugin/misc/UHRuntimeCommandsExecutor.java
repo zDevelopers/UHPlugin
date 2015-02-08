@@ -17,7 +17,7 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package me.azenet.UHPlugin;
+package me.azenet.UHPlugin.misc;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,7 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.task.ScheduledCommandsExecutorTask;
+import me.azenet.UHPlugin.utils.UHUtils;
 
 
 /**

@@ -20,7 +20,7 @@
 package me.azenet.UHPlugin.spawns;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.UHUtils;
+import me.azenet.UHPlugin.utils.UHUtils;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.spawns.exceptions.CannotGenerateSpawnPointsException;
 import me.azenet.UHPlugin.spawns.exceptions.UnknownGeneratorException;

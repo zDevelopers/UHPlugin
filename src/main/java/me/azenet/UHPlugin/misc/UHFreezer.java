@@ -17,12 +17,13 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package me.azenet.UHPlugin;
+package me.azenet.UHPlugin.misc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.listeners.UHFreezerListener;
 
 import org.bukkit.Location;

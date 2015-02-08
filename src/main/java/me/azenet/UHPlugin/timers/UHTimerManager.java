@@ -17,7 +17,7 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package me.azenet.UHPlugin;
+package me.azenet.UHPlugin.timers;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -48,10 +48,10 @@ public class UHTimerManager {
 	
 	/**
 	 * Registers the main timer, used to display the episodes countdown.
-	 * 
+	 *
 	 * @param timer The timer.
 	 */
-	protected void registerMainTimer(UHTimer timer) {
+	public void registerMainTimer(UHTimer timer) {
 		this.mainTimer = timer;
 		timer.setRegistered(true);
 	}

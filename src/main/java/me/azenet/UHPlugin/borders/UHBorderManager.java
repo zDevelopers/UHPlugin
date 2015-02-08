@@ -17,13 +17,15 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package me.azenet.UHPlugin;
+package me.azenet.UHPlugin.borders;
 
 import java.util.HashSet;
 
+import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.task.BorderWarningTask;
 
+import me.azenet.UHPlugin.timers.UHTimer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World.Environment;

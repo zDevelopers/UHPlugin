@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.UUID;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.UHProTipsSender;
-import me.azenet.UHPlugin.UHRuntimeCommandsExecutor;
-import me.azenet.UHPlugin.UHSound;
-import me.azenet.UHPlugin.UHTeam;
+import me.azenet.UHPlugin.misc.UHProTipsSender;
+import me.azenet.UHPlugin.misc.UHRuntimeCommandsExecutor;
+import me.azenet.UHPlugin.utils.UHSound;
+import me.azenet.UHPlugin.teams.UHTeam;
 import me.azenet.UHPlugin.events.EpisodeChangedCause;
 import me.azenet.UHPlugin.events.TimerEndsEvent;
 import me.azenet.UHPlugin.events.TimerStartsEvent;

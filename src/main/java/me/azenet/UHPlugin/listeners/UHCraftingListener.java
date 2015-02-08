@@ -22,7 +22,7 @@ package me.azenet.UHPlugin.listeners;
 import java.util.HashSet;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.UHProTipsSender;
+import me.azenet.UHPlugin.misc.UHProTipsSender;
 import me.azenet.UHPlugin.recipes.RecipesManager;
 import me.azenet.UHPlugin.i18n.I18n;
 

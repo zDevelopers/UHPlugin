@@ -19,7 +19,7 @@
 
 package me.azenet.UHPlugin.events;
 
-import me.azenet.UHPlugin.UHTeam;
+import me.azenet.UHPlugin.teams.UHTeam;
 
 /**
  * Event fired when the last member of a team die.
