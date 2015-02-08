@@ -19,23 +19,9 @@
 
 package me.azenet.UHPlugin;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
-
 import me.azenet.UHPlugin.i18n.I18n;
-
+import me.azenet.UHPlugin.spawns.exceptions.CannotGenerateSpawnPointsException;
+import me.azenet.UHPlugin.spawns.exceptions.UnknownGeneratorException;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -48,6 +34,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 public class UHPluginCommand implements CommandExecutor {
 	
@@ -668,7 +663,7 @@ public class UHPluginCommand implements CommandExecutor {
 			
 			else if(subcommand.equalsIgnoreCase("generate")) { // /uh spawns generate
 				// Usage: /uh spawns generate <circular|squared|random> [size = current size of the map] [distanceMin = 250] [count = number of teams registered] [xCenter = xSpawn] [zCenter = zSpawn] [world = sender's world]
-				
+
 				if(args.length < 3) { // Documentation
 					displaySeparator(sender);
 					sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
@@ -686,25 +681,25 @@ public class UHPluginCommand implements CommandExecutor {
 					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsArgsCount"));
 					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsArgsCenter"));
 					sender.sendMessage(i.t("cmd.spawnsHelpGenerateDetailsArgsWorld"));
-					
+
 					displaySeparator(sender);
 					return;
 				}
-				
+
 				String generationMethod = args[2];
-				
+
 				// Default values
 				Integer size = p.getBorderManager().getCurrentBorderDiameter() - 25; // Avoid spawn points being too close to the border
 				Integer distanceMinBetweenTwoPoints = 250;
 				World world = p.getServer().getWorlds().get(0);
 				Double xCenter = world.getSpawnLocation().getX();
 				Double zCenter = world.getSpawnLocation().getZ();
-				
+
 				Integer spawnsCount = 0;
 				for(UHTeam team : p.getTeamManager().getTeams()) {
 					if(!team.isEmpty()) spawnsCount++;
 				}
-				
+
 				if(args.length < 9) {
 					if(sender instanceof Player) {
 						world = ((Player) sender).getWorld();
@@ -712,11 +707,11 @@ public class UHPluginCommand implements CommandExecutor {
 					else if(sender instanceof BlockCommandSender) {
 						world = ((BlockCommandSender) sender).getBlock().getWorld();
 					}
-					
+
 					xCenter = world.getSpawnLocation().getX();
 					zCenter = world.getSpawnLocation().getZ();
 				}
-				
+
 				// What if the game is in solo, or some players are out of all team?
 				// Only if the spawn count is not provided of course. Else, we don't care, this count
 				// will be overwritten.
@@ -733,33 +728,33 @@ public class UHPluginCommand implements CommandExecutor {
 								playersWithoutTeam++;
 							}
 						}
-						
+
 						if(playersWithoutTeam != 0) {
 							sender.sendMessage(i.t("spawns.assumptions.partialSolo"));
 							spawnsCount += playersWithoutTeam;
 						}
 					}
 				}
-				
+
 				try {
 					if(args.length >= 4) { // size included
 						size = Integer.valueOf(args[3]);
-						
+
 						if(args.length >= 5) { // distance minimal included
 							distanceMinBetweenTwoPoints = Integer.valueOf(args[4]);
-							
+
 							if(args.length >= 6) { // spawn count included
 								spawnsCount = Integer.valueOf(args[5]);
-								
+
 								if(args.length >= 7) { // xCenter included
 									xCenter = Double.parseDouble(args[6]);
-									
+
 									if(args.length >= 8) { // zCenter included
 										zCenter = Double.parseDouble(args[7]);
-										
+
 										if(args.length >= 9) { // world included
 											World inputWorld = p.getServer().getWorld(args[8]);
-											
+
 											if(inputWorld != null) {
 												world = inputWorld;
 											}
@@ -777,46 +772,33 @@ public class UHPluginCommand implements CommandExecutor {
 					sender.sendMessage(i.t("spawns.NaN"));
 					return;
 				}
-				
-				
+
+
 				if(spawnsCount <= 0) {
 					sender.sendMessage(i.t("spawns.generate.nothingToDo"));
 					return;
 				}
-				
-				
-				boolean success;
-				switch(generationMethod) {
-					case "random":
-						success = p.getSpawnsManager().generateRandomSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints, xCenter, zCenter);
-						break;
-					
-					case "grid":
-						success = p.getSpawnsManager().generateGridSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints, xCenter, zCenter);
-						break;
-					
-					case "circular":
-						success = p.getSpawnsManager().generateCircularSpawnPoints(world, spawnsCount, size, distanceMinBetweenTwoPoints, xCenter, zCenter);
-						break;
-					
-					default:
-						sender.sendMessage(i.t("spawns.generate.unsupportedMethod", generationMethod));
-						return;
-				}
-				
-				if(success) {
-					sender.sendMessage(i.t("spawns.generate.success"));
-				}
-				else {
+
+
+				try {
+					p.getSpawnsManager().generateSpawnPoints(generationMethod, world, spawnsCount, size, distanceMinBetweenTwoPoints, xCenter, zCenter);
+
+				} catch (UnknownGeneratorException e) {
+					sender.sendMessage(i.t("spawns.generate.unsupportedMethod", generationMethod));
+					return;
+
+				} catch (CannotGenerateSpawnPointsException e) {
 					sender.sendMessage(i.t("spawns.generate.impossible"));
+					return;
 				}
+
+				sender.sendMessage(i.t("spawns.generate.success"));
 			}
-			
+
 			else if(subcommand.equalsIgnoreCase("remove")) { // /uh spawns remove <x> <z>
 				if(args.length == 2) { // /uh spawns remove
 					if(!(sender instanceof Player)) {
 						sender.sendMessage(i.t("spawns.errorCoords"));
-						return;
 					}
 					else {
 						Player pl = (Player) sender; // Just a way to avoid casts everywhere.
@@ -836,7 +818,7 @@ public class UHPluginCommand implements CommandExecutor {
 						else {
 							world = p.getServer().getWorlds().get(0);
 						}
-						
+
 						p.getSpawnsManager().removeSpawnPoint(new Location(world, Double.parseDouble(args[2]), 0, Double.parseDouble(args[3])), true);
 						sender.sendMessage(i.t("spawns.remove.removed", p.getServer().getWorlds().get(0).getName(), args[2], args[3]));
 					} catch(NumberFormatException e) {
@@ -844,7 +826,7 @@ public class UHPluginCommand implements CommandExecutor {
 					}
 				}
 			}
-			
+
 			else if(subcommand.equalsIgnoreCase("reset")) { // /uh spawns reset
 				p.getSpawnsManager().reset();
 				sender.sendMessage(i.t("spawns.reset"));
