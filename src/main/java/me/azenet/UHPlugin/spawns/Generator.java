@@ -28,6 +28,7 @@ import me.azenet.UHPlugin.spawns.generators.SpawnPointsGenerator;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
 
 
 public enum Generator {
@@ -71,6 +72,7 @@ public enum Generator {
 			return (SpawnPointsGenerator) constructor.newInstance(p);
 
 		} catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e) {
+			p.getLogger().log(Level.SEVERE, "Cannot instantiate the spawn points generator: invalid class (missing constructor?).");
 			e.printStackTrace();
 			return null;
 		}

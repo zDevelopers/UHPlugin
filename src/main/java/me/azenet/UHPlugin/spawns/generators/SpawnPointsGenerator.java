@@ -26,6 +26,15 @@ import org.bukkit.World;
 
 import java.util.Set;
 
+
+/**
+ * Represents a spawn points generator.
+ *
+ * <p>
+ *     The constructor must take a single argument, an instance of the main class of
+ *     the plugin.
+ * </p>
+ */
 public interface SpawnPointsGenerator {
 
 	/**
