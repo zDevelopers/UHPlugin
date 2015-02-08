@@ -23,7 +23,7 @@ import java.util.HashSet;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHProTipsSender;
-import me.azenet.UHPlugin.UHRecipeManager;
+import me.azenet.UHPlugin.recipes.UHRecipeManager;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.Bukkit;

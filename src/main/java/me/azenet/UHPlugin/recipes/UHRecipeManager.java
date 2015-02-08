@@ -17,12 +17,13 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package me.azenet.UHPlugin;
+package me.azenet.UHPlugin.recipes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
 
 import org.bukkit.ChatColor;

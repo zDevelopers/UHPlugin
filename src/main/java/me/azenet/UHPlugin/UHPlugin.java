@@ -29,6 +29,7 @@ import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
 import me.azenet.UHPlugin.listeners.UHCraftingListener;
 import me.azenet.UHPlugin.listeners.UHGameListener;
 import me.azenet.UHPlugin.listeners.UHGameplayListener;
+import me.azenet.UHPlugin.recipes.UHRecipeManager;
 import me.azenet.UHPlugin.spawns.SpawnsManager;
 import me.azenet.UHPlugin.task.UpdateTimerTask;
 
