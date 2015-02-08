@@ -20,10 +20,15 @@
 package me.azenet.UHPlugin.spawns;
 
 
+import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.spawns.generators.CircularSpawnPointsGenerator;
 import me.azenet.UHPlugin.spawns.generators.GridSpawnPointsGenerator;
 import me.azenet.UHPlugin.spawns.generators.RandomSpawnPointsGenerator;
 import me.azenet.UHPlugin.spawns.generators.SpawnPointsGenerator;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 
 public enum Generator {
 
@@ -59,12 +64,13 @@ public enum Generator {
 	 *
 	 * @return The instance.
 	 */
-	public SpawnPointsGenerator getInstance() {
+	public SpawnPointsGenerator getInstance(UHPlugin p) {
 
 		try {
-			return generatorClass.newInstance();
+			Constructor constructor = generatorClass.getConstructor(UHPlugin.class);
+			return (SpawnPointsGenerator) constructor.newInstance(p);
 
-		} catch (InstantiationException | IllegalAccessException e) {
+		} catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e) {
 			e.printStackTrace();
 			return null;
 		}

@@ -225,7 +225,7 @@ public class SpawnsManager {
 	 * @throws CannotGenerateSpawnPointsException In case of fail.
 	 */
 	public void generateSpawnPoints(Generator generator, World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter) throws CannotGenerateSpawnPointsException {
-		generateSpawnPoints(generator.getInstance(), world, spawnCount, regionDiameter, minimalDistanceBetweenTwoPoints, xCenter, zCenter);
+		generateSpawnPoints(generator.getInstance(p), world, spawnCount, regionDiameter, minimalDistanceBetweenTwoPoints, xCenter, zCenter);
 	}
 
 	/**
