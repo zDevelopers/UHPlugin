@@ -56,7 +56,7 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator {
      *
      * @return The spawn points generated.
      *
-     * @throws me.azenet.UHPlugin.spawns.exceptions.CannotGenerateSpawnPointsException In case of fail.
+     * @throws CannotGenerateSpawnPointsException In case of fail.
      */
     @Override
     public Set<Location> generate(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter, boolean avoidWater) throws CannotGenerateSpawnPointsException {

@@ -41,9 +41,9 @@ public interface SpawnPointsGenerator {
 	 * @param zCenter                         The z coordinate of the point in the center of the region where the points will be generated.
 	 * @param avoidWater                      True if the generation have to avoid the water.
 	 *
-	 * @return The spawn points generated. An empty set in case of fail.
+	 * @return The spawn points generated.
 	 *
-	 * @throws me.azenet.UHPlugin.spawns.exceptions.CannotGenerateSpawnPointsException In case of fail.
+	 * @throws CannotGenerateSpawnPointsException In case of fail.
 	 */
 	public Set<Location> generate(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter, boolean avoidWater) throws CannotGenerateSpawnPointsException;
 
