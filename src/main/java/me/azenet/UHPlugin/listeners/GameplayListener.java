@@ -50,12 +50,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UHGameplayListener implements Listener {
+public class GameplayListener implements Listener {
 
 	private UHPlugin p = null;
 	private I18n i = null;
 	
-	public UHGameplayListener(UHPlugin p) {
+	public GameplayListener(UHPlugin p) {
 		this.p = p;
 		this.i = p.getI18n();
 	}

@@ -24,12 +24,12 @@ import me.azenet.UHPlugin.events.UHEpisodeChangedEvent;
 import me.azenet.UHPlugin.events.UHGameStartsEvent;
 import me.azenet.UHPlugin.events.UHPlayerResurrectedEvent;
 import me.azenet.UHPlugin.i18n.I18n;
-import me.azenet.UHPlugin.misc.UHProTipsSender;
+import me.azenet.UHPlugin.misc.ProTipsSender;
 import me.azenet.UHPlugin.task.FireworksOnWinnersTask;
 import me.azenet.UHPlugin.task.TeamStartTask;
 import me.azenet.UHPlugin.teams.TeamColor;
 import me.azenet.UHPlugin.teams.UHTeam;
-import me.azenet.UHPlugin.teams.UHTeamManager;
+import me.azenet.UHPlugin.teams.TeamManager;
 import me.azenet.UHPlugin.timers.UHTimer;
 import me.azenet.UHPlugin.utils.UHSound;
 import me.azenet.UHPlugin.utils.UHUtils;
@@ -43,7 +43,7 @@ import java.util.*;
 public class UHGameManager {
 	
 	private UHPlugin p = null;
-	private UHTeamManager tm = null;
+	private TeamManager tm = null;
 	private I18n i = null;
 	private Random random = null;
 	
@@ -448,7 +448,7 @@ public class UHGameManager {
 				@Override
 				public void run() {
 					for(Player player : getOnlineAlivePlayers()) {
-						p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_USE_T_COMMAND);
+						p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_USE_T_COMMAND);
 					}
 				}
 			}, 400L);
@@ -459,7 +459,7 @@ public class UHGameManager {
 			@Override
 			public void run() {
 				for(Player player : getOnlineAlivePlayers()) {
-					p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_STARTUP_INVINCIBILITY);
+					p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_STARTUP_INVINCIBILITY);
 				}
 			}
 		}, 100L);

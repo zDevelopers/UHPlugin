@@ -22,7 +22,7 @@ package me.azenet.UHPlugin.integration;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.listeners.UHPacketsListener;
+import me.azenet.UHPlugin.listeners.PacketsListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -35,7 +35,7 @@ public class UHProtocolLibIntegration {
 	private UHPlugin p = null;
 	private ProtocolManager pm = null;
 	
-	private UHPacketsListener packetsListener = null;
+	private PacketsListener packetsListener = null;
 	
 	public UHProtocolLibIntegration(UHPlugin p) {
 		this.p = p;
@@ -48,7 +48,7 @@ public class UHProtocolLibIntegration {
 		
 		
 		this.pm = ProtocolLibrary.getProtocolManager();
-		this.packetsListener = new UHPacketsListener(p);
+		this.packetsListener = new PacketsListener(p);
 		
 		if(p.getConfig().getBoolean("hardcore-hearts.display")) {
 			pm.addPacketListener(packetsListener);

@@ -38,13 +38,13 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UHScoreboardManager {
+public class ScoreboardManager {
 	
 	private UHPlugin p = null;
 	private I18n i = null;
 	private UHGameManager gm = null;
 	private Scoreboard sb = null;
-	private UHSidebarObjective sidebar = null;
+	private SidebarObjective sidebar = null;
 	
 	// Old values, to be able to update the minimum.
 	// Initialized to -1 to force an update at the first launch.
@@ -67,7 +67,7 @@ public class UHScoreboardManager {
 	 * 
 	 * @param plugin
 	 */
-	public UHScoreboardManager(UHPlugin plugin) {
+	public ScoreboardManager(UHPlugin plugin) {
 		this.p  = plugin;
 		this.i  = p.getI18n();
 		this.gm = p.getGameManager();
@@ -81,7 +81,7 @@ public class UHScoreboardManager {
 				sb.getObjective(objectiveName).unregister();
 			} catch(NullPointerException | IllegalArgumentException ignored) { }
 			
-			sidebar = new UHSidebarObjective(sb, objectiveName);
+			sidebar = new SidebarObjective(sb, objectiveName);
 			sidebar.setDisplayName(getScoreboardName());
 			
 			if(p.getConfig().getBoolean("episodes.enabled")) {
@@ -91,7 +91,7 @@ public class UHScoreboardManager {
 			sidebar.addEntry(this.getText("players", p.getServer().getOnlinePlayers().length), true);
 			
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
-				sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
+				sidebar.addEntry(SidebarObjective.SEPARATOR, true);
 				
 				// Displays a fake, frozen timer if the game is not started.
 				sidebar.addEntry(this.getTimerText(new UHTimer(""), true, false), true);
@@ -157,7 +157,7 @@ public class UHScoreboardManager {
 			}
 			
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer") && p.getTimerManager().getMainTimer() != null) {
-				sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
+				sidebar.addEntry(SidebarObjective.SEPARATOR, true);
 				sidebar.addEntry(getTimerText(p.getTimerManager().getMainTimer(), false, false), true);
 			}
 			
@@ -197,7 +197,7 @@ public class UHScoreboardManager {
 			}
 			
 			// Effective display
-			sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
+			sidebar.addEntry(SidebarObjective.SEPARATOR, true);
 			sidebar.addEntry(timer.getDisplayName(), true);
 			sidebar.addEntry(getTimerText(timer, false, false), true);
 			sidebar.reconstruct();
@@ -311,7 +311,7 @@ public class UHScoreboardManager {
 			final String freezerStatusText = i.t("freeze.scoreboard");
 			
 			if(frozen) {
-				sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
+				sidebar.addEntry(SidebarObjective.SEPARATOR, true);
 				sidebar.addEntry(freezerStatusText, true);
 				sidebar.reconstruct();
 			}

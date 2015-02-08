@@ -22,8 +22,8 @@ package me.azenet.UHPlugin.listeners;
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.events.*;
 import me.azenet.UHPlugin.i18n.I18n;
-import me.azenet.UHPlugin.misc.UHProTipsSender;
-import me.azenet.UHPlugin.misc.UHRuntimeCommandsExecutor;
+import me.azenet.UHPlugin.misc.ProTipsSender;
+import me.azenet.UHPlugin.misc.RuntimeCommandsExecutor;
 import me.azenet.UHPlugin.teams.UHTeam;
 import me.azenet.UHPlugin.utils.UHSound;
 import org.bukkit.*;
@@ -47,12 +47,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 import java.util.UUID;
 
-public class UHGameListener implements Listener {
+public class GameListener implements Listener {
 	
 	private UHPlugin p = null;
 	private I18n i = null;
 	
-	public UHGameListener(UHPlugin p) {
+	public GameListener(UHPlugin p) {
 		this.p = p;
 		this.i = p.getI18n();
 	}
@@ -130,7 +130,7 @@ public class UHGameListener implements Listener {
 						Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 							@Override
 							public void run() {
-								p.getProtipsSender().sendProtip(killer, UHProTipsSender.PROTIP_CRAFT_GOLDEN_HEAD);
+								p.getProtipsSender().sendProtip(killer, ProTipsSender.PROTIP_CRAFT_GOLDEN_HEAD);
 							}
 						}, 200L);
 					}
@@ -599,7 +599,7 @@ public class UHGameListener implements Listener {
 		Bukkit.getServer().broadcastMessage(i.t("start.go"));
 		
 		// Commands
-		p.getRuntimeCommandsExecutor().registerCommandsInScheduler(UHRuntimeCommandsExecutor.AFTER_GAME_START);
+		p.getRuntimeCommandsExecutor().registerCommandsInScheduler(RuntimeCommandsExecutor.AFTER_GAME_START);
 		
 		// MOTD
 		p.getMOTDManager().updateMOTDDuringGame();
@@ -629,7 +629,7 @@ public class UHGameListener implements Listener {
 		}
 		
 		// Commands
-		p.getRuntimeCommandsExecutor().registerCommandsInScheduler(UHRuntimeCommandsExecutor.AFTER_GAME_END);
+		p.getRuntimeCommandsExecutor().registerCommandsInScheduler(RuntimeCommandsExecutor.AFTER_GAME_END);
 		
 		// Updates the MOTD.
 		p.getMOTDManager().updateMOTDAfterGame(ev.getWinnerTeam());

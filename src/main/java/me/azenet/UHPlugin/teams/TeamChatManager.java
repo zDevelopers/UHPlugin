@@ -21,14 +21,14 @@ package me.azenet.UHPlugin.teams;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
-import me.azenet.UHPlugin.misc.UHProTipsSender;
+import me.azenet.UHPlugin.misc.ProTipsSender;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-public class UHTeamChatManager {
+public class TeamChatManager {
 	
 	UHPlugin p = null;
 	I18n i = null;
@@ -36,7 +36,7 @@ public class UHTeamChatManager {
 	List<UUID> teamChatLocked = new ArrayList<UUID>();
 	Map<UUID,UHTeam> otherTeamChatLocked = new HashMap<UUID,UHTeam>();
 	
-	public UHTeamChatManager(UHPlugin p) {
+	public TeamChatManager(UHPlugin p) {
 		this.p = p;
 		this.i = p.getI18n();
 	}
@@ -119,11 +119,11 @@ public class UHTeamChatManager {
 			p.getServer().getConsoleSender().sendMessage(rawMessage);
 		}
 		
-		if(!p.getProtipsSender().wasProtipSent(sender, UHProTipsSender.PROTIP_LOCK_CHAT)) {
+		if(!p.getProtipsSender().wasProtipSent(sender, ProTipsSender.PROTIP_LOCK_CHAT)) {
 			Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 				@Override
 				public void run() {
-					p.getProtipsSender().sendProtip(sender, UHProTipsSender.PROTIP_LOCK_CHAT);
+					p.getProtipsSender().sendProtip(sender, ProTipsSender.PROTIP_LOCK_CHAT);
 				}
 			}, 30L);
 		}
@@ -199,7 +199,7 @@ public class UHTeamChatManager {
 				Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable() {
 					@Override
 					public void run() {
-						p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_USE_G_COMMAND);
+						p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_USE_G_COMMAND);
 					}
 				}, 10L);
 				

@@ -38,17 +38,17 @@ import java.util.ArrayList;
  * It is NOT the index used as a score in the objective.
  * 
  * <h3>About separators</h3>
- * <em>(<tt>so</tt> is a UHSidebarObjective object.)</em>
+ * <em>(<tt>so</tt> is a SidebarObjective object.)</em>
  * <p>
  * To add a separator (blank line on the sidebar), use
- * <tt>so.{@link #addEntry(String) addEntry}(UHSidebarObjective.SEPARATOR);</tt>.<br />
+ * <tt>so.{@link #addEntry(String) addEntry}(SidebarObjective.SEPARATOR);</tt>.<br />
  * This class will automatically use a different number of spaces to allow you to use
  * multiple separators (hard vanilla limit: 17 separators per scoreboard).
  * <p>
  * To remove a separator, it's a bit more complicated, because separators are not unique.
  * <ul>
  * 	<li>If there is only one separator in the scoreboard, you can safely use
- *      <tt>so.{@link #removeEntry(String) removeEntry}(UHSidebarObjective.SEPARATOR);</tt>.</li>
+ *      <tt>so.{@link #removeEntry(String) removeEntry}(SidebarObjective.SEPARATOR);</tt>.</li>
  * 	<li>Else, this method will remove the <em>first separator</em> only.<br />
  *      To remove a specific separator, use {@link #removeEntryAtIndex(int)}, using the index
  *      of an entry just before or after the space you want to remove as a reference.<br />
@@ -60,7 +60,7 @@ import java.util.ArrayList;
  * 
  * @author Amaury Carrade
  */
-public class UHSidebarObjective {
+public class SidebarObjective {
 	
 	private ArrayList<String> entries = new ArrayList<String>();
 	
@@ -74,7 +74,7 @@ public class UHSidebarObjective {
 	 */
 	public static final String SEPARATOR = "";
 	
-	public UHSidebarObjective(Scoreboard scoreboard, String objectiveName) {
+	public SidebarObjective(Scoreboard scoreboard, String objectiveName) {
 		this.objectiveName = objectiveName;
 		this.scoreboard = scoreboard;
 		this.displayName = objectiveName;

@@ -29,11 +29,11 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class UHFreezerListener implements Listener {
+public class FreezerListener implements Listener {
 	
 	private UHPlugin p = null;
 	
-	public UHFreezerListener(UHPlugin p) {
+	public FreezerListener(UHPlugin p) {
 		this.p = p;
 	}
 	

@@ -27,7 +27,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-public class UHWallGenerator {
+public class WallGenerator {
 	
 	private UHPlugin p = null;
 	private I18n i = null;
@@ -38,7 +38,7 @@ public class UHWallGenerator {
 	
 	private Integer blocksSet = 0;
 	
-	public UHWallGenerator(UHPlugin p, World w) {
+	public WallGenerator(UHPlugin p, World w) {
 		this.p = p;
 		this.i = p.getI18n();
 		this.w = w;

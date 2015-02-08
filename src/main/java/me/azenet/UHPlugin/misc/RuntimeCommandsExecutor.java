@@ -34,7 +34,7 @@ import java.util.Map.Entry;
  * This will execute the commands to be executed during runtime, as configured in the config.yml file
  * or added through the API.
  */
-public class UHRuntimeCommandsExecutor {
+public class RuntimeCommandsExecutor {
 	
 	private UHPlugin p = null;
 	
@@ -65,7 +65,7 @@ public class UHRuntimeCommandsExecutor {
 	public final static String AFTER_GAME_END = "internal.game-end";
 	
 	
-	public UHRuntimeCommandsExecutor(UHPlugin plugin) {
+	public RuntimeCommandsExecutor(UHPlugin plugin) {
 		p = plugin;
 		
 		importFromConfig("commands.execute-server-start", AFTER_SERVER_START);

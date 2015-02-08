@@ -24,7 +24,7 @@ import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.teams.UHTeam;
 import org.bukkit.ChatColor;
 
-public class UHMOTDManager {
+public class MOTDManager {
 	
 	private UHPlugin p;
 	private I18n i;
@@ -34,7 +34,7 @@ public class UHMOTDManager {
 	
 	private String currentMOTD;
 	
-	public UHMOTDManager(UHPlugin plugin) {
+	public MOTDManager(UHPlugin plugin) {
 		p = plugin;
 		i = p.getI18n();
 		

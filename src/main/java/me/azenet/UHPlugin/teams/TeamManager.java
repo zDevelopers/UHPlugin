@@ -31,7 +31,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class UHTeamManager {
+public class TeamManager {
 	
 	private UHPlugin p = null;
 	private I18n i = null;
@@ -40,7 +40,7 @@ public class UHTeamManager {
 	private int maxPlayersPerTeam;
 	
 	
-	public UHTeamManager(UHPlugin plugin) {
+	public TeamManager(UHPlugin plugin) {
 		this.p = plugin;
 		this.i = p.getI18n();
 		

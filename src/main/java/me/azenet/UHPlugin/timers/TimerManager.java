@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class UHTimerManager {
+public class TimerManager {
 	
 	private Map<String,UHTimer> timers = new HashMap<String,UHTimer>();
 	private UHTimer mainTimer = null;
@@ -42,7 +42,7 @@ public class UHTimerManager {
 	private HashSet<UHTimer> timersToResume = new HashSet<UHTimer>();
 	
 	
-	public UHTimerManager() {
+	public TimerManager() {
 		
 	}
 	

@@ -37,14 +37,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.lang.reflect.InvocationTargetException;
 
 
-public class UHPacketsListener extends PacketAdapter implements Listener {
+public class PacketsListener extends PacketAdapter implements Listener {
 	
 	private UHPlugin p = null;
 	private ProtocolManager pm = ProtocolLibrary.getProtocolManager();
 	
 	private final PacketContainer respawnPacket;
 	
-	public UHPacketsListener(UHPlugin p) {
+	public PacketsListener(UHPlugin p) {
 		// This listener needs to listen on login packets only.
 		super(p, ListenerPriority.NORMAL, PacketType.Play.Server.LOGIN);
 		

@@ -21,7 +21,7 @@ package me.azenet.UHPlugin.listeners;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
-import me.azenet.UHPlugin.misc.UHProTipsSender;
+import me.azenet.UHPlugin.misc.ProTipsSender;
 import me.azenet.UHPlugin.recipes.RecipesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,11 +41,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 
-public class UHCraftingListener implements Listener {
+public class CraftingListener implements Listener {
 	private UHPlugin p = null;
 	private I18n i = null;
 	
-	public UHCraftingListener(UHPlugin p) {
+	public CraftingListener(UHPlugin p) {
 		this.p = p;
 		this.i = p.getI18n();
 	}
@@ -83,24 +83,24 @@ public class UHCraftingListener implements Listener {
 						case RecipesManager.RECIPE_COMPASS:
 							switch(p.getRecipesManager().getCompassRecipeType()) {
 								case RecipesManager.COMPASS_EASY:
-									p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_COMPASS_EASY);
+									p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_CRAFT_COMPASS_EASY);
 									break;
 								case RecipesManager.COMPASS_MEDIUM:
-									p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_COMPASS_MEDIUM);
+									p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_CRAFT_COMPASS_MEDIUM);
 									break;
 								case RecipesManager.COMPASS_HARD:
-									p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_COMPASS_HARD);
+									p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_CRAFT_COMPASS_HARD);
 									break;
 							}
 							
 							break;
 						
 						case RecipesManager.RECIPE_GLISTERING_MELON:
-							p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_GLISTERING_MELON);
+							p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_CRAFT_GLISTERING_MELON);
 							break;
 						
 						case RecipesManager.RECIPE_ENCHANTED_GOLDEN_APPLE:
-							p.getProtipsSender().sendProtip(player, UHProTipsSender.PROTIP_CRAFT_NO_ENCHANTED_GOLDEN_APPLE);
+							p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_CRAFT_NO_ENCHANTED_GOLDEN_APPLE);
 							break;
 					}
 				}

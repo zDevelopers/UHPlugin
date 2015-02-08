@@ -19,26 +19,26 @@
 
 package me.azenet.UHPlugin;
 
-import me.azenet.UHPlugin.borders.UHBorderManager;
+import me.azenet.UHPlugin.borders.BorderManager;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.integration.UHDynmapIntegration;
 import me.azenet.UHPlugin.integration.UHProtocolLibIntegrationWrapper;
 import me.azenet.UHPlugin.integration.UHSpectatorPlusIntegration;
 import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
-import me.azenet.UHPlugin.listeners.UHCraftingListener;
-import me.azenet.UHPlugin.listeners.UHGameListener;
-import me.azenet.UHPlugin.listeners.UHGameplayListener;
-import me.azenet.UHPlugin.misc.UHFreezer;
-import me.azenet.UHPlugin.misc.UHMOTDManager;
-import me.azenet.UHPlugin.misc.UHProTipsSender;
-import me.azenet.UHPlugin.misc.UHRuntimeCommandsExecutor;
+import me.azenet.UHPlugin.listeners.CraftingListener;
+import me.azenet.UHPlugin.listeners.GameListener;
+import me.azenet.UHPlugin.listeners.GameplayListener;
+import me.azenet.UHPlugin.misc.Freezer;
+import me.azenet.UHPlugin.misc.MOTDManager;
+import me.azenet.UHPlugin.misc.ProTipsSender;
+import me.azenet.UHPlugin.misc.RuntimeCommandsExecutor;
 import me.azenet.UHPlugin.recipes.RecipesManager;
-import me.azenet.UHPlugin.scoreboard.UHScoreboardManager;
+import me.azenet.UHPlugin.scoreboard.ScoreboardManager;
 import me.azenet.UHPlugin.spawns.SpawnsManager;
 import me.azenet.UHPlugin.task.UpdateTimerTask;
-import me.azenet.UHPlugin.teams.UHTeamChatManager;
-import me.azenet.UHPlugin.teams.UHTeamManager;
-import me.azenet.UHPlugin.timers.UHTimerManager;
+import me.azenet.UHPlugin.teams.TeamChatManager;
+import me.azenet.UHPlugin.teams.TeamManager;
+import me.azenet.UHPlugin.timers.TimerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
@@ -50,21 +50,21 @@ public final class UHPlugin extends JavaPlugin {
 	private UHPluginCommand commandManager = null;
 	private UHTabCompleter tabCompleter = null;
 	
-	private UHTeamManager teamManager = null;
+	private TeamManager teamManager = null;
 	private SpawnsManager spawnsManager = null;
 	private UHGameManager gameManager = null;
-	private UHScoreboardManager scoreboardManager = null;
-	private UHMOTDManager motdManager = null;
-	private UHBorderManager borderManager = null;
+	private ScoreboardManager scoreboardManager = null;
+	private MOTDManager motdManager = null;
+	private BorderManager borderManager = null;
 	private RecipesManager recipesManager = null;
-	private UHTeamChatManager teamChatManager = null;
-	private UHTimerManager timerManager = null;
+	private TeamChatManager teamChatManager = null;
+	private TimerManager timerManager = null;
 	
-	private UHRuntimeCommandsExecutor runtimeCommandsExecutor = null;
+	private RuntimeCommandsExecutor runtimeCommandsExecutor = null;
 	
-	private UHFreezer freezer = null;
+	private Freezer freezer = null;
 	
-	private UHProTipsSender protipsSender = null;
+	private ProTipsSender protipsSender = null;
 	
 	private UHWorldBorderIntegration wbintegration = null;
 	private UHSpectatorPlusIntegration spintegration = null;
@@ -84,22 +84,22 @@ public final class UHPlugin extends JavaPlugin {
 			i18n = new I18n(this, getConfig().getString("lang"));
 		}
 		
-		teamManager = new UHTeamManager(this);
+		teamManager = new TeamManager(this);
 		gameManager = new UHGameManager(this);
 		spawnsManager = new SpawnsManager(this);
-		borderManager = new UHBorderManager(this);
+		borderManager = new BorderManager(this);
 		recipesManager = new RecipesManager(this);
-		teamChatManager = new UHTeamChatManager(this);
-		timerManager = new UHTimerManager();
+		teamChatManager = new TeamChatManager(this);
+		timerManager = new TimerManager();
 		
-		runtimeCommandsExecutor = new UHRuntimeCommandsExecutor(this);
+		runtimeCommandsExecutor = new RuntimeCommandsExecutor(this);
 		
-		freezer = new UHFreezer(this);
+		freezer = new Freezer(this);
 		
-		protipsSender = new UHProTipsSender(this);
+		protipsSender = new ProTipsSender(this);
 		
-		scoreboardManager = new UHScoreboardManager(this);
-		motdManager = new UHMOTDManager(this);
+		scoreboardManager = new ScoreboardManager(this);
+		motdManager = new MOTDManager(this);
 		
 		wbintegration = new UHWorldBorderIntegration(this);
 		spintegration = new UHSpectatorPlusIntegration(this);
@@ -123,9 +123,9 @@ public final class UHPlugin extends JavaPlugin {
 		getCommand("togglechat").setTabCompleter(tabCompleter);
 		getCommand("join").setTabCompleter(tabCompleter);
 		
-		getServer().getPluginManager().registerEvents(new UHGameListener(this), this);
-		getServer().getPluginManager().registerEvents(new UHGameplayListener(this), this);
-		getServer().getPluginManager().registerEvents(new UHCraftingListener(this), this);
+		getServer().getPluginManager().registerEvents(new GameListener(this), this);
+		getServer().getPluginManager().registerEvents(new GameplayListener(this), this);
+		getServer().getPluginManager().registerEvents(new CraftingListener(this), this);
 		// The freezer listener is registered by the freezer when it is needed.
 		
 		recipesManager.registerRecipes();
@@ -150,7 +150,7 @@ public final class UHPlugin extends JavaPlugin {
 		new UpdateTimerTask(this).runTaskTimer(this, 20l, 20l);
 		
 		// Schedule commands
-		runtimeCommandsExecutor.registerCommandsInScheduler(UHRuntimeCommandsExecutor.AFTER_SERVER_START);
+		runtimeCommandsExecutor.registerCommandsInScheduler(RuntimeCommandsExecutor.AFTER_SERVER_START);
 		
 		// Launch metrics
 		if(getConfig().getBoolean("metrics")) {
@@ -173,7 +173,7 @@ public final class UHPlugin extends JavaPlugin {
 	 * 
 	 * @return
 	 */
-	public UHTeamManager getTeamManager() {
+	public TeamManager getTeamManager() {
 		return teamManager;
 	}
 	
@@ -191,7 +191,7 @@ public final class UHPlugin extends JavaPlugin {
 	 * 
 	 * @return
 	 */
-	public UHScoreboardManager getScoreboardManager() {
+	public ScoreboardManager getScoreboardManager() {
 		return scoreboardManager;
 	}
 	
@@ -200,7 +200,7 @@ public final class UHPlugin extends JavaPlugin {
 	 * 
 	 * @return
 	 */
-	public UHMOTDManager getMOTDManager() {
+	public MOTDManager getMOTDManager() {
 		return motdManager;
 	}
 	
@@ -227,7 +227,7 @@ public final class UHPlugin extends JavaPlugin {
 	 * 
 	 * @return
 	 */
-	public UHBorderManager getBorderManager() {
+	public BorderManager getBorderManager() {
 		return borderManager;
 	}
 	
@@ -243,7 +243,7 @@ public final class UHPlugin extends JavaPlugin {
 	 * Returns the team-chat manager.
 	 * @return
 	 */
-	public UHTeamChatManager getTeamChatManager() {
+	public TeamChatManager getTeamChatManager() {
 		return teamChatManager;
 	}
 	
@@ -251,7 +251,7 @@ public final class UHPlugin extends JavaPlugin {
 	 * Returns the timer manager.
 	 * @return
 	 */
-	public UHTimerManager getTimerManager() {
+	public TimerManager getTimerManager() {
 		return timerManager;
 	}
 	
@@ -260,7 +260,7 @@ public final class UHPlugin extends JavaPlugin {
 	 * game (or any other moment using the generic API).
 	 * @return
 	 */
-	public UHRuntimeCommandsExecutor getRuntimeCommandsExecutor() {
+	public RuntimeCommandsExecutor getRuntimeCommandsExecutor() {
 		return runtimeCommandsExecutor;
 	}
 	
@@ -269,7 +269,7 @@ public final class UHPlugin extends JavaPlugin {
 	 * 
 	 * @return
 	 */
-	public UHFreezer getFreezer() {
+	public Freezer getFreezer() {
 		return freezer;
 	}
 	
@@ -278,7 +278,7 @@ public final class UHPlugin extends JavaPlugin {
 	 * 
 	 * @return
 	 */
-	public UHProTipsSender getProtipsSender() {
+	public ProTipsSender getProtipsSender() {
 		return protipsSender;
 	}
 	

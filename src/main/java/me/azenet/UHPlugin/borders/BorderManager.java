@@ -32,7 +32,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 
-public class UHBorderManager {
+public class BorderManager {
 	
 	private UHPlugin p = null;
 	private I18n i = null;
@@ -49,7 +49,7 @@ public class UHBorderManager {
 	private Boolean isCircularBorder = null;
 	
 	
-	public UHBorderManager(UHPlugin plugin) {
+	public BorderManager(UHPlugin plugin) {
 		this.p = plugin;
 		this.i = p.getI18n();
 		

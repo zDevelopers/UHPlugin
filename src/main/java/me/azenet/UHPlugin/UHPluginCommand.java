@@ -19,13 +19,13 @@
 
 package me.azenet.UHPlugin;
 
-import me.azenet.UHPlugin.borders.UHWallGenerator;
+import me.azenet.UHPlugin.borders.WallGenerator;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.spawns.exceptions.CannotGenerateSpawnPointsException;
 import me.azenet.UHPlugin.spawns.exceptions.UnknownGeneratorException;
 import me.azenet.UHPlugin.teams.TeamColor;
 import me.azenet.UHPlugin.teams.UHTeam;
-import me.azenet.UHPlugin.teams.UHTeamManager;
+import me.azenet.UHPlugin.teams.TeamManager;
 import me.azenet.UHPlugin.timers.UHTimer;
 import me.azenet.UHPlugin.utils.UHUtils;
 import org.apache.commons.lang.WordUtils;
@@ -484,7 +484,7 @@ public class UHPluginCommand implements CommandExecutor {
 		}
 		
 		try {
-			UHWallGenerator wallGenerator = new UHWallGenerator(this.p, world);
+			WallGenerator wallGenerator = new WallGenerator(this.p, world);
 			Boolean success = wallGenerator.build();
 			
 			if(!success) {
@@ -871,7 +871,7 @@ public class UHPluginCommand implements CommandExecutor {
 			displaySeparator(sender);
 		}
 		else {
-			UHTeamManager tm = p.getTeamManager();
+			TeamManager tm = p.getTeamManager();
 			String subcommand = args[1];
 			
 			if(subcommand.equalsIgnoreCase("add")) {

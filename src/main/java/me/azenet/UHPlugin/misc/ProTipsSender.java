@@ -44,7 +44,7 @@ import java.util.UUID;
  * @author Amaury Carrade
  *
  */
-public class UHProTipsSender {
+public class ProTipsSender {
 	
 	UHPlugin p = null;
 	I18n i = null;
@@ -66,7 +66,7 @@ public class UHProTipsSender {
 
 	public static final String PROTIP_STARTUP_INVINCIBILITY = "start.invincibility";
 	
-	public UHProTipsSender(UHPlugin p) {
+	public ProTipsSender(UHPlugin p) {
 		this.p = p;
 		this.i = p.getI18n();
 		

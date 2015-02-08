@@ -20,7 +20,7 @@
 package me.azenet.UHPlugin.misc;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.listeners.UHFreezerListener;
+import me.azenet.UHPlugin.listeners.FreezerListener;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Creature;
@@ -35,22 +35,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class UHFreezer {
+public class Freezer {
 	
 	private UHPlugin p = null;
 	
 	private boolean isListenerRegistered = false;
-	private UHFreezerListener freezerListener = null;
+	private FreezerListener freezerListener = null;
 	
 	private Boolean globalFreeze = false;
 	private ArrayList<UUID> frozenPlayers = new ArrayList<UUID>();
 	private HashMap<UUID,Boolean> oldAllowFly = new HashMap<UUID,Boolean>();
 	private HashMap<UUID,Boolean> oldFlyMode = new HashMap<UUID,Boolean>();
 	
-	public UHFreezer(UHPlugin plugin) {
+	public Freezer(UHPlugin plugin) {
 		this.p = plugin;
 		
-		this.freezerListener = new UHFreezerListener(p);
+		this.freezerListener = new FreezerListener(p);
 	}
 	
 	
