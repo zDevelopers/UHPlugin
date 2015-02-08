@@ -29,7 +29,7 @@ import me.azenet.UHPlugin.integration.UHWorldBorderIntegration;
 import me.azenet.UHPlugin.listeners.UHCraftingListener;
 import me.azenet.UHPlugin.listeners.UHGameListener;
 import me.azenet.UHPlugin.listeners.UHGameplayListener;
-import me.azenet.UHPlugin.spawns.UHSpawnsManager;
+import me.azenet.UHPlugin.spawns.SpawnsManager;
 import me.azenet.UHPlugin.task.UpdateTimerTask;
 
 import org.bukkit.entity.Player;
@@ -42,7 +42,7 @@ public final class UHPlugin extends JavaPlugin {
 	private UHTabCompleter tabCompleter = null;
 	
 	private UHTeamManager teamManager = null;
-	private UHSpawnsManager spawnsManager = null;
+	private SpawnsManager spawnsManager = null;
 	private UHGameManager gameManager = null;
 	private UHScoreboardManager scoreboardManager = null;
 	private UHMOTDManager motdManager = null;
@@ -77,7 +77,7 @@ public final class UHPlugin extends JavaPlugin {
 		
 		teamManager = new UHTeamManager(this);
 		gameManager = new UHGameManager(this);
-		spawnsManager = new UHSpawnsManager(this);
+		spawnsManager = new SpawnsManager(this);
 		borderManager = new UHBorderManager(this);
 		recipeManager = new UHRecipeManager(this);
 		teamChatManager = new UHTeamChatManager(this);
@@ -200,7 +200,7 @@ public final class UHPlugin extends JavaPlugin {
 	 * 
 	 * @return
 	 */
-	public UHSpawnsManager getSpawnsManager() {
+	public SpawnsManager getSpawnsManager() {
 		return spawnsManager;
 	}
 	

@@ -33,7 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class UHSpawnsManager {
+public class SpawnsManager {
 	
 	UHPlugin p = null;
 	I18n i = null;
@@ -43,7 +43,7 @@ public class UHSpawnsManager {
 	private boolean avoidWater;
 	
 	
-	public UHSpawnsManager(UHPlugin plugin) {
+	public SpawnsManager(UHPlugin plugin) {
 		this.p = plugin;
 		this.i = p.getI18n();
 		
