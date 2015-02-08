@@ -19,18 +19,17 @@
 
 package me.azenet.UHPlugin.teams;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
-
 import me.azenet.UHPlugin.utils.UHUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 public class UHTeamManager {
 	

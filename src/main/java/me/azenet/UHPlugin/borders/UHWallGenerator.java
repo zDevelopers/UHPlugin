@@ -21,7 +21,6 @@ package me.azenet.UHPlugin.borders;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

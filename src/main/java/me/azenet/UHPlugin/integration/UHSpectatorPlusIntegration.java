@@ -19,13 +19,11 @@
 
 package me.azenet.UHPlugin.integration;
 
-import me.azenet.UHPlugin.UHPlugin;
-
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-
 import com.pgcraft.spectatorplus.SpectateAPI;
 import com.pgcraft.spectatorplus.SpectatorPlus;
+import me.azenet.UHPlugin.UHPlugin;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 
 public class UHSpectatorPlusIntegration {

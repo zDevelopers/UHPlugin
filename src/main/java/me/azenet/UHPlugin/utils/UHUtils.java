@@ -19,17 +19,12 @@
 
 package me.azenet.UHPlugin.utils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Random;
-import java.util.logging.Level;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import org.bukkit.*;
 import org.bukkit.FireworkEffect.Builder;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandException;
 import org.bukkit.entity.EntityType;
@@ -37,10 +32,8 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Random;
 
 public class UHUtils {
 	

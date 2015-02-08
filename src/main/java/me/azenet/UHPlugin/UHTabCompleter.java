@@ -19,11 +19,6 @@
 
 package me.azenet.UHPlugin;
 
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import me.azenet.UHPlugin.teams.UHTeam;
 import me.azenet.UHPlugin.timers.UHTimer;
 import me.azenet.UHPlugin.utils.UHUtils;
@@ -33,6 +28,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class UHTabCompleter implements TabCompleter {
 	

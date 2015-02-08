@@ -19,13 +19,12 @@
 
 package me.azenet.UHPlugin.task;
 
-import java.util.HashSet;
-import java.util.logging.Level;
-
 import me.azenet.UHPlugin.UHPlugin;
-
 import org.bukkit.command.CommandException;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.HashSet;
+import java.util.logging.Level;
 
 /**
  * Schedules a stack of commands executed at the same time.

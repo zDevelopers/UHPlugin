@@ -19,16 +19,14 @@
 
 package me.azenet.UHPlugin.integration;
 
+import com.wimbli.WorldBorder.BorderData;
+import com.wimbli.WorldBorder.Config;
+import com.wimbli.WorldBorder.WorldBorder;
 import me.azenet.UHPlugin.UHPlugin;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.Plugin;
-
-import com.wimbli.WorldBorder.BorderData;
-import com.wimbli.WorldBorder.Config;
-import com.wimbli.WorldBorder.WorldBorder;
 
 public class UHWorldBorderIntegration {
 	

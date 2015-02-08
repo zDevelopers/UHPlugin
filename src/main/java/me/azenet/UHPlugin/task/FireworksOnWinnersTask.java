@@ -19,16 +19,15 @@
 
 package me.azenet.UHPlugin.task;
 
-import java.util.Random;
-import java.util.Set;
-
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.utils.UHUtils;
-
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Random;
+import java.util.Set;
 
 public class FireworksOnWinnersTask extends BukkitRunnable {
 

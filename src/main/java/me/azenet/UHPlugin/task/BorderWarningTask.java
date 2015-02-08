@@ -21,7 +21,6 @@ package me.azenet.UHPlugin.task;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
-
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

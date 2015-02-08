@@ -20,9 +20,8 @@
 package me.azenet.UHPlugin.task;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.teams.UHTeam;
 import me.azenet.UHPlugin.i18n.I18n;
-
+import me.azenet.UHPlugin.teams.UHTeam;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;

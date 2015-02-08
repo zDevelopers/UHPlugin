@@ -19,14 +19,8 @@
 
 package me.azenet.UHPlugin.teams;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
-
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.i18n.I18n;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -35,6 +29,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 
 public class UHTeam {
 	private UHPlugin plugin = null;

@@ -19,14 +19,13 @@
 
 package me.azenet.UHPlugin.timers;
 
-import java.util.UUID;
-
 import me.azenet.UHPlugin.events.TimerEndsEvent;
 import me.azenet.UHPlugin.events.TimerStartsEvent;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+
+import java.util.UUID;
 
 
 /**

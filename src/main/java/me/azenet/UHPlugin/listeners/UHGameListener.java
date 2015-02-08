@@ -19,31 +19,14 @@
 
 package me.azenet.UHPlugin.listeners;
 
-import java.util.List;
-import java.util.UUID;
-
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.events.*;
+import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.misc.UHProTipsSender;
 import me.azenet.UHPlugin.misc.UHRuntimeCommandsExecutor;
-import me.azenet.UHPlugin.utils.UHSound;
 import me.azenet.UHPlugin.teams.UHTeam;
-import me.azenet.UHPlugin.events.EpisodeChangedCause;
-import me.azenet.UHPlugin.events.TimerEndsEvent;
-import me.azenet.UHPlugin.events.TimerStartsEvent;
-import me.azenet.UHPlugin.events.UHEpisodeChangedEvent;
-import me.azenet.UHPlugin.events.UHGameEndsEvent;
-import me.azenet.UHPlugin.events.UHGameStartsEvent;
-import me.azenet.UHPlugin.events.UHPlayerDeathEvent;
-import me.azenet.UHPlugin.events.UHPlayerResurrectedEvent;
-import me.azenet.UHPlugin.events.UHTeamDeathEvent;
-import me.azenet.UHPlugin.i18n.I18n;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.SkullType;
+import me.azenet.UHPlugin.utils.UHSound;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,24 +34,18 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerAchievementAwardedEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.List;
+import java.util.UUID;
 
 public class UHGameListener implements Listener {
 	

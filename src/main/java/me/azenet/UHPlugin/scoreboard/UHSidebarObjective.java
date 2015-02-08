@@ -19,11 +19,11 @@
 
 package me.azenet.UHPlugin.scoreboard;
 
-import java.util.ArrayList;
-
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+
+import java.util.ArrayList;
 
 /**
  * This class represents a sidebar objective used to display informations

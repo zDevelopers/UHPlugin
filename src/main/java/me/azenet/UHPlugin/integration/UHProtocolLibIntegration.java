@@ -19,17 +19,15 @@
 
 package me.azenet.UHPlugin.integration;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.listeners.UHPacketsListener;
-
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class UHProtocolLibIntegration {

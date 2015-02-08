@@ -19,15 +19,6 @@
 
 package me.azenet.UHPlugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
-
 import me.azenet.UHPlugin.events.EpisodeChangedCause;
 import me.azenet.UHPlugin.events.UHEpisodeChangedEvent;
 import me.azenet.UHPlugin.events.UHGameStartsEvent;
@@ -36,23 +27,18 @@ import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.misc.UHProTipsSender;
 import me.azenet.UHPlugin.task.FireworksOnWinnersTask;
 import me.azenet.UHPlugin.task.TeamStartTask;
-
 import me.azenet.UHPlugin.teams.TeamColor;
 import me.azenet.UHPlugin.teams.UHTeam;
 import me.azenet.UHPlugin.teams.UHTeamManager;
 import me.azenet.UHPlugin.timers.UHTimer;
 import me.azenet.UHPlugin.utils.UHSound;
 import me.azenet.UHPlugin.utils.UHUtils;
-import org.bukkit.Achievement;
-import org.bukkit.Bukkit;
-import org.bukkit.Difficulty;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.*;
 
 public class UHGameManager {
 	

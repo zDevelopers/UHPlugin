@@ -20,10 +20,9 @@
 package me.azenet.UHPlugin.misc;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.teams.UHTeam;
 import org.bukkit.ChatColor;
-
-import me.azenet.UHPlugin.i18n.I18n;
 
 public class UHMOTDManager {
 	

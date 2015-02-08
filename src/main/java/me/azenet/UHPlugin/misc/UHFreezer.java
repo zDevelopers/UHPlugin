@@ -19,13 +19,8 @@
 
 package me.azenet.UHPlugin.misc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
-
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.listeners.UHFreezerListener;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Creature;
@@ -35,6 +30,10 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class UHFreezer {
 	

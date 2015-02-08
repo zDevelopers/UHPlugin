@@ -19,16 +19,6 @@
 
 package me.azenet.UHPlugin.listeners;
 
-import java.lang.reflect.InvocationTargetException;
-
-import me.azenet.UHPlugin.UHPlugin;
-
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -37,6 +27,14 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import me.azenet.UHPlugin.UHPlugin;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.lang.reflect.InvocationTargetException;
 
 
 public class UHPacketsListener extends PacketAdapter implements Listener {

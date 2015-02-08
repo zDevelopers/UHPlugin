@@ -21,7 +21,6 @@ package me.azenet.UHPlugin.task;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.timers.UHTimer;
-
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class UpdateTimerTask extends BukkitRunnable {

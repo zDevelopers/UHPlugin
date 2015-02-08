@@ -19,12 +19,11 @@
 
 package me.azenet.UHPlugin.integration;
 
+import me.azenet.UHPlugin.UHPlugin;
+import org.bukkit.Bukkit;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import me.azenet.UHPlugin.UHPlugin;
-
-import org.bukkit.Bukkit;
 
 
 public class UHProtocolLibIntegrationWrapper {
