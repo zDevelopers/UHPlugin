@@ -132,6 +132,10 @@ death:
     head:
         drop: true
         pvpOnly: false
+    
+    goldenApple:
+    	drop:true
+    	number:1
         
     give-xp-to-killer:
         levels: 2  # set to 0 to disable
