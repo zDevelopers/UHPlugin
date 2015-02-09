@@ -19,6 +19,9 @@
 
 package me.azenet.UHPlugin.listeners;
 
+import io.puharesource.mc.titlemanager.api.TitleObject;
+import io.puharesource.mc.titlemanager.api.animations.TitleAnimation;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -439,6 +442,13 @@ public class UHGameListener implements Listener {
 				ev.getPlayer().sendMessage(i.t("load.SPNotInstalled2"));
 			}
 			
+			// The same for TitleManager
+			
+			
+			if (p.getServer().getPluginManager().getPlugin("TitleManager") == null || !p.getServer().getPluginManager().getPlugin("TitleManager").isEnabled()){
+				ev.getPlayer().sendMessage(i.t("load.TMNotInstalled"));
+			}
+			
 			// The same for ProtocolLib
 			if(!p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled()) {
 				List<String> enabledOptionsWithProtocolLibNeeded = p.getProtocolLibIntegrationWrapper().isProtocolLibNeeded();
@@ -618,7 +628,13 @@ public class UHGameListener implements Listener {
 		else {
 			message = i.t("episodes.end", String.valueOf(ev.getNewEpisode() - 1));
 		}
-		p.getServer().broadcastMessage(message);
+		
+		//titlemanager hook
+		if (p.getServer().getPluginManager().getPlugin("TitleManager") != null && p.getServer().getPluginManager().getPlugin("TitleManager").isEnabled()) {
+			new TitleObject(message, TitleObject.TitleType.TITLE).broadcast();
+		} else {
+			p.getServer().broadcastMessage(message);
+		}
 	}
 	
 	
