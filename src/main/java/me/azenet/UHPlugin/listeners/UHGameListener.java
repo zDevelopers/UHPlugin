@@ -135,10 +135,10 @@ public class UHGameListener implements Listener {
 			}, 20L * this.p.getConfig().getInt("death.kick.time", 30));
 		}
 		
+		Location l = ev.getEntity().getLocation();
 		//drop golden apple
 		if(p.getConfig().getBoolean("death.goldenApple.drop")) {
 			try {
-				Location l = ev.getEntity().getLocation();
 				ItemStack skullApple = new ItemStack(Material.GOLDEN_APPLE);
 				ItemMeta skullMetaApple = skullApple.getItemMeta();
 				skullMetaApple.setDisplayName(ChatColor.GREEN + "Pomme d'or");
@@ -155,7 +155,6 @@ public class UHGameListener implements Listener {
 		if(p.getConfig().getBoolean("death.head.drop")) {
 			if(!p.getConfig().getBoolean("death.head.pvpOnly")
 					|| (p.getConfig().getBoolean("death.head.pvpOnly") && ev.getEntity().getKiller() != null && ev.getEntity().getKiller() instanceof Player)) {
-				//Location l = ev.getEntity().getLocation();
 				try { 
 					ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
 					SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
