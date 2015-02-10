@@ -20,6 +20,7 @@
 package me.azenet.UHPlugin.spawns.generators;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.borders.MapShape;
 import me.azenet.UHPlugin.spawns.exceptions.CannotGenerateSpawnPointsException;
 import me.azenet.UHPlugin.utils.UHUtils;
 import org.bukkit.Location;
@@ -69,7 +70,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator {
 
 		double surfacePrivatePartsAroundSpawnPoints = (int) (spawnCount * (Math.PI * Math.pow(minimalDistanceBetweenTwoPoints, 2)));
 		double surfaceRegion;
-		if(p.getBorderManager().isCircularBorder()) {
+		if(p.getBorderManager().getMapShape() == MapShape.CIRCULAR) {
 			surfaceRegion = (Math.PI * Math.pow(regionDiameter, 2)) / 4;
 		}
 		else {

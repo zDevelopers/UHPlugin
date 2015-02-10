@@ -20,17 +20,20 @@
 package me.azenet.UHPlugin.borders;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.borders.exceptions.CannotGenerateWallsException;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.task.BorderWarningTask;
 import me.azenet.UHPlugin.timers.UHTimer;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
+
 
 public class BorderManager {
 	
@@ -46,7 +49,7 @@ public class BorderManager {
 	private String warningTimerName = null;
 	private CommandSender warningSender = null;
 	
-	private Boolean isCircularBorder = null;
+	private MapShape mapShape = null;
 	
 	
 	public BorderManager(UHPlugin plugin) {
@@ -56,18 +59,32 @@ public class BorderManager {
 		this.warningTimerName = i.t("borders.warning.nameTimer");
 		
 		this.currentBorderDiameter = p.getConfig().getInt("map.size");
-		this.isCircularBorder      = p.getConfig().getBoolean("map.circular");
+		this.mapShape              = MapShape.fromString(p.getConfig().getString("map.shape"));
+
+		if(mapShape == null) {
+			p.getLogger().warning("Invalid shape '" + p.getConfig().getString("map.shape") + "'; using 'squared' instead.");
+			mapShape = MapShape.SQUARED;
+		}
 	}
-	
+
 	/**
-	 * Changes the shape of the border.
-	 * 
-	 * @param circular If true the border is circular. Else, squared.
+	 * Sets the shape of the map. Updates the WorldBorder too.
+	 *
+	 * @param shape The shape.
 	 */
-	public void setCircular(boolean circular) {
-		this.isCircularBorder = circular;
-		
+	public void setMapShape(MapShape shape) {
+		this.mapShape = shape;
+
 		p.getWorldBorderIntegration().setupBorders(); // Updates the WB border if needed
+	}
+
+	/**
+	 * Returns the current shape of the map.
+	 *
+	 * @return The shape.
+	 */
+	public MapShape getMapShape() {
+		return mapShape;
 	}
 	
 	/**
@@ -78,17 +95,12 @@ public class BorderManager {
 	 * @param diameter
 	 * @return
 	 */
-	public boolean isInsideBorder(Location location, int diameter) {
+	public boolean isInsideBorder(Location location, double diameter) {
 		if(!location.getWorld().getEnvironment().equals(Environment.NORMAL)) { // The nether/end are not limited.
 			return true;
 		}
 		
-		if(this.isCircularBorder()) {
-			return this.isInsideCircularBorder(location, diameter);
-		}
-		else {
-			return this.isInsideSquaredBorder(location, diameter);
-		}
+		return mapShape.getShape().isInsideBorder(location, diameter, location.getWorld().getSpawnLocation());
 	}
 	
 	/**
@@ -96,7 +108,6 @@ public class BorderManager {
 	 * The check is performed for a circular or squared border, following the configuration.
 	 * 
 	 * @param location
-	 * @param diameter
 	 * @return
 	 */
 	public boolean isInsideBorder(Location location) {
@@ -111,13 +122,8 @@ public class BorderManager {
 	 * @param diameter
 	 * @return
 	 */
-	public int getDistanceToBorder(Location location, int diameter) {		
-		if(this.isCircularBorder()) {
-			return this.getDistanceToCircularBorder(location, diameter);
-		}
-		else {
-			return this.getDistanceToSquaredBorder(location, diameter);
-		}
+	public double getDistanceToBorder(Location location, double diameter) {
+		return mapShape.getShape().getDistanceToBorder(location, diameter, location.getWorld().getSpawnLocation());
 	}
 	
 	
@@ -151,11 +157,11 @@ public class BorderManager {
 	 * @return
 	 */
 	public int getCheckDiameter() {
-		if(this.isCircularBorder()) {
-			return this.getCurrentBorderDiameter() + 3;
+		if(getMapShape() == MapShape.CIRCULAR) {
+			return getCurrentBorderDiameter() + 3;
 		}
 		else {
-			return this.getCurrentBorderDiameter();
+			return getCurrentBorderDiameter();
 		}
 	}
 	
@@ -275,15 +281,6 @@ public class BorderManager {
 	}
 	
 	/**
-	 * Returns true if the border is circular.
-	 * 
-	 * @return
-	 */
-	public boolean isCircularBorder() {
-		return this.isCircularBorder;
-	}
-	
-	/**
 	 * Changes the current border diameter.
 	 * This also reconfigures WorldBorder (if present).
 	 * 
@@ -315,7 +312,7 @@ public class BorderManager {
 		else {
 			to.sendMessage(i.t("borders.check.countPlayersOutside", String.valueOf(playersOutside.size())));
 			for(Player player : getPlayersOutside(diameter)) {
-				int distance = getDistanceToBorder(player.getLocation(), diameter);
+				double distance = getDistanceToBorder(player.getLocation(), diameter);
 				if(distance > 150) {
 					to.sendMessage(i.t("borders.check.itemPlayerFar", player.getName()));
 				}
@@ -328,138 +325,22 @@ public class BorderManager {
 			}
 		}
 	}
-	
-	
-	/*** Squared border ***/
-	
+
 	/**
-	 * Checks if the given location is inside the given squared border.
-	 * 
-	 * @param location The location to be checked.
-	 * @param diameter The "diameter" of the squared wall (i.e. the size of a side of the wall).
-	 * 
-	 * @return true if the location is inside the border.
+	 *
+	 * @param world The world were the walls will be built in.
+	 * @throws CannotGenerateWallsException
 	 */
-	private boolean isInsideSquaredBorder(Location location, int diameter) {
-		Integer halfMapSize = (int) Math.floor(diameter/2);
-		Integer x = location.getBlockX();
-		Integer z = location.getBlockZ();
-		
-		Location spawn = location.getWorld().getSpawnLocation();
-		Integer limitXInf = spawn.add(-halfMapSize, 0, 0).getBlockX();
-		
-		spawn = location.getWorld().getSpawnLocation();
-		Integer limitXSup = spawn.add(halfMapSize, 0, 0).getBlockX();
-		
-		spawn = location.getWorld().getSpawnLocation();
-		Integer limitZInf = spawn.add(0, 0, -halfMapSize).getBlockZ();
-		
-		spawn = location.getWorld().getSpawnLocation();
-		Integer limitZSup = spawn.add(0, 0, halfMapSize).getBlockZ();
-		
-		return !(x < limitXInf || x > limitXSup || z < limitZInf || z > limitZSup);
-	}
-	
-	/**
-	 * Returns the distance from the given location to the border.
-	 * 
-	 * If the location is inside the border, or not in the same world, this returns 0.
-	 * 
-	 * @param location The location to be checked.
-	 * @param diameter The "diameter" of the squared wall (i.e. the size of a side of the wall).
-	 * 
-	 * @return the distance from the given location to the border.
-	 */
-	private int getDistanceToSquaredBorder(Location location, int diameter) {
-		if(!location.getWorld().equals(Bukkit.getWorlds().get(0))) { // The nether is not limited.
-			return 0;
+	public void generateWalls(World world) throws CannotGenerateWallsException {
+		Integer wallHeight = p.getConfig().getInt("map.wall.height");
+
+		Material wallBlockAir = Material.matchMaterial(p.getConfig().getString("map.wall.block.replaceAir"));
+		Material wallBlockSolid = Material.matchMaterial(p.getConfig().getString("map.wall.block.replaceSolid"));
+
+		if(wallBlockAir == null || !wallBlockAir.isSolid() || wallBlockSolid == null || !wallBlockSolid.isSolid()) {
+			throw new CannotGenerateWallsException("Cannot generate the walls: invalid blocks set in the config");
 		}
-		if(isInsideBorder(location, diameter)) {
-			return 0;
-		}
-		
-		Integer halfMapSize = (int) Math.floor(diameter/2);
-		Integer x = location.getBlockX();
-		Integer z = location.getBlockZ();
-		
-		Location spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-		Integer limitXInf = spawn.add(-halfMapSize, 0, 0).getBlockX();
-		
-		spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-		Integer limitXSup = spawn.add(halfMapSize, 0, 0).getBlockX();
-		
-		spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-		Integer limitZInf = spawn.add(0, 0, -halfMapSize).getBlockZ();
-		
-		spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-		Integer limitZSup = spawn.add(0, 0, halfMapSize).getBlockZ();
-		
-		if(x > limitXSup && z < limitZSup && z > limitZInf) { // East of the border
-			return Math.abs(x - limitXSup);
-		}
-		else if(x < limitXInf && z < limitZSup && z > limitZInf) { // West of the border
-			return Math.abs(x - limitXInf);
-		}
-		else if(z > limitZSup && x < limitXSup && x > limitXInf) { // South of the border
-			return Math.abs(z - limitZSup);
-		}
-		else if(z < limitZInf && x < limitXSup && x > limitXInf) { // North of the border
-			return Math.abs(z - limitZInf);
-		}
-		else if(x > limitXSup && z < limitZInf) { // N-E
-			return (int) location.distance(new Location(location.getWorld(), limitXSup, location.getBlockY(), limitZInf));
-		}
-		else if(x > limitXSup && z > limitZSup) { // S-E
-			return (int) location.distance(new Location(location.getWorld(), limitXSup, location.getBlockY(), limitZSup));
-		}
-		else if(x < limitXInf && z > limitZSup) { // S-O
-			return (int) location.distance(new Location(location.getWorld(), limitXInf, location.getBlockY(), limitZSup));
-		}
-		else if(x < limitXInf && z < limitZInf) { // N-O
-			return (int) location.distance(new Location(location.getWorld(), limitXInf, location.getBlockY(), limitZInf));
-		}
-		else {
-			return 0; // Should never happen.
-		}
-	}
-	
-	
-	/** Circular border **/
-	
-	/**
-	 * Checks if the given location is inside the given circular border.
-	 * 
-	 * @param location The location to be checked.
-	 * @param diameter The diameter of the circular wall.
-	 * 
-	 * @return true if the location is inside the border.
-	 */
-	private boolean isInsideCircularBorder(Location location, int diameter) {
-		Double radius = Math.floor(diameter/2);
-		Location spawn = location.getWorld().getSpawnLocation().clone();
-		spawn.setY(location.getY());
-		
-		return (location.distance(spawn) <= radius);
-	}
-	
-	/**
-	 * Returns the distance from the given location to the border.
-	 * 
-	 * If the location is inside the border, or not in the same world, this returns 0.
-	 * 
-	 * @param location The location to be checked.
-	 * @param diameter The diameter of the circular wall.
-	 * 
-	 * @return the distance from the given location to the border.
-	 */
-	private int getDistanceToCircularBorder(Location location, int diameter) {
-		if(!location.getWorld().getEnvironment().equals(Environment.NORMAL)) { // The nether/end are not limited.
-			return 0;
-		}
-		if(isInsideBorder(location, diameter)) {
-			return 0;
-		}
-		
-		return (int) (location.distance(Bukkit.getWorlds().get(0).getSpawnLocation()) - Math.floor(diameter/2));
+
+		mapShape.getWallGeneratorInstance(p, wallBlockAir, wallBlockSolid).build(world, getCurrentBorderDiameter(), wallHeight);
 	}
 }

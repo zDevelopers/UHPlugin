@@ -2,6 +2,7 @@ package me.azenet.UHPlugin.spawns.generators;
 
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.borders.MapShape;
 import me.azenet.UHPlugin.spawns.exceptions.CannotGenerateSpawnPointsException;
 import me.azenet.UHPlugin.utils.UHUtils;
 import org.bukkit.Location;
@@ -49,7 +50,7 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator {
 
 		// The points are on a grid
 		int neededColumnsCount = (int) Math.ceil(Math.sqrt(spawnCount));
-		if (p.getBorderManager().isCircularBorder()) {
+		if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR) {
 			// If the border is circular, the distance between two points needs to be decreased.
 			// The space available is divided by PI/4, so the column count is multiplied by
 			// this number.

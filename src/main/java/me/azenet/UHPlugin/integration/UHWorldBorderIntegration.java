@@ -23,6 +23,7 @@ import com.wimbli.WorldBorder.BorderData;
 import com.wimbli.WorldBorder.Config;
 import com.wimbli.WorldBorder.WorldBorder;
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.borders.MapShape;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -83,7 +84,7 @@ public class UHWorldBorderIntegration {
 			borderOverworld = new BorderData(0, 0, 0); // Random values, overwritten later. 
 		}
 		
-		borderOverworld.setShape(p.getBorderManager().isCircularBorder()); // Squared border
+		borderOverworld.setShape(p.getBorderManager().getMapShape() == MapShape.CIRCULAR);
 		
 		borderOverworld.setX(overworld.getSpawnLocation().getX()); // A border centered on the spawn point
 		borderOverworld.setZ(overworld.getSpawnLocation().getZ());

@@ -710,7 +710,7 @@ public class UHGameManager {
 	 * Returns a list of the current registered spectators.
 	 * 
 	 * This returns only a list of the <em>initial</em> spectators.
-	 * Use {@link UHGameManager.getAlivePlayers()} to get the alive players, and remove
+	 * Use {@link #getAlivePlayers()} to get the alive players, and remove
 	 * the elements of this list from the online players to get the spectators.
 	 * 
 	 * @return The initial spectators.

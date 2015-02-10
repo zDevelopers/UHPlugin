@@ -19,13 +19,14 @@
 
 package me.azenet.UHPlugin;
 
-import me.azenet.UHPlugin.borders.WallGenerator;
+import me.azenet.UHPlugin.borders.MapShape;
+import me.azenet.UHPlugin.borders.exceptions.CannotGenerateWallsException;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.spawns.exceptions.CannotGenerateSpawnPointsException;
 import me.azenet.UHPlugin.spawns.exceptions.UnknownGeneratorException;
 import me.azenet.UHPlugin.teams.TeamColor;
-import me.azenet.UHPlugin.teams.UHTeam;
 import me.azenet.UHPlugin.teams.TeamManager;
+import me.azenet.UHPlugin.teams.UHTeam;
 import me.azenet.UHPlugin.timers.UHTimer;
 import me.azenet.UHPlugin.utils.UHUtils;
 import org.apache.commons.lang.WordUtils;
@@ -478,22 +479,25 @@ public class UHPluginCommand implements CommandExecutor {
 		if(sender instanceof Player) {
 			world = ((Player) sender).getWorld();
 		}
+		else if(sender instanceof BlockCommandSender) {
+			world = ((BlockCommandSender) sender).getBlock().getWorld();
+		}
 		else {
 			world = p.getServer().getWorlds().get(0);
 			sender.sendMessage(i.t("wall.consoleDefaultWorld", world.getName()));
 		}
 		
 		try {
-			WallGenerator wallGenerator = new WallGenerator(this.p, world);
-			Boolean success = wallGenerator.build();
-			
-			if(!success) {
-				sender.sendMessage(i.t("wall.error"));
-			}
-		}
-		catch(Exception e) {
+			p.getBorderManager().generateWalls(world);
+
+		} catch(CannotGenerateWallsException e) {
+			sender.sendMessage(i.t("wall.error"));
+			return;
+
+		} catch(Exception e) {
 			sender.sendMessage(i.t("wall.unknownError"));
 			e.printStackTrace();
+			return;
 		}
 		
 		sender.sendMessage(i.t("wall.done"));
@@ -1612,7 +1616,7 @@ public class UHPluginCommand implements CommandExecutor {
 			String subcommand = args[1];
 			
 			if(subcommand.equalsIgnoreCase("current")) { // /uh border current
-				if(p.getBorderManager().isCircularBorder()) {
+				if(p.getBorderManager().getMapShape() == MapShape.CIRCULAR) {
 					sender.sendMessage(i.t("borders.current.messageCircular", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
 				}
 				else {
@@ -1639,7 +1643,7 @@ public class UHPluginCommand implements CommandExecutor {
 						else {
 							p.getBorderManager().setCurrentBorderDiameter(newDiameter);
 							
-							if(p.getBorderManager().isCircularBorder()) {
+							if(p.getBorderManager().getMapShape() == MapShape.CIRCULAR) {
 								p.getServer().broadcastMessage(i.t("borders.set.broadcastCircular", args[2]));
 							}
 							else {
@@ -1657,7 +1661,7 @@ public class UHPluginCommand implements CommandExecutor {
 						
 						p.getBorderManager().setCurrentBorderDiameter(newDiameter);
 						
-						if(p.getBorderManager().isCircularBorder()) {
+						if(p.getBorderManager().getMapShape() == MapShape.CIRCULAR) {
 							p.getServer().broadcastMessage(i.t("borders.set.broadcastCircular", args[2]));
 						}
 						else {
@@ -2043,7 +2047,7 @@ public class UHPluginCommand implements CommandExecutor {
 					sender.sendMessage(i.t("timers.timerDoesNotExists"));
 					return;
 				}
-				
+
 				p.getScoreboardManager().hideTimer(timer);
 				p.getTimerManager().unregisterTimer(timer);
 				timer.stop();

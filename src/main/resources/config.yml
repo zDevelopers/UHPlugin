@@ -32,8 +32,13 @@ episodes:
 
 
 map:
+    # The diameter of the map (not the radius!), in blocks.
     size: 2000
-    circular: false
+
+    # "squared" or "circular". Affects the WorldBorder pre-configuration, and the
+    # wall generator used.
+    shape: "squared"
+
     wall:
         height: 128
         block:
