@@ -20,6 +20,7 @@
 package me.azenet.UHPlugin.task;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.borders.MapShape;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -43,9 +44,9 @@ public class BorderWarningTask extends BukkitRunnable {
 		
 		// Message sent to all players outside the border
 		for(Player player : p.getBorderManager().getPlayersOutside(p.getBorderManager().getWarningSize())) {
-			int distance = p.getBorderManager().getDistanceToBorder(player.getLocation(), p.getBorderManager().getWarningSize());
+			double distance = p.getBorderManager().getDistanceToBorder(player.getLocation(), p.getBorderManager().getWarningSize());
 			
-			if(p.getBorderManager().isCircularBorder()) {
+			if(p.getBorderManager().getMapShape() == MapShape.CIRCULAR) {
 				player.sendMessage(i.t("borders.warning.messageCircular", String.valueOf(p.getBorderManager().getWarningSize())));
 			}
 			else {
