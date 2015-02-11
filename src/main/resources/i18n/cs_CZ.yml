@@ -1,18 +1,18 @@
 author: "Nojp"
 keys:
     load:
-        spawnPointAdded: "Spawn point {0},{1} z konfiguracniho souboru byl pridan"
+        spawnPointAdded: "Spawn point {0};{1} byl nacten z konfiguracniho souboru"
         invalidSpawnPoint: "V konfiguracnim souboru je neplatny spawn point: {0}"
-        teamAdded: "Tym {0} z konfiguracniho souboru byl pridan"
-        namedTeamAdded: "Tym {0} ({1}) z konfiguracniho souboru byl pridan"
+        teamAdded: "Tym {0} byl nacten z konfiguracniho souboru"
+        namedTeamAdded: "Tym {0} ({1}) byl nacten z konfiguracniho souboru"
         invalidTeam: "V konfiguracnim souboru je neplatny tym: {0}"
         recipeApple: "Pridan novy recept na zlate jablko."
         recipeCompass: "Pridan novy recept na kompas."
-        recipeMelon: "Pridan novy recept pro zlaty meloun."
+        recipeMelon: "Pridan novy recept na zlaty meloun."
         loaded: "UHC plugin byl nacten."
 
         WBNotInstalled1: "{darkred}[UHC] {ce}Plugin WorldBorder neni nainstalovan - hranice sveta nemohou byt nastaveny!"
-        WBNotInstalled2: "{gray}Bez tohoto pluginu nemuzou byt hranice sveta nastavovany behem hry."
+        WBNotInstalled2: "{gray}Bez tohoto pluginu nelze hranice sveta nastavovat behem hry."
         WBNotInstalled3: "{gray}Staci plugin nainstalovat, UHPlugin ho automaticky nakonfiguruje."
 
         SPNotInstalled1: "{darkred}[UHC] {ce}Plugin SpectatorPlus neni nainstalovan."
@@ -29,7 +29,7 @@ keys:
         errorUnauthorized: "{ce}lolnope"
 
         titleHelp: "{yellow}{0} - verze {1}"
-        legendHelp: "{ci}Legenda: {cc}/uh prikaz <povinne> [volitelne=standardni] <povolene mezery, ...>ci}."
+        legendHelp: "{ci}Legenda: {cc}/uh prikaz <povinne> [volitelne=vychozi] <povolene mezery, ...>{ci}."
         helpNextPage: "{gray}Dalsi stranka: /uh {0}"
 
         titleGameCmd: "{aqua}------ Prikazy ke hre ------"
@@ -43,8 +43,8 @@ keys:
         helpBorder: "{cc}/uh border {ci}: nastavuje hranice. Napiste /uh borders pro vice detailu."
 
         titleBugCmd: "{aqua}------ Prikazy k administraci ------"
-        helpHeal: "{cc}/uh heal <player> [half-hearts=20|±diff] {ci}: vyhealuje hraece o pocet zadanych pulsrdicek (standardne 20))."
-        helpHealall: "{cc}/uh healall [half-hearts=20|±diff] {ci}: vyhealuje misto jednoho hrace vsechny."
+        helpHeal: "{cc}/uh heal <player> [half-hearts=20|±diff] {ci}: uzdravi hraece o pocet zadanych pulsrdicek (standardne 20)."
+        helpHealall: "{cc}/uh healall [half-hearts=20|±diff] {ci}: uzdravi misto jednoho hrace vsechny."
         helpFeed: "{cc}/uh feed <player> [foodPoints=20] [saturation=max] {ci}: nakrmi hrace."
         helpFeedall: "{cc}/uh feedall [foodPoints=20] [saturation=max] {ci}: nakrmi vsechny hrace."
         helpKill: "{cc}/uh kill <player> {ci}: oznaci hrace za mrtveho, i kdyz je offline."
@@ -52,7 +52,7 @@ keys:
         helpTpback: "{cc}/uh tpback <player> [force] {ci}: bezpecne teleportuje hrace na misto jeho smrti."
 
         titleMiscCmd: "{aqua}------ Ostatni prikazy ------"
-        helpFreeze: "{cc}/uh freeze {ci}: (un)zmrazi celou hru nebo jednoho hrace. Napiste /uh freeze pro vice detailu."
+        helpFreeze: "{cc}/uh freeze {ci}: (od)zmrazi celou hru nebo jednoho hrace. Napiste /uh freeze pro vice detailu."
         helpFinish: "{cc}/uh finish {ci}: zobrazi jmena vitezneho tymu a spusti ohnostroj."
         helpTP: "{cc}/uh tp {ci}: teleportuje spectatory nebo cely tym. Napiste /uh tp pro vice detailu."
         helpTimers: "{cc}/uh timers {ci}: nastavi casovace. Napiste /uh times pro vice detailu."
@@ -81,7 +81,7 @@ keys:
         spawnsHelpGenerateDetailsShapesGrid: " - {cc}grid{ci}: vygeneruje spawn points v soustrednych ctvercich s minimalni vzdalenosti mezi dvema body."
         spawnsHelpGenerateDetailsShapesCircular: " - {cc}circular{ci}: vygeneruje spawn points v soustrednych kruzich s minimalni vzdalenosti mezi dvema body. V kazdem kruhu je vzdalenost a uhel mezi dvema body konstantni."
         spawnsHelpGenerateDetailsArgsTitle: "{aqua}Argumenty"
-        spawnsHelpGenerateDetailsArgsSize: " - {cc}siye{ci}: velikost regionu, ve kterem budou spawn points vygenerovany. Budou kruhovite nebo ctvercovite podle tvaru mapy (standardni hodnota)."
+        spawnsHelpGenerateDetailsArgsSize: " - {cc}size{ci}: velikost regionu, ve kterem budou spawn points vygenerovany. Budou kruhovite nebo ctvercovite podle tvaru mapy (standardni hodnota)."
         spawnsHelpGenerateDetailsArgsDistanceMin: " - {cc}distanceMin{ci}: minimalni vzdalenost mezi dvema spawn points. Standardni je 250 bloku."
         spawnsHelpGenerateDetailsArgsCount: " - {cc}count{ci}: pocet spawn points, ktere maji byt vygenerovany. Standardne se jedna o pocet hracu nebo tymu."
         spawnsHelpGenerateDetailsArgsCenter: " - {cc}xCenter{ci}, {cc}zCenter{ci}: souradnic stredu regionu, ve kterem budou spawn points vygenerovany. Standardne se jedna o spawn mapy."
@@ -122,17 +122,17 @@ keys:
         timersHelpStart: "{cc}/uh timers start <title ...> {ci}: nastartuje casovac."
         timersHelpPause: "{cc}/uh timers pause <title ...> {ci}: pauzne casovac."
         timersHelpResume: "{cc}/uh timers resume <title ...> {ci}: pokracuje v casovaci."
-        timersHelpStop: "{cc}/uh timers stop <title ...> {ci}: zsstavi casovac. Ten bude take skryt ze scoreboardu."
+        timersHelpStop: "{cc}/uh timers stop <title ...> {ci}: zastavi casovac. Ten bude take skryt ze scoreboardu."
         timersHelpRemove: "{cc}/uh timers remove <title ...> {ci}: odstrani casovac."
         timersHelpList: "{cc}/uh timers list {ci}: zobrazi seznam bezicich casovacu."
-        timersHelpDurations: "{gray}Format delek: mm, mm:ss nebo hh:mm:ss."
+        timersHelpDurations: "{gray}Format casu: mm, mm:ss nebo hh:mm:ss."
 
     about:
-        authors: "Tento plugin byl vytvoren s laskou {0}."
+        authors: "Tento plugin vytvorili {0}."
         and: "a"
 
         build:
-            number: "Cislo buildu: {0}."
+            number: "Build: {0}."
             notAvailable: "Cislo buildu neni dostupne."
 
         i18n:
@@ -145,7 +145,7 @@ keys:
 
     start:
         already: "{ce}Hra jiz zacala! Reloadnete nebo restartujete server pro restart hry."
-        syntax: "{ce}Chyba v syntaxi. Pouziti: /uh start [slow] nebo /uh start slow go."
+        syntax: "{ce}Chyba v syntaxi prikazu. Pouziti: /uh start [slow] nebo /uh start slow go."
         notEnoughTP: "{ce}Neni mozne zacit hru: neni dostatek teleportacnich mist."
         teleportationInProgress: "{lightpurple}Probiha teleportace... vyckejte, prosim."
 
@@ -183,8 +183,8 @@ keys:
         starting: "Probiha start hry..."
         runningSolo: "Hra bezi! {0} hracu je nazivu."
         runningTeams: "Hra bezi! {0} hracu v {1} tymech je nazivu."
-        finishedSolo: "Hra skoncila; gratulujeme hraci {0} k jeho vitezstvi!"
-        finishedTeams: "Hra skoncila; tento zapas vyhral tym {0}!"
+        finishedSolo: "Hra skoncila, gratulujeme hraci {0} k jeho vitezstvi!"
+        finishedTeams: "Hra skoncila, zapas vyhral tym {0}!"
 
     death:
         kickMessage: "ayayay"
@@ -204,7 +204,7 @@ keys:
             nameGoldenAppleFromHeadNotch: "{lightpurple}Zlata hlava"
 
     compass:
-        noRottenFlesh: "{gray}{italic}Nemas zadne rotten flesh."
+        noRottenFlesh: "{gray}{italic}Nemas zadne shnile maso (rotten flesh)."
         nothingFound: "{gray}{italic}Tva zadost zmizela v tichu."
         success: "{gray}Kompas nyni ukazuje smer k nejblizsimu hraci."
 
@@ -223,7 +223,7 @@ keys:
 
     spawns:
         NaN: "{ce}To neni cislo!"
-        syntaxError: "{ce}Chyba v syntaxi; napiste /uh spawns."
+        syntaxError: "{ce}Chyba v syntaxi prikazu, zkuste /uh spawns."
         errorCoords: "{ce}Musite urcit souradnice z konzole."
         error2Coords: "{ce}Musite urcit obe souradnice."
 
@@ -238,7 +238,7 @@ keys:
 
         generate:
             nothingToDo: "{ci}Zazadali jste o generaci voidu, proto je tato generace prazdna."
-            unsupportedMethod: "{ce}Generacni metoda “{0}” neni (zatim?) podporovana."
+            unsupportedMethod: "{ce}Generacni metoda '{0}' neni (zatim?) podporovana."
             unknownWorld: "{ce}Svet {0} neexistuje."
             success: "{cs}Zazadane spawn points byly uspesne vytvoreny."
             impossible: "{ce}Chcete nemozne: zazadali jste moc spawn points na male plose. Snizte pocet spawn points nebo minimalni vzdalenost mezi nimi."
@@ -259,7 +259,7 @@ keys:
         reset: "{cs}Vsechny spawn points byly odstraneny."
 
     team:
-        syntaxError: "{ce}Chyba v syntaxi: napiste /uh team."
+        syntaxError: "{ce}Chyba v syntaxi prikazu, zkuste /uh team."
         unknownCommand: "{ce}Neplatny prikaz. Napiste /uh team pro vypsani seznamu dostupnych prikazu."
         onlyAsAPlayer: "{ce}Tento prikaz muze byt timto zpusobem proveden pouze hracem."
 
@@ -275,7 +275,7 @@ keys:
         addplayer:
             disconnected: "{ce}Nepovedlo se pridat hrace {0} do tymu {1}. Hrac musi byt pripojen k serveru."
             success: "{cs}Hrac {0} byl uspesne pridan do tymu {1}"
-            added: "{aqua}Nyni jsi v tymu{0}{aqua}."
+            added: "{aqua}Nyni jsi v tymu {0}{aqua}."
             doesNotExists: "{ce}Takovy tym neexistuje."
             full: "{ce}Tym {0}{ce} je plny!"
 
@@ -301,9 +301,9 @@ keys:
             playersCount: "{gray}[{white}{0}{gray}/{white}{1}{gray}]"
             playersCountUnlimited: "{gray}[{white}{0}{gray}]"
             tooltipCount: "{0} hracu v tomto tymu"
-            tooltipJoin: "Kliknete zde, pokud se chcete pripojit do tymu {0}"
+            tooltipJoin: "Kliknete sem, pokud se chcete pripojit do tymu {0}"
             tooltipJoinInside: "Nyni jsi v tymu {0}"
-            leaveTeam: "{darkred}[\u00D7] {red}Kliknete zde, pokud chcete opustit svuj tym"
+            leaveTeam: "{darkred}[\u00D7] {red}Kliknete sem, pokud chcete opustit svuj tym"
             howToDisplayAgain: "{gray}Pokud tuto zpravu chcete zobrazit znovu, napiste /join"
             noTeams: "{ce}Neni zadny dostupny tym."
 
@@ -323,7 +323,7 @@ keys:
                 nowTeamChat: "{cs}Nyni pises do tymoveho chatu."
                 nowGlobalChat: "{cs}Nyni pises do globalniho chatu."
 
-                nowOtherTeamChat: "{cs}Nyni pises do chatu s tymem{0}{cs}."
+                nowOtherTeamChat: "{cs}Nyni pises do chatu s tymem {0}{cs}."
                 unknownTeam: "{ce}Takovy tym neexistuje."
 
             format: "{gold}[{0}{gold} svemu tymu] {reset}{1}"
@@ -393,7 +393,7 @@ keys:
         teamDoesNotExists: "{ce}Takovy tym neexistuje."
 
     spectators:
-        syntaxError: "{ce}Chyba v syntaxi, napiste /uh spec."
+        syntaxError: "{ce}Chyba v syntaxi prikazu, zkuste /uh spec."
         unknownCommand: "{ce}Neplatny prikaz. Napiste /uh spec pro seznam dostupnych prikazu."
         offline: "{ce}Hrac {0} neni online."
 
@@ -427,7 +427,7 @@ keys:
 
     borders:
         syntaxError: "{ce}Chybe v syntaxi, napiste /uh border."
-        NaN: "{ce}“{0}” neni cislo."
+        NaN: "{ce}'{0}' neni cislo."
 
         current:
             messageSquared: "{ci}Soucasna velikost mapy je {0}*{0}."
@@ -465,7 +465,7 @@ keys:
             itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (velmi blizko hranici)"
 
     timers:
-        syntaxError: "{ce}Chyba v syntaxi, napiste /uh timers."
+        syntaxError: "{ce}Chyba v syntaxi prikazu, zkuste /uh timers."
         durationSyntaxError: "{ce}Chyba v casove syntaxi - funguji formaty mm, mm:ss a hh:mm:ss."
         timerDoesNotExists: "{ce}Takovy casovac neexistuje."
         alreadyExists: "{ce}Casovac nazvany {0}{ce} jiz existuje, prosim vyberte jine jmeno."
@@ -483,7 +483,7 @@ keys:
         list:
             count: "{ci}{0} casovac(u) je registrovano."
             itemRunning: "{green} • {ci}{0}{ci} - celkem {1} sekund - {2}"
-            itemPaused: "{yellow} • {{ci}{0}{ci} - celkem {1} sekund - {2}"
+            itemPaused: "{yellow} • {ci}{0}{ci} - celkem {1} sekund - {2}"
             itemStopped: "{red} • {ci}{0}{ci} - celkem {1} sekund"
 
     protips:
