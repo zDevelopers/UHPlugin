@@ -43,7 +43,7 @@ keys:
         helpBorder: "{cc}/uh border {ci}: nastavuje hranice. Napiste /uh borders pro vice detailu."
 
         titleBugCmd: "{aqua}------ Prikazy k administraci ------"
-        helpHeal: "{cc}/uh heal <player> [half-hearts=20|±diff] {ci}: uzdravi hraece o pocet zadanych pulsrdicek (standardne 20)."
+        helpHeal: "{cc}/uh heal <player> [half-hearts=20|±diff] {ci}: uzdravi hrace o pocet zadanych pulsrdicek (standardne 20)."
         helpHealall: "{cc}/uh healall [half-hearts=20|±diff] {ci}: uzdravi misto jednoho hrace vsechny."
         helpFeed: "{cc}/uh feed <player> [foodPoints=20] [saturation=max] {ci}: nakrmi hrace."
         helpFeedall: "{cc}/uh feedall [foodPoints=20] [saturation=max] {ci}: nakrmi vsechny hrace."
