@@ -354,7 +354,7 @@ keys:
         cantNotStarted: "{ce}Neni mozne posunout soucasnou epizodu, protoze hra jeste nezacala."
 
     heal:
-        usage: "{ce}Pouziti: /uh heal <hrac> [pocet pulsrdicek = 20]"
+        usage: "{ce}Pouziti: /uh heal <hrac> [half-hearts = 20]"
         offline: "{ce}Tento hrac je offline."
         errorNaN: "{ce}Hej, tohle neni pocet pulsrdicek. Tohle je text. Pfff."
         errorNoKill: "{ce}Kvuli predejiti preklepu neni mozne zabit hrace timto prikazem."
@@ -362,9 +362,9 @@ keys:
         allErrorNoKill: "{ce}Seriovy vrahu!"
 
     feed:
-        usage: "{ce}Pouziti: /uh feed <hrac> [pocet foodPoints = 20] [saturace = max]"
+        usage: "{ce}Pouziti: /uh feed <hrac> [foodPoints = 20] [saturation = max]"
         offline: "{ce}Tento hrac je offline."
-        errorNaN: "{ce}Food points a saturace museji byt cisla (v pripade saturace desetinna)!"
+        errorNaN: "{ce}Mnozstvi jidla (foodPoints) i saturace musi byt cisla (saturace je desetinne cislo)!"
 
     kill:
         usage: "{ce}Pouziti: /uh kill <hrac>"
@@ -380,7 +380,7 @@ keys:
         broadcastMessage: "{gold}{0} se navratil ze zahrobi!"
 
     tpback:
-        usage: "{ce}Pouziti: /uh tpback <hrac> [donutit]"
+        usage: "{ce}Pouziti: /uh tpback <hrac> [force]"
         offline: "{ce}Hrac {0} neni online."
         noDeathLocation: "{ce}Nebylo nalezeno misto umrti hrace {0}."
         teleported: "{cs}Hrac {0} byl uspesne teleportovan zpet."
@@ -388,7 +388,7 @@ keys:
         notTeleportedNoSafeSpotCmd: "{ci}Pouzijte {cc}/uh tpback {0} force{ci} pro teleport i pres nenalezeni bezpecneho mista."
 
     tp:
-        NaN: "{ce}Souradnice museji byt tri platna cisla."
+        NaN: "{ce}Souradnice se musi skladat ze tri cisel."
         targetOffline: "{ce}{0} je offline!"
         teamDoesNotExists: "{ce}Takovy tym neexistuje."
 
