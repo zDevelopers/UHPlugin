@@ -26,7 +26,7 @@ keys:
     cmd:
         errorLoad: "{ce}Ocorreu um Erro, ve a console para detalhes. Provavelmente sera um Bug."
         errorUnknown: "{ce}Este comando nao existe. Faz /uh para veres os comandos existentes."
-        errorUnauthorized: "{ce}lolnope"
+        errorUnauthorized: "{ce}Nao estas Autorizado a executar este comando."
         
         titleHelp: "{yellow}{0} - versao {1}"
         legendHelp: "{ci}Legenda: {cc}/uh command <necessario> [opcional=default] <espacos sao validos ...>{ci}."
