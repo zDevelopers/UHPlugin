@@ -19,13 +19,7 @@
 
 package me.azenet.UHPlugin;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 import me.azenet.UHPlugin.i18n.I18n;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,6 +29,11 @@ import org.bukkit.scoreboard.Criterias;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UHScoreboardManager {
 	
@@ -82,20 +81,7 @@ public class UHScoreboardManager {
 			sidebar = new UHSidebarObjective(sb, objectiveName);
 			sidebar.setDisplayName(getScoreboardName());
 			
-			if(p.getConfig().getBoolean("episodes.enabled")) {
-				sidebar.addEntry(this.getText("episode", 0), true);
-			}
-			
-			sidebar.addEntry(this.getText("players", p.getServer().getOnlinePlayers().length), true);
-			
-			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
-				sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
-				
-				// Displays a fake, frozen timer if the game is not started.
-				sidebar.addEntry(this.getTimerText(new UHTimer(""), true, false), true);
-			}
-			
-			sidebar.reconstruct();
+			buildSidebar();
 		}
 		
 		// Initialization of the scoreboard (health in players' list)
@@ -131,116 +117,110 @@ public class UHScoreboardManager {
 		sidebar.updateEntry(this.getText("players", p.getServer().getOnlinePlayers().length + 1), 
 				this.getText("players", p.getServer().getOnlinePlayers().length));
 	}
-	
+
 	/**
-	 * Initializes the scoreboard just after the beginning of the game.
+	 * Re-builds the sidebar from scratch.
 	 */
-	public void initScoreboardAfterStart() {
-		if(p.getConfig().getBoolean("scoreboard.enabled")) {
-			sidebar.reset(true);
-			
-			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.episode")) {
-				sidebar.addEntry(this.getText("episode", 1), true);
-				oldEpisode = 1;
+	public void buildSidebar() {
+		if(!p.getConfig().getBoolean("scoreboard.enabled")) {
+			return;
+		}
+
+		sidebar.reset(true);
+
+		// Initial state (before start)
+		if(!gm.isGameStarted()) {
+			if(p.getConfig().getBoolean("episodes.enabled")) {
+				sidebar.addEntry(this.getText("episode", 0), true);
 			}
-			
+
+			sidebar.addEntry(this.getText("players", p.getServer().getOnlinePlayers().length), true);
+
+			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
+				sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
+
+				// Displays a fake, frozen timer if the game is not started.
+				sidebar.addEntry(this.getTimerText(new UHTimer(""), true, false), true);
+			}
+
+			buildTimersSidebar();
+			displayFreezeState();
+
+			sidebar.reconstruct();
+		}
+
+		// In-game state
+		else {
+			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.episode")) {
+				sidebar.addEntry(this.getText("episode", gm.getEpisode()), true);
+				oldEpisode = gm.getEpisode();
+			}
+
 			if(p.getConfig().getBoolean("scoreboard.players")) {
 				sidebar.addEntry(this.getText("players", p.getGameManager().getAlivePlayersCount()), true);
 				oldAlivePlayersCount = p.getGameManager().getAlivePlayersCount();
 			}
-			
+
 			if(gm.isGameWithTeams() && p.getConfig().getBoolean("scoreboard.teams")) {
 				sidebar.addEntry(this.getText("teams", p.getGameManager().getAliveTeamsCount()), true);
 				oldAliveTeamsCount = p.getGameManager().getAliveTeamsCount();
 			}
-			
+
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer") && p.getTimerManager().getMainTimer() != null) {
 				sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
 				sidebar.addEntry(getTimerText(p.getTimerManager().getMainTimer(), false, false), true);
 			}
-			
+
+			buildTimersSidebar();
+			displayFreezeState();
+
 			sidebar.reconstruct();
-			
-			for(UHTimer timer : displayedTimers) {
-				displayTimer(timer, true);
-			}
 		}
 	}
-	
+
 	/**
-	 * Displays a timer in the scoreboard.
-	 * 
-	 * @param timer
+	 * Adds the timers to the sidebar.
+	 *
+	 * <p>Appends to the current sidebar. This method will *not* reconstruct the sidebar.</p>
 	 */
-	public void displayTimer(UHTimer timer) {
-		displayTimer(timer, false);
-	}
-	
-	/**
-	 * Displays a timer in the scoreboard.
-	 * 
-	 * @param timer
-	 * @param force If true, this timer will be displayed even if it is marked as displayed.
-	 */
-	private void displayTimer(UHTimer timer, boolean force) {
-		if(p.getConfig().getBoolean("scoreboard.enabled")) {
-			if(displayedTimers.contains(timer) && !force) {
-				return; // already displayed
-			}
-			
-			if(p.getFreezer().getGlobalFreezeState()) {
-				// If the global freeze is ON, because I want the "Game frozen" entry kept
-				// at the bottom of the scoreboard, I remove and after add again this text.
-				this.displayFreezeState(false);
-			}
-			
-			// Effective display
+	private void buildTimersSidebar() {
+		for(UHTimer timer : displayedTimers) {
 			sidebar.addEntry(UHSidebarObjective.SEPARATOR, true);
 			sidebar.addEntry(timer.getDisplayName(), true);
 			sidebar.addEntry(getTimerText(timer, false, false), true);
-			sidebar.reconstruct();
-			
-			if(p.getFreezer().getGlobalFreezeState()) {
-				this.displayFreezeState(true);
-			}
-			
-			if(!displayedTimers.contains(timer)) displayedTimers.add(timer);
 		}
 	}
-	
+
+	/**
+	 * Displays a timer in the scoreboard.
+	 *
+	 * @param timer
+	 */
+	public void displayTimer(UHTimer timer) {
+		if(!displayedTimers.contains(timer)) {
+			displayedTimers.add(timer);
+			buildSidebar();
+		}
+	}
+
 	/**
 	 * Hides a timer, in the scoreboard.
-	 * 
+	 *
 	 * @param timer
 	 */
 	public void hideTimer(UHTimer timer) {
-		if(p.getConfig().getBoolean("scoreboard.enabled")) {
-			// The timer is removed from the lists of the displayed timers.
-			// All the positions of the displayed timers are changed, as well as the number of spaces used.
-			
-			if(!displayedTimers.contains(timer)) {
-				return;
-			}
-			
-			// The timer is hidden
-			int sepIndex = sidebar.getEntryIndex(timer.getDisplayName()) - 1; // Test useless, this exists because the timer is displayed.
-			sidebar.removeEntryAtIndex(sepIndex, true);
-			sidebar.removeEntry(timer.getDisplayName(), true);
-			sidebar.removeEntry(getTimerText(timer, false, false), true);
-			sidebar.removeEntry(getTimerText(timer, false, true), true);
-			sidebar.reconstruct();
-			
-			displayedTimers.remove(timer);
+		if(displayedTimers.remove(timer)) {
+			buildSidebar();
 		}
 	}
-	
+
 	/**
 	 * The sidebar needs to be reconstructed when the timers are restarted, to avoid
 	 * duplicated values.
 	 */
 	public void restartTimers() {
 		if(p.getConfig().getBoolean("scoreboard.enabled")) {
-			sidebar.reconstruct();
+			buildSidebar();
 		}
 	}
 	

@@ -19,15 +19,6 @@
 
 package me.azenet.UHPlugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
-
 import me.azenet.UHPlugin.events.EpisodeChangedCause;
 import me.azenet.UHPlugin.events.UHEpisodeChangedEvent;
 import me.azenet.UHPlugin.events.UHGameStartsEvent;
@@ -35,17 +26,12 @@ import me.azenet.UHPlugin.events.UHPlayerResurrectedEvent;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.task.FireworksOnWinnersTask;
 import me.azenet.UHPlugin.task.TeamStartTask;
-
-import org.bukkit.Achievement;
-import org.bukkit.Bukkit;
-import org.bukkit.Difficulty;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.*;
 
 public class UHGameManager {
 	
@@ -478,12 +464,13 @@ public class UHGameManager {
 	 */
 	private void finalizeStart() {
 		p.getFreezer().setGlobalFreezeState(false);
-		p.getScoreboardManager().initScoreboardAfterStart();
 		
 		this.gameStarted = true;
 		this.gameFinished = false;
 		
 		updateAliveCache();
+
+		p.getScoreboardManager().buildSidebar();
 		
 		// Fires the event
 		p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
@@ -717,7 +704,7 @@ public class UHGameManager {
 	 * Returns a list of the current registered spectators.
 	 * 
 	 * This returns only a list of the <em>initial</em> spectators.
-	 * Use {@link UHGameManager.getAlivePlayers()} to get the alive players, and remove
+	 * Use {@link #getAlivePlayers()} to get the alive players, and remove
 	 * the elements of this list from the online players to get the spectators.
 	 * 
 	 * @return The initial spectators.
@@ -864,7 +851,7 @@ public class UHGameManager {
 					else {
 						winners += ", ";
 					}
-					
+
 					winners += winner.getName();
 					j++;
 				}
@@ -1004,7 +991,7 @@ public class UHGameManager {
 	 * Returns a list of the current registered spectators.
 	 * 
 	 * This returns only a list of the <em>initial</em> spectators.
-	 * Use {@link UHGameManager.getAlivePlayers()} to get the alive players, and remove
+	 * Use {@link #getAlivePlayers()} to get the alive players, and remove
 	 * the elements of this list from the online players to get the spectators.
 	 * 
 	 * @return The initial spectators.
