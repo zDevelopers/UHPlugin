@@ -19,13 +19,10 @@
 
 package me.azenet.UHPlugin.listeners;
 
-import java.util.HashSet;
-
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.UHProTipsSender;
 import me.azenet.UHPlugin.UHRecipeManager;
 import me.azenet.UHPlugin.i18n.I18n;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -38,14 +35,11 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.HashSet;
 
 public class UHCraftingListener implements Listener {
 	private UHPlugin p = null;
@@ -236,21 +230,21 @@ public class UHCraftingListener implements Listener {
 						if(item != null) { // result slot non empty
 							ItemMeta meta = item.getItemMeta();
 							
-							HashSet<String> prohibed = new HashSet<String>();
+							HashSet<String> prohibited = new HashSet<String>();
 							
-							prohibed.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"));
-							prohibed.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch"));
+							prohibited.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"));
+							prohibited.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch"));
 							
 							// It is possible that the client filters the name of the golden apple in the anvil UI,
 							// removing all §.
-							for(String prohibition : new HashSet<String>(prohibed)) {
-								prohibed.add(prohibition.replace("§", ""));
+							for(String prohibition : new HashSet<String>(prohibited)) {
+								prohibited.add(prohibition.replace("§", ""));
 							}
 							
 							
 							// An item can't be renamed to the name of a golden head
 							if(meta != null && meta.hasDisplayName()) {
-								if(prohibed.contains(meta.getDisplayName())) {
+								if(prohibited.contains(meta.getDisplayName())) {
 									ev.setCancelled(true); // nope nope nope
 								}
 							}
@@ -260,7 +254,7 @@ public class UHCraftingListener implements Listener {
 								ItemMeta metaOriginal = view.getItem(0).getItemMeta();
 								
 								if(metaOriginal != null && metaOriginal.hasDisplayName()) {
-									if(prohibed.contains(metaOriginal.getDisplayName())) {
+									if(prohibited.contains(metaOriginal.getDisplayName())) {
 										ev.setCancelled(true);
 									}
 								}

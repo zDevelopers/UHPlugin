@@ -19,22 +19,17 @@
 
 package me.azenet.UHPlugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import me.azenet.UHPlugin.i18n.I18n;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class UHRecipeManager {
 	
@@ -167,11 +162,7 @@ public class UHRecipeManager {
 	 * @return true if the recipe is an alternate recipe for the compass.
 	 */
 	public boolean isValidCompassRecipe(ItemStack[] matrix) {
-		if(matrix.length <= 4) {
-			return false; // Small crafting grid
-		}
-		
-		
+
 		if(matrix.length <= 5) {
 			return false; // Small crafting grid
 		}
@@ -236,7 +227,6 @@ public class UHRecipeManager {
 			Boolean wither = true;
 			
 			for(ItemStack item : inventory.getContents()) {
-				p.getLogger().info(item.toString());
 				if(item.getType() == Material.SKULL_ITEM && item.getDurability() == (short) SkullType.PLAYER.ordinal()) { // An human head
 					SkullMeta sm = (SkullMeta) item.getItemMeta();
 					if(sm.hasOwner()) { // An human head
@@ -443,7 +433,7 @@ public class UHRecipeManager {
 	 */
 	public ShapedRecipe getVanillaCompassRecipe() {
 		ShapedRecipe vanillaCompassRecipe = new ShapedRecipe(new ItemStack(Material.COMPASS));
-		vanillaCompassRecipe.shape(new String[] {" I ", "IRI", " I "});
+		vanillaCompassRecipe.shape(" I ", "IRI", " I ");
 		
 		vanillaCompassRecipe.setIngredient('I', Material.IRON_INGOT);
 		vanillaCompassRecipe.setIngredient('R', Material.REDSTONE);
@@ -458,7 +448,7 @@ public class UHRecipeManager {
 	 */
 	public ShapedRecipe getVanillaGoldenMelonRecipe() {
 		ShapedRecipe vanillaGoldenMelonRecipe = new ShapedRecipe(new ItemStack(Material.SPECKLED_MELON));
-		vanillaGoldenMelonRecipe.shape(new String[] {"GGG", "GMG", "GGG"});
+		vanillaGoldenMelonRecipe.shape("GGG", "GMG", "GGG");
 		
 		vanillaGoldenMelonRecipe.setIngredient('G', Material.GOLD_NUGGET);
 		vanillaGoldenMelonRecipe.setIngredient('M', Material.MELON);
