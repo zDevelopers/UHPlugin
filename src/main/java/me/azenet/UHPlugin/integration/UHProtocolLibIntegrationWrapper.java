@@ -19,12 +19,12 @@
 
 package me.azenet.UHPlugin.integration;
 
+import me.azenet.UHPlugin.UHPlugin;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import me.azenet.UHPlugin.UHPlugin;
-
-import org.bukkit.Bukkit;
 
 
 public class UHProtocolLibIntegrationWrapper {
@@ -37,8 +37,14 @@ public class UHProtocolLibIntegrationWrapper {
 		
 		// Needed to avoid a NoClassDefFoundError.
 		// I don't like this way of doing this, but else, the plugin will not load without ProtocolLib.
-		if(Bukkit.getServer().getPluginManager().getPlugin("ProtocolLib") != null) {
-			integration = new UHProtocolLibIntegration(p);
+
+		Plugin pl = Bukkit.getServer().getPluginManager().getPlugin("ProtocolLib");
+		if(pl != null && pl.isEnabled()) {
+			try {
+				integration = new UHProtocolLibIntegration(p);
+			} catch(NoClassDefFoundError e) {
+				p.getLogger().warning("ProtocolLib is present but cannot be loaded (outdated?), so the integration was disabled.");
+			}
 		}
 		else {
 			p.getLogger().warning("ProtocolLib is not present, so the integration was disabled.");

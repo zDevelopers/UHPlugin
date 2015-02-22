@@ -19,79 +19,27 @@
 
 package me.azenet.UHPlugin.integration;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.comphenix.protocol.ProtocolLibrary;
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.listeners.UHPacketsListener;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-
 
 public class UHProtocolLibIntegration {
-	
-	private UHPlugin p = null;
-	private ProtocolManager pm = null;
-	
-	private UHPacketsListener packetsListener = null;
-	
+
 	public UHProtocolLibIntegration(UHPlugin p) {
-		this.p = p;
 		
-		Plugin plTest = Bukkit.getServer().getPluginManager().getPlugin("ProtocolLib");
-		if(plTest == null || !plTest.isEnabled()) {
-			this.p.getLogger().warning("ProtocolLib is not present, so the integration was disabled.");
-			return;
-		}
-		
-		
-		this.pm = ProtocolLibrary.getProtocolManager();
-		this.packetsListener = new UHPacketsListener(p);
+		// The plugin is available if this is called.
+
+		UHPacketsListener packetsListener = new UHPacketsListener(p);
 		
 		if(p.getConfig().getBoolean("hardcore-hearts.display")) {
-			pm.addPacketListener(packetsListener);
+			ProtocolLibrary.getProtocolManager().addPacketListener(packetsListener);
 		}
 		if(p.getConfig().getBoolean("auto-respawn.do")) {
 			p.getServer().getPluginManager().registerEvents(packetsListener, p);
 		}
 		
 		
-		this.p.getLogger().info("Successfully hooked into ProtocolLib.");
-	}
-	
-	public boolean isProtocolLibIntegrationEnabled() {
-		return (this.pm != null);
-	}
-	
-	/**
-	 * Checks if there are some enabled option which require ProtocolLib.
-	 * 
-	 * @return A list of enabled options which requires ProtocolLib, or null 
-	 * if there isn't any enabled option that requires ProtocolLib.
-	 */
-	public List<String> isProtocolLibNeeded() {
-		
-		ArrayList<String> options = new ArrayList<String>();
-		options.add("hardcore-hearts.display");
-		options.add("auto-respawn.do");
-		
-		ArrayList<String> enabledOptions = new ArrayList<String>();
-		
-		for(String option : options) {
-			if(p.getConfig().getBoolean(option)) {
-				enabledOptions.add(option);
-			}
-		}
-		
-		if(enabledOptions.size() != 0) {
-			return enabledOptions;
-		}
-		else {
-			return null;
-		}
+		p.getLogger().info("Successfully hooked into ProtocolLib.");
 	}
 }
