@@ -308,15 +308,17 @@ public class UHRecipeManager {
 		if(compassRecipeType != -1) {
 			return compassRecipeType;
 		}
-		
+
 		if (p.getConfig().getBoolean("gameplay-changes.compass.enabled")) {
-			switch(p.getConfig().getString("gameplay-changes.compass.recipe")) {
+			switch(p.getConfig().getString("gameplay-changes.compass.recipe").toLowerCase()) {
 				case "easy":
 					compassRecipeType = COMPASS_EASY;
+					break;
 					
 				case "hard":
 					compassRecipeType = COMPASS_HARD;
-					
+					break;
+
 				default:
 					compassRecipeType = COMPASS_MEDIUM;
 			}
