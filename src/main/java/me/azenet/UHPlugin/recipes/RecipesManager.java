@@ -163,10 +163,6 @@ public class RecipesManager {
 	 * @return true if the recipe is an alternate recipe for the compass.
 	 */
 	public boolean isValidCompassRecipe(ItemStack[] matrix) {
-		if(matrix.length <= 4) {
-			return false; // Small crafting grid
-		}
-		
 		
 		if(matrix.length <= 5) {
 			return false; // Small crafting grid
@@ -232,7 +228,6 @@ public class RecipesManager {
 			Boolean wither = true;
 			
 			for(ItemStack item : inventory.getContents()) {
-				p.getLogger().info(item.toString());
 				if(item.getType() == Material.SKULL_ITEM && item.getDurability() == (short) SkullType.PLAYER.ordinal()) { // An human head
 					SkullMeta sm = (SkullMeta) item.getItemMeta();
 					if(sm.hasOwner()) { // An human head
@@ -283,7 +278,7 @@ public class RecipesManager {
 					break; // Found (because there is only one item in the craft).
 				}
 			}
-			
+
 			ItemMeta metaOriginal = original.getItemMeta();
 			
 			if(metaOriginal != null && metaOriginal.hasDisplayName()) {
@@ -316,15 +311,18 @@ public class RecipesManager {
 		}
 		
 		if (p.getConfig().getBoolean("gameplay-changes.compass.enabled")) {
-			switch(p.getConfig().getString("gameplay-changes.compass.recipe")) {
+			switch(p.getConfig().getString("gameplay-changes.compass.recipe").toLowerCase()) {
 				case "easy":
 					compassRecipeType = COMPASS_EASY;
+					break;
 					
 				case "hard":
 					compassRecipeType = COMPASS_HARD;
+					break;
 					
 				default:
 					compassRecipeType = COMPASS_MEDIUM;
+					break;
 			}
 		}
 		else {
@@ -439,7 +437,7 @@ public class RecipesManager {
 	 */
 	public ShapedRecipe getVanillaCompassRecipe() {
 		ShapedRecipe vanillaCompassRecipe = new ShapedRecipe(new ItemStack(Material.COMPASS));
-		vanillaCompassRecipe.shape(new String[] {" I ", "IRI", " I "});
+		vanillaCompassRecipe.shape(" I ", "IRI", " I ");
 		
 		vanillaCompassRecipe.setIngredient('I', Material.IRON_INGOT);
 		vanillaCompassRecipe.setIngredient('R', Material.REDSTONE);
@@ -454,7 +452,7 @@ public class RecipesManager {
 	 */
 	public ShapedRecipe getVanillaGoldenMelonRecipe() {
 		ShapedRecipe vanillaGoldenMelonRecipe = new ShapedRecipe(new ItemStack(Material.SPECKLED_MELON));
-		vanillaGoldenMelonRecipe.shape(new String[] {"GGG", "GMG", "GGG"});
+		vanillaGoldenMelonRecipe.shape("GGG", "GMG", "GGG");
 		
 		vanillaGoldenMelonRecipe.setIngredient('G', Material.GOLD_NUGGET);
 		vanillaGoldenMelonRecipe.setIngredient('M', Material.MELON);

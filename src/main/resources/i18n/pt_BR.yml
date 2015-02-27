@@ -9,7 +9,7 @@ keys:
         recipeApple: "Adicionada nova receita para maçã dourada."
         recipeCompass: "Adicionada nova receita para bússola."
         recipeMelon: "Adicionada nova receita para melancia reluzente."
-        loaded: "plugin Ultra Difícil Carregado."
+        loaded: "Plugin Ultra Difícil Carregado."
         
         WBNotInstalled1: "{darkred}[UHC] {ce}WorldBorder não está instalado: muralhas não serão verificadas!"
         WBNotInstalled2: "{gray}Também, sem WorldBorder, as muralhas não poderão ser reduzidas durante a partida (avisos excluidos)."
@@ -26,7 +26,7 @@ keys:
     cmd:
         errorLoad: "{ce}Ocorreu um Erro, verifique o console para maiores detalhes. Isto provavelmente é um Bug."
         errorUnknown: "{ce}Comando não existente. Digite /uh para ver uma lista dos comandos disponíveis."
-        errorUnauthorized: "{ce}aqui não jacaré"
+        errorUnauthorized: "{ce}Você não está autorizado a executar este comando."
         
         titleHelp: "{yellow}{0} - versão {1}"
         legendHelp: "{ci}Legenda: {cc}/uh command <necessário> [opcional=valor padrão] <espaços são válidos ...>{ci}."

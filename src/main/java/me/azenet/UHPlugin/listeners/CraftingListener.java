@@ -230,21 +230,21 @@ public class CraftingListener implements Listener {
 						if(item != null) { // result slot non empty
 							ItemMeta meta = item.getItemMeta();
 							
-							HashSet<String> prohibed = new HashSet<String>();
+							HashSet<String> prohibited = new HashSet<String>();
 							
-							prohibed.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"));
-							prohibed.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch"));
+							prohibited.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"));
+							prohibited.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch"));
 							
 							// It is possible that the client filters the name of the golden apple in the anvil UI,
 							// removing all §.
-							for(String prohibition : new HashSet<String>(prohibed)) {
-								prohibed.add(prohibition.replace("§", ""));
+							for(String prohibition : new HashSet<String>(prohibited)) {
+								prohibited.add(prohibition.replace("§", ""));
 							}
 							
 							
 							// An item can't be renamed to the name of a golden head
 							if(meta != null && meta.hasDisplayName()) {
-								if(prohibed.contains(meta.getDisplayName())) {
+								if(prohibited.contains(meta.getDisplayName())) {
 									ev.setCancelled(true); // nope nope nope
 								}
 							}
@@ -254,7 +254,7 @@ public class CraftingListener implements Listener {
 								ItemMeta metaOriginal = view.getItem(0).getItemMeta();
 								
 								if(metaOriginal != null && metaOriginal.hasDisplayName()) {
-									if(prohibed.contains(metaOriginal.getDisplayName())) {
+									if(prohibited.contains(metaOriginal.getDisplayName())) {
 										ev.setCancelled(true);
 									}
 								}

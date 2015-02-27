@@ -242,9 +242,9 @@ public class UHUtils {
 		if((blockCenter.getType().isTransparent() || (blockCenter.isLiquid() && !blockCenter.getType().equals(Material.LAVA) && !blockCenter.getType().equals(Material.STATIONARY_LAVA)))
 				&& (blockAbove.getType().isTransparent() || (blockAbove.isLiquid() && !blockAbove.getType().equals(Material.LAVA) && !blockCenter.getType().equals(Material.STATIONARY_LAVA)))) {
 			// two breathable blocks: ok
-			
-			if(blockBelow.getType().isSolid() || blockBelow.getType().equals(Material.WATER) || blockBelow.equals(Material.STATIONARY_WATER)) {
-				// The block below is solid, or liquid (but not lava)
+
+
+			if(blockBelow.getType().isSolid() || blockBelow.getType().equals(Material.WATER) || blockBelow.getType().equals(Material.STATIONARY_WATER)) {				// The block below is solid, or liquid (but not lava)
 				return true;
 			}
 			else {
