@@ -39,7 +39,6 @@ public class UHProtocolLibIntegration {
 			p.getServer().getPluginManager().registerEvents(packetsListener, p);
 		}
 
-
 		p.getLogger().info("Successfully hooked into ProtocolLib.");
 	}
 }

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 public class RecipesManager {
 	
 	private UHPlugin p = null;
@@ -163,7 +164,6 @@ public class RecipesManager {
 	 * @return true if the recipe is an alternate recipe for the compass.
 	 */
 	public boolean isValidCompassRecipe(ItemStack[] matrix) {
-		
 		if(matrix.length <= 5) {
 			return false; // Small crafting grid
 		}
@@ -309,7 +309,7 @@ public class RecipesManager {
 		if(compassRecipeType != -1) {
 			return compassRecipeType;
 		}
-		
+
 		if (p.getConfig().getBoolean("gameplay-changes.compass.enabled")) {
 			switch(p.getConfig().getString("gameplay-changes.compass.recipe").toLowerCase()) {
 				case "easy":
@@ -319,7 +319,7 @@ public class RecipesManager {
 				case "hard":
 					compassRecipeType = COMPASS_HARD;
 					break;
-					
+
 				default:
 					compassRecipeType = COMPASS_MEDIUM;
 					break;

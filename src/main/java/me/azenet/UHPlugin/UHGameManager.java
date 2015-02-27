@@ -33,6 +33,7 @@ import me.azenet.UHPlugin.teams.UHTeam;
 import me.azenet.UHPlugin.timers.UHTimer;
 import me.azenet.UHPlugin.utils.UHSound;
 import me.azenet.UHPlugin.utils.UHUtils;
+
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -482,7 +483,6 @@ public class UHGameManager {
 		// Fires the event
 		p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
 	}
-
 
 	/**
 	 * Notify the game manager the teleportation is finished.
