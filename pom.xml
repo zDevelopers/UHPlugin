@@ -88,8 +88,8 @@
   </build>
   <repositories>
     <repository>
-      <id>bukkit-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public/</url>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
     <repository>
       <id>dynmap-repo</id>
@@ -97,8 +97,8 @@
     </repository>
     <repository>
       <id>comphenix-rep</id>
-      <name>Comphenix Repository</name>
-      <url>http://repo.comphenix.net/content/groups/public</url>
+      <name>Shadowvolt Repository</name>
+      <url>http://ci.shadowvolt.com/plugin/repository/everything/</url>
     </repository>
     <repository>
       <id>carrade-repo</id>
@@ -113,7 +113,7 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.7.9-R0.2</version>
+      <version>1.8-R0.1-SNAPSHOT</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
@@ -137,7 +137,7 @@
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
       <artifactId>ProtocolLib</artifactId>
-      <version>3.4.0</version>
+      <version>3.6.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.mcstats.bukkit</groupId>

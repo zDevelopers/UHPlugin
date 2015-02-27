@@ -108,8 +108,8 @@ public class ScoreboardManager {
 	 * To be called when a player joins.
 	 */
 	public void addPlayerBeforeStart() {
-		sidebar.updateEntry(this.getText("players", p.getServer().getOnlinePlayers().length - 1),
-				this.getText("players", p.getServer().getOnlinePlayers().length));
+		sidebar.updateEntry(this.getText("players", p.getServer().getOnlinePlayers().size() - 1),
+				this.getText("players", p.getServer().getOnlinePlayers().size()));
 	}
 
 	/**
@@ -118,8 +118,8 @@ public class ScoreboardManager {
 	 * To be called when a player leaves.
 	 */
 	public void removePlayerBeforeStart() {
-		sidebar.updateEntry(this.getText("players", p.getServer().getOnlinePlayers().length + 1),
-				this.getText("players", p.getServer().getOnlinePlayers().length));
+		sidebar.updateEntry(this.getText("players", p.getServer().getOnlinePlayers().size() + 1),
+				this.getText("players", p.getServer().getOnlinePlayers().size()));
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class ScoreboardManager {
 				sidebar.addEntry(this.getText("episode", 0), true);
 			}
 
-			sidebar.addEntry(this.getText("players", p.getServer().getOnlinePlayers().length), true);
+			sidebar.addEntry(this.getText("players", p.getServer().getOnlinePlayers().size()), true);
 
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
 				sidebar.addEntry(SidebarObjective.SEPARATOR, true);
@@ -344,7 +344,7 @@ public class ScoreboardManager {
 	 * @param useOldValues if true, the old values of the timer will be used.
 	 * @return The text of the timer.
 	 */
-	protected String getTimerText(UHTimer timer, Boolean forceNonHoursTimer, Boolean useOldValues) {
+	public String getTimerText(UHTimer timer, Boolean forceNonHoursTimer, Boolean useOldValues) {
 		Validate.notNull(timer, "The timer cannot be null");
 
 		if(timer.getDisplayHoursInTimer() && !forceNonHoursTimer) {

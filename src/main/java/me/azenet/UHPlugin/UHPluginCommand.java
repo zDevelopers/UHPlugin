@@ -728,7 +728,7 @@ public class UHPluginCommand implements CommandExecutor {
 				if(args.length < 6) {
 					if(spawnsCount == 0) { // Solo mode?
 						sender.sendMessage(i.t("spawns.assumptions.solo"));
-						spawnsCount = p.getServer().getOnlinePlayers().length - p.getGameManager().getStartupSpectators().size();
+						spawnsCount = p.getServer().getOnlinePlayers().size() - p.getGameManager().getStartupSpectators().size();
 					}
 					else {
 						// Trying to find players without team
