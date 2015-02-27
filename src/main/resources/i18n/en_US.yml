@@ -23,6 +23,8 @@ keys:
         PLNotInstalledItem: "{darkgray} - {gray}{0}"
         PLNotInstalled3: "{gray}ProtocolLib is available here: {0}"
         
+        TMNotInstalled : "{darkred}[UHC] {ce}TitleManager is not installed : End of episode will be displayed in chat !"
+        
     cmd:
         errorLoad: "{ce}An error occurred, see console for details. This is probably a bug."
         errorUnknown: "{ce}This subcommand does not exists. See /uh for the available commands."

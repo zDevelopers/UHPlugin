@@ -13,7 +13,7 @@ softdepend:
   - SpectatorPlus
   - dynmap
   - ProtocolLib
-
+  - TitleManager
 commands:
    uh:
       description: UltraHardcore Reloaded base command

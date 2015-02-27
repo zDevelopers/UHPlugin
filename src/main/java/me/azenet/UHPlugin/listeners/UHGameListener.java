@@ -19,6 +19,9 @@
 
 package me.azenet.UHPlugin.listeners;
 
+import io.puharesource.mc.titlemanager.api.TitleObject;
+import io.puharesource.mc.titlemanager.api.animations.TitleAnimation;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -67,6 +70,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -134,11 +138,26 @@ public class UHGameListener implements Listener {
 			}, 20L * this.p.getConfig().getInt("death.kick.time", 30));
 		}
 		
+		Location l = ev.getEntity().getLocation();
+		//drop golden apple
+		if(p.getConfig().getBoolean("death.goldenApple.drop")) {
+			try {
+				ItemStack skullApple = new ItemStack(Material.GOLDEN_APPLE);
+				ItemMeta skullMetaApple = skullApple.getItemMeta();
+				skullMetaApple.setDisplayName(ChatColor.GREEN + "Pomme d'or");
+				skullApple.setAmount(p.getConfig().getInt("death.goldenApple.number"));
+				skullApple.setItemMeta(skullMetaApple);
+				l.getWorld().dropItem(l, skullApple);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
 		// Drops the skull of the player.
 		if(p.getConfig().getBoolean("death.head.drop")) {
 			if(!p.getConfig().getBoolean("death.head.pvpOnly")
 					|| (p.getConfig().getBoolean("death.head.pvpOnly") && ev.getEntity().getKiller() != null && ev.getEntity().getKiller() instanceof Player)) {
-				Location l = ev.getEntity().getLocation();
 				try { 
 					ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
 					SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
@@ -423,6 +442,13 @@ public class UHGameListener implements Listener {
 				ev.getPlayer().sendMessage(i.t("load.SPNotInstalled2"));
 			}
 			
+			// The same for TitleManager
+			
+			
+			if (p.getServer().getPluginManager().getPlugin("TitleManager") == null || !p.getServer().getPluginManager().getPlugin("TitleManager").isEnabled()){
+				ev.getPlayer().sendMessage(i.t("load.TMNotInstalled"));
+			}
+			
 			// The same for ProtocolLib
 			if(!p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled()) {
 				List<String> enabledOptionsWithProtocolLibNeeded = p.getProtocolLibIntegrationWrapper().isProtocolLibNeeded();
@@ -602,7 +628,13 @@ public class UHGameListener implements Listener {
 		else {
 			message = i.t("episodes.end", String.valueOf(ev.getNewEpisode() - 1));
 		}
-		p.getServer().broadcastMessage(message);
+		
+		//titlemanager hook
+		if (p.getServer().getPluginManager().getPlugin("TitleManager") != null && p.getServer().getPluginManager().getPlugin("TitleManager").isEnabled()) {
+			new TitleObject(message, TitleObject.TitleType.TITLE).broadcast();
+		} else {
+			p.getServer().broadcastMessage(message);
+		}
 	}
 	
 	
