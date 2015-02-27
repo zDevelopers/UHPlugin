@@ -100,6 +100,12 @@
       <name>Shadowvolt Repository</name>
       <url>http://ci.shadowvolt.com/plugin/repository/everything/</url>
     </repository>
+    <!-- Sometimes the comphenix's repository is down -->
+    <repository>
+      <id>comphenix-mirror-repo</id>
+      <name>Mirror of the comphenix repository</name>
+      <url>http://minor.royaldev.org:8081/nexus/content/groups/public/</url>
+    </repository>
     <repository>
       <id>carrade-repo</id>
       <url>http://depot.carrade.eu/maven2/</url>
