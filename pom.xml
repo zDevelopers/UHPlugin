@@ -96,7 +96,7 @@
       <url>http://repo.mikeprimm.com/</url>
     </repository>
     <repository>
-      <id>comphenix-rep</id>
+      <id>shadowvolt-repo</id>
       <name>Shadowvolt Repository</name>
       <url>http://ci.shadowvolt.com/plugin/repository/everything/</url>
     </repository>
