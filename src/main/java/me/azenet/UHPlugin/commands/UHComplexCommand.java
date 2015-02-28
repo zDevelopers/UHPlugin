@@ -18,9 +18,9 @@
  */
 package me.azenet.UHPlugin.commands;
 
+import me.azenet.UHPlugin.utils.CommandUtils;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,11 +42,13 @@ public abstract class UHComplexCommand extends UHCommand {
 	private Map<String, String> permissions = new HashMap<>();
 
 	/**
-	 * This will be executed if this command is called without argument.
+	 * This will be executed if this command is called without argument,
+	 * or if there isn't any sub-command executor registered.
 	 *
 	 * @param sender The sender.
+	 * @param args The arguments passed to the command.
 	 */
-	public abstract void runRoot(CommandSender sender);
+	public abstract void runRoot(CommandSender sender, String[] args);
 
 	/**
 	 * Returns the general help for this command.
@@ -110,7 +112,7 @@ public abstract class UHComplexCommand extends UHCommand {
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
 		if(args.length == 0) {
-			runRoot(sender);
+			runRoot(sender, new String[0]);
 		}
 		else {
 			UHCommand cmd = subcommands.get(args[0]);
@@ -118,12 +120,14 @@ public abstract class UHComplexCommand extends UHCommand {
 				// Allowed?
 				String permission = permissions.get(args[0]);
 				if(sender.hasPermission(permission)) {
-					String[] subArgs = Arrays.copyOfRange(args,1, args.length - 1);
-					cmd.run(sender, subArgs);
+					cmd.run(sender, CommandUtils.getSubcommandArguments(args));
 				}
 				else {
 					throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NOT_ALLOWED);
 				}
+			}
+			else {
+				runRoot(sender, CommandUtils.getSubcommandArguments(args));
 			}
 		}
 	}

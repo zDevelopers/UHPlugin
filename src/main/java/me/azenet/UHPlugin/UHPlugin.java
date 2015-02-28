@@ -20,6 +20,7 @@
 package me.azenet.UHPlugin;
 
 import me.azenet.UHPlugin.borders.BorderManager;
+import me.azenet.UHPlugin.commands.UHCommandExecutor;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.integration.UHDynmapIntegration;
 import me.azenet.UHPlugin.integration.UHProtocolLibIntegrationWrapper;
@@ -109,7 +110,7 @@ public final class UHPlugin extends JavaPlugin {
 		// I don't like this way of doing this, but else, the plugin will not load without ProtocolLib.
 		protocollibintegrationwrapper = new UHProtocolLibIntegrationWrapper(this);
 		
-		commandManager = new UHPluginCommand(this);
+		/*commandManager = new UHPluginCommand(this);
 		tabCompleter = new UHTabCompleter(this);
 		
 		getCommand("uh").setExecutor(commandManager);		
@@ -121,7 +122,13 @@ public final class UHPlugin extends JavaPlugin {
 		
 		getCommand("uh").setTabCompleter(tabCompleter);
 		getCommand("togglechat").setTabCompleter(tabCompleter);
-		getCommand("join").setTabCompleter(tabCompleter);
+		getCommand("join").setTabCompleter(tabCompleter);*/
+
+		UHCommandExecutor executor = new UHCommandExecutor(this);
+		for(String commandName : getDescription().getCommands().keySet()) {
+			getCommand(commandName).setExecutor(executor);
+			getCommand(commandName).setTabCompleter(executor);
+		}
 		
 		getServer().getPluginManager().registerEvents(new GameListener(this), this);
 		getServer().getPluginManager().registerEvents(new GameplayListener(this), this);

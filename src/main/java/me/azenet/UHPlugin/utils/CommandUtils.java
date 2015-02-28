@@ -16,24 +16,24 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands;
+package me.azenet.UHPlugin.utils;
 
-import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.commands.UH;
-import me.azenet.UHPlugin.i18n.I18n;
+import java.util.Arrays;
 
 
-public class UHCommandExecutor extends AbstractCommandExecutor {
+public class CommandUtils {
 
-	private UHPlugin p;
-	private I18n i;
+	/**
+	 * Returns the args without the first item.
+	 *
+	 * @param args The arguments sent to the parent command.
+	 * @return The arguments to send to the child command.
+	 */
+	public static String[] getSubcommandArguments(String[] args) {
+		if(args.length <= 1) {
+			return new String[0];
+		}
 
-	public UHCommandExecutor(UHPlugin plugin) {
-		super(plugin);
-
-		p = plugin;
-		i = p.getI18n();
-
-		registerCommand(new UH(p));
+		return Arrays.copyOfRange(args, 1, args.length);
 	}
 }
