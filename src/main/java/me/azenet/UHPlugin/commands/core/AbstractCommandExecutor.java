@@ -16,9 +16,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands;
+package me.azenet.UHPlugin.commands.core;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.commands.core.annotations.Command;
+import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
+import me.azenet.UHPlugin.commands.core.commands.UHCommand;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.utils.CommandUtils;
 import org.bukkit.command.CommandSender;
@@ -59,7 +62,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	 *                                  annotation.
 	 */
 	public void registerCommand(UHCommand command) {
-		me.azenet.UHPlugin.commands.Command commandAnnotation = command.getClass().getAnnotation(me.azenet.UHPlugin.commands.Command.class);
+		Command commandAnnotation = command.getClass().getAnnotation(Command.class);
 		if(commandAnnotation == null) {
 			throw new IllegalArgumentException("Cannot register a command without @Command annotation.");
 		}

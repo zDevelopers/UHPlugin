@@ -17,7 +17,7 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package me.azenet.UHPlugin.commands;
+package me.azenet.UHPlugin.commands.core.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

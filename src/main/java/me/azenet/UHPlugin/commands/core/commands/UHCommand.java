@@ -17,9 +17,10 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package me.azenet.UHPlugin.commands;
+package me.azenet.UHPlugin.commands.core.commands;
 
 
+import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public abstract class UHCommand {
 	 * @param sender The sender of the command.
 	 * @param args The arguments passed to the command.
 	 *
-	 * @throws CannotExecuteCommandException If the command cannot be executed.
+	 * @throws me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException If the command cannot be executed.
 	 */
 	public abstract void run(CommandSender sender, String[] args) throws CannotExecuteCommandException;
 

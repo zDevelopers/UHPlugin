@@ -20,6 +20,7 @@ package me.azenet.UHPlugin.commands;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.commands.UH;
+import me.azenet.UHPlugin.commands.core.AbstractCommandExecutor;
 import me.azenet.UHPlugin.i18n.I18n;
 
 

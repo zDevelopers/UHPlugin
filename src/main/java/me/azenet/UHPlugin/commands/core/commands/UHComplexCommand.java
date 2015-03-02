@@ -16,8 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands;
+package me.azenet.UHPlugin.commands.core.commands;
 
+import me.azenet.UHPlugin.commands.core.annotations.Command;
+import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.utils.CommandUtils;
 import org.bukkit.command.CommandSender;
 
@@ -71,7 +73,7 @@ public abstract class UHComplexCommand extends UHCommand {
 	 * @param command The command to register.
 	 *
 	 * @throws IllegalArgumentException If the command object don't have
-	 *                                  the {@code @}{@link Command} annotation.
+	 *                                  the {@code @}{@link me.azenet.UHPlugin.commands.core.annotations.Command} annotation.
 	 */
 	public void registerSubCommand(UHCommand command) {
 		Command commandAnnotation = command.getClass().getAnnotation(Command.class);

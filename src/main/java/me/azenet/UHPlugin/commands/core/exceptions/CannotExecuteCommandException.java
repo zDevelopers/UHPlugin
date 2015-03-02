@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands;
+package me.azenet.UHPlugin.commands.core.exceptions;
 
 public class CannotExecuteCommandException extends Exception {
 

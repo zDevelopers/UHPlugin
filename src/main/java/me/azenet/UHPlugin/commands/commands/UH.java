@@ -19,8 +19,8 @@
 package me.azenet.UHPlugin.commands.commands;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.Command;
-import me.azenet.UHPlugin.commands.UHComplexCommand;
+import me.azenet.UHPlugin.commands.core.annotations.Command;
+import me.azenet.UHPlugin.commands.core.commands.UHComplexCommand;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;
 
