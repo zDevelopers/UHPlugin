@@ -29,7 +29,17 @@ import org.bukkit.command.TabExecutor;
 
 import java.util.*;
 
-
+/**
+ * The base of every command executor.
+ *
+ * <p>
+ *     The command executors needs to extend this class and to register the commands in the constructor
+ *     with the method {@link #registerCommand}.
+ * </p>
+ *
+ * @version 1.0
+ * @author Amaury Carrade
+ */
 public abstract class AbstractCommandExecutor implements TabExecutor {
 
 	private UHPlugin p;

@@ -18,6 +18,12 @@
  */
 package me.azenet.UHPlugin.commands.core.exceptions;
 
+/**
+ * This exception is fired when a command cannot be executed, for whatever reason.
+ *
+ * @version 1.0
+ * @author Amaury Carrade
+ */
 public class CannotExecuteCommandException extends Exception {
 
 	public enum Reason {

@@ -25,7 +25,20 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-
+/**
+ * The base of a simple command.
+ *
+ * <p>
+ *     This kind of command is just a “final” command, without any subcommand.
+ * </p>
+ * <p>
+ *     If you want a command with sub-commands automatically managed, extend the
+ *     {@link me.azenet.UHPlugin.commands.core.commands.UHComplexCommand} class instead.
+ * </p>
+ *
+ * @version 1.0
+ * @author AmauryCarrade
+ */
 public abstract class UHCommand {
 
 	/**

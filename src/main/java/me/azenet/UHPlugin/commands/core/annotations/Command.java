@@ -24,7 +24,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
+/**
+ * This annotation needs to be applied to every command class. It is used to define the
+ * name and the permission of the command.
+ *
+ * @version 1.0
+ * @author Amaury Carrade
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Command {

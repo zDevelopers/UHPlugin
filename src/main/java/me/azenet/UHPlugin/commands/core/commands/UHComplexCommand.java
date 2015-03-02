@@ -31,6 +31,15 @@ import java.util.Map;
 
 /**
  * Represents a command with subcommands.
+ *
+ * <p>
+ *     Add the subcommands with the {@link #registerSubCommand} method in the constructor.<br />
+ *     A subcommand is simply an {@link me.azenet.UHPlugin.commands.core.commands.UHCommand} (or
+ *     {@link me.azenet.UHPlugin.commands.core.commands.UHComplexCommand}) object.
+ * </p>
+ *
+ * @version 1.0
+ * @author Amaury Carrade
  */
 public abstract class UHComplexCommand extends UHCommand {
 
