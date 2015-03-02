@@ -65,14 +65,14 @@ public abstract class UHCommand {
 	public abstract void run(CommandSender sender, String[] args) throws CannotExecuteCommandException;
 
 	/**
-	 * Auto-completes ths command.
+	 * Tab-completes this command.
 	 *
 	 * @param sender The sender.
 	 * @param args The arguments passed to the command.
 	 *
 	 * @return A list of suggestions.
 	 */
-	public abstract List<String> autocomplete(CommandSender sender, String[] args);
+	public abstract List<String> tabComplete(CommandSender sender, String[] args);
 
 	/**
 	 * Returns the help of this command.

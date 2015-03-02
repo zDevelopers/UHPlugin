@@ -66,14 +66,14 @@ public class UH extends UHComplexCommand {
 	}
 
 	/**
-	 * The result of this method will be added to the autocomplete suggestions for this command.
+	 * The result of this method will be added to the tabComplete suggestions for this command.
 	 *
 	 * @param sender The sender.
 	 * @param args   The arguments.
 	 * @return The suggestions to add.
 	 */
 	@Override
-	public List<String> autocompleteRoot(CommandSender sender, String[] args) {
+	public List<String> tabCompleteRoot(CommandSender sender, String[] args) {
 		return Arrays.asList("test", "test2");
 	}
 }

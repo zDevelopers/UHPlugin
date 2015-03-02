@@ -129,6 +129,6 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
 		UHCommand uhCommand = mainCommands.get(command.getName());
-		return uhCommand.autocomplete(sender, args);
+		return uhCommand.tabComplete(sender, args);
 	}
 }

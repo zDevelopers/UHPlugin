@@ -77,14 +77,14 @@ public abstract class UHComplexCommand extends UHCommand {
 	public abstract List<String> helpRoot(CommandSender sender);
 
 	/**
-	 * The result of this method will be added to the autocomplete suggestions for this command.
+	 * The result of this method will be added to the tab-complete suggestions for this command.
 	 *
 	 * @param sender The sender.
 	 * @param args   The arguments.
 	 *
 	 * @return The suggestions to add.
 	 */
-	public abstract List<String> autocompleteRoot(CommandSender sender, String[] args);
+	public abstract List<String> tabCompleteRoot(CommandSender sender, String[] args);
 
 	/**
 	 * Registers a subcommand of this command.
@@ -180,7 +180,7 @@ public abstract class UHComplexCommand extends UHCommand {
 	 * @return A list of suggestions.
 	 */
 	@Override
-	public List<String> autocomplete(CommandSender sender, String[] args) {
+	public List<String> tabComplete(CommandSender sender, String[] args) {
 		// Autocompletion for this command
 		if(args.length == 1) {
 			List<String> suggestions = new LinkedList<>();
@@ -189,7 +189,7 @@ public abstract class UHComplexCommand extends UHCommand {
 				suggestions.add(command);
 			}
 
-			suggestions.addAll(autocompleteRoot(sender, args));
+			suggestions.addAll(tabCompleteRoot(sender, args));
 
 			return suggestions;
 		}
@@ -198,10 +198,10 @@ public abstract class UHComplexCommand extends UHCommand {
 		else {
 			UHCommand subcommand = subcommands.get(args[0]);
 			if(subcommand != null) {
-				return subcommand.autocomplete(sender, CommandUtils.getSubcommandArguments(args));
+				return subcommand.tabComplete(sender, CommandUtils.getSubcommandArguments(args));
 			}
 			else {
-				return autocompleteRoot(sender, args);
+				return tabCompleteRoot(sender, args);
 			}
 		}
 	}
