@@ -45,9 +45,7 @@ public @interface Command {
 	 *     be {@code cmd.norris.sb}.
 	 * </p>
 	 * <p>
-	 *     If this is left empty, or not set, the permission of the parent command will be used.<br />
-	 *     If the parent command is {@code null} (i.e. this command is a root one), the command will be
-	 *     accessible to everyone.
+	 *     If this is left empty, or not set, the permission will be the name of the command.
 	 * </p>
 	 */
 	public String permission() default "";
@@ -62,4 +60,14 @@ public @interface Command {
 	 * </p>
 	 */
 	public boolean inheritPermission() default true;
+
+	/**
+	 * If this is set to {@code true}, the permission of the parent command will be used.
+	 *
+	 * <p>
+	 *     If the parent command is {@code null} (i.e. this command is a root one), the command will be
+	 *     accessible to everyone.
+	 * </p>
+	 */
+	public boolean useParentPermission() default false;
 }

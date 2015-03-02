@@ -65,7 +65,12 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 		}
 
 		mainCommands.put(commandAnnotation.name(), command);
-		mainCommandsPermissions.put(commandAnnotation.name(), commandAnnotation.permission());
+
+		String permission = commandAnnotation.permission();
+		if((permission != null && permission.isEmpty()) || commandAnnotation.useParentPermission()) {
+			permission = null;
+		}
+		mainCommandsPermissions.put(commandAnnotation.name(), permission);
 	}
 
 	@Override
@@ -75,7 +80,8 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 			return false;
 		}
 		try {
-			if(!sender.hasPermission(mainCommandsPermissions.get(command.getName()))) {
+			String permission = mainCommandsPermissions.get(command.getName());
+			if(permission != null && !sender.hasPermission(permission)) {
 				throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NOT_ALLOWED);
 			}
 

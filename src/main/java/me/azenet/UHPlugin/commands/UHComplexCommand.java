@@ -85,14 +85,27 @@ public abstract class UHComplexCommand extends UHCommand {
 		String name = commandAnnotation.name();
 		String permission = commandAnnotation.permission();
 
-		if(commandAnnotation.inheritPermission()) {
+		if(permission != null && permission.isEmpty()) {
+			permission = null;
+		}
+
+		if(commandAnnotation.inheritPermission() || commandAnnotation.useParentPermission()) {
+
 			UHCommand parent = this;
+			if(commandAnnotation.useParentPermission()) {
+				// We starts at the parent to get the parent's permission.
+				parent = this.getParent();
+			}
+
 			while(parent != null) {
 				// The parent will always have the @Command annotation, because it is always
 				// added in this method and the presence of the annotation is checked.
 				Command parentAnnotation = parent.getClass().getAnnotation(Command.class);
-				if(!parentAnnotation.permission().isEmpty()) {
-					permission = parentAnnotation.permission() + "." + permission;
+				if(parentAnnotation.permission() != null && !parentAnnotation.permission().isEmpty()) {
+					permission = parentAnnotation.permission();
+					if(permission != null && !permission.isEmpty()) {
+						permission += "." + permission;
+					}
 				}
 				parent = parent.getParent();
 			}
@@ -119,7 +132,7 @@ public abstract class UHComplexCommand extends UHCommand {
 			if(cmd != null) {
 				// Allowed?
 				String permission = permissions.get(args[0]);
-				if(sender.hasPermission(permission)) {
+				if(permission == null || sender.hasPermission(permission)) {
 					cmd.run(sender, CommandUtils.getSubcommandArguments(args));
 				}
 				else {
