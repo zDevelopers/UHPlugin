@@ -98,12 +98,12 @@ public abstract class UHComplexCommand extends UHCommand {
 		String name = commandAnnotation.name();
 		String permission = commandAnnotation.permission();
 
-		if(permission != null && permission.isEmpty()) {
-			permission = null;
-		}
-
 		if(permission == null && !commandAnnotation.useParentPermission()) {
 			permission = commandAnnotation.name();
+		}
+
+		if(permission != null && permission.isEmpty()) {
+			permission = null;
 		}
 
 		if(commandAnnotation.inheritPermission() || commandAnnotation.useParentPermission()) {

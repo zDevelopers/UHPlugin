@@ -38,6 +38,11 @@ public @interface Command {
 	 * The permission needed to execute this command.
 	 *
 	 * <p>
+	 *     Please note that with the current version of this API, the user will need to have the right to
+	 *     access the parent commands, to access this command.<br />
+	 *     This situation may evolve in the future.
+	 * </p>
+	 * <p>
 	 *     If the {@code inheritPermission} option is unset or set to {@code true},
 	 *     this permission is <strong>concatened to the parent permissions</strong>.<br />
 	 *     As example, if the permission is set to {@code sb}, and if the parent command
@@ -47,6 +52,10 @@ public @interface Command {
 	 * <p>
 	 *     If this is left empty, or not set, the permission will be the name of the command, excepted
 	 *     if {@link #useParentPermission} is set to true.
+	 * </p>
+	 * <p>
+	 *     If this is set to {@code null}, no permission is needed to access the command (excepted the
+	 *     permission to access the parent command).
 	 * </p>
 	 */
 	public String permission() default "";
