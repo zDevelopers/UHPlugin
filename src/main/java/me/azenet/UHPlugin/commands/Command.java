@@ -38,7 +38,7 @@ public @interface Command {
 	 * The permission needed to execute this command.
 	 *
 	 * <p>
-	 *     If the {@code inheritPermission} option is unset or set to <code>false</code>,
+	 *     If the {@code inheritPermission} option is unset or set to {@code true},
 	 *     this permission is <strong>concatened to the parent permissions</strong>.<br />
 	 *     As example, if the permission is set to {@code sb}, and if the parent command
 	 *     have the permission {@code cmd.norris}, the real permission of the command will
