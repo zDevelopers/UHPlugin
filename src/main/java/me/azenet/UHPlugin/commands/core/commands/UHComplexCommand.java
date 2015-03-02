@@ -186,7 +186,9 @@ public abstract class UHComplexCommand extends UHCommand {
 			List<String> suggestions = new LinkedList<>();
 
 			for (String command : subcommands.keySet()) {
-				suggestions.add(command);
+				if(sender.hasPermission(permissions.get(command))) {
+					suggestions.add(command);
+				}
 			}
 
 			suggestions.addAll(tabCompleteRoot(sender, args));
