@@ -24,6 +24,7 @@ import me.azenet.UHPlugin.utils.CommandUtils;
 import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,13 +68,23 @@ public abstract class UHComplexCommand extends UHCommand {
 	public abstract List<String> helpRoot(CommandSender sender);
 
 	/**
+	 * The result of this method will be added to the autocomplete suggestions for this command.
+	 *
+	 * @param sender The sender.
+	 * @param args   The arguments.
+	 *
+	 * @return The suggestions to add.
+	 */
+	public abstract List<String> autocompleteRoot(CommandSender sender, String[] args);
+
+	/**
 	 * Registers a subcommand of this command.
 	 * A subcommand can be a complex command.
 	 *
 	 * @param command The command to register.
 	 *
 	 * @throws IllegalArgumentException If the command object don't have
-	 *                                  the {@code @}{@link me.azenet.UHPlugin.commands.core.annotations.Command} annotation.
+	 *                                  the {@link me.azenet.UHPlugin.commands.core.annotations.Command} annotation.
 	 */
 	public void registerSubCommand(UHCommand command) {
 		Command commandAnnotation = command.getClass().getAnnotation(Command.class);
@@ -148,7 +159,7 @@ public abstract class UHComplexCommand extends UHCommand {
 	}
 
 	/**
-	 * Autocompletes ths command.
+	 * Autocompletes this command.
 	 *
 	 * @param sender The sender.
 	 * @param args   The arguments passed to the command.
@@ -157,7 +168,29 @@ public abstract class UHComplexCommand extends UHCommand {
 	 */
 	@Override
 	public List<String> autocomplete(CommandSender sender, String[] args) {
-		return null;
+		// Autocompletion for this command
+		if(args.length == 1) {
+			List<String> suggestions = new LinkedList<>();
+
+			for (String command : subcommands.keySet()) {
+				suggestions.add(command);
+			}
+
+			suggestions.addAll(autocompleteRoot(sender, args));
+
+			return suggestions;
+		}
+
+		// Autocompletion for a subcommand
+		else {
+			UHCommand subcommand = subcommands.get(args[0]);
+			if(subcommand != null) {
+				return subcommand.autocomplete(sender, CommandUtils.getSubcommandArguments(args));
+			}
+			else {
+				return autocompleteRoot(sender, args);
+			}
+		}
 	}
 
 	/**

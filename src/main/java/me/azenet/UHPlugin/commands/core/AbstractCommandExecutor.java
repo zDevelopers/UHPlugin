@@ -27,9 +27,7 @@ import me.azenet.UHPlugin.utils.CommandUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public abstract class AbstractCommandExecutor implements TabExecutor {
@@ -115,7 +113,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
-		return null;
+		UHCommand uhCommand = mainCommands.get(command.getName());
+		return uhCommand.autocomplete(sender, args);
 	}
-
 }

@@ -24,6 +24,7 @@ import me.azenet.UHPlugin.commands.core.commands.UHComplexCommand;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Command(name = "uh", permission = "uh")
@@ -62,5 +63,17 @@ public class UH extends UHComplexCommand {
 	@Override
 	public List<String> helpRoot(CommandSender sender) {
 		return null;
+	}
+
+	/**
+	 * The result of this method will be added to the autocomplete suggestions for this command.
+	 *
+	 * @param sender The sender.
+	 * @param args   The arguments.
+	 * @return The suggestions to add.
+	 */
+	@Override
+	public List<String> autocompleteRoot(CommandSender sender, String[] args) {
+		return Arrays.asList("test", "test2");
 	}
 }
