@@ -193,7 +193,7 @@ public abstract class UHComplexCommand extends UHCommand {
 
 			suggestions.addAll(tabCompleteRoot(sender, args));
 
-			return suggestions;
+			return CommandUtils.getAutocompleteSuggestions(args[0], suggestions);
 		}
 
 		// Autocompletion for a subcommand
