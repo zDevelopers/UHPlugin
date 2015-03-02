@@ -27,7 +27,7 @@ import org.bukkit.command.CommandSender;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(name = "uh", permission = "uh")
+@Command(name = "uh")
 public class UH extends UHComplexCommand {
 
 	private UHPlugin p;

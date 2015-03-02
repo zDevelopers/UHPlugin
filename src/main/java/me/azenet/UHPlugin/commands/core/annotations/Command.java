@@ -45,7 +45,8 @@ public @interface Command {
 	 *     be {@code cmd.norris.sb}.
 	 * </p>
 	 * <p>
-	 *     If this is left empty, or not set, the permission will be the name of the command.
+	 *     If this is left empty, or not set, the permission will be the name of the command, excepted
+	 *     if {@link #useParentPermission} is set to true.
 	 * </p>
 	 */
 	public String permission() default "";

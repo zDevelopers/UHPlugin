@@ -68,8 +68,13 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 		mainCommands.put(commandAnnotation.name(), command);
 
 		String permission = commandAnnotation.permission();
-		if((permission != null && permission.isEmpty()) || commandAnnotation.useParentPermission()) {
-			permission = null;
+		if(permission != null && permission.isEmpty()) {
+			if(commandAnnotation.useParentPermission()) {
+				permission = null;
+			}
+			else {
+				permission = commandAnnotation.name();
+			}
 		}
 		mainCommandsPermissions.put(commandAnnotation.name(), permission);
 	}

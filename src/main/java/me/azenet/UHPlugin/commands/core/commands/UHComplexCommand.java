@@ -102,6 +102,10 @@ public abstract class UHComplexCommand extends UHCommand {
 			permission = null;
 		}
 
+		if(permission == null && !commandAnnotation.useParentPermission()) {
+			permission = commandAnnotation.name();
+		}
+
 		if(commandAnnotation.inheritPermission() || commandAnnotation.useParentPermission()) {
 
 			UHCommand parent = this;
