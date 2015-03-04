@@ -21,6 +21,7 @@ package me.azenet.UHPlugin.commands.commands;
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.commands.UHComplexCommand;
+import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;
 
@@ -44,8 +45,8 @@ public class UH extends UHComplexCommand {
 	 * @param sender The sender.
 	 */
 	@Override
-	public void runRoot(CommandSender sender, String[] args) {
-		sender.sendMessage("Hi");
+	public void runRoot(CommandSender sender, String[] args) throws CannotExecuteCommandException {
+		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE);
 	}
 
 	/**
@@ -61,7 +62,7 @@ public class UH extends UHComplexCommand {
 	 * @return The help, one line per entry in the list.
 	 */
 	@Override
-	public List<String> helpRoot(CommandSender sender) {
+	public List<String> help(CommandSender sender) {
 		return null;
 	}
 

@@ -60,21 +60,7 @@ public abstract class UHComplexCommand extends UHCommand {
 	 * @param sender The sender.
 	 * @param args The arguments passed to the command.
 	 */
-	public abstract void runRoot(CommandSender sender, String[] args);
-
-	/**
-	 * Returns the general help for this command.
-	 *
-	 * <p>
-	 *     This help should be a one-line help, as it's displayed as the help
-	 *     for the parent commands.
-	 * </p>
-	 *
-	 * @param sender The sender.
-	 *
-	 * @return The help, one line per entry in the list.
-	 */
-	public abstract List<String> helpRoot(CommandSender sender);
+	public abstract void runRoot(CommandSender sender, String[] args) throws CannotExecuteCommandException;
 
 	/**
 	 * The result of this method will be added to the tab-complete suggestions for this command.
@@ -209,14 +195,28 @@ public abstract class UHComplexCommand extends UHCommand {
 	}
 
 	/**
-	 * Returns the help of this command.
+	 * Returns the subcommands.
 	 *
-	 * @param sender The sender.
+	 * <p>
+	 *     Map: name of the command → UHCommand object.
+	 * </p>
 	 *
-	 * @return The help. One line per entry in the list.
+	 * @return the subcommands.
 	 */
-	@Override
-	public List<String> help(CommandSender sender) {
-		return null;
+	public Map<String, UHCommand> getSubcommands() {
+		return subcommands;
+	}
+
+	/**
+	 * Returns the permissions of the subcommands.
+	 *
+	 * <p>
+	 *     Map: name of the command → raw permission of this command.
+	 * </p>
+	 *
+	 * @return the permissions of the subcommands.
+	 */
+	public Map<String, String> getSubcommandsPermissions() {
+		return permissions;
 	}
 }

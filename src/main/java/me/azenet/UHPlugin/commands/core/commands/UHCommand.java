@@ -60,7 +60,7 @@ public abstract class UHCommand {
 	 * @param sender The sender of the command.
 	 * @param args The arguments passed to the command.
 	 *
-	 * @throws me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException If the command cannot be executed.
+	 * @throws CannotExecuteCommandException If the command cannot be executed.
 	 */
 	public abstract void run(CommandSender sender, String[] args) throws CannotExecuteCommandException;
 
@@ -76,6 +76,15 @@ public abstract class UHCommand {
 
 	/**
 	 * Returns the help of this command.
+	 *
+	 * <p>
+	 *     The first line should describe briefly the command, as this line is displayed as
+	 *     a line of the help of the parent command.
+	 * </p>
+	 * <p>
+	 *     The other lines will only be displayed if the {@link CannotExecuteCommandException}
+	 *     is caught by the command executor.
+	 * </p>
 	 *
 	 * @param sender The sender.
 	 *

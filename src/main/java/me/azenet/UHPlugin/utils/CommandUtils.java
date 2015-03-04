@@ -18,6 +18,13 @@
  */
 package me.azenet.UHPlugin.utils;
 
+import me.azenet.UHPlugin.commands.core.annotations.Command;
+import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.UHComplexCommand;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +33,41 @@ import java.util.List;
 
 
 public class CommandUtils {
+
+	/**
+	 * Returns {@code true} if the sender is allowed to execute the given command.
+	 *
+	 * <p>
+	 *     Use that only if you have an isolated UHCommand object. Not if you have a direct access to
+	 *     the parent command, or if you know the command is a root command.
+	 * </p>
+	 *
+	 * @param sender The sender.
+	 * @param command The command.
+	 *
+	 * @return {@code true} if the sender is allowed to execute the command.
+	 */
+	public static boolean isAllowed(CommandSender sender, UHCommand command) {
+		if(command.getParent() == null) { // root command
+			Command commandAnnotation = command.getClass().getAnnotation(Command.class);
+			if(commandAnnotation != null) {
+				if(commandAnnotation.permission() == null) {
+					return true;
+				}
+				else if(commandAnnotation.permission().isEmpty()) {
+					return sender.hasPermission(commandAnnotation.name());
+				}
+				else {
+					return sender.hasPermission(commandAnnotation.permission());
+				}
+			}
+		}
+		else {
+			return sender.hasPermission(((UHComplexCommand) command.getParent()).getSubcommandsPermissions().get(command.getClass().getAnnotation(Command.class).name()));
+		}
+
+		return false; // should never happens.
+	}
 
 	/**
 	 * Returns the args without the first item.
@@ -93,5 +135,23 @@ public class CommandUtils {
 	 */
 	public static List<String> getAutocompleteSuggestions(String typed, List<String> suggestionsList) {
 		return getAutocompleteSuggestions(typed, suggestionsList, 0);
+	}
+
+
+	/**
+	 * Displays a separator around the output of the commands.
+	 *
+	 * <p>
+	 *    To be called before and after the output (prints a line only).
+	 * </p>
+	 *
+	 * @param sender The line will be displayed for this sender.
+	 */
+	public static void displaySeparator(CommandSender sender) {
+		if(!(sender instanceof Player)) {
+			return;
+		}
+
+		sender.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
 	}
 }

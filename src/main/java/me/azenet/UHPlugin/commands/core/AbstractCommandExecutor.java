@@ -20,6 +20,7 @@ package me.azenet.UHPlugin.commands.core;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
+import me.azenet.UHPlugin.commands.core.commands.UHComplexCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.commands.core.commands.UHCommand;
 import me.azenet.UHPlugin.i18n.I18n;
@@ -60,6 +61,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 		i = p.getI18n();
 	}
 
+
 	/**
 	 * Registers a main, root command. This command must be in the {@code plugin.yml}, or
 	 * it will never be called.
@@ -89,6 +91,61 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 		mainCommandsPermissions.put(commandAnnotation.name(), permission);
 	}
 
+
+	/**
+	 * Displays the help of a command.
+	 *
+	 * <p>
+	 *     If the command is a complex command, this will display the short help of all sub-commands.<br />
+	 *     Else, this will display the full help for the command.
+	 * </p>
+	 *
+	 * @param sender The sender.
+	 * @param command The command.
+	 */
+	public void displayHelp(CommandSender sender, UHCommand command) {
+		if(command instanceof UHComplexCommand) {
+			List<String> help = new ArrayList<>();
+
+			List<String> rootHelp = command.help(sender);
+			if(rootHelp != null) {
+				help.addAll(rootHelp);
+			}
+
+			for(Map.Entry<String, UHCommand> subCommand : ((UHComplexCommand) command).getSubcommands().entrySet()) {
+				List<String> subHelp = subCommand.getValue().help(sender);
+				if(subHelp.size() > 0 && sender.hasPermission(((UHComplexCommand) command).getSubcommandsPermissions().get(subCommand.getKey()))) {
+					help.add(subHelp.get(0));
+				}
+			}
+
+			displayHelp(sender, help);
+		}
+		else {
+			displayHelp(sender, command.help(sender));
+		}
+	}
+
+	/**
+	 * Displays the help of a command.
+	 *
+	 * @param sender The sender; this user will receive the help.
+	 * @param help The help to display (one line per entry; raw display).
+	 */
+	public void displayHelp(CommandSender sender, List<String> help) {
+		CommandUtils.displaySeparator(sender);
+
+		sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+		sender.sendMessage(i.t("cmd.legendHelp"));
+
+		for(String line : help) {
+			sender.sendMessage(line);
+		}
+
+		CommandUtils.displaySeparator(sender);
+	}
+
+
 	@Override
 	public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
 		UHCommand uhCommand = mainCommands.get(command.getName());
@@ -113,9 +170,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 					break;
 
 				case BAD_USE:
-					for(String line : uhCommand.help(sender)) {
-						sender.sendMessage(line);
-					}
+					displayHelp(sender, uhCommand);
 					break;
 
 				case UNKNOWN:
