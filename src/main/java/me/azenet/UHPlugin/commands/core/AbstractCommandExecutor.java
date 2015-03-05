@@ -159,7 +159,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 				throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NOT_ALLOWED);
 			}
 
-			uhCommand.routeCommand(sender, CommandUtils.getSubcommandArguments(args));
+			uhCommand.routeCommand(sender, args);
 
 		} catch(CannotExecuteCommandException e) {
 			switch(e.getReason()) {
