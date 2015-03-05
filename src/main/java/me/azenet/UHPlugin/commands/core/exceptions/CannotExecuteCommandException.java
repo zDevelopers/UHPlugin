@@ -18,6 +18,9 @@
  */
 package me.azenet.UHPlugin.commands.core.exceptions;
 
+import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+
+
 /**
  * This exception is fired when a command cannot be executed, for whatever reason.
  *
@@ -34,12 +37,22 @@ public class CannotExecuteCommandException extends Exception {
 	}
 
 	private Reason reason;
+	private UHCommand origin;
+
+	public CannotExecuteCommandException(Reason reason, UHCommand origin) {
+		this.reason = reason;
+		this.origin = origin;
+	}
 
 	public CannotExecuteCommandException(Reason reason) {
-		this.reason = reason;
+		this(reason, null);
 	}
 
 	public Reason getReason() {
 		return reason;
+	}
+
+	public UHCommand getOrigin() {
+		return origin;
 	}
 }

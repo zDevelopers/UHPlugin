@@ -96,7 +96,8 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	 * Displays the help of a command.
 	 *
 	 * <p>
-	 *     If the command is a complex command, this will display the short help of all sub-commands.<br />
+	 *     If the command is a complex command, this will display the help of the complex command,
+	 *     first line excepted, ath then the short help of all sub-commands.<br />
 	 *     Else, this will display the full help for the command.
 	 * </p>
 	 *
@@ -107,9 +108,17 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 		if(command instanceof UHComplexCommand) {
 			List<String> help = new ArrayList<>();
 
+			p.getLogger().info("Displaying help of command: " + command.getClass().getAnnotation(Command.class).name());
+
+			/*try {
+				throw new Exception();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}*/
+
 			List<String> rootHelp = command.help(sender);
-			if(rootHelp != null) {
-				help.addAll(rootHelp);
+			if(rootHelp != null && rootHelp.size() >= 1) {
+				help.addAll(rootHelp.subList(1, rootHelp.size()));
 			}
 
 			for(Map.Entry<String, UHCommand> subCommand : ((UHComplexCommand) command).getSubcommands().entrySet()) {
@@ -162,16 +171,20 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 			uhCommand.routeCommand(sender, args);
 
 		} catch(CannotExecuteCommandException e) {
+
+			e.printStackTrace();
+
 			switch(e.getReason()) {
 				case NOT_ALLOWED:
 					sender.sendMessage(i.t("cmd.errorUnauthorized"));
 					break;
 
 				case ONLY_AS_A_PLAYER:
+					sender.sendMessage(i.t("cmd.errorOnlyAsAPlayer"));
 					break;
 
 				case BAD_USE:
-					displayHelp(sender, uhCommand);
+					displayHelp(sender, e.getOrigin() != null ? e.getOrigin() : uhCommand);
 					break;
 
 				case UNKNOWN:
