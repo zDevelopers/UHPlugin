@@ -25,7 +25,6 @@ import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Command(name = "uh")
@@ -50,7 +49,7 @@ public class UH extends UHComplexCommand {
 	}
 
 	@Override
-	public List<String> tabCompleteRoot(CommandSender sender, String[] args) {
+	public List<String> tabComplete(CommandSender sender, String[] args) {
 		return null;
 	}
 }
