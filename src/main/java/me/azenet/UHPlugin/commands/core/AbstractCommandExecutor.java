@@ -158,7 +158,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 				throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NOT_ALLOWED);
 			}
 
-			uhCommand.run(sender, CommandUtils.getSubcommandArguments(args));
+			uhCommand.routeCommand(sender, CommandUtils.getSubcommandArguments(args));
 
 		} catch(CannotExecuteCommandException e) {
 			switch(e.getReason()) {
@@ -184,6 +184,6 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
 		UHCommand uhCommand = mainCommands.get(command.getName());
-		return uhCommand.tabComplete(sender, args);
+		return uhCommand.routeTabComplete(sender, args);
 	}
 }

@@ -43,13 +43,13 @@ public abstract class UHCommand {
 
 	/**
 	 * The parent command.
-	 *
+	 * <p/>
 	 * <p>
-	 *     Example, for <code>/cmd foo bar</code>, the parent command of <code>bar</code>
-	 *     is the command <code>foo</code>.
+	 * Example, for <code>/cmd foo bar</code>, the parent command of <code>bar</code>
+	 * is the command <code>foo</code>.
 	 * </p>
 	 * <p>
-	 *     Without parent, <code>null</code>.
+	 * Without parent, <code>null</code>.
 	 * </p>
 	 */
 	private UHCommand parent = null;
@@ -58,7 +58,7 @@ public abstract class UHCommand {
 	 * Runs the command.
 	 *
 	 * @param sender The sender of the command.
-	 * @param args The arguments passed to the command.
+	 * @param args   The arguments passed to the command.
 	 *
 	 * @throws CannotExecuteCommandException If the command cannot be executed.
 	 */
@@ -68,7 +68,7 @@ public abstract class UHCommand {
 	 * Tab-completes this command.
 	 *
 	 * @param sender The sender.
-	 * @param args The arguments passed to the command.
+	 * @param args   The arguments passed to the command.
 	 *
 	 * @return A list of suggestions.
 	 */
@@ -76,14 +76,14 @@ public abstract class UHCommand {
 
 	/**
 	 * Returns the help of this command.
-	 *
+	 * <p/>
 	 * <p>
-	 *     The first line should describe briefly the command, as this line is displayed as
-	 *     a line of the help of the parent command.
+	 * The first line should describe briefly the command, as this line is displayed as
+	 * a line of the help of the parent command.
 	 * </p>
 	 * <p>
-	 *     The other lines will only be displayed if the {@link CannotExecuteCommandException}
-	 *     is caught by the command executor.
+	 * The other lines will only be displayed if the {@link CannotExecuteCommandException}
+	 * is caught by the command executor.
 	 * </p>
 	 *
 	 * @param sender The sender.
@@ -96,10 +96,11 @@ public abstract class UHCommand {
 	 * Sets the parent command of this command. Can be set only one time.
 	 *
 	 * @param parent The parent.
+	 *
 	 * @throws IllegalArgumentException If the parent command is already set.
 	 */
 	public void setParent(UHCommand parent) {
-		if(this.parent != null) {
+		if (this.parent != null) {
 			throw new IllegalArgumentException("The parent command is already set!");
 		}
 
@@ -113,5 +114,38 @@ public abstract class UHCommand {
 	 */
 	public UHCommand getParent() {
 		return parent;
+	}
+
+	/**
+	 * Routes the command. In this base command without any subcommand,
+	 * this will simply execute the {@link #run} method.
+	 *
+	 * <p>
+	 *     Internal use. Do not override this. Ignore this.
+	 * </p>
+	 *
+	 * @param sender The sender of the command.
+	 * @param args   The arguments passed to the command.
+	 */
+	public void routeCommand(CommandSender sender, String[] args) throws CannotExecuteCommandException {
+		run(sender, args);
+	}
+
+	/**
+	 * Routes to the autocompleter of this command. In this base command
+	 * without any subcommand, this will simply execute the {@link #tabComplete}
+	 * method.
+	 *
+	 * <p>
+	 *     Internal use. Do not override this. Ignore this.
+	 * </p>
+	 *
+	 * @param sender The sender.
+	 * @param args   The arguments passed to the command.
+	 *
+	 * @return A list of suggestions.
+	 */
+	public List<String> routeTabComplete(CommandSender sender, String[] args) {
+		return tabComplete(sender, args);
 	}
 }

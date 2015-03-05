@@ -39,40 +39,16 @@ public class UH extends UHComplexCommand {
 		i = p.getI18n();
 	}
 
-	/**
-	 * This will be executed if this command is called without argument.
-	 *
-	 * @param sender The sender.
-	 */
 	@Override
-	public void runRoot(CommandSender sender, String[] args) throws CannotExecuteCommandException {
+	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
 		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE);
 	}
 
-	/**
-	 * Returns the general help for this command.
-	 * <p/>
-	 * <p>
-	 * This help should be a one-line help, as it's displayed as the help
-	 * for the parent commands.
-	 * </p>
-	 *
-	 * @param sender The sender.
-	 *
-	 * @return The help, one line per entry in the list.
-	 */
 	@Override
 	public List<String> help(CommandSender sender) {
 		return null;
 	}
 
-	/**
-	 * The result of this method will be added to the tabComplete suggestions for this command.
-	 *
-	 * @param sender The sender.
-	 * @param args   The arguments.
-	 * @return The suggestions to add.
-	 */
 	@Override
 	public List<String> tabCompleteRoot(CommandSender sender, String[] args) {
 		return Arrays.asList("test", "test2");

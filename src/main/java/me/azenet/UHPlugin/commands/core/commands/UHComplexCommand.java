@@ -60,7 +60,7 @@ public abstract class UHComplexCommand extends UHCommand {
 	 * @param sender The sender.
 	 * @param args The arguments passed to the command.
 	 */
-	public abstract void runRoot(CommandSender sender, String[] args) throws CannotExecuteCommandException;
+	public abstract void run(CommandSender sender, String[] args) throws CannotExecuteCommandException;
 
 	/**
 	 * The result of this method will be added to the tab-complete suggestions for this command.
@@ -70,7 +70,7 @@ public abstract class UHComplexCommand extends UHCommand {
 	 *
 	 * @return The suggestions to add.
 	 */
-	public abstract List<String> tabCompleteRoot(CommandSender sender, String[] args);
+	public abstract List<String> tabComplete(CommandSender sender, String[] args);
 
 	/**
 	 * Registers a subcommand of this command.
@@ -78,8 +78,7 @@ public abstract class UHComplexCommand extends UHCommand {
 	 *
 	 * @param command The command to register.
 	 *
-	 * @throws IllegalArgumentException If the command object don't have
-	 *                                  the {@link me.azenet.UHPlugin.commands.core.annotations.Command} annotation.
+	 * @throws IllegalArgumentException If the command object don't have the {@link Command} annotation.
 	 */
 	public void registerSubCommand(UHCommand command) {
 		Command commandAnnotation = command.getClass().getAnnotation(Command.class);
@@ -129,15 +128,21 @@ public abstract class UHComplexCommand extends UHCommand {
 	}
 
 	/**
-	 * Runs the command.
+	 * Routes the command, to a sub command, with a fallback to the
+	 * {@link #run} method of this command if no subcommand matches
+	 * or if there isn't any argument passed to this command.
+	 *
+	 * <p>
+	 *     Internal use. Do not override this. Ignore this.
+	 * </p>
 	 *
 	 * @param sender The sender of the command.
 	 * @param args   The arguments passed to the command.
 	 */
 	@Override
-	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
+	public void routeCommand(CommandSender sender, String[] args) throws CannotExecuteCommandException {
 		if(args.length == 0) {
-			runRoot(sender, new String[0]);
+			run(sender, new String[0]);
 		}
 		else {
 			UHCommand cmd = subcommands.get(args[0]);
@@ -145,20 +150,23 @@ public abstract class UHComplexCommand extends UHCommand {
 				// Allowed?
 				String permission = permissions.get(args[0]);
 				if(permission == null || sender.hasPermission(permission)) {
-					cmd.run(sender, CommandUtils.getSubcommandArguments(args));
-				}
-				else {
+					cmd.routeCommand(sender, CommandUtils.getSubcommandArguments(args));
+				} else {
 					throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NOT_ALLOWED);
 				}
 			}
 			else {
-				runRoot(sender, CommandUtils.getSubcommandArguments(args));
+				run(sender, CommandUtils.getSubcommandArguments(args));
 			}
 		}
 	}
 
 	/**
-	 * Autocompletes this command.
+	 * Routes to the autocompleter of this command.
+	 *
+	 * <p>
+	 *     Internal use. Do not override this. Ignore this.
+	 * </p>
 	 *
 	 * @param sender The sender.
 	 * @param args   The arguments passed to the command.
@@ -166,7 +174,7 @@ public abstract class UHComplexCommand extends UHCommand {
 	 * @return A list of suggestions.
 	 */
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args) {
+	public List<String> routeTabComplete(CommandSender sender, String[] args) {
 		// Autocompletion for this command
 		if(args.length == 1) {
 			List<String> suggestions = new LinkedList<>();
@@ -177,7 +185,7 @@ public abstract class UHComplexCommand extends UHCommand {
 				}
 			}
 
-			suggestions.addAll(tabCompleteRoot(sender, args));
+			suggestions.addAll(tabComplete(sender, args));
 
 			return CommandUtils.getAutocompleteSuggestions(args[0], suggestions);
 		}
@@ -186,10 +194,10 @@ public abstract class UHComplexCommand extends UHCommand {
 		else {
 			UHCommand subcommand = subcommands.get(args[0]);
 			if(subcommand != null) {
-				return subcommand.tabComplete(sender, CommandUtils.getSubcommandArguments(args));
+				return subcommand.routeTabComplete(sender, CommandUtils.getSubcommandArguments(args));
 			}
 			else {
-				return tabCompleteRoot(sender, args);
+				return tabComplete(sender, args);
 			}
 		}
 	}
