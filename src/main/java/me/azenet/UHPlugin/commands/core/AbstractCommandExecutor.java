@@ -114,7 +114,8 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 
 			for(Map.Entry<String, UHCommand> subCommand : ((UHComplexCommand) command).getSubcommands().entrySet()) {
 				List<String> subHelp = subCommand.getValue().help(sender);
-				if(subHelp.size() > 0 && sender.hasPermission(((UHComplexCommand) command).getSubcommandsPermissions().get(subCommand.getKey()))) {
+				String permission = ((UHComplexCommand) command).getSubcommandsPermissions().get(subCommand.getKey());
+				if(subHelp.size() > 0 && permission != null && sender.hasPermission(permission)) {
 					help.add(subHelp.get(0));
 				}
 			}
