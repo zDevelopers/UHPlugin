@@ -116,7 +116,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 			for(Map.Entry<String, UHCommand> subCommand : ((UHComplexCommand) command).getSubcommands().entrySet()) {
 				List<String> subHelp = subCommand.getValue().help(sender);
 				String permission = ((UHComplexCommand) command).getSubcommandsPermissions().get(subCommand.getKey());
-				if(subHelp.size() > 0 && (permission == null || sender.hasPermission(permission))) {
+				if(subHelp != null && subHelp.size() > 0 && (permission == null || sender.hasPermission(permission))) {
 					help.add(subHelp.get(0));
 				}
 			}
@@ -163,9 +163,6 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 			uhCommand.routeCommand(sender, args);
 
 		} catch(CannotExecuteCommandException e) {
-
-			e.printStackTrace();
-
 			switch(e.getReason()) {
 				case NOT_ALLOWED:
 					sender.sendMessage(i.t("cmd.errorUnauthorized"));
