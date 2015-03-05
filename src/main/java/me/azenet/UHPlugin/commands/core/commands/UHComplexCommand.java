@@ -187,7 +187,10 @@ public abstract class UHComplexCommand extends UHCommand {
 
 			suggestions = CommandUtils.getAutocompleteSuggestions(args[0], suggestions);
 
-			suggestions.addAll(tabComplete(sender, args));
+			List<String> suggestionsFromThisCommand = tabComplete(sender, args);
+			if(suggestionsFromThisCommand != null) {
+				suggestions.addAll(suggestionsFromThisCommand);
+			}
 
 			return suggestions;
 		}

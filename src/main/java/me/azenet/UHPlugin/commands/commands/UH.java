@@ -51,6 +51,6 @@ public class UH extends UHComplexCommand {
 
 	@Override
 	public List<String> tabCompleteRoot(CommandSender sender, String[] args) {
-		return Arrays.asList("test", "test2");
+		return null;
 	}
 }
