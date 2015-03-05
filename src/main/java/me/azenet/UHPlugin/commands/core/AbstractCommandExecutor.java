@@ -108,14 +108,6 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 		if(command instanceof UHComplexCommand) {
 			List<String> help = new ArrayList<>();
 
-			p.getLogger().info("Displaying help of command: " + command.getClass().getAnnotation(Command.class).name());
-
-			/*try {
-				throw new Exception();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}*/
-
 			List<String> rootHelp = command.help(sender);
 			if(rootHelp != null && rootHelp.size() >= 1) {
 				help.addAll(rootHelp.subList(1, rootHelp.size()));
