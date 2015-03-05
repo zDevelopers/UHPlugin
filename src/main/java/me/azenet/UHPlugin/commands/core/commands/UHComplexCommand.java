@@ -180,7 +180,8 @@ public abstract class UHComplexCommand extends UHCommand {
 			List<String> suggestions = new LinkedList<>();
 
 			for (String command : subcommands.keySet()) {
-				if(sender.hasPermission(permissions.get(command))) {
+				String permission = permissions.get(command);
+				if(permission == null || sender.hasPermission(permission)) {
 					suggestions.add(command);
 				}
 			}
