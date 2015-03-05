@@ -71,7 +71,7 @@ keys:
         teamHelpLeaveCmd: "{cc}/leave [player] {ci}: odstrani hrace (nebo odesilatele prikazu) z jeho tymu."
 
         spawnsHelpTitle: "{aqua}------ Spawn points prikazy ------"
-        spawnsHelpAdd: "{cc}/uh spawns add {ci}: prida spawn point pro tym nebo hrace na soucasne pozici odesilatele prikazu."
+        spawnsHelpAdd: "{cc}/uh spawns add [<x> <z>]{ci}: prida spawn point pro tym nebo hrace na soucasne pozici odesilatele prikazu."
         spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: prida spawn point pro tym nebo hrace na danych souradnicich v soucasnem svete."
         spawnsHelpGenerate: "{cc}/uh spawns generate {ci}: automagicky vygeneruje spawn points. Napiste /uh spawns generat pro vice detailu."
         spawnsHelpGenerateDetailsCmdTitle: "{aqua}Prikaz"

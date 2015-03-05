@@ -71,8 +71,7 @@ keys:
         teamHelpLeaveCmd: "{cc}/leave [joueur] {ci}: retire “joueur” (ou l'envoyeur) de son équipe."
         
         spawnsHelpTitle: "{aqua}------ Commandes de gestion des points de démarrage ------"
-        spawnsHelpAdd: "{cc}/uh spawns add {ci}: ajoute un point de démarrage à la position de l'exécutant."
-        spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: ajoute un point de démarrage aux coordonnées données, dans le monde principal."
+        spawnsHelpAdd: "{cc}/uh spawns add [<x> <z>]{ci}: ajoute un point de démarrage à la position de l'exécutant ou aux coordonnées données."
         spawnsHelpGenerate: "{cc}/uh spawns generate {ci}: génère automatiquement des points de démarrage. Consultez /uh spawns generate pour plus de détails."
         spawnsHelpGenerateDetailsCmdTitle: "{aqua}Commande"
         spawnsHelpGenerateDetailsCmd: "{cc}/uh spawns generate <circular|grid|random> [taille] [distanceMin] [nombre] [xCentre] [zCentre] [monde]"

@@ -16,14 +16,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands.commands;
+package me.azenet.UHPlugin.commands.commands.uh.spawns;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.commands.uh.UHGenerateWallsCommand;
-import me.azenet.UHPlugin.commands.commands.uh.UHSpawnsCommand;
-import me.azenet.UHPlugin.commands.commands.uh.UHStartCommand;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHComplexCommand;
+import me.azenet.UHPlugin.commands.core.commands.UHCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;
@@ -31,33 +28,46 @@ import org.bukkit.command.CommandSender;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(name = "uh")
-public class UH extends UHComplexCommand {
+@Command(name = "reset")
+public class UHSpawnsResetCommand extends UHCommand {
 
-	private UHPlugin p;
-	private I18n i;
+	UHPlugin p;
+	I18n i;
 
-	public UH(UHPlugin plugin) {
+	public UHSpawnsResetCommand(UHPlugin plugin) {
 		p = plugin;
-		i = p.getI18n();
-
-		registerSubCommand(new UHStartCommand(p));
-		registerSubCommand(new UHSpawnsCommand(p));
-		registerSubCommand(new UHGenerateWallsCommand(p));
+		i = plugin.getI18n();
 	}
 
+	/**
+	 * Runs the command.
+	 *
+	 * @param sender The sender of the command.
+	 * @param args   The arguments passed to the command.
+	 *
+	 * @throws me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException If the command cannot be executed.
+	 */
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE);
+		p.getSpawnsManager().reset();
+		sender.sendMessage(i.t("spawns.reset"));
+	}
+
+	/**
+	 * Tab-completes this command.
+	 *
+	 * @param sender The sender.
+	 * @param args   The arguments passed to the command.
+	 *
+	 * @return A list of suggestions.
+	 */
+	@Override
+	public List<String> tabComplete(CommandSender sender, String[] args) {
+		return null;
 	}
 
 	@Override
 	public List<String> help(CommandSender sender) {
-		return Arrays.asList(i.t("cmd.spawnsHelpAdd"));
-	}
-
-	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args) {
-		return null;
+		return Arrays.asList(i.t("cmd.spawnsHelpReset"));
 	}
 }

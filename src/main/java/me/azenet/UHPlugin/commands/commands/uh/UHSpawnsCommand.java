@@ -16,12 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands.commands;
+package me.azenet.UHPlugin.commands.commands.uh;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.commands.uh.UHGenerateWallsCommand;
-import me.azenet.UHPlugin.commands.commands.uh.UHSpawnsCommand;
-import me.azenet.UHPlugin.commands.commands.uh.UHStartCommand;
+import me.azenet.UHPlugin.commands.commands.uh.spawns.*;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.commands.UHComplexCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
@@ -31,33 +29,51 @@ import org.bukkit.command.CommandSender;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(name = "uh")
-public class UH extends UHComplexCommand {
+@Command(name = "spawns")
+public class UHSpawnsCommand extends UHComplexCommand {
 
 	private UHPlugin p;
-	private I18n i;
+	private final I18n i;
 
-	public UH(UHPlugin plugin) {
+	public UHSpawnsCommand(UHPlugin plugin) {
 		p = plugin;
 		i = p.getI18n();
 
-		registerSubCommand(new UHStartCommand(p));
-		registerSubCommand(new UHSpawnsCommand(p));
-		registerSubCommand(new UHGenerateWallsCommand(p));
+		registerSubCommand(new UHSpawnsAddCommand(p));
+		registerSubCommand(new UHSpawnsGenerateCommand(p));
+		registerSubCommand(new UHSpawnsListCommand(p));
+		registerSubCommand(new UHSpawnsDumpCommand(p));
+		registerSubCommand(new UHSpawnsRemoveCommand(p));
+		registerSubCommand(new UHSpawnsResetCommand(p));
 	}
 
+	/**
+	 * This will be executed if this command is called without argument,
+	 * or if there isn't any sub-command executor registered.
+	 *
+	 * @param sender The sender.
+	 * @param args   The arguments passed to the command.
+	 */
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE);
+		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
+	}
+
+	/**
+	 * The result of this method will be added to the tab-complete suggestions for this command.
+	 *
+	 * @param sender The sender.
+	 * @param args   The arguments.
+	 *
+	 * @return The suggestions to add.
+	 */
+	@Override
+	public List<String> tabComplete(CommandSender sender, String[] args) {
+		return null;
 	}
 
 	@Override
 	public List<String> help(CommandSender sender) {
-		return Arrays.asList(i.t("cmd.spawnsHelpAdd"));
-	}
-
-	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args) {
-		return null;
+		return Arrays.asList(i.t("cmd.helpSpawns"), i.t("cmd.spawnsHelpTitle"));
 	}
 }

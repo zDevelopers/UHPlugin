@@ -524,11 +524,11 @@ public class UHPluginCommand implements CommandExecutor {
 			sender.sendMessage(i.t("cmd.legendHelp"));
 
 			sender.sendMessage(i.t("cmd.spawnsHelpTitle"));
-			sender.sendMessage(i.t("cmd.spawnsHelpAdd"));
-			sender.sendMessage(i.t("cmd.spawnsHelpAddXZ"));
-			sender.sendMessage(i.t("cmd.spawnsHelpGenerate"));
-			sender.sendMessage(i.t("cmd.spawnsHelpList"));
-			sender.sendMessage(i.t("cmd.spawnsHelpDump"));
+			sender.sendMessage(i.t("cmd.spawnsHelpAdd")); //ok
+			sender.sendMessage(i.t("cmd.spawnsHelpAddXZ")); //ok
+			sender.sendMessage(i.t("cmd.spawnsHelpGenerate")); //ok
+			sender.sendMessage(i.t("cmd.spawnsHelpList")); //ok
+			sender.sendMessage(i.t("cmd.spawnsHelpDump")); //ok
 			sender.sendMessage(i.t("cmd.spawnsHelpRemove"));
 			sender.sendMessage(i.t("cmd.spawnsHelpReset"));
 			displaySeparator(sender);

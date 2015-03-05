@@ -71,7 +71,7 @@ keys:
         teamHelpLeaveCmd: "{cc}/leave [player] {ci}: Remove o “jogador” (ou ele mesmo) de seu time."
         
         spawnsHelpTitle: "{aqua}------ Comandos para os Spawns ------"
-        spawnsHelpAdd: "{cc}/uh spawns add {ci}: Adiciona um local de spawn para uma equipe ou jogador, no local onde é executado."
+        spawnsHelpAdd: "{cc}/uh spawns add [<x> <z>]{ci}: Adiciona um local de spawn para uma equipe ou jogador, no local onde é executado."
         spawnsHelpAddXZ: "{cc}/uh spawns add <x> <z> {ci}: Adiciona um local de spawn para uma equipe ou jogador, nas coordenadas inseridas, no mundo padrão."
         spawnsHelpGenerate: "{cc}/uh spawns generate {ci}: Automaticamente gera locais de spawn. Digite: /uh spawns generate para mais detalhes."
         spawnsHelpGenerateDetailsCmdTitle: "{aqua}Comandos"
