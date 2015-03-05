@@ -19,6 +19,7 @@
 package me.azenet.UHPlugin.commands.commands;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.commands.commands.uh.UHStartCommand;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.commands.UHComplexCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
@@ -36,6 +37,8 @@ public class UH extends UHComplexCommand {
 	public UH(UHPlugin plugin) {
 		p = plugin;
 		i = p.getI18n();
+
+		registerSubCommand(new UHStartCommand(p));
 	}
 
 	@Override
