@@ -19,29 +19,32 @@
 package me.azenet.UHPlugin.commands.commands.uh;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.borders.exceptions.CannotGenerateWallsException;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.commands.UHCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
-import me.azenet.UHPlugin.utils.CommandUtils;
+import org.bukkit.World;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
 
 
 /**
- * This command starts the game.
+ * This command generates the walls around the map.
  *
- * Usage: /uh start [slow [go]]
+ * Usage: /uh generatewalls
  */
-@Command(name = "start")
-public class UHStartCommand extends UHCommand {
+@Command(name = "generatewalls")
+public class UHGenerateWallsCommand extends UHCommand {
 
 	private UHPlugin p;
 	private I18n i;
 
-	public UHStartCommand(UHPlugin plugin) {
+	public UHGenerateWallsCommand(UHPlugin plugin) {
 		p = plugin;
 		i = p.getI18n();
 	}
@@ -52,37 +55,39 @@ public class UHStartCommand extends UHCommand {
 	 * @param sender The sender of the command.
 	 * @param args   The arguments passed to the command.
 	 *
-	 * @throws CannotExecuteCommandException If the command cannot be executed.
+	 * @throws me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException If the command cannot be executed.
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		if(args.length == 0) { // /uh start (standard mode)
-			try {
-				p.getGameManager().start(sender, false);
-			} catch(IllegalStateException e) {
-				sender.sendMessage(i.t("start.already"));
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
+		sender.sendMessage(i.t("wall.startGen"));
 
-		else if(args.length == 1 && args[0].equalsIgnoreCase("slow")) { // /uh start slow
-			try {
-				p.getGameManager().start(sender, true);
-			} catch(IllegalStateException e) {
-				sender.sendMessage(i.t("start.already"));
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
+		World world = null;
 
-		else if(args.length == 2 && args[0].equalsIgnoreCase("slow") && args[1].equalsIgnoreCase("go")) { // /uh start slow go
-			p.getGameManager().finalizeStartSlow(sender);
+		if(sender instanceof Player) {
+			world = ((Player) sender).getWorld();
 		}
-
+		else if(sender instanceof BlockCommandSender) {
+			world = ((BlockCommandSender) sender).getBlock().getWorld();
+		}
 		else {
-			throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE);
+			world = p.getServer().getWorlds().get(0);
+			sender.sendMessage(i.t("wall.consoleDefaultWorld", world.getName()));
 		}
+
+		try {
+			p.getBorderManager().generateWalls(world);
+
+		} catch(CannotGenerateWallsException e) {
+			sender.sendMessage(i.t("wall.error"));
+			return;
+
+		} catch(Exception e) {
+			sender.sendMessage(i.t("wall.unknownError"));
+			e.printStackTrace();
+			return;
+		}
+
+		sender.sendMessage(i.t("wall.done"));
 	}
 
 	/**
@@ -95,20 +100,27 @@ public class UHStartCommand extends UHCommand {
 	 */
 	@Override
 	public List<String> tabComplete(CommandSender sender, String[] args) {
-
-		if(args.length == 1) { // /uh start <?>
-			return CommandUtils.getAutocompleteSuggestions(args[0], Arrays.asList("slow"));
-		}
-
-		else if(args.length == 2 && args[0].equalsIgnoreCase("slow")) { // /uh start slow <?>
-			return CommandUtils.getAutocompleteSuggestions(args[1], Arrays.asList("go"));
-		}
-
-		else return null;
+		return null;
 	}
 
+	/**
+	 * Returns the help of this command.
+	 * <p/>
+	 * <p>
+	 * The first line should describe briefly the command, as this line is displayed as
+	 * a line of the help of the parent command.
+	 * </p>
+	 * <p>
+	 * The other lines will only be displayed if the {@link me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException}
+	 * is caught by the command executor.
+	 * </p>
+	 *
+	 * @param sender The sender.
+	 *
+	 * @return The help. One line per entry in the list.
+	 */
 	@Override
 	public List<String> help(CommandSender sender) {
-		return Arrays.asList(i.t("cmd.helpStart"));
+		return Arrays.asList(i.t("cmd.helpWall"));
 	}
 }

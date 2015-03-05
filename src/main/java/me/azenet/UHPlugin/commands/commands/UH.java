@@ -19,6 +19,7 @@
 package me.azenet.UHPlugin.commands.commands;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.commands.commands.uh.UHGenerateWallsCommand;
 import me.azenet.UHPlugin.commands.commands.uh.UHStartCommand;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.commands.UHComplexCommand;
@@ -39,6 +40,7 @@ public class UH extends UHComplexCommand {
 		i = p.getI18n();
 
 		registerSubCommand(new UHStartCommand(p));
+		registerSubCommand(new UHGenerateWallsCommand(p));
 	}
 
 	@Override
