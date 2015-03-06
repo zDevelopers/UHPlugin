@@ -21,7 +21,7 @@
      <plugin>
        <groupId>org.apache.maven.plugins</groupId>
        <artifactId>maven-compiler-plugin</artifactId>
-       <version>2.3.2</version>
+       <version>3.1</version>
        <configuration>
          <source>1.7</source>
          <target>1.7</target>
@@ -115,19 +115,16 @@
       <artifactId>bukkit</artifactId>
       <version>1.8-R0.1-SNAPSHOT</version>
       <type>jar</type>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.wimbli.WorldBorder</groupId>
       <artifactId>WorldBorder</artifactId>
       <version>1.8.0</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.pgcraft</groupId>
       <artifactId>SpectatorPlus</artifactId>
       <version>1.9.2</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.dynmap</groupId>
@@ -144,6 +141,27 @@
       <artifactId>metrics-lite</artifactId>
       <version>R7</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.2</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>1.4.9</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito</artifactId>
+      <version>1.4.9</version>
+      <type>jar</type>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

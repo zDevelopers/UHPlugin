@@ -189,4 +189,8 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 		UHCommand uhCommand = mainCommands.get(command.getName());
 		return uhCommand.routeTabComplete(sender, args);
 	}
+
+	public Map<String, UHCommand> getMainCommands() {
+		return mainCommands;
+	}
 }

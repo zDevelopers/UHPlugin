@@ -46,7 +46,7 @@ import org.mcstats.MetricsLite;
 
 import java.io.IOException;
 
-public final class UHPlugin extends JavaPlugin {
+public class UHPlugin extends JavaPlugin {
 	
 	private UHPluginCommand commandManager = null;
 	private UHTabCompleter tabCompleter = null;
