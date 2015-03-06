@@ -32,12 +32,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Command(name = "uh")
-public class UH extends UHComplexCommand {
+public class UHRootCommand extends UHComplexCommand {
 
 	private UHPlugin p;
 	private I18n i;
 
-	public UH(UHPlugin plugin) {
+	public UHRootCommand(UHPlugin plugin) {
 		p = plugin;
 		i = p.getI18n();
 

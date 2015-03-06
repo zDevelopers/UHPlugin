@@ -19,7 +19,7 @@
 package me.azenet.UHPlugin.commands;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.commands.UH;
+import me.azenet.UHPlugin.commands.commands.UHRootCommand;
 import me.azenet.UHPlugin.commands.core.AbstractCommandExecutor;
 import me.azenet.UHPlugin.i18n.I18n;
 
@@ -35,6 +35,6 @@ public class UHCommandExecutor extends AbstractCommandExecutor {
 		p = plugin;
 		i = p.getI18n();
 
-		registerCommand(new UH(p));
+		registerCommand(new UHRootCommand(p));
 	}
 }
