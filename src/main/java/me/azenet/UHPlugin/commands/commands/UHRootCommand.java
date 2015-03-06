@@ -19,6 +19,7 @@
 package me.azenet.UHPlugin.commands.commands;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.commands.commands.uh.UHAboutCommand;
 import me.azenet.UHPlugin.commands.commands.uh.UHGenerateWallsCommand;
 import me.azenet.UHPlugin.commands.commands.uh.UHSpawnsCommand;
 import me.azenet.UHPlugin.commands.commands.uh.UHStartCommand;
@@ -44,6 +45,7 @@ public class UHRootCommand extends UHComplexCommand {
 		registerSubCommand(new UHStartCommand(p));
 		registerSubCommand(new UHSpawnsCommand(p));
 		registerSubCommand(new UHGenerateWallsCommand(p));
+		registerSubCommand(new UHAboutCommand(p));
 	}
 
 	@Override
