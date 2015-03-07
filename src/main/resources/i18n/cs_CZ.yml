@@ -60,8 +60,7 @@ keys:
         helpAbout: "{cc}/uh about {ci}: zobrazi informace o pluginu a jeho prekladu."
 
         teamHelpTitle: "{aqua}------ Tymove prikazy ------"
-        teamHelpAdd: "{cc}/uh team add <color> {ci}: prida tym dane barvy."
-        teamHelpAddName: "{cc}/uh team add <color> <name ...> {ci}: prida pojmenovany tym daneho jmena a barvy."
+        teamHelpAdd: "{cc}/uh team add <color> [<name ...>] {ci}: prida tym dane barvy."
         teamHelpRemove: "{cc}/uh team remove <name ...> {ci}: odstrani tym"
         teamHelpJoin: "{cc}/uh team join <player> <teamName ...> {ci}: prida hrace do daneho tymu. Jmeno tymu je jeho barva, pripadne konkretni jmeno."
         teamHelpLeave: "{cc}/uh team leave <player> {ci}: odstrani hrace z jeho tymu."

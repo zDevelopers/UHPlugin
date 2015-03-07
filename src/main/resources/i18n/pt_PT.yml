@@ -60,8 +60,7 @@ keys:
         helpAbout: "{cc}/uh about {ci}: informacao sobre o Plugin e as Traducoes."
         
         teamHelpTitle: "{aqua}------ Comandos para Equipas ------"
-        teamHelpAdd: "{cc}/uh team add <cor> {ci}: adiciona uma equipa com uma determinada cor."
-        teamHelpAddName: "{cc}/uh team add <cor> <nome ...> {ci}: adiciona uma equipa com um determinado nome e cor. Podem ser usados espacos."
+        teamHelpAdd: "{cc}/uh team add <cor> [<nome ...>]{ci}: adiciona uma equipa com uma determinada cor."
         teamHelpRemove: "{cc}/uh team remove <nome ...> {ci}: elimina uma equipa"
         teamHelpJoin: "{cc}/uh team join <jogador> <equipa ...>{ci}: adiciona um jogador a uma equipa. O nome da equipa pode ser a cor ou o seu determinado nome."
         teamHelpLeave: "{cc}/uh team leave <jogador> {ci}: retira um jogador da sua equipa."
