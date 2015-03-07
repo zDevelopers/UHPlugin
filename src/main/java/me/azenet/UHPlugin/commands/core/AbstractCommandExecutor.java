@@ -49,12 +49,12 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	/**
 	 * Stores the main commands, i.e. the commands registered in the {@code plugin.yml} file.
 	 */
-	private Map<String, UHCommand> mainCommands = new HashMap<>();
+	private Map<String, UHCommand> mainCommands = new LinkedHashMap<>();
 
 	/**
 	 * Stores the base permissions of these commands.
 	 */
-	private Map<String, String> mainCommandsPermissions = new HashMap<>();
+	private Map<String, String> mainCommandsPermissions = new LinkedHashMap<>();
 
 	public AbstractCommandExecutor(UHPlugin plugin) {
 		p = plugin;

@@ -23,10 +23,7 @@ import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException
 import me.azenet.UHPlugin.utils.CommandUtils;
 import org.bukkit.command.CommandSender;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -46,12 +43,12 @@ public abstract class UHComplexCommand extends UHCommand {
 	/**
 	 * Stores the sub-commands of this complex command.
 	 */
-	private Map<String, UHCommand> subcommands = new HashMap<>();
+	private Map<String, UHCommand> subcommands = new LinkedHashMap<>();
 
 	/**
 	 * Stores the permissions of the sub-commands.
 	 */
-	private Map<String, String> permissions = new HashMap<>();
+	private Map<String, String> permissions = new LinkedHashMap<>();
 
 	/**
 	 * This will be executed if this command is called without argument,
