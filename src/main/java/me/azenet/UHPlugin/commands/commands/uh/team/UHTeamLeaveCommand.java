@@ -53,14 +53,14 @@ public class UHTeamLeaveCommand extends UHCommand {
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
 		if(args.length == 1) { // /uh team leave <player>
 
-			OfflinePlayer player = p.getServer().getOfflinePlayer(args[2]);
+			OfflinePlayer player = p.getServer().getOfflinePlayer(args[0]);
 
 			if(player == null) {
-				sender.sendMessage(i.t("team.removeplayer.disconnected", args[2]));
+				sender.sendMessage(i.t("team.removeplayer.disconnected", args[0]));
 			}
 			else {
 				p.getTeamManager().removePlayerFromTeam(player);
-				sender.sendMessage(i.t("team.removeplayer.success", args[2]));
+				sender.sendMessage(i.t("team.removeplayer.success", args[0]));
 			}
 		}
 		else {
