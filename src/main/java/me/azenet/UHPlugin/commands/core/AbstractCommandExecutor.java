@@ -74,7 +74,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	public void registerCommand(UHCommand command) {
 		Command commandAnnotation = command.getClass().getAnnotation(Command.class);
 		if(commandAnnotation == null) {
-			throw new IllegalArgumentException("Cannot register a command without @Command annotation.");
+			throw new IllegalArgumentException("Cannot register a command without @Command annotation. Class: " + command.getClass().getCanonicalName() + ".");
 		}
 
 		mainCommands.put(commandAnnotation.name(), command);

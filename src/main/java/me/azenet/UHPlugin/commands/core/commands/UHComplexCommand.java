@@ -84,7 +84,7 @@ public abstract class UHComplexCommand extends UHCommand {
 		Command commandAnnotation = command.getClass().getAnnotation(Command.class);
 
 		if(commandAnnotation == null) {
-			throw new IllegalArgumentException("Cannot register a command without the @Command annotation.");
+			throw new IllegalArgumentException("Cannot register a command without @Command annotation. Class: " + command.getClass().getCanonicalName() + ".");
 		}
 
 		command.setParent(this);
