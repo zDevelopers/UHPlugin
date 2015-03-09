@@ -20,7 +20,7 @@ package me.azenet.UHPlugin.commands.commands.uh.team;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.teams.UHTeam;
@@ -32,7 +32,7 @@ import java.util.List;
 
 
 @Command(name = "list")
-public class UHTeamListCommand extends UHCommand {
+public class UHTeamListCommand extends AbstractCommand {
 
 	UHPlugin p;
 	I18n i;

@@ -20,7 +20,7 @@ package me.azenet.UHPlugin.commands.commands.uh.spawns;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.Location;
@@ -30,7 +30,7 @@ import org.bukkit.command.CommandSender;
 import java.util.*;
 
 @Command(name = "dump")
-public class UHSpawnsDumpCommand extends UHCommand {
+public class UHSpawnsDumpCommand extends AbstractCommand {
 
 	UHPlugin p;
 	I18n i;

@@ -20,7 +20,7 @@ package me.azenet.UHPlugin.commands.core;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.utils.CommandUtils;
@@ -48,7 +48,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	/**
 	 * Stores the main commands, i.e. the commands registered in the {@code plugin.yml} file.
 	 */
-	private Map<String, UHCommand> mainCommands = new LinkedHashMap<>();
+	private Map<String, AbstractCommand> mainCommands = new LinkedHashMap<>();
 
 	/**
 	 * Stores the base permissions of these commands.
@@ -70,7 +70,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	 * @throws IllegalArgumentException If the command class doesn't have the @Command
 	 *                                  annotation.
 	 */
-	public void registerCommand(UHCommand command) {
+	public void registerCommand(AbstractCommand command) {
 		Command commandAnnotation = command.getClass().getAnnotation(Command.class);
 		if(commandAnnotation == null) {
 			throw new IllegalArgumentException("Cannot register a command without @Command annotation. Class: " + command.getClass().getCanonicalName() + ".");
@@ -104,7 +104,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	 * @param command The command.
 	 * @param isAnError {@code true} if this is displayed due to an error.
 	 */
-	public void displayHelp(CommandSender sender, UHCommand command, boolean isAnError) {
+	public void displayHelp(CommandSender sender, AbstractCommand command, boolean isAnError) {
 		if(command.hasSubCommands()) {
 			List<String> help = new ArrayList<>();
 
@@ -113,7 +113,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 				help.addAll(rootHelp.subList(1, rootHelp.size()));
 			}
 
-			for(Map.Entry<String, UHCommand> subCommand : command.getSubcommands().entrySet()) {
+			for(Map.Entry<String, AbstractCommand> subCommand : command.getSubcommands().entrySet()) {
 				List<String> subHelp = subCommand.getValue().help(sender);
 				String permission = command.getSubcommandsPermissions().get(subCommand.getKey());
 				if(subHelp != null && subHelp.size() > 0 && (permission == null || sender.hasPermission(permission))) {
@@ -159,8 +159,8 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
-		UHCommand uhCommand = mainCommands.get(command.getName());
-		if(uhCommand == null) {
+		AbstractCommand abstractCommand = mainCommands.get(command.getName());
+		if(abstractCommand == null) {
 			return false;
 		}
 
@@ -170,7 +170,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 				throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NOT_ALLOWED);
 			}
 
-			uhCommand.routeCommand(sender, args);
+			abstractCommand.routeCommand(sender, args);
 
 		} catch(CannotExecuteCommandException e) {
 			switch(e.getReason()) {
@@ -184,7 +184,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 
 				case BAD_USE:
 				case NEED_DOC:
-					displayHelp(sender, e.getOrigin() != null ? e.getOrigin() : uhCommand, e.getReason() == CannotExecuteCommandException.Reason.BAD_USE);
+					displayHelp(sender, e.getOrigin() != null ? e.getOrigin() : abstractCommand, e.getReason() == CannotExecuteCommandException.Reason.BAD_USE);
 					break;
 
 				case UNKNOWN:
@@ -197,11 +197,11 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
-		UHCommand uhCommand = mainCommands.get(command.getName());
-		return uhCommand.routeTabComplete(sender, args);
+		AbstractCommand abstractCommand = mainCommands.get(command.getName());
+		return abstractCommand.routeTabComplete(sender, args);
 	}
 
-	public Map<String, UHCommand> getMainCommands() {
+	public Map<String, AbstractCommand> getMainCommands() {
 		return mainCommands;
 	}
 }

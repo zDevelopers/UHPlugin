@@ -19,7 +19,7 @@
 package me.azenet.UHPlugin.utils;
 
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -46,7 +46,7 @@ public class CommandUtils {
 	 *
 	 * @return {@code true} if the sender is allowed to execute the command.
 	 */
-	public static boolean isAllowed(CommandSender sender, UHCommand command) {
+	public static boolean isAllowed(CommandSender sender, AbstractCommand command) {
 		if(command.getParent() == null) { // root command
 			Command commandAnnotation = command.getClass().getAnnotation(Command.class);
 			if(commandAnnotation != null) {
@@ -62,7 +62,7 @@ public class CommandUtils {
 			}
 		}
 		else {
-			return sender.hasPermission(((UHCommand) command.getParent()).getSubcommandsPermissions().get(command.getClass().getAnnotation(Command.class).name()));
+			return sender.hasPermission(((AbstractCommand) command.getParent()).getSubcommandsPermissions().get(command.getClass().getAnnotation(Command.class).name()));
 		}
 
 		return false; // should never happens.

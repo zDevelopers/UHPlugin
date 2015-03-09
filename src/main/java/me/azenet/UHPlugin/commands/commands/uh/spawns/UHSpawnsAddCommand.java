@@ -20,7 +20,7 @@ package me.azenet.UHPlugin.commands.commands.uh.spawns;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.World;
@@ -33,7 +33,7 @@ import java.util.List;
 
 
 @Command(name = "add")
-public class UHSpawnsAddCommand extends UHCommand {
+public class UHSpawnsAddCommand extends AbstractCommand {
 
 	UHPlugin p;
 	I18n i;

@@ -21,7 +21,6 @@ package me.azenet.UHPlugin.commands.core.commands;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.utils.CommandUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
@@ -32,19 +31,19 @@ import java.util.*;
  *
  * <p>
  *     Add the subcommands with the {@link #registerSubCommand} method in the constructor.<br />
- *     A subcommand is simply an {@link me.azenet.UHPlugin.commands.core.commands.UHCommand} (or
- *     {@link UHCommand}) object.
+ *     A subcommand is simply an {@link AbstractCommand} (or
+ *     {@link AbstractCommand}) object.
  * </p>
  *
  * @version 1.0
  * @author Amaury Carrade
  */
-public abstract class UHCommand {
+public abstract class AbstractCommand {
 
 	/**
 	 * Stores the sub-commands of this complex command.
 	 */
-	private Map<String, UHCommand> subcommands = new LinkedHashMap<>();
+	private Map<String, AbstractCommand> subcommands = new LinkedHashMap<>();
 
 	/**
 	 * Stores the permissions of the sub-commands.
@@ -62,7 +61,7 @@ public abstract class UHCommand {
 	 *     Without parent (root command), {@code null}.
 	 * </p>
 	 */
-	private UHCommand parent = null;
+	private AbstractCommand parent = null;
 
 	/**
 	 * Runs the command.
@@ -110,7 +109,7 @@ public abstract class UHCommand {
 	 *
 	 * @throws IllegalArgumentException If the parent command is already set.
 	 */
-	public void setParent(UHCommand parent) {
+	public void setParent(AbstractCommand parent) {
 		if (this.parent != null) {
 			throw new IllegalArgumentException("The parent command is already set!");
 		}
@@ -123,7 +122,7 @@ public abstract class UHCommand {
 	 *
 	 * @return The parent; {@code null} if this command is a root one.
 	 */
-	public UHCommand getParent() {
+	public AbstractCommand getParent() {
 		return parent;
 	}
 
@@ -136,7 +135,7 @@ public abstract class UHCommand {
 	 *
 	 * @throws IllegalArgumentException If the command object don't have the {@link Command} annotation.
 	 */
-	public void registerSubCommand(UHCommand command) {
+	public void registerSubCommand(AbstractCommand command) {
 		Command commandAnnotation = command.getClass().getAnnotation(Command.class);
 
 		if(commandAnnotation == null) {
@@ -158,7 +157,7 @@ public abstract class UHCommand {
 
 		if(commandAnnotation.inheritPermission() || commandAnnotation.useParentPermission()) {
 
-			UHCommand parent = this;
+			AbstractCommand parent = this;
 			if(commandAnnotation.useParentPermission()) {
 				// We starts at the parent to get the parent's permission.
 				parent = this.getParent();
@@ -200,7 +199,7 @@ public abstract class UHCommand {
 			run(sender, new String[0]);
 		}
 		else {
-			UHCommand cmd = subcommands.get(args[0]);
+			AbstractCommand cmd = subcommands.get(args[0]);
 			if(cmd != null) {
 				// Allowed?
 				String permission = permissions.get(args[0]);
@@ -252,7 +251,7 @@ public abstract class UHCommand {
 
 		// Autocompletion for a subcommand
 		else {
-			UHCommand subcommand = subcommands.get(args[0]);
+			AbstractCommand subcommand = subcommands.get(args[0]);
 			if(subcommand != null) {
 				return subcommand.routeTabComplete(sender, CommandUtils.getSubcommandArguments(args));
 			}
@@ -271,7 +270,7 @@ public abstract class UHCommand {
 	 *
 	 * @return the subcommands.
 	 */
-	public Map<String, UHCommand> getSubcommands() {
+	public Map<String, AbstractCommand> getSubcommands() {
 		return subcommands;
 	}
 

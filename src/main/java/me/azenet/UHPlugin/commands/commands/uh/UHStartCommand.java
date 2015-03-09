@@ -20,7 +20,7 @@ package me.azenet.UHPlugin.commands.commands.uh;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.utils.CommandUtils;
@@ -36,7 +36,7 @@ import java.util.List;
  * Usage: /uh start [slow [go]]
  */
 @Command(name = "start")
-public class UHStartCommand extends UHCommand {
+public class UHStartCommand extends AbstractCommand {
 
 	private UHPlugin p;
 	private I18n i;

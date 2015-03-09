@@ -22,7 +22,7 @@ import junit.framework.Assert;
 import me.azenet.UHPlugin.TestsUtils;
 import me.azenet.UHPlugin.commands.core.AbstractCommandExecutor;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -41,7 +41,7 @@ public class TestCommandsAnnotation {
 
 		// Tests
 		for(AbstractCommandExecutor executor : executors) {
-			for(UHCommand command : executor.getMainCommands().values()) {
+			for(AbstractCommand command : executor.getMainCommands().values()) {
 				testCommandAnnotationIsPresentEverywhere(command);
 			}
 		}
@@ -52,10 +52,10 @@ public class TestCommandsAnnotation {
 	 *
 	 * @param command The command to start with.
 	 */
-	private void testCommandAnnotationIsPresentEverywhere(UHCommand command) {
+	private void testCommandAnnotationIsPresentEverywhere(AbstractCommand command) {
 		Assert.assertTrue("Missing command annotation for the class " + command.getClass().getCanonicalName(), command.getClass().isAnnotationPresent(Command.class));
 
-		for(UHCommand subCommand : command.getSubcommands().values()) {
+		for(AbstractCommand subCommand : command.getSubcommands().values()) {
 			testCommandAnnotationIsPresentEverywhere(subCommand);
 		}
 	}

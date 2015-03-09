@@ -18,7 +18,7 @@
  */
 package me.azenet.UHPlugin.commands.core.exceptions;
 
-import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 
 
 /**
@@ -62,9 +62,9 @@ public class CannotExecuteCommandException extends Exception {
 	}
 
 	private Reason reason;
-	private UHCommand origin;
+	private AbstractCommand origin;
 
-	public CannotExecuteCommandException(Reason reason, UHCommand origin) {
+	public CannotExecuteCommandException(Reason reason, AbstractCommand origin) {
 		this.reason = reason;
 		this.origin = origin;
 	}
@@ -77,7 +77,7 @@ public class CannotExecuteCommandException extends Exception {
 		return reason;
 	}
 
-	public UHCommand getOrigin() {
+	public AbstractCommand getOrigin() {
 		return origin;
 	}
 }

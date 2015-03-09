@@ -21,7 +21,7 @@ package me.azenet.UHPlugin.commands.commands;
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.commands.uh.*;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;
@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Command(name = "uh")
-public class UHRootCommand extends UHCommand {
+public class UHRootCommand extends AbstractCommand {
 
 	private UHPlugin p;
 	private I18n i;

@@ -20,7 +20,7 @@ package me.azenet.UHPlugin.commands.commands.uh.spawns;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.spawns.Generator;
@@ -38,7 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Command(name = "generate")
-public class UHSpawnsGenerateCommand extends UHCommand {
+public class UHSpawnsGenerateCommand extends AbstractCommand {
 
 	private UHPlugin p;
 	private final I18n i;

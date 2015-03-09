@@ -21,7 +21,7 @@ package me.azenet.UHPlugin.commands.commands.uh;
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.borders.exceptions.CannotGenerateWallsException;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.World;
@@ -39,7 +39,7 @@ import java.util.List;
  * Usage: /uh generatewalls
  */
 @Command(name = "generatewalls")
-public class UHGenerateWallsCommand extends UHCommand {
+public class UHGenerateWallsCommand extends AbstractCommand {
 
 	private UHPlugin p;
 	private I18n i;
