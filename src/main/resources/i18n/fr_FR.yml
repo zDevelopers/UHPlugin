@@ -27,7 +27,9 @@ keys:
         errorLoad: "{ce}Une erreur est survenue, consultez la console pour plus de détails. Il s'agit probablement d'un bug."
         errorUnknown: "{ce}Cette commande n'existe pas. Tapez /uh pour la liste des commandes."
         errorUnauthorized: "{ce}Vous n'avez pas le droit d'exécuter cette commande."
-        
+        errorBadUse: "{ce}{bold}Vous ne pouvez exécuter cette commande ainsi."
+        errorBadUseHelpAbove: "{ce}L'aide est rappelée ci-dessus."
+
         titleHelp: "{yellow}{0} - version {1}"
         legendHelp: "{ci}Légende: {cc}/uh command <requis> [optionnel=valeur par défaut] <espaces autorisées ...>{ci}."
         helpNextPage: "{gray}Page suivante : /uh {0}"

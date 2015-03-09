@@ -103,8 +103,9 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	 *
 	 * @param sender The sender.
 	 * @param command The command.
+	 * @param isAnError {@code true} if this is displayed due to an error.
 	 */
-	public void displayHelp(CommandSender sender, UHCommand command) {
+	public void displayHelp(CommandSender sender, UHCommand command, boolean isAnError) {
 		if(command instanceof UHComplexCommand) {
 			List<String> help = new ArrayList<>();
 
@@ -121,10 +122,10 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 				}
 			}
 
-			displayHelp(sender, help);
+			displayHelp(sender, help, isAnError);
 		}
 		else {
-			displayHelp(sender, command.help(sender));
+			displayHelp(sender, command.help(sender), isAnError);
 		}
 	}
 
@@ -133,18 +134,27 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	 *
 	 * @param sender The sender; this user will receive the help.
 	 * @param help The help to display (one line per entry; raw display).
+	 * @param isAnError {@code true} if this is displayed due to an error.
 	 */
-	public void displayHelp(CommandSender sender, List<String> help) {
+	public void displayHelp(CommandSender sender, List<String> help, boolean isAnError) {
 		CommandUtils.displaySeparator(sender);
 
-		sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
-		sender.sendMessage(i.t("cmd.legendHelp"));
+		if(!isAnError) {
+			sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+			sender.sendMessage(i.t("cmd.legendHelp"));
+		}
 
 		for(String line : help) {
 			sender.sendMessage(line);
 		}
 
 		CommandUtils.displaySeparator(sender);
+
+		if(isAnError) {
+			sender.sendMessage(i.t("cmd.errorBadUse"));
+			sender.sendMessage(i.t("cmd.errorBadUseHelpAbove"));
+			CommandUtils.displaySeparator(sender);
+		}
 	}
 
 
@@ -173,7 +183,8 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 					break;
 
 				case BAD_USE:
-					displayHelp(sender, e.getOrigin() != null ? e.getOrigin() : uhCommand);
+				case NEED_DOC:
+					displayHelp(sender, e.getOrigin() != null ? e.getOrigin() : uhCommand, e.getReason() == CannotExecuteCommandException.Reason.BAD_USE);
 					break;
 
 				case UNKNOWN:

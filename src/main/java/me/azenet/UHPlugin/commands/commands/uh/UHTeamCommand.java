@@ -63,7 +63,7 @@ public class UHTeamCommand extends UHComplexCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
+		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
 	}
 
 	/**
@@ -79,22 +79,6 @@ public class UHTeamCommand extends UHComplexCommand {
 		return null;
 	}
 
-	/**
-	 * Returns the help of this command.
-	 * <p/>
-	 * <p>
-	 * The first line should describe briefly the command, as this line is displayed as
-	 * a line of the help of the parent command.
-	 * </p>
-	 * <p>
-	 * The other lines will only be displayed if the {@link me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException}
-	 * is caught by the command executor.
-	 * </p>
-	 *
-	 * @param sender The sender.
-	 *
-	 * @return The help. One line per entry in the list.
-	 */
 	@Override
 	public List<String> help(CommandSender sender) {
 		return Arrays.asList(i.t("cmd.helpTeam"),

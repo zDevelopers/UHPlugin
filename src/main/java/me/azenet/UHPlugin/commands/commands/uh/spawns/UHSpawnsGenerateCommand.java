@@ -60,7 +60,7 @@ public class UHSpawnsGenerateCommand extends UHCommand {
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
 
 		if(args.length == 0) { // Help
-			throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
+			throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
 		}
 
 		String generationMethod = args[0];

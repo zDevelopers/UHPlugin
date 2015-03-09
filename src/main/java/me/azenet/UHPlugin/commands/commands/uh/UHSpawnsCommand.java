@@ -56,7 +56,7 @@ public class UHSpawnsCommand extends UHComplexCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
+		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
 	}
 
 	/**

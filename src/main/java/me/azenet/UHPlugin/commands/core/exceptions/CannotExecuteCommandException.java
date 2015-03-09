@@ -30,9 +30,34 @@ import me.azenet.UHPlugin.commands.core.commands.UHCommand;
 public class CannotExecuteCommandException extends Exception {
 
 	public enum Reason {
+		/**
+		 * Use this if the player is not allowed to execute the command.
+		 */
 		NOT_ALLOWED,
+
+		/**
+		 * Use this if the command can only be executed as a player, and
+		 * the sender is not a player.
+		 */
 		ONLY_AS_A_PLAYER,
+
+		/**
+		 * Use this if the sender used the command badly.
+		 *
+		 * <p>
+		 *     This will display the documentation and an error message.
+		 * </p>
+		 */
 		BAD_USE,
+
+		/**
+		 * Use this to have the documentation of the command displayed.
+		 */
+		NEED_DOC,
+
+		/**
+		 * Use this in other cases.
+		 */
 		UNKNOWN
 	}
 

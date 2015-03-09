@@ -27,7 +27,9 @@ keys:
         errorLoad: "{ce}An error occurred, see console for details. This is probably a bug."
         errorUnknown: "{ce}This subcommand does not exists. See /uh for the available commands."
         errorUnauthorized: "{ce}You are not allowed to execute this command."
-        
+        errorBadUse: "{ce}{bold}You cannot execute this command this way."
+        errorBadUseHelpAbove: "{ce}The help is displayed above."
+
         titleHelp: "{yellow}{0} - version {1}"
         legendHelp: "{ci}Legend: {cc}/uh command <required> [optional=default] <spaces allowed ...>{ci}."
         helpNextPage: "{gray}Next page: /uh {0}"

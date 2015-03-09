@@ -48,7 +48,7 @@ public class UHRootCommand extends UHComplexCommand {
 
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE);
+		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
 	}
 
 	@Override
