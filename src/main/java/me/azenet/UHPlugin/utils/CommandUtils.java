@@ -20,7 +20,6 @@ package me.azenet.UHPlugin.utils;
 
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.commands.UHCommand;
-import me.azenet.UHPlugin.commands.core.commands.UHComplexCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -63,7 +62,7 @@ public class CommandUtils {
 			}
 		}
 		else {
-			return sender.hasPermission(((UHComplexCommand) command.getParent()).getSubcommandsPermissions().get(command.getClass().getAnnotation(Command.class).name()));
+			return sender.hasPermission(((UHCommand) command.getParent()).getSubcommandsPermissions().get(command.getClass().getAnnotation(Command.class).name()));
 		}
 
 		return false; // should never happens.

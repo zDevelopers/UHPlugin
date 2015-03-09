@@ -53,6 +53,7 @@ public class UHSpawnsAddCommand extends UHCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
+
 		// World?
 		World world;
 		if(sender instanceof Player) {

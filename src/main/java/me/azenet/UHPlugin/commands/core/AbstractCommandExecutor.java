@@ -20,9 +20,8 @@ package me.azenet.UHPlugin.commands.core;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.UHComplexCommand;
-import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.commands.core.commands.UHCommand;
+import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.utils.CommandUtils;
 import org.bukkit.command.CommandSender;
@@ -106,7 +105,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	 * @param isAnError {@code true} if this is displayed due to an error.
 	 */
 	public void displayHelp(CommandSender sender, UHCommand command, boolean isAnError) {
-		if(command instanceof UHComplexCommand) {
+		if(command.hasSubCommands()) {
 			List<String> help = new ArrayList<>();
 
 			List<String> rootHelp = command.help(sender);
@@ -114,9 +113,9 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 				help.addAll(rootHelp.subList(1, rootHelp.size()));
 			}
 
-			for(Map.Entry<String, UHCommand> subCommand : ((UHComplexCommand) command).getSubcommands().entrySet()) {
+			for(Map.Entry<String, UHCommand> subCommand : command.getSubcommands().entrySet()) {
 				List<String> subHelp = subCommand.getValue().help(sender);
-				String permission = ((UHComplexCommand) command).getSubcommandsPermissions().get(subCommand.getKey());
+				String permission = command.getSubcommandsPermissions().get(subCommand.getKey());
 				if(subHelp != null && subHelp.size() > 0 && (permission == null || sender.hasPermission(permission))) {
 					help.add(subHelp.get(0));
 				}
@@ -164,6 +163,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 		if(uhCommand == null) {
 			return false;
 		}
+
 		try {
 			String permission = mainCommandsPermissions.get(command.getName());
 			if(permission != null && !sender.hasPermission(permission)) {
