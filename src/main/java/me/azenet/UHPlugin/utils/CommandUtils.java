@@ -62,7 +62,7 @@ public class CommandUtils {
 			}
 		}
 		else {
-			return sender.hasPermission(((AbstractCommand) command.getParent()).getSubcommandsPermissions().get(command.getClass().getAnnotation(Command.class).name()));
+			return sender.hasPermission(command.getParent().getSubcommandsPermissions().get(command.getClass().getAnnotation(Command.class).name()));
 		}
 
 		return false; // should never happens.
