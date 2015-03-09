@@ -22,7 +22,7 @@ import junit.framework.Assert;
 import me.azenet.UHPlugin.TestsUtils;
 import me.azenet.UHPlugin.commands.core.AbstractCommandExecutor;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
+import me.azenet.UHPlugin.commands.core.AbstractCommand;
 import org.junit.Test;
 
 import java.util.HashSet;

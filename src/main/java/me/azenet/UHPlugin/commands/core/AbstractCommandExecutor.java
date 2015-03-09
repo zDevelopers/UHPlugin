@@ -20,7 +20,6 @@ package me.azenet.UHPlugin.commands.core;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.utils.CommandUtils;

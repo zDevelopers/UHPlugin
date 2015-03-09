@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands.core.commands;
+package me.azenet.UHPlugin.commands.core;
 
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;

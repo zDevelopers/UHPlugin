@@ -19,7 +19,7 @@
 package me.azenet.UHPlugin.utils;
 
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
+import me.azenet.UHPlugin.commands.core.AbstractCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

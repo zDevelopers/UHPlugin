@@ -20,7 +20,7 @@ package me.azenet.UHPlugin.commands.commands.uh.team;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
+import me.azenet.UHPlugin.commands.core.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;

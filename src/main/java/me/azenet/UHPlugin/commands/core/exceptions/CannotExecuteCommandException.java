@@ -18,7 +18,7 @@
  */
 package me.azenet.UHPlugin.commands.core.exceptions;
 
-import me.azenet.UHPlugin.commands.core.commands.AbstractCommand;
+import me.azenet.UHPlugin.commands.core.AbstractCommand;
 
 
 /**
