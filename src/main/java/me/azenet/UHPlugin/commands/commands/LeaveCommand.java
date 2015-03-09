@@ -16,31 +16,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands;
+
+package me.azenet.UHPlugin.commands.commands;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.commands.JoinCommand;
-import me.azenet.UHPlugin.commands.commands.LeaveCommand;
-import me.azenet.UHPlugin.commands.commands.UHRootCommand;
-import me.azenet.UHPlugin.commands.core.AbstractCommandExecutor;
-import me.azenet.UHPlugin.i18n.I18n;
+import me.azenet.UHPlugin.commands.commands.uh.team.UHTeamLeaveCommand;
+import me.azenet.UHPlugin.commands.core.annotations.Command;
 
 
-public class UHCommandExecutor extends AbstractCommandExecutor {
+// The permissions are too complex, we need to manage them manually.
+@Command(name = "leave", noPermission = true, inheritPermission = false)
+public class LeaveCommand extends UHTeamLeaveCommand {
 
-	private UHPlugin p;
-	private I18n i;
-
-	public UHCommandExecutor(UHPlugin plugin) {
+	public LeaveCommand(UHPlugin plugin) {
 		super(plugin);
-
-		p = plugin;
-		i = p.getI18n();
-
-
-		registerCommand(new UHRootCommand(p));  // /uh
-
-		registerCommand(new JoinCommand(p));    // /join
-		registerCommand(new LeaveCommand(p));   // /leave
 	}
+
 }

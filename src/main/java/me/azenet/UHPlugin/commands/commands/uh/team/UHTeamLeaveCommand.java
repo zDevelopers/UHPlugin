@@ -25,6 +25,7 @@ import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,20 +52,43 @@ public class UHTeamLeaveCommand extends AbstractCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		if(args.length == 1) { // /uh team leave <player>
 
-			OfflinePlayer player = p.getServer().getOfflinePlayer(args[0]);
+		OfflinePlayer target;
 
-			if(player == null) {
-				sender.sendMessage(i.t("team.removeplayer.disconnected", args[0]));
+		if(args.length == 0) {
+			if(sender instanceof Player) {
+				target = (OfflinePlayer) sender;
 			}
 			else {
-				p.getTeamManager().removePlayerFromTeam(player);
-				sender.sendMessage(i.t("team.removeplayer.success", args[0]));
+				throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
 			}
 		}
+		else { // /uh team leave <player>
+			target = p.getServer().getOfflinePlayer(args[0]);
+		}
+
+
+		if(target == null) {
+			sender.sendMessage(i.t("team.removeplayer.disconnected", args[0])); // args.length >= 1 here.
+		}
+
 		else {
-			throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
+
+			// Permissions check
+			if (sender.hasPermission("uh.team.leave")
+					|| (target.equals(sender) && sender.hasPermission("uh.player.leave.self"))
+					|| (!target.equals(sender) && sender.hasPermission("uh.player.leave.others"))) {
+
+
+				p.getTeamManager().removePlayerFromTeam(target);
+
+				if(!target.equals(sender)) {
+					sender.sendMessage(i.t("team.removeplayer.success", target.getName()));
+				}
+
+			} else {
+				throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NOT_ALLOWED);
+			}
 		}
 	}
 

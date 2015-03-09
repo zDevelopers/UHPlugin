@@ -29,12 +29,17 @@ import me.azenet.UHPlugin.utils.CommandUtils;
 import me.azenet.UHPlugin.utils.UHUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * This class is used for both /uh team join and /join commands.
+ *
+ * @see {@link me.azenet.UHPlugin.commands.commands.JoinCommand}.
+ */
 @Command(name = "join")
 public class UHTeamJoinCommand extends AbstractCommand {
 
@@ -56,31 +61,56 @@ public class UHTeamJoinCommand extends AbstractCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		if(args.length >= 2) { // /uh team join <player> <teamName>
 
-			OfflinePlayer player = p.getServer().getOfflinePlayer(args[0]);
-			String teamName = UHUtils.getStringFromCommandArguments(args, 1);
+		if(args.length == 0) {
+			throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
+		}
 
-			if(player == null || !player.isOnline()) {
-				sender.sendMessage(i.t("team.addplayer.disconnected", args[0], teamName));
+		UHTeam  team;
+		Player  target = null;
+		Boolean self   = null;
+
+		// /... join <team>?
+		team = p.getTeamManager().getTeam(UHUtils.getStringFromCommandArguments(args, 0));
+		if(team != null) {
+			if(sender instanceof Player) {
+				target = (Player) sender;
+				self = true;
 			}
 			else {
-				try {
-					p.getTeamManager().addPlayerToTeam(teamName, player);
-				} catch(IllegalArgumentException e) {
-					sender.sendMessage(i.t("team.addplayer.doesNotExists"));
-					return;
-				}
-				catch(RuntimeException e) {
-					sender.sendMessage(i.t("team.addplayer.full", teamName));
-					return;
-				}
-				UHTeam team = p.getTeamManager().getTeam(teamName);
-				sender.sendMessage(i.t("team.addplayer.success", args[0], team.getDisplayName()));
+				throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
 			}
 		}
+		else if(args.length >= 2) {
+			// /... join <player> <team>?
+			team = p.getTeamManager().getTeam(UHUtils.getStringFromCommandArguments(args, 1));
+			if(team != null) {
+				target = p.getServer().getPlayer(args[0]);
+				self = false;
+				if(target == null) {
+					sender.sendMessage(i.t("team.addplayer.disconnected", args[0], team.getName()));
+					return;
+				}
+			}
+		}
+
+		if(team == null) {
+			sender.sendMessage(i.t("team.addplayer.doesNotExists"));
+		}
 		else {
-			throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
+			if(sender.hasPermission("uh.team.join")
+					|| (self  && sender.hasPermission("uh.player.join.self"))
+					|| (!self && sender.hasPermission("uh.player.join.others"))) {
+
+				team.addPlayer(target);
+
+				if(!sender.equals(target)) {
+					sender.sendMessage(i.t("team.addplayer.success", target.getName(), team.getName()));
+				}
+			}
+			else {
+				throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NOT_ALLOWED, this);
+			}
 		}
 	}
 
