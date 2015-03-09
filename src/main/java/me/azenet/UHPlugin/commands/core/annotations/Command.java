@@ -59,10 +59,6 @@ public @interface Command {
 	 *     If this is left empty, or not set, the permission will be the name of the command, excepted
 	 *     if {@link #useParentPermission} is set to true.
 	 * </p>
-	 * <p>
-	 *     If this is set to {@code null}, no permission is needed to access the command (excepted the
-	 *     permission to access the parent command).
-	 * </p>
 	 */
 	public String permission() default "";
 
@@ -86,4 +82,10 @@ public @interface Command {
 	 * </p>
 	 */
 	public boolean useParentPermission() default false;
+
+	/**
+	 * If this is set to true, no permissions check will be done when someone
+	 * executes this command.
+	 */
+	public boolean noPermission() default false;
 }

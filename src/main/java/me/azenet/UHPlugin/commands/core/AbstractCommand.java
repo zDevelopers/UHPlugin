@@ -151,7 +151,7 @@ public abstract class AbstractCommand {
 			permission = commandAnnotation.name();
 		}
 
-		if(permission != null && permission.isEmpty()) {
+		if(permission != null && permission.isEmpty() || commandAnnotation.noPermission()) {
 			permission = null;
 		}
 
