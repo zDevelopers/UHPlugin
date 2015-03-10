@@ -7,7 +7,7 @@ Development builds available for each commit [on our Jenkins server](http://jenk
 This plugin is [available on BukkitDev](http://dev.bukkit.org/bukkit-plugins/uhc/).  
 Please note, this README reflects the last development version. Some features listed here may not be in the version published on BukkitDev.
 
-[![Build Status](https://travis-ci.org/AmauryCarrade/UHPlugin.svg?branch=dev)](https://travis-ci.org/AmauryCarrade/UHPlugin)
+[![Build Status](https://travis-ci.org/AmauryCarrade/UHPlugin.svg?branch=dev)](https://travis-ci.org/AmauryCarrade/UHPlugin) — [![Build Status](http://jenkins.carrade.eu/buildStatus/icon?job=UltraHardcoreReloaded)](http://jenkins.carrade.eu/job/UltraHardcoreReloaded/)
 
 1. [Features](#features)
    1. [Teams](#manages-teams)
