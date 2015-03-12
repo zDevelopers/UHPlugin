@@ -112,17 +112,43 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 		if(command.hasSubCommands()) {
 			List<String> help = new ArrayList<>();
 
+			// Root help: all the help defined, first line excepted.
 			List<String> rootHelp = command.help(sender);
 			if(rootHelp != null && rootHelp.size() >= 1) {
 				help.addAll(rootHelp.subList(1, rootHelp.size()));
 			}
 
+			// Then, the help of the sub-commands sorted by category.
+			// We first organize the commands per-category.
+			Map<String, List<String>> helpPerCategory = new LinkedHashMap<>();
+
 			for(Map.Entry<String, AbstractCommand> subCommand : command.getSubcommands().entrySet()) {
 				List<String> subHelp = subCommand.getValue().help(sender);
 				String permission = command.getSubcommandsPermissions().get(subCommand.getKey());
+				String category = command.getSubcommandsCategories().get(subCommand.getKey());
+
+				if(category == null) category = "";
+
 				if(subHelp != null && subHelp.size() > 0 && (permission == null || sender.hasPermission(permission))) {
-					help.add(subHelp.get(0));
+					String subHelpToAdd = subHelp.get(0);
+
+					List<String> helpForThisCategory = helpPerCategory.get(category);
+					if(helpForThisCategory != null) {
+						helpForThisCategory.add(subHelpToAdd);
+					}
+					else {
+						helpForThisCategory = new LinkedList<>();
+						helpForThisCategory.add(subHelpToAdd);
+						helpPerCategory.put(category, helpForThisCategory);
+					}
 				}
+			}
+
+			// After, we add to the help to display these commands, with the titles of the
+			// categories.
+			for(Map.Entry<String, List<String>> category : helpPerCategory.entrySet()) {
+				help.add(category.getKey());
+				help.addAll(category.getValue());
 			}
 
 			displayHelp(sender, help, isAnError);
@@ -148,7 +174,8 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 		}
 
 		for(String line : help) {
-			sender.sendMessage(line);
+			if(line != null && !line.isEmpty())
+				sender.sendMessage(line);
 		}
 
 		CommandUtils.displaySeparator(sender);

@@ -34,6 +34,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Command {
+
 	/**
 	 * The name of the command, needed to type in the console/chat to execute
 	 * the (sub-)command.

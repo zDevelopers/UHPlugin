@@ -18,13 +18,34 @@
  */
 package me.azenet.UHPlugin;
 
+import me.azenet.UHPlugin.i18n.I18n;
+import org.mockito.Matchers;
 import org.powermock.api.mockito.PowerMockito;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class TestsUtils {
 
-	public static UHPlugin getMookedPluginInstance() {
-		return PowerMockito.mock(UHPlugin.class);
+	public static I18n getMockedI18n() {
+		I18n mockedI18n = PowerMockito.mock(I18n.class);
+
+		PowerMockito.when(mockedI18n.t(Matchers.anyString())).thenReturn("");
+
+		return mockedI18n;
+	}
+
+	public static UHPlugin getMockedPluginInstance() {
+		UHPlugin mockedPlugin = mock(UHPlugin.class);
+		PowerMockito.mockStatic(UHPlugin.class);
+
+		I18n i18n = getMockedI18n();
+
+		when(mockedPlugin.getI18n()).thenReturn(i18n);
+		when(UHPlugin.i()).thenReturn(i18n);
+		
+		return mockedPlugin;
 	}
 
 }

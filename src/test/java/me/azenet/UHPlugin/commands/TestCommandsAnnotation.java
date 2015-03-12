@@ -20,15 +20,21 @@ package me.azenet.UHPlugin.commands;
 
 import junit.framework.Assert;
 import me.azenet.UHPlugin.TestsUtils;
+import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.commands.core.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.AbstractCommandExecutor;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
-import me.azenet.UHPlugin.commands.core.AbstractCommand;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.HashSet;
 import java.util.Set;
 
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(UHPlugin.class)
 public class TestCommandsAnnotation {
 
 	@Test
@@ -36,7 +42,7 @@ public class TestCommandsAnnotation {
 
 		// Data
 		Set<AbstractCommandExecutor> executors = new HashSet<>();
-		executors.add(new UHCommandExecutor(TestsUtils.getMookedPluginInstance()));
+		executors.add(new UHCommandExecutor(TestsUtils.getMockedPluginInstance()));
 
 
 		// Tests

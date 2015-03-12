@@ -72,7 +72,7 @@ public class UHPlugin extends JavaPlugin {
 	private UHDynmapIntegration dynmapintegration = null;
 	private UHProtocolLibIntegrationWrapper protocollibintegrationwrapper = null;
 	
-	private I18n i18n = null;
+	private static I18n i18n;
 
 	@Override
 	public void onEnable() {
@@ -332,6 +332,15 @@ public class UHPlugin extends JavaPlugin {
 	 * @return
 	 */
 	public I18n getI18n() {
+		return i18n;
+	}
+
+	/**
+	 * Returns the internationalization manager
+	 *
+	 * @return
+	 */
+	public static I18n i() {
 		return i18n;
 	}
 }

@@ -27,12 +27,11 @@ import java.util.*;
 
 
 /**
- * Represents a command with subcommands.
+ * Represents a command with subcommands (or not).
  *
  * <p>
  *     Add the subcommands with the {@link #registerSubCommand} method in the constructor.<br />
- *     A subcommand is simply an {@link AbstractCommand} (or
- *     {@link AbstractCommand}) object.
+ *     A subcommand is simply an {@link AbstractCommand} object.
  * </p>
  *
  * @version 1.0
@@ -42,13 +41,24 @@ public abstract class AbstractCommand {
 
 	/**
 	 * Stores the sub-commands of this complex command.
+	 *
+	 * <p>name → command.</p>
 	 */
 	private Map<String, AbstractCommand> subcommands = new LinkedHashMap<>();
 
 	/**
 	 * Stores the permissions of the sub-commands.
+	 *
+	 * <p>name → permission.</p>
 	 */
 	private Map<String, String> permissions = new LinkedHashMap<>();
+
+	/**
+	 * Stores the sub-commands per category.
+	 *
+	 * <p>name → category.</p>
+	 */
+	private Map<String, String> subcommandsCategories = new HashMap<>();
 
 	/**
 	 * The parent command.
@@ -62,6 +72,7 @@ public abstract class AbstractCommand {
 	 * </p>
 	 */
 	private AbstractCommand parent = null;
+
 
 	/**
 	 * Runs the command.
@@ -100,6 +111,29 @@ public abstract class AbstractCommand {
 	 * @return The help. One line per entry in the list.
 	 */
 	public abstract List<String> help(CommandSender sender);
+
+	/**
+	 * Returns the title of the category of the command.
+	 *
+	 * <p>
+	 *     This category will be displayed as a title in the commands' list.<br />
+	 *     If the value defined is empty, or null, or the method not overwritten,
+	 *     the command will be not categorized.
+	 * </p>
+	 *
+	 * <p>
+	 *     This category must be unique in the sub-commands of a command.
+	 * </p>
+	 *
+	 * <p>
+	 *     You should either use a category for all subcommands of a command, either no categories
+	 *     at all for these commands. Else, the non-categorized commands will be displayed somewhere,
+	 *     and this place may vary.
+	 * </p>
+	 */
+	public String getCategory() {
+		return null;
+	}
 
 
 	/**
@@ -180,6 +214,11 @@ public abstract class AbstractCommand {
 		// Let's save these permissions and executors.
 		subcommands.put(name, command);
 		permissions.put(name, permission);
+
+		// Categories
+		if(command.getCategory() != null && !command.getCategory().isEmpty()) {
+			subcommandsCategories.put(name, command.getCategory());
+		}
 	}
 
 	/**
@@ -292,5 +331,16 @@ public abstract class AbstractCommand {
 	 */
 	public boolean hasSubCommands() {
 		return subcommands.size() > 0;
+	}
+
+	/**
+	 * Returns the categories of the subcommands.
+	 *
+	 * <p>
+	 *     Map: name of the command → title of the category of this command.
+	 * </p>
+	 */
+	public Map<String, String> getSubcommandsCategories() {
+		return subcommandsCategories;
 	}
 }
