@@ -19,6 +19,7 @@
 package me.azenet.UHPlugin.commands.commands.uh;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.commands.commands.categories.Category;
 import me.azenet.UHPlugin.commands.commands.uh.team.*;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
@@ -85,5 +86,10 @@ public class UHTeamCommand extends AbstractCommand {
 				i.t("cmd.teamHelpTitle"),
 				i.t("cmd.teamHelpJoinCmd"),
 				i.t("cmd.teamHelpLeaveCmd"));
+	}
+
+	@Override
+	public String getCategory() {
+		return Category.GAME.getTitle();
 	}
 }

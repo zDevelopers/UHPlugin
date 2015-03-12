@@ -19,8 +19,9 @@
 package me.azenet.UHPlugin.commands.commands.uh;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.core.annotations.Command;
+import me.azenet.UHPlugin.commands.commands.categories.Category;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
+import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.utils.CommandUtils;
@@ -134,5 +135,10 @@ public class UHAboutCommand extends AbstractCommand {
 	@Override
 	public List<String> help(CommandSender sender) {
 		return Arrays.asList(i.t("cmd.helpAbout"));
+	}
+
+	@Override
+	public String getCategory() {
+		return Category.MISC.getTitle();
 	}
 }

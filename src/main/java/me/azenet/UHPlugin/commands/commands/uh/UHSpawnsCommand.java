@@ -19,6 +19,7 @@
 package me.azenet.UHPlugin.commands.commands.uh;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.commands.commands.categories.Category;
 import me.azenet.UHPlugin.commands.commands.uh.spawns.*;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
@@ -75,5 +76,10 @@ public class UHSpawnsCommand extends AbstractCommand {
 	@Override
 	public List<String> help(CommandSender sender) {
 		return Arrays.asList(i.t("cmd.helpSpawns"), i.t("cmd.spawnsHelpTitle"));
+	}
+
+	@Override
+	public String getCategory() {
+		return Category.GAME.getTitle();
 	}
 }

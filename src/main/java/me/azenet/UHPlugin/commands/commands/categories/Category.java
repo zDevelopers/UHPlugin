@@ -16,36 +16,26 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin;
+package me.azenet.UHPlugin.commands.commands.categories;
 
-import me.azenet.UHPlugin.i18n.I18n;
-import org.mockito.Matchers;
-import org.powermock.api.mockito.PowerMockito;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import me.azenet.UHPlugin.UHPlugin;
 
 
-public class TestsUtils {
+public enum Category {
 
-	public static I18n getMockedI18n() {
-		I18n mockedI18n = PowerMockito.mock(I18n.class);
+	GAME(UHPlugin.i().t("cmd.titleGameCmd")),
+	BUGS(UHPlugin.i().t("cmd.titleBugCmd")),
+	MISC(UHPlugin.i().t("cmd.titleMiscCmd"));
 
-		PowerMockito.when(mockedI18n.t(Matchers.anyString())).thenReturn("");
 
-		return mockedI18n;
+	private String title;
+
+	private Category(String title) {
+		this.title = title;
 	}
 
-	public static UHPlugin getMockedPluginInstance() {
-		UHPlugin mockedPlugin = mock(UHPlugin.class);
-		PowerMockito.mockStatic(UHPlugin.class);
 
-		I18n i18n = getMockedI18n();
-
-		when(mockedPlugin.getI18n()).thenReturn(i18n);
-		when(UHPlugin.i()).thenReturn(i18n);
-
-		return mockedPlugin;
+	public String getTitle() {
+		return title;
 	}
-
 }
