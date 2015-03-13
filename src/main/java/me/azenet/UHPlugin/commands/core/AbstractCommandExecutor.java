@@ -110,7 +110,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 	 */
 	public void displayHelp(CommandSender sender, AbstractCommand command, boolean isAnError) {
 		if(command.hasSubCommands()) {
-			List<String> help = new ArrayList<>();
+			List<String> help = new LinkedList<>();
 
 			// Root help: all the help defined, first line excepted.
 			List<String> rootHelp = command.help(sender);
@@ -120,25 +120,24 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 
 			// Then, the help of the sub-commands sorted by category.
 			// We first organize the commands per-category.
-			Map<String, List<String>> helpPerCategory = new LinkedHashMap<>();
+			Map<String, LinkedList<String>> helpPerCategory = new LinkedHashMap<>();
 
 			for(Map.Entry<String, AbstractCommand> subCommand : command.getSubcommands().entrySet()) {
-				List<String> subHelp = subCommand.getValue().help(sender);
+				List<String> subHelp = subCommand.getValue().onListHelp(sender);
 				String permission = command.getSubcommandsPermissions().get(subCommand.getKey());
 				String category = command.getSubcommandsCategories().get(subCommand.getKey());
 
 				if(category == null) category = "";
 
 				if(subHelp != null && subHelp.size() > 0 && (permission == null || sender.hasPermission(permission))) {
-					String subHelpToAdd = subHelp.get(0);
 
-					List<String> helpForThisCategory = helpPerCategory.get(category);
+					LinkedList<String> helpForThisCategory = helpPerCategory.get(category);
 					if(helpForThisCategory != null) {
-						helpForThisCategory.add(subHelpToAdd);
+						helpForThisCategory.addAll(subHelp);
 					}
 					else {
 						helpForThisCategory = new LinkedList<>();
-						helpForThisCategory.add(subHelpToAdd);
+						helpForThisCategory.addAll(subHelp);
 						helpPerCategory.put(category, helpForThisCategory);
 					}
 				}
@@ -146,7 +145,7 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 
 			// After, we add to the help to display these commands, with the titles of the
 			// categories.
-			for(Map.Entry<String, List<String>> category : helpPerCategory.entrySet()) {
+			for(Map.Entry<String, LinkedList<String>> category : helpPerCategory.entrySet()) {
 				help.add(category.getKey());
 				help.addAll(category.getValue());
 			}
@@ -154,7 +153,10 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 			displayHelp(sender, help, isAnError);
 		}
 		else {
-			displayHelp(sender, command.help(sender), isAnError);
+			List<String> help = command.help(sender);
+			if(help == null) help = command.onListHelp(sender);
+
+			displayHelp(sender, help, isAnError);
 		}
 	}
 
@@ -173,9 +175,11 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 			sender.sendMessage(i.t("cmd.legendHelp"));
 		}
 
-		for(String line : help) {
-			if(line != null && !line.isEmpty())
-				sender.sendMessage(line);
+		if(help != null) {
+			for (String line : help) {
+				if (line != null && !line.isEmpty())
+					sender.sendMessage(line);
+			}
 		}
 
 		CommandUtils.displaySeparator(sender);

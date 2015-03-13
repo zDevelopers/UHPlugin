@@ -96,21 +96,35 @@ public abstract class AbstractCommand {
 
 	/**
 	 * Returns the help of this command.
-	 * <p/>
+	 *
 	 * <p>
-	 * The first line should describe briefly the command, as this line is displayed as
-	 * a line of the help of the parent command.
+	 *     These lines will only be displayed if the {@link CannotExecuteCommandException} is
+	 *     caught by the command executor, with the reasons {@code BAD_USE} or {@code NEED_DOC}.
 	 * </p>
 	 * <p>
-	 * The other lines will only be displayed if the {@link CannotExecuteCommandException}
-	 * is caught by the command executor.
+	 *     If this returns null, fallsback to {@link #onListHelp}.
 	 * </p>
+	 *
 	 *
 	 * @param sender The sender.
 	 *
 	 * @return The help. One line per entry in the list.
 	 */
 	public abstract List<String> help(CommandSender sender);
+
+	/**
+	 * Returns the help displayed in the list of the commands, in the help
+	 * of the parent command.
+	 *
+	 * <p>
+	 *     You should return one single line here, except for special cases.
+	 * </p>
+	 *
+	 * @param sender The sender.
+	 *
+	 * @return The help. One line displayed per entry in the list.
+	 */
+	public abstract List<String> onListHelp(CommandSender sender);
 
 	/**
 	 * Returns the title of the category of the command.
