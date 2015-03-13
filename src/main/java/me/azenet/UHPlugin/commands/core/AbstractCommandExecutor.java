@@ -112,10 +112,10 @@ public abstract class AbstractCommandExecutor implements TabExecutor {
 		if(command.hasSubCommands()) {
 			List<String> help = new LinkedList<>();
 
-			// Root help: all the help defined, first line excepted.
+			// Root help
 			List<String> rootHelp = command.help(sender);
-			if(rootHelp != null && rootHelp.size() >= 1) {
-				help.addAll(rootHelp.subList(1, rootHelp.size()));
+			if(rootHelp != null) {
+				help.addAll(rootHelp);
 			}
 
 			// Then, the help of the sub-commands sorted by category.
