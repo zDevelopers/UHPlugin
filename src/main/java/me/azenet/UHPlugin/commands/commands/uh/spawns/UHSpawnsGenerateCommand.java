@@ -38,7 +38,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Command(name = "generate")
-public class UHSpawnsGenerateCommand extends AbstractCommand {
+public class UHSpawnsGenerateCommand extends AbstractCommand
+{
 
 	private UHPlugin p;
 	private final I18n i;
@@ -224,7 +225,7 @@ public class UHSpawnsGenerateCommand extends AbstractCommand {
 	 */
 	@Override
 	public List<String> help(CommandSender sender) {
-		return Arrays.asList(i.t("cmd.spawnsHelpGenerate"),
+		return Arrays.asList(
 				i.t("cmd.spawnsHelpGenerateDetailsCmdTitle"),
 				i.t("cmd.spawnsHelpGenerateDetailsCmd"),
 				i.t("cmd.spawnsHelpGenerateDetailsShapesTitle"),
@@ -236,6 +237,12 @@ public class UHSpawnsGenerateCommand extends AbstractCommand {
 				i.t("cmd.spawnsHelpGenerateDetailsArgsDistanceMin"),
 				i.t("cmd.spawnsHelpGenerateDetailsArgsCount"),
 				i.t("cmd.spawnsHelpGenerateDetailsArgsCenter"),
-				i.t("cmd.spawnsHelpGenerateDetailsArgsWorld"));
+				i.t("cmd.spawnsHelpGenerateDetailsArgsWorld")
+		);
+	}
+
+	@Override
+	public List<String> onListHelp(CommandSender sender) {
+		return Arrays.asList(i.t("cmd.spawnsHelpGenerate"));
 	}
 }

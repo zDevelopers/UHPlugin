@@ -33,7 +33,7 @@ keys:
         helpNextPage: "{gray}Dalsi stranka: /uh {0}"
 
         titleGameCmd: "{aqua}------ Prikazy ke hre ------"
-        helpStart: "{cc}/uh start [slow] {ci}: spusti hru."
+        helpStart: "{cc}/uh start {ci}: spusti hru."
         helpStartSlow: "{cc}/uh start slow {ci}: pomalu spusti hru ve dvou krocich (vhodne pro mensi servery)."
         helpShift: "{cc}/uh shift {ci}: posune epizodu."
         helpTeam: "{cc}/uh team {ci}: nastavuje tymy. Napiste /uh team pro vice detailu."

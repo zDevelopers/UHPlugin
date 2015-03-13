@@ -20,14 +20,13 @@ package me.azenet.UHPlugin.commands.commands.uh.team;
 
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
+import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import me.azenet.UHPlugin.teams.UHTeam;
 import me.azenet.UHPlugin.utils.CommandUtils;
 import me.azenet.UHPlugin.utils.UHUtils;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -140,6 +139,11 @@ public class UHTeamJoinCommand extends AbstractCommand {
 
 	@Override
 	public List<String> help(CommandSender sender) {
+		return null;
+	}
+
+	@Override
+	public List<String> onListHelp(CommandSender sender) {
 		return Arrays.asList(i.t("cmd.teamHelpJoin"));
 	}
 }

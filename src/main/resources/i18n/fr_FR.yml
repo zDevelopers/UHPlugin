@@ -35,8 +35,8 @@ keys:
         helpNextPage: "{gray}Page suivante : /uh {0}"
         
         titleGameCmd: "{aqua}------ Commandes liées au jeu ------"
-        helpStart: "{cc}/uh start [slow] {ci}: lance le jeu. Avec {cc}slow{ci}, lance le jeu en deux étapes (téléportation puis début) pour les plus petits serveurs."
-        helpStartSlow: "{cc}/uh start slow {ci}: lance le jeu doucement, en deux étapes, pour les plus petits serveurs."
+        helpStart: "{cc}/uh start {ci}: lance le jeu."
+        helpStartSlow: "{cc}/uh start slow {ci}: lance le jeu doucement, en deux étapes (téléportation puis début), pour les plus petits serveurs."
         helpShift: "{cc}/uh shift {ci}: passe un épisode."
         helpTeam: "{cc}/uh team {ci}: gère les équipes. Exécutez /uh team pour plus de détails."
         helpSpawns: "{cc}/uh spawns {ci}: gère les points de démarrage. Exécutez /uh spawns pour plus de détails."

@@ -82,10 +82,16 @@ public class UHTeamCommand extends AbstractCommand {
 
 	@Override
 	public List<String> help(CommandSender sender) {
-		return Arrays.asList(i.t("cmd.helpTeam"),
+		return Arrays.asList(
 				i.t("cmd.teamHelpTitle"),
 				i.t("cmd.teamHelpJoinCmd"),
-				i.t("cmd.teamHelpLeaveCmd"));
+				i.t("cmd.teamHelpLeaveCmd")
+		);
+	}
+
+	@Override
+	public List<String> onListHelp(CommandSender sender) {
+		return Arrays.asList(i.t("cmd.helpTeam"));
 	}
 
 	@Override

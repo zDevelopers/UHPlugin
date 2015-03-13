@@ -99,6 +99,11 @@ public class UHSpawnsRemoveCommand extends AbstractCommand {
 
 	@Override
 	public List<String> help(CommandSender sender) {
+		return null;
+	}
+
+	@Override
+	public List<String> onListHelp(CommandSender sender) {
 		return Arrays.asList(i.t("cmd.spawnsHelpRemove"));
 	}
 }

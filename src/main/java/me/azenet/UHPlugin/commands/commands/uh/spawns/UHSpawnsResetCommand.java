@@ -19,8 +19,8 @@
 package me.azenet.UHPlugin.commands.commands.uh.spawns;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
+import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;
@@ -68,6 +68,11 @@ public class UHSpawnsResetCommand extends AbstractCommand {
 
 	@Override
 	public List<String> help(CommandSender sender) {
+		return null;
+	}
+
+	@Override
+	public List<String> onListHelp(CommandSender sender) {
 		return Arrays.asList(i.t("cmd.spawnsHelpReset"));
 	}
 }

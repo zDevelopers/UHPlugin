@@ -116,4 +116,9 @@ public class UHSpawnsAddCommand extends AbstractCommand {
 	public List<String> help(CommandSender sender) {
 		return Arrays.asList(i.t("cmd.spawnsHelpAdd"));
 	}
+
+	@Override
+	public List<String> onListHelp(CommandSender sender) {
+		return null;
+	}
 }

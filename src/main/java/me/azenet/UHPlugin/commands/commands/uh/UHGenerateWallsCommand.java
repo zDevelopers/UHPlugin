@@ -21,8 +21,8 @@ package me.azenet.UHPlugin.commands.commands.uh;
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.borders.exceptions.CannotGenerateWallsException;
 import me.azenet.UHPlugin.commands.commands.categories.Category;
-import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
+import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.World;
@@ -104,24 +104,13 @@ public class UHGenerateWallsCommand extends AbstractCommand {
 		return null;
 	}
 
-	/**
-	 * Returns the help of this command.
-	 * <p/>
-	 * <p>
-	 * The first line should describe briefly the command, as this line is displayed as
-	 * a line of the help of the parent command.
-	 * </p>
-	 * <p>
-	 * The other lines will only be displayed if the {@link me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException}
-	 * is caught by the command executor.
-	 * </p>
-	 *
-	 * @param sender The sender.
-	 *
-	 * @return The help. One line per entry in the list.
-	 */
 	@Override
 	public List<String> help(CommandSender sender) {
+		return null;
+	}
+
+	@Override
+	public List<String> onListHelp(CommandSender sender) {
 		return Arrays.asList(i.t("cmd.helpWall"));
 	}
 

@@ -35,8 +35,8 @@ keys:
         helpNextPage: "{gray}Next page: /uh {0}"
         
         titleGameCmd: "{aqua}------ Game-related commands ------"
-        helpStart: "{cc}/uh start [slow] {ci}: launches the game. With {cc}slow{ci}, launches the game slowly (teleportation then beginning of the game), for smaller servers. "
-        helpStartSlow: "{cc}/uh start slow {ci}: launches the game slowly, in two steps, for smaller servers."
+        helpStart: "{cc}/uh start {ci}: launches the game."
+        helpStartSlow: "{cc}/uh start slow {ci}: launches the game slowly, in two steps (teleportation then beginning of the game), for smaller servers."
         helpShift: "{cc}/uh shift {ci}: shifts an episode."
         helpTeam: "{cc}/uh team {ci}: manages the teams. Execute /uh team for details."
         helpSpawns: "{cc}/uh spawns {ci}: manages the spawn points. Execute /uh spawns for details."

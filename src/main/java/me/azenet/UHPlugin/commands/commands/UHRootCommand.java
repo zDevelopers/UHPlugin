@@ -62,6 +62,11 @@ public class UHRootCommand extends AbstractCommand {
 	}
 
 	@Override
+	public List<String> onListHelp(CommandSender sender) {
+		return null;
+	}
+
+	@Override
 	public List<String> tabComplete(CommandSender sender, String[] args) {
 		return null;
 	}

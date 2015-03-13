@@ -132,8 +132,6 @@ public class UHSpectatorsCommand extends AbstractCommand {
 	public List<String> help(CommandSender sender) {
 		List<String> help = new ArrayList<>();
 
-		help.add(i.t("cmd.helpSpec"));
-
 		help.add(i.t("cmd.specHelpTitle"));
 
 		if(!p.getSpectatorPlusIntegration().isSPIntegrationEnabled()) {
@@ -145,5 +143,10 @@ public class UHSpectatorsCommand extends AbstractCommand {
 		help.add(i.t("cmd.specHelpList"));
 
 		return help;
+	}
+
+	@Override
+	public List<String> onListHelp(CommandSender sender) {
+		return Arrays.asList(i.t("cmd.helpSpec"));
 	}
 }
