@@ -33,7 +33,7 @@ keys:
         helpNextPage: "{gray}Próxima Página: /uh {0}"
         
         titleGameCmd: "{aqua}------ Comandos do jogo ------"
-        helpStart: "{cc}/uh start {ci}: Inicia o jogo."
+        helpStart: "{cc}/uh start [slow] {ci}: Inicia o jogo."
         helpStartSlow: "{cc}/uh start slow {ci}: Inicia o jogo no modo lento, em 2 etapas, para servidores pequenos."
         helpShift: "{cc}/uh shift {ci}: Passa para o próximo episódio."
         helpTeam: "{cc}/uh team {ci}: Edita as equipes. Digite /uh team para detalhes."

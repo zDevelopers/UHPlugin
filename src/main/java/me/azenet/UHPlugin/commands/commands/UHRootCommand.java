@@ -39,10 +39,13 @@ public class UHRootCommand extends AbstractCommand {
 		p = plugin;
 		i = p.getI18n();
 
+		// Game
 		registerSubCommand(new UHStartCommand(p));
 		registerSubCommand(new UHSpawnsCommand(p));
 		registerSubCommand(new UHTeamCommand(p));
 		registerSubCommand(new UHGenerateWallsCommand(p));
+
+		// Misc
 		registerSubCommand(new UHAboutCommand(p));
 	}
 
