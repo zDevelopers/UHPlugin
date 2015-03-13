@@ -19,6 +19,7 @@
 package me.azenet.UHPlugin.commands.commands.uh;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.commands.commands.categories.Category;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
@@ -148,5 +149,10 @@ public class UHSpectatorsCommand extends AbstractCommand {
 	@Override
 	public List<String> onListHelp(CommandSender sender) {
 		return Arrays.asList(i.t("cmd.helpSpec"));
+	}
+
+	@Override
+	public String getCategory() {
+		return Category.GAME.getTitle();
 	}
 }

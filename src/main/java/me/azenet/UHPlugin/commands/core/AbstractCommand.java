@@ -58,7 +58,7 @@ public abstract class AbstractCommand {
 	 *
 	 * <p>name → category.</p>
 	 */
-	private Map<String, String> subcommandsCategories = new HashMap<>();
+	private Map<String, String> subcommandsCategories = new LinkedHashMap<>();
 
 	/**
 	 * The parent command.

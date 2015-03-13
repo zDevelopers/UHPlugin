@@ -19,6 +19,7 @@
 package me.azenet.UHPlugin.commands.commands.uh;
 
 import me.azenet.UHPlugin.UHPlugin;
+import me.azenet.UHPlugin.commands.commands.categories.Category;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
@@ -69,5 +70,10 @@ public class UHShiftCommand extends AbstractCommand {
 	@Override
 	public List<String> onListHelp(CommandSender sender) {
 		return Arrays.asList(UHPlugin.i().t("cmd.helpShift"));
+	}
+
+	@Override
+	public String getCategory() {
+		return Category.GAME.getTitle();
 	}
 }
