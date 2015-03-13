@@ -103,7 +103,7 @@ keys:
         freezeHelpNone: "{cc}/uh freeze none{ci}: Descongela o jogo todo. Você DEVE executar este comando para que o tempo do jogo volte a contar."
         
         borderHelpTitle: "{aqua}------ Comandos para área do jogo ------"
-        borderHelpCurrent: "{cc}/uh border current{ci}: Informa o tamanho atual do mapa."
+        borderHelpCurrent: "{cc}/uh border get{ci}: Informa o tamanho atual do mapa."
         borderHelpSet: "{cc}/uh border set <tamanho> [force]{ci}: Muda o tamanho do mapa. Se o comando force não for indicado, a operação será cancelada se houver algum jogador fora da nova área."
         borderHelpWarning: "{cc}/uh border warning <tamanhofuturo> [minutos para a redução]{ci}: Informa todos os jogadores que estão fora da futura área. É apenas um AVISO, nada acontece."
         borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: Cancela os avisos da mudança na área de jogo."

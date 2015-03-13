@@ -103,7 +103,7 @@ keys:
         freezeHelpNone: "{cc}/uh freeze none{ci}: descongela/retoma o Jogo Todo. PRECISAS de fazer este comando para Retomar o tempo do Jogo."
         
         borderHelpTitle: "{aqua}------ Comandos para Limites ------"
-        borderHelpCurrent: "{cc}/uh border current{ci}: diz o tamanho dos limites atuais."
+        borderHelpCurrent: "{cc}/uh border get{ci}: diz o tamanho dos limites atuais."
         borderHelpSet: "{cc}/uh border set <tamanho> [force]{ci}: muda o limite das paredes. Se nao for indicado o force, a operacao sera cancelada se tiver algum jogador fora dos novos limites."
         borderHelpWarning: "{cc}/uh border warning <tamanhofuturo> [minutos para a reducao]{ci}: avisa todos os jogadores fora dos futuros limites. E so um AVISO, nao acontece nada."
         borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: cancela os avisos do /uh border warning."

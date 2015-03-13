@@ -104,7 +104,7 @@ keys:
         freezeHelpNone: "{cc}/uh freeze none{ci}: unfreezes the entire game. You NEED to execute this in order to relaunch the timer."
         
         borderHelpTitle: "{aqua}------ Border commands ------"
-        borderHelpCurrent: "{cc}/uh border current{ci}: returns the current size of the map."
+        borderHelpCurrent: "{cc}/uh border get{ci}: returns the current size of the map."
         borderHelpSet: "{cc}/uh border set <diameter> [force]{ci}: changes the size of the map. If force is not given, the operation will be canceled if there is a player outside the border."
         borderHelpWarning: "{cc}/uh border warning <futureDiameter> [minutesBeforeReduction]{ci}: warns all players outside the given future diameter. It's just a notice, nothing else."
         borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: cancels a previously-set warning."

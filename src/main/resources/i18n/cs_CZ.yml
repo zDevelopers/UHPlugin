@@ -103,7 +103,7 @@ keys:
         freezeHelpNone: "{cc}/uh freeze none{ci}: odmrazi celou hru. Tento prikaz je nutnosti, pokud chcete znovu spustit casovac."
 
         borderHelpTitle: "{aqua}------ Prikazy k hranicim ------"
-        borderHelpCurrent: "{cc}/uh border current{ci}: vrati mapu do jeji puvodni velikosti."
+        borderHelpCurrent: "{cc}/uh border get{ci}: vrati mapu do jeji puvodni velikosti."
         borderHelpSet: "{cc}/uh border set <diameter> [force]{ci}: zmeni velikost mapy. Pokud neni zadan arguement 'force', operace bude zrusena za predpokladu, ze nektery z hracu je za hranice mapy."
         borderHelpWarning: "{cc}/uh border warning <futureDiameter> [minutesBeforeReduction]{ci}: varuje vsechny hrace za hranici mapy o danem budoucim prumeru. Jedna se pouze o upozorneni."
         borderHelpWarningCancel: "{cc}/uh border warning cancel{ci}: zrusi predesle varovani."

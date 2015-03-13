@@ -16,12 +16,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands.commands;
+package me.azenet.UHPlugin.commands.commands.uh.border;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.commands.uh.*;
-import me.azenet.UHPlugin.commands.core.annotations.Command;
+import me.azenet.UHPlugin.borders.MapShape;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
+import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;
@@ -29,46 +29,40 @@ import org.bukkit.command.CommandSender;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(name = "uh")
-public class UHRootCommand extends AbstractCommand {
 
-	private UHPlugin p;
-	private I18n i;
+@Command(name = "get")
+public class UHBorderGetCommand extends AbstractCommand {
 
-	public UHRootCommand(UHPlugin plugin) {
-		p = plugin;
-		i = p.getI18n();
+	UHPlugin p;
+	I18n i;
 
-		// Game
-		registerSubCommand(new UHStartCommand(p));
-		registerSubCommand(new UHShiftCommand(p));
-		registerSubCommand(new UHSpawnsCommand(p));
-		registerSubCommand(new UHTeamCommand(p));
-		registerSubCommand(new UHBorderCommand(p));
-		registerSubCommand(new UHSpectatorsCommand(p));
-		registerSubCommand(new UHGenerateWallsCommand(p));
-
-		// Misc
-		registerSubCommand(new UHAboutCommand(p));
+	public UHBorderGetCommand(UHPlugin p) {
+		this.p = p;
+		this.i = p.getI18n();
 	}
 
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
-	}
-
-	@Override
-	public List<String> help(CommandSender sender) {
-		return Arrays.asList(i.t("cmd.spawnsHelpAdd"));
-	}
-
-	@Override
-	public List<String> onListHelp(CommandSender sender) {
-		return null;
+		if(p.getBorderManager().getMapShape() == MapShape.CIRCULAR) {
+			sender.sendMessage(i.t("borders.current.messageCircular", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+		}
+		else {
+			sender.sendMessage(i.t("borders.current.messageSquared", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+		}
 	}
 
 	@Override
 	public List<String> tabComplete(CommandSender sender, String[] args) {
 		return null;
+	}
+
+	@Override
+	public List<String> help(CommandSender sender) {
+		return null;
+	}
+
+	@Override
+	public List<String> onListHelp(CommandSender sender) {
+		return Arrays.asList(i.t("cmd.borderHelpCurrent"));
 	}
 }

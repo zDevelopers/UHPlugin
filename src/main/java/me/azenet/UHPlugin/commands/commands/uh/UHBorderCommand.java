@@ -16,12 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands.commands;
+package me.azenet.UHPlugin.commands.commands.uh;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.commands.uh.*;
-import me.azenet.UHPlugin.commands.core.annotations.Command;
+import me.azenet.UHPlugin.commands.commands.categories.Category;
+import me.azenet.UHPlugin.commands.commands.uh.border.UHBorderCheckCommand;
+import me.azenet.UHPlugin.commands.commands.uh.border.UHBorderGetCommand;
+import me.azenet.UHPlugin.commands.commands.uh.border.UHBorderSetCommand;
+import me.azenet.UHPlugin.commands.commands.uh.border.UHBorderWarningCommand;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
+import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;
@@ -29,27 +33,28 @@ import org.bukkit.command.CommandSender;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(name = "uh")
-public class UHRootCommand extends AbstractCommand {
 
-	private UHPlugin p;
-	private I18n i;
+/**
+ * This command manages borders (gets current, checks if players are out, sets a new size, warns players
+ * about the future size).
+ *
+ * Usage: /uh border (doc)
+ * Usage: /uh border <get|set [force]|warning|check>
+ */
+@Command(name = "border")
+public class UHBorderCommand extends AbstractCommand {
 
-	public UHRootCommand(UHPlugin plugin) {
-		p = plugin;
-		i = p.getI18n();
+	UHPlugin p;
+	I18n i;
 
-		// Game
-		registerSubCommand(new UHStartCommand(p));
-		registerSubCommand(new UHShiftCommand(p));
-		registerSubCommand(new UHSpawnsCommand(p));
-		registerSubCommand(new UHTeamCommand(p));
-		registerSubCommand(new UHBorderCommand(p));
-		registerSubCommand(new UHSpectatorsCommand(p));
-		registerSubCommand(new UHGenerateWallsCommand(p));
+	public UHBorderCommand(UHPlugin p) {
+		this.p = p;
+		this.i = p.getI18n();
 
-		// Misc
-		registerSubCommand(new UHAboutCommand(p));
+		registerSubCommand(new UHBorderGetCommand(p));
+		registerSubCommand(new UHBorderSetCommand(p));
+		registerSubCommand(new UHBorderWarningCommand(p));
+		registerSubCommand(new UHBorderCheckCommand(p));
 	}
 
 	@Override
@@ -58,17 +63,22 @@ public class UHRootCommand extends AbstractCommand {
 	}
 
 	@Override
+	public List<String> tabComplete(CommandSender sender, String[] args) {
+		return null;
+	}
+
+	@Override
 	public List<String> help(CommandSender sender) {
-		return Arrays.asList(i.t("cmd.spawnsHelpAdd"));
+		return Arrays.asList(i.t("cmd.borderHelpTitle"));
 	}
 
 	@Override
 	public List<String> onListHelp(CommandSender sender) {
-		return null;
+		return Arrays.asList(i.t("cmd.helpBorder"));
 	}
 
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args) {
-		return null;
+	public String getCategory() {
+		return Category.GAME.getTitle();
 	}
 }
