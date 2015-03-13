@@ -44,6 +44,7 @@ public class UHRootCommand extends AbstractCommand {
 		registerSubCommand(new UHShiftCommand(p));
 		registerSubCommand(new UHSpawnsCommand(p));
 		registerSubCommand(new UHTeamCommand(p));
+		registerSubCommand(new UHSpectatorsCommand(p));
 		registerSubCommand(new UHGenerateWallsCommand(p));
 
 		// Misc

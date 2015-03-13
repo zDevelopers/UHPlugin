@@ -93,11 +93,11 @@ keys:
         
         specHelpTitle: "{aqua}------ Commandes liées aux spectateurs initiaux ------"
         specHelpNoticeSpectatorPlusNotInstalled: "{ce}Attention{ci}: SpectatorPlus n'étant pas installé, un spectateur n'est qu'un joueur ignoré."
-        specHelpAdd: "{cc}/uh spec add <joueur>{ci}: ajoute un spectateur initial."
-        specHelpRemove: "{cc}/uh spec remove <joueur>{ci}: supprime un spectateur initial."
-        specHelpList: "{cc}/uh spec list{ci}: liste les spectateurs initiaux."
-        
-        specHelpTitle: "{aqua}------ Commandes liées à l'immobilisation ------"
+        specHelpAdd: "{cc}/uh spec add <joueur> {ci}: ajoute un spectateur initial."
+        specHelpRemove: "{cc}/uh spec remove <joueur> {ci}: supprime un spectateur initial."
+        specHelpList: "{cc}/uh spec list {ci}: liste les spectateurs initiaux."
+
+        freezeHelpTitle: "{aqua}------ Commandes liées à l'immobilisation ------"
         freezeHelpOn: "{cc}/uh freeze on [joueur]{ci}: immobilise un joueur, ou l'exécuteur sans joueur spécifié."
         freezeHelpOff: "{cc}/uh freeze off [player]{ci}: libère un joueur (ou l'envoyeur), même si le jeu est en pause."
         freezeHelpAll: "{cc}/uh freeze all{ci}: met le jeu en pause (immobilise les joueurs, mobs, et le compteur)."
