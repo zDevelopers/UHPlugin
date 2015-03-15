@@ -20,6 +20,7 @@ package me.azenet.UHPlugin.commands.commands;
 
 import me.azenet.UHPlugin.UHPlugin;
 import me.azenet.UHPlugin.commands.commands.uh.*;
+import me.azenet.UHPlugin.commands.commands.uh.UHHealAllCommand;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
@@ -47,6 +48,10 @@ public class UHRootCommand extends AbstractCommand {
 		registerSubCommand(new UHBorderCommand(p));
 		registerSubCommand(new UHSpectatorsCommand(p));
 		registerSubCommand(new UHGenerateWallsCommand(p));
+
+		// Bugs
+		registerSubCommand(new UHHealCommand(p));
+		registerSubCommand(new UHHealAllCommand(p));
 
 		// Misc
 		registerSubCommand(new UHInfosCommand(p));
