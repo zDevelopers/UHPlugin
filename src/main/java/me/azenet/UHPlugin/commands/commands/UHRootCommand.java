@@ -52,6 +52,9 @@ public class UHRootCommand extends AbstractCommand {
 		registerSubCommand(new UHHealAllCommand(p));
 		registerSubCommand(new UHFeedCommand(p));
 		registerSubCommand(new UHFeedAllCommand(p));
+		registerSubCommand(new UHKillCommand(p));
+		registerSubCommand(new UHResurrectCommand(p));
+		registerSubCommand(new UHTPBackCommand(p));
 
 		// Misc
 		registerSubCommand(new UHInfosCommand(p));

@@ -876,9 +876,18 @@ public class UHGameManager {
 	}
 
 	/**
+	 * Returns the names of the players of this game.
+	 *
+	 * @return The set.
+	 */
+	public HashSet<String> getPlayers() {
+		return players;
+	}
+
+	/**
 	 * Returns a list of the currently alive teams.
 	 *
-	 * @return The list.
+	 * @return The set.
 	 */
 	public Set<UHTeam> getAliveTeams() {
 		return aliveTeams;
@@ -887,7 +896,7 @@ public class UHGameManager {
 	/**
 	 * Returns a list of the currently alive players.
 	 *
-	 * @return The list.
+	 * @return The set.
 	 */
 	public Set<OfflinePlayer> getAlivePlayers() {
 
