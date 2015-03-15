@@ -24,6 +24,7 @@ import me.azenet.UHPlugin.commands.core.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
+import me.azenet.UHPlugin.utils.CommandUtils;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -93,7 +94,11 @@ public class UHBorderSetCommand extends AbstractCommand {
 
 	@Override
 	public List<String> tabComplete(CommandSender sender, String[] args) {
-		return null;
+		if(args.length == 2) {
+			return CommandUtils.getAutocompleteSuggestions(args[1], Arrays.asList("force"));
+		}
+
+		else return null;
 	}
 
 	@Override
