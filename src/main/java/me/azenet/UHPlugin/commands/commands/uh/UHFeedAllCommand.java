@@ -16,51 +16,71 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands.commands;
+package me.azenet.UHPlugin.commands.commands.uh;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.commands.uh.*;
+import me.azenet.UHPlugin.commands.commands.categories.Category;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.List;
 
-@Command(name = "uh")
-public class UHRootCommand extends AbstractCommand {
 
-	private UHPlugin p;
-	private I18n i;
+/**
+ * This command feeds all player.
+ *
+ * Usage: /uh feed &lt;player> [foodLevel=20] [saturation=20]
+ */
+@Command(name = "feedall")
+public class UHFeedAllCommand extends AbstractCommand {
 
-	public UHRootCommand(UHPlugin plugin) {
-		p = plugin;
-		i = p.getI18n();
+	UHPlugin p;
+	I18n i;
 
-		// Game
-		registerSubCommand(new UHStartCommand(p));
-		registerSubCommand(new UHShiftCommand(p));
-		registerSubCommand(new UHSpawnsCommand(p));
-		registerSubCommand(new UHTeamCommand(p));
-		registerSubCommand(new UHBorderCommand(p));
-		registerSubCommand(new UHSpectatorsCommand(p));
-		registerSubCommand(new UHGenerateWallsCommand(p));
-
-		// Bugs
-		registerSubCommand(new UHHealCommand(p));
-		registerSubCommand(new UHHealAllCommand(p));
-		registerSubCommand(new UHFeedCommand(p));
-		registerSubCommand(new UHFeedAllCommand(p));
-
-		// Misc
-		registerSubCommand(new UHInfosCommand(p));
-		registerSubCommand(new UHAboutCommand(p));
+	public UHFeedAllCommand(UHPlugin p) {
+		this.p = p;
+		this.i = p.getI18n();
 	}
 
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
+
+		int   foodLevel  = 20;
+		float saturation = 20f;
+
+		if(args.length > 0) { // /uh feedall <foodLevel>
+			try {
+				foodLevel = Integer.valueOf(args[0]);
+			} catch(NumberFormatException e) {
+				sender.sendMessage(i.t("feed.errorNaN"));
+				return;
+			}
+
+			if(args.length > 1) { // /uh feedall <foodLevel> <saturation>
+				try {
+					// The saturation value cannot be more than the food level.
+					saturation = Math.min(foodLevel, Float.valueOf(args[1]));
+				} catch(NumberFormatException e) {
+					sender.sendMessage(i.t("feed.errorNaN"));
+					return;
+				}
+			}
+		}
+
+		for(Player player : p.getServer().getOnlinePlayers()) {
+			player.setFoodLevel(foodLevel);
+			player.setSaturation(saturation);
+		}
+	}
+
+	@Override
+	public List<String> tabComplete(CommandSender sender, String[] args) {
+		return null;
 	}
 
 	@Override
@@ -70,11 +90,11 @@ public class UHRootCommand extends AbstractCommand {
 
 	@Override
 	public List<String> onListHelp(CommandSender sender) {
-		return null;
+		return Arrays.asList(i.t("cmd.helpFeedall"));
 	}
 
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args) {
-		return null;
+	public String getCategory() {
+		return Category.BUGS.getTitle();
 	}
 }
