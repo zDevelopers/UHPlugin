@@ -49,6 +49,7 @@ public class UHRootCommand extends AbstractCommand {
 		registerSubCommand(new UHGenerateWallsCommand(p));
 
 		// Misc
+		registerSubCommand(new UHInfosCommand(p));
 		registerSubCommand(new UHAboutCommand(p));
 	}
 
