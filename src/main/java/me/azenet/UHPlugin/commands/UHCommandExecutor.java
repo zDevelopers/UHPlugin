@@ -19,28 +19,26 @@
 package me.azenet.UHPlugin.commands;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.commands.JoinCommand;
-import me.azenet.UHPlugin.commands.commands.LeaveCommand;
-import me.azenet.UHPlugin.commands.commands.UHRootCommand;
+import me.azenet.UHPlugin.commands.commands.*;
 import me.azenet.UHPlugin.commands.core.AbstractCommandExecutor;
 import me.azenet.UHPlugin.i18n.I18n;
 
 
 public class UHCommandExecutor extends AbstractCommandExecutor {
 
-	private UHPlugin p;
-	private I18n i;
+	public UHCommandExecutor(UHPlugin p) {
 
-	public UHCommandExecutor(UHPlugin plugin) {
-		super(plugin);
-
-		p = plugin;
-		i = p.getI18n();
+		super(p);
 
 
-		registerCommand(new UHRootCommand(p));  // /uh
+		registerCommand(new UHRootCommand(p));          //  /uh
 
-		registerCommand(new JoinCommand(p));    // /join
-		registerCommand(new LeaveCommand(p));   // /leave
+		registerCommand(new JoinCommand(p));            //  /join
+		registerCommand(new LeaveCommand(p));           //  /leave
+
+		registerCommand(new TeamMessageCommand(p));     //  /t
+		registerCommand(new GlobalMessageCommand(p));   //  /g
+		registerCommand(new ToggleChatCommand(p));      //  /togglechat
+
 	}
 }
