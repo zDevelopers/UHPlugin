@@ -483,7 +483,7 @@ keys:
         list:
             count: "{ci}Il y a {0} compteur(s) enregistré(s)."
             itemRunning: "{green} • {ci}{0}{ci} - {1} secondes au total - {2}"
-            itemPaused: "{yellow} • {{ci}{0}{ci} - {1} secondes au total - {2}"
+            itemPaused: "{yellow} • {ci}{0}{ci} - {1} secondes au total - {2}"
             itemStopped: "{red} • {ci}{0}{ci} - {1} secondes au total"
     
     protips:

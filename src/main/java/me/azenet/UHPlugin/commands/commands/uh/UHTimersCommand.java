@@ -16,50 +16,46 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
-package me.azenet.UHPlugin.commands.commands;
+package me.azenet.UHPlugin.commands.commands.uh;
 
 import me.azenet.UHPlugin.UHPlugin;
-import me.azenet.UHPlugin.commands.commands.uh.*;
+import me.azenet.UHPlugin.commands.commands.categories.Category;
+import me.azenet.UHPlugin.commands.commands.uh.timers.*;
 import me.azenet.UHPlugin.commands.core.AbstractCommand;
 import me.azenet.UHPlugin.commands.core.annotations.Command;
 import me.azenet.UHPlugin.commands.core.exceptions.CannotExecuteCommandException;
 import me.azenet.UHPlugin.i18n.I18n;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
 import java.util.List;
 
-@Command(name = "uh")
-public class UHRootCommand extends AbstractCommand {
 
-	private UHPlugin p;
-	private I18n i;
+/**
+ * This command manages timers.
+ *
+ * Usage: /uh timers < add | set | display | hide | start | pause | resume | stop | remove | list >
+ */
+@Command(name = "timers")
+public class UHTimersCommand extends AbstractCommand {
 
-	public UHRootCommand(UHPlugin plugin) {
-		p = plugin;
-		i = p.getI18n();
+	UHPlugin p;
+	I18n i;
 
-		// Game
-		registerSubCommand(new UHStartCommand(p));
-		registerSubCommand(new UHShiftCommand(p));
-		registerSubCommand(new UHSpawnsCommand(p));
-		registerSubCommand(new UHTeamCommand(p));
-		registerSubCommand(new UHBorderCommand(p));
-		registerSubCommand(new UHSpectatorsCommand(p));
-		registerSubCommand(new UHGenerateWallsCommand(p));
+	public UHTimersCommand(UHPlugin p) {
+		this.p = p;
+		this.i = p.getI18n();
 
-		// Bugs
-		registerSubCommand(new UHHealCommand(p));
-		registerSubCommand(new UHHealAllCommand(p));
-		registerSubCommand(new UHFeedCommand(p));
-		registerSubCommand(new UHFeedAllCommand(p));
-		registerSubCommand(new UHKillCommand(p));
-		registerSubCommand(new UHResurrectCommand(p));
-		registerSubCommand(new UHTPBackCommand(p));
-
-		// Misc
-		registerSubCommand(new UHTimersCommand(p));
-		registerSubCommand(new UHInfosCommand(p));
-		registerSubCommand(new UHAboutCommand(p));
+		registerSubCommand(new UHTimersAddCommand(p));
+		registerSubCommand(new UHTimersSetCommand(p));
+		registerSubCommand(new UHTimersDisplayCommand(p));
+		registerSubCommand(new UHTimersHideCommand(p));
+		registerSubCommand(new UHTimersStartCommand(p));
+		registerSubCommand(new UHTimersPauseCommand(p));
+		registerSubCommand(new UHTimersResumeCommand(p));
+		registerSubCommand(new UHTimersStopCommand(p));
+		registerSubCommand(new UHTimersRemoveCommand(p));
+		registerSubCommand(new UHTimersListCommand(p));
 	}
 
 	@Override
@@ -68,17 +64,22 @@ public class UHRootCommand extends AbstractCommand {
 	}
 
 	@Override
-	public List<String> help(CommandSender sender) {
+	public List<String> tabComplete(CommandSender sender, String[] args) {
 		return null;
+	}
+
+	@Override
+	public List<String> help(CommandSender sender) {
+		return Arrays.asList(i.t("cmd.timersHelpTitle"));
 	}
 
 	@Override
 	public List<String> onListHelp(CommandSender sender) {
-		return null;
+		return Arrays.asList(i.t("cmd.helpTimers"));
 	}
 
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args) {
-		return null;
+	public String getCategory() {
+		return Category.MISC.getTitle();
 	}
 }
