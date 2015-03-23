@@ -48,9 +48,6 @@ import java.io.IOException;
 
 public class UHPlugin extends JavaPlugin {
 	
-	private UHPluginCommand commandManager = null;
-	private UHTabCompleter tabCompleter = null;
-	
 	private TeamManager teamManager = null;
 	private SpawnsManager spawnsManager = null;
 	private UHGameManager gameManager = null;
@@ -109,20 +106,6 @@ public class UHPlugin extends JavaPlugin {
 		// Needed to avoid a NoClassDefFoundError.
 		// I don't like this way of doing this, but else, the plugin will not load without ProtocolLib.
 		protocollibintegrationwrapper = new UHProtocolLibIntegrationWrapper(this);
-		
-		/*commandManager = new UHPluginCommand(this);
-		tabCompleter = new UHTabCompleter(this);
-		
-		getCommand("uh").setExecutor(commandManager);		
-		getCommand("t").setExecutor(commandManager);
-		getCommand("g").setExecutor(commandManager);
-		getCommand("togglechat").setExecutor(commandManager);
-		getCommand("join").setExecutor(commandManager);
-		getCommand("leave").setExecutor(commandManager);
-		
-		getCommand("uh").setTabCompleter(tabCompleter);
-		getCommand("togglechat").setTabCompleter(tabCompleter);
-		getCommand("join").setTabCompleter(tabCompleter);*/
 
 		UHCommandExecutor executor = new UHCommandExecutor(this);
 		for(String commandName : getDescription().getCommands().keySet()) {
@@ -218,15 +201,6 @@ public class UHPlugin extends JavaPlugin {
 	 */
 	public SpawnsManager getSpawnsManager() {
 		return spawnsManager;
-	}
-	
-	/**
-	 * Returns the command manager.
-	 * 
-	 * @return
-	 */
-	public UHPluginCommand getCommandManager() {
-		return commandManager;
 	}
 	
 	/**
