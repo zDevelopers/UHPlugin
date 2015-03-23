@@ -1,6 +1,6 @@
-name: UHPlugin
+name: UHCReloaded
 description: Ultra Hardcore plugin
-main: me.azenet.UHPlugin.UHPlugin
+main: eu.carrade.amaury.UHCReloaded.UHCReloaded
 version: 1.3 §cdev
 author: "Amaury Carrade"
 authors: [azenet, "João Roda"]
