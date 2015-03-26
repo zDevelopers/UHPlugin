@@ -24,7 +24,7 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
-import eu.carrade.amaury.UHCReloaded.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;

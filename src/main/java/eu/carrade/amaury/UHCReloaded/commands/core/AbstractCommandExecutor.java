@@ -22,7 +22,7 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
-import eu.carrade.amaury.UHCReloaded.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 

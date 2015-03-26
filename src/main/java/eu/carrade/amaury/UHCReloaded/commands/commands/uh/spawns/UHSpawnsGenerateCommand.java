@@ -26,7 +26,7 @@ import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.spawns.Generator;
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.UnknownGeneratorException;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
-import eu.carrade.amaury.UHCReloaded.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
