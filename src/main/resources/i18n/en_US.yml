@@ -29,14 +29,13 @@ keys:
         errorUnauthorized: "{ce}You are not allowed to execute this command."
         errorBadUse: "{ce}{bold}You cannot execute this command this way."
         errorBadUseHelpAbove: "{ce}The help is displayed above."
-
+        
         titleHelp: "{yellow}{0} - version {1}"
         legendHelp: "{ci}Legend: {cc}/uh command <required> [optional=default] <spaces allowed ...>{ci}."
         helpNextPage: "{gray}Next page: /uh {0}"
         
         titleGameCmd: "{aqua}------ Game-related commands ------"
-        helpStart: "{cc}/uh start {ci}: launches the game."
-        helpStartSlow: "{cc}/uh start slow {ci}: launches the game slowly, in two steps (teleportation then beginning of the game), for smaller servers."
+        helpStart: "{cc}/uh start {ci}: launches the game. See /uh start help for options (slow and ignoreTeams)."
         helpShift: "{cc}/uh shift {ci}: shifts an episode."
         helpTeam: "{cc}/uh team {ci}: manages the teams. Execute /uh team for details."
         helpSpawns: "{cc}/uh spawns {ci}: manages the spawn points. Execute /uh spawns for details."
@@ -60,6 +59,13 @@ keys:
         helpTimers: "{cc}/uh timers {ci}: manages the timers. See /uh timers for details."
         helpInfos: "{cc}/uh infos {ci}: prints some infos about the current game."
         helpAbout: "{cc}/uh about {ci}: informations about the plugin and the translation."
+        
+        startHelpTitle: "{aqua}------ Beginning of the game ------"
+        startHelpBasic: "{cc}/uh start {ci}: starts the game. Period."
+        startHelpTagsTitle: "{aqua}Startup options"
+        startHelpTags: "{ci}You can add some tags to change the way the game is started, just append them to the command with spaces."
+        startHelpSlow: "{cc}slow:true {ci}: launches the game slowly, in two steps (teleportation then beginning of the game), for smaller servers."
+        startHelpIgnoreTeams: "{cc}ignoreTeams:true {ci}: even with teams, teleports the players like in a solo game (only one player per spawn point, not a spawn point per team)."
         
         teamHelpTitle: "{aqua}------ Team commands ------"
         teamHelpAdd: "{cc}/uh team add <color> [<name ...>] {ci}: adds a team with the provided color."

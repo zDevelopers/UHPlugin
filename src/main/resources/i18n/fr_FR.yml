@@ -29,14 +29,13 @@ keys:
         errorUnauthorized: "{ce}Vous n'avez pas le droit d'exécuter cette commande."
         errorBadUse: "{ce}{bold}Vous ne pouvez exécuter cette commande ainsi."
         errorBadUseHelpAbove: "{ce}L'aide est rappelée ci-dessus."
-
+        
         titleHelp: "{yellow}{0} - version {1}"
         legendHelp: "{ci}Légende: {cc}/uh command <requis> [optionnel=valeur par défaut] <espaces autorisées ...>{ci}."
         helpNextPage: "{gray}Page suivante : /uh {0}"
         
         titleGameCmd: "{aqua}------ Commandes liées au jeu ------"
-        helpStart: "{cc}/uh start {ci}: lance le jeu."
-        helpStartSlow: "{cc}/uh start slow {ci}: lance le jeu doucement, en deux étapes (téléportation puis début), pour les plus petits serveurs."
+        helpStart: "{cc}/uh start {ci}: lance le jeu. Consultez /uh start help pour les options de démarrage (lent, en ignorant les équipes)."
         helpShift: "{cc}/uh shift {ci}: passe un épisode."
         helpTeam: "{cc}/uh team {ci}: gère les équipes. Exécutez /uh team pour plus de détails."
         helpSpawns: "{cc}/uh spawns {ci}: gère les points de démarrage. Exécutez /uh spawns pour plus de détails."
@@ -60,6 +59,13 @@ keys:
         helpTimers: "{cc}/uh timers {ci}: gère les comptes à rebours. Consultez /uh timers pour plus de détails."
         helpInfos: "{cc}/uh infos {ci}: affiche des informations à propos du jeu en cours."
         helpAbout: "{cc}/uh about {ci}: informations à propos du plugin et des traductions."
+        
+        startHelpTitle: "{aqua}------ Démarrage du jeu ------"
+        startHelpBasic: "{cc}/uh start {ci}: démarre le jeu, tout simplement."
+        startHelpTagsTitle: "{aqua}Options de démarrage"
+        startHelpTags: "{ci}Vous pouvez ajouter des options pour changer la manière dont le jeu est démarré. Pour ce faire, ajoutez les tags suivant après la commande (séparés par des espaces)."
+        startHelpSlow: "{cc}slow:true {ci}: lance le jeu doucement, en deux étapes (téléportation puis commencement), pour les plus petits serveurs."
+        startHelpIgnoreTeams: "{cc}ignoreTeams:true {ci}: même avec des équipes, téléporte les joueurs comme pour un jeu solo (uniquement un joueur par point de démarrage, et non un point par équipe)."
         
         teamHelpTitle: "{aqua}------ Commandes liées aux équipes ------"
         teamHelpAdd: "{cc}/uh team add <couleur> [<nom ...>]{ci}: ajoute une équipe de la couleur donnée."

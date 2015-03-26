@@ -59,7 +59,7 @@ public class UHStartCommand extends AbstractCommand {
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
 
 		if(args.length == 1 && args[0].equalsIgnoreCase("help")) {
-			throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC);
+			throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
 		}
 
 		else if(args.length == 2 && args[0].equalsIgnoreCase("slow") && args[1].equalsIgnoreCase("go")) { // /uh start slow go
@@ -107,6 +107,7 @@ public class UHStartCommand extends AbstractCommand {
 
 			if(args.length == 1) {
 				suggestions.add("slow");
+				suggestions.add("help");
 			}
 
 			return CommandUtils.getAutocompleteSuggestions(args[args.length - 1], suggestions);
@@ -115,12 +116,19 @@ public class UHStartCommand extends AbstractCommand {
 
 	@Override
 	public List<String> help(CommandSender sender) {
-		return null;
+		return Arrays.asList(
+				i.t("cmd.startHelpTitle"),
+				i.t("cmd.startHelpBasic"),
+				i.t("cmd.startHelpTagsTitle"),
+				i.t("cmd.startHelpTags"),
+				i.t("cmd.startHelpSlow"),
+				i.t("cmd.startHelpIgnoreTeams")
+		);
 	}
 
 	@Override
 	public List<String> onListHelp(CommandSender sender) {
-		return Arrays.asList(i.t("cmd.helpStart"), i.t("cmd.helpStartSlow"));
+		return Arrays.asList(i.t("cmd.helpStart"));
 	}
 
 	@Override
