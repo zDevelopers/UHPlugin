@@ -165,13 +165,15 @@ public class UHGameManager {
 	 *
 	 * @param sender The player who launched the game.
 	 * @param slow If true, the slow mode is enabled.
-	 * With the slow mode, the players are, at first, teleported team by team with a configurable delay,
-	 * and with the fly.
-	 * Then, the fly is removed and the game starts.
+	 *             With the slow mode, the players are, at first, teleported team by team
+	 *             with a configurable delay, and with the fly.
+	 *             Then, the fly is removed and the game starts.
+	 * @param ignoreTeams If true, the players will be teleported in individual teleportation spots,
+	 *                    just like without teams, even with teams.
 	 *
 	 * @throws IllegalStateException if the game is running.
 	 */
-	public void start(CommandSender sender, Boolean slow) throws IllegalStateException {
+	public void start(CommandSender sender, Boolean slow, Boolean ignoreTeams) throws IllegalStateException {
 
 		if(isGameRunning()) {
 			throw new IllegalStateException("The game is currently running!");
@@ -271,7 +273,9 @@ public class UHGameManager {
 			if(!team.isEmpty()) aliveTeamsCount++;
 		}
 
-		if(p.getSpawnsManager().getSpawnPoints().size() < aliveTeamsCount) {
+		int spawnPointsNeeded = ignoreTeams ? alivePlayersCount : aliveTeamsCount;
+
+		if(p.getSpawnsManager().getSpawnPoints().size() < spawnPointsNeeded) {
 			sender.sendMessage(i.t("start.notEnoughTP"));
 
 			// We clears the teams if the game was in solo-mode, to avoid a team-counter to be displayed on the next start
@@ -293,17 +297,14 @@ public class UHGameManager {
 		/** Teleportation **/
 
 		// Standard mode
-		if(slow == false) {
+		if(!slow) {
 			List<Location> unusedTP = p.getSpawnsManager().getSpawnPoints();
+
 			for (final UHTeam t : tm.getTeams()) {
 				if(t.isEmpty()) continue;
 
-				final Location lo = unusedTP.get(this.random.nextInt(unusedTP.size()));
-
-				BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo);
+				BukkitRunnable teamStartTask = new TeamStartTask(p, t, unusedTP, ignoreTeams);
 				teamStartTask.runTaskLater(p, 10L);
-
-				unusedTP.remove(lo);
 			}
 
 
@@ -338,14 +339,10 @@ public class UHGameManager {
 			for (UHTeam t : tm.getTeams()) {
 				if(t.isEmpty()) continue;
 
-				Location lo = unusedTP.get(random.nextInt(unusedTP.size()));
-
-				BukkitRunnable teamStartTask = new TeamStartTask(p, t, lo, true, sender, teamsTeleported);
+				BukkitRunnable teamStartTask = new TeamStartTask(p, t, unusedTP, ignoreTeams, true, sender, teamsTeleported);
 				teamStartTask.runTaskLater(p, 20L * teamsTeleported * delayBetweenTP);
 
 				teamsTeleported++;
-
-				unusedTP.remove(lo);
 			}
 
 			// The end is handled by this.finalizeStartSlow().

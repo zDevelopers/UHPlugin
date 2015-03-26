@@ -100,6 +100,28 @@ public class UHUtils {
 			return Integer.valueOf(splitted[0]) * 3600 + Integer.valueOf(splitted[1]) * 60 + Integer.valueOf(splitted[2]);
 		}
 	}
+
+	/**
+	 * Converts a string to a boolean.
+	 *
+	 * <p>
+	 *     {@code true, on, 1, yes} (case insensitive) -> {@code true}.<br />
+	 *     Anything else ({@code null} included) -> {@code false}.
+	 * </p>
+	 *
+	 * @param raw The raw string.
+	 * @return a boolean.
+	 */
+	public static boolean stringToBoolean(String raw) {
+		return raw != null
+				&& (
+				raw.equalsIgnoreCase("true")
+						|| raw.equalsIgnoreCase("on")
+						|| raw.equalsIgnoreCase("1")
+						|| raw.equalsIgnoreCase("yes")
+		);
+	}
+
 	
 	/**
 	 * Sends a JSON-formatted message to player.

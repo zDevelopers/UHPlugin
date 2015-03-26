@@ -21,15 +21,13 @@ package eu.carrade.amaury.UHCReloaded.commands.core.utils;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 public class CommandUtils {
@@ -81,6 +79,47 @@ public class CommandUtils {
 		}
 
 		return Arrays.copyOfRange(args, 1, args.length);
+	}
+
+
+	/**
+	 * Returns the tags in the arguments, following the format "tagname:value".
+	 *
+	 * <p>
+	 *     If a tag is defined multiple times, the value used is the last one.
+	 * </p>
+	 * <p>
+	 *     Invalid tags (other format that « key:value ») are ignored.
+	 * </p>
+	 *
+	 * @param args The args.
+	 * @param defaults The defaults values. The values defined here will always be in the returned map,
+	 *                 with the same value if the key is not in the arguments.
+	 *                 {@code null} if no default values are needed.
+	 *
+	 * @return A map tagname -> value.
+	 */
+	public static Map<String, String> getTagsInArgs(String[] args, Map<String, String> defaults) {
+		Map<String, String> tagsCollected;
+
+		if(defaults != null) {
+			tagsCollected = new HashMap<>(defaults);
+		}
+		else {
+			tagsCollected = new HashMap<>();
+		}
+
+		for(String arg : args) {
+			String[] argSpilt = arg.split(":");
+			if(argSpilt.length >= 2) { // valid
+				String key = argSpilt[0];
+				String value = StringUtils.join(Arrays.copyOfRange(argSpilt, 1, argSpilt.length), ":");
+
+				tagsCollected.put(key, value);
+			}
+		}
+
+		return tagsCollected;
 	}
 
 

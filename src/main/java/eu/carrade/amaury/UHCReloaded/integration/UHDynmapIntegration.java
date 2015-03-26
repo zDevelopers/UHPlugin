@@ -177,75 +177,142 @@ public class UHDynmapIntegration {
 			return;
 		}
 		
-		// Let's try to find the best icon
-		// Available flags:
-		// redflag, orangeflag, yellowflag, greenflag, blueflag, purpleflag, pinkflag, pirateflag (black)
-		// Ref. https://github.com/webbukkit/dynmap/wiki/Using-markers
-		
-		MarkerIcon icon = null;
-		
+
 		TeamColor teamColor = team.getColor();
 		if(teamColor == null) {
 			teamColor = TeamColor.GREEN; // green flags for solo games without colors
 		}
 		
-		switch(teamColor) {
-			case BLUE:
-			case DARK_BLUE:
-			case AQUA:
-			case DARK_AQUA:
-				icon = markerAPI.getMarkerIcon("blueflag");
-				break;
-				
-			case GREEN:
-			case DARK_GREEN:
-				icon = markerAPI.getMarkerIcon("greenflag");
-				break;
-				
-			case GOLD:
-				icon = markerAPI.getMarkerIcon("orangeflag");
-				break;
-				
-			case YELLOW:
-				icon = markerAPI.getMarkerIcon("yellowflag");
-				break;
-				
-			case RED:
-			case DARK_RED:
-				icon = markerAPI.getMarkerIcon("redflag");
-				break;
-			
-			case DARK_PURPLE:
-				icon = markerAPI.getMarkerIcon("purpleflag");
-				break;
-			
-			case LIGHT_PURPLE:
-				icon = markerAPI.getMarkerIcon("pinkflag");
-				break;
-				
-			case BLACK:
-			case DARK_GRAY:
-			case GRAY:
-				icon = markerAPI.getMarkerIcon("pirateflag");
-				break;
-				
-			case WHITE: // There is nothing better than pink I think...
-			default:
-				icon = markerAPI.getMarkerIcon("pinkflag");
-				break;
-		}
-		
 		String markerID = getSpawnMarkerName(team);
-		String markerLabel = null;
+
+		String markerLabel;
 		if(p.getGameManager().isGameWithTeams()) {
 			markerLabel = i.t("dynmap.markerLabelSpawn", team.getName());
 		}
 		else {
 			markerLabel = i.t("dynmap.markerLabelSpawnNoTeam", team.getName());
 		}
-		
-		Marker marker = markerSet.createMarker(markerID, markerLabel, true, spawnPoint.getWorld().getName(), spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), icon, false);
-		
+
+		showSpawnLocation(spawnPoint, teamColor, markerLabel, markerID);
+	}
+
+	/**
+	 * Displays the spawn point of the given player.
+	 *
+	 * <p>
+	 *     Used when the teleportation ignores the teams.
+	 * </p>
+	 *
+	 * @param player The player.
+	 * @param spawnPoint The location of the spawn point.
+	 */
+	public void showSpawnLocation(Player player, Location spawnPoint) {
+		UHTeam team = p.getTeamManager().getTeamForPlayer(player);
+
+		showSpawnLocation(player, team != null ? team.getColor() : null, spawnPoint);
+	}
+
+	/**
+	 * Displays the spawn point of the given player.
+	 *
+	 * <p>
+	 *     Used when the teleportation ignores the teams.
+	 * </p>
+	 *
+	 * @param player The player.
+	 * @param color The color of the spawn point (i.e. of the team).
+	 * @param spawnPoint The location of the spawn point.
+	 */
+	public void showSpawnLocation(Player player, TeamColor color, Location spawnPoint) {
+		if(!isDynmapIntegrationEnabled()) {
+			return;
+		}
+
+		if(!p.getConfig().getBoolean("dynmap.showSpawnLocations")) {
+			return;
+		}
+
+
+		if(color == null) {
+			color = TeamColor.GREEN;
+		}
+
+		String markerID = getSpawnMarkerName(player);
+		String markerLabel = i.t("dynmap.markerLabelSpawnNoTeam", player.getName());
+
+		showSpawnLocation(spawnPoint, color, markerLabel, markerID);
+	}
+
+	/**
+	 * Displays a spawn-point marker.
+	 *
+	 * @param spawnPoint The location of the spawn.
+	 * @param color The color of the team (for the flag).
+	 * @param label The label of the marker.
+	 * @param markerID The ID of the marker.
+	 */
+	private void showSpawnLocation(Location spawnPoint, TeamColor color, String label, String markerID) {
+
+		/* ***  Icon  *** */
+
+		MarkerIcon icon;
+
+		// Let's try to find the best icon
+		// Available flags:
+		// redflag, orangeflag, yellowflag, greenflag, blueflag, purpleflag, pinkflag, pirateflag (black)
+		// Ref. https://github.com/webbukkit/dynmap/wiki/Using-markers
+
+		switch(color) {
+			case BLUE:
+			case DARK_BLUE:
+			case AQUA:
+			case DARK_AQUA:
+				icon = markerAPI.getMarkerIcon("blueflag");
+				break;
+
+			case GREEN:
+			case DARK_GREEN:
+				icon = markerAPI.getMarkerIcon("greenflag");
+				break;
+
+			case GOLD:
+				icon = markerAPI.getMarkerIcon("orangeflag");
+				break;
+
+			case YELLOW:
+				icon = markerAPI.getMarkerIcon("yellowflag");
+				break;
+
+			case RED:
+			case DARK_RED:
+				icon = markerAPI.getMarkerIcon("redflag");
+				break;
+
+			case DARK_PURPLE:
+				icon = markerAPI.getMarkerIcon("purpleflag");
+				break;
+
+			case LIGHT_PURPLE:
+				icon = markerAPI.getMarkerIcon("pinkflag");
+				break;
+
+			case BLACK:
+			case DARK_GRAY:
+			case GRAY:
+				icon = markerAPI.getMarkerIcon("pirateflag");
+				break;
+
+			case WHITE: // There is nothing better than pink I think...
+			default:
+				icon = markerAPI.getMarkerIcon("pinkflag");
+				break;
+		}
+
+
+		/* ***  Registration  *** */
+
+		Marker marker = markerSet.createMarker(markerID, label, true, spawnPoint.getWorld().getName(), spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), icon, false);
+
 		if(marker == null) {
 			p.getLogger().warning("Unable to create marker " + markerID);
 		}
@@ -259,5 +326,19 @@ public class UHDynmapIntegration {
 	 */
 	private String getSpawnMarkerName(UHTeam team) {
 		return "uhplugin.spawn." + team.getName();
+	}
+
+	/**
+	 * Returns the internal ID of the marker of the spawn point of the given team.
+	 *
+	 * <p>
+	 *     Used if the teleportation ignores the teams.
+	 * </p>
+	 *
+	 * @param player The player.
+	 * @return The ID.
+	 */
+	private String getSpawnMarkerName(Player player) {
+		return "uhplugin.spawn." + player.getName();
 	}
 }

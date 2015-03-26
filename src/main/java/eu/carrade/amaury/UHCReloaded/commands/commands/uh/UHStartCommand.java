@@ -18,17 +18,17 @@
  */
 package eu.carrade.amaury.UHCReloaded.commands.commands.uh;
 
-import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
-import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -57,24 +57,9 @@ public class UHStartCommand extends AbstractCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		if(args.length == 0) { // /uh start (standard mode)
-			try {
-				p.getGameManager().start(sender, false);
-			} catch(IllegalStateException e) {
-				sender.sendMessage(i.t("start.already"));
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
 
-		else if(args.length == 1 && args[0].equalsIgnoreCase("slow")) { // /uh start slow
-			try {
-				p.getGameManager().start(sender, true);
-			} catch(IllegalStateException e) {
-				sender.sendMessage(i.t("start.already"));
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
+		if(args.length == 1 && args[0].equalsIgnoreCase("help")) {
+			throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC);
 		}
 
 		else if(args.length == 2 && args[0].equalsIgnoreCase("slow") && args[1].equalsIgnoreCase("go")) { // /uh start slow go
@@ -82,7 +67,19 @@ public class UHStartCommand extends AbstractCommand {
 		}
 
 		else {
-			throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE);
+			Map<String, String> defaultTags = new HashMap<>();
+			defaultTags.put("slow", "false");
+			defaultTags.put("ignoreTeams", "false");
+
+			Map<String, String> tags = CommandUtils.getTagsInArgs(args, defaultTags);
+
+			try {
+				p.getGameManager().start(sender, UHUtils.stringToBoolean(tags.get("slow")), UHUtils.stringToBoolean(tags.get("ignoreTeams")));
+			} catch(IllegalStateException e) {
+				sender.sendMessage(i.t("start.already"));
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -97,15 +94,23 @@ public class UHStartCommand extends AbstractCommand {
 	@Override
 	public List<String> tabComplete(CommandSender sender, String[] args) {
 
-		if(args.length == 1) { // /uh start <?>
-			return CommandUtils.getAutocompleteSuggestions(args[0], Arrays.asList("slow"));
-		}
-
-		else if(args.length == 2 && args[0].equalsIgnoreCase("slow")) { // /uh start slow <?>
+		if(args.length == 2 && args[0].equalsIgnoreCase("slow")) { // /uh start slow <?>
 			return CommandUtils.getAutocompleteSuggestions(args[1], Arrays.asList("go"));
 		}
 
-		else return null;
+		else {
+			// Can be improved
+
+			List<String> suggestions = new ArrayList<>();
+			suggestions.add("slow:true");
+			suggestions.add("ignoreTeams:true");
+
+			if(args.length == 1) {
+				suggestions.add("slow");
+			}
+
+			return CommandUtils.getAutocompleteSuggestions(args[args.length - 1], suggestions);
+		}
 	}
 
 	@Override

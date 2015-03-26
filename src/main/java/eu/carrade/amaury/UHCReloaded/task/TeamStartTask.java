@@ -31,36 +31,62 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
+import java.util.Random;
+
+
 public class TeamStartTask extends BukkitRunnable {
 
 	private UHCReloaded p = null;
 	private I18n i = null;
+
 	private UHTeam team = null;
-	private Location startPoint = null;
+	private List<Location> startPoints = null;
+
 	private Boolean slow = false;
+	private Boolean ignoreTeams = false;
+
 	private CommandSender sender = null;
 	private Integer teamsTeleported = 0;
+
+	private Random random = new Random();
 	
-	public TeamStartTask(UHCReloaded p, UHTeam team, Location startPoint) {
+	public TeamStartTask(UHCReloaded p, UHTeam team, List<Location> startPoints, Boolean ignoreTeams) {
 		this.p = p;
 		this.i = p.getI18n();
 		this.team = team;
-		this.startPoint = startPoint;
+		this.startPoints = startPoints;
+		this.ignoreTeams = ignoreTeams;
 	}
 	
-	public TeamStartTask(UHCReloaded p, UHTeam team, Location startPoint, Boolean slow, CommandSender sender, Integer teamsTeleported) {
+	public TeamStartTask(UHCReloaded p, UHTeam team, List<Location> startPoints, Boolean ignoreTeams, Boolean slow, CommandSender sender, Integer teamsTeleported) {
 		this.p = p;
 		this.i = p.getI18n();
 		this.team = team;
-		this.startPoint = startPoint;
+		this.startPoints = startPoints;
 		this.slow = slow;
 		this.sender = sender;
 		this.teamsTeleported = teamsTeleported;
+		this.ignoreTeams = ignoreTeams;
 	}
 	
 	@Override
 	public void run() {
-		team.teleportTo(startPoint);
+
+		if(!ignoreTeams) {
+			Location spawn = getRandomPoint();
+
+			team.teleportTo(spawn);
+			p.getDynmapIntegration().showSpawnLocation(team, spawn);
+		}
+		else {
+			for(Player player : team.getOnlinePlayers()) {
+				Location spawn = getRandomPoint();
+
+				player.teleport(spawn);
+				p.getDynmapIntegration().showSpawnLocation(player, team.getColor(), spawn);
+			}
+		}
 		
 		for (Player player : team.getOnlinePlayers()) {
 			player.setGameMode(GameMode.SURVIVAL);
@@ -78,18 +104,18 @@ public class TeamStartTask extends BukkitRunnable {
 			player.setExp(0L+0F);
 			player.setLevel(0);
 			player.closeInventory();
+
 			for(PotionEffect effect : player.getActivePotionEffects()) {
 				player.removePotionEffect(effect.getType());
 			}
-			player.setCompassTarget(startPoint);
+
+			player.setCompassTarget(player.getWorld().getSpawnLocation());
 		}
-		
-		p.getDynmapIntegration().showSpawnLocation(team, startPoint);
 		
 		if(slow) {
 			try {
 				sender.sendMessage(i.t("start.startSlowTeamTP", team.getDisplayName()));
-			} catch(NullPointerException e) { }
+			} catch(NullPointerException ignored) { }
 			
 			if(p.getGameManager().getAliveTeamsCount() == this.teamsTeleported) {
 				p.getGameManager().setSlowStartTPFinished(true);
@@ -97,8 +123,21 @@ public class TeamStartTask extends BukkitRunnable {
 				try {
 					sender.sendMessage(i.t("start.startSlowAllTeamsTP"));
 					sender.sendMessage(i.t("start.startSlowAllTeamsTPCmd"));
-				} catch(NullPointerException e) { }
+				} catch(NullPointerException ignored) { }
 			}
 		}
+	}
+
+	/**
+	 * Returns a random location in the list, and removes the location from
+	 * this list, to avoid a teleportation of multiple people/teams at the same spot.
+	 *
+	 * @return The location of a randomly-chosen spawn point.
+	 */
+	private Location getRandomPoint() {
+		Location point = startPoints.get(random.nextInt(startPoints.size()));
+		startPoints.remove(point);
+
+		return point;
 	}
 }
