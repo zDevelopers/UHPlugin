@@ -22,6 +22,8 @@ package eu.carrade.amaury.UHCReloaded.scoreboard;
 import eu.carrade.amaury.UHCReloaded.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import eu.carrade.amaury.UHCReloaded.scoreboard.managers.SidebarObjective;
+import eu.carrade.amaury.UHCReloaded.scoreboard.managers.sync.SynchronizedSidebarObjective;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -81,7 +83,7 @@ public class ScoreboardManager {
 				sb.getObjective(objectiveName).unregister();
 			} catch(NullPointerException | IllegalArgumentException ignored) { }
 
-			sidebar = new SidebarObjective(sb, objectiveName);
+			sidebar = new SynchronizedSidebarObjective(sb, objectiveName);
 			sidebar.setDisplayName(getScoreboardName());
 
 			buildSidebar();

@@ -17,8 +17,9 @@
  *  along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package eu.carrade.amaury.UHCReloaded.scoreboard;
+package eu.carrade.amaury.UHCReloaded.scoreboard.managers.sync;
 
+import eu.carrade.amaury.UHCReloaded.scoreboard.managers.SidebarObjective;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -60,7 +61,7 @@ import java.util.ArrayList;
  * 
  * @author Amaury Carrade
  */
-public class SidebarObjective {
+public class SynchronizedSidebarObjective implements SidebarObjective {
 	
 	private ArrayList<String> entries = new ArrayList<String>();
 	
@@ -68,13 +69,8 @@ public class SidebarObjective {
 	private String objectiveName = null;
 	private String displayName = null;
 	private Objective objective = null;
-	
-	/**
-	 * Represents an entry used as a separator.
-	 */
-	public static final String SEPARATOR = "";
-	
-	public SidebarObjective(Scoreboard scoreboard, String objectiveName) {
+
+	public SynchronizedSidebarObjective(Scoreboard scoreboard, String objectiveName) {
 		this.objectiveName = objectiveName;
 		this.scoreboard = scoreboard;
 		this.displayName = objectiveName;
@@ -87,6 +83,7 @@ public class SidebarObjective {
 	 * 
 	 * @param displayName The display name.
 	 */
+	@Override
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 		setDisplayName();
@@ -110,6 +107,7 @@ public class SidebarObjective {
 	 * @throws IllegalStateException If the objective has been unregistered
 	 * with {@link #unregisterObjective()}.
 	 */
+	@Override
 	public void display() {
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 	}
@@ -117,6 +115,7 @@ public class SidebarObjective {
 	/**
 	 * Unregisters the objective.
 	 */
+	@Override
 	public void unregisterObjective() {
 		objective.unregister();
 	}
@@ -124,6 +123,7 @@ public class SidebarObjective {
 	/**
 	 * Registers the objective.
 	 */
+	@Override
 	public void registerObjective() {
 		this.objective = scoreboard.registerNewObjective(objectiveName, "dummy");
 		setDisplayName();
@@ -145,6 +145,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
+	@Override
 	public boolean addEntry(String entry, boolean dontReconstruct) {
 		entry = truncateEntry(entry);
 		
@@ -171,6 +172,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
+	@Override
 	public boolean addEntry(String entry) {
 		return addEntry(entry, false);
 	}
@@ -191,6 +193,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
+	@Override
 	public boolean addEntryAtIndex(int index, String entry, boolean dontReconstruct) {
 		entry = truncateEntry(entry);
 		
@@ -227,6 +230,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
+	@Override
 	public boolean addEntryAtIndex(int index, String entry) {
 		return addEntryAtIndex(index, entry, false);
 	}
@@ -246,6 +250,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
+	@Override
 	public boolean addEntryAfter(String afterThis, String entry, boolean dontReconstruct) {
 		entry = truncateEntry(entry);
 		
@@ -277,6 +282,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
+	@Override
 	public boolean addEntryAfter(String afterThis, String entry) {
 		return addEntryAfter(afterThis, entry, false);
 	}
@@ -296,6 +302,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
+	@Override
 	public boolean addEntryBefore(String beforeThis, String entry, boolean dontReconstruct) {
 		entry = truncateEntry(entry);
 		
@@ -327,6 +334,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if the entry was added (aka non already registered).
 	 */
+	@Override
 	public boolean addEntryBefore(String beforeThis, String entry) {
 		return addEntryBefore(beforeThis, entry, false);
 	}
@@ -342,6 +350,7 @@ public class SidebarObjective {
 	 * @return <tt>True</tt> if the text was updated (aka <tt>true</tt> if an
 	 * entry <tt>oldEntry</tt> is registered).
 	 */
+	@Override
 	public boolean updateEntry(String oldEntry, String newEntry) {
 		int index = entries.indexOf(oldEntry);
 		if(index != -1) {
@@ -367,6 +376,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if an entry was removed.
 	 */
+	@Override
 	public boolean removeEntryAtIndex(int index, boolean dontReconstruct) {
 		try {
 			if(entries.get(index) != null) {
@@ -388,6 +398,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if an entry was removed.
 	 */
+	@Override
 	public boolean removeEntryAtIndex(int index) {
 		return removeEntryAtIndex(index, false);
 	}
@@ -403,6 +414,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if an entry was removed.
 	 */
+	@Override
 	public boolean removeEntry(String entry, boolean dontReconstruct) {
 		return removeEntryAtIndex(entries.indexOf(entry), dontReconstruct);
 	}
@@ -416,6 +428,7 @@ public class SidebarObjective {
 	 * 
 	 * @return <tt>True</tt> if an entry was removed.
 	 */
+	@Override
 	public boolean removeEntry(String entry) {
 		return removeEntry(entry, false);
 	}
@@ -427,6 +440,7 @@ public class SidebarObjective {
 	 * @param dontReconstruct If true, the objective will not been automatically
 	 * reconstructed. You will need to call {@link #reconstruct()} to do so.
 	 */
+	@Override
 	public void reset(boolean dontReconstruct) {
 		entries.clear();
 		
@@ -436,6 +450,7 @@ public class SidebarObjective {
 	/**
 	 * Resets the sidebar, removing all entries.
 	 */
+	@Override
 	public void reset() {
 		reset(false);
 	}
@@ -449,6 +464,7 @@ public class SidebarObjective {
 	 * @param entry The entry.
 	 * @return The index, or {@code -1} if the given {@code entry} is not registered.
 	 */
+	@Override
 	public int getEntryIndex(String entry) {
 		return entries.indexOf(truncateEntry(entry));
 	}
@@ -459,6 +475,7 @@ public class SidebarObjective {
 	 * @param index The index.
 	 * @return The entry.
 	 */
+	@Override
 	public String getEntry(int index) {
 		return entries.get(index);
 	}
@@ -470,6 +487,7 @@ public class SidebarObjective {
 	 * Automatically called when an entry is added/removed, except if the reconstruction
 	 * is explicitly disabled using the dontReconstruct parameter.
 	 */
+	@Override
 	public void reconstruct() {
 		// First: the objective is removed, then recreated, to reset it.
 		this.unregisterObjective();
