@@ -192,6 +192,15 @@ gameplay-changes:
     witch:
         disableNaturalSpawn: false
         disableLightningSpawn: false  # from a villager
+
+    rabbit:
+        killerRabbitSpawn: true
+        # When a rabbit spawns, it will be transformed into a Killer Rabbit following
+        # this probability (between 0 and 1).
+        killerRabbitSpawnProbability: 0.05
+        # The rabbit will be named after this configuration point, except if empty - then, the
+        # default vanilla name will be used ("The Killer Bunny").
+        killerRabbitName: "The Killer Rabbit of Caerbannog"
     
     
     # If true a compass will show the nearest player, and the craft will be different.

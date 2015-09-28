@@ -24,6 +24,7 @@ import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.integration.UHDynmapIntegration;
 import eu.carrade.amaury.UHCReloaded.integration.UHProtocolLibIntegrationWrapper;
 import eu.carrade.amaury.UHCReloaded.listeners.GameplayListener;
+import eu.carrade.amaury.UHCReloaded.listeners.SpawnsListener;
 import eu.carrade.amaury.UHCReloaded.misc.Freezer;
 import eu.carrade.amaury.UHCReloaded.misc.MOTDManager;
 import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
@@ -116,6 +117,7 @@ public class UHCReloaded extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new GameListener(this), this);
 		getServer().getPluginManager().registerEvents(new GameplayListener(this), this);
 		getServer().getPluginManager().registerEvents(new CraftingListener(this), this);
+		getServer().getPluginManager().registerEvents(new SpawnsListener(this), this);
 		// The freezer listener is registered by the freezer when it is needed.
 		
 		recipesManager.registerRecipes();
