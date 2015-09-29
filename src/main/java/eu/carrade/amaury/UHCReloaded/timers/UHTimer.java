@@ -106,7 +106,7 @@ public class UHTimer {
 	/**
 	 * Stops this timer.
 	 *
-	 * @param ended If true, the timer was stopped because the timer was up.
+	 * @param wasUp If true, the timer was stopped because the timer was up.
 	 */
 	private void stop(boolean wasUp) {
 		TimerEndsEvent event = new TimerEndsEvent(this, wasUp);

@@ -97,8 +97,6 @@ public class SidebarObjective {
 	 * stored display name.
 	 *
 	 * Used when the scoreboard is reconstructed.
-	 *
-	 * @param displayName The display name.
 	 */
 	private void setDisplayName() {
 		objective.setDisplayName(displayName.substring(0, Math.min(displayName.length(), 32)));

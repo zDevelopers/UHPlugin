@@ -127,7 +127,7 @@ public class RuntimeCommandsExecutor {
 	/**
 	 * Schedules a command.
 	 *
-	 * @param commands A map containing the scheduled commands, sorted by delay.
+	 * @param scheduledCommands A map containing the scheduled commands, sorted by delay.
 	 * @param command The command to add.
 	 * @param delay The delay (seconds).
 	 */
@@ -135,7 +135,7 @@ public class RuntimeCommandsExecutor {
 		HashSet<String> list = scheduledCommands.get(delay);
 
 		if(list == null) {
-			list = new HashSet<String>();
+			list = new HashSet<>();
 			scheduledCommands.put(delay, list);
 		}
 
@@ -207,7 +207,8 @@ public class RuntimeCommandsExecutor {
 	 * Imports the commands stored in the configuration.
 	 *
 	 * @param path The path in the config file.
-	 * @param scheduledCommands A map containing the scheduled commands, sorted by delay.
+	 * @param key The command will be stored under this key.
+	 *    The keys internally used by the plugin start by "{@code internal.}".
 	 */
 	private void importFromConfig(String path, String key) {
 		List<Map<?, ?>> rawCommands = p.getConfig().getMapList(path);

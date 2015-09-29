@@ -232,7 +232,7 @@ public class TeamManager {
 	 */
 	public void reset(boolean dontNotify) {
 		// 1: scoreboard reset
-		for(UHTeam team : new HashSet<UHTeam>(teams)) {
+		for(UHTeam team : new HashSet<>(teams)) {
 			this.removeTeam(team, dontNotify);
 		}
 
@@ -250,7 +250,7 @@ public class TeamManager {
 	/**
 	 * Sets the correct display name of a player, according to his team.
 	 *
-	 * @param player
+	 * @param offlinePlayer The player to colorize.
 	 */
 	public void colorizePlayer(OfflinePlayer offlinePlayer) {
 		if(!p.getConfig().getBoolean("colorizeChat")) {
@@ -333,8 +333,8 @@ public class TeamManager {
 	 * @param player2 The second player
 	 * @return True if the players are in the same team, false else.
 	 */
-	public boolean inSameTeam(Player pl, Player pl2) {
-		return (getTeamForPlayer(pl).equals(getTeamForPlayer(pl2)));
+	public boolean inSameTeam(Player player1, Player player2) {
+		return (getTeamForPlayer(player1).equals(getTeamForPlayer(player2)));
 	}
 
 	/**

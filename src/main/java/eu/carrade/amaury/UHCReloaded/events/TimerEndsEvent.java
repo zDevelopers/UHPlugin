@@ -69,8 +69,7 @@ public final class TimerEndsEvent extends UHEvent {
     /**
      * Return true if the timer will be restarted.
      *
-     * @param restart true if the timer will be restarted.
-     * @return
+     * @return {@code true} if the timer needs to be restarted.
      */
     public boolean getRestart() {
     	return this.restart;

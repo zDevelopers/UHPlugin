@@ -79,7 +79,7 @@ public class Freezer {
 	/**
 	 * Enables or disables the global freeze of players, mobs, timer.
 	 *
-	 * @param freezed If true the global freeze will be enabled.
+	 * @param frozen If true the global freeze will be enabled.
 	 * @param showStateInScoreboard If false, the freeze state will not be displayed in the scoreboard.
 	 */
 	public void setGlobalFreezeState(Boolean frozen, Boolean showStateInScoreboard) {
@@ -136,7 +136,7 @@ public class Freezer {
 	/**
 	 * Enables or disables the global freeze of players, mobs, timer.
 	 *
-	 * @param freezed If true the global freeze will be enabled.
+	 * @param frozen If true the global freeze will be enabled.
 	 */
 	public void setGlobalFreezeState(Boolean frozen) {
 		setGlobalFreezeState(frozen, true);
@@ -156,7 +156,7 @@ public class Freezer {
 	 * Freezes a player.
 	 *
 	 * @param player The player to freeze.
-	 * @param freezed If true the player will be frozen. If false, unfrozen.
+	 * @param frozen If true the player will be frozen. If false, unfrozen.
 	 */
 	public void setPlayerFreezeState(Player player, Boolean frozen) {
 		if(frozen && !this.frozenPlayers.contains(player.getUniqueId())) {
