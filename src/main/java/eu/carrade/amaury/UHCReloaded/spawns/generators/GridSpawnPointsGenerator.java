@@ -1,3 +1,20 @@
+/**
+ * Plugin UltraHardcore Reloaded (UHPlugin)
+ * Copyright (C) 2013 azenet
+ * Copyright (C) 2014-2015 Amaury Carrade
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program.  If
+ * not, see [http://www.gnu.org/licenses/].
+ */
+
 package eu.carrade.amaury.UHCReloaded.spawns.generators;
 
 
@@ -13,11 +30,14 @@ import org.bukkit.block.Block;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GridSpawnPointsGenerator implements SpawnPointsGenerator {
+
+public class GridSpawnPointsGenerator implements SpawnPointsGenerator
+{
 
 	private UHCReloaded p;
 
-	public GridSpawnPointsGenerator(UHCReloaded p) {
+	public GridSpawnPointsGenerator(UHCReloaded p)
+	{
 		this.p = p;
 	}
 
@@ -26,21 +46,24 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator {
 	 *
 	 * @param world                           The world where the spawn points will be generated.
 	 * @param spawnCount                      The number of spawn points to generate.
-	 * @param regionDiameter                  The diameter of the region where the spawn points will be generated.<br>
-	 *                                        This is limited by the size of the map. This will be seen as the diameter of a circular or
-	 *                                        of a squared map, following the shape of the world set in the configuration.
+	 * @param regionDiameter                  The diameter of the region where the spawn points will
+	 *                                        be generated.<br> This is limited by the size of the
+	 *                                        map. This will be seen as the diameter of a circular
+	 *                                        or of a squared map, following the shape of the world
+	 *                                        set in the configuration.
 	 * @param minimalDistanceBetweenTwoPoints The minimal distance between two points.
-	 * @param xCenter                         The x coordinate of the point in the center of the region where the points will be generated.
-	 * @param zCenter                         The z coordinate of the point in the center of the region where the points will be generated.
+	 * @param xCenter                         The x coordinate of the point in the center of the
+	 *                                        region where the points will be generated.
+	 * @param zCenter                         The z coordinate of the point in the center of the
+	 *                                        region where the points will be generated.
 	 * @param avoidWater                      True if the generation have to avoid the water.
 	 *
 	 * @return The spawn points generated.
-	 *
-	 * @throws eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException In case of fail.
+	 * @throws CannotGenerateSpawnPointsException In case of fail.
 	 */
 	@Override
-	public Set<Location> generate(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter, boolean avoidWater) throws CannotGenerateSpawnPointsException {
-
+	public Set<Location> generate(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter, boolean avoidWater) throws CannotGenerateSpawnPointsException
+	{
 		// We starts the generation on a smaller grid, to avoid false outside tests if the point is on the edge
 		int usedRegionDiameter = regionDiameter - 1;
 
@@ -50,7 +73,8 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator {
 
 		// The points are on a grid
 		int neededColumnsCount = (int) Math.ceil(Math.sqrt(spawnCount));
-		if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR) {
+		if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
+		{
 			// If the border is circular, the distance between two points needs to be decreased.
 			// The space available is divided by PI/4, so the column count is multiplied by
 			// this number.
@@ -58,25 +82,28 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator {
 		}
 
 		// IS impossible.
-		if (neededColumnsCount > maxColumnsCount) {
+		if (neededColumnsCount > maxColumnsCount)
+		{
 			throw new CannotGenerateSpawnPointsException("Cannot generate spawn points on a grid: not enough space.");
 		}
+
 		// If the map is circular, the generation may be impossible, because this check was
 		// performed for a squared map.
 		// The test will be done after the generation.
 
 
 		// We generates the points on a grid in squares, starting by the biggest square.
-		int distanceBetweenTwoPoints = (int) (Double.valueOf(usedRegionDiameter) / (Double.valueOf(neededColumnsCount - 1)));
+		int distanceBetweenTwoPoints = (int) ((double) usedRegionDiameter / ((double) (neededColumnsCount - 1)));
 
 		// Check related to the case the column count was increased.
-		if (distanceBetweenTwoPoints < minimalDistanceBetweenTwoPoints) {
+		if (distanceBetweenTwoPoints < minimalDistanceBetweenTwoPoints)
+		{
 			throw new CannotGenerateSpawnPointsException("Cannot generate spawn points on a grid: not enough space.");
 		}
 
 
 		int countGeneratedPoints = 0;
-		HashSet<Location> generatedPoints = new HashSet<Location>();
+		HashSet<Location> generatedPoints = new HashSet<>();
 
 		int halfDiameter = (int) Math.floor(usedRegionDiameter / 2);
 
@@ -94,50 +121,60 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator {
 		// We generates the points until there isn't any point left to place. The loop will be broken.
 		// On each step of this loop, a square is generated.
 		generationLoop:
-		while (true) {
+		while (true)
+		{
 			currentPoint = currentSquareStartPoint.clone();
 
 			// First point
-			if (p.getBorderManager().isInsideBorder(currentPoint, regionDiameter) && UHUtils.searchSafeSpot(currentPoint) != null) {
+			if (p.getBorderManager().isInsideBorder(currentPoint, regionDiameter) && UHUtils.searchSafeSpot(currentPoint) != null)
+			{
 				generatedPoints.add(currentPoint.clone());
 				countGeneratedPoints++;
 
-				if (countGeneratedPoints >= spawnCount) {
-					break generationLoop;
+				if (countGeneratedPoints >= spawnCount)
+				{
+					break;
 				}
 			}
 
-			for (int j = 0; j < 4; j++) { // A step for each side, j is the side (see addOnSide).
+			// A step for each side, j is the side (see addOnSide).
+			for (int j = 0; j < 4; j++)
+			{
 				int plottedSize = 0;
 
-				sideLoop:
-				while (plottedSize < currentSquareSize) {
+				while (plottedSize < currentSquareSize)
+				{
 					currentPoint.add(addOnSide[j]);
 					plottedSize += distanceBetweenTwoPoints;
 
 					// Inside the border?
-					if (!p.getBorderManager().isInsideBorder(currentPoint, regionDiameter)) {
-						continue sideLoop;
+					if (!p.getBorderManager().isInsideBorder(currentPoint, regionDiameter))
+					{
+						continue;
 					}
 
 					Block surfaceBlock = world.getHighestBlockAt(currentPoint);
 
 					// Safe spot available?
-					if (!UHUtils.isSafeSpot(surfaceBlock.getLocation())) {
-						continue sideLoop; // not safe: nope
+					if (!UHUtils.isSafeSpot(surfaceBlock.getLocation()))
+					{
+						continue; // not safe: nope
 					}
 
 					// Not above the water?
-					if (avoidWater) {
-						if (surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.STATIONARY_WATER) {
-							continue sideLoop;
+					if (avoidWater)
+					{
+						if (surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.STATIONARY_WATER)
+						{
+							continue;
 						}
 					}
 
 					generatedPoints.add(currentPoint.clone());
 					countGeneratedPoints++;
 
-					if (countGeneratedPoints >= spawnCount) {
+					if (countGeneratedPoints >= spawnCount)
+					{
 						break generationLoop;
 					}
 				}
@@ -147,18 +184,22 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator {
 			currentSquareSize -= 2 * distanceBetweenTwoPoints;
 			currentSquareStartPoint.add(new Location(world, -distanceBetweenTwoPoints, 0, distanceBetweenTwoPoints));
 
-			if (currentSquareSize < distanceBetweenTwoPoints) {
+			if (currentSquareSize < distanceBetweenTwoPoints)
+			{
 				// This may happens if we generates the points for a circular world
-				break generationLoop;
+				break;
 			}
 		}
 
 		// If the generation was broken (circular world, not enough positions),
 		// the generation was incomplete.
-		if (countGeneratedPoints >= spawnCount) {
+		if (countGeneratedPoints >= spawnCount)
+		{
 			// Generation OK
 			return generatedPoints;
-		} else {
+		}
+		else
+		{
 			throw new CannotGenerateSpawnPointsException("Cannot generate the spawn points: not enough space.");
 		}
 	}
