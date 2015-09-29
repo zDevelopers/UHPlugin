@@ -36,30 +36,30 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Freezer {
-	
+
 	private UHCReloaded p = null;
-	
+
 	private boolean isListenerRegistered = false;
 	private FreezerListener freezerListener = null;
-	
+
 	private Boolean globalFreeze = false;
 	private ArrayList<UUID> frozenPlayers = new ArrayList<UUID>();
 	private HashMap<UUID,Boolean> oldAllowFly = new HashMap<UUID,Boolean>();
 	private HashMap<UUID,Boolean> oldFlyMode = new HashMap<UUID,Boolean>();
-	
+
 	public Freezer(UHCReloaded plugin) {
 		this.p = plugin;
-		
+
 		this.freezerListener = new FreezerListener(p);
 	}
-	
-	
+
+
 	/**
 	 * Freezes a player, if needed.
 	 * The player is blocked inside the block he is currently.
-	 * 
+	 *
 	 * This method is intended to be executed when a player moves.
-	 * 
+	 *
 	 * @param player The player to freeze
 	 * @param from The old position from the PlayerMoveEvent
 	 * @param to The new position from the PlayerMoveEvent
@@ -73,23 +73,23 @@ public class Freezer {
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Enables or disables the global freeze of players, mobs, timer.
-	 * 
+	 *
 	 * @param freezed If true the global freeze will be enabled.
 	 * @param showStateInScoreboard If false, the freeze state will not be displayed in the scoreboard.
 	 */
 	public void setGlobalFreezeState(Boolean frozen, Boolean showStateInScoreboard) {
 		this.globalFreeze = frozen;
-		
+
 		if(frozen) {
 			for(Player player : p.getGameManager().getOnlineAlivePlayers()) {
 				this.setPlayerFreezeState(player, true);
 			}
-			
+
 			// Freezes the mobs by applying a Slowness effect. There isn't any EntityMoveEvent, so...
 			for(World world : p.getServer().getWorlds()) {
 				for(Entity entity : world.getLivingEntities()) {
@@ -98,11 +98,11 @@ public class Freezer {
 					}
 				}
 			}
-			
+
 			// Freezes the timers.
 			p.getTimerManager().pauseAllRunning(true);
 		}
-		
+
 		else {
 			// All the online players are listed, not the internal list of frozen players,
 			// to avoid a ConcurrentModificationException if the iterated list is being emptied.
@@ -111,7 +111,7 @@ public class Freezer {
 					this.setPlayerFreezeState(player, false);
 				}
 			}
-			
+
 			// Removes the slowness effect
 			for(World world : p.getServer().getWorlds()) {
 				for(Entity entity : world.getLivingEntities()) {
@@ -120,41 +120,41 @@ public class Freezer {
 					}
 				}
 			}
-			
+
 			// Unfreezes the timers.
 			p.getTimerManager().pauseAllRunning(false);
 			p.getScoreboardManager().restartTimers();
 		}
-		
+
 		if(showStateInScoreboard || !frozen) {
 			p.getScoreboardManager().displayFreezeState();
 		}
-		
+
 		updateListenerRegistration();
 	}
-	
+
 	/**
 	 * Enables or disables the global freeze of players, mobs, timer.
-	 * 
+	 *
 	 * @param freezed If true the global freeze will be enabled.
 	 */
 	public void setGlobalFreezeState(Boolean frozen) {
 		setGlobalFreezeState(frozen, true);
 	}
-	
-	
+
+
 	/**
 	 * Returns the current state of the global freeze.
-	 * 
+	 *
 	 * @return True if the global freeze is enabled.
 	 */
 	public boolean getGlobalFreezeState() {
 		return this.globalFreeze;
 	}
-	
+
 	/**
 	 * Freezes a player.
-	 * 
+	 *
 	 * @param player The player to freeze.
 	 * @param freezed If true the player will be frozen. If false, unfrozen.
 	 */
@@ -163,38 +163,38 @@ public class Freezer {
 			this.frozenPlayers.add(player.getUniqueId());
 			this.oldAllowFly.put(player.getUniqueId(), player.getAllowFlight());
 			this.oldFlyMode.put(player.getUniqueId(), player.isFlying());
-			
+
 			// Used to prevent the player to be kicked for fly if he was frozen during a fall.
 			// He is blocked inside his current block anyway.
 			player.setAllowFlight(true);
 		}
-		
+
 		if(!frozen && this.frozenPlayers.contains(player.getUniqueId())) {
 			this.frozenPlayers.remove(player.getUniqueId());
-			
+
 			player.setFlying(this.oldFlyMode.get(player.getUniqueId()));
 			player.setAllowFlight(this.oldAllowFly.get(player.getUniqueId()));
-			
+
 			this.oldAllowFly.remove(player.getUniqueId());
 			this.oldFlyMode.remove(player.getUniqueId());
 		}
-		
+
 		updateListenerRegistration();
 	}
-	
+
 	/**
 	 * Returns true if the given player is frozen.
-	 * 
+	 *
 	 * @param player The player to be checked.
 	 * @return true if the given player is frozen.
 	 */
 	public boolean isPlayerFrozen(Player player) {
 		return frozenPlayers.contains(player.getUniqueId());
 	}
-	
+
 	/**
 	 * (Un)freezes a creature.
-	 * 
+	 *
 	 * @param creature The creature to freeze.
 	 * @param frozen If true the creature will be frozen. Else...
 	 */
@@ -207,11 +207,11 @@ public class Freezer {
 			creature.removePotionEffect(PotionEffectType.SLOW);
 		}
 	}
-	
+
 	/**
 	 * Registers the listener if it wasn't registered, and unregisters this listener
 	 * if there isn't any frozen player.
-	 * 
+	 *
 	 * Call this AFTER registering the first frozen player, and AFTER unregistering
 	 * the last one. 
 	 */
@@ -224,7 +224,7 @@ public class Freezer {
 				this.isListenerRegistered = true;
 			}
 		}
-		
+
 		// Unregisters the listener if needed
 		else {
 			if(this.frozenPlayers.isEmpty() && !this.getGlobalFreezeState()) {
@@ -233,21 +233,21 @@ public class Freezer {
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Returns the list of the currently frozen players.
-	 * 
+	 *
 	 * @return The list.
 	 */
 	public ArrayList<Player> getFrozenPlayers() {
-		
+
 		ArrayList<Player> frozenPlayersList = new ArrayList<Player>();
-		
+
 		for(UUID id : frozenPlayers) {
 			frozenPlayersList.add(p.getServer().getPlayer(id));
 		}
-		
+
 		return frozenPlayersList;
 	}
 }

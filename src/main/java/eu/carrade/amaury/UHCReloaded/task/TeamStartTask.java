@@ -50,7 +50,7 @@ public class TeamStartTask extends BukkitRunnable {
 	private Integer teamsTeleported = 0;
 
 	private Random random = new Random();
-	
+
 	public TeamStartTask(UHCReloaded p, UHTeam team, List<Location> startPoints, Boolean ignoreTeams) {
 		this.p = p;
 		this.i = p.getI18n();
@@ -58,7 +58,7 @@ public class TeamStartTask extends BukkitRunnable {
 		this.startPoints = startPoints;
 		this.ignoreTeams = ignoreTeams;
 	}
-	
+
 	public TeamStartTask(UHCReloaded p, UHTeam team, List<Location> startPoints, Boolean ignoreTeams, Boolean slow, CommandSender sender, Integer teamsTeleported) {
 		this.p = p;
 		this.i = p.getI18n();
@@ -69,7 +69,7 @@ public class TeamStartTask extends BukkitRunnable {
 		this.teamsTeleported = teamsTeleported;
 		this.ignoreTeams = ignoreTeams;
 	}
-	
+
 	@Override
 	public void run() {
 
@@ -87,15 +87,15 @@ public class TeamStartTask extends BukkitRunnable {
 				p.getDynmapIntegration().showSpawnLocation(player, team.getColor(), spawn);
 			}
 		}
-		
+
 		for (Player player : team.getOnlinePlayers()) {
 			player.setGameMode(GameMode.SURVIVAL);
-			
+
 			if(slow) {
 				player.setAllowFlight(true);
 				player.setFlying(true);
 			}
-			
+
 			player.setHealth(20D);
 			player.setFoodLevel(20);
 			player.setSaturation(20);
@@ -111,15 +111,15 @@ public class TeamStartTask extends BukkitRunnable {
 
 			player.setCompassTarget(player.getWorld().getSpawnLocation());
 		}
-		
+
 		if(slow) {
 			try {
 				sender.sendMessage(i.t("start.startSlowTeamTP", team.getDisplayName()));
 			} catch(NullPointerException ignored) { }
-			
+
 			if(p.getGameManager().getAliveTeamsCount() == this.teamsTeleported) {
 				p.getGameManager().setSlowStartTPFinished(true);
-				
+
 				try {
 					sender.sendMessage(i.t("start.startSlowAllTeamsTP"));
 					sender.sendMessage(i.t("start.startSlowAllTeamsTPCmd"));

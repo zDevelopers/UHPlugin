@@ -38,26 +38,26 @@ import java.lang.reflect.InvocationTargetException;
 
 
 public class PacketsListener extends PacketAdapter implements Listener {
-	
+
 	private UHCReloaded p = null;
 	private ProtocolManager pm = ProtocolLibrary.getProtocolManager();
-	
+
 	private final PacketContainer respawnPacket;
-	
+
 	public PacketsListener(UHCReloaded p) {
 		// This listener needs to listen on login packets only.
 		super(p, ListenerPriority.NORMAL, PacketType.Play.Server.LOGIN);
-		
+
 		this.p = p;
-		
+
 		// The packet to send to automatically respawn the player.
 		respawnPacket = pm.createPacket(PacketType.Play.Client.CLIENT_COMMAND);
 		respawnPacket.getClientCommands().write(0, EnumWrappers.ClientCommand.PERFORM_RESPAWN);
 	}
-	
+
 	/**
 	 * Used to present the server as an hardcore server, for the clients to display hardcore hearts.
-	 * 
+	 *
 	 * @param ev
 	 */
 	 @Override
@@ -67,10 +67,10 @@ public class PacketsListener extends PacketAdapter implements Listener {
 			 ev.getPacket().getBooleans().write(0, true);
 		 }
 	 }
-	 
+
 	 /**
 	  * Used to automatically respawn the dead players.
-	  * 
+	  *
 	  * @param ev
 	  */
 	 @EventHandler

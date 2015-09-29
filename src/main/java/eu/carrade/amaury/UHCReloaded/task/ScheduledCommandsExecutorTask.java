@@ -30,15 +30,15 @@ import java.util.logging.Level;
  * Schedules a stack of commands executed at the same time.
  */
 public class ScheduledCommandsExecutorTask extends BukkitRunnable {
-	
+
 	UHCReloaded p = null;
 	HashSet<String> commands = null;
-	
+
 	public ScheduledCommandsExecutorTask(UHCReloaded plugin, HashSet<String> commands) {
 		this.p = plugin;
 		this.commands = commands;
 	}
-	
+
 	@Override
 	public void run() {
 		for(String command : commands) {

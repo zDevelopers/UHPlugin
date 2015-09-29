@@ -28,10 +28,10 @@ import org.bukkit.event.entity.PlayerDeathEvent;
  * This event is called before all the action executed on player death (sound, scoreboard updates, etc.).
  */
 public class UHPlayerDeathEvent extends UHEvent {
-	
+
 	private Player player;
 	private PlayerDeathEvent ev;
-	
+
 	public UHPlayerDeathEvent(Player player, PlayerDeathEvent ev) {
 		this.player = player;
 		this.ev = ev;
@@ -44,7 +44,7 @@ public class UHPlayerDeathEvent extends UHEvent {
 	public Player getPlayer() {
 		return player;
 	}
-	
+
 	/**
 	 * Returns the PlayerDeathEvent under this event.
 	 * @return The PlayerDeathEvent.

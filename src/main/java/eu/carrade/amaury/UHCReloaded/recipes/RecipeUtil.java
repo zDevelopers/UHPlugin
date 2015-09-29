@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Utility class to compare Bukkit recipes.<br>
  * Useful for identifying your recipes in events, where recipes are re-generated in a different manner.
- * 
+ *
  * @version R1.3
  * @author Digi
  */
@@ -40,13 +40,13 @@ public class RecipeUtil
      * If this is used as data value on an ingredient it will accept any data value.
      */
     public static final short DATA_WILDCARD = Short.MAX_VALUE;
-    
+
     /**
      * Checks if both recipes are equal.<br>
      * Compares both ingredients and results.<br>
      * <br>
      * NOTE: If both arguments are null it returns true.
-     * 
+     *
      * @param recipe1 the first recipe
      * @param recipe2 the second recipe
      * @return true if ingredients and results match, false otherwise.
@@ -75,7 +75,7 @@ public class RecipeUtil
     {
         return recipe1 == recipe2 || !(recipe1 == null || recipe2 == null) && match(recipe1, recipe2);
     }
-    
+
     private static boolean match(Recipe recipe1, Recipe recipe2)
     {
         if(recipe1 instanceof ShapedRecipe)
@@ -84,21 +84,21 @@ public class RecipeUtil
             {
             	return false; // if other recipe is not the same type then they're not equal.
             }
-            
+
             ShapedRecipe r1 = (ShapedRecipe)recipe1;
             ShapedRecipe r2 = (ShapedRecipe)recipe2;
-            
+
             // convert both shapes and ingredient maps to common ItemStack array.
             ItemStack[] matrix1 = shapeToMatrix(r1.getShape(), r1.getIngredientMap());
             ItemStack[] matrix2 = shapeToMatrix(r2.getShape(), r2.getIngredientMap());
-            
+
             if(!Arrays.equals(matrix1, matrix2)) // compare arrays and if they don't match run another check with one shape mirrored.
             {
             	 mirrorMatrix(matrix1);
-                
+
                 return Arrays.equals(matrix1, matrix2);
             }
-            
+
             return true; // ingredients match.
         }
         else if(recipe1 instanceof ShapelessRecipe)
@@ -107,19 +107,19 @@ public class RecipeUtil
             {
                 return false; // if other recipe is not the same type then they're not equal.
             }
-            
+
             ShapelessRecipe r1 = (ShapelessRecipe)recipe1;
             ShapelessRecipe r2 = (ShapelessRecipe)recipe2;
-            
+
             // get copies of the ingredient lists
             List<ItemStack> find = r1.getIngredientList();
             List<ItemStack> compare = r2.getIngredientList();
-            
+
             if(find.size() != compare.size())
             {
                 return false; // if they don't have the same amount of ingredients they're not equal.
             }
-            
+
             for(ItemStack item : compare)
             {
                 if(!find.remove(item))
@@ -127,7 +127,7 @@ public class RecipeUtil
                     return false; // if ingredient wasn't removed (not found) then they're not equal.
                 }
             }
-            
+
             return find.isEmpty(); // if there are any ingredients not removed then they're not equal.
         }
         else if(recipe1 instanceof FurnaceRecipe)
@@ -136,10 +136,10 @@ public class RecipeUtil
             {
                 return false; // if other recipe is not the same type then they're not equal.
             }
-            
+
             FurnaceRecipe r1 = (FurnaceRecipe)recipe1;
             FurnaceRecipe r2 = (FurnaceRecipe)recipe2;
-            
+
             //return (r1.getInput().equals(r2.getInput()));
             return r1.getInput().getType() == r2.getInput().getType();
         }
@@ -148,12 +148,12 @@ public class RecipeUtil
             throw new IllegalArgumentException("Unsupported recipe type: '" + recipe1 + "', update this class!");
         }
     }
-    
+
     private static ItemStack[] shapeToMatrix(String[] shape, Map<Character, ItemStack> map)
     {
         ItemStack[] matrix = new ItemStack[9];
         int slot = 0;
-        
+
         for(int r = 0; r < shape.length; r++)
         {
             for(char col : shape[r].toCharArray())
@@ -161,17 +161,17 @@ public class RecipeUtil
                 matrix[slot] = map.get(col);
                 slot++;
             }
-            
+
             slot = ((r + 1) * 3);
         }
-        
+
         return matrix;
     }
-    
+
     private static void mirrorMatrix(ItemStack[] matrix)
     {
         ItemStack tmp;
-        
+
         for(int r = 0; r < 3; r++)
         {
             tmp = matrix[(r * 3)];
@@ -179,14 +179,14 @@ public class RecipeUtil
             matrix[(r * 3) + 2] = tmp;
         }
     }
-    
-    
-    
+
+
+
     /**
 	 * Returns the list of the ingredients of the given recipe.
-	 * 
+	 *
 	 * @author Amaury Carrade
-	 * 
+	 *
 	 * @param recipe The recipe to analyze.
 	 * @return A list of the ingredients.
 	 */
@@ -203,7 +203,7 @@ public class RecipeUtil
 				listOfItems = new LinkedList<ItemStack>(); // empty list
 			}
 		}
-		
+
 		return listOfItems;
 	}
 }

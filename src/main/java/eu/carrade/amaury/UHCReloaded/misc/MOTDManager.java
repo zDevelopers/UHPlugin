@@ -25,59 +25,59 @@ import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import org.bukkit.ChatColor;
 
 public class MOTDManager {
-	
+
 	private UHCReloaded p;
 	private I18n i;
-	
+
 	private boolean enabled;
 	private String matchName = "";
-	
+
 	private String currentMOTD;
-	
+
 	public MOTDManager(UHCReloaded plugin) {
 		p = plugin;
 		i = p.getI18n();
-		
+
 		enabled = p.getConfig().getBoolean("motd.enabled");
-		
+
 		if(enabled && p.getConfig().getBoolean("motd.displayMatchName")) {
 			matchName = ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("motd.matchNamePrefix")) + p.getScoreboardManager().getScoreboardName() + ChatColor.RESET + "\n";
 		}
 	}
-	
+
 	/**
 	 * Returns the current MOTD.
-	 * 
+	 *
 	 * @return The MOTD.
 	 */
 	public String getCurrentMOTD() {
 		return currentMOTD;
 	}
-	
+
 	/**
 	 * Returns true if the state-based MOTDs are enabled.
-	 * 
+	 *
 	 * @return true if enabled.
 	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
-	
-	
+
+
 	/**
 	 * Updates the MOTD to the one displayed before the game start.
 	 */
 	public void updateMOTDBeforeStart() {
 		if(enabled) currentMOTD = matchName + i.t("motd.beforeStart");
 	}
-	
+
 	/**
 	 * Updates the MOTD to the one displayed during the start.
 	 */
 	public void updateMOTDDuringStart() {
 		if(enabled) currentMOTD = matchName + i.t("motd.starting");
 	}
-	
+
 	/**
 	 * Updates the MOTD to the one displayed during the game (includes alive counts).
 	 * <p>
@@ -93,10 +93,10 @@ public class MOTDManager {
 			}
 		}
 	}
-	
+
 	/**
 	 * Updates the MOTD after the game.
-	 * 
+	 *
 	 * @param winner The winner.
 	 */
 	public void updateMOTDAfterGame(UHTeam winner) {

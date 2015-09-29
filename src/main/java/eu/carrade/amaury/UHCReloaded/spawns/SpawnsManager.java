@@ -34,35 +34,35 @@ import java.util.List;
 import java.util.Set;
 
 public class SpawnsManager {
-	
+
 	UHCReloaded p = null;
 	I18n i = null;
-	
+
 	private LinkedList<Location> spawnPoints = new LinkedList<Location>();
-	
+
 	private boolean avoidWater;
-	
-	
+
+
 	public SpawnsManager(UHCReloaded plugin) {
 		this.p = plugin;
 		this.i = p.getI18n();
-		
+
 		avoidWater = p.getConfig().getBoolean("map.spawnPoints.dontGenerateAboveWater");
 	}
-	
+
 	/**
 	 * Adds a spawn point at (x;z) in the default world.
-	 * 
+	 *
 	 * @param x The X coordinate.
 	 * @param z The Z coordinate.
 	 */
 	public void addSpawnPoint(final Double x, final Double z) {
 		addSpawnPoint(p.getServer().getWorlds().get(0), x, z);
 	}
-	
+
 	/**
 	 * Adds a spawn point at (x;z) in the given world.
-	 * 
+	 *
 	 * @param world The world.
 	 * @param x The X coordinate.
 	 * @param z The Z coordinate.
@@ -70,19 +70,19 @@ public class SpawnsManager {
 	public void addSpawnPoint(final World world, final Double x, final Double z) {
 		addSpawnPoint(new Location(world, x, 0, z));
 	}
-	
+
 	/**
 	 * Adds a spawn point from a location.
-	 * 
+	 *
 	 * @param location The location. Cloned, so you can use the same location object with
 	 * modifications between two calls.
-	 * 
+	 *
 	 * @throws RuntimeException If the spawn point is in the Nether and no safe spot was found.
 	 * @throws IllegalArgumentException If the spawn point is out of the current border.
 	 */
 	public void addSpawnPoint(final Location location) {
 		Location spawnPoint = location.clone();
-		
+
 		// Initial fall, except in the nether.
 		if(!(spawnPoint.getWorld().getEnvironment() == Environment.NETHER)) {
 			spawnPoint.setY(location.getWorld().getHighestBlockYAt(location.getBlockX(), location.getBlockZ()) + 120);
@@ -92,30 +92,30 @@ public class SpawnsManager {
 			if(safeSpot == null) {
 				throw new RuntimeException("Unable to find a safe spot to set the spawn point " + location.toString());
 			}
-			
+
 			spawnPoint.setY(safeSpot.getY());
 		}
-		
+
 		if(!p.getBorderManager().isInsideBorder(spawnPoint)) {
 			throw new IllegalArgumentException("The given spawn location is outside the current border");
 		}
-		
+
 		spawnPoints.add(spawnPoint);
 	}
-	
+
 	/**
 	 * Returns the registered spawn points.
-	 * 
+	 *
 	 * @return The spawn points.
 	 */
 	public List<Location> getSpawnPoints() {
 		return spawnPoints;
 	}
-	
+
 	/**
 	 * Removes all spawn points with the same coordinates as the given location object
 	 * (X, Z, world).
-	 * 
+	 *
 	 * @param location The location to be removed.
 	 * @param precise If true, only the spawn points at the exact same location will be removed.
 	 * Else, the points in the same block. 
@@ -123,7 +123,7 @@ public class SpawnsManager {
 	 */
 	public boolean removeSpawnPoint(Location location, boolean precise) {
 		List<Location> toRemove = new LinkedList<Location>();
-		
+
 		for(Location spawn : getSpawnPoints()) {
 			if(location.getWorld().equals(spawn.getWorld())) {
 				if(precise
@@ -138,27 +138,27 @@ public class SpawnsManager {
 				}
 			}
 		}
-		
+
 		for(Location spawnToRemove : toRemove) {
 			while(spawnPoints.remove(spawnToRemove)); // Used to remove all occurrences of the spawn point
 		}
-		
+
 		return toRemove.size() != 0;
 	}
-	
+
 	/**
 	 * Removes all registered spawn points.
-	 * 
+	 *
 	 * CANNOT BE CANCELLED.
 	 */
 	public void reset() {
 		spawnPoints = new LinkedList<Location>();
 	}
-	
-	
+
+
 	/**
 	 * Imports spawn points from the configuration.
-	 * 
+	 *
 	 * @return The number of spawn points imported.
 	 */
 	public int importSpawnPointsFromConfig() {
@@ -176,10 +176,10 @@ public class SpawnsManager {
 					}
 				}
 			}
-			
+
 			return spawnCount;
 		}
-		
+
 		return 0;
 	}
 
