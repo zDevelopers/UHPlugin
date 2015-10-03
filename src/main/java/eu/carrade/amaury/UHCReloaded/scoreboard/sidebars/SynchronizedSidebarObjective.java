@@ -15,7 +15,7 @@
  * not, see [http://www.gnu.org/licenses/].
  */
 
-package eu.carrade.amaury.UHCReloaded.scoreboard.managers;
+package eu.carrade.amaury.UHCReloaded.scoreboard.sidebars;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
