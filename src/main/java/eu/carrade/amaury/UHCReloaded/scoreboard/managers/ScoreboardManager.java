@@ -32,14 +32,6 @@ public abstract class ScoreboardManager {
 		return null;
 	}
 
-
-	/**
-	 * Ensures the given player will use the good scoreboard.
-	 *
-	 * @param player The player.
-	 */
-	public abstract void setScoreboardForPlayer(Player player);
-
 	/**
 	 * Schedules an update of the scoreboard.
 	 */
@@ -78,7 +70,7 @@ public abstract class ScoreboardManager {
 	 *
 	 * @param sidebar The sidebar to init.
 	 */
-	public void initSidebarTop(SidebarObjective sidebar) {
+	public void initSidebarTop(AbstractSidebarObjective sidebar) {
 
 	}
 
@@ -96,7 +88,7 @@ public abstract class ScoreboardManager {
 	 *
 	 * @param sidebar The sidebar to init.
 	 */
-	public void initSidebarBottom(SidebarObjective sidebar) {
+	public void initSidebarBottom(AbstractSidebarObjective sidebar) {
 
 	}
 
@@ -109,7 +101,7 @@ public abstract class ScoreboardManager {
 	 *
 	 * @param sidebar The sidebar to update.
 	 */
-	public void updateSidebarTop(SidebarObjective sidebar) {
+	public void updateSidebarTop(AbstractSidebarObjective sidebar) {
 
 	}
 
@@ -122,7 +114,7 @@ public abstract class ScoreboardManager {
 	 *
 	 * @param sidebar The sidebar to update.
 	 */
-	public void updateSidebarBottom(SidebarObjective sidebar) {
+	public void updateSidebarBottom(AbstractSidebarObjective sidebar) {
 
 	}
 }

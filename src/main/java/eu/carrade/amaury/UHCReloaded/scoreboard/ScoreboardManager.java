@@ -19,11 +19,11 @@
 
 package eu.carrade.amaury.UHCReloaded.scoreboard;
 
-import eu.carrade.amaury.UHCReloaded.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
-import eu.carrade.amaury.UHCReloaded.scoreboard.managers.SidebarObjective;
-import eu.carrade.amaury.UHCReloaded.scoreboard.managers.sync.SynchronizedSidebarObjective;
+import eu.carrade.amaury.UHCReloaded.scoreboard.managers.AbstractSidebarObjective;
+import eu.carrade.amaury.UHCReloaded.scoreboard.managers.SynchronizedSidebarObjective;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -46,7 +46,7 @@ public class ScoreboardManager {
 	private I18n i = null;
 	private UHGameManager gm = null;
 	private Scoreboard sb = null;
-	private SidebarObjective sidebar = null;
+	private AbstractSidebarObjective sidebar = null;
 
 	// Old values, to be able to update the minimum.
 	// Initialized to -1 to force an update at the first launch.
@@ -142,7 +142,7 @@ public class ScoreboardManager {
 			sidebar.addEntry(this.getText("players", p.getServer().getOnlinePlayers().size()), true);
 
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer")) {
-				sidebar.addEntry(SidebarObjective.SEPARATOR, true);
+				sidebar.addEntry(AbstractSidebarObjective.SEPARATOR, true);
 
 				// Displays a fake, frozen timer if the game is not started.
 				sidebar.addEntry(this.getTimerText(new UHTimer(""), true, false), true);
@@ -172,7 +172,7 @@ public class ScoreboardManager {
 			}
 
 			if(p.getConfig().getBoolean("episodes.enabled") && p.getConfig().getBoolean("scoreboard.timer") && p.getTimerManager().getMainTimer() != null) {
-				sidebar.addEntry(SidebarObjective.SEPARATOR, true);
+				sidebar.addEntry(AbstractSidebarObjective.SEPARATOR, true);
 				sidebar.addEntry(getTimerText(p.getTimerManager().getMainTimer(), false, false), true);
 			}
 
@@ -190,7 +190,7 @@ public class ScoreboardManager {
 	 */
 	private void buildTimersSidebar() {
 		for(UHTimer timer : displayedTimers) {
-			sidebar.addEntry(SidebarObjective.SEPARATOR, true);
+			sidebar.addEntry(AbstractSidebarObjective.SEPARATOR, true);
 			sidebar.addEntry(timer.getDisplayName(), true);
 			sidebar.addEntry(getTimerText(timer, false, false), true);
 		}
@@ -294,7 +294,7 @@ public class ScoreboardManager {
 			final String freezerStatusText = i.t("freeze.scoreboard");
 
 			if(frozen) {
-				sidebar.addEntry(SidebarObjective.SEPARATOR, true);
+				sidebar.addEntry(AbstractSidebarObjective.SEPARATOR, true);
 				sidebar.addEntry(freezerStatusText, true);
 				sidebar.reconstruct();
 			}
