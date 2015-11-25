@@ -23,5 +23,5 @@ package eu.carrade.amaury.UHCReloaded.events;
  * This event is fired when the UHC game is started.
  */
 public class UHGameStartsEvent  extends UHEvent {
-	
+
 }

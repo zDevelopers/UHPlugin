@@ -35,44 +35,44 @@ import java.util.logging.Level;
 /**
  * This class is used to manage the internationalization of this plugin.
  * It is plugin-independent.
- * 
+ *
  * @author Amaury Carrade
  * @version 1.2
  * @license Mozilla Public License
  *
  */
 public class I18n {
-	
+
 	private Plugin p = null;
-	
+
 	private String selectedLanguage = null;
 	private String defaultLanguage = null;
-	
+
 	private Map<String,FileConfiguration> languageSource = new HashMap<String,FileConfiguration>();
 	private Map<String,File> languageFile = new HashMap<String,File>();
 	private File manifestFile = null;
 	private FileConfiguration manifest = null;
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * About the storage: 
 	 *  - the translation files are stored in the directory {PluginDir}/i18n/{languageCode}.yml
 	 *  - an additional file, {PluginDir}/i18n/manifest.yml, contains two keys. 
 	 *     - "languages": this key is a list of the available languages.
 	 *     - "version": this key is the version of the plugin (used to update the language files on the disk).
 	 *       This needs to be the exact version defined in the plugin.yml file.
-	 * 
+	 *
 	 * Currently, an "en_US" language file is needed.
 	 * Else, if the requested language is not available, a crash will occur when trying to load the en_US language.
-	 * 
+	 *
 	 * @param plugin The plugin.
 	 * @param selectedLanguage The selected language.
 	 * @param defaultLanguage The default language, used when a key is missing or null.
 	 */
 	public I18n(Plugin plugin, String selectedLanguage, String defaultLanguage) {
 		this.p = plugin;
-		
+
 		// Write the manifest
 		try {
 			p.saveResource(getLanguageFilePath("manifest"), false);
@@ -85,14 +85,14 @@ public class I18n {
 			p.getLogger().log(Level.SEVERE, "Unable to load a malformed i18n manifest", e);
 			return;
 		}
-		
+
 		// The language files need to be written
 		// and to be overwritten if the plugin was updated (== different version)
 		writeFilesIfNeeded();
-		
+
 		this.selectedLanguage = selectedLanguage;
 		this.defaultLanguage = defaultLanguage;
-		
+
 		if(!isLanguageAvailable(selectedLanguage)) {
 			if(isLanguageAvailable(getLanguageName(Locale.getDefault()))) {
 				this.selectedLanguage = getLanguageName(Locale.getDefault());
@@ -106,7 +106,7 @@ public class I18n {
 			this.defaultLanguage  = "en_US";
 			p.getLogger().info("The default language (" + defaultLanguage + ") is not available or not registered in the manifest; using en_US.");
 		}
-		
+
 		try {
 			this.reloadLanguageFile(this.selectedLanguage);
 			this.reloadLanguageFile(this.defaultLanguage);
@@ -124,32 +124,32 @@ public class I18n {
 			return;
 		}
 	}
-	
+
 	/**
 	 * Constructor.
 	 * With this constructor, the default language is the English one (en_US).
-	 * 
+	 *
 	 * @param plugin The plugin.
 	 * @param selectedLanguage The selected language.
 	 */
 	public I18n(Plugin plugin, String selectedLanguage) {
 		this(plugin, selectedLanguage, "en_US");
 	}
-	
+
 	/**
 	 * Constructor.
 	 * With this constructor, the default language is the English one (en_US), and 
 	 * the selected language is the one returned by Locale.getDefault().
-	 * 
+	 *
 	 * @param plugin The plugin.
 	 */
 	public I18n(Plugin plugin) {
 		this(plugin, getLanguageName(Locale.getDefault()));
 	}
-	
+
 	/**
 	 * Returns the translator of the given language.
-	 * 
+	 *
 	 * @param lang The language.
 	 * @return The translator, or null if not defined.
 	 */
@@ -159,28 +159,28 @@ public class I18n {
 		}
 		return this.languageSource.get(lang).getString("author");
 	}
-	
+
 	/**
 	 * Returns the selected language.
-	 * 
+	 *
 	 * @return The code of the language (ex. en_US).
 	 */
 	public String getSelectedLanguage() {
 		return this.selectedLanguage;
 	}
-	
+
 	/**
 	 * Returns the default (fallback) language.
-	 * 
+	 *
 	 * @return The code of the language (ex. en_US).
 	 */
 	public String getDefaultLanguage() {
 		return this.defaultLanguage;
 	}
-	
+
 	/**
 	 * Returns the translated value associated to a key.
-	 * 
+	 *
 	 * @param key The key.
 	 * @return
 	 */
@@ -198,11 +198,11 @@ public class I18n {
 			return key;
 		}
 	}
-	
+
 	/**
 	 * Returns the translated value associated to a key.
 	 * Replaces {0}, {1}, etc. with the other parameters, following the order of these parameters.
-	 * 
+	 *
 	 * @param key The key.
 	 * @param params The additional parameters.
 	 * @return
@@ -210,18 +210,18 @@ public class I18n {
 	public String t(String key, String... params) {
 		int i = 0;
 		String text = t(key);
-		
+
 		for(String param : params) {
 			text = text.replace("{" + i + "}", param);
 			i++;
 		}
-		
+
 		return text;
 	}
-	
+
 	/**
 	 * Returns the raw translation stored in the language file.
-	 * 
+	 *
 	 * @param key
 	 * @param lang
 	 * @return
@@ -232,15 +232,15 @@ public class I18n {
 		}
 		return this.languageSource.get(lang).getString("keys." + key);
 	}
-	
+
 	/**
 	 * Replaces standard keys in the message, like {gold} for the gold color code.
-	 * 
+	 *
 	 * @param text
 	 * @return
 	 */
 	private String replaceStandardKeys(String text) {
-		
+
 		return text.replace("{black}", ChatColor.BLACK.toString())
 		           .replace("{darkblue}", ChatColor.DARK_BLUE.toString())
 		           .replace("{darkgreen}", ChatColor.DARK_GREEN.toString())
@@ -257,53 +257,53 @@ public class I18n {
 		           .replace("{lightpurple}", ChatColor.LIGHT_PURPLE.toString())
 		           .replace("{yellow}", ChatColor.YELLOW.toString())
 		           .replace("{white}", ChatColor.WHITE.toString())
-		           
+
 		           .replace("{bold}", ChatColor.BOLD.toString())
 		           .replace("{strikethrough}", ChatColor.STRIKETHROUGH.toString())
 		           .replace("{underline}", ChatColor.UNDERLINE.toString())
 		           .replace("{italic}", ChatColor.ITALIC.toString())
 		           .replace("{obfuscated}", ChatColor.MAGIC.toString())
-		           
+
 		           .replace("{reset}", ChatColor.RESET.toString())
-		           
+
 		           .replace("{ce}", ChatColor.RED.toString()) // error
 		           .replace("{cc}", ChatColor.GOLD.toString()) // command
 		           .replace("{ci}", ChatColor.WHITE.toString()) // info
 		           .replace("{cs}", ChatColor.GREEN.toString()) // success
 		           .replace("{cst}", ChatColor.DARK_GRAY.toString()); // status
 	}
-	
+
 	/**
 	 * Returns the name of the language associated with the given locale.
 	 * <p>
 	 * <code>locale.toString()</code> is not use to avoid a longer name, because the format
 	 * of this method is:
-	 * 
+	 *
 	 * <pre>language + "_" + country + "_" + (variant + "_#" | "#") + script + "-" + extensions</pre>
-	 * 
+	 *
 	 * <p>
 	 * Static because I need this in a constructor.
-	 * 
+	 *
 	 * @param locale The locale
 	 * @return The name of the locale, formatted following this scheme: "language_COUNTRY".
 	 */
 	private static String getLanguageName(Locale locale) {
 		return locale.getLanguage() + "_" + locale.getCountry();
 	}
-	
+
 	/**
 	 * Returns true if the given language is available, using the manifest.
-	 * 
+	 *
 	 * @param lang The lang.
 	 * @return true if the given language is available.
 	 */
 	private boolean isLanguageAvailable(String lang) {
 		return this.manifest.getList("languages").contains(lang);
 	}
-	
+
 	/**
 	 * (Re)loads a language file.
-	 * 
+	 *
 	 * @param lang The language to (re)load.
 	 * @throws IllegalArgumentException if the language is not registered.
 	 * @throws FileNotFoundException if the language file does not exists in the server's plugins directory.
@@ -312,24 +312,24 @@ public class I18n {
 	 */
 	private void reloadLanguageFile(String lang) throws InvalidConfigurationException, IllegalArgumentException, FileNotFoundException, IOException {
 		lang = this.cleanLanguageName(lang);
-		
+
 		if(!isLanguageAvailable(lang)) { // Unknown language
 			throw new IllegalArgumentException("The language " + lang + " is not registered");
 		}
-		
+
 		if(this.languageFile.get(lang) == null) {
 			this.languageFile.put(lang, new File(p.getDataFolder() + "/" + getLanguageFilePath(lang)));
 		}
-		
-		
+
+
 		// The YAML configuration is loaded using a Reader, to specify the encoding to be used,
 		// to be able to force UTF-8.
 		// An InputStream of the language file is needed for this.
 		InputStream languageFileInputStream = null;
 		languageFileInputStream = languageFile.get(lang).toURI().toURL().openConnection().getInputStream();
 		this.languageSource.put(lang, YamlConfiguration.loadConfiguration(new InputStreamReader(languageFileInputStream, Charsets.UTF_8)));
-		
-		
+
+
 		// Default config
 		try {
 			Reader defaultLanguageFile = new InputStreamReader(p.getResource(getLanguageFilePath(lang)), Charsets.UTF_8);
@@ -341,19 +341,19 @@ public class I18n {
 			// No "default" translation file available: user-only language file.
 		}
 	}
-	
+
 	/**
 	 * Reloads the manifest.
-	 * @return 
+	 * @return
 	 */
 	private void reloadManifest() throws InvalidConfigurationException {
 		if(manifestFile == null) {
 			manifestFile = new File(p.getDataFolder() + "/" + this.getLanguageFilePath("manifest"));
 		}
-		
+
 		manifest = YamlConfiguration.loadConfiguration(manifestFile);
 	}
-	
+
 	/**
 	 * Writes the language files and the manifest to the disk if needed.
 	 * The files are written if they are not already written of if the version changed.
@@ -374,13 +374,13 @@ public class I18n {
 			}
 		}
 	}
-	
+
 	/**
 	 * Writes the language files to the disk, on the {PluginFolder}/i18n/ directory.
 	 * <p>
 	 * (The manifest is not written here, but in the {@link #I18n(Plugin, String, String) constructor},
 	 * because it is needed here.)
-	 * 
+	 *
 	 * @param overwrite If true, the language files will be overwritten.
 	 */
 	private void writeLanguageFiles(boolean overwrite) {
@@ -390,7 +390,7 @@ public class I18n {
 				try {
 					if(overwrite) p.getLogger().log(Level.INFO, "Updating the language file for " + lang + "...");
 					else          p.getLogger().log(Level.INFO, "Writing the language file for " + lang + "...");
-					
+
 					p.saveResource(getLanguageFilePath((String) lang), overwrite);
 				} catch(IllegalArgumentException e) {
 					p.getLogger().severe("Unable to load the language file for " + lang + ": the file does not exists.");
@@ -398,20 +398,20 @@ public class I18n {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns a cleaned version of a language name.
-	 * 
+	 *
 	 * @param lang
 	 * @return
 	 */
 	private String cleanLanguageName(String lang) {
 		return lang.replace(' ', '_');
 	}
-	
+
 	/**
 	 * Returns the location of the language file inside the data folder, for the given language.
-	 * 
+	 *
 	 * @param lang
 	 * @return
 	 */

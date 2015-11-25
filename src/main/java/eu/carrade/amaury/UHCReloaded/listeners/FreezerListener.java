@@ -30,17 +30,17 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public class FreezerListener implements Listener {
-	
+
 	private UHCReloaded p = null;
-	
+
 	public FreezerListener(UHCReloaded p) {
 		this.p = p;
 	}
-	
-	
+
+
 	/**
 	 * Used to prevent frozen players to break blocks.
-	 * 
+	 *
 	 * @param ev
 	 */
 	@EventHandler
@@ -49,11 +49,11 @@ public class FreezerListener implements Listener {
 			ev.setCancelled(true);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Used to prevent frozen players to place blocks.
-	 * 
+	 *
 	 * @param ev
 	 */
 	@EventHandler
@@ -62,31 +62,31 @@ public class FreezerListener implements Listener {
 			ev.setCancelled(true);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Used to freeze the players.
-	 * 
+	 *
 	 * @param ev
 	 */
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent ev) {
 		p.getFreezer().freezePlayerIfNeeded(ev.getPlayer(), ev.getFrom(), ev.getTo());
 	}
-	
-	
+
+
 	/**
 	 * Used to prevent the bows to be used while in global freeze mode.
-	 * 
+	 *
 	 * @param ev
 	 */
 	@EventHandler
 	public void onEntityShoot(EntityShootBowEvent ev) {
 		if((ev.getEntity() instanceof Player && p.getFreezer().isPlayerFrozen((Player) ev.getEntity()))
 				|| p.getFreezer().getGlobalFreezeState()) {
-			
+
 			ev.setCancelled(true);
-			
+
 			// If a shoot from a player is cancelled, the arrow seems to be
 			// consumed in the player' screen.
 			// The inventory needs to be updated for the arrow to "come back".
@@ -95,11 +95,11 @@ public class FreezerListener implements Listener {
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Used to prevent items from despawning if the game is frozen.
-	 * 
+	 *
 	 * @param ev
 	 */
 	@EventHandler
@@ -108,8 +108,8 @@ public class FreezerListener implements Listener {
 			ev.setCancelled(true);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Used to freeze the mobs spawning while the game is frozen.
 	 * @param ev
@@ -120,11 +120,11 @@ public class FreezerListener implements Listener {
 			p.getFreezer().freezeCreature((Creature) ev.getEntity(), true);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Used to disable any damages if the player is frozen.
-	 * 
+	 *
 	 * @param ev
 	 */
 	@EventHandler
@@ -135,10 +135,10 @@ public class FreezerListener implements Listener {
 			}
 		}
 	}
-	
+
 	/**
 	 * Used to cancel any food loss (but the players can still eat).
-	 * 
+	 *
 	 * @param ev
 	 */
 	@EventHandler

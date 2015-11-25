@@ -49,13 +49,13 @@ public class UHGameManager {
 
 	private Boolean damageIsOn = false;
 
-	private HashSet<String> players = new HashSet<String>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available 
-	private HashSet<UUID> alivePlayers = new HashSet<UUID>();
-	private HashSet<UHTeam> aliveTeams = new HashSet<UHTeam>();
-	private HashSet<UUID> spectators = new HashSet<UUID>();
-	private Map<UUID,Location> deathLocations = new HashMap<UUID,Location>();
+	private HashSet<String> players = new HashSet<>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available
+	private HashSet<UUID> alivePlayers = new HashSet<>();
+	private HashSet<UHTeam> aliveTeams = new HashSet<>();
+	private HashSet<UUID> spectators = new HashSet<>();
+	private Map<UUID,Location> deathLocations = new HashMap<>();
 
-	private HashSet<String> deadPlayersToBeResurrected = new HashSet<String>(); // Same
+	private HashSet<String> deadPlayersToBeResurrected = new HashSet<>(); // Same
 
 	private Integer alivePlayersCount = 0;
 	private Integer aliveTeamsCount = 0;
@@ -210,7 +210,7 @@ public class UHGameManager {
 		}
 
 		// This is used to be able to delete the teams created on-the-fly
-		ArrayList<String> onTheFlyTeams = new ArrayList<String>();
+		ArrayList<String> onTheFlyTeams = new ArrayList<>();
 		boolean useColors = p.getConfig().getBoolean("teams-options.randomColors");
 
 
@@ -321,10 +321,6 @@ public class UHGameManager {
 
 			// The players are frozen during the start.
 			p.getFreezer().setGlobalFreezeState(true, false);
-
-			// Used to display the number of teams, players... in the scoreboard instead of 0
-			// while the players are teleported.
-			p.getScoreboardManager().updateCounters();
 
 			// A simple information, because this start is slower (yeah, Captain Obvious here)
 			p.getServer().broadcastMessage(i.t("start.teleportationInProgress"));
@@ -474,8 +470,6 @@ public class UHGameManager {
 
 		updateAliveCache();
 
-		p.getScoreboardManager().buildSidebar();
-
 		// Fires the event
 		p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
 	}
@@ -514,8 +508,6 @@ public class UHGameManager {
 		this.alivePlayersCount = alivePlayers.size();
 		this.aliveTeamsCount   = aliveTeams.size();
 
-		p.getScoreboardManager().updateCounters();
-
 		p.getMOTDManager().updateMOTDDuringGame();
 	}
 
@@ -546,11 +538,8 @@ public class UHGameManager {
 			// Restarts the timer.
 			// Useless for a normal start (restarted in the event), but needed if the episode was shifted.
 			if(cause == EpisodeChangedCause.SHIFTED) {
-				p.getScoreboardManager().restartTimers();
 				p.getTimerManager().getMainTimer().start();
 			}
-
-			p.getScoreboardManager().updateCounters();
 
 			p.getServer().getPluginManager().callEvent(new UHEpisodeChangedEvent(episode, cause, shifter));
 		}
@@ -714,7 +703,7 @@ public class UHGameManager {
 	 */
 	public HashSet<String> getStartupSpectators() {
 
-		HashSet<String> spectatorNames = new HashSet<String>();
+		HashSet<String> spectatorNames = new HashSet<>();
 
 		for(UUID id : spectators) {
 			spectatorNames.add(p.getServer().getPlayer(id).getName());
@@ -896,7 +885,7 @@ public class UHGameManager {
 	 */
 	public Set<OfflinePlayer> getAlivePlayers() {
 
-		HashSet<OfflinePlayer> alivePlayersList = new HashSet<OfflinePlayer>();
+		HashSet<OfflinePlayer> alivePlayersList = new HashSet<>();
 
 		for(UUID id : alivePlayers) {
 			alivePlayersList.add(p.getServer().getOfflinePlayer(id));
@@ -912,7 +901,7 @@ public class UHGameManager {
 	 */
 	public HashSet<Player> getOnlineAlivePlayers() {
 
-		HashSet<Player> alivePlayersList = new HashSet<Player>();
+		HashSet<Player> alivePlayersList = new HashSet<>();
 
 		for(UUID id : alivePlayers) {
 			Player player = p.getServer().getPlayer(id);

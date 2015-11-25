@@ -33,41 +33,41 @@ public class FireworksOnWinnersTask extends BukkitRunnable {
 
 	private UHCReloaded p = null;
 	private Set<OfflinePlayer> winners = null;
-	
+
 	private Double areaSize;
 	private Random rand;
-	
+
 	private long startTime = 0L;
-	
+
 	public FireworksOnWinnersTask(UHCReloaded p, Set<OfflinePlayer> listWinners) {
 		this.p = p;
 		this.winners = listWinners;
-		
+
 		this.areaSize = p.getConfig().getDouble("finish.fireworks.areaSize");
 		this.rand = new Random();
-		
+
 		this.startTime = System.currentTimeMillis();
 	}
-	
+
 	@Override
 	public void run() {
 		// The fireworks are launched in a square centered on the player.
 		Double halfAreaSize = areaSize / 2;
-		
+
 		for(OfflinePlayer winner : winners) {
 			if(winner.isOnline()) {
 				Location fireworkLocation = ((Player) winner).getLocation();
-				
+
 				fireworkLocation.add(rand.nextDouble() * areaSize - halfAreaSize, // a number between -halfAreaSize and halfAreaSize 
 						2, // y+2 for a clean vision of the winner.
 						rand.nextDouble() * areaSize - halfAreaSize);
-				
+
 				UHUtils.generateRandomFirework(fireworkLocation, 0, 15);
 				UHUtils.generateRandomFirework(fireworkLocation.add(0.2, 0d, 0.2), 0, 15);
 				UHUtils.generateRandomFirework(fireworkLocation.add(-0.2, 0d, 0.2), 0, 15);
 			}
 		}
-		
+
 		if((System.currentTimeMillis() - startTime) / 1000 > p.getConfig().getInt("finish.fireworks.duration", 10)) {
 			this.cancel();
 		}

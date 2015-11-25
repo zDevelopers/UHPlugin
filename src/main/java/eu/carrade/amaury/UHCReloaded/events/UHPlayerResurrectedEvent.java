@@ -32,16 +32,16 @@ import org.bukkit.entity.Player;
  * (i.e. when the message “the player is resurrected” is broadcasted).
  */
 public class UHPlayerResurrectedEvent extends UHEvent {
-	
+
 	private Player resurrectedPlayer;
-	
+
 	public UHPlayerResurrectedEvent(Player player) {
 		this.resurrectedPlayer = player;
 	}
-	
+
 	/**
 	 * Returns the resurrected player.
-	 * 
+	 *
 	 * @return The player.
 	 */
 	public Player getPlayer() {

@@ -23,7 +23,7 @@ import org.bukkit.ChatColor;
 
 /**
  * Represents a team color.
- * 
+ *
  * Also used to convert a string to a ChatColor object.
  */
 public enum TeamColor {
@@ -52,14 +52,14 @@ public enum TeamColor {
 		this.name = name;
 		this.color = color;
 	}
-	
+
 	public ChatColor toChatColor() {
 		return this.color;
 	}
-	
+
 	/**
 	 * Returns a ChatColor object from a string.
-	 * 
+	 *
 	 * @param name The name of the color.
 	 * @return The ChatColor object (null if RANDOM or not found).
 	 */
@@ -67,13 +67,13 @@ public enum TeamColor {
 		for(TeamColor color : values()) {
 			if (color.name.equalsIgnoreCase(name)) return color.color;
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Case&trim-insensitive version of {@link #valueOf(String)}.
-	 * 
+	 *
 	 * @param name The name to get.
 	 * @return A TeamColor value, or null if no value found.
 	 */
@@ -81,7 +81,7 @@ public enum TeamColor {
 		if(name.equals("?")) {
 			return RANDOM;
 		}
-		
+
 		try {
 			return valueOf(name.trim().toUpperCase());
 		}
@@ -90,7 +90,7 @@ public enum TeamColor {
 			for(TeamColor color : values()) {
 				if(color.name.equalsIgnoreCase(name)) return color;
 			}
-			
+
 			return null;
 		}
 	}

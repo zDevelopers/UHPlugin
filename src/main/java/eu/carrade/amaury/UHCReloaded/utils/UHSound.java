@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 
 /**
  * Represents a sound, with volume and pitch.
- * 
+ *
  * @author Amaury Carrade
  */
 public class UHSound {
@@ -38,7 +38,7 @@ public class UHSound {
 
 	/**
 	 * Constructs a sound with volume = 1f and pitch = 1f.
-	 * 
+	 *
 	 * @param sound The sound.
 	 */
 	public UHSound(Sound sound) {
@@ -61,14 +61,14 @@ public class UHSound {
 	 *     volume: decimal number
 	 *     pitch: decimal number
 	 * </pre>
-	 * 
+	 *
 	 * @param config The configuration section.
 	 */
 	public UHSound(ConfigurationSection config) {
 		if(config == null) {
 			return;
 		}
-		
+
 		this.sound = string2Sound(config.getString("name"));
 		this.volume = (float) config.getDouble("volume");
 		this.pitch = (float) config.getDouble("pitch");
@@ -80,7 +80,7 @@ public class UHSound {
 	 * The sound is played at the current location of the player.
 	 * <p>
 	 * If the sound is null, fails silently.
-	 * 
+	 *
 	 * @param player The player.
 	 */
 	public void play(Player player) {
@@ -91,7 +91,7 @@ public class UHSound {
 	 * Plays the sound for the specified player, at the specified location.
 	 * <p>
 	 * If the sound is null, fails silently.
-	 * 
+	 *
 	 * @param player The player.
 	 * @param location The location of the sound.
 	 */
@@ -185,7 +185,7 @@ public class UHSound {
 	 * <p>
 	 * "<code>ANVIL_LAND</code>", "<code>Anvil Land</code>" and "<code>ANVIL Land</code>" are recognized as
 	 * <code>Sound.ANVIL_LAND</code>, as example.
-	 * 
+	 *
 	 * @param soundName The text to be converted.
 	 * @return The corresponding Sound, or null if there isn't any match.
 	 */
@@ -199,7 +199,7 @@ public class UHSound {
 				return null;
 			}
 		}
-		
+
 		return null;
 	}
 }

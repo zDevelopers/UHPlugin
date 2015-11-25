@@ -30,24 +30,24 @@ public class CancelBrewTask extends BukkitRunnable {
 
 	private BrewerInventory inventory = null;
 	private HumanEntity whoClicked = null;
-	
+
 	public CancelBrewTask(BrewerInventory inventory, HumanEntity whoClicked) {
 		this.inventory = inventory;
 		this.whoClicked = whoClicked;
 	}
-	
+
 	@Override
 	public void run() {
 		if(inventory.getIngredient() == null) {
 			return; // Nothing to do!
 		}
-		
+
 		if(whoClicked instanceof Player) {
 			ItemStack ingredient = inventory.getIngredient();
-			
+
 			if(ingredient.getType() != null && ingredient.getType().equals(Material.GLOWSTONE_DUST)) {
 				inventory.setIngredient(new ItemStack(Material.AIR)); // The glowstone is removed.
-				
+
 				// First try: try to add the glowstone to an existing stack
 				Boolean added = false;
 				for(ItemStack item : whoClicked.getInventory().getContents()) {
@@ -60,12 +60,12 @@ public class CancelBrewTask extends BukkitRunnable {
 						}
 					}
 				}
-				
+
 				if(!added) {
 					// Failed... We adds the glowstone to the first empty slot found.
-					
+
 					Integer slotEmpty = whoClicked.getInventory().firstEmpty();
-					
+
 					if(slotEmpty != -1) { // -1 is returned if there isn't any empty slot
 						whoClicked.getInventory().setItem(slotEmpty, ingredient);
 					}
@@ -75,7 +75,7 @@ public class CancelBrewTask extends BukkitRunnable {
 						whoClicked.getWorld().dropItem(whoClicked.getLocation(), ingredient);
 					}
 				}
-				
+
 				((Player) whoClicked).updateInventory();
 			}
 		}

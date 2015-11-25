@@ -29,30 +29,30 @@ public class BorderWarningTask extends BukkitRunnable {
 
 	private UHCReloaded p = null;
 	private I18n i = null;
-	
+
 	public BorderWarningTask(UHCReloaded p) {
 		this.p = p;
 		this.i = p.getI18n();
 	}
-	
+
 	@Override
 	public void run() {
-		
+
 		if(p.getFreezer().getGlobalFreezeState()) {
 			return; // No messages are sent if the game is frozen.
 		}
-		
+
 		// Message sent to all players outside the border
 		for(Player player : p.getBorderManager().getPlayersOutside(p.getBorderManager().getWarningSize())) {
 			double distance = p.getBorderManager().getDistanceToBorder(player.getLocation(), p.getBorderManager().getWarningSize());
-			
+
 			if(p.getBorderManager().getMapShape() == MapShape.CIRCULAR) {
 				player.sendMessage(i.t("borders.warning.messageCircular", String.valueOf(p.getBorderManager().getWarningSize())));
 			}
 			else {
 				player.sendMessage(i.t("borders.warning.messageSquared", String.valueOf(p.getBorderManager().getWarningSize())));
 			}
-			
+
 			player.sendMessage(i.t("borders.warning.messageDistance", String.valueOf(distance)));
 		}
 	}

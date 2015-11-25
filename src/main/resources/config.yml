@@ -11,7 +11,7 @@
 # Warning: NEVER USE TABS in this file, always spaces, to indent.
 
 
-# Available languages: en_US, fr_FR, pt_PT, pt_BR, cs_CZ.
+# Available languages: en_US, fr_FR, pt_PT, pt_BR, cs_CZ, zh_CN.
 # Empty value: system language.
 lang: 
 
@@ -71,6 +71,11 @@ scoreboard:
     episode: true
     players: true
     teams: true
+    ownTeam:
+        enabled: true        # Displays the player's team in the scoreboard
+        displayHearts: true  # Displays hearts colored following the player's life (low = red, high = green)
+        colorName: false     # Color the whole name, not only the heart, following the life
+        loginState: true     # Logged-out players are displayed in italic
     timer: true
     freezeStatus: true
     
@@ -192,6 +197,15 @@ gameplay-changes:
     witch:
         disableNaturalSpawn: false
         disableLightningSpawn: false  # from a villager
+
+    rabbit:
+        killerRabbitSpawn: true
+        # When a rabbit spawns, it will be transformed into a Killer Rabbit following
+        # this probability (between 0 and 1).
+        killerRabbitSpawnProbability: 0.05
+        # The rabbit will be named after this configuration point, except if empty - then, the
+        # default vanilla name will be used ("The Killer Bunny").
+        killerRabbitName: "The Killer Rabbit of Caerbannog"
     
     
     # If true a compass will show the nearest player, and the craft will be different.
