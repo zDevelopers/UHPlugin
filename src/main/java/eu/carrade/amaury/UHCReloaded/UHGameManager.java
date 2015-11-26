@@ -53,7 +53,6 @@ import java.util.UUID;
 
 public class UHGameManager
 {
-
     private UHCReloaded p = null;
     private TeamManager tm = null;
     private I18n i = null;

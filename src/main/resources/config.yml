@@ -83,6 +83,9 @@ scoreboard:
             loginState:
                 italic: true          # Logged-out players are displayed in italic
                 suffix: "\u27A5"      # This string is displayed after the name of logged-out players
+            displayMetPlayersOnly:
+                enabled: false               # If enabled, the sidebar will only contains players met at some time.
+                displayedWhenCloserThan: 10  # If enabled, a teammate will be displayed to the reference player if he/she is closer that this amount of blocks to the player.
     timer: true
     freezeStatus: true
     

@@ -35,7 +35,9 @@ import fr.zcraft.zlib.components.scoreboard.Sidebar;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 
 /**
@@ -49,6 +51,9 @@ public class SidebarPlayerCache
     private ChatColor healthColor = ChatColor.WHITE;
     private boolean isOnline;
     private boolean isAlive;
+
+    private Set<UUID> teammatesDisplayed = new CopyOnWriteArraySet<>();
+
 
     public SidebarPlayerCache(UUID id)
     {
@@ -120,5 +125,10 @@ public class SidebarPlayerCache
     public boolean isAlive()
     {
         return isAlive;
+    }
+
+    public Set<UUID> getTeammatesDisplayed()
+    {
+        return teammatesDisplayed;
     }
 }

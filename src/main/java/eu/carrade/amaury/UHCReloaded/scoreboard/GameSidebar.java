@@ -41,6 +41,7 @@ import fr.zcraft.zlib.components.scoreboard.Sidebar;
 import fr.zcraft.zlib.components.scoreboard.SidebarMode;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
@@ -67,13 +68,15 @@ public class GameSidebar extends Sidebar
     private final boolean FREEZE_STATUS_IN_SIDEBAR;
 
     private final boolean OWN_TEAM_IN_SIDEBAR;
-    private final String OWN_TEAM_TITLE_COLOR;
+    private final String  OWN_TEAM_TITLE_COLOR;
     private final boolean OWN_TEAM_TITLE_IS_NAME;
     private final boolean OWN_TEAM_DISPLAY_HEARTS;
     private final boolean OWN_TEAM_COLOR_WHOLE_NAME;
     private final boolean OWN_TEAM_STRIKE_DEAD_PLAYERS;
     private final boolean OWN_TEAM_DISPLAY_LOGIN_STATE_ITALIC;
-    private final String OWN_TEAM_DISPLAY_LOGIN_STATE_SUFFIX;
+    private final String  OWN_TEAM_DISPLAY_LOGIN_STATE_SUFFIX;
+    private final boolean OWN_TEAM_DISPLAY_MET_PLAYERS_ONLY;
+    private final double  OWN_TEAM_DISPLAY_MET_PLAYERS_MIN_DISTANCE_SQUARED;
 
     private final String FROOZEN_NULL_TIMER_TEXT;
     private final String HEART = "\u2764";
@@ -105,6 +108,8 @@ public class GameSidebar extends Sidebar
         OWN_TEAM_STRIKE_DEAD_PLAYERS = config.getBoolean("scoreboard.ownTeam.content.strikeDeadPlayers");
         OWN_TEAM_DISPLAY_LOGIN_STATE_ITALIC = config.getBoolean("scoreboard.ownTeam.content.loginState.italic");
         OWN_TEAM_DISPLAY_LOGIN_STATE_SUFFIX = ChatColor.translateAlternateColorCodes('&', config.getString("scoreboard.ownTeam.content.loginState.suffix"));
+        OWN_TEAM_DISPLAY_MET_PLAYERS_ONLY = config.getBoolean("scoreboard.ownTeam.content.displayMetPlayersOnly.enabled");
+        OWN_TEAM_DISPLAY_MET_PLAYERS_MIN_DISTANCE_SQUARED = Math.pow(config.getDouble("scoreboard.ownTeam.content.displayMetPlayersOnly.displayedWhenCloserThan"), 2);
 
         FROOZEN_NULL_TIMER_TEXT = new UHTimer("").toString();
 
@@ -181,9 +186,44 @@ public class GameSidebar extends Sidebar
                         + (OWN_TEAM_TITLE_IS_NAME ? ChatColor.BOLD + team.getName() : i.t("scoreboard.yourTeam"))
                 );
 
+                Location playerLocation = player.getLocation();
+
                 for (UUID teamMember : team.getPlayersUUID())
                 {
                     SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(teamMember);
+
+                    // If enabled, we check if the player was already met or is close to this player.
+                    // Only if the damages are on (= 30 seconds after the game start) to avoid false close while
+                    // teleporting.
+                    if(OWN_TEAM_DISPLAY_MET_PLAYERS_ONLY)
+                    {
+                        if(!(teamMember.equals(player.getUniqueId()) || cache.getTeammatesDisplayed().contains(teamMember)))
+                        {
+                            if (gameManager.isGameStarted() && gameManager.isTakingDamage())
+                            {
+                                Player teammate = Sidebar.getPlayerAsync(teamMember);
+                                if (teammate == null)
+                                    continue; // offline
+
+                                Location teammateLocation = teammate.getLocation();
+
+                                // Check if the players are close
+                                final double distanceSquared = teammateLocation.distanceSquared(playerLocation);
+                                if (teammateLocation.getWorld().equals(playerLocation.getWorld()) && distanceSquared <= OWN_TEAM_DISPLAY_MET_PLAYERS_MIN_DISTANCE_SQUARED)
+                                {
+                                    cache.getTeammatesDisplayed().add(teamMember);
+                                }
+                                else
+                                {
+                                    continue; // Too far, skipped
+                                }
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                    }
 
                     final String strike = OWN_TEAM_STRIKE_DEAD_PLAYERS && !cache.isAlive() ? ChatColor.STRIKETHROUGH.toString() : "";
                     final ChatColor aliveColor = cache.isAlive() ? ChatColor.WHITE : ChatColor.GRAY;
