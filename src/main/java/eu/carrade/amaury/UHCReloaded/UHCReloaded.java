@@ -19,10 +19,15 @@
 
 package eu.carrade.amaury.UHCReloaded;
 
+import eu.carrade.amaury.UHCReloaded.borders.BorderManager;
 import eu.carrade.amaury.UHCReloaded.commands.UHCommandExecutor;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.integration.UHDynmapIntegration;
 import eu.carrade.amaury.UHCReloaded.integration.UHProtocolLibIntegrationWrapper;
+import eu.carrade.amaury.UHCReloaded.integration.UHSpectatorPlusIntegration;
+import eu.carrade.amaury.UHCReloaded.integration.UHWorldBorderIntegration;
+import eu.carrade.amaury.UHCReloaded.listeners.CraftingListener;
+import eu.carrade.amaury.UHCReloaded.listeners.GameListener;
 import eu.carrade.amaury.UHCReloaded.listeners.GameplayListener;
 import eu.carrade.amaury.UHCReloaded.listeners.SpawnsListener;
 import eu.carrade.amaury.UHCReloaded.misc.Freezer;
@@ -30,25 +35,21 @@ import eu.carrade.amaury.UHCReloaded.misc.MOTDManager;
 import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
 import eu.carrade.amaury.UHCReloaded.misc.RuntimeCommandsExecutor;
 import eu.carrade.amaury.UHCReloaded.recipes.RecipesManager;
-import eu.carrade.amaury.UHCReloaded.spawns.SpawnsManager;
-import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
-import eu.carrade.amaury.UHCReloaded.timers.TimerManager;
-import eu.carrade.amaury.UHCReloaded.borders.BorderManager;
-import eu.carrade.amaury.UHCReloaded.integration.UHSpectatorPlusIntegration;
-import eu.carrade.amaury.UHCReloaded.integration.UHWorldBorderIntegration;
-import eu.carrade.amaury.UHCReloaded.listeners.CraftingListener;
-import eu.carrade.amaury.UHCReloaded.listeners.GameListener;
 import eu.carrade.amaury.UHCReloaded.scoreboard.ScoreboardManager;
+import eu.carrade.amaury.UHCReloaded.spawns.SpawnsManager;
 import eu.carrade.amaury.UHCReloaded.task.UpdateTimerTask;
 import eu.carrade.amaury.UHCReloaded.teams.TeamChatManager;
+import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
+import eu.carrade.amaury.UHCReloaded.timers.TimerManager;
+import fr.zcraft.zlib.components.scoreboard.SidebarScoreboard;
+import fr.zcraft.zlib.core.ZPlugin;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
 
 import java.io.IOException;
 
-public class UHCReloaded extends JavaPlugin {
-
+public class UHCReloaded extends ZPlugin
+{
 	private TeamManager teamManager = null;
 	private SpawnsManager spawnsManager = null;
 	private UHGameManager gameManager = null;
@@ -85,6 +86,8 @@ public class UHCReloaded extends JavaPlugin {
 		else {
 			i18n = new I18n(this, getConfig().getString("lang"));
 		}
+
+		loadComponents(SidebarScoreboard.class);
 
 		teamManager = new TeamManager(this);
 		gameManager = new UHGameManager(this);

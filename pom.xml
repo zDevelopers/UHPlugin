@@ -110,9 +110,9 @@
             <url>http://repo.mikeprimm.com/</url>
         </repository>
         <repository>
-            <id>shadowvolt-repo</id>
-            <name>Shadowvolt Repository</name>
-            <url>http://ci.shadowvolt.com/plugin/repository/everything/</url>
+            <id>dmulloy2-repo</id>
+            <name>Dmulloy2 Repository (ProtocolLib)</name>
+            <url>http://repo.dmulloy2.net/content/groups/public/</url>
         </repository>
         <repository>
             <id>carrade-repo</id>
@@ -157,7 +157,7 @@
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>3.6.3-SNAPSHOT</version>
+            <version>3.6.4</version>
         </dependency>
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>

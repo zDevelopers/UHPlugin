@@ -58,7 +58,6 @@ public class UHTimersHideCommand extends AbstractCommand {
 			return;
 		}
 
-		p.getScoreboardManager().hideTimer(timer);
 		sender.sendMessage(i.t("timers.hidden", timer.getDisplayName()));
 	}
 

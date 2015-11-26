@@ -18,19 +18,19 @@
  */
 package eu.carrade.amaury.UHCReloaded.commands.commands.uh.timers;
 
-import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
-import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
-import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
-import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
+import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
+import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
+import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -57,14 +57,15 @@ public class UHTimersListCommand extends AbstractCommand {
 					sender.sendMessage(i.t("timers.list.itemPaused",
 							timer.getDisplayName(),
 							String.valueOf(timer.getDuration()),
-							p.getScoreboardManager().getTimerText(timer, false, false)));
+							timer.toString()
+					));
 				}
 				else {
 					sender.sendMessage(i.t("timers.list.itemRunning",
 							timer.getDisplayName(),
 							String.valueOf(timer.getDuration()),
-							p.getScoreboardManager().getTimerText(timer, false, false)));
-
+							timer.toString()
+					));
 				}
 			}
 			else {
@@ -93,6 +94,6 @@ public class UHTimersListCommand extends AbstractCommand {
 
 	@Override
 	public List<String> onListHelp(CommandSender sender) {
-		return Arrays.asList(i.t("cmd.timersHelpList"));
+		return Collections.singletonList(i.t("cmd.timersHelpList"));
 	}
 }

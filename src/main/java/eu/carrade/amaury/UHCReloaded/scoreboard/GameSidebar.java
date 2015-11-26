@@ -34,10 +34,10 @@ package eu.carrade.amaury.UHCReloaded.scoreboard;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import eu.carrade.amaury.UHCReloaded.misc.Freezer;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
 import fr.zcraft.zlib.components.scoreboard.SidebarMode;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
@@ -64,6 +64,8 @@ public class GameSidebar extends Sidebar
     private final boolean TIMER_IN_SIDEBAR;
     private final boolean FREEZE_STATUS_IN_SIDEBAR;
 
+    private final String FROOZEN_NULL_TIMER_TEXT;
+
     private final String sidebarTitle;
     private final List<String> sidebarTop = new ArrayList<>();
     private final List<String> sidebarTimers = new ArrayList<>();
@@ -82,6 +84,8 @@ public class GameSidebar extends Sidebar
         TEAMS_IN_SIDEBAR = config.getBoolean("scoreboard.teams");
         TIMER_IN_SIDEBAR = config.getBoolean("scoreboard.timer");
         FREEZE_STATUS_IN_SIDEBAR = config.getBoolean("scoreboard.freezeStatus");
+
+        FROOZEN_NULL_TIMER_TEXT = new UHTimer("").toString();
 
         setAsync(true);
         setAutoRefreshDelay(20);
@@ -130,9 +134,9 @@ public class GameSidebar extends Sidebar
         if(TIMER_IN_SIDEBAR)
         {
             if (!gameManager.isGameStarted())
-                sidebarTimers.add(this.getTimerText(new UHTimer(""), true, false));
+                sidebarTimers.add(FROOZEN_NULL_TIMER_TEXT);
             else
-                sidebarTimers.add(getTimerText(UHCReloaded.get().getTimerManager().getMainTimer(), false, false));
+                sidebarTimers.add(UHCReloaded.get().getTimerManager().getMainTimer().toString());
         }
     }
 
@@ -178,7 +182,7 @@ public class GameSidebar extends Sidebar
             if(timer.isDisplayed())
             {
                 sidebar.add(timer.getDisplayName());
-                sidebar.add(getTimerText(timer, false, false));
+                sidebar.add(timer.toString());
                 sidebar.add("");
             }
         }
@@ -191,79 +195,11 @@ public class GameSidebar extends Sidebar
      */
     private void insertFreezeStatus(List<String> sidebar, Player player)
     {
-        if(UHCReloaded.get().getFreezer().getGlobalFreezeState() || UHCReloaded.get().getFreezer().isPlayerFrozen(player)) {
+        final Freezer freezer = UHCReloaded.get().getFreezer();
+
+        if((freezer.getGlobalFreezeState() && !freezer.isHiddenFreeze()) || freezer.isPlayerFrozen(player)) {
             sidebar.add("");
             sidebar.add(i.t("freeze.scoreboard"));
-        }
-    }
-
-
-    /**
-     * Returns the text displayed in the scoreboard.
-     *
-     * @param textType Either "episode", "players" or "teams".
-     * @param arg Respectively, the episode number, the players count and the teams count.
-     * @return The text.
-     * @throws IllegalArgumentException if the textType is not one of the listed types.
-     */
-    private String getText(String textType, Integer arg) {
-        switch(textType) {
-            case "episode":
-                return i.t("scoreboard.episode", arg.toString());
-            case "players":
-                return i.t("scoreboard.players", arg.toString());
-            case "teams":
-                return i.t("scoreboard.teams", arg.toString());
-            default:
-                throw new IllegalArgumentException("Incorrect text type, see javadoc");
-        }
-    }
-
-    /**
-     * Returns the text displayed in the scoreboard, for the timer.
-     *
-     * @param timer The timer to display.
-     * @param forceNonHoursTimer If true, the non-hours timer text will be returned.
-     * @param useOldValues if true, the old values of the timer will be used.
-     * @return The text of the timer.
-     */
-    protected String getTimerText(UHTimer timer, Boolean forceNonHoursTimer, Boolean useOldValues) {
-        Validate.notNull(timer, "The timer cannot be null");
-
-        if(timer.getDisplayHoursInTimer() && !forceNonHoursTimer) {
-            if(useOldValues) {
-                return getTimerText(timer.getOldHoursLeft(), timer.getOldMinutesLeft(), timer.getOldSecondsLeft(), true);
-            }
-            else {
-                return getTimerText(timer.getHoursLeft(), timer.getMinutesLeft(), timer.getSecondsLeft(), true);
-            }
-        }
-        else {
-            if(useOldValues) {
-                return getTimerText(0, timer.getOldMinutesLeft(), timer.getOldSecondsLeft(), false);
-            }
-            else {
-                return getTimerText(0, timer.getMinutesLeft(), timer.getSecondsLeft(), false);
-            }
-        }
-    }
-
-    /**
-     * Returns the text displayed in the scoreboard, for the give values.
-     *
-     * @param hours The hours in the timer.
-     * @param minutes The minutes in the timer.
-     * @param seconds The seconds in the timer.
-     * @param displayHours If true, "hh:mm:ss"; else, "mm:ss".
-     *
-     * @return The text of the timer.
-     */
-    private String getTimerText(Integer hours, Integer minutes, Integer seconds, Boolean displayHours) {
-        if(displayHours) {
-            return i.t("scoreboard.timerWithHours", formatter.format(hours), formatter.format(minutes), formatter.format(seconds));
-        }
-        else {
-            return i.t("scoreboard.timer", formatter.format(minutes), formatter.format(seconds));
         }
     }
 }

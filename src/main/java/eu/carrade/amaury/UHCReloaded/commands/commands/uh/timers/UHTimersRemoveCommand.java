@@ -58,7 +58,6 @@ public class UHTimersRemoveCommand extends AbstractCommand {
 			return;
 		}
 
-		p.getScoreboardManager().hideTimer(timer);
 		p.getTimerManager().unregisterTimer(timer);
 		timer.stop();
 

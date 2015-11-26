@@ -47,6 +47,9 @@ public class Freezer {
 	private HashMap<UUID,Boolean> oldAllowFly = new HashMap<UUID,Boolean>();
 	private HashMap<UUID,Boolean> oldFlyMode = new HashMap<UUID,Boolean>();
 
+	private boolean hiddenFreeze = false;
+
+
 	public Freezer(UHCReloaded plugin) {
 		this.p = plugin;
 
@@ -84,6 +87,7 @@ public class Freezer {
 	 */
 	public void setGlobalFreezeState(Boolean frozen, Boolean showStateInScoreboard) {
 		this.globalFreeze = frozen;
+		this.hiddenFreeze = !showStateInScoreboard;
 
 		if(frozen) {
 			for(Player player : p.getGameManager().getOnlineAlivePlayers()) {
@@ -123,11 +127,6 @@ public class Freezer {
 
 			// Unfreezes the timers.
 			p.getTimerManager().pauseAllRunning(false);
-			p.getScoreboardManager().restartTimers();
-		}
-
-		if(showStateInScoreboard || !frozen) {
-			p.getScoreboardManager().displayFreezeState();
 		}
 
 		updateListenerRegistration();
@@ -190,6 +189,16 @@ public class Freezer {
 	 */
 	public boolean isPlayerFrozen(Player player) {
 		return frozenPlayers.contains(player.getUniqueId());
+	}
+
+	/**
+	 * Returns {@code true} if the current freeze must be hidden in the sidebar.
+	 *
+	 * @return {@code true} to hide it.
+	 */
+	public boolean isHiddenFreeze()
+	{
+		return hiddenFreeze;
 	}
 
 	/**

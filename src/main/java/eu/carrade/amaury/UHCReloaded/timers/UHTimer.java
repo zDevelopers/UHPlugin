@@ -19,12 +19,15 @@
 
 package eu.carrade.amaury.UHCReloaded.timers;
 
+import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.events.TimerEndsEvent;
 import eu.carrade.amaury.UHCReloaded.events.TimerStartsEvent;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.UUID;
 
 
@@ -34,6 +37,7 @@ import java.util.UUID;
  * @author Amaury Carrade
  */
 public class UHTimer {
+	private static final NumberFormat formatter = new DecimalFormat("00");
 
 	private UUID id = null;
 	private String name = null;
@@ -81,8 +85,7 @@ public class UHTimer {
 		this.minutesLeft = (int) (Math.floor(this.duration / 60) - (this.hoursLeft * 60));
 		this.secondsLeft = this.duration - (this.minutesLeft * 60 + this.hoursLeft * 3600);
 
-		// Lower than 100 because else the counter text is longer than 16 characters.
-		this.displayHoursInTimer = (this.hoursLeft != 0 && this.hoursLeft < 100);
+		this.displayHoursInTimer = (this.hoursLeft != 0);
 	}
 
 	/**
@@ -338,25 +341,24 @@ public class UHTimer {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		if(!(other instanceof UHTimer)) {
-			return false;
-		}
-
-		return ((UHTimer) other).getName().equals(this.getName());
+	public boolean equals(Object other)
+	{
+		return other instanceof UHTimer && ((UHTimer) other).getName().equals(this.getName());
 	}
 
 	@Override
 	public String toString() {
-		return "UHTimer ["
-				+ (name != null ? "name=" + name + ", " : "")
-				+ (registered != null ? "registered=" + registered + ", " : "")
-				+ (isRunning() ? "running, " : "")
-				+ (startTime != null ? "startTime=" + startTime + ", " : "")
-				+ (duration != null ? "duration=" + duration + ", " : "")
-				+ (isRunning() ? "currentTime=" + getHoursLeft() + "h" + getMinutesLeft() + "m" + getSecondsLeft() + "s" : "")
-				+ (isRunning() && paused != null ? "paused=" + paused + ", " : "")
-				+ (isRunning() && paused && pauseTime != null ? "pauseTime=" + pauseTime : "") + "]";
+		return toString(displayHoursInTimer);
+	}
+
+	public String toString(boolean displayHours)
+	{
+		if(displayHours) {
+			return UHCReloaded.i().t("scoreboard.timerWithHours", formatter.format(hoursLeft), formatter.format(minutesLeft), formatter.format(secondsLeft));
+		}
+		else {
+			return UHCReloaded.i().t("scoreboard.timer", formatter.format(minutesLeft), formatter.format(secondsLeft));
+		}
 	}
 
 	@Override

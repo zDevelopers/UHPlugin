@@ -58,7 +58,6 @@ public class UHTimersDisplayCommand extends AbstractCommand {
 			return;
 		}
 
-		p.getScoreboardManager().displayTimer(timer);
 		sender.sendMessage(i.t("timers.displayed", timer.getDisplayName()));
 	}
 
