@@ -71,6 +71,22 @@ scoreboard:
     episode: true
     players: true
     teams: true
+    ownTeam:
+        enabled: true                 # Displays the player's team in the scoreboard
+        title:
+            color: ""                 # The color of the title. If empty, the team color is used.
+            useTeamName: false        # If true, the title is the team's name. Else, a generic title (« Your team »).
+        content:
+            displayHearts: true       # Displays hearts colored following the player's life (low = red, high = green)
+            colorName: false          # Color the whole name, not only the heart, following the life. If disabled the name is white (alive) or gray (dead).
+            strikeDeadPlayers: false  # Strike the dead players lines.
+            loginState:
+                italic: true          # Logged-out players are displayed in italic
+                suffix: "\u27A5"      # This string is displayed after the name of logged-out players
+            displayMetPlayersOnly:
+                enabled: false               # If enabled, the sidebar will only contains players met at some time.
+                displayedWhenCloserThan: 10  # If enabled, a teammate will be displayed to the reference player if he/she is closer that this amount of blocks to the player.
+    kills: true
     timer: true
     freezeStatus: true
     

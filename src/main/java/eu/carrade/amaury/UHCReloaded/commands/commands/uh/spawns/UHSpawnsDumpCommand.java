@@ -1,20 +1,17 @@
 /**
- *  Plugin UltraHardcore Reloaded (UHPlugin)
- *  Copyright (C) 2013 azenet
- *  Copyright (C) 2014-2015 Amaury Carrade
+ * Plugin UltraHardcore Reloaded (UHPlugin) Copyright (C) 2013 azenet Copyright (C) 2014-2015 Amaury
+ * Carrade
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see [http://www.gnu.org/licenses/].
+ * You should have received a copy of the GNU General Public License along with this program.  If
+ * not, see [http://www.gnu.org/licenses/].
  */
 package eu.carrade.amaury.UHCReloaded.commands.commands.uh.spawns;
 
@@ -27,76 +24,93 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-@Command(name = "dump")
-public class UHSpawnsDumpCommand extends AbstractCommand {
 
-	UHCReloaded p;
-	I18n i;
+@Command (name = "dump")
+public class UHSpawnsDumpCommand extends AbstractCommand
+{
 
-	public UHSpawnsDumpCommand(UHCReloaded plugin) {
-		p = plugin;
-		i = plugin.getI18n();
-	}
+    UHCReloaded p;
+    I18n i;
 
-	/**
-	 * Runs the command.
-	 *
-	 * @param sender The sender of the command.
-	 * @param args   The arguments passed to the command.
-	 *
-	 * @throws eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException If the command cannot be executed.
-	 */
-	@Override
-	public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException {
-		// We want one list per world
-		Map<World,List<Location>> spanwsInWorlds = new HashMap<World,List<Location>>();
-		for(World world : p.getServer().getWorlds()) {
-			spanwsInWorlds.put(world, new LinkedList<Location>());
-		}
+    public UHSpawnsDumpCommand(UHCReloaded plugin)
+    {
+        p = plugin;
+        i = plugin.getI18n();
+    }
 
-		for(Location spawn : p.getSpawnsManager().getSpawnPoints()) {
-			spanwsInWorlds.get(spawn.getWorld()).add(spawn);
-		}
+    /**
+     * Runs the command.
+     *
+     * @param sender The sender of the command.
+     * @param args   The arguments passed to the command.
+     *
+     * @throws eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException If the command cannot be executed.
+     */
+    @Override
+    public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
+    {
+        // We want one list per world
+        Map<World, List<Location>> spanwsInWorlds = new HashMap<World, List<Location>>();
+        for (World world : p.getServer().getWorlds())
+        {
+            spanwsInWorlds.put(world, new LinkedList<Location>());
+        }
 
-		String dump = "";
+        for (Location spawn : p.getSpawnsManager().getSpawnPoints())
+        {
+            spanwsInWorlds.get(spawn.getWorld()).add(spawn);
+        }
 
-		for(Map.Entry<World, List<Location>> spanwsInWorld : spanwsInWorlds.entrySet()) {
-			if(spanwsInWorld.getValue().size() == 0) {
-				continue;
-			}
+        String dump = "";
 
-			dump += "\n* " + spanwsInWorld.getKey().getName() + "\n";
+        for (Map.Entry<World, List<Location>> spanwsInWorld : spanwsInWorlds.entrySet())
+        {
+            if (spanwsInWorld.getValue().size() == 0)
+            {
+                continue;
+            }
 
-			for(Location spawn : spanwsInWorld.getValue()) {
-				dump += spawn.getBlockX() + "," + spawn.getBlockZ() + "\n";
-			}
-		}
+            dump += "\n* " + spanwsInWorld.getKey().getName() + "\n";
 
-		sender.sendMessage(dump);
-	}
+            for (Location spawn : spanwsInWorld.getValue())
+            {
+                dump += spawn.getBlockX() + "," + spawn.getBlockZ() + "\n";
+            }
+        }
 
-	/**
-	 * Tab-completes this command.
-	 *
-	 * @param sender The sender.
-	 * @param args   The arguments passed to the command.
-	 *
-	 * @return A list of suggestions.
-	 */
-	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args) {
-		return null;
-	}
+        sender.sendMessage(dump);
+    }
 
-	@Override
-	public List<String> help(CommandSender sender) {
-		return null;
-	}
+    /**
+     * Tab-completes this command.
+     *
+     * @param sender The sender.
+     * @param args   The arguments passed to the command.
+     *
+     * @return A list of suggestions.
+     */
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args)
+    {
+        return null;
+    }
 
-	@Override
-	public List<String> onListHelp(CommandSender sender) {
-		return Arrays.asList(i.t("cmd.spawnsHelpDump"));
-	}
+    @Override
+    public List<String> help(CommandSender sender)
+    {
+        return null;
+    }
+
+    @Override
+    public List<String> onListHelp(CommandSender sender)
+    {
+        return Collections.singletonList(i.t("cmd.spawnsHelpDump"));
+    }
 }

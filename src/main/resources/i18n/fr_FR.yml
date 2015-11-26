@@ -181,6 +181,8 @@ keys:
         episode: "{gray}Épisode {white}{0}"
         players: "{white}{0}{gray} joueurs"
         teams: "{white}{0}{gray} équipes"
+        yourTeam: "{bold}Votre équipe"
+        kills: "{white}{0}{gray} joueurs tués"
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
     

@@ -1,20 +1,17 @@
 /**
- *  Plugin UltraHardcore Reloaded (UHPlugin)
- *  Copyright (C) 2013 azenet
- *  Copyright (C) 2014-2015 Amaury Carrade
+ * Plugin UltraHardcore Reloaded (UHPlugin) Copyright (C) 2013 azenet Copyright (C) 2014-2015 Amaury
+ * Carrade
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see [http://www.gnu.org/licenses/].
+ * You should have received a copy of the GNU General Public License along with this program.  If
+ * not, see [http://www.gnu.org/licenses/].
  */
 
 package eu.carrade.amaury.UHCReloaded.integration;
@@ -33,312 +30,350 @@ import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
 
-public class UHDynmapIntegration {
 
-	private UHCReloaded p = null;
-	private I18n i = null;
-	private DynmapAPI api = null;
-	private MarkerAPI markerAPI = null;
-	private MarkerSet markerSet = null;
+public class UHDynmapIntegration
+{
 
-	public UHDynmapIntegration(UHCReloaded plugin) {
-		this.p = plugin;
-		this.i = p.getI18n();
+    private UHCReloaded p = null;
+    private I18n i = null;
+    private DynmapAPI api = null;
+    private MarkerAPI markerAPI = null;
+    private MarkerSet markerSet = null;
 
-		Plugin apiTest = Bukkit.getServer().getPluginManager().getPlugin("dynmap");
-		if(apiTest == null || !apiTest.isEnabled()) {
-			p.getLogger().warning("Dynmap is not present, so the integration was disabled.");
-			return;
-		}
+    public UHDynmapIntegration(UHCReloaded plugin)
+    {
+        this.p = plugin;
+        this.i = p.getI18n();
 
-		this.api = (DynmapAPI) apiTest;
+        Plugin apiTest = Bukkit.getServer().getPluginManager().getPlugin("dynmap");
+        if (apiTest == null || !apiTest.isEnabled())
+        {
+            p.getLogger().warning("Dynmap is not present, so the integration was disabled.");
+            return;
+        }
 
-		markerAPI = api.getMarkerAPI();
-		if (markerAPI == null) {
-			p.getLogger().warning("Dynmap is available, but the markers API is not. The integration was disabled.");
-			return;
-		}
+        this.api = (DynmapAPI) apiTest;
 
-
-		// All is good, let's integrate.
-		initDynmapIntegration();
-
-		p.getLogger().info("Successfully hooked into Dynmap.");
-	}
-
-	private void initDynmapIntegration() {
-
-		markerSet = markerAPI.getMarkerSet("uhplugin.markerset");
-
-		if(markerSet == null) {
-			markerSet = markerAPI.createMarkerSet("uhplugin.markerset", "UltraHardcore", null, false);
-		}
-		else {
-			markerSet.setMarkerSetLabel("UltraHardcore");
-		}
-	}
-
-	public void shutdownDynmapIntegration() {
-		if(isDynmapIntegrationEnabled()) {
-			markerSet.deleteMarkerSet();
-		}
-	}
-
-	public boolean isDynmapIntegrationEnabled() {
-		return !(this.api == null);
-	}
-
-	public DynmapAPI getDynmapAPI() {
-		return api;
-	}
-
-	public MarkerAPI getDynmapMarkerAPI() {
-		return markerAPI;
-	}
-
-	/** Death locations **/
-
-	/**
-	 * Displays the death location of the given player.
-	 *
-	 * @param player The player.
-	 */
-	public void showDeathLocation(Player player) {
-		if(!isDynmapIntegrationEnabled()) {
-			return;
-		}
-
-		if(!p.getConfig().getBoolean("dynmap.showDeathLocations")) {
-			return;
-		}
-
-		if(!p.getGameManager().hasDeathLocation(player)) {
-			return;
-		}
-
-		Location deathPoint = p.getGameManager().getDeathLocation(player);
-
-		String markerID = getDeathMarkerName(player);
-		String markerLabel = i.t("dynmap.markerLabelDeath", player.getName());
-		MarkerIcon icon = markerAPI.getMarkerIcon("skull");
-
-		Marker marker = markerSet.createMarker(markerID, markerLabel, true, deathPoint.getWorld().getName(), deathPoint.getX(), deathPoint.getY(), deathPoint.getZ(), icon, false);
-		if(marker == null) {
-			p.getLogger().warning("Unable to create marker " + markerID);
-		}
-	}
-
-	/**
-	 * Hides the death location of the given player.
-	 *
-	 * @param player The player.
-	 */
-	public void hideDeathLocation(Player player) {
-		if(!isDynmapIntegrationEnabled()) {
-			return;
-		}
-
-		if(!p.getConfig().getBoolean("dynmap.showDeathLocations")) {
-			return;
-		}
-
-		Marker marker = markerSet.findMarker(getDeathMarkerName(player));
-		if(marker != null) {
-			marker.deleteMarker();
-		}
-	}
-
-	/**
-	 * Returns the internal ID of the marker of the death point of the given player.
-	 *
-	 * @param player The player.
-	 * @return The ID.
-	 */
-	private String getDeathMarkerName(Player player) {
-		return "uhplugin.death." + player.getName();
-	}
+        markerAPI = api.getMarkerAPI();
+        if (markerAPI == null)
+        {
+            p.getLogger().warning("Dynmap is available, but the markers API is not. The integration was disabled.");
+            return;
+        }
 
 
+        // All is good, let's integrate.
+        initDynmapIntegration();
 
-	/** Spawn locations **/
+        p.getLogger().info("Successfully hooked into Dynmap.");
+    }
 
-	/**
-	 * Displays the spawn point of the given team.
-	 *
-	 * @param team The team.
-	 * @param spawnPoint The location of the spawn point.
-	 */
-	public void showSpawnLocation(UHTeam team, Location spawnPoint) {
-		if(!isDynmapIntegrationEnabled()) {
-			return;
-		}
+    private void initDynmapIntegration()
+    {
 
-		if(!p.getConfig().getBoolean("dynmap.showSpawnLocations")) {
-			return;
-		}
+        markerSet = markerAPI.getMarkerSet("uhplugin.markerset");
+
+        if (markerSet == null)
+        {
+            markerSet = markerAPI.createMarkerSet("uhplugin.markerset", "UltraHardcore", null, false);
+        }
+        else
+        {
+            markerSet.setMarkerSetLabel("UltraHardcore");
+        }
+    }
+
+    public void shutdownDynmapIntegration()
+    {
+        if (isDynmapIntegrationEnabled())
+        {
+            markerSet.deleteMarkerSet();
+        }
+    }
+
+    public boolean isDynmapIntegrationEnabled()
+    {
+        return !(this.api == null);
+    }
+
+    public DynmapAPI getDynmapAPI()
+    {
+        return api;
+    }
+
+    public MarkerAPI getDynmapMarkerAPI()
+    {
+        return markerAPI;
+    }
+
+    /** Death locations **/
+
+    /**
+     * Displays the death location of the given player.
+     *
+     * @param player The player.
+     */
+    public void showDeathLocation(Player player)
+    {
+        if (!isDynmapIntegrationEnabled())
+        {
+            return;
+        }
+
+        if (!p.getConfig().getBoolean("dynmap.showDeathLocations"))
+        {
+            return;
+        }
+
+        if (!p.getGameManager().hasDeathLocation(player))
+        {
+            return;
+        }
+
+        Location deathPoint = p.getGameManager().getDeathLocation(player);
+
+        String markerID = getDeathMarkerName(player);
+        String markerLabel = i.t("dynmap.markerLabelDeath", player.getName());
+        MarkerIcon icon = markerAPI.getMarkerIcon("skull");
+
+        Marker marker = markerSet.createMarker(markerID, markerLabel, true, deathPoint.getWorld().getName(), deathPoint.getX(), deathPoint.getY(), deathPoint.getZ(), icon, false);
+        if (marker == null)
+        {
+            p.getLogger().warning("Unable to create marker " + markerID);
+        }
+    }
+
+    /**
+     * Hides the death location of the given player.
+     *
+     * @param player The player.
+     */
+    public void hideDeathLocation(Player player)
+    {
+        if (!isDynmapIntegrationEnabled())
+        {
+            return;
+        }
+
+        if (!p.getConfig().getBoolean("dynmap.showDeathLocations"))
+        {
+            return;
+        }
+
+        Marker marker = markerSet.findMarker(getDeathMarkerName(player));
+        if (marker != null)
+        {
+            marker.deleteMarker();
+        }
+    }
+
+    /**
+     * Returns the internal ID of the marker of the death point of the given player.
+     *
+     * @param player The player.
+     * @return The ID.
+     */
+    private String getDeathMarkerName(Player player)
+    {
+        return "uhplugin.death." + player.getName();
+    }
 
 
-		TeamColor teamColor = team.getColor();
-		if(teamColor == null) {
-			teamColor = TeamColor.GREEN; // green flags for solo games without colors
-		}
+    /** Spawn locations **/
 
-		String markerID = getSpawnMarkerName(team);
+    /**
+     * Displays the spawn point of the given team.
+     *
+     * @param team The team.
+     * @param spawnPoint The location of the spawn point.
+     */
+    public void showSpawnLocation(UHTeam team, Location spawnPoint)
+    {
+        if (!isDynmapIntegrationEnabled())
+        {
+            return;
+        }
 
-		String markerLabel;
-		if(p.getGameManager().isGameWithTeams()) {
-			markerLabel = i.t("dynmap.markerLabelSpawn", team.getName());
-		}
-		else {
-			markerLabel = i.t("dynmap.markerLabelSpawnNoTeam", team.getName());
-		}
-
-		showSpawnLocation(spawnPoint, teamColor, markerLabel, markerID);
-	}
-
-	/**
-	 * Displays the spawn point of the given player.
-	 *
-	 * <p>
-	 *     Used when the teleportation ignores the teams.
-	 * </p>
-	 *
-	 * @param player The player.
-	 * @param spawnPoint The location of the spawn point.
-	 */
-	public void showSpawnLocation(Player player, Location spawnPoint) {
-		UHTeam team = p.getTeamManager().getTeamForPlayer(player);
-
-		showSpawnLocation(player, team != null ? team.getColor() : null, spawnPoint);
-	}
-
-	/**
-	 * Displays the spawn point of the given player.
-	 *
-	 * <p>
-	 *     Used when the teleportation ignores the teams.
-	 * </p>
-	 *
-	 * @param player The player.
-	 * @param color The color of the spawn point (i.e. of the team).
-	 * @param spawnPoint The location of the spawn point.
-	 */
-	public void showSpawnLocation(Player player, TeamColor color, Location spawnPoint) {
-		if(!isDynmapIntegrationEnabled()) {
-			return;
-		}
-
-		if(!p.getConfig().getBoolean("dynmap.showSpawnLocations")) {
-			return;
-		}
+        if (!p.getConfig().getBoolean("dynmap.showSpawnLocations"))
+        {
+            return;
+        }
 
 
-		if(color == null) {
-			color = TeamColor.GREEN;
-		}
+        TeamColor teamColor = team.getColor();
+        if (teamColor == null)
+        {
+            teamColor = TeamColor.GREEN; // green flags for solo games without colors
+        }
 
-		String markerID = getSpawnMarkerName(player);
-		String markerLabel = i.t("dynmap.markerLabelSpawnNoTeam", player.getName());
+        String markerID = getSpawnMarkerName(team);
 
-		showSpawnLocation(spawnPoint, color, markerLabel, markerID);
-	}
+        String markerLabel;
+        if (p.getGameManager().isGameWithTeams())
+        {
+            markerLabel = i.t("dynmap.markerLabelSpawn", team.getName());
+        }
+        else
+        {
+            markerLabel = i.t("dynmap.markerLabelSpawnNoTeam", team.getName());
+        }
 
-	/**
-	 * Displays a spawn-point marker.
-	 *
-	 * @param spawnPoint The location of the spawn.
-	 * @param color The color of the team (for the flag).
-	 * @param label The label of the marker.
-	 * @param markerID The ID of the marker.
-	 */
-	private void showSpawnLocation(Location spawnPoint, TeamColor color, String label, String markerID) {
+        showSpawnLocation(spawnPoint, teamColor, markerLabel, markerID);
+    }
+
+    /**
+     * Displays the spawn point of the given player.
+     *
+     * <p>
+     *     Used when the teleportation ignores the teams.
+     * </p>
+     *
+     * @param player The player.
+     * @param spawnPoint The location of the spawn point.
+     */
+    public void showSpawnLocation(Player player, Location spawnPoint)
+    {
+        UHTeam team = p.getTeamManager().getTeamForPlayer(player);
+
+        showSpawnLocation(player, team != null ? team.getColor() : null, spawnPoint);
+    }
+
+    /**
+     * Displays the spawn point of the given player.
+     *
+     * <p>
+     *     Used when the teleportation ignores the teams.
+     * </p>
+     *
+     * @param player The player.
+     * @param color The color of the spawn point (i.e. of the team).
+     * @param spawnPoint The location of the spawn point.
+     */
+    public void showSpawnLocation(Player player, TeamColor color, Location spawnPoint)
+    {
+        if (!isDynmapIntegrationEnabled())
+        {
+            return;
+        }
+
+        if (!p.getConfig().getBoolean("dynmap.showSpawnLocations"))
+        {
+            return;
+        }
+
+
+        if (color == null)
+        {
+            color = TeamColor.GREEN;
+        }
+
+        String markerID = getSpawnMarkerName(player);
+        String markerLabel = i.t("dynmap.markerLabelSpawnNoTeam", player.getName());
+
+        showSpawnLocation(spawnPoint, color, markerLabel, markerID);
+    }
+
+    /**
+     * Displays a spawn-point marker.
+     *
+     * @param spawnPoint The location of the spawn.
+     * @param color The color of the team (for the flag).
+     * @param label The label of the marker.
+     * @param markerID The ID of the marker.
+     */
+    private void showSpawnLocation(Location spawnPoint, TeamColor color, String label, String markerID)
+    {
 
 		/* ***  Icon  *** */
 
-		MarkerIcon icon;
+        MarkerIcon icon;
 
-		// Let's try to find the best icon
-		// Available flags:
-		// redflag, orangeflag, yellowflag, greenflag, blueflag, purpleflag, pinkflag, pirateflag (black)
-		// Ref. https://github.com/webbukkit/dynmap/wiki/Using-markers
+        // Let's try to find the best icon
+        // Available flags:
+        // redflag, orangeflag, yellowflag, greenflag, blueflag, purpleflag, pinkflag, pirateflag (black)
+        // Ref. https://github.com/webbukkit/dynmap/wiki/Using-markers
 
-		switch(color) {
-			case BLUE:
-			case DARK_BLUE:
-			case AQUA:
-			case DARK_AQUA:
-				icon = markerAPI.getMarkerIcon("blueflag");
-				break;
+        switch (color)
+        {
+            case BLUE:
+            case DARK_BLUE:
+            case AQUA:
+            case DARK_AQUA:
+                icon = markerAPI.getMarkerIcon("blueflag");
+                break;
 
-			case GREEN:
-			case DARK_GREEN:
-				icon = markerAPI.getMarkerIcon("greenflag");
-				break;
+            case GREEN:
+            case DARK_GREEN:
+                icon = markerAPI.getMarkerIcon("greenflag");
+                break;
 
-			case GOLD:
-				icon = markerAPI.getMarkerIcon("orangeflag");
-				break;
+            case GOLD:
+                icon = markerAPI.getMarkerIcon("orangeflag");
+                break;
 
-			case YELLOW:
-				icon = markerAPI.getMarkerIcon("yellowflag");
-				break;
+            case YELLOW:
+                icon = markerAPI.getMarkerIcon("yellowflag");
+                break;
 
-			case RED:
-			case DARK_RED:
-				icon = markerAPI.getMarkerIcon("redflag");
-				break;
+            case RED:
+            case DARK_RED:
+                icon = markerAPI.getMarkerIcon("redflag");
+                break;
 
-			case DARK_PURPLE:
-				icon = markerAPI.getMarkerIcon("purpleflag");
-				break;
+            case DARK_PURPLE:
+                icon = markerAPI.getMarkerIcon("purpleflag");
+                break;
 
-			case LIGHT_PURPLE:
-				icon = markerAPI.getMarkerIcon("pinkflag");
-				break;
+            case LIGHT_PURPLE:
+                icon = markerAPI.getMarkerIcon("pinkflag");
+                break;
 
-			case BLACK:
-			case DARK_GRAY:
-			case GRAY:
-				icon = markerAPI.getMarkerIcon("pirateflag");
-				break;
+            case BLACK:
+            case DARK_GRAY:
+            case GRAY:
+                icon = markerAPI.getMarkerIcon("pirateflag");
+                break;
 
-			case WHITE: // There is nothing better than pink I think...
-			default:
-				icon = markerAPI.getMarkerIcon("pinkflag");
-				break;
-		}
+            case WHITE: // There is nothing better than pink I think...
+            default:
+                icon = markerAPI.getMarkerIcon("pinkflag");
+                break;
+        }
 
 
 		/* ***  Registration  *** */
 
-		Marker marker = markerSet.createMarker(markerID, label, true, spawnPoint.getWorld().getName(), spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), icon, false);
+        Marker marker = markerSet.createMarker(markerID, label, true, spawnPoint.getWorld().getName(), spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), icon, false);
 
-		if(marker == null) {
-			p.getLogger().warning("Unable to create marker " + markerID);
-		}
-	}
+        if (marker == null)
+        {
+            p.getLogger().warning("Unable to create marker " + markerID);
+        }
+    }
 
-	/**
-	 * Returns the internal ID of the marker of the spawn point of the given team.
-	 *
-	 * @param team The team.
-	 * @return The ID.
-	 */
-	private String getSpawnMarkerName(UHTeam team) {
-		return "uhplugin.spawn." + team.getName();
-	}
+    /**
+     * Returns the internal ID of the marker of the spawn point of the given team.
+     *
+     * @param team The team.
+     * @return The ID.
+     */
+    private String getSpawnMarkerName(UHTeam team)
+    {
+        return "uhplugin.spawn." + team.getName();
+    }
 
-	/**
-	 * Returns the internal ID of the marker of the spawn point of the given team.
-	 *
-	 * <p>
-	 *     Used if the teleportation ignores the teams.
-	 * </p>
-	 *
-	 * @param player The player.
-	 * @return The ID.
-	 */
-	private String getSpawnMarkerName(Player player) {
-		return "uhplugin.spawn." + player.getName();
-	}
+    /**
+     * Returns the internal ID of the marker of the spawn point of the given team.
+     *
+     * <p>
+     *     Used if the teleportation ignores the teams.
+     * </p>
+     *
+     * @param player The player.
+     * @return The ID.
+     */
+    private String getSpawnMarkerName(Player player)
+    {
+        return "uhplugin.spawn." + player.getName();
+    }
 }

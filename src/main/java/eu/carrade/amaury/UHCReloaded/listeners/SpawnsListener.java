@@ -44,39 +44,39 @@ import java.util.Random;
 
 public class SpawnsListener implements Listener
 {
-	private final Random random = new Random();
+    private final Random random = new Random();
 
-	private final boolean RABBIT_SPAWN_ENABLED;
-	private final double  RABBIT_SPAWN_PROBABILITY;
-	private final String  RABBIT_NAME;
+    private final boolean RABBIT_SPAWN_ENABLED;
+    private final double RABBIT_SPAWN_PROBABILITY;
+    private final String RABBIT_NAME;
 
-	public SpawnsListener(UHCReloaded plugin)
-	{
-		RABBIT_SPAWN_ENABLED = plugin.getConfig().getBoolean("gameplay-changes.rabbit.killerRabbitSpawn");
-		RABBIT_SPAWN_PROBABILITY = plugin.getConfig().getDouble("gameplay-changes.rabbit.killerRabbitSpawnProbability");
+    public SpawnsListener(UHCReloaded plugin)
+    {
+        RABBIT_SPAWN_ENABLED = plugin.getConfig().getBoolean("gameplay-changes.rabbit.killerRabbitSpawn");
+        RABBIT_SPAWN_PROBABILITY = plugin.getConfig().getDouble("gameplay-changes.rabbit.killerRabbitSpawnProbability");
 
-		RABBIT_NAME = plugin.getConfig().getString("gameplay-changes.rabbit.killerRabbitName");
-	}
+        RABBIT_NAME = plugin.getConfig().getString("gameplay-changes.rabbit.killerRabbitName");
+    }
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onRabbitSpawn(CreatureSpawnEvent ev)
-	{
-		if(!RABBIT_SPAWN_ENABLED)
-			return;
+    @EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onRabbitSpawn(CreatureSpawnEvent ev)
+    {
+        if (!RABBIT_SPAWN_ENABLED)
+            return;
 
-		if(ev.getEntity().getType() != EntityType.RABBIT)
-			return;
+        if (ev.getEntity().getType() != EntityType.RABBIT)
+            return;
 
-		if(random.nextDouble() >= RABBIT_SPAWN_PROBABILITY)
-			return;
+        if (random.nextDouble() >= RABBIT_SPAWN_PROBABILITY)
+            return;
 
-		Rabbit rabbit = (Rabbit) ev.getEntity();
-		rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
+        Rabbit rabbit = (Rabbit) ev.getEntity();
+        rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
 
-		if(!RABBIT_NAME.isEmpty())
-		{
-			rabbit.setCustomName(RABBIT_NAME);
-			rabbit.setCustomNameVisible(true);
-		}
-	}
+        if (!RABBIT_NAME.isEmpty())
+        {
+            rabbit.setCustomName(RABBIT_NAME);
+            rabbit.setCustomNameVisible(true);
+        }
+    }
 }

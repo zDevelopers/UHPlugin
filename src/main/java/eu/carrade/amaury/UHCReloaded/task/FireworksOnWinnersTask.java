@@ -1,20 +1,17 @@
 /**
- *  Plugin UltraHardcore Reloaded (UHPlugin)
- *  Copyright (C) 2013 azenet
- *  Copyright (C) 2014-2015 Amaury Carrade
+ * Plugin UltraHardcore Reloaded (UHPlugin) Copyright (C) 2013 azenet Copyright (C) 2014-2015 Amaury
+ * Carrade
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see [http://www.gnu.org/licenses/].
+ * You should have received a copy of the GNU General Public License along with this program.  If
+ * not, see [http://www.gnu.org/licenses/].
  */
 
 package eu.carrade.amaury.UHCReloaded.task;
@@ -29,47 +26,54 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Random;
 import java.util.Set;
 
-public class FireworksOnWinnersTask extends BukkitRunnable {
 
-	private UHCReloaded p = null;
-	private Set<OfflinePlayer> winners = null;
+public class FireworksOnWinnersTask extends BukkitRunnable
+{
 
-	private Double areaSize;
-	private Random rand;
+    private UHCReloaded p = null;
+    private Set<OfflinePlayer> winners = null;
 
-	private long startTime = 0L;
+    private Double areaSize;
+    private Random rand;
 
-	public FireworksOnWinnersTask(UHCReloaded p, Set<OfflinePlayer> listWinners) {
-		this.p = p;
-		this.winners = listWinners;
+    private long startTime = 0L;
 
-		this.areaSize = p.getConfig().getDouble("finish.fireworks.areaSize");
-		this.rand = new Random();
+    public FireworksOnWinnersTask(UHCReloaded p, Set<OfflinePlayer> listWinners)
+    {
+        this.p = p;
+        this.winners = listWinners;
 
-		this.startTime = System.currentTimeMillis();
-	}
+        this.areaSize = p.getConfig().getDouble("finish.fireworks.areaSize");
+        this.rand = new Random();
 
-	@Override
-	public void run() {
-		// The fireworks are launched in a square centered on the player.
-		Double halfAreaSize = areaSize / 2;
+        this.startTime = System.currentTimeMillis();
+    }
 
-		for(OfflinePlayer winner : winners) {
-			if(winner.isOnline()) {
-				Location fireworkLocation = ((Player) winner).getLocation();
+    @Override
+    public void run()
+    {
+        // The fireworks are launched in a square centered on the player.
+        Double halfAreaSize = areaSize / 2;
 
-				fireworkLocation.add(rand.nextDouble() * areaSize - halfAreaSize, // a number between -halfAreaSize and halfAreaSize 
-						2, // y+2 for a clean vision of the winner.
-						rand.nextDouble() * areaSize - halfAreaSize);
+        for (OfflinePlayer winner : winners)
+        {
+            if (winner.isOnline())
+            {
+                Location fireworkLocation = ((Player) winner).getLocation();
 
-				UHUtils.generateRandomFirework(fireworkLocation, 0, 15);
-				UHUtils.generateRandomFirework(fireworkLocation.add(0.2, 0d, 0.2), 0, 15);
-				UHUtils.generateRandomFirework(fireworkLocation.add(-0.2, 0d, 0.2), 0, 15);
-			}
-		}
+                fireworkLocation.add(rand.nextDouble() * areaSize - halfAreaSize, // a number between -halfAreaSize and halfAreaSize
+                        2, // y+2 for a clean vision of the winner.
+                        rand.nextDouble() * areaSize - halfAreaSize);
 
-		if((System.currentTimeMillis() - startTime) / 1000 > p.getConfig().getInt("finish.fireworks.duration", 10)) {
-			this.cancel();
-		}
-	}
+                UHUtils.generateRandomFirework(fireworkLocation, 0, 15);
+                UHUtils.generateRandomFirework(fireworkLocation.add(0.2, 0d, 0.2), 0, 15);
+                UHUtils.generateRandomFirework(fireworkLocation.add(-0.2, 0d, 0.2), 0, 15);
+            }
+        }
+
+        if ((System.currentTimeMillis() - startTime) / 1000 > p.getConfig().getInt("finish.fireworks.duration", 10))
+        {
+            this.cancel();
+        }
+    }
 }

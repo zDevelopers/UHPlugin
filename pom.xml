@@ -67,11 +67,16 @@
                     <artifactSet>
                         <includes>
                             <include>org.mcstats.*:*</include>
+                            <include>fr.zcraft:zlib</include>
                         </includes>
                     </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>org.mcstats</pattern>
+                            <shadedPattern>eu.carrade.amaury.UHCReloaded</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>fr.zcraft.zlib</pattern>
                             <shadedPattern>me.azenet.UHPlugin</shadedPattern>
                         </relocation>
                     </relocations>
@@ -105,13 +110,17 @@
             <url>http://repo.mikeprimm.com/</url>
         </repository>
         <repository>
-            <id>shadowvolt-repo</id>
-            <name>Shadowvolt Repository</name>
-            <url>http://ci.shadowvolt.com/plugin/repository/everything/</url>
+            <id>dmulloy2-repo</id>
+            <name>Dmulloy2 Repository (ProtocolLib)</name>
+            <url>http://repo.dmulloy2.net/content/groups/public/</url>
         </repository>
         <repository>
             <id>carrade-repo</id>
             <url>http://depot.carrade.eu/maven2/</url>
+        </repository>
+        <repository>
+            <id>zDevelopers</id>
+            <url>http://maven.carrade.eu/artifactory/snapshots</url>
         </repository>
         <repository>
             <id>Plugin Metrics</id>
@@ -124,6 +133,11 @@
             <artifactId>bukkit</artifactId>
             <version>1.8.3-R0.1-SNAPSHOT</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>fr.zcraft</groupId>
+            <artifactId>zlib</artifactId>
+            <version>0.99-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.wimbli.WorldBorder</groupId>
@@ -143,7 +157,7 @@
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>3.6.3-SNAPSHOT</version>
+            <version>3.6.4</version>
         </dependency>
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>

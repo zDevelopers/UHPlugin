@@ -20,8 +20,8 @@ package eu.carrade.amaury.UHCReloaded.spawns.exceptions;
 public class CannotGenerateSpawnPointsException extends Exception
 {
 
-	public CannotGenerateSpawnPointsException(String message)
-	{
-		super(message);
-	}
+    public CannotGenerateSpawnPointsException(String message)
+    {
+        super(message);
+    }
 }
