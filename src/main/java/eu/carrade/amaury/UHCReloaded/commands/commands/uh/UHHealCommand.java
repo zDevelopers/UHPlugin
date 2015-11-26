@@ -108,6 +108,7 @@ public class UHHealCommand extends AbstractCommand
         }
 
         player.setHealth(health);
+        UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(player.getUniqueId()).updateHealth(health);
     }
 
     @Override

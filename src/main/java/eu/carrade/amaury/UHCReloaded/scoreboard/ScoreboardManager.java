@@ -32,8 +32,6 @@
 package eu.carrade.amaury.UHCReloaded.scoreboard;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.UHGameManager;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,24 +41,27 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 
 public class ScoreboardManager
 {
     private UHCReloaded p;
-    private I18n i;
 
-    private final UHGameManager gm;
+    private Map<UUID, SidebarPlayerCache> sidebarCache = new ConcurrentHashMap<>();
+
     private final Scoreboard sb;
-
     private Sidebar sidebar = null;
+
 
     public ScoreboardManager(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
-
-        this.gm = p.getGameManager();
         this.sb = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+
+        UHCReloaded.get().getServer().getPluginManager().registerEvents(new ScoreboardListener(), UHCReloaded.get());
 
 
         // Initialization of the scoreboard (match info in the sidebar)
@@ -88,7 +89,14 @@ public class ScoreboardManager
         {
             sb.clearSlot(DisplaySlot.PLAYER_LIST); // Just in case
         }
+
+        // Initialization of the sidebar cache
+        for (Player player : Bukkit.getOnlinePlayers())
+        {
+            getSidebarPlayerCache(player.getUniqueId()); // Initializes the object.
+        }
     }
+
 
     /**
      * Updates the health score for all players.
@@ -156,5 +164,24 @@ public class ScoreboardManager
     public Scoreboard getScoreboard()
     {
         return sb;
+    }
+
+    /**
+     * Returns the cached data about the given player.
+     *
+     * @param id The player's UUID.
+     * @return The cached data, created on the fly if needed.
+     */
+    public SidebarPlayerCache getSidebarPlayerCache(UUID id)
+    {
+        SidebarPlayerCache cache = sidebarCache.get(id);
+
+        if(cache != null)
+            return cache;
+
+        cache = new SidebarPlayerCache(id);
+
+        sidebarCache.put(id, cache);
+        return cache;
     }
 }

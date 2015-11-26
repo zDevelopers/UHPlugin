@@ -35,6 +35,7 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.misc.Freezer;
+import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
 import fr.zcraft.zlib.components.scoreboard.SidebarMode;
@@ -47,6 +48,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class GameSidebar extends Sidebar
@@ -64,7 +66,17 @@ public class GameSidebar extends Sidebar
     private final boolean TIMER_IN_SIDEBAR;
     private final boolean FREEZE_STATUS_IN_SIDEBAR;
 
+    private final boolean OWN_TEAM_IN_SIDEBAR;
+    private final String OWN_TEAM_TITLE_COLOR;
+    private final boolean OWN_TEAM_TITLE_IS_NAME;
+    private final boolean OWN_TEAM_DISPLAY_HEARTS;
+    private final boolean OWN_TEAM_COLOR_WHOLE_NAME;
+    private final boolean OWN_TEAM_STRIKE_DEAD_PLAYERS;
+    private final boolean OWN_TEAM_DISPLAY_LOGIN_STATE_ITALIC;
+    private final String OWN_TEAM_DISPLAY_LOGIN_STATE_SUFFIX;
+
     private final String FROOZEN_NULL_TIMER_TEXT;
+    private final String HEART = "\u2764";
 
     private final String sidebarTitle;
     private final List<String> sidebarTop = new ArrayList<>();
@@ -84,6 +96,15 @@ public class GameSidebar extends Sidebar
         TEAMS_IN_SIDEBAR = config.getBoolean("scoreboard.teams");
         TIMER_IN_SIDEBAR = config.getBoolean("scoreboard.timer");
         FREEZE_STATUS_IN_SIDEBAR = config.getBoolean("scoreboard.freezeStatus");
+
+        OWN_TEAM_IN_SIDEBAR = config.getBoolean("scoreboard.ownTeam.enabled");
+        OWN_TEAM_TITLE_COLOR = ChatColor.translateAlternateColorCodes('&', config.getString("scoreboard.ownTeam.title.color"));
+        OWN_TEAM_TITLE_IS_NAME = config.getBoolean("scoreboard.ownTeam.title.useTeamName");
+        OWN_TEAM_DISPLAY_HEARTS = config.getBoolean("scoreboard.ownTeam.content.displayHearts");
+        OWN_TEAM_COLOR_WHOLE_NAME = config.getBoolean("scoreboard.ownTeam.content.colorName");
+        OWN_TEAM_STRIKE_DEAD_PLAYERS = config.getBoolean("scoreboard.ownTeam.content.strikeDeadPlayers");
+        OWN_TEAM_DISPLAY_LOGIN_STATE_ITALIC = config.getBoolean("scoreboard.ownTeam.content.loginState.italic");
+        OWN_TEAM_DISPLAY_LOGIN_STATE_SUFFIX = ChatColor.translateAlternateColorCodes('&', config.getString("scoreboard.ownTeam.content.loginState.suffix"));
 
         FROOZEN_NULL_TIMER_TEXT = new UHTimer("").toString();
 
@@ -149,9 +170,36 @@ public class GameSidebar extends Sidebar
         sidebar.addAll(sidebarTop);
         sidebar.add("");
 
-        if (gameManager.isGameStarted() && gameManager.isGameWithTeams())
+        if (OWN_TEAM_IN_SIDEBAR && gameManager.isGameStarted() && gameManager.isGameWithTeams())
         {
-            // TODO add team details if enabled
+            UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
+
+            if (team != null)
+            {
+                sidebar.add(
+                          (OWN_TEAM_TITLE_COLOR.isEmpty() ? team.getColor().toChatColor() : OWN_TEAM_TITLE_COLOR)
+                        + (OWN_TEAM_TITLE_IS_NAME ? ChatColor.BOLD + team.getName() : i.t("scoreboard.yourTeam"))
+                );
+
+                for (UUID teamMember : team.getPlayersUUID())
+                {
+                    SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(teamMember);
+
+                    final String strike = OWN_TEAM_STRIKE_DEAD_PLAYERS && !cache.isAlive() ? ChatColor.STRIKETHROUGH.toString() : "";
+                    final ChatColor aliveColor = cache.isAlive() ? ChatColor.WHITE : ChatColor.GRAY;
+
+                    final String heart = OWN_TEAM_DISPLAY_HEARTS ? cache.getHealthColor() + strike + HEART + " " : "";
+                    final String name = (OWN_TEAM_COLOR_WHOLE_NAME ? cache.getHealthColor() : aliveColor)
+                            + strike
+                            + (OWN_TEAM_DISPLAY_LOGIN_STATE_ITALIC && !cache.isOnline() ? ChatColor.ITALIC : "")
+                            + cache.getPlayerName()
+                            + (!cache.isOnline() ? ChatColor.RESET + "" + (OWN_TEAM_COLOR_WHOLE_NAME ? cache.getHealthColor() : aliveColor) + " " + OWN_TEAM_DISPLAY_LOGIN_STATE_SUFFIX : "");
+
+                    sidebar.add(heart + name);
+                }
+
+                sidebar.add("");
+            }
         }
 
         sidebar.addAll(sidebarTimers);

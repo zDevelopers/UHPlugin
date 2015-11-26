@@ -181,6 +181,7 @@ keys:
         episode: "{gray}Episode {white}{0}"
         players: "{white}{0}{gray} players"
         teams: "{white}{0}{gray} teams"
+        yourTeam: "{bold}Your team"
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
     
