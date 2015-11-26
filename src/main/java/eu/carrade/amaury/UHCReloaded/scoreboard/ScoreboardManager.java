@@ -184,4 +184,9 @@ public class ScoreboardManager
         sidebarCache.put(id, cache);
         return cache;
     }
+
+    public Map<UUID, SidebarPlayerCache> getAllSidebarPlayerCache()
+    {
+        return sidebarCache;
+    }
 }

@@ -87,12 +87,23 @@ public class ScoreboardListener implements Listener
     public void onPlayerDeath(UHPlayerDeathEvent ev)
     {
         onPlayerHealthChange(ev.getPlayer());
+
+        if (ev.getPlayerDeathEvent().getEntity().getKiller() != null)
+            UHCReloaded.get().getScoreboardManager()
+                    .getSidebarPlayerCache(ev.getPlayerDeathEvent().getEntity().getKiller().getUniqueId())
+                    .getPlayersKilled().add(ev.getPlayer().getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerResurrect(UHPlayerResurrectedEvent ev)
     {
         onPlayerHealthChange(ev.getPlayer());
+
+        for (SidebarPlayerCache cache : UHCReloaded.get().getScoreboardManager().getAllSidebarPlayerCache().values())
+        {
+            if(cache.getPlayersKilled().remove(ev.getPlayer().getUniqueId()))
+                break;
+        }
     }
 
     private void onPlayerQuit(Player player)

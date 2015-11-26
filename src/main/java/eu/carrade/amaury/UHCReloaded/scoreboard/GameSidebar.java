@@ -64,6 +64,7 @@ public class GameSidebar extends Sidebar
     private final boolean EPISODES_IN_SIDEBAR;
     private final boolean PLAYERS_IN_SIDEBAR;
     private final boolean TEAMS_IN_SIDEBAR;
+    private final boolean KILLS_IN_SIDEBAR;
     private final boolean TIMER_IN_SIDEBAR;
     private final boolean FREEZE_STATUS_IN_SIDEBAR;
 
@@ -97,6 +98,7 @@ public class GameSidebar extends Sidebar
         EPISODES_IN_SIDEBAR = config.getBoolean("scoreboard.episode");
         PLAYERS_IN_SIDEBAR = config.getBoolean("scoreboard.players");
         TEAMS_IN_SIDEBAR = config.getBoolean("scoreboard.teams");
+        KILLS_IN_SIDEBAR = config.getBoolean("scoreboard.kills");
         TIMER_IN_SIDEBAR = config.getBoolean("scoreboard.timer");
         FREEZE_STATUS_IN_SIDEBAR = config.getBoolean("scoreboard.freezeStatus");
 
@@ -240,6 +242,14 @@ public class GameSidebar extends Sidebar
 
                 sidebar.add("");
             }
+        }
+
+        if (KILLS_IN_SIDEBAR && gameManager.isGameStarted())
+        {
+            SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(player.getUniqueId());
+
+            sidebar.add(i.t("scoreboard.kills", String.valueOf(cache.getPlayersKilled().size())));
+            sidebar.add("");
         }
 
         sidebar.addAll(sidebarTimers);

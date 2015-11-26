@@ -86,6 +86,7 @@ scoreboard:
             displayMetPlayersOnly:
                 enabled: false               # If enabled, the sidebar will only contains players met at some time.
                 displayedWhenCloserThan: 10  # If enabled, a teammate will be displayed to the reference player if he/she is closer that this amount of blocks to the player.
+    kills: true
     timer: true
     freezeStatus: true
     

@@ -49,9 +49,11 @@ public class SidebarPlayerCache
 
     private String playerName;
     private ChatColor healthColor = ChatColor.WHITE;
+
     private boolean isOnline;
     private boolean isAlive;
 
+    private Set<UUID> playersKilled      = new CopyOnWriteArraySet<>();
     private Set<UUID> teammatesDisplayed = new CopyOnWriteArraySet<>();
 
 
@@ -102,6 +104,11 @@ public class SidebarPlayerCache
         this.isOnline = isOnline;
     }
 
+    public void addKill(UUID id)
+    {
+        playersKilled.add(id);
+    }
+
     public UUID getPlayerId()
     {
         return playerId;
@@ -130,5 +137,10 @@ public class SidebarPlayerCache
     public Set<UUID> getTeammatesDisplayed()
     {
         return teammatesDisplayed;
+    }
+
+    public Set<UUID> getPlayersKilled()
+    {
+        return playersKilled;
     }
 }

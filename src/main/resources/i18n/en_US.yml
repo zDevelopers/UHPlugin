@@ -182,6 +182,7 @@ keys:
         players: "{white}{0}{gray} players"
         teams: "{white}{0}{gray} teams"
         yourTeam: "{bold}Your team"
+        kills: "{white}{0}{gray} players killed"
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
     
