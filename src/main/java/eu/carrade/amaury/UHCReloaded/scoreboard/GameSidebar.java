@@ -102,7 +102,8 @@ public class GameSidebar extends Sidebar
 
         // Top sidebar
 
-        if(EPISODES_ENABLED && EPISODES_IN_SIDEBAR) {
+        if (EPISODES_ENABLED && EPISODES_IN_SIDEBAR)
+        {
             sidebarTop.add(i.t(
                     "scoreboard.episode",
                     String.valueOf(gameManager.isGameStarted() ? gameManager.getEpisode() : 0)
@@ -111,18 +112,18 @@ public class GameSidebar extends Sidebar
 
         if (!gameManager.isGameStarted())
         {
-            if(PLAYERS_IN_SIDEBAR)
+            if (PLAYERS_IN_SIDEBAR)
                 sidebarTop.add(i.t("scoreboard.players", String.valueOf(Bukkit.getOnlinePlayers().size())));
         }
         else
         {
-            if(gameManager.isGameWithTeams() && EPISODES_ENABLED && EPISODES_IN_SIDEBAR)
+            if (gameManager.isGameWithTeams() && EPISODES_ENABLED && EPISODES_IN_SIDEBAR)
                 sidebarTop.add("");
 
-            if(PLAYERS_IN_SIDEBAR)
+            if (PLAYERS_IN_SIDEBAR)
                 sidebarTop.add(i.t("scoreboard.players", String.valueOf(gameManager.getAlivePlayersCount())));
 
-            if(gameManager.isGameWithTeams() && TEAMS_IN_SIDEBAR)
+            if (gameManager.isGameWithTeams() && TEAMS_IN_SIDEBAR)
                 sidebarTop.add(i.t("scoreboard.teams", String.valueOf(gameManager.getAliveTeamsCount())));
         }
 
@@ -131,7 +132,7 @@ public class GameSidebar extends Sidebar
 
         insertTimers(sidebarTimers);
 
-        if(TIMER_IN_SIDEBAR)
+        if (TIMER_IN_SIDEBAR)
         {
             if (!gameManager.isGameStarted())
                 sidebarTimers.add(FROOZEN_NULL_TIMER_TEXT);
@@ -171,15 +172,16 @@ public class GameSidebar extends Sidebar
 
 
     /**
-     * Inserts the timers in the given list, to be displayed in the sidebar, at the bottom of the list.
+     * Inserts the timers in the given list, to be displayed in the sidebar, at the bottom of the
+     * list.
      *
      * @param sidebar The list representing the sidebar's content.
      */
     private void insertTimers(List<String> sidebar)
     {
-        for(UHTimer timer : UHCReloaded.get().getTimerManager().getTimers())
+        for (UHTimer timer : UHCReloaded.get().getTimerManager().getTimers())
         {
-            if(timer.isDisplayed())
+            if (timer.isDisplayed())
             {
                 sidebar.add(timer.getDisplayName());
                 sidebar.add(timer.toString());
@@ -189,7 +191,8 @@ public class GameSidebar extends Sidebar
     }
 
     /**
-     * Inserts the « frozen » text at the bottom of the list, if active globally or for the given player.
+     * Inserts the « frozen » text at the bottom of the list, if active globally or for the given
+     * player.
      *
      * @param sidebar The list representing the sidebar's content.
      */
@@ -197,7 +200,8 @@ public class GameSidebar extends Sidebar
     {
         final Freezer freezer = UHCReloaded.get().getFreezer();
 
-        if((freezer.getGlobalFreezeState() && !freezer.isHiddenFreeze()) || freezer.isPlayerFrozen(player)) {
+        if ((freezer.getGlobalFreezeState() && !freezer.isHiddenFreeze()) || freezer.isPlayerFrozen(player))
+        {
             sidebar.add("");
             sidebar.add(i.t("freeze.scoreboard"));
         }

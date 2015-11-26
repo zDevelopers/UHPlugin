@@ -1,7 +1,6 @@
 /**
- * Plugin UltraHardcore Reloaded (UHPlugin)
- * Copyright (C) 2013 azenet
- * Copyright (C) 2014-2015 Amaury Carrade
+ * Plugin UltraHardcore Reloaded (UHPlugin) Copyright (C) 2013 azenet Copyright (C) 2014-2015 Amaury
+ * Carrade
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -36,22 +35,22 @@ import java.util.Set;
 public interface SpawnPointsGenerator
 {
 
-	/**
-	 * Generates the spawn points.
-	 *
-	 * @param world                           The world where the spawn points will be generated.
-	 * @param spawnCount                      The number of spawn points to generate.
-	 * @param regionDiameter                  The diameter of the region where the spawn points will be generated.<br>
-	 *                                        This is limited by the size of the map. This will be seen as the diameter of a circular or
-	 *                                        of a squared map, following the shape of the world set in the configuration.
-	 * @param minimalDistanceBetweenTwoPoints The minimal distance between two points.
-	 * @param xCenter                         The x coordinate of the point in the center of the region where the points will be generated.
-	 * @param zCenter                         The z coordinate of the point in the center of the region where the points will be generated.
-	 * @param avoidWater                      True if the generation have to avoid the water.
-	 *
-	 * @return The spawn points generated.
-	 *
-	 * @throws eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException In case of fail.
-	 */
-	Set<Location> generate(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter, boolean avoidWater) throws CannotGenerateSpawnPointsException;
+    /**
+     * Generates the spawn points.
+     *
+     * @param world                           The world where the spawn points will be generated.
+     * @param spawnCount                      The number of spawn points to generate.
+     * @param regionDiameter                  The diameter of the region where the spawn points will be generated.<br>
+     *                                        This is limited by the size of the map. This will be seen as the diameter of a circular or
+     *                                        of a squared map, following the shape of the world set in the configuration.
+     * @param minimalDistanceBetweenTwoPoints The minimal distance between two points.
+     * @param xCenter                         The x coordinate of the point in the center of the region where the points will be generated.
+     * @param zCenter                         The z coordinate of the point in the center of the region where the points will be generated.
+     * @param avoidWater                      True if the generation have to avoid the water.
+     *
+     * @return The spawn points generated.
+     *
+     * @throws eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException In case of fail.
+     */
+    Set<Location> generate(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter, boolean avoidWater) throws CannotGenerateSpawnPointsException;
 }
