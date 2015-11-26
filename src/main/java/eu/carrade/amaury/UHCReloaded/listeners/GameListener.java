@@ -649,6 +649,7 @@ public class GameListener implements Listener
 	public void onEpisodeChange(UHEpisodeChangedEvent ev)
 	{
 		String message;
+
 		if (ev.getCause() == EpisodeChangedCause.SHIFTED)
 		{
 			message = i.t("episodes.endForced", String.valueOf(ev.getNewEpisode() - 1), ev.getShifter());

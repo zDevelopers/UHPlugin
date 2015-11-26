@@ -29,7 +29,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class TimerManager {
 
-	private Map<String,UHTimer> timers = new ConcurrentHashMap<>();
+	private Map<String, UHTimer> timers = new ConcurrentHashMap<>();
 	private UHTimer mainTimer = null;
 
 	/**
