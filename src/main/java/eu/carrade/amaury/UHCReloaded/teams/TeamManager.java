@@ -18,7 +18,7 @@ package eu.carrade.amaury.UHCReloaded.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
-import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.tools.text.RawMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -546,7 +546,7 @@ public class TeamManager
 
                 text += "]}";
 
-                UHUtils.sendJSONMessage(player, text);
+                RawMessage.send(player, text);
             }
 
             if (p.getTeamManager().getTeamForPlayer(player) != null && player.hasPermission("uh.player.leave.self"))
@@ -556,7 +556,7 @@ public class TeamManager
                 text += "\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/leave\"}";
                 text += "}";
 
-                UHUtils.sendJSONMessage(player, text);
+                RawMessage.send(player, text);
             }
             else
             {

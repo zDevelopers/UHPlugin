@@ -23,7 +23,7 @@ import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteComma
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
-import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.tools.text.RawMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -115,12 +115,10 @@ public class UHInfosCommand extends AbstractCommand
                         json += "}";
                     }
 
-
                     // End
                     json += "]}";
 
-                    UHUtils.sendJSONMessage((Player) sender, json);
-
+                    RawMessage.send((Player) sender, json);
                 }
                 else
                 {

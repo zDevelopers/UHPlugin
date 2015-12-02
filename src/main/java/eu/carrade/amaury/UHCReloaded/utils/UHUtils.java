@@ -16,11 +16,6 @@
 
 package eu.carrade.amaury.UHCReloaded.utils;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Builder;
@@ -28,13 +23,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.command.CommandException;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 
@@ -135,51 +128,6 @@ public class UHUtils
                         || raw.equalsIgnoreCase("1")
                         || raw.equalsIgnoreCase("yes")
         );
-    }
-
-
-    /**
-     * Sends a JSON-formatted message to player.
-     * <p>
-     * If ProtocolLib is not available, fallback to the tellraw command.
-     *
-     * @param player The receiver of the message.
-     * @param json The message.
-     * @return true if the message was sent.
-     */
-    public static boolean sendJSONMessage(Player player, String json)
-    {
-        try
-        {
-            PacketContainer message = new PacketContainer(PacketType.Play.Server.CHAT);
-            message.getChatComponents().write(0, WrappedChatComponent.fromJson(json));
-
-            try
-            {
-                ProtocolLibrary.getProtocolManager().sendServerPacket(player, message);
-                return true;
-            }
-            catch (InvocationTargetException e)
-            {
-                e.printStackTrace();
-                return false;
-            }
-
-        }
-        catch (NoClassDefFoundError e)
-        {
-            // Fallback to the tellraw command
-            try
-            {
-                return Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-                        "tellraw " + player.getName() + " " + json);
-
-            }
-            catch (CommandException cmde)
-            {
-                return false;
-            }
-        }
     }
 
 
