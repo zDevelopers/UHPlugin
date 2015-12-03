@@ -183,6 +183,11 @@ keys:
         teams: "{white}{0}{gray} 个队伍"
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
+
+    playersList:
+        episode: "阶段 {0}"
+        players: "{0} 位玩家"
+        teams: "{0} 个队伍"
     
     motd:
         beforeStart: "等待玩家中..."

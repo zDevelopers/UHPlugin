@@ -29,6 +29,7 @@ import eu.carrade.amaury.UHCReloaded.listeners.GameplayListener;
 import eu.carrade.amaury.UHCReloaded.listeners.SpawnsListener;
 import eu.carrade.amaury.UHCReloaded.misc.Freezer;
 import eu.carrade.amaury.UHCReloaded.misc.MOTDManager;
+import eu.carrade.amaury.UHCReloaded.misc.PlayerListHeaderFooterManager;
 import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
 import eu.carrade.amaury.UHCReloaded.misc.RuntimeCommandsExecutor;
 import eu.carrade.amaury.UHCReloaded.recipes.RecipesManager;
@@ -53,6 +54,7 @@ public class UHCReloaded extends ZPlugin
     private UHGameManager gameManager = null;
     private ScoreboardManager scoreboardManager = null;
     private MOTDManager motdManager = null;
+    private PlayerListHeaderFooterManager playerListHeaderFooterManager = null;
     private BorderManager borderManager = null;
     private RecipesManager recipesManager = null;
     private TeamChatManager teamChatManager = null;
@@ -106,6 +108,7 @@ public class UHCReloaded extends ZPlugin
 
         scoreboardManager = new ScoreboardManager(this);
         motdManager = new MOTDManager(this);
+        playerListHeaderFooterManager = new PlayerListHeaderFooterManager();
 
         wbintegration = new UHWorldBorderIntegration(this);
         spintegration = new UHSpectatorPlusIntegration(this);
@@ -212,6 +215,16 @@ public class UHCReloaded extends ZPlugin
     public MOTDManager getMOTDManager()
     {
         return motdManager;
+    }
+
+    /**
+     * Returns the players list's headers & footers manager.
+     *
+     * @return
+     */
+    public PlayerListHeaderFooterManager getPlayerListHeaderFooterManager()
+    {
+        return playerListHeaderFooterManager;
     }
 
     /**

@@ -95,6 +95,27 @@ scoreboard:
 
 
 
+# Controls what is displayed in the tab list headers and footers.
+# Tags:
+# - {title}: contains the scoreboard title (key scoreboard.title).
+# - {episodeText}: contains the localized “Episode x” text.
+# - {playersText}: contains the localized “x players left” text.
+# - {teamsText}: contains the localized “x teams left” text.
+# - {episodeNumber}: contains the raw episode number (e.g. “2”).
+# - {playersCount}: contains the raw alive players count (e.g. “18”).
+# - {teamsCount}: contains the raw alive teams count (e.g. “6”).
+# You can use color & formatting codes with either & or §.
+# If you want, you can use "\n" to create a new line.
+playersList:
+    waitingTime:
+        header: "{title}"
+        footer: ""
+    inGameTime:
+        header: "{title}"
+        footer: "§a{episodeText} §7- §a{playersText} §7- §a{teamsText}"
+
+
+
 # Update the MOTD according to the current state of the game?
 # This will overwrite the original MOTD.
 motd:

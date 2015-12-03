@@ -177,6 +177,11 @@ keys:
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
 
+    playersList:
+        episode: "Epizoda {0}"
+        players: "{0} hracu"
+        teams: "{0} tymu"
+
     motd:
         beforeStart: "Ceka se na hrace..."
         starting: "Probiha start hry..."

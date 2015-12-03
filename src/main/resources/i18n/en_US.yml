@@ -185,7 +185,12 @@ keys:
         kills: "{white}{0}{gray} players killed"
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
-    
+
+    playersList:
+        episode: "Episode {0}"
+        players: "{0} players"
+        teams: "{0} teams"
+
     motd:
         beforeStart: "Waiting for players..."
         starting: "Starting in progress..."

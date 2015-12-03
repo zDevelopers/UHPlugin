@@ -276,6 +276,9 @@ public class GameListener implements Listener
                 p.getTeamChatManager().toggleChatForPlayer(ev.getEntity());
             }
         }
+
+        // Updates the list headers & footers.
+        p.getPlayerListHeaderFooterManager().updateHeadersFooters();
     }
 
 
@@ -446,6 +449,9 @@ public class GameListener implements Listener
 
         // Mainly useful on the first join.
         p.getScoreboardManager().setScoreboardForPlayer(ev.getPlayer());
+
+        // The headers & footers needs to be (re)sent.
+        p.getPlayerListHeaderFooterManager().sendTo(ev.getPlayer());
 
         // The display name is reset when the player logs off.
         p.getTeamManager().colorizePlayer(ev.getPlayer());
@@ -659,6 +665,10 @@ public class GameListener implements Listener
         }
 
         p.getServer().broadcastMessage(message);
+
+
+        // Updates the list headers & footers.
+        p.getPlayerListHeaderFooterManager().updateHeadersFooters();
     }
 
 
@@ -681,6 +691,9 @@ public class GameListener implements Listener
 
         // MOTD
         p.getMOTDManager().updateMOTDDuringGame();
+
+        // List headers & footers.
+        p.getPlayerListHeaderFooterManager().updateHeadersFooters();
     }
 
     /**
@@ -743,9 +756,12 @@ public class GameListener implements Listener
         p.getDynmapIntegration().hideDeathLocation(ev.getPlayer());
 
         // All players are notified
-        this.p.getServer().broadcastMessage(i.t("resurrect.broadcastMessage", ev.getPlayer().getName()));
+        p.getServer().broadcastMessage(i.t("resurrect.broadcastMessage", ev.getPlayer().getName()));
 
         // Updates the MOTD.
         p.getMOTDManager().updateMOTDDuringGame();
+
+        // Updates the list headers & footers.
+        p.getPlayerListHeaderFooterManager().updateHeadersFooters();
     }
 }

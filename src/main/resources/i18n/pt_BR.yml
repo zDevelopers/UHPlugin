@@ -176,6 +176,11 @@ keys:
         teams: "{white}{0}{gray} Equipes"
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"
+
+    playersList:
+        episode: "Episódio {0}"
+        players: "{0} Jogadores"
+        teams: "{0} Equipes"
     
     motd:
         beforeStart: "Aguardando jogadores..."
