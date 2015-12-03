@@ -22,7 +22,6 @@ import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
 import fr.zcraft.zlib.tools.text.MessageSender;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,7 +137,7 @@ public class TeamChatManager
 
         if (!p.getProtipsSender().wasProtipSent(sender, ProTipsSender.PROTIP_LOCK_CHAT))
         {
-            Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable()
+            Bukkit.getScheduler().runTaskLater(p, new Runnable()
             {
                 @Override
                 public void run()
@@ -225,7 +224,7 @@ public class TeamChatManager
             {
                 teamChatLocked.add(player.getUniqueId());
 
-                Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable()
+                Bukkit.getScheduler().runTaskLater(p, new Runnable()
                 {
                     @Override
                     public void run()

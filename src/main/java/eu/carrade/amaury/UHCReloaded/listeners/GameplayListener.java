@@ -46,7 +46,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -255,7 +254,7 @@ public class GameplayListener implements Listener
 
                 final int healthApplied = halfHearts - 1;
 
-                Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable()
+                Bukkit.getScheduler().runTaskLater(this.p, new Runnable()
                 {
                     @Override
                     public void run()

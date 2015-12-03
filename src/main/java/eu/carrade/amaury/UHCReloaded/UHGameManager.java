@@ -145,7 +145,7 @@ public class UHGameManager
         // Used to update the "health" objective, to avoid a null one.
         // Launched later because else, the health is constantly set to 20,
         // and this prevents the health score to be updated.
-        Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable()
+        Bukkit.getScheduler().runTaskLater(p, new Runnable()
         {
             @Override
             public void run()
@@ -476,7 +476,7 @@ public class UHGameManager
     private void scheduleDamages()
     {
         // 30 seconds later, damages are enabled.
-        Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable()
+        Bukkit.getScheduler().runTaskLater(p, new Runnable()
         {
             @Override
             public void run()
@@ -496,7 +496,7 @@ public class UHGameManager
         // Team chat - 20 seconds after
         if (this.isGameWithTeams())
         {
-            Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable()
+            Bukkit.getScheduler().runTaskLater(p, new Runnable()
             {
                 @Override
                 public void run()
@@ -510,7 +510,7 @@ public class UHGameManager
         }
 
         // Invincibility - 5 seconds after
-        Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable()
+        Bukkit.getScheduler().runTaskLater(p, new Runnable()
         {
             @Override
             public void run()

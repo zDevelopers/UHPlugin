@@ -18,7 +18,6 @@ package eu.carrade.amaury.UHCReloaded.task;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import org.bukkit.command.CommandException;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -27,9 +26,8 @@ import java.util.logging.Level;
 /**
  * Schedules a stack of commands executed at the same time.
  */
-public class ScheduledCommandsExecutorTask extends BukkitRunnable
+public class ScheduledCommandsExecutorTask implements Runnable
 {
-
     UHCReloaded p = null;
     HashSet<String> commands = null;
 

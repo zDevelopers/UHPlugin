@@ -60,7 +60,6 @@ import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.UUID;
@@ -127,7 +126,7 @@ public class GameListener implements Listener
         // Kicks the player if needed.
         if (this.p.getConfig().getBoolean("death.kick.do", true))
         {
-            Bukkit.getScheduler().runTaskLater(this.p, new BukkitRunnable()
+            Bukkit.getScheduler().runTaskLater(this.p, new Runnable()
             {
 
                 @Override

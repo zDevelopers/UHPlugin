@@ -39,7 +39,6 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 
@@ -84,7 +83,7 @@ public class CraftingListener implements Listener
             // ProTips
             final String failedRecipe = p.getRecipesManager().getLastFailedRecipe();
             final Player player = (Player) ev.getViewers().get(0); // crafting inventory: only one viewer in all cases.
-            Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable()
+            Bukkit.getScheduler().runTaskLater(p, new Runnable()
             {
                 @Override
                 public void run()
@@ -169,7 +168,7 @@ public class CraftingListener implements Listener
              from the grid. **/
             if (inventory instanceof CraftingInventory && ev.getSlotType() == SlotType.RESULT)
             {
-                p.getServer().getScheduler().runTaskLater(p, new BukkitRunnable()
+                p.getServer().getScheduler().runTaskLater(p, new Runnable()
                 {
 
                     @Override
@@ -195,7 +194,7 @@ public class CraftingListener implements Listener
                 // This is ran one tick after the click because when the event is fired, the inventory
                 // object is not updated, and so the result of the isValidCompassResult is invalid.
 
-                Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable()
+                Bukkit.getScheduler().runTaskLater(p, new Runnable()
                 {
                     @Override
                     public void run()
@@ -317,7 +316,7 @@ public class CraftingListener implements Listener
     {
         if (ev.getInventory() instanceof CraftingInventory)
         {
-            Bukkit.getScheduler().runTaskLater(p, new BukkitRunnable()
+            Bukkit.getScheduler().runTaskLater(p, new Runnable()
             {
                 @Override
                 public void run()
