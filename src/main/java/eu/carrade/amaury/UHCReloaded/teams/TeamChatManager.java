@@ -19,6 +19,7 @@ package eu.carrade.amaury.UHCReloaded.teams;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
+import fr.zcraft.zlib.tools.text.MessageSender;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,12 +33,11 @@ import java.util.UUID;
 
 public class TeamChatManager
 {
-
     UHCReloaded p = null;
     I18n i = null;
 
-    List<UUID> teamChatLocked = new ArrayList<UUID>();
-    Map<UUID, UHTeam> otherTeamChatLocked = new HashMap<UUID, UHTeam>();
+    List<UUID> teamChatLocked = new ArrayList<>();
+    Map<UUID, UHTeam> otherTeamChatLocked = new HashMap<>();
 
     public TeamChatManager(UHCReloaded p)
     {
@@ -78,8 +78,8 @@ public class TeamChatManager
             return;
         }
 
-        String rawMessage = null;
-        UHTeam recipient = null;
+        String rawMessage;
+        UHTeam recipient;
 
         if (team == null)
         {
@@ -114,7 +114,7 @@ public class TeamChatManager
         // The message is sent to the players of the team...
         for (final Player player : team.getOnlinePlayers())
         {
-            player.sendMessage(rawMessage);
+            MessageSender.sendChatMessage(player, rawMessage);
         }
 
         // ... to the spies ...
@@ -125,7 +125,7 @@ public class TeamChatManager
                 // The message is only sent to the spies not in the team, to avoid double messages
                 if (otherTeamChatLocked.get(playerId).equals(team) && !team.containsPlayer(playerId))
                 {
-                    p.getServer().getPlayer(playerId).sendMessage(rawMessage);
+                    MessageSender.sendChatMessage(p.getServer().getPlayer(playerId), rawMessage);
                 }
             }
         }
