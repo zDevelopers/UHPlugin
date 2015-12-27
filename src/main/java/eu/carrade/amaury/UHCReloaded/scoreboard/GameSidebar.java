@@ -45,8 +45,6 @@ import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -54,8 +52,6 @@ import java.util.UUID;
 
 public class GameSidebar extends Sidebar
 {
-    private final NumberFormat formatter = new DecimalFormat("00");
-
     private final I18n i;
     private final Configuration config;
     private final UHGameManager gameManager;
@@ -203,17 +199,24 @@ public class GameSidebar extends Sidebar
                         {
                             if (gameManager.isGameStarted() && gameManager.isTakingDamage())
                             {
+                                if (gameManager.isPlayerDead(teamMember))
+                                    continue; // dead (spectators don't have to be displayed in the sidebar).
+
                                 Player teammate = Sidebar.getPlayerAsync(teamMember);
                                 if (teammate == null)
                                     continue; // offline
 
+
                                 Location teammateLocation = teammate.getLocation();
 
                                 // Check if the players are close
-                                final double distanceSquared = teammateLocation.distanceSquared(playerLocation);
-                                if (teammateLocation.getWorld().equals(playerLocation.getWorld()) && distanceSquared <= OWN_TEAM_DISPLAY_MET_PLAYERS_MIN_DISTANCE_SQUARED)
+                                if (teammateLocation.getWorld().equals(playerLocation.getWorld()))
                                 {
-                                    cache.getTeammatesDisplayed().add(teamMember);
+                                    final double distanceSquared = teammateLocation.distanceSquared(playerLocation);
+                                    if (distanceSquared <= OWN_TEAM_DISPLAY_MET_PLAYERS_MIN_DISTANCE_SQUARED)
+                                        cache.getTeammatesDisplayed().add(teamMember);
+                                    else
+                                        continue; // Too far, skipped
                                 }
                                 else
                                 {
