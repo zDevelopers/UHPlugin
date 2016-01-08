@@ -17,6 +17,7 @@
 package eu.carrade.amaury.UHCReloaded.integration;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -46,12 +47,12 @@ public class UHProtocolLibIntegrationWrapper
             }
             catch (NoClassDefFoundError e)
             {
-                p.getLogger().warning("ProtocolLib is present but cannot be loaded (outdated?), so the integration was disabled.");
+                PluginLogger.error("ProtocolLib is present but cannot be loaded (outdated?), so the integration was disabled.", e);
             }
         }
         else
         {
-            p.getLogger().warning("ProtocolLib is not present, so the integration was disabled.");
+            PluginLogger.warning("ProtocolLib is not present, so the integration was disabled.");
         }
     }
 

@@ -21,6 +21,7 @@ import com.wimbli.WorldBorder.Config;
 import com.wimbli.WorldBorder.WorldBorder;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.borders.MapShape;
+import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -40,7 +41,7 @@ public class UHWorldBorderIntegration
         Plugin wbTest = Bukkit.getServer().getPluginManager().getPlugin("WorldBorder");
         if (wbTest == null || !wbTest.isEnabled())
         {
-            p.getLogger().warning("WorldBorder is not present, so the integration was disabled.");
+            PluginLogger.warning("WorldBorder is not present, so the integration was disabled.");
             return;
         }
 
@@ -54,8 +55,8 @@ public class UHWorldBorderIntegration
         }
         catch (ClassNotFoundException e)
         {
-            p.getLogger().warning("WorldBorder is available, but the version you are using is too old.");
-            p.getLogger().warning("This plugin is tested and works with WorldBorder 1.8.0 or later.");
+            PluginLogger.warning("WorldBorder is available, but the version you are using is too old.");
+            PluginLogger.warning("This plugin is tested and works with WorldBorder 1.8.0 or later.");
 
             this.wb = null;
             return;
@@ -65,7 +66,7 @@ public class UHWorldBorderIntegration
         // All is good, let's integrate.
         setupBorders();
 
-        p.getLogger().info("Successfully hooked into WorldBorder.");
+        PluginLogger.info("Successfully hooked into WorldBorder.");
     }
 
     public void setupBorders()
@@ -99,14 +100,13 @@ public class UHWorldBorderIntegration
 
         Config.setBorder(overworld.getName(), borderOverworld);
 
-        p.getLogger().info("Overworld border configured using WorldBorder (world \"" + overworld.getName() + "\").");
+        PluginLogger.info("Overworld border configured using WorldBorder (world '{0}').", overworld.getName());
 
 
         /** Nether border **/
 
         // There is not any border set for the Nether, because WorldBorder handles portal redirection
         // if a player rebuild a portal far from the Nether' spawn point.
-
     }
 
     /**

@@ -19,6 +19,7 @@ package eu.carrade.amaury.UHCReloaded.integration;
 import com.pgcraft.spectatorplus.SpectateAPI;
 import com.pgcraft.spectatorplus.SpectatorPlus;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -56,8 +57,8 @@ public class UHSpectatorPlusIntegration
         }
         catch (ClassNotFoundException e)
         {
-            this.p.getLogger().warning("SpectatorPlus is available, but the version you are using is too old.");
-            this.p.getLogger().warning("This plugin is tested and works with SpectatorPlus 1.9.2 or later. The SpectateAPI is needed.");
+            PluginLogger.warning("SpectatorPlus is available, but the version you are using is too old.");
+            PluginLogger.warning("This plugin is tested and works with SpectatorPlus 1.9.2 or later. The SpectateAPI is needed.");
 
             this.sp = null;
             return;
@@ -65,13 +66,26 @@ public class UHSpectatorPlusIntegration
 
 
         // All is OK, let's integrate.
-        this.spAPI = sp.getAPI();
+        try
+        {
+            spAPI = sp.getAPI();
 
-        spAPI.setCompass(true, true);
-        spAPI.setSpectateOnDeath(true, true);
-        spAPI.setColouredTabList(false, true); // potential conflict with our scoreboard
+            spAPI.setCompass(true, true);
+            spAPI.setSpectateOnDeath(true, true);
+            spAPI.setColouredTabList(false, true); // potential conflict with our scoreboard
 
-        this.p.getLogger().info("Successfully hooked into SpectatorPlus.");
+            PluginLogger.info("Successfully hooked into SpectatorPlus.");
+        }
+
+        // Generic catch block to catch any kind of exception (logged, anyway), including e.g.
+        // NoSuchMethodError, if the API change, so the plugin is not broken.
+        catch (Throwable e)
+        {
+            PluginLogger.error("Cannot hook into SpectatorPlus, is this version compatible?", e);
+
+            spAPI = null;
+            sp = null;
+        }
     }
 
     public boolean isSPIntegrationEnabled()

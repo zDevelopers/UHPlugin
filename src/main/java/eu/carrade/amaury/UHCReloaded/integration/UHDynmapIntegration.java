@@ -20,6 +20,7 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -48,7 +49,7 @@ public class UHDynmapIntegration
         Plugin apiTest = Bukkit.getServer().getPluginManager().getPlugin("dynmap");
         if (apiTest == null || !apiTest.isEnabled())
         {
-            p.getLogger().warning("Dynmap is not present, so the integration was disabled.");
+            PluginLogger.warning("Dynmap is not present, so the integration was disabled.");
             return;
         }
 
@@ -57,7 +58,7 @@ public class UHDynmapIntegration
         markerAPI = api.getMarkerAPI();
         if (markerAPI == null)
         {
-            p.getLogger().warning("Dynmap is available, but the markers API is not. The integration was disabled.");
+            PluginLogger.warning("Dynmap is available, but the markers API is not. The integration was disabled.");
             return;
         }
 
@@ -65,7 +66,7 @@ public class UHDynmapIntegration
         // All is good, let's integrate.
         initDynmapIntegration();
 
-        p.getLogger().info("Successfully hooked into Dynmap.");
+        PluginLogger.info("Successfully hooked into Dynmap.");
     }
 
     private void initDynmapIntegration()
@@ -347,7 +348,7 @@ public class UHDynmapIntegration
 
         if (marker == null)
         {
-            p.getLogger().warning("Unable to create marker " + markerID);
+            PluginLogger.warning("Unable to create marker {0}", markerID);
         }
     }
 

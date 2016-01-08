@@ -19,15 +19,16 @@ package eu.carrade.amaury.UHCReloaded.integration;
 import com.comphenix.protocol.ProtocolLibrary;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.listeners.PacketsListener;
+import fr.zcraft.zlib.tools.PluginLogger;
 
 
 public class UHProtocolLibIntegration
 {
-
     public UHProtocolLibIntegration(UHCReloaded p)
     {
+        if (!p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled())
+            return;
 
-        // The plugin is available if this is called.
 
         PacketsListener packetsListener = new PacketsListener(p);
 
@@ -35,11 +36,12 @@ public class UHProtocolLibIntegration
         {
             ProtocolLibrary.getProtocolManager().addPacketListener(packetsListener);
         }
+
         if (p.getConfig().getBoolean("auto-respawn.do"))
         {
             p.getServer().getPluginManager().registerEvents(packetsListener, p);
         }
 
-        p.getLogger().info("Successfully hooked into ProtocolLib.");
+        PluginLogger.info("Successfully hooked into ProtocolLib.");
     }
 }
