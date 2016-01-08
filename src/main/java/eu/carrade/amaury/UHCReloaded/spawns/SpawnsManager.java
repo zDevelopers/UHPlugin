@@ -195,8 +195,8 @@ public class SpawnsManager
                         p.getLogger().info(i.t("load.spawnPointAdded", coords[0], coords[1]));
                         spawnCount++;
                     }
-                    catch (Exception e)
-                    { // Not an integer or not enough coords
+                    catch (Exception e) // Not an integer or not enough coords
+                    {
                         p.getLogger().warning(i.t("load.invalidSpawnPoint", (String) position));
                     }
                 }
@@ -263,7 +263,7 @@ public class SpawnsManager
      */
     public void generateSpawnPoints(Generator generator, World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter) throws CannotGenerateSpawnPointsException
     {
-        generateSpawnPoints(generator.getInstance(p), world, spawnCount, regionDiameter, minimalDistanceBetweenTwoPoints, xCenter, zCenter);
+        generateSpawnPoints(generator.getInstance(), world, spawnCount, regionDiameter, minimalDistanceBetweenTwoPoints, xCenter, zCenter);
     }
 
     /**

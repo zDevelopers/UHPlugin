@@ -32,13 +32,7 @@ import java.util.Set;
 
 public class GridSpawnPointsGenerator implements SpawnPointsGenerator
 {
-
-    private UHCReloaded p;
-
-    public GridSpawnPointsGenerator(UHCReloaded p)
-    {
-        this.p = p;
-    }
+    private final UHCReloaded p = UHCReloaded.get();
 
     /**
      * Generates spawn points in a grid.

@@ -13,9 +13,7 @@
  * You should have received a copy of the GNU General Public License along with this program.  If
  * not, see [http://www.gnu.org/licenses/].
  */
-
 package eu.carrade.amaury.UHCReloaded.spawns.generators;
-
 
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException;
 import org.bukkit.Location;
@@ -28,13 +26,11 @@ import java.util.Set;
  * Represents a spawn points generator.
  *
  * <p>
- *     The constructor must take a single argument, an instance of the main class of
- *     the plugin.
+ *     A zero-arguments constructor is needed.
  * </p>
  */
 public interface SpawnPointsGenerator
 {
-
     /**
      * Generates the spawn points.
      *
@@ -50,7 +46,7 @@ public interface SpawnPointsGenerator
      *
      * @return The spawn points generated.
      *
-     * @throws eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException In case of fail.
+     * @throws CannotGenerateSpawnPointsException In case of fail.
      */
     Set<Location> generate(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter, boolean avoidWater) throws CannotGenerateSpawnPointsException;
 }

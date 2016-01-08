@@ -31,14 +31,7 @@ import java.util.Set;
 
 public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
 {
-
-    private UHCReloaded p;
-
-    public CircularSpawnPointsGenerator(UHCReloaded p)
-    {
-        this.p = p;
-    }
-
+    private final UHCReloaded p = UHCReloaded.get();
 
     /**
      * Generates spawn points in concentric circles.

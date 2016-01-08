@@ -35,15 +35,8 @@ import java.util.Set;
  */
 public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
 {
-    private UHCReloaded p;
-
     private final Random random = new Random();
-
-
-    public RandomSpawnPointsGenerator(UHCReloaded p)
-    {
-        this.p = p;
-    }
+    private final UHCReloaded p = UHCReloaded.get();
 
     /**
      * Generates randomly some spawn points in the map, with a minimal distance.
@@ -211,8 +204,8 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
         {
             return -1 * (random.nextInt(Math.abs(min - max)) + Math.abs(max));
         }
-        else
-        { // min <= 0 && max >= 0
+        else // min <= 0 && max >= 0
+        {
             return random.nextInt(Math.abs(min) + Math.abs(max)) - Math.abs(min);
         }
     }

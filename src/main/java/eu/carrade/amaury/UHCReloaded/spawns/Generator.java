@@ -17,13 +17,13 @@
 package eu.carrade.amaury.UHCReloaded.spawns;
 
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.spawns.generators.CircularSpawnPointsGenerator;
 import eu.carrade.amaury.UHCReloaded.spawns.generators.GridSpawnPointsGenerator;
 import eu.carrade.amaury.UHCReloaded.spawns.generators.RandomSpawnPointsGenerator;
 import eu.carrade.amaury.UHCReloaded.spawns.generators.SpawnPointsGenerator;
+import fr.zcraft.zlib.tools.PluginLogger;
+import fr.zcraft.zlib.tools.reflection.Reflection;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 
@@ -83,26 +83,20 @@ public enum Generator
      *
      * @return The instance.
      */
-    public SpawnPointsGenerator getInstance(UHCReloaded p)
+    public SpawnPointsGenerator getInstance()
     {
         try
         {
-            Constructor constructor = generatorClass.getConstructor(UHCReloaded.class);
-            return (SpawnPointsGenerator) constructor.newInstance(p);
-
+            return (SpawnPointsGenerator) Reflection.instantiate(generatorClass);
         }
         catch (NoSuchMethodException | InstantiationException | IllegalAccessException e)
         {
-            p.getLogger().log(Level.SEVERE, "Cannot instantiate the spawn points generator: invalid class (missing constructor?): " + generatorClass.getName());
-            e.printStackTrace();
-
+            PluginLogger.log(Level.SEVERE, "Cannot instantiate the spawn points generator: invalid class (missing constructor?): " + generatorClass.getName(), e.getCause());
             return null;
         }
         catch (InvocationTargetException e)
         {
-            p.getLogger().log(Level.SEVERE, "Error during the spawn points generator instantiation: " + generatorClass.getName());
-            e.getCause().printStackTrace();
-
+            PluginLogger.log(Level.SEVERE, "Error during the spawn points generator instantiation: " + generatorClass.getName(), e.getCause());
             return null;
         }
     }
