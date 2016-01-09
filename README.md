@@ -333,9 +333,10 @@ To opt out of metrics you can edit the `config.yml` file in the `PluginMetrics` 
 ## Thanks
 
  - This work is a fork of [the KTP plugin](https://github.com/Azenet/KTP) made by [@Azenet](https://github.com/Azenet).
+   *The original project was published under GPLv3, but without any piece of code in common between this original and the current project, the license was changed to CeCILL-B.*
  - Special thanks to [@jonyroda97](https://github.com/jonyroda97), for many interesting suggestions and Portuguese translation.
 
 
 ## License
 
-GPLv3. Voir le fichier LICENSE pour détails.
+This software is published under the **CeCILL-B** license. See the `LICENSE` file for details.
