@@ -152,6 +152,7 @@ statistics:
 start:
     slow:
         delayBetweenTP: 3  # in seconds
+        broadcastProgress: true  # Displays something like « Teleporting... (14/28) » in the action bar for every player.
         
     sound:
         name: NONE

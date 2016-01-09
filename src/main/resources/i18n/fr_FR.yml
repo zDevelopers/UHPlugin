@@ -153,7 +153,11 @@ keys:
         already: "{ce}Le jeu est déjà démarré ! Rechargez ou redémarrez le serveur pour redémarrer."
         syntax: "{ce}Erreur de syntaxe. Utilisation : /uh start [slow] ou /uh start slow go."
         notEnoughTP: "{ce}Impossible de démarrer : pas assez de points de téléportation."
+
         teleportationInProgress: "{lightpurple}Téléportation en cours... Merci de patienter."
+        teleportationInProgressInActionBar: "{lightpurple}Téléportation... {gray}({0}/{1})"
+        teleportationFinishedInActionBar: "{lightpurple}Téléportation terminée. {gray}Ça ne devrait pas tarder..."
+
         
         startSlowBeforeStartSlowGo: "{ce}Veuillez exécuter {cc}/uh start slow{ce} avant."
         startSlowWaitBeforeGo: "{ce}Veuillez patienter, les équipes sont en train d'être téléportées."

@@ -32,6 +32,7 @@ import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.runners.RunTask;
+import fr.zcraft.zlib.tools.text.ActionBar;
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -59,6 +60,7 @@ import java.util.UUID;
 public class UHGameManager
 {
     private final Boolean RANDOM_COLORS_IN_SOLO;
+    private final Boolean BROADCAST_SLOW_START_PROGRESS;
     private final UHSound DEATH_SOUND;
 
     private UHCReloaded p = null;
@@ -108,6 +110,7 @@ public class UHGameManager
 
         // Loads the config
         RANDOM_COLORS_IN_SOLO = p.getConfig().getBoolean("teams-options.randomColors");
+        BROADCAST_SLOW_START_PROGRESS = p.getConfig().getBoolean("start.slow.broadcastProgress");
         DEATH_SOUND = new UHSound(p.getConfig().getConfigurationSection("death.announcements.sound"));
     }
 
@@ -363,7 +366,15 @@ public class UHGameManager
                 public void call(UUID uuid)
                 {
                     teleported++;
-                    // TODO inform players if option set
+
+                    if (BROADCAST_SLOW_START_PROGRESS)
+                    {
+                        String message = i.t("start.teleportationInProgressInActionBar", teleported, total);
+                        for (Player player : Bukkit.getOnlinePlayers())
+                        {
+                            ActionBar.sendPermanentMessage(player, message);
+                        }
+                    }
                 }
             });
         }
@@ -434,6 +445,15 @@ public class UHGameManager
                                 sender.sendMessage(i.t("start.startSlowAllTeamsTPCmd"));
                             }
                             catch (NullPointerException ignored) {}
+
+                            if (BROADCAST_SLOW_START_PROGRESS)
+                            {
+                                String message = i.t("start.teleportationFinishedInActionBar");
+                                for (Player player : Bukkit.getOnlinePlayers())
+                                {
+                                    ActionBar.sendPermanentMessage(player, message);
+                                }
+                            }
                         }
                         else
                         {
@@ -479,6 +499,15 @@ public class UHGameManager
             {
                 player.setFlying(false);
                 player.setAllowFlight(false);
+            }
+        }
+
+        // The action bar is cleared
+        if (BROADCAST_SLOW_START_PROGRESS)
+        {
+            for (Player player : Bukkit.getOnlinePlayers())
+            {
+                ActionBar.removeMessage(player);
             }
         }
 

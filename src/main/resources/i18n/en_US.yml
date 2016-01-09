@@ -153,7 +153,10 @@ keys:
         already: "{ce}The game is already started! Reload or restart the server to restart the game."
         syntax: "{ce}Syntax error. Usage: /uh start [slow] or /uh start slow go."
         notEnoughTP: "{ce}Unable to start the game: not enough teleportation spots."
+
         teleportationInProgress: "{lightpurple}Teleportation in progress... Please wait."
+        teleportationInProgressInActionBar: "{lightpurple}Teleporting... {gray}({0}/{1})"
+        teleportationFinishedInActionBar: "{lightpurple}Teleportation complete. {gray}The game will start soon..."
         
         startSlowBeforeStartSlowGo: "{ce}Please execute {cc}/uh start slow{ce} before."
         startSlowWaitBeforeGo: "{ce}Please wait while the players are teleported."

@@ -239,14 +239,14 @@ public class I18n
      * @param params The additional parameters.
      * @return
      */
-    public String t(String key, String... params)
+    public String t(String key, Object... params)
     {
         int i = 0;
         String text = t(key);
 
-        for (String param : params)
+        for (Object param : params)
         {
-            text = text.replace("{" + i + "}", param);
+            text = text.replace("{" + i + "}", String.valueOf(param));
             i++;
         }
 
