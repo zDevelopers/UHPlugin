@@ -149,7 +149,6 @@ keys:
         teleportationInProgress: "{lightpurple}Teleporte em Progresso... Espera um Pouco."
         startSlowBeforeStartSlowGo: "{ce}Faz {cc}/uh start slow{ce} antes desse Comando."
         startSlowWaitBeforeGo: "{ce}Espera ate os jogadores estarem todos teleportados."
-        startSlowTeamTP: "{gray}Equipa {0}{gray} Teleportada."
         startSlowAllTeamsTP: "{cs}Todas as Equipas foram Teleportadas."
         startSlowAllTeamsTPCmd: "{gray}Usa {cc}/uh start slow go{gray} para comecar o Jogo."
         

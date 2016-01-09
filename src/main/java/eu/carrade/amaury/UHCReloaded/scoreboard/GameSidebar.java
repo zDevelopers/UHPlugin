@@ -32,7 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.scoreboard;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.UHGameManager;
+import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.misc.Freezer;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;

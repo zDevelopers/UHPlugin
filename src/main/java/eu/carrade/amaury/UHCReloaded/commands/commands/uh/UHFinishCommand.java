@@ -17,7 +17,7 @@
 package eu.carrade.amaury.UHCReloaded.commands.commands.uh;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.UHGameManager;
+import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;

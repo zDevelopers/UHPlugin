@@ -150,7 +150,6 @@ keys:
         
         startSlowBeforeStartSlowGo: "{ce}Digite {cc}/uh start slow{ce} antes."
         startSlowWaitBeforeGo: "{ce}Por favor aguarde até os jogadores serem teletransportados."
-        startSlowTeamTP: "{gray}Equipe {0}{gray} teletransportada."
         startSlowAllTeamsTP: "{cs}Todas as equipes foram teletransportadas."
         startSlowAllTeamsTPCmd: "{gray}Digite {cc}/uh start slow go{gray} para iniciar a partida."
         

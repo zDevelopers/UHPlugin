@@ -158,6 +158,8 @@ keys:
         startSlowBeforeStartSlowGo: "{ce}Veuillez exécuter {cc}/uh start slow{ce} avant."
         startSlowWaitBeforeGo: "{ce}Veuillez patienter, les équipes sont en train d'être téléportées."
         startSlowTeamTP: "{gray}Équipe {0}{gray} téléportée."
+        startSlowTP: "{gray}Joueur {0}{gray} téléporté."
+        startSlowTPFailed: "{ce}Impossible de téléporter le joueur {0}{ce}: est-il hors-ligne ?"
         startSlowAllTeamsTP: "{cs}Toutes les équipes ont été téléportées."
         startSlowAllTeamsTPCmd: "{gray}Utilisez {cc}/uh start slow go{gray} pour démarrer le jeu."
         

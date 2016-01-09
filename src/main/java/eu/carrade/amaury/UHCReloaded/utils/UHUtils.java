@@ -16,6 +16,7 @@
 
 package eu.carrade.amaury.UHCReloaded.utils;
 
+import fr.zcraft.zlib.tools.Callback;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Builder;
@@ -87,24 +88,24 @@ public class UHUtils
      */
     public static int string2Time(String text)
     {
-        String[] splitted = text.split(":");
+        String[] split = text.split(":");
 
-        if (splitted.length > 3)
+        if (split.length > 3)
         {
-            throw new IllegalArgumentException("Badely formatted string in string2time, formats allowed are mm, mm:ss or hh:mm:ss.");
+            throw new IllegalArgumentException("Badly formatted string in string2time, formats allowed are mm, mm:ss or hh:mm:ss.");
         }
 
-        if (splitted.length == 1)
-        { // "mm"
-            return Integer.valueOf(splitted[0]) * 60;
+        if (split.length == 1)  // "mm"
+        {
+            return Integer.valueOf(split[0]) * 60;
         }
-        else if (splitted.length == 2)
-        { // "mm:ss"
-            return Integer.valueOf(splitted[0]) * 60 + Integer.valueOf(splitted[1]);
+        else if (split.length == 2)  // "mm:ss"
+        {
+            return Integer.valueOf(split[0]) * 60 + Integer.valueOf(split[1]);
         }
-        else
-        { // "hh:mm:ss"
-            return Integer.valueOf(splitted[0]) * 3600 + Integer.valueOf(splitted[1]) * 60 + Integer.valueOf(splitted[2]);
+        else  // "hh:mm:ss"
+        {
+            return Integer.valueOf(split[0]) * 3600 + Integer.valueOf(split[1]) * 60 + Integer.valueOf(split[2]);
         }
     }
 
@@ -348,5 +349,17 @@ public class UHUtils
     {
         Random rand = new Random();
         return Color.fromBGR(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
+    }
+
+    /**
+     * Calls a callback if it is defined (non-{@code null}).
+     *
+     * @param callback The callback
+     * @param argument The callback's argument.
+     * @param <T> The callback's argument type.
+     */
+    public static <T> void callIfDefined(Callback<T> callback, T argument)
+    {
+        if (callback != null) callback.call(argument);
     }
 }

@@ -150,7 +150,6 @@ keys:
 
         startSlowBeforeStartSlowGo: "{ce}Nejprve napiste prikaz {cc}/uh start slow{ce}"
         startSlowWaitBeforeGo: "{ce}Prosim vyckejte, nez budou vsichni hraci teleportovani."
-        startSlowTeamTP: "{gray}Tym {0}{gray} byl uspesne teleportovan."
         startSlowAllTeamsTP: "{cs}Vsechny tymy byly uspesne teleportovany."
         startSlowAllTeamsTPCmd: "{gray}Pouzijte prikaz {cc}/uh start slow go{gray} pro zapoceti hry."
 

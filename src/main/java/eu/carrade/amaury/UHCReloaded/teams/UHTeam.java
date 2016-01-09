@@ -27,6 +27,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -43,9 +44,18 @@ public class UHTeam
     private String displayName = null;
     private TeamColor color = null;
 
-    private HashSet<UUID> players = new HashSet<UUID>();
+    private HashSet<UUID> players = new HashSet<>();
 
 
+    public UHTeam(String name, TeamColor color)
+    {
+        this(name, color, UHCReloaded.get());
+    }
+
+    /**
+     * @deprecated Use {@link #UHTeam(String, TeamColor)} instead.
+     */
+    @Deprecated
     public UHTeam(String name, TeamColor color, UHCReloaded plugin)
     {
         Validate.notNull(name, "The name cannot be null.");
@@ -77,8 +87,8 @@ public class UHTeam
 
         Scoreboard sb = this.plugin.getScoreboardManager().getScoreboard();
 
-        sb.registerNewTeam(this.internalName);
-        Team t = sb.getTeam(this.internalName);
+        Team t = sb.registerNewTeam(this.internalName);
+        t.setDisplayName(displayName.substring(0, Math.min(displayName.length(), 32)));
 
         if (this.color != null)
         {
@@ -172,7 +182,7 @@ public class UHTeam
     @SuppressWarnings ("unchecked")
     public Set<UUID> getPlayersUUID()
     {
-        return (HashSet<UUID>) players.clone();
+        return Collections.unmodifiableSet(players);
     }
 
     /**
@@ -187,7 +197,7 @@ public class UHTeam
         for (UUID id : players)
         {
             Player player = plugin.getServer().getPlayer(id);
-            if (player != null)
+            if (player != null && player.isOnline())
             {
                 playersList.add(id);
             }
@@ -239,7 +249,6 @@ public class UHTeam
         if (plugin.getTeamManager().getMaxPlayersPerTeam() != 0
                 && this.players.size() >= plugin.getTeamManager().getMaxPlayersPerTeam())
         {
-
             throw new RuntimeException("The team " + getName() + " is full");
         }
 

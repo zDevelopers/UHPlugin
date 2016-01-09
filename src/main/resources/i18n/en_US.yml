@@ -157,7 +157,8 @@ keys:
         
         startSlowBeforeStartSlowGo: "{ce}Please execute {cc}/uh start slow{ce} before."
         startSlowWaitBeforeGo: "{ce}Please wait while the players are teleported."
-        startSlowTeamTP: "{gray}Team {0}{gray} teleported."
+        startSlowTP: "{gray}Player {0}{gray} teleported."
+        startSlowTPFailed: "{ce}Cannot teleport player {0}{ce}: is it offline?"
         startSlowAllTeamsTP: "{cs}All teams are teleported."
         startSlowAllTeamsTPCmd: "{gray}Use {cc}/uh start slow go{gray} to start the game."
         

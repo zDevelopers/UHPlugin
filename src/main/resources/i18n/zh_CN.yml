@@ -157,7 +157,6 @@ keys:
         
         startSlowBeforeStartSlowGo: "{ce}请先执行 {cc}/uh start slow{ce} 指令."
         startSlowWaitBeforeGo: "{ce}正在传送玩家, 请等候."
-        startSlowTeamTP: "{gray}队伍 {0}{gray} 已被传送."
         startSlowAllTeamsTP: "{cs}所有队伍已被传送."
         startSlowAllTeamsTPCmd: "{gray}请用 {cc}/uh start slow go{gray} 来开始游戏."
         

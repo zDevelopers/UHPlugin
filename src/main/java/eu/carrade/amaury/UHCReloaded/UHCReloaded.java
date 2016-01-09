@@ -18,6 +18,7 @@ package eu.carrade.amaury.UHCReloaded;
 
 import eu.carrade.amaury.UHCReloaded.borders.BorderManager;
 import eu.carrade.amaury.UHCReloaded.commands.UHCommandExecutor;
+import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.integration.UHDynmapIntegration;
 import eu.carrade.amaury.UHCReloaded.integration.UHProtocolLibIntegrationWrapper;
