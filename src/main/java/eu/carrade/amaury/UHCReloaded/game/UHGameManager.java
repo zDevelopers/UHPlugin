@@ -266,7 +266,7 @@ public class UHGameManager
 
             for (Player player : Bukkit.getOnlinePlayers())
             {
-                if (!spectators.contains(player.getUniqueId()))
+                if (!spectators.contains(player.getUniqueId()) && tm.getTeamForPlayer(player) == null)
                 {
                     // We need an unique name for the team.
                     String teamName = player.getName();
