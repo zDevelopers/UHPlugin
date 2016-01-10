@@ -88,7 +88,7 @@ public class BrettflanWorldBorder extends WorldBorder
     @Override
     public double getDiameter()
     {
-        return border.getRadiusX();
+        return border.getRadiusX() * 2;
     }
 
     @Override

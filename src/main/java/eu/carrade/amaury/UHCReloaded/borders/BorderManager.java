@@ -129,6 +129,14 @@ public class BorderManager
     }
 
     /**
+     * @return The WorldBorder proxy to set the border in-game.
+     */
+    public WorldBorder getBorderProxy()
+    {
+        return border;
+    }
+
+    /**
      * Checks if a given location is inside the border with the given diameter.
      * The check is performed for a circular or squared border, following the configuration.
      *

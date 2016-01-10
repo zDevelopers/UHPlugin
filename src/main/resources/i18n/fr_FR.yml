@@ -188,6 +188,15 @@ keys:
         players: "{white}{0}{gray} joueurs"
         teams: "{white}{0}{gray} équipes"
         yourTeam: "{bold}Votre équipe"
+        border:
+            title: "{blue}{bold}Bordure"
+            coordinates:
+                x: "{gray}X: {white}{0} {1}"
+                z: "{gray}Z: {white}{0} {1}"
+                both: "{white}{0} {1}"
+            diameter:
+                squared: "{white}{0} blocs de large"
+                circular: "{gray}Diamètre : {white}{0} blocs"
         kills: "{white}{0}{gray} joueurs tués"
         timer: "{white}{0}{gray}:{white}{1}"
         timerWithHours: "{0}{gray}:{white}{1}{gray}:{white}{2}"

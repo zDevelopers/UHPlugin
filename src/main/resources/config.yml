@@ -128,7 +128,7 @@ scoreboard:
                 displayedWhenCloserThan: 10  # If enabled, a teammate will be displayed to the reference player if he/she is closer that this amount of blocks to the player.
     border:
         displayed: true
-        data: "coordinates"  # "coordinates" (ex. "-1000 ; 1000") or "diameter" (ex. "2000 blocks wide"). Fallsback to "coordinates".
+        displayDiameter: false  # If true, displays the border diameter (ex. "2000 blocks wide"). Else, the min/max coordinates (ex. "-1000 +1000"). Ignored if the border is circular.
     kills: true
     timer: true
     freezeStatus: true

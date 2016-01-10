@@ -32,11 +32,14 @@
 package eu.carrade.amaury.UHCReloaded.scoreboard;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.borders.MapShape;
+import eu.carrade.amaury.UHCReloaded.borders.worldborders.WorldBorder;
 import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.misc.Freezer;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
+import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
 import fr.zcraft.zlib.components.scoreboard.SidebarMode;
 import org.bukkit.Bukkit;
@@ -53,13 +56,14 @@ import java.util.UUID;
 public class GameSidebar extends Sidebar
 {
     private final I18n i;
-    private final Configuration config;
     private final UHGameManager gameManager;
+    private final WorldBorder border;
 
     private final boolean EPISODES_ENABLED;
     private final boolean EPISODES_IN_SIDEBAR;
     private final boolean PLAYERS_IN_SIDEBAR;
     private final boolean TEAMS_IN_SIDEBAR;
+    private final boolean BORDER_IN_SIDEBAR;
     private final boolean KILLS_IN_SIDEBAR;
     private final boolean TIMER_IN_SIDEBAR;
     private final boolean FREEZE_STATUS_IN_SIDEBAR;
@@ -75,11 +79,14 @@ public class GameSidebar extends Sidebar
     private final boolean OWN_TEAM_DISPLAY_MET_PLAYERS_ONLY;
     private final double  OWN_TEAM_DISPLAY_MET_PLAYERS_MIN_DISTANCE_SQUARED;
 
+    private final boolean BORDER_DISPLAY_DIAMETER;
+
     private final String FROOZEN_NULL_TIMER_TEXT;
     private final String HEART = "\u2764";
 
     private final String sidebarTitle;
     private final List<String> sidebarTop = new ArrayList<>();
+    private final List<String> sidebarBorder = new ArrayList<>();
     private final List<String> sidebarTimers = new ArrayList<>();
 
 
@@ -87,13 +94,15 @@ public class GameSidebar extends Sidebar
     {
         i = UHCReloaded.i();
 
-        config = UHCReloaded.get().getConfig();
+        Configuration config = UHCReloaded.get().getConfig();
         gameManager = UHCReloaded.get().getGameManager();
+        border = UHCReloaded.get().getBorderManager().getBorderProxy();
 
         EPISODES_ENABLED = config.getBoolean("episodes.enabled");
         EPISODES_IN_SIDEBAR = config.getBoolean("scoreboard.episode");
         PLAYERS_IN_SIDEBAR = config.getBoolean("scoreboard.players");
         TEAMS_IN_SIDEBAR = config.getBoolean("scoreboard.teams");
+        BORDER_IN_SIDEBAR = config.getBoolean("scoreboard.border.displayed");
         KILLS_IN_SIDEBAR = config.getBoolean("scoreboard.kills");
         TIMER_IN_SIDEBAR = config.getBoolean("scoreboard.timer");
         FREEZE_STATUS_IN_SIDEBAR = config.getBoolean("scoreboard.freezeStatus");
@@ -109,6 +118,8 @@ public class GameSidebar extends Sidebar
         OWN_TEAM_DISPLAY_MET_PLAYERS_ONLY = config.getBoolean("scoreboard.ownTeam.content.displayMetPlayersOnly.enabled");
         OWN_TEAM_DISPLAY_MET_PLAYERS_MIN_DISTANCE_SQUARED = Math.pow(config.getDouble("scoreboard.ownTeam.content.displayMetPlayersOnly.displayedWhenCloserThan"), 2);
 
+        BORDER_DISPLAY_DIAMETER = config.getBoolean("scoreboard.border.displayDiameter");
+
         FROOZEN_NULL_TIMER_TEXT = new UHTimer("").toString();
 
         setAsync(true);
@@ -122,6 +133,7 @@ public class GameSidebar extends Sidebar
     public void preRender()
     {
         sidebarTop.clear();
+        sidebarBorder.clear();
         sidebarTimers.clear();
 
         // Top sidebar
@@ -149,6 +161,14 @@ public class GameSidebar extends Sidebar
 
             if (gameManager.isGameWithTeams() && TEAMS_IN_SIDEBAR)
                 sidebarTop.add(i.t("scoreboard.teams", String.valueOf(gameManager.getAliveTeamsCount())));
+        }
+
+
+        // Border part of the sidebar
+
+        if (gameManager.isGameStarted())
+        {
+            insertBorder(sidebarBorder);
         }
 
 
@@ -247,6 +267,8 @@ public class GameSidebar extends Sidebar
             }
         }
 
+        sidebar.addAll(sidebarBorder);
+
         if (KILLS_IN_SIDEBAR && gameManager.isGameStarted())
         {
             SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(player.getUniqueId());
@@ -271,6 +293,52 @@ public class GameSidebar extends Sidebar
         return sidebarTitle;
     }
 
+
+    /**
+     * Inserts the border status in the given list, to be displayed in the sidebar.
+     *
+     * @param sidebar The list representing the sidebar's content.
+     */
+    private void insertBorder(List<String> sidebar)
+    {
+        if (BORDER_IN_SIDEBAR)
+        {
+            sidebar.add(i.t("scoreboard.border.title"));
+
+            int diameter = (int) Math.ceil(border.getDiameter());
+
+            if (BORDER_DISPLAY_DIAMETER || border.getShape() == MapShape.CIRCULAR)
+            {
+                if (border.getShape() == MapShape.SQUARED)
+                    sidebar.add(i.t("scoreboard.border.diameter.squared", diameter));
+                else
+                    sidebar.add(i.t("scoreboard.border.diameter.circular", diameter));
+            }
+            else
+            {
+                Location center = border.getCenter();
+                int radius = (int) Math.ceil(diameter / 2);
+
+                int minX = center.getBlockX() - radius;
+                int maxX = center.getBlockX() + radius;
+                int minZ = center.getBlockZ() - radius;
+                int maxZ = center.getBlockZ() + radius;
+
+                // Same min & max, we can display both at once
+                if (minX == minZ && maxX == maxZ)
+                {
+                    sidebar.add(i.t("scoreboard.border.coordinates.both", UHUtils.integerToStringWithSign(minX), UHUtils.integerToStringWithSign(maxZ)));
+                }
+                else
+                {
+                    sidebar.add(i.t("scoreboard.border.coordinates.x", UHUtils.integerToStringWithSign(minX), UHUtils.integerToStringWithSign(maxX)));
+                    sidebar.add(i.t("scoreboard.border.coordinates.z", UHUtils.integerToStringWithSign(minZ), UHUtils.integerToStringWithSign(maxZ)));
+                }
+            }
+
+            sidebar.add("");
+        }
+    }
 
     /**
      * Inserts the timers in the given list, to be displayed in the sidebar, at the bottom of the

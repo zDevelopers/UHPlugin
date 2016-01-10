@@ -51,7 +51,6 @@ import java.util.Random;
 
 public class UHUtils
 {
-
     /**
      * Extracts a string from a list of arguments, starting at the given index.
      *
@@ -146,6 +145,15 @@ public class UHUtils
                         || raw.equalsIgnoreCase("1")
                         || raw.equalsIgnoreCase("yes")
         );
+    }
+
+    /**
+     * @param integer An integer.
+     * @return A string representation of this integer, with an explicit "+" if positive.
+     */
+    public static String integerToStringWithSign(int integer)
+    {
+        return (integer < 0 ? "" : "+") + String.valueOf(integer);
     }
 
 
