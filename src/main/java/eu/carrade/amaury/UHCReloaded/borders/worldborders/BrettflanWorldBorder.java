@@ -53,8 +53,10 @@ import org.bukkit.World;
  */
 public class BrettflanWorldBorder extends WorldBorder
 {
-    World world;
-    BorderData border;
+    private World world;
+    private BorderData border;
+
+    private Double diameter = 0d;
 
     public BrettflanWorldBorder(World world)
     {
@@ -88,20 +90,47 @@ public class BrettflanWorldBorder extends WorldBorder
     @Override
     public double getDiameter()
     {
-        return border.getRadiusX() * 2;
+        // If squared, the size is not changed
+        if (!border.getShape())
+            return diameter;
+
+
+        Double realDiameter = (double) (border.getRadiusX() * 2);
+
+        // Returns the stored diameter, except if it was changed
+        // manually with /wb (see #setDiameterInternal(Double) for
+        // details).
+        if (realDiameter - diameter >= 8)
+            diameter = realDiameter;
+
+        return diameter;
     }
 
     @Override
     public void setDiameter(double diameter)
     {
-        border.setRadius((int) Math.floor(diameter / 2));
+        setDiameterInternal(diameter);
     }
 
     @Override
     public void setDiameter(double diameter, long time)
     {
         // TODO emulate the vanilla world border, to allow slowly shrinking circular borders
-        border.setRadius((int) Math.floor(diameter / 2));
+        setDiameterInternal(diameter);
+    }
+
+    private void setDiameterInternal(double diameter)
+    {
+        this.diameter = diameter;
+
+        // If the wall is circular, the diameter used to check must be bigger to avoid false positives
+        // if a player is in an angle of the circular wall. The original diameter set is stored and
+        // returned by the getDiameter value (except if the diameter was changed using /wb), for nicer
+        // display (avoids rounding errors).
+        // “+3” ? Experimental.
+        int offset = (getShape() == MapShape.CIRCULAR) ? 3 : 0;
+
+        border.setRadius((int) Math.floor((diameter + offset) / 2));
     }
 
     @Override

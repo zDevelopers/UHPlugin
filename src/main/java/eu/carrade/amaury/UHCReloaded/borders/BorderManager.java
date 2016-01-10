@@ -201,28 +201,6 @@ public class BorderManager
     }
 
     /**
-     * Returns the diameter used to check if the players are inside the wall.
-     *
-     * If the wall is circular, the diameter used to check must be bigger to avoid false positives
-     * if a player is in an angle of the circular wall.
-     *
-     * “+3” ? Experimental.
-     *
-     * @return the diameter.
-     */
-    public int getCheckDiameter()
-    {
-        if (getMapShape() == MapShape.CIRCULAR)
-        {
-            return getCurrentBorderDiameter() + 3;
-        }
-        else
-        {
-            return getCurrentBorderDiameter();
-        }
-    }
-
-    /**
      * Returns the size of the future border, used in the warning messages sent to the
      * players out of this future border.
      *
