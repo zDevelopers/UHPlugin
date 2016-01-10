@@ -32,28 +32,18 @@
 
 package eu.carrade.amaury.UHCReloaded.integration;
 
-import com.wimbli.WorldBorder.BorderData;
-import com.wimbli.WorldBorder.Config;
 import com.wimbli.WorldBorder.WorldBorder;
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.borders.MapShape;
 import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.plugin.Plugin;
 
 
 public class UHWorldBorderIntegration
 {
-
-    private UHCReloaded p = null;
     private WorldBorder wb = null;
 
-    public UHWorldBorderIntegration(UHCReloaded p)
+    public UHWorldBorderIntegration()
     {
-        this.p = p;
-
         Plugin wbTest = Bukkit.getServer().getPluginManager().getPlugin("WorldBorder");
         if (wbTest == null || !wbTest.isEnabled())
         {
@@ -62,7 +52,6 @@ public class UHWorldBorderIntegration
         }
 
         this.wb = (WorldBorder) wbTest;
-
 
         try
         {
@@ -78,68 +67,7 @@ public class UHWorldBorderIntegration
             return;
         }
 
-
-        // All is good, let's integrate.
-        setupBorders();
-
         PluginLogger.info("Successfully hooked into WorldBorder.");
-    }
-
-    public void setupBorders()
-    {
-        if (!isWBIntegrationEnabled())
-        {
-            return;
-        }
-
-        /** General configuration **/
-
-        Config.setPortalRedirection(true); // Because the nether is border-less.
-
-
-        /** Overworld border **/
-
-        World overworld = getOverworld();
-        BorderData borderOverworld = wb.getWorldBorder(overworld.getName());
-
-        if (borderOverworld == null)
-        { // The border needs to be created from scratch
-            borderOverworld = new BorderData(0, 0, 0); // Random values, overwritten later.
-        }
-
-        borderOverworld.setShape(p.getBorderManager().getMapShape() == MapShape.CIRCULAR);
-
-        borderOverworld.setX(overworld.getSpawnLocation().getX()); // A border centered on the spawn point
-        borderOverworld.setZ(overworld.getSpawnLocation().getZ());
-
-        borderOverworld.setRadius((int) Math.floor(p.getBorderManager().getCheckDiameter() / 2));
-
-        Config.setBorder(overworld.getName(), borderOverworld);
-
-        PluginLogger.info("Overworld border configured using WorldBorder (world '{0}').", overworld.getName());
-
-
-        /** Nether border **/
-
-        // There is not any border set for the Nether, because WorldBorder handles portal redirection
-        // if a player rebuild a portal far from the Nether' spawn point.
-    }
-
-    /**
-     * Returns the overworld.
-     *
-     * @return the... overworld?
-     */
-    private World getOverworld()
-    {
-        for (World world : Bukkit.getServer().getWorlds())
-        {
-            if (world.getEnvironment() != Environment.NETHER && world.getEnvironment() != Environment.THE_END)
-            {
-                return world;
-            }
-        }
-        return null;
     }
 
     public boolean isWBIntegrationEnabled()

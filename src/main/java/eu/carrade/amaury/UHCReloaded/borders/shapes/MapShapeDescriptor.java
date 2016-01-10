@@ -39,7 +39,6 @@ import org.bukkit.Location;
  */
 public interface MapShapeDescriptor
 {
-
     /**
      * Returns true if the given location is inside the map.
      *
@@ -49,7 +48,7 @@ public interface MapShapeDescriptor
      *
      * @return {@code true} if the given location is inside the map.
      */
-    public boolean isInsideBorder(final Location location, final Double diameter, final Location center);
+    boolean isInsideBorder(final Location location, final Double diameter, final Location center);
 
     /**
      * Returns the distance between the given location and the border with this diameter.
@@ -61,6 +60,5 @@ public interface MapShapeDescriptor
      * @return The distance between the given {@code location} and the closest point of the border.<br />
      *         {@code -1} if the location is inside the border.
      */
-    public double getDistanceToBorder(final Location location, final Double diameter, final Location center);
-
+    double getDistanceToBorder(final Location location, final Double diameter, final Location center);
 }

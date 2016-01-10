@@ -33,6 +33,7 @@
 package eu.carrade.amaury.UHCReloaded.utils;
 
 import fr.zcraft.zlib.tools.Callback;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Builder;
@@ -377,5 +378,22 @@ public class UHUtils
     public static <T> void callIfDefined(Callback<T> callback, T argument)
     {
         if (callback != null) callback.call(argument);
+    }
+
+    /**
+     * Returns the overworld.
+     *
+     * @return the... overworld?
+     */
+    public static World getOverworld()
+    {
+        for (World world : Bukkit.getServer().getWorlds())
+        {
+            if (world.getEnvironment() != World.Environment.NETHER && world.getEnvironment() != World.Environment.THE_END)
+            {
+                return world;
+            }
+        }
+        return null;
     }
 }

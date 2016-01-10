@@ -37,7 +37,6 @@ import org.bukkit.World;
 
 public class CircularMapShape implements MapShapeDescriptor
 {
-
     /**
      * Returns true if the given location is inside the map.
      *
@@ -69,8 +68,9 @@ public class CircularMapShape implements MapShapeDescriptor
     @Override
     public double getDistanceToBorder(final Location location, final Double diameter, final Location center)
     {
+        // The nether/end are not limited.
         if (!location.getWorld().getEnvironment().equals(World.Environment.NORMAL))
-        { // The nether/end are not limited.
+        {
             return -1;
         }
 

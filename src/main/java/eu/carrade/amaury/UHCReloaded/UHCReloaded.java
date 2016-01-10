@@ -109,6 +109,10 @@ public class UHCReloaded extends ZPlugin
 
         loadComponents(SidebarScoreboard.class);
 
+        wbintegration = new UHWorldBorderIntegration();
+        spintegration = new UHSpectatorPlusIntegration(this);
+        dynmapintegration = new UHDynmapIntegration(this);
+
         teamManager = new TeamManager(this);
         gameManager = new UHGameManager(this);
         spawnsManager = new SpawnsManager(this);
@@ -126,10 +130,6 @@ public class UHCReloaded extends ZPlugin
         scoreboardManager = new ScoreboardManager(this);
         motdManager = new MOTDManager(this);
         playerListHeaderFooterManager = new PlayerListHeaderFooterManager();
-
-        wbintegration = new UHWorldBorderIntegration(this);
-        spintegration = new UHSpectatorPlusIntegration(this);
-        dynmapintegration = new UHDynmapIntegration(this);
 
         // Needed to avoid a NoClassDefFoundError.
         // I don't like this way of doing this, but else, the plugin will not load without ProtocolLib.

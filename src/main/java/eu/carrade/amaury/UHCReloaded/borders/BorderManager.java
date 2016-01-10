@@ -34,9 +34,13 @@ package eu.carrade.amaury.UHCReloaded.borders;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.borders.exceptions.CannotGenerateWallsException;
+import eu.carrade.amaury.UHCReloaded.borders.worldborders.WorldBorder;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.task.BorderWarningTask;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
+import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.tools.PluginLogger;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -46,14 +50,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
+import java.util.Set;
 
 
 public class BorderManager
 {
-
     private UHCReloaded p = null;
     private I18n i = null;
 
+    private WorldBorder border = null;
     private Integer currentBorderDiameter = null;
 
     private Integer warningSize = 0;
@@ -78,9 +83,28 @@ public class BorderManager
 
         if (mapShape == null)
         {
-            p.getLogger().warning("Invalid shape '" + p.getConfig().getString("map.shape") + "'; using 'squared' instead.");
+            PluginLogger.warning("Invalid shape '" + p.getConfig().getString("map.shape") + "'; using 'squared' instead.");
             mapShape = MapShape.SQUARED;
         }
+
+
+        World world = UHUtils.getOverworld();
+
+        if (world == null)
+        {
+            world = Bukkit.getWorlds().get(0);
+            PluginLogger.warning("Cannot find overworld! Using the world '{0}' instead (environment: {1}).", world.getName(), world.getEnvironment());
+        }
+
+        border = WorldBorder.getInstance(world, p.getConfig().getString("map.border.motor"), mapShape);
+
+        border.setShape(mapShape);
+        border.setCenter(world.getSpawnLocation());
+        border.setDiameter(currentBorderDiameter);
+
+        border.init();
+
+        PluginLogger.info("Using {0} to set the world border.", border.getClass().getSimpleName());
     }
 
     /**
@@ -91,8 +115,7 @@ public class BorderManager
     public void setMapShape(MapShape shape)
     {
         this.mapShape = shape;
-
-        p.getWorldBorderIntegration().setupBorders(); // Updates the WB border if needed
+        border.setShape(shape);
     }
 
     /**
@@ -109,26 +132,23 @@ public class BorderManager
      * Checks if a given location is inside the border with the given diameter.
      * The check is performed for a circular or squared border, following the configuration.
      *
-     * @param location
-     * @param diameter
-     * @return
+     * @param location The location to check.
+     * @param diameter The diameter of the checked border.
+     *
+     * @return {@code true} if inside.
      */
     public boolean isInsideBorder(Location location, double diameter)
     {
-        if (!location.getWorld().getEnvironment().equals(Environment.NORMAL))
-        { // The nether/end are not limited.
-            return true;
-        }
-
-        return mapShape.getShape().isInsideBorder(location, diameter, location.getWorld().getSpawnLocation());
+        // The nether/end are not limited.
+        return !location.getWorld().getEnvironment().equals(Environment.NORMAL) || mapShape.getShape().isInsideBorder(location, diameter, location.getWorld().getSpawnLocation());
     }
 
     /**
      * Checks if a given location is inside the border with the current diameter.
      * The check is performed for a circular or squared border, following the configuration.
      *
-     * @param location
-     * @return
+     * @param location The location to check.
+     * @return {@code true} if inside.
      */
     public boolean isInsideBorder(Location location)
     {
@@ -139,9 +159,10 @@ public class BorderManager
      * Returns the distance from the location to the border, if the location is outside this border.
      * If it is inside, or in another world, returns 0.
      *
-     * @param location
-     * @param diameter
-     * @return
+     * @param location The location to check.
+     * @param diameter The diameter of the checked border.
+     *
+     * @return The distance, or 0 if the player is either inside the border or not in the world.
      */
     public double getDistanceToBorder(Location location, double diameter)
     {
@@ -153,10 +174,10 @@ public class BorderManager
      * Returns a list of the players outside a border with the given diameter.
      * The check is performed for a circular or squared border, following the configuration.
      *
-     * @param diameter
-     * @return
+     * @param diameter The diameter of the checked border.
+     * @return A list of players out of the given diameter.
      */
-    public HashSet<Player> getPlayersOutside(int diameter)
+    public Set<Player> getPlayersOutside(int diameter)
     {
         HashSet<Player> playersOutside = new HashSet<Player>();
 
@@ -179,7 +200,7 @@ public class BorderManager
      *
      * “+3” ? Experimental.
      *
-     * @return
+     * @return the diameter.
      */
     public int getCheckDiameter()
     {
@@ -197,7 +218,7 @@ public class BorderManager
      * Returns the size of the future border, used in the warning messages sent to the
      * players out of this future border.
      *
-     * @return
+     * @return the future border diameter.
      */
     public int getWarningSize()
     {
@@ -205,9 +226,7 @@ public class BorderManager
     }
 
     /**
-     * Returns true if there is currently a warning with a time left displayed.
-     *
-     * @return
+     * @return true if there is currently a warning with a time left displayed.
      */
     public boolean getWarningFinalTimeEnabled()
     {
@@ -215,9 +234,7 @@ public class BorderManager
     }
 
     /**
-     * Returns the sender of the last warning configured.
-     *
-     * @return
+     * @return the sender of the last warning configured.
      */
     public CommandSender getWarningSender()
     {
@@ -234,8 +251,9 @@ public class BorderManager
      * If timeLeft is not null, the time available for the players to go inside the future
      * border is displayed in the warning message.
      *
-     * @param diameter
+     * @param diameter The future diameter.
      * @param timeLeft The time available for the players to go inside the future border (minutes).
+     * @param sender The user who requested this change.
      */
     public void setWarningSize(int diameter, int timeLeft, CommandSender sender)
     {
@@ -269,7 +287,7 @@ public class BorderManager
      * This also starts the display of the warning messages, every 90 seconds by default
      * (configurable, see config.yml, map.border.warningInterval).
      *
-     * @param diameter
+     * @param diameter The diameter of the future border.
      */
     public void setWarningSize(int diameter)
     {
@@ -278,8 +296,8 @@ public class BorderManager
 
     /**
      * Returns the UHTimer object representing the countdown before the next border reduction.
-     * <p>
-     * Returns null if there isn't any countdown running currently.
+     *
+     * <p>Returns {@code null} if there isn't any countdown running currently.</p>
      *
      * @return The timer.
      */
@@ -314,9 +332,7 @@ public class BorderManager
     }
 
     /**
-     * Returns the current border diameter.
-     *
-     * @return
+     * @return the current border diameter.
      */
     public int getCurrentBorderDiameter()
     {
@@ -325,19 +341,19 @@ public class BorderManager
 
     /**
      * Changes the current border diameter.
-     * This also reconfigures WorldBorder (if present).
+     * This also reconfigures the used world border.
      *
      * If WorldBorder is installed, all players out of this new border will be teleported inside the new one.
      * Else, nothing will happens.
      *
-     * @param diameter
+     * @param diameter the new diameter.
      */
     public void setCurrentBorderDiameter(int diameter)
     {
         cancelWarning();
-        this.currentBorderDiameter = diameter;
 
-        p.getWorldBorderIntegration().setupBorders(); // Updates the WB border if needed
+        currentBorderDiameter = diameter;
+        border.setDiameter(diameter);
     }
 
 
@@ -349,7 +365,7 @@ public class BorderManager
      */
     public void sendCheckMessage(CommandSender to, int diameter)
     {
-        HashSet<Player> playersOutside = getPlayersOutside(diameter);
+        Set<Player> playersOutside = getPlayersOutside(diameter);
 
         if (playersOutside.size() == 0)
         {
@@ -378,9 +394,10 @@ public class BorderManager
     }
 
     /**
+     * Generates the walls in the given world, following the current border configuration.
      *
      * @param world The world were the walls will be built in.
-     * @throws eu.carrade.amaury.UHCReloaded.borders.exceptions.CannotGenerateWallsException
+     * @throws CannotGenerateWallsException
      */
     public void generateWalls(World world) throws CannotGenerateWallsException
     {

@@ -143,9 +143,12 @@ public class UHGameManager
     /**
      * Initializes the given player.
      *
-     * - Teleportation to the default world's spawn point. - Max food level & health. - Scoreboard.
-     * - Fixed health score. - Spectate mode disabled. - Gamemode: creative (if permission
-     * "uh.build" granted) or adventure (else).
+     * - Teleportation to the default world's spawn point.
+     * - Max food level & health.
+     * - Scoreboard.
+     * - Fixed health score.
+     * - Spectate mode disabled.
+     * - Gamemode: creative (if permission "uh.build" granted) or adventure (else).
      *
      * @param player
      */

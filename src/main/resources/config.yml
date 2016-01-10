@@ -46,7 +46,47 @@ map:
             # The replaceSolid one, where there was an other kind of block.
             replaceAir: GLASS
             replaceSolid: BEDROCK
+
     border:
+        # The world border manager. Can be:
+        # - "vanilla", to use the vanilla world border; or
+        # - "brettflan", to use the WorldBorder Bukkit plugin by Brettflan
+        #   (http://dev.bukkit.org/bukkit-plugins/worldborder/).
+        #
+        # If the shape is "circular", fallbacks to "brettflan" as the vanilla world border don't
+        # support circular borders. And if the WorldBorder plugin is not installed, fallbacks to
+        # no border.
+        motor: "vanilla"
+
+        # The amount of blocks a player may safely be outside the border before taking damage.
+        # Only for the vanilla world border. Ignored else.
+        damagesBuffer: 5
+
+        # The amount of damage a player takes when outside the border plus the border buffer.
+        # The damages delt is calculated by multiplying this amount by the number of blocks behind the buffer.
+        # Only for the vanilla world border. Ignored else.
+        damagesAmount: 0.2
+
+        # The warning distance that causes the screen to be tinted red when the player is within the specified
+        # number of blocks from the border.
+        # Only for the vanilla world border. Ignored else.
+        warningDistance: 5
+
+
+        # You can display the border size in the scoreboard; see `scoreboard.border`.
+
+
+        # Automatic and progressive border shrinking
+        shrinking:
+            enabled: false
+
+            # Formats: "mm", "mm:ss" or "hh:mm:ss".
+            # With the default values, the border eats one block every 8 seconds on each side.
+            startsAfter: "30:00"
+            shrinksDuring: "2:00:00"
+            diameterAfterShrink: 200
+
+
         # The delay between two warning messages sent to the players out of a future border 
         # (this warning is set using /uh border warning <futureDiameter>).
         warningInterval: 90  # seconds
@@ -86,6 +126,9 @@ scoreboard:
             displayMetPlayersOnly:
                 enabled: false               # If enabled, the sidebar will only contains players met at some time.
                 displayedWhenCloserThan: 10  # If enabled, a teammate will be displayed to the reference player if he/she is closer that this amount of blocks to the player.
+    border:
+        displayed: true
+        data: "coordinates"  # "coordinates" (ex. "-1000 ; 1000") or "diameter" (ex. "2000 blocks wide"). Fallsback to "coordinates".
     kills: true
     timer: true
     freezeStatus: true

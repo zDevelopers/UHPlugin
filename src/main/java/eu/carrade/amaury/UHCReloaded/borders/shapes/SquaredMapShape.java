@@ -37,7 +37,6 @@ import org.bukkit.World;
 
 public class SquaredMapShape implements MapShapeDescriptor
 {
-
     /**
      * Returns true if the given location is inside the map.
      *
@@ -75,8 +74,9 @@ public class SquaredMapShape implements MapShapeDescriptor
     @Override
     public double getDistanceToBorder(final Location location, final Double diameter, final Location center)
     {
+        // The nether/end are not limited.
         if (!location.getWorld().getEnvironment().equals(World.Environment.NORMAL))
-        { // The nether/end are not limited.
+        {
             return -1;
         }
 
@@ -94,36 +94,36 @@ public class SquaredMapShape implements MapShapeDescriptor
         Integer limitZInf = center.clone().add(0, 0, -halfMapSize).getBlockZ();
         Integer limitZSup = center.clone().add(0, 0, halfMapSize).getBlockZ();
 
-        if (x > limitXSup && z < limitZSup && z > limitZInf)
-        { // East of the border
+        if (x > limitXSup && z < limitZSup && z > limitZInf)       // East of the border
+        {
             return Math.abs(x - limitXSup);
         }
-        else if (x < limitXInf && z < limitZSup && z > limitZInf)
-        { // West of the border
+        else if (x < limitXInf && z < limitZSup && z > limitZInf)  // West of the border
+        {
             return Math.abs(x - limitXInf);
         }
-        else if (z > limitZSup && x < limitXSup && x > limitXInf)
-        { // South of the border
+        else if (z > limitZSup && x < limitXSup && x > limitXInf)  // South of the border
+        {
             return Math.abs(z - limitZSup);
         }
-        else if (z < limitZInf && x < limitXSup && x > limitXInf)
-        { // North of the border
+        else if (z < limitZInf && x < limitXSup && x > limitXInf)  // North of the border
+        {
             return Math.abs(z - limitZInf);
         }
-        else if (x > limitXSup && z < limitZInf)
-        { // North-East
+        else if (x > limitXSup && z < limitZInf)  // North-East
+        {
             return (int) location.distance(new Location(location.getWorld(), limitXSup, location.getBlockY(), limitZInf));
         }
-        else if (x > limitXSup && z > limitZSup)
-        { // South-East
+        else if (x > limitXSup && z > limitZSup)  // South-East
+        {
             return (int) location.distance(new Location(location.getWorld(), limitXSup, location.getBlockY(), limitZSup));
         }
-        else if (x < limitXInf && z > limitZSup)
-        { // South-West
+        else if (x < limitXInf && z > limitZSup)  // South-West
+        {
             return (int) location.distance(new Location(location.getWorld(), limitXInf, location.getBlockY(), limitZSup));
         }
-        else if (x < limitXInf && z < limitZInf)
-        { // North-West
+        else if (x < limitXInf && z < limitZInf)  // North-West
+        {
             return (int) location.distance(new Location(location.getWorld(), limitXInf, location.getBlockY(), limitZInf));
         }
         else

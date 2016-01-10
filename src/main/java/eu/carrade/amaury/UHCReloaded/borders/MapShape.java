@@ -38,16 +38,15 @@ import eu.carrade.amaury.UHCReloaded.borders.generators.WallGenerator;
 import eu.carrade.amaury.UHCReloaded.borders.shapes.CircularMapShape;
 import eu.carrade.amaury.UHCReloaded.borders.shapes.MapShapeDescriptor;
 import eu.carrade.amaury.UHCReloaded.borders.shapes.SquaredMapShape;
+import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.Material;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
 
 
 public enum MapShape
 {
-
     CIRCULAR(new CircularMapShape(), CircularWallGenerator.class),
     SQUARED(new SquaredMapShape(), SquaredWallGenerator.class);
 
@@ -58,7 +57,7 @@ public enum MapShape
     /**
      * @param generator The wall generator class associated with this shape.
      */
-    private MapShape(MapShapeDescriptor shape, Class<? extends WallGenerator> generator)
+    MapShape(MapShapeDescriptor shape, Class<? extends WallGenerator> generator)
     {
         this.shape = shape;
         this.generatorClass = generator;
@@ -71,7 +70,6 @@ public enum MapShape
      */
     public WallGenerator getWallGeneratorInstance(UHCReloaded p, Material wallBlockAir, Material wallBlockSolid)
     {
-
         try
         {
             Constructor constructor = generatorClass.getConstructor(UHCReloaded.class, Material.class, Material.class);
@@ -80,8 +78,7 @@ public enum MapShape
         }
         catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e)
         {
-            p.getLogger().log(Level.SEVERE, "Cannot instantiate the walls generator: invalid class.");
-            e.printStackTrace();
+            PluginLogger.error("Cannot instantiate the walls generator: invalid class.", e);
             return null;
         }
     }
