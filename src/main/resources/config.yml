@@ -207,6 +207,10 @@ start:
     # Display a title to everyone when the game begins
     displayTitle: true
 
+    # Damages are enabled after this amount of seconds.
+    # Cannot be less than 15 seconds, to avoid initial-fall-related problems.
+    gracePeriod: 30
+
 
 
 death:

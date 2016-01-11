@@ -76,6 +76,7 @@ public class UHGameManager
 {
     private final Boolean RANDOM_COLORS_IN_SOLO;
     private final Boolean BROADCAST_SLOW_START_PROGRESS;
+    private final Long GRACE_PERIOD;
     private final UHSound DEATH_SOUND;
 
     private UHCReloaded p = null;
@@ -126,6 +127,7 @@ public class UHGameManager
         // Loads the config
         RANDOM_COLORS_IN_SOLO = p.getConfig().getBoolean("teams-options.randomColors");
         BROADCAST_SLOW_START_PROGRESS = p.getConfig().getBoolean("start.slow.broadcastProgress");
+        GRACE_PERIOD = (long) Math.min(p.getConfig().getDouble("start.gracePeriod", 30), 15) * 20l;
         DEATH_SOUND = new UHSound(p.getConfig().getConfigurationSection("death.announcements.sound"));
     }
 
@@ -595,7 +597,7 @@ public class UHGameManager
             {
                 damageIsOn = true;
             }
-        }, 600L);
+        }, GRACE_PERIOD);
     }
 
     /**
