@@ -29,7 +29,6 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-
 package eu.carrade.amaury.UHCReloaded;
 
 import eu.carrade.amaury.UHCReloaded.borders.BorderManager;
@@ -52,6 +51,7 @@ import eu.carrade.amaury.UHCReloaded.misc.RuntimeCommandsExecutor;
 import eu.carrade.amaury.UHCReloaded.recipes.RecipesManager;
 import eu.carrade.amaury.UHCReloaded.scoreboard.ScoreboardManager;
 import eu.carrade.amaury.UHCReloaded.spawns.SpawnsManager;
+import eu.carrade.amaury.UHCReloaded.spectators.SpectatorsManager;
 import eu.carrade.amaury.UHCReloaded.task.UpdateTimerTask;
 import eu.carrade.amaury.UHCReloaded.teams.TeamChatManager;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
@@ -69,6 +69,7 @@ public class UHCReloaded extends ZPlugin
     private TeamManager teamManager = null;
     private SpawnsManager spawnsManager = null;
     private UHGameManager gameManager = null;
+    private SpectatorsManager spectatorsManager = null;
     private ScoreboardManager scoreboardManager = null;
     private MOTDManager motdManager = null;
     private PlayerListHeaderFooterManager playerListHeaderFooterManager = null;
@@ -109,10 +110,17 @@ public class UHCReloaded extends ZPlugin
 
         loadComponents(SidebarScoreboard.class);
 
+
         wbintegration = new UHWorldBorderIntegration();
         spintegration = new UHSpectatorPlusIntegration(this);
         dynmapintegration = new UHDynmapIntegration(this);
 
+        // Needed to avoid a NoClassDefFoundError.
+        // I don't like this way of doing this, but else, the plugin will not load without ProtocolLib.
+        protocollibintegrationwrapper = new UHProtocolLibIntegrationWrapper(this);
+
+
+        spectatorsManager = SpectatorsManager.getInstance();
         teamManager = new TeamManager(this);
         gameManager = new UHGameManager(this);
         spawnsManager = new SpawnsManager(this);
@@ -130,10 +138,6 @@ public class UHCReloaded extends ZPlugin
         scoreboardManager = new ScoreboardManager(this);
         motdManager = new MOTDManager(this);
         playerListHeaderFooterManager = new PlayerListHeaderFooterManager();
-
-        // Needed to avoid a NoClassDefFoundError.
-        // I don't like this way of doing this, but else, the plugin will not load without ProtocolLib.
-        protocollibintegrationwrapper = new UHProtocolLibIntegrationWrapper(this);
 
         UHCommandExecutor executor = new UHCommandExecutor(this);
         for (String commandName : getDescription().getCommands().keySet())
@@ -212,6 +216,14 @@ public class UHCReloaded extends ZPlugin
     public UHGameManager getGameManager()
     {
         return gameManager;
+    }
+
+    /**
+     * @return the spectators manager.
+     */
+    public SpectatorsManager getSpectatorsManager()
+    {
+        return spectatorsManager;
     }
 
     /**

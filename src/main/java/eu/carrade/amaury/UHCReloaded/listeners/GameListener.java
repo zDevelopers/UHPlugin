@@ -47,6 +47,7 @@ import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
 import eu.carrade.amaury.UHCReloaded.misc.RuntimeCommandsExecutor;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -73,20 +74,25 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
 public class GameListener implements Listener
 {
+    private final UHCReloaded p;
+    private final I18n i;
 
-    private UHCReloaded p = null;
-    private I18n i = null;
+    private final Set<UUID> enableSpectatorModeOnRespawn = new HashSet<>();
+
 
     public GameListener(UHCReloaded p)
     {
@@ -139,6 +145,9 @@ public class GameListener implements Listener
 
         // Removes the player from the alive players.
         this.p.getGameManager().addDead(ev.getEntity());
+
+        // Remember to enable spectator mode on respawn
+        enableSpectatorModeOnRespawn.add(ev.getEntity().getUniqueId());
 
         // Kicks the player if needed.
         if (this.p.getConfig().getBoolean("death.kick.do", true))
@@ -295,6 +304,25 @@ public class GameListener implements Listener
 
         // Updates the list headers & footers.
         p.getPlayerListHeaderFooterManager().updateHeadersFooters();
+    }
+
+
+    /**
+     * Used to enable the spectator mode when the player respawns.
+     */
+    @EventHandler
+    public void onPlayerRespawn(final PlayerRespawnEvent ev)
+    {
+        if (enableSpectatorModeOnRespawn.remove(ev.getPlayer().getUniqueId()))
+        {
+            RunTask.nextTick(new Runnable() {
+                @Override
+                public void run()
+                {
+                    p.getSpectatorsManager().setSpectating(ev.getPlayer(), true);
+                }
+            });
+        }
     }
 
 
@@ -482,13 +510,6 @@ public class GameListener implements Listener
                 ev.getPlayer().sendMessage(i.t("load.WBNotInstalled3"));
             }
 
-            // The same for SpectatorPlus
-            if (!p.getSpectatorPlusIntegration().isSPIntegrationEnabled())
-            {
-                ev.getPlayer().sendMessage(i.t("load.SPNotInstalled1"));
-                ev.getPlayer().sendMessage(i.t("load.SPNotInstalled2"));
-            }
-
             // The same for ProtocolLib
             if (!p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled())
             {
@@ -526,10 +547,9 @@ public class GameListener implements Listener
 
         // If the player is a new one, the game is started, and the option is set to true...
         if (p.getGameManager().isGameRunning() && p.getConfig().getBoolean("spectatorModeWhenNewPlayerJoinAfterStart")
-                && !p.getGameManager().getAlivePlayers().contains(ev.getPlayer())
-                && p.getSpectatorPlusIntegration().isSPIntegrationEnabled())
+                && !p.getGameManager().getAlivePlayers().contains(ev.getPlayer()))
         {
-            p.getSpectatorPlusIntegration().getSPAPI().setSpectating(ev.getPlayer(), true);
+            p.getSpectatorsManager().setSpectating(ev.getPlayer(), true);
         }
     }
 
@@ -772,10 +792,7 @@ public class GameListener implements Listener
     public void onPlayerResurrected(UHPlayerResurrectedEvent ev)
     {
         // Spectator mode disabled
-        if (p.getSpectatorPlusIntegration().isSPIntegrationEnabled())
-        {
-            p.getSpectatorPlusIntegration().getSPAPI().setSpectating(ev.getPlayer(), false);
-        }
+        p.getSpectatorsManager().setSpectating(ev.getPlayer(), false);
 
         // Death point removed on the dynmap
         p.getDynmapIntegration().hideDeathLocation(ev.getPlayer());

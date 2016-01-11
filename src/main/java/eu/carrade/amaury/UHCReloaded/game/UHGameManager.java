@@ -183,10 +183,7 @@ public class UHGameManager
         }, 20L);
 
         // Disable the spectator mode if the game is not started.
-        if (p.getSpectatorPlusIntegration().isSPIntegrationEnabled())
-        {
-            p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, false);
-        }
+        p.getSpectatorsManager().setSpectating(player, false);
 
         // Resets the achievements
         if (p.getConfig().getBoolean("achievements.resetAchievementsAtStartup", true))
@@ -333,12 +330,9 @@ public class UHGameManager
 
         /** Initialization of the spectator mode **/
 
-        if (p.getSpectatorPlusIntegration().isSPIntegrationEnabled())
+        for (Player player : Bukkit.getOnlinePlayers())
         {
-            for (Player player : Bukkit.getOnlinePlayers())
-            {
-                p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, spectators.contains(player.getUniqueId()));
-            }
+            p.getSpectatorsManager().setSpectating(player, spectators.contains(player.getUniqueId()));
         }
 
 

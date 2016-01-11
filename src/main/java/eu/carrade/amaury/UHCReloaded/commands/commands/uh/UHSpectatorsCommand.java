@@ -173,11 +173,6 @@ public class UHSpectatorsCommand extends AbstractCommand
 
         help.add(i.t("cmd.specHelpTitle"));
 
-        if (!p.getSpectatorPlusIntegration().isSPIntegrationEnabled())
-        {
-            help.add(i.t("cmd.specHelpNoticeSpectatorPlusNotInstalled"));
-        }
-
         help.add(i.t("cmd.specHelpAdd"));
         help.add(i.t("cmd.specHelpRemove"));
         help.add(i.t("cmd.specHelpList"));
