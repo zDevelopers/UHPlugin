@@ -230,8 +230,6 @@ public class UHGameManager
             throw new IllegalStateException("The game is currently running!");
         }
 
-        p.getMOTDManager().updateMOTDDuringStart();
-
 
         /** Initialization of the teams **/
 
@@ -323,8 +321,14 @@ public class UHGameManager
 
             aliveTeamsCount = 0;
             alivePlayersCount = 0;
+
             return;
         }
+
+
+        /** MOTD (now the game WILL start) **/
+
+        p.getMOTDManager().updateMOTDDuringStart();
 
 
         /** Initialization of the spectator mode **/
