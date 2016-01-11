@@ -490,6 +490,14 @@ keys:
             itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (close to the border)"
             itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (very close to the border)"
 
+        shrinking:
+            title:
+                title: "{red}Warning!"
+                subtitle: "{white}The border begins to shrink..."
+            message:
+                title: "{red}{bold}The border begins to shrink..."
+                times: "{gray}It will shrink by one block every {0} second(s) until {1} blocks in diameter."
+
     timers:
         syntaxError: "{ce}Syntax error, see /uh timers."
         durationSyntaxError: "{ce}The duration' syntax is invalid; accepted formats are mm, mm:ss or hh:mm:ss."

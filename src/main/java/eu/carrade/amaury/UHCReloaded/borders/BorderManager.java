@@ -40,6 +40,8 @@ import eu.carrade.amaury.UHCReloaded.task.BorderWarningTask;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.tools.PluginLogger;
+import fr.zcraft.zlib.tools.runners.RunTask;
+import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -55,11 +57,15 @@ import java.util.Set;
 
 public class BorderManager
 {
+    private final boolean BORDER_SHRINKING;
+    private final long BORDER_SHRINKING_STARTS_AFTER;
+    private final long BORDER_SHRINKING_DURATION;
+    private final double BORDER_SHRINKING_FINAL_SIZE;
+
     private UHCReloaded p = null;
     private I18n i = null;
 
     private WorldBorder border = null;
-    private Integer currentBorderDiameter = null;
 
     private Integer warningSize = 0;
     private BukkitRunnable warningTask = null;
@@ -73,14 +79,12 @@ public class BorderManager
 
     public BorderManager(UHCReloaded plugin)
     {
-        this.p = plugin;
-        this.i = p.getI18n();
+        p = plugin;
+        i = p.getI18n();
 
-        this.warningTimerName = i.t("borders.warning.nameTimer");
+        warningTimerName = i.t("borders.warning.nameTimer");
 
-        this.currentBorderDiameter = p.getConfig().getInt("map.size");
-        this.mapShape = MapShape.fromString(p.getConfig().getString("map.shape"));
-
+        mapShape = MapShape.fromString(p.getConfig().getString("map.shape"));
         if (mapShape == null)
         {
             PluginLogger.warning("Invalid shape '" + p.getConfig().getString("map.shape") + "'; using 'squared' instead.");
@@ -100,11 +104,17 @@ public class BorderManager
 
         border.setShape(mapShape);
         border.setCenter(world.getSpawnLocation());
-        border.setDiameter(currentBorderDiameter);
+        border.setDiameter(p.getConfig().getInt("map.size", 2000));
 
         border.init();
 
         PluginLogger.info("Using {0} to set the world border.", border.getClass().getSimpleName());
+
+
+        BORDER_SHRINKING = p.getConfig().getBoolean("map.border.shrinking.enabled", false);
+        BORDER_SHRINKING_STARTS_AFTER = UHUtils.string2Time(p.getConfig().getString("map.border.shrinking.startsAfter"), 30*60);  // Seconds
+        BORDER_SHRINKING_DURATION = UHUtils.string2Time(p.getConfig().getString("map.border.shrinking.shrinksDuring"), 60*60*2);  // Same
+        BORDER_SHRINKING_FINAL_SIZE = p.getConfig().getDouble("map.border.shrinking.diameterAfterShrink", 200);
     }
 
     /**
@@ -303,10 +313,7 @@ public class BorderManager
             {
                 warningTask.cancel();
             }
-            catch (IllegalStateException e)
-            {
-
-            }
+            catch (IllegalStateException ignored) {}
         }
 
         UHTimer timer = getWarningTimer();
@@ -322,7 +329,7 @@ public class BorderManager
      */
     public int getCurrentBorderDiameter()
     {
-        return this.currentBorderDiameter;
+        return (int) border.getDiameter();
     }
 
     /**
@@ -338,7 +345,6 @@ public class BorderManager
     {
         cancelWarning();
 
-        currentBorderDiameter = diameter;
         border.setDiameter(diameter);
     }
 
@@ -398,5 +404,29 @@ public class BorderManager
         }
 
         mapShape.getWallGeneratorInstance(p, wallBlockAir, wallBlockSolid).build(world, getCurrentBorderDiameter(), wallHeight);
+    }
+
+    /**
+     * Schedules the automatic border reduction, if enabled in the configuration.
+     */
+    public void scheduleBorderReduction()
+    {
+        if (BORDER_SHRINKING)
+        {
+            RunTask.later(new Runnable() {
+                @Override
+                public void run()
+                {
+                    Integer secondsPerBlock = (int) Math.rint(BORDER_SHRINKING_DURATION / (border.getDiameter() - BORDER_SHRINKING_FINAL_SIZE)) * 2;
+
+                    border.setDiameter(BORDER_SHRINKING_FINAL_SIZE, BORDER_SHRINKING_DURATION);
+
+                    Titles.broadcastTitle(5, 30, 8, i.t("borders.shrinking.title.title"), i.t("borders.shrinking.title.subtitle"));
+
+                    Bukkit.broadcastMessage(i.t("borders.shrinking.message.title"));
+                    Bukkit.broadcastMessage(i.t("borders.shrinking.message.times", secondsPerBlock, BORDER_SHRINKING_FINAL_SIZE));
+                }
+            }, BORDER_SHRINKING_STARTS_AFTER * 20l);
+        }
     }
 }

@@ -704,6 +704,9 @@ public class GameListener implements Listener
         // Commands
         p.getRuntimeCommandsExecutor().registerCommandsInScheduler(RuntimeCommandsExecutor.AFTER_GAME_START);
 
+        // Border shrinking
+        p.getBorderManager().scheduleBorderReduction();
+
         // MOTD
         p.getMOTDManager().updateMOTDDuringGame();
 

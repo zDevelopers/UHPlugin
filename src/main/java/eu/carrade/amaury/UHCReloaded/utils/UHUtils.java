@@ -33,6 +33,7 @@
 package eu.carrade.amaury.UHCReloaded.utils;
 
 import fr.zcraft.zlib.tools.Callback;
+import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -122,6 +123,30 @@ public class UHUtils
         else  // "hh:mm:ss"
         {
             return Integer.valueOf(split[0]) * 3600 + Integer.valueOf(split[1]) * 60 + Integer.valueOf(split[2]);
+        }
+    }
+
+    /**
+     * Converts a string to a number of seconds.
+     *
+     * Prints a warning if the format is invalid.
+     *
+     * @param text The text to be converted.
+     * @param defaultValue The default value returned if the format is invalid.
+     *
+     * @return The extracted seconds, or the default value if invalid.
+     * @see #string2Time(String)
+     */
+    public static int string2Time(String text, Integer defaultValue)
+    {
+        try
+        {
+            return string2Time(text);
+        }
+        catch (IllegalArgumentException e)
+        {
+            PluginLogger.warning("Invalid duration '{0}', using {1} seconds instead.", text, defaultValue);
+            return defaultValue;
         }
     }
 

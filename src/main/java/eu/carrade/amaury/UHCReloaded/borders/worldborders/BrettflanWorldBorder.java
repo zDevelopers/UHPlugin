@@ -35,8 +35,10 @@ import com.wimbli.WorldBorder.BorderData;
 import com.wimbli.WorldBorder.Config;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.borders.MapShape;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.scheduler.BukkitTask;
 
 
 /**
@@ -57,6 +59,9 @@ public class BrettflanWorldBorder extends WorldBorder
     private BorderData border;
 
     private Double diameter = 0d;
+
+    private BukkitTask slowReductionTask = null;
+
 
     public BrettflanWorldBorder(World world)
     {
@@ -110,13 +115,47 @@ public class BrettflanWorldBorder extends WorldBorder
     public void setDiameter(double diameter)
     {
         setDiameterInternal(diameter);
+
+        if (slowReductionTask != null)
+        {
+            slowReductionTask.cancel();
+            slowReductionTask = null;
+        }
     }
 
     @Override
-    public void setDiameter(double diameter, long time)
+    public void setDiameter(final double diameter, final long time)
     {
-        // TODO emulate the vanilla world border, to allow slowly shrinking circular borders
-        setDiameterInternal(diameter);
+        // The behavior of the vanilla reduction is emulated.
+        final double currentDiameter = getDiameter();
+
+        final long ticksPerBlockRemoved = (int) Math.rint(time / (currentDiameter - diameter)) * 20l;
+        final long movement = (diameter >= currentDiameter) ? 1 : -1;
+
+        if (slowReductionTask != null)
+        {
+            slowReductionTask.cancel();
+            slowReductionTask = null;
+        }
+
+        slowReductionTask = RunTask.timer(new Runnable() {
+            @Override
+            public void run()
+            {
+                Double newDiameter = getDiameter() + movement;
+
+                // If the final size is achieved, we set the exact requested size and we stop here.
+                // Calling setDiameter cancels this task.
+                if ((movement < 0 && newDiameter <= diameter) || (movement > 0 && newDiameter >= diameter))
+                {
+                    setDiameter(diameter);
+                }
+                else
+                {
+                    setDiameterInternal(newDiameter);
+                }
+            }
+        }, ticksPerBlockRemoved, ticksPerBlockRemoved);
     }
 
     private void setDiameterInternal(double diameter)

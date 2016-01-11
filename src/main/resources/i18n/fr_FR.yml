@@ -491,6 +491,14 @@ keys:
             itemPlayerFar: "{lightpurple} - {red}{0}{ci} (loin de la bordure)"
             itemPlayerClose: "{lightpurple} - {yellow}{0}{ci} (proche de la bordure)"
             itemPlayerVeryClose: "{lightpurple} - {green}{0}{ci} (très proche de la bordure)"
+
+        shrinking:
+            title:
+                title: "{red}Attention !"
+                subtitle: "{white}La bordure commence à se réduire..."
+            message:
+                title: "{red}{bold}La bordure commence à se réduire..."
+                times: "{gray}Elle réduira d'un bloc toutes les {0} seconde(s) jusqu'à atteindre {1} blocs de diamètre."
     
     timers:
         syntaxError: "{ce}Erreur de syntaxe, consultez /uh timers."

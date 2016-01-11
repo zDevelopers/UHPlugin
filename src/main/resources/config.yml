@@ -76,7 +76,9 @@ map:
         # You can display the border size in the scoreboard; see `scoreboard.border`.
 
 
-        # Automatic and progressive border shrinking
+        # Automatic and progressive border shrinking.
+        # Notice: if the border is circular, the WorldBorder Bukkit plugin by Brettflan (see above)
+        # is REQUIRED. Without, the border shrinking will not work.
         shrinking:
             enabled: false
 
