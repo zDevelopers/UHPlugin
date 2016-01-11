@@ -154,6 +154,7 @@ keys:
         already: "{ce}Le jeu est déjà démarré ! Rechargez ou redémarrez le serveur pour redémarrer."
         syntax: "{ce}Erreur de syntaxe. Utilisation : /uh start [slow] ou /uh start slow go."
         notEnoughTP: "{ce}Impossible de démarrer : pas assez de points de téléportation."
+        notEnoughTPHelp: "{ci}Vous pouvez utiliser {cc}/uh spawns generate <random|circular|grid>{ci} pour automatiquement générer les points de téléportation manquant."
 
         teleportationInProgress: "{lightpurple}Téléportation en cours... Merci de patienter."
         teleportationInProgressInActionBar: "{lightpurple}Téléportation... {gray}({0}/{1})"

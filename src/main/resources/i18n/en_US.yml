@@ -154,6 +154,7 @@ keys:
         already: "{ce}The game is already started! Reload or restart the server to restart the game."
         syntax: "{ce}Syntax error. Usage: /uh start [slow] or /uh start slow go."
         notEnoughTP: "{ce}Unable to start the game: not enough teleportation spots."
+        notEnoughTPHelp: "{ci}You can use {cc}/uh spawns generate <random|circular|grid>{ci} to generate the missing spawns automatically."
 
         teleportationInProgress: "{lightpurple}Teleportation in progress... Please wait."
         teleportationInProgressInActionBar: "{lightpurple}Teleporting... {gray}({0}/{1})"

@@ -311,7 +311,9 @@ public class UHGameManager
 
         if (p.getSpawnsManager().getSpawnPoints().size() < spawnsNeeded)
         {
+            if (sender instanceof Player) sender.sendMessage("");
             sender.sendMessage(i.t("start.notEnoughTP"));
+            sender.sendMessage(i.t("start.notEnoughTPHelp"));
 
             // We clears the teams created on-the-fly
             for (UHTeam team : onTheFlyTeams)
