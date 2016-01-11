@@ -183,6 +183,9 @@ keys:
             withTeams: "{darkgreen}{obfuscated}--{green} Félicitations à {0} (équipe {1}{green}) pour leur victoire ! {darkgreen}{obfuscated}--"
             withoutTeams: "{darkgreen}{obfuscated}--{green} Félicitation à {0} pour sa victoire ! {darkgreen}{obfuscated}--"
 
+    pvp:
+        enabled: "{red}{bold}Attention !{white} Le PvP est désormais actif."
+
     episodes:
         end: "{aqua}-------- Fin de l'épisode {0} --------"
         endForced: "{aqua}-------- Fin de l'épisode {0} [forcé par {1}] --------"

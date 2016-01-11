@@ -181,7 +181,10 @@ keys:
         broadcast:
             withTeams: "{darkgreen}{obfuscated}--{green} Congratulations to {0} (team {1}{green}) for their victory! {darkgreen}{obfuscated}--"
             withoutTeams: "{darkgreen}{obfuscated}--{green} Congratulations to {0} for his victory! {darkgreen}{obfuscated}--"
-    
+
+    pvp:
+        enabled: "{red}{bold}Warning!{white} PvP is now enabled."
+
     episodes:
         end: "{aqua}-------- End of episode {0} --------"
         endForced: "{aqua}-------- End of episode {0} [forced by {1}] --------"

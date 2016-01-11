@@ -207,9 +207,15 @@ start:
     # Display a title to everyone when the game begins
     displayTitle: true
 
-    # Damages are enabled after this amount of seconds.
+    # Damages are enabled after this amount of time.
     # Cannot be less than 15 seconds, to avoid initial-fall-related problems.
-    gracePeriod: 30
+    # Format: "mm", "mm:ss", "hh:mm:ss"
+    gracePeriod: "00:30"
+
+    # PVP is enabled after this amount of time.
+    # If 0, enabled immediately.
+    # Format: "mm", "mm:ss", "hh:mm:ss"
+    peacePeriod: 0
 
 
 

@@ -107,7 +107,7 @@ public class UHUtils
     {
         String[] split = text.split(":");
 
-        if (split.length > 3)
+        if (text.isEmpty() || split.length > 3)
         {
             throw new IllegalArgumentException("Badly formatted string in string2time, formats allowed are mm, mm:ss or hh:mm:ss.");
         }
@@ -143,7 +143,7 @@ public class UHUtils
         {
             return string2Time(text);
         }
-        catch (IllegalArgumentException e)
+        catch (IllegalArgumentException | NullPointerException e)
         {
             PluginLogger.warning("Invalid duration '{0}', using {1} seconds instead.", text, defaultValue);
             return defaultValue;

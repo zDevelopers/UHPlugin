@@ -77,6 +77,7 @@ public class UHGameManager
     private final Boolean RANDOM_COLORS_IN_SOLO;
     private final Boolean BROADCAST_SLOW_START_PROGRESS;
     private final Long GRACE_PERIOD;
+    private final Long PEACE_PERIOD;
     private final UHSound DEATH_SOUND;
 
     private UHCReloaded p = null;
@@ -84,7 +85,7 @@ public class UHGameManager
     private I18n i = null;
     private Random random = null;
 
-    private Boolean damageIsOn = false;
+    private Boolean damagesEnabled = false;
 
     private HashSet<String> players = new HashSet<>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available
     private HashSet<UUID> alivePlayers = new HashSet<>();
@@ -127,7 +128,8 @@ public class UHGameManager
         // Loads the config
         RANDOM_COLORS_IN_SOLO = p.getConfig().getBoolean("teams-options.randomColors");
         BROADCAST_SLOW_START_PROGRESS = p.getConfig().getBoolean("start.slow.broadcastProgress");
-        GRACE_PERIOD = (long) Math.min(p.getConfig().getDouble("start.gracePeriod", 30), 15) * 20l;
+        GRACE_PERIOD = (long) Math.min(UHUtils.string2Time(p.getConfig().getString("start.gracePeriod"), 30), 15) * 20l;
+        PEACE_PERIOD = (long) UHUtils.string2Time(p.getConfig().getString("start.peacePeriod"), 0) * 20l;
         DEATH_SOUND = new UHSound(p.getConfig().getConfigurationSection("death.announcements.sound"));
     }
 
@@ -589,15 +591,34 @@ public class UHGameManager
      */
     private void scheduleDamages()
     {
-        // 30 seconds later, damages are enabled.
+        // When the grace period is over, damages are enabled.
         RunTask.later(new Runnable()
         {
             @Override
             public void run()
             {
-                damageIsOn = true;
+                damagesEnabled = true;
             }
         }, GRACE_PERIOD);
+
+        // When the peace period is over, PVP is enabled
+        if (PEACE_PERIOD > 0)
+        {
+            for (World world : Bukkit.getWorlds())
+                world.setPVP(false);
+
+            RunTask.later(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    for (World world : Bukkit.getWorlds())
+                        world.setPVP(true);
+
+                    Bukkit.broadcastMessage(i.t("pvp.enabled"));
+                }
+            }, PEACE_PERIOD);
+        }
     }
 
     /**
@@ -959,7 +980,7 @@ public class UHGameManager
      */
     public boolean isTakingDamage()
     {
-        return damageIsOn;
+        return damagesEnabled;
     }
 
     /**
