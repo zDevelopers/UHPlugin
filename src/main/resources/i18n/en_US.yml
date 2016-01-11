@@ -167,6 +167,9 @@ keys:
         startSlowAllTeamsTPCmd: "{gray}Use {cc}/uh start slow go{gray} to start the game."
         
         go: "{green}--- GO ---"
+        title:
+            title: "{darkgreen}Let's go!"
+            subtitle: "{green}Good luck, and have fun"
     
     finish:
         notStarted: "{ce}The game is not started!"

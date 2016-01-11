@@ -47,6 +47,7 @@ import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
 import eu.carrade.amaury.UHCReloaded.misc.RuntimeCommandsExecutor;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
+import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -700,6 +701,12 @@ public class GameListener implements Listener
 
         // Broadcast
         Bukkit.getServer().broadcastMessage(i.t("start.go"));
+
+        // Title
+        if (p.getConfig().getBoolean("start.displayTitle"))
+        {
+            Titles.broadcastTitle(5, 40, 8, i.t("start.title.title"), i.t("start.title.subtitle"));
+        }
 
         // Commands
         p.getRuntimeCommandsExecutor().registerCommandsInScheduler(RuntimeCommandsExecutor.AFTER_GAME_START);

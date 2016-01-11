@@ -158,7 +158,6 @@ keys:
         teleportationInProgress: "{lightpurple}Téléportation en cours... Merci de patienter."
         teleportationInProgressInActionBar: "{lightpurple}Téléportation... {gray}({0}/{1})"
         teleportationFinishedInActionBar: "{lightpurple}Téléportation terminée. {gray}Ça ne devrait pas tarder..."
-
         
         startSlowBeforeStartSlowGo: "{ce}Veuillez exécuter {cc}/uh start slow{ce} avant."
         startSlowWaitBeforeGo: "{ce}Veuillez patienter, les équipes sont en train d'être téléportées."
@@ -169,6 +168,9 @@ keys:
         startSlowAllTeamsTPCmd: "{gray}Utilisez {cc}/uh start slow go{gray} pour démarrer le jeu."
         
         go: "{green}--- GO ---"
+        title:
+            title: "{darkgreen}C'est parti !"
+            subtitle: "{green}Bonne chance et bon jeu à tous"
     
     finish:
         notStarted: "{ce}Le jeu n'est pas encore démarré !"
