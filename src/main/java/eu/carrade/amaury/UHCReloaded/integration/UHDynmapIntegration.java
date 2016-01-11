@@ -39,6 +39,7 @@ import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.dynmap.DynmapAPI;
@@ -248,8 +249,10 @@ public class UHDynmapIntegration
      * @param player The player.
      * @param spawnPoint The location of the spawn point.
      */
-    public void showSpawnLocation(Player player, Location spawnPoint)
+    public void showSpawnLocation(OfflinePlayer player, Location spawnPoint)
     {
+        if (player == null) return;
+
         UHTeam team = p.getTeamManager().getTeamForPlayer(player);
 
         showSpawnLocation(player, team != null ? team.getColor() : null, spawnPoint);
@@ -266,7 +269,7 @@ public class UHDynmapIntegration
      * @param color The color of the spawn point (i.e. of the team).
      * @param spawnPoint The location of the spawn point.
      */
-    public void showSpawnLocation(Player player, TeamColor color, Location spawnPoint)
+    public void showSpawnLocation(OfflinePlayer player, TeamColor color, Location spawnPoint)
     {
         if (!isDynmapIntegrationEnabled())
         {
@@ -389,7 +392,7 @@ public class UHDynmapIntegration
      * @param player The player.
      * @return The ID.
      */
-    private String getSpawnMarkerName(Player player)
+    private String getSpawnMarkerName(OfflinePlayer player)
     {
         return "uhplugin.spawn." + player.getName();
     }

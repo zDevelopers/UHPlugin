@@ -208,12 +208,15 @@ public class UHGameManager
 
 
     /**
-     * Starts the game. - Teleports the teams - Changes the gamemode, reset the life, clear
-     * inventories, etc. - Launches the timer
+     * Starts the game.
+     *
+     * - Teleports the teams
+     * - Changes the gamemode, reset the life, clear inventories, etc.
+     * - Launches the timer
      *
      * @param sender      The player who launched the game.
      * @param slow        If true, the slow mode is enabled. With the slow mode, the players are, at
-     *                    first, teleported team by team with a configurable delay, and with the
+     *                    first, teleported one by one with a configurable delay, and with the
      *                    fly. Then, the fly is removed and the game starts.
      * @param ignoreTeams If true, the players will be teleported in individual teleportation spots,
      *                    just like without teams, even with teams.
@@ -346,20 +349,25 @@ public class UHGameManager
         {
             if (team.isEmpty()) continue;
 
-            if (!ignoreTeams)
+            if (!ignoreTeams && gameWithTeams)
             {
-                Location teamSpawn = unusedTP.poll();
+                final Location teamSpawn = unusedTP.poll();
 
-                for (UUID player : team.getPlayersUUID())
+                p.getDynmapIntegration().showSpawnLocation(team, teamSpawn);
+
+                for (final UUID player : team.getPlayersUUID())
                 {
                     teleporter.setSpawnForPlayer(player, teamSpawn);
                 }
             }
             else
             {
-                for (UUID player : team.getPlayersUUID())
+                for (final UUID player : team.getPlayersUUID())
                 {
-                    teleporter.setSpawnForPlayer(player, unusedTP.poll());
+                    final Location playerSpawn = unusedTP.poll();
+
+                    teleporter.setSpawnForPlayer(player, playerSpawn);
+                    p.getDynmapIntegration().showSpawnLocation(Bukkit.getOfflinePlayer(player), playerSpawn);
                 }
             }
         }
@@ -378,7 +386,7 @@ public class UHGameManager
             teleporter.whenTeleportationOccurs(new Callback<UUID>()
             {
                 private int teleported = 0;
-                private int total = alivePlayersCount;
+                private final int total = alivePlayersCount;
 
                 @Override
                 public void call(UUID uuid)
@@ -387,7 +395,7 @@ public class UHGameManager
 
                     if (BROADCAST_SLOW_START_PROGRESS)
                     {
-                        String message = i.t("start.teleportationInProgressInActionBar", teleported, total);
+                        final String message = i.t("start.teleportationInProgressInActionBar", teleported, total);
                         for (Player player : Bukkit.getOnlinePlayers())
                         {
                             ActionBar.sendPermanentMessage(player, message);
