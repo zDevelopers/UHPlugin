@@ -51,6 +51,7 @@ keys:
         helpKill: "{cc}/uh kill <joueur> {ci}: marque un joueur comme mort, même s'il est hors-ligne."
         helpResurrect: "{cc}/uh resurrect <joueur> {ci}: fait revivre un joueur."
         helpTpback: "{cc}/uh tpback <joueur> [force] {ci}: téléporte un joueur au lieu de sa mort en toute sécurité."
+        helpTpspawn: "{cc}/uh tpspawn <joueur> [force] {ci}: téléporte un joueur à son point de démarrage attribué en toute sécurité."
         
         titleMiscCmd: "{aqua}------ Commandes diverses ------"
         helpFreeze: "{cc}/uh freeze {ci}: (dés)immobilise l'ensemble du jeu, ou un joueur. Consultez /uh freeze pour plus de détails."
@@ -408,12 +409,19 @@ keys:
         broadcastMessage: "{gold}{0} est revenu d'entre les morts !"
         
     tpback:
-        usage: "{ce}Utilisation : /uh tpback <joueur> [force]"
         offline: "{ce}Le joueur {0} n'est pas connecté."
         noDeathLocation: "{ce}Pas de localisation de mort enregistrée pour le joueur {0}."
         teleported: "{cs}Le joueur {0} a été téléporté là où il est mort."
         notTeleportedNoSafeSpot: "{ce}Le joueur {0} n'a PAS été téléporté car aucun point de téléportation sûr n'a été trouvé."
         notTeleportedNoSafeSpotCmd: "{ci}Utilisez {cc}/uh tpback {0} force{ci} pour le téléporter malgré tout."
+
+    tpspawn:
+        notAssigned: "{ce}Les points de démarrage n'ont pas encore été assignés aux joueurs, car le jeu n'a pas encore démarré."
+        offline: "{ce}Le joueur {0} n'est pas connecté."
+        noSpawnLocation: "{ce}Pas de localisation de démarrage enregistrée pour le joueur {0}."
+        teleported: "{cs}Le joueur {0} a été téléporté à son point de démarrage attribué."
+        notTeleportedNoSafeSpot: "{ce}Le joueur {0} n'a PAS été téléporté car aucun point de téléportation sûr n'a été trouvé."
+        notTeleportedNoSafeSpotCmd: "{ci}Utilisez {cc}/uh tpspawn {0} force{ci} pour le téléporter malgré tout."
     
     tp:
         NaN: "{ce}Les coordonnées doivent être trois nombres."

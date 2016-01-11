@@ -48,11 +48,11 @@ import java.util.Set;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(UHCReloaded.class)
-public class TestCommandsAnnotation {
-
+public class TestCommandsAnnotation
+{
 	@Test
-	public void testCommandAnnotationIsPresentEverywhere() {
-
+	public void testCommandAnnotationIsPresentEverywhere()
+	{
 		// Data
 		Set<AbstractCommandExecutor> executors = new HashSet<>();
 		executors.add(new UHCommandExecutor(TestsUtils.getMockedPluginInstance()));
@@ -71,10 +71,12 @@ public class TestCommandsAnnotation {
 	 *
 	 * @param command The command to start with.
 	 */
-	private void testCommandAnnotationIsPresentEverywhere(AbstractCommand command) {
+	private void testCommandAnnotationIsPresentEverywhere(AbstractCommand command)
+	{
 		Assert.assertTrue("Missing command annotation for the class " + command.getClass().getCanonicalName(), command.getClass().isAnnotationPresent(Command.class));
 
-		for(AbstractCommand subCommand : command.getSubcommands().values()) {
+		for(AbstractCommand subCommand : command.getSubcommands().values())
+		{
 			testCommandAnnotationIsPresentEverywhere(subCommand);
 		}
 	}

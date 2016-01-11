@@ -94,6 +94,26 @@ public class Teleporter
     }
 
     /**
+     * Checks if a spawn point is registered for the given player.
+     *
+     * @param playerUUID The player UUID.
+     * @return {@code true} if a spawn point is registered.
+     */
+    public boolean hasSpawnForPlayer(UUID playerUUID)
+    {
+        return spawnPoints.containsKey(playerUUID);
+    }
+
+    /**
+     * @param playerUUID A player's UUID.
+     * @return The registered spawn point for that player, or {@code null} if no-one was ever registered.
+     */
+    public Location getSpawnForPlayer(UUID playerUUID)
+    {
+        return spawnPoints.get(playerUUID).clone();
+    }
+
+    /**
      * Teleports the given player to the spawn point.
      *
      * @param playerUUID       The player's UUID.

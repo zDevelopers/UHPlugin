@@ -47,22 +47,30 @@ import java.util.Collections;
 import java.util.List;
 
 
-@Command (name = "tpback")
-public class UHTPBackCommand extends AbstractCommand
+@Command (name = "tpspawn")
+public class UHTPSpawnCommand extends AbstractCommand
 {
+    private final UHCReloaded p;
+    private final I18n i;
 
-    UHCReloaded p;
-    I18n i;
-
-    public UHTPBackCommand(UHCReloaded p)
+    public UHTPSpawnCommand(UHCReloaded plugin)
     {
-        this.p = p;
-        this.i = p.getI18n();
+        p = plugin;
+        i = p.getI18n();
     }
+
 
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
+        // Spawns not assigned
+        if (p.getGameManager().getTeleporter() == null)
+        {
+            sender.sendMessage(i.t("tpspawn.notAssigned"));
+            return;
+        }
+
+
         if (args.length < 1)
         {
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
@@ -71,46 +79,50 @@ public class UHTPBackCommand extends AbstractCommand
         Player player = p.getServer().getPlayer(args[0]);
         if (player == null || !player.isOnline())
         {
-            sender.sendMessage(i.t("tpback.offline", args[0]));
+            sender.sendMessage(i.t("tpspawn.offline", args[0]));
             return;
         }
-        else if (!p.getGameManager().hasDeathLocation(player))
+
+        Location spawnLocation = p.getGameManager().getTeleporter().getSpawnForPlayer(player.getUniqueId());
+
+        if (spawnLocation == null)
         {
-            sender.sendMessage(i.t("tpback.noDeathLocation", args[0]));
+            sender.sendMessage(i.t("tpspawn.noSpawnLocation", args[0]));
             return;
         }
 
-
-        Location deathLocation = p.getGameManager().getDeathLocation(player);
 
         if (args.length >= 2 && args[1].equalsIgnoreCase("force"))
         {
-            UHUtils.safeTP(player, deathLocation, true);
-            sender.sendMessage(i.t("tpback.teleported", args[0]));
-            p.getGameManager().removeDeathLocation(player);
+            p.getGameManager().getTeleporter().teleportPlayer(player.getUniqueId(), true);
+            sender.sendMessage(i.t("tpspawn.teleported", args[0]));
         }
-        else if (UHUtils.safeTP(player, deathLocation))
+        else if (UHUtils.safeTP(player, spawnLocation))
         {
-            sender.sendMessage(i.t("tpback.teleported", args[0]));
-            p.getGameManager().removeDeathLocation(player);
+            sender.sendMessage(i.t("tpspawn.teleported", args[0]));
         }
         else
         {
-            sender.sendMessage(i.t("tpback.notTeleportedNoSafeSpot", args[0]));
-            sender.sendMessage(i.t("tpback.notTeleportedNoSafeSpotCmd", args[0]));
+            sender.sendMessage(i.t("tpspawn.notTeleportedNoSafeSpot", args[0]));
+            sender.sendMessage(i.t("tpspawn.notTeleportedNoSafeSpotCmd", args[0]));
         }
     }
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args)
     {
+        // Spawns not attributed
+        if (p.getGameManager().getTeleporter() == null)
+            return null;
+
+
         if (args.length == 1)
         {
             List<String> suggestions = new ArrayList<>();
 
             for (Player player : p.getServer().getOnlinePlayers())
             {
-                if (p.getGameManager().hasDeathLocation(player))
+                if (p.getGameManager().getTeleporter().hasSpawnForPlayer(player.getUniqueId()))
                 {
                     suggestions.add(player.getName());
                 }
@@ -136,6 +148,6 @@ public class UHTPBackCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpTpback"));
+        return Collections.singletonList(i.t("cmd.helpTpspawn"));
     }
 }

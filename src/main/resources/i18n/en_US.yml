@@ -51,6 +51,7 @@ keys:
         helpKill: "{cc}/uh kill <player> {ci}: mark a player as dead, even if he is offline."
         helpResurrect: "{cc}/uh resurrect <player> {ci}: resurrects a player."
         helpTpback: "{cc}/uh tpback <player> [force] {ci}: safely teleports back a player to his death location."
+        helpTpspawn: "{cc}/uh tpspawn <player> [force] {ci}: safely teleports back a player to his spawn location."
         
         titleMiscCmd: "{aqua}------ Miscellaneous commands ------"
         helpFreeze: "{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."
@@ -404,14 +405,21 @@ keys:
         offlineOk: "{cs}Because {0} is offline, he will be resurrected when he logins. If he was, he is no longer banned."
         notDead: "{ce}{0} is not dead!"
         broadcastMessage: "{gold}{0} returned from the dead!"
-        
+
     tpback:
-        usage: "{ce}Usage: /uh tpback <player> [force]"
         offline: "{ce}The player {0} is not online."
         noDeathLocation: "{ce}No death location available for the player {0}."
         teleported: "{cs}The player {0} was teleported back."
         notTeleportedNoSafeSpot: "{ce}The player {0} was NOT teleported back because no safe spot was found."
-        notTeleportedNoSafeSpotCmd: "{ci}Use {cc}/uh tpback {0} force{ci} to teleport the player regardess this point."
+        notTeleportedNoSafeSpotCmd: "{ci}Use {cc}/uh tpback {0} force{ci} to teleport the player regardless this point."
+
+    tpspawn:
+        notAssigned: "{ce}The spawn points are not already assigned to the player, because the game is not started."
+        offline: "{ce}The player {0} is not online."
+        noSpawnLocation: "{ce}No spawn location available for the player {0}."
+        teleported: "{cs}The player {0} was teleported to his spawn location."
+        notTeleportedNoSafeSpot: "{ce}The player {0} was NOT teleported to his spawn because no safe spot was found."
+        notTeleportedNoSafeSpotCmd: "{ci}Use {cc}/uh tpspawn {0} force{ci} to teleport the player regardless this point."
     
     tp:
         NaN: "{ce}The coordinates must be three valid numbers."
