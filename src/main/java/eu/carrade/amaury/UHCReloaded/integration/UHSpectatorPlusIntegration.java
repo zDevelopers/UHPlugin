@@ -86,10 +86,6 @@ public class UHSpectatorPlusIntegration
         {
             spAPI = sp.getAPI();
 
-            spAPI.setCompass(true, true);
-            spAPI.setSpectateOnDeath(true, true);
-            spAPI.setColouredTabList(false, true); // potential conflict with our scoreboard
-
             PluginLogger.info("Successfully hooked into SpectatorPlus.");
         }
 

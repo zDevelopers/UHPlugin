@@ -146,6 +146,11 @@
             <url>http://repo.dmulloy2.net/content/groups/public/</url>
         </repository>
         <repository>
+            <id>pgmann-repo</id>
+            <name>PGMann repository (SpectatorPlus)</name>
+            <url>https://ci.pgmann.cf/maven/</url>
+        </repository>
+        <repository>
             <id>carrade-repo</id>
             <url>http://depot.carrade.eu/maven2/</url>
         </repository>
@@ -178,7 +183,7 @@
         <dependency>
             <groupId>com.pgcraft</groupId>
             <artifactId>SpectatorPlus</artifactId>
-            <version>1.9.2</version>
+            <version>LATEST</version>
         </dependency>
         <dependency>
             <groupId>org.dynmap</groupId>
