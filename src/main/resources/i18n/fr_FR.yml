@@ -197,6 +197,9 @@ keys:
     episodes:
         end: "{aqua}-------- Fin de l'épisode {0} --------"
         endForced: "{aqua}-------- Fin de l'épisode {0} [forcé par {1}] --------"
+        title:
+            title: "{darkaqua}Épisode {aqua}{0}"
+            subtitle: ""
     
     scoreboard:
         episode: "{gray}Épisode {white}{0}"

@@ -29,6 +29,9 @@ episodes:
     # Don't remove the "quotes" (because of the commas)!
     length: "20:00"
 
+    # A title is displayed when the episode changes.
+    title: true
+
 
 
 map:

@@ -703,6 +703,13 @@ public class GameListener implements Listener
         p.getServer().broadcastMessage(message);
 
 
+        // Broadcasts title
+        if (p.getConfig().getBoolean("episodes.title"))
+        {
+            Titles.broadcastTitle(5, 32, 8, i.t("episodes.title.title", ev.getNewEpisode(), ev.getNewEpisode() - 1), i.t("episodes.title.subtitle", ev.getNewEpisode(), ev.getNewEpisode() - 1));
+        }
+
+
         // Updates the list headers & footers.
         p.getPlayerListHeaderFooterManager().updateHeadersFooters();
     }
