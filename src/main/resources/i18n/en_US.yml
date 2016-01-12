@@ -59,6 +59,7 @@ keys:
         helpTP: "{cc}/uh tp {ci}: teleports the spectators or an entire team. See /uh tp for details."
         helpTimers: "{cc}/uh timers {ci}: manages the timers. See /uh timers for details."
         helpInfos: "{cc}/uh infos {ci}: prints some infos about the current game."
+        helpRules: "{cc}/uh rules [player] {ci}: sends the server rules to the server or the given player."
         helpAbout: "{cc}/uh about {ci}: informations about the plugin and the translation."
         
         startHelpTitle: "{aqua}------ Beginning of the game ------"
@@ -575,3 +576,8 @@ keys:
     rules:
         header: "{red}{bold}Rules and informations"
         bullet: "{darkgray}- {reset}{0}"
+
+        command:
+            offline: "{ce}Cannot display the rules to {0} because he (or she) is offline."
+            unset: "{ce}No rules are set in the config file."
+            sent: "{cs}Rules sent to {0}."

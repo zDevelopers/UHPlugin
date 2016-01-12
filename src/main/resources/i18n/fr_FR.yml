@@ -59,6 +59,7 @@ keys:
         helpTP: "{cc}/uh tp {ci}: téléporte les spectateurs ou une équipe. Consultez /uh tp pour plus de détails."
         helpTimers: "{cc}/uh timers {ci}: gère les comptes à rebours. Consultez /uh timers pour plus de détails."
         helpInfos: "{cc}/uh infos {ci}: affiche des informations à propos du jeu en cours."
+        helpRules: "{cc}/uh rules [joueur] {ci}: envoie les règles du jeu au serveur ou au joueur spécifié."
         helpAbout: "{cc}/uh about {ci}: informations à propos du plugin et des traductions."
         
         startHelpTitle: "{aqua}------ Démarrage du jeu ------"
@@ -575,3 +576,8 @@ keys:
     rules:
         header: "{red}{bold}Règles et informations"
         bullet: "{darkgray}- {reset}{0}"
+
+        command:
+            offline: "{ce}Impossible d'afficher les règles à {0} car il ou elle est hors-ligne."
+            unset: "{ce}Aucune règle n'est enregistrée dans le fichier de configuration."
+            sent: "{cs}Les règles ont été envoyées à {0}."

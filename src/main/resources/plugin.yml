@@ -64,6 +64,7 @@ permissions:
             uh.spec: true
             uh.finish: true
             uh.infos: true
+            uh.rules: true
             uh.timers: true
             uh.tp: true
             uh.team.spy: true
@@ -138,6 +139,9 @@ permissions:
     uh.infos:
         description: Allows an user to get infos about the current game with /uh infos
         default: true
+    uh.rules:
+        description: Allows an user to broadcast or send the rules on-demand
+        default: op
     uh.about:
         description: Prints some informations about the plugin and the translation.
         default: true
