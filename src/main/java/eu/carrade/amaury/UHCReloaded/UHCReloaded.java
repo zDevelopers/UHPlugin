@@ -47,6 +47,7 @@ import eu.carrade.amaury.UHCReloaded.misc.Freezer;
 import eu.carrade.amaury.UHCReloaded.misc.MOTDManager;
 import eu.carrade.amaury.UHCReloaded.misc.PlayerListHeaderFooterManager;
 import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
+import eu.carrade.amaury.UHCReloaded.misc.RulesManager;
 import eu.carrade.amaury.UHCReloaded.misc.RuntimeCommandsExecutor;
 import eu.carrade.amaury.UHCReloaded.recipes.RecipesManager;
 import eu.carrade.amaury.UHCReloaded.scoreboard.ScoreboardManager;
@@ -72,6 +73,7 @@ public class UHCReloaded extends ZPlugin
     private SpectatorsManager spectatorsManager = null;
     private ScoreboardManager scoreboardManager = null;
     private MOTDManager motdManager = null;
+    private RulesManager rulesManager = null;
     private PlayerListHeaderFooterManager playerListHeaderFooterManager = null;
     private BorderManager borderManager = null;
     private RecipesManager recipesManager = null;
@@ -137,6 +139,7 @@ public class UHCReloaded extends ZPlugin
 
         scoreboardManager = new ScoreboardManager(this);
         motdManager = new MOTDManager(this);
+        rulesManager = new RulesManager();
         playerListHeaderFooterManager = new PlayerListHeaderFooterManager();
 
         UHCommandExecutor executor = new UHCommandExecutor(this);
@@ -244,6 +247,14 @@ public class UHCReloaded extends ZPlugin
     public MOTDManager getMOTDManager()
     {
         return motdManager;
+    }
+
+    /**
+     * @return the rules manager.
+     */
+    public RulesManager getRulesManager()
+    {
+        return rulesManager;
     }
 
     /**

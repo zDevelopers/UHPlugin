@@ -398,6 +398,21 @@ spectatorModeWhenNewPlayerJoinAfterStart: true
 
 
 
+# Rules are a way to display rules & other informations to the players.
+# The content is completly up to you, formatting included (using standard
+# formatting codes with either § or &). It will be displayed as a list to
+# the players (one bullet per line in the `rules.rules` entry).
+# Empty entries (« - "" ») are replaced by a completly blank line, if you
+# need a separator.
+rules:
+    display:
+        onJoin: false
+        onStart: true
+    rules:
+        -
+
+
+
 # Execute commands during the game or after the end of it, and after a configurable delay?
 # Format explained below.
 # Respect the spaces before the keywords ("exec" and "delay" need to be aligned).

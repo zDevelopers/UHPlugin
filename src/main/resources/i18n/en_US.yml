@@ -572,3 +572,6 @@ keys:
         start:
             invincibility: "{gray}Fallen on a tree? Jump, you have 25 seconds left to remain invincible."
 
+    rules:
+        header: "{red}{bold}Rules and informations"
+        bullet: "{darkgray}- {reset}{0}"

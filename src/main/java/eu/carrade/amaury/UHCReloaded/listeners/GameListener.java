@@ -470,7 +470,7 @@ public class GameListener implements Listener
                 // Teams selector.
                 if (p.getConfig().getBoolean("teams-options.gui.autoDisplay") && p.getTeamManager().getTeams().size() != 0)
                 {
-                    p.getServer().getScheduler().runTaskLater(p, new Runnable()
+                    RunTask.later(new Runnable()
                     {
                         @Override
                         public void run()
@@ -481,6 +481,18 @@ public class GameListener implements Listener
                             }
                         }
                     }, 20l * p.getConfig().getInt("teams-options.gui.delay"));
+                }
+
+                // Rules
+                if (p.getRulesManager().displayOnJoin())
+                {
+                    RunTask.later(new Runnable() {
+                        @Override
+                        public void run()
+                        {
+                            p.getRulesManager().displayRulesTo(ev.getPlayer());
+                        }
+                    }, 15 * 20l);
                 }
             }
             else
@@ -746,6 +758,18 @@ public class GameListener implements Listener
 
         // List headers & footers.
         p.getPlayerListHeaderFooterManager().updateHeadersFooters();
+
+        // Rules
+        if (p.getRulesManager().displayOnStart())
+        {
+            RunTask.later(new Runnable() {
+                @Override
+                public void run()
+                {
+                    p.getRulesManager().broadcastRules();
+                }
+            }, 15 * 20l);
+        }
     }
 
     /**

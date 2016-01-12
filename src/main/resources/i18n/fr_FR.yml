@@ -572,3 +572,6 @@ keys:
         start:
             invincibility: "{gray}Tombé(e) sur un arbre ? Sautez, il vous reste 25 secondes d'invincibilité."
 
+    rules:
+        header: "{red}{bold}Règles et informations"
+        bullet: "{darkgray}- {reset}{0}"
