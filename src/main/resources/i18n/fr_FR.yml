@@ -74,6 +74,7 @@ keys:
         teamHelpJoin: "{cc}/uh team join <joueur> <nomÉquipe ...> {ci}: ajoute un joueur dans l'équipe donnée. Le nom de l'équipe est sa couleur, ou le nom explicite donné."
         teamHelpLeave: "{cc}/uh team leave <joueur> {ci}: retire un joueur de son équipe."
         teamHelpList: "{cc}/uh team list {ci}: liste toutes les équipes et leurs membres."
+        teamHelpSpy: "{cc}/uh team spy [joueur] {ci}: permet de recevoir (soit-même ou le joueur ciblé) tous les chats d'équipe (en lecture seule). Exécutez une autre fois pour interrompre."
         teamHelpReset: "{cc}/uh team reset {ci}: supprime toutes les équipes."
         teamHelpJoinCmd: "{cc}/join [joueur] <équipe ...> {ci}: ajoute “joueur” (ou l'envoyeur) dans l'équipe donnée. Sans argument, affiche le sélecteur d'équipe."
         teamHelpLeaveCmd: "{cc}/leave [joueur] {ci}: retire “joueur” (ou l'envoyeur) de son équipe."
@@ -355,6 +356,11 @@ keys:
         
         reset:
             success: "{cs}Toutes les équipes ont été supprimées."
+
+        spy:
+            offline: "{ce}Impossible d'inverser le mode d'espoinnage de {0} car il (ou elle) n'est pas connecté(e)."
+            enabled: "{cs}Espionnage {darkgreen}activé{cs} pour {0}."
+            disabled: "{cs}Espoinnage {darkred}désactivé{cs} pour {0}."
             
         message:
             noConsole: "{ce}Vous ne pouvez envoyer un message d'équipe depuis la console."

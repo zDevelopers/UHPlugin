@@ -66,6 +66,8 @@ permissions:
             uh.infos: true
             uh.timers: true
             uh.tp: true
+            uh.team.spy: true
+            uh.team.spy.others: true
             
             uh.teamchat: true
             uh.player: true
@@ -81,6 +83,12 @@ permissions:
         default: op
     uh.team:
         description: Allows an user to manage the teams with /uh team *
+        default: op
+    uh.team.spy:
+        description: Allows an user to receive all teams chat if he executes /uh team spy
+        default: op
+    uh.team.spy.others:
+        description: Allows an user to toggle spy for another player; this other one will receive all the teams chat.
         default: op
     uh.spawns:
         description: Allows an user to manage the spawn points with /uh spawns *

@@ -39,20 +39,21 @@ import fr.zcraft.zlib.tools.text.MessageSender;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 
 public class TeamChatManager
 {
-    UHCReloaded p = null;
-    I18n i = null;
+    private final UHCReloaded p;
+    private final I18n i;
 
-    List<UUID> teamChatLocked = new ArrayList<>();
-    Map<UUID, UHTeam> otherTeamChatLocked = new HashMap<>();
+    private final Set<UUID> teamChatLocked = new HashSet<>();
+    private final Map<UUID, UHTeam> otherTeamChatLocked = new HashMap<>();
+    private final Set<UUID> globalSpies = new HashSet<>();
 
     public TeamChatManager(UHCReloaded p)
     {
@@ -125,7 +126,6 @@ public class TeamChatManager
      */
     private void sendRawTeamMessage(final Player sender, String rawMessage, UHTeam team)
     {
-
         // The message is sent to the players of the team...
         for (final Player player : team.getOnlinePlayers())
         {
@@ -142,6 +142,15 @@ public class TeamChatManager
                 {
                     MessageSender.sendChatMessage(p.getServer().getPlayer(playerId), rawMessage);
                 }
+            }
+        }
+
+        // ... to the global spies ...
+        for (UUID playerId : globalSpies)
+        {
+            if (!team.containsPlayer(playerId))
+            {
+                p.getServer().getPlayer(playerId).sendMessage(rawMessage);
             }
         }
 
@@ -318,5 +327,34 @@ public class TeamChatManager
     public UHTeam getOtherTeamEnabled(Player player)
     {
         return otherTeamChatLocked.get(player.getUniqueId());
+    }
+
+
+    /**
+     * Registers a player receiving ALL the teams chats.
+     *
+     * @param id The spy's UUID.
+     */
+    public void addGlobalSpy(UUID id) {
+        globalSpies.add(id);
+    }
+
+    /**
+     * Stops a player from receiving ALL the teams chats.
+     *
+     * @param id The spy's UUID.
+     */
+    public void removeGlobalSpy(UUID id) {
+        globalSpies.remove(id);
+    }
+
+    /**
+     * Checks if the given player receives all the teams chats.
+     *
+     * @param id The spy's UUID.
+     * @return {@code true} if spying.
+     */
+    public boolean isGlobalSpy(UUID id) {
+        return globalSpies.contains(id);
     }
 }

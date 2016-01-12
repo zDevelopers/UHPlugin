@@ -74,6 +74,7 @@ keys:
         teamHelpJoin: "{cc}/uh team join <player> <teamName ...> {ci}: adds a player inside the given team. The name of the team is it color, or the explicit name given."
         teamHelpLeave: "{cc}/uh team leave <player> {ci}: removes a player from his team."
         teamHelpList: "{cc}/uh team list {ci}: lists the teams and their players."
+        teamHelpSpy: "{cc}/uh team spy [player] {ci}: allows yourself (or the target player) to receive all the team chats (read-only). Execute again to stop."
         teamHelpReset: "{cc}/uh team reset {ci}: removes all teams."
         teamHelpJoinCmd: "{cc}/join [player] <team ...> {ci}: adds “player” (or the sender) inside the given team. Without arguments, displays the chat-based team selector."
         teamHelpLeaveCmd: "{cc}/leave [player] {ci}: removes “player” (or the sender) from his team."
@@ -355,7 +356,12 @@ keys:
         
         reset:
             success: "{cs}All teams where removed."
-            
+
+        spy:
+            offline: "{ce}Cannot toggle the spy mode of {0} because he/she is offline."
+            enabled: "{cs}Spy mode {darkgreen}enabled{cs} for {0}."
+            disabled: "{cs}Spy mode {darkred}disabled{cs} for {0}."
+
         message:
             noConsole: "{ce}You can't send a team-message from the console."
             noTeam: "{ce}You are not in a team!"
