@@ -374,6 +374,8 @@ finish:
         timeAfterLastDeath: 3  # The command will be executed this amount of seconds after the last death.
     
     message: true  # If true, the name of the winner(s) will be broadcasted.
+    title: true    # If true, a title will display the winner(s) of the game.
+
     fireworks:
         enabled: true  # If true, some fireworks will be launched at the location of the winners.
         duration: 10   # In seconds.

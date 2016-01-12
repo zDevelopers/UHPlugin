@@ -183,6 +183,14 @@ keys:
             withTeams: "{darkgreen}{obfuscated}--{green} Félicitations à {0} (équipe {1}{green}) pour leur victoire ! {darkgreen}{obfuscated}--"
             withoutTeams: "{darkgreen}{obfuscated}--{green} Félicitation à {0} pour sa victoire ! {darkgreen}{obfuscated}--"
 
+        titles:
+            withTeams:
+                title: "{darkgreen}{0}"
+                subtitle: "{green}Cette équipe remporte la victoire !"
+            withoutTeams:
+                title: "{darkgreen}{0}"
+                subtitle: "{green}remporte la partie !"
+
     pvp:
         enabled: "{red}{bold}Attention !{white} Le PvP est désormais actif."
 

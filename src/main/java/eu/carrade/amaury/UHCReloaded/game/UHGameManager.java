@@ -48,6 +48,7 @@ import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.ActionBar;
+import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -1050,30 +1051,28 @@ public class UHGameManager
         }
 
         // There's only one team.
-        p.getLogger().info(p.getGameManager().getAliveTeams().toString());
         UHTeam winnerTeam = p.getGameManager().getAliveTeams().iterator().next();
         Set<OfflinePlayer> listWinners = winnerTeam.getPlayers();
 
         if (p.getConfig().getBoolean("finish.message"))
         {
-            if (p.getGameManager().isGameWithTeams())
+            if (isGameWithTeams())
             {
                 String winners = "";
                 int j = 0;
 
                 for (OfflinePlayer winner : listWinners)
                 {
-                    if (j == 0)
+                    if (j != 0)
                     {
-                        // Nothing
-                    }
-                    else if (j == listWinners.size() - 1)
-                    {
-                        winners += " " + i.t("finish.and") + " ";
-                    }
-                    else
-                    {
-                        winners += ", ";
+                        if (j == listWinners.size() - 1)
+                        {
+                            winners += " " + i.t("finish.and") + " ";
+                        }
+                        else
+                        {
+                            winners += ", ";
+                        }
                     }
 
                     winners += winner.getName();
@@ -1086,6 +1085,25 @@ public class UHGameManager
             {
                 p.getServer().broadcastMessage(i.t("finish.broadcast.withoutTeams", winnerTeam.getName()));
             }
+        }
+
+        if (p.getConfig().getBoolean("finish.title"))
+        {
+            final String title;
+            final String subtitle;
+
+            if (isGameWithTeams())
+            {
+                title = i.t("finish.titles.withTeams.title", winnerTeam.getDisplayName());
+                subtitle = i.t("finish.titles.withTeams.subtitle", winnerTeam.getDisplayName());
+            }
+            else
+            {
+                title = i.t("finish.titles.withoutTeams.title", winnerTeam.getDisplayName());
+                subtitle = i.t("finish.titles.withoutTeams.subtitle", winnerTeam.getDisplayName());
+            }
+
+            Titles.broadcastTitle(5, 142, 21, title, subtitle);
         }
 
         if (p.getConfig().getBoolean("finish.fireworks.enabled"))
