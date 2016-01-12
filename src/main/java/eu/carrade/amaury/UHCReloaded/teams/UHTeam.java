@@ -80,31 +80,17 @@ public class UHTeam
         this.plugin = plugin;
         this.i = plugin.getI18n();
 
-        this.name = name;
-
         // We don't use generateColor directly because we want to keep the "null" color.
         if (color == TeamColor.RANDOM) this.color = plugin.getTeamManager().generateColor(color);
         else this.color = color;
-
 
         // We use a random internal name because the name of a team, in Minecraft vanilla, is limited
         // (16 characters max).
         Random rand = new Random();
         this.internalName = String.valueOf(rand.nextInt(99999999)) + String.valueOf(rand.nextInt(99999999));
 
-        if (this.color != null)
-        {
-            this.displayName = this.color.toChatColor() + name + ChatColor.RESET;
-        }
-        else
-        {
-            this.displayName = name;
-        }
-
         Scoreboard sb = this.plugin.getScoreboardManager().getScoreboard();
-
         Team t = sb.registerNewTeam(this.internalName);
-        t.setDisplayName(displayName.substring(0, Math.min(displayName.length(), 32)));
 
         if (this.color != null)
         {
@@ -114,6 +100,8 @@ public class UHTeam
 
         t.setCanSeeFriendlyInvisibles(plugin.getConfig().getBoolean("teams-options.canSeeFriendlyInvisibles", true));
         t.setAllowFriendlyFire(plugin.getConfig().getBoolean("teams-options.allowFriendlyFire", true));
+
+        setName(name, true);
     }
 
     /**
@@ -126,6 +114,44 @@ public class UHTeam
     public String getName()
     {
         return name;
+    }
+
+    public void setName(String name)
+    {
+        setName(name, false);
+    }
+
+    /**
+     * Changes the name of this team.
+     *
+     * @param name The new name.
+     * @param silent if {@code true}, the players will not be notified.
+     */
+    public void setName(String name, boolean silent)
+    {
+        if (name == null || (this.name != null && this.name.equals(name)))
+            return;
+
+
+        this.name = name;
+
+        if (color != null)
+        {
+            displayName = color.toChatColor() + name + ChatColor.RESET;
+        }
+        else
+        {
+            displayName = name;
+        }
+
+        Team t = plugin.getScoreboardManager().getScoreboard().getTeam(internalName);
+        if (t != null)
+            t.setDisplayName(displayName.substring(0, Math.min(displayName.length(), 32)));
+
+
+        if (!silent)
+            for (Player player : getOnlinePlayers())
+                player.sendMessage(i.t("team.rename.renamed", displayName));
     }
 
     /**

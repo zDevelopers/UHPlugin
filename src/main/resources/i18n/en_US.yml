@@ -316,6 +316,9 @@ keys:
             errorColor: "{ce}Unable to add the team, check the color name. Tip: use Tab to autocomplete."
             errorExists: "{ce}This team already exists."
             added: "{cs}Team {0}{cs} added."
+
+        rename:
+            renamed: "{cs}Your team is now called {0}{cs}."
         
         remove:
             doesNotExists: "{ce}This team does not exists."
@@ -359,6 +362,9 @@ keys:
         chestGui:
             selector:
                 title: "{black}Select a team {reset}({0})"
+                rename:
+                    title: "{white}Rename your team"
+                    selectBefore: "{gray}You have to be in a team"
                 teamItem:
                     title: "{white}Team {0} {gray}({1} players)"
                     titleWithMax: "{white}Team {0} {gray}({1}/{2})"

@@ -316,6 +316,9 @@ keys:
             errorColor: "{ce}Impossible d'ajouter l'équipe ; vérifiez le nom de la couleur. Conseil : utilisez l'autocomplétion."
             errorExists: "{ce}Cette équipe existe déjà."
             added: "{cs}Équipe {0}{cs} ajoutée."
+
+        rename:
+            renamed: "{cs}Votre équipe s'appelle désormais {0}{cs}."
         
         remove:
             doesNotExists: "{ce}Cette équipe n'existe pas."
@@ -359,6 +362,9 @@ keys:
         chestGui:
             selector:
                 title: "{black}Sélectionnez votre équipe {reset}({0})"
+                rename:
+                    title: "{white}Renommer votre équipe"
+                    selectBefore: "{gray}Vous devez être dans une équipe"
                 teamItem:
                     title: "{white}Équipe {0} {gray}({1} players)"
                     titleWithMax: "{white}Équipe {0} {gray}({1}/{2})"

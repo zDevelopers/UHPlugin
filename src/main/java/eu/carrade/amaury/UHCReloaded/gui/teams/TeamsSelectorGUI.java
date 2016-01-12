@@ -38,7 +38,11 @@ import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
 import fr.zcraft.zlib.components.gui.ExplorerGui;
+import fr.zcraft.zlib.components.gui.Gui;
+import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
+import fr.zcraft.zlib.components.gui.PromptGui;
+import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.items.GlowEffect;
 import fr.zcraft.zlib.tools.items.TextualBanners;
 import org.bukkit.DyeColor;
@@ -48,6 +52,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -76,6 +81,13 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
         setData(tm.getTeams().toArray(new UHTeam[tm.getTeams().size()]));
 
         setMode(Mode.READONLY);
+        setKeepHorizontalScrollingSpace(true);
+
+        if (getPlayer().hasPermission("uh.player.renameTeam"))
+        {
+            List<String> lore = tm.getTeamForPlayer(getPlayer()) == null ? Collections.singletonList(i.t(IB + "rename.selectBefore")) : null;
+            action("rename", getSize() - 5, GuiUtils.makeItem(Material.BOOK_AND_QUILL, i.t(IB + "rename.title"), lore));
+        }
     }
 
     @Override
@@ -188,5 +200,21 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
         {
             getPickedUpItem(team);
         }
+    }
+
+    @GuiAction ("rename")
+    public void rename()
+    {
+        final UHTeam team = tm.getTeamForPlayer(getPlayer());
+        if (team == null)
+            return;
+
+        Gui.open(getPlayer(), new PromptGui(new Callback<String>() {
+            @Override
+            public void call(String name)
+            {
+                team.setName(name);
+            }
+        }, team.getName()), this);
     }
 }
