@@ -571,7 +571,7 @@ keys:
             noEnchGoldenApple: "{gray}La pomme d'or enchantée est désactivée pour cette partie."
         
         start:
-            invincibility: "{gray}Tombé(e) sur un arbre ? Sautez, il vous reste 25 secondes d'invincibilité."
+            invincibility: "{gray}Tombé(e) sur un arbre ? Sautez, il vous reste quelques dizaines de secondes d'invincibilité."
 
     rules:
         header: "{red}{bold}Règles et informations"
