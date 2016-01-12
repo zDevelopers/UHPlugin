@@ -77,6 +77,7 @@ keys:
         teamHelpList: "{cc}/uh team list {ci}: lists the teams and their players."
         teamHelpSpy: "{cc}/uh team spy [player] {ci}: allows yourself (or the target player) to receive all the team chats (read-only). Execute again to stop."
         teamHelpReset: "{cc}/uh team reset {ci}: removes all teams."
+        teamHelpGui: "{cc}/uh team gui {ci}: opens a GUI to join and manage the teams."
         teamHelpJoinCmd: "{cc}/join [player] <team ...> {ci}: adds “player” (or the sender) inside the given team. Without arguments, displays the chat-based team selector."
         teamHelpLeaveCmd: "{cc}/leave [player] {ci}: removes “player” (or the sender) from his team."
         
@@ -354,6 +355,18 @@ keys:
             leaveTeam: "{darkred}[\u00D7] {red}Click here to leave your team"
             howToDisplayAgain: "{gray}Run /join to display this again"
             noTeams: "{ce}There isn't any team available."
+
+        chestGui:
+            selector:
+                title: "{black}Select a team {reset}({0})"
+                teamItem:
+                    title: "{white}Team {0} {gray}({1} players)"
+                    titleWithMax: "{white}Team {0} {gray}({1}/{2})"
+                    subtitlePlayers: "{blue}Players"
+                    bulletPlayers: "{darkgray}- {white}{0}"
+                    inviteJoin: "{darkgray}» {white}Click {gray}to join this team"
+                    inviteLeave: "{darkgray}» {white}Click {gray}to leave this team"
+                    inviteManage: "{darkgray}» {white}Right-click {gray}to manage this team"
         
         reset:
             success: "{cs}All teams where removed."

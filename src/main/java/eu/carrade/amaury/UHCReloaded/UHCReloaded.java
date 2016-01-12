@@ -57,6 +57,7 @@ import eu.carrade.amaury.UHCReloaded.task.UpdateTimerTask;
 import eu.carrade.amaury.UHCReloaded.teams.TeamChatManager;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.timers.TimerManager;
+import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.scoreboard.SidebarScoreboard;
 import fr.zcraft.zlib.core.ZPlugin;
 import org.bukkit.entity.Player;
@@ -110,7 +111,7 @@ public class UHCReloaded extends ZPlugin
             i18n = new I18n(this, getConfig().getString("lang"));
         }
 
-        loadComponents(SidebarScoreboard.class);
+        loadComponents(SidebarScoreboard.class, Gui.class);
 
 
         wbintegration = new UHWorldBorderIntegration();

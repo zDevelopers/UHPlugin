@@ -337,6 +337,12 @@ teams-options:
         autoDisplay: true
         # Delay between the login and the display? (Seconds)
         delay: 4
+
+    # Chest-based GUI to choose a team and manage the teams
+    chestGui:
+        display:
+            teamItem: "banner"        # Values: "banner", "glass", "glass_pane", "clay", "wool", "dye"
+            glowOnSelectedTeam: true  # Set to true to display an enchantment glow on the player team
     
     teamChat:
         # Forces disable the team-chat when the player die.

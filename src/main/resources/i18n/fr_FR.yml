@@ -77,6 +77,7 @@ keys:
         teamHelpList: "{cc}/uh team list {ci}: liste toutes les équipes et leurs membres."
         teamHelpSpy: "{cc}/uh team spy [joueur] {ci}: permet de recevoir (soit-même ou le joueur ciblé) tous les chats d'équipe (en lecture seule). Exécutez une autre fois pour interrompre."
         teamHelpReset: "{cc}/uh team reset {ci}: supprime toutes les équipes."
+        teamHelpGui: "{cc}/uh team gui {ci}: ouvre une interface graphique pour gérer et rejoindre les équipes."
         teamHelpJoinCmd: "{cc}/join [joueur] <équipe ...> {ci}: ajoute “joueur” (ou l'envoyeur) dans l'équipe donnée. Sans argument, affiche le sélecteur d'équipe."
         teamHelpLeaveCmd: "{cc}/leave [joueur] {ci}: retire “joueur” (ou l'envoyeur) de son équipe."
         
@@ -354,6 +355,18 @@ keys:
             leaveTeam: "{darkred}[\u00D7] {red}Cliquez ici pour quitter votre équipe"
             howToDisplayAgain: "{gray}Exécutez /join pour réafficher ceci"
             noTeams: "{ce}Il n'y a aucune équipe disponible."
+
+        chestGui:
+            selector:
+                title: "{black}Sélectionnez votre équipe {reset}({0})"
+                teamItem:
+                    title: "{white}Équipe {0} {gray}({1} players)"
+                    titleWithMax: "{white}Équipe {0} {gray}({1}/{2})"
+                    subtitlePlayers: "{blue}Joueurs"
+                    bulletPlayers: "{darkgray}- {white}{0}"
+                    inviteJoin: "{darkgray}» {white}Cliquez {gray}pour rejoindre l'équipe"
+                    inviteLeave: "{darkgray}» {white}Cliquez {gray}pour quitter l'équipe"
+                    inviteManage: "{darkgray}» {white}Cliquez droit {gray}pour gérer cette équipe"
         
         reset:
             success: "{cs}Toutes les équipes ont été supprimées."

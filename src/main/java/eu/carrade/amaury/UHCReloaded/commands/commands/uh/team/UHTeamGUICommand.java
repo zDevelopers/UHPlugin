@@ -29,35 +29,59 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.commands;
+package eu.carrade.amaury.UHCReloaded.commands.commands.uh.team;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.commands.commands.GlobalMessageCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.JoinCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.LeaveCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.TeamMessageCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.TeamsCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.ToggleChatCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.UHRootCommand;
-import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommandExecutor;
+import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
+import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
+import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
+import eu.carrade.amaury.UHCReloaded.gui.teams.TeamsSelectorGUI;
+import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.gui.Gui;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.Collections;
+import java.util.List;
 
 
-public class UHCommandExecutor extends AbstractCommandExecutor
+@Command (name = "gui", noPermission = true, inheritPermission = false)
+public class UHTeamGUICommand extends AbstractCommand
 {
+    private final I18n i;
 
-    public UHCommandExecutor(UHCReloaded p)
+    public UHTeamGUICommand(UHCReloaded plugin)
     {
-        super(p);
+        i = plugin.getI18n();
+    }
 
 
-        registerCommand(new UHRootCommand(p));          //  /uh
+    @Override
+    public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
+    {
+        if (!(sender instanceof Player))
+        {
+            throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER, this);
+        }
 
-        registerCommand(new JoinCommand(p));            //  /join
-        registerCommand(new LeaveCommand(p));           //  /leave
-        registerCommand(new TeamsCommand(p));           //  /teams
+        Gui.open((Player) sender, new TeamsSelectorGUI());
+    }
 
-        registerCommand(new TeamMessageCommand(p));     //  /t
-        registerCommand(new GlobalMessageCommand(p));   //  /g
-        registerCommand(new ToggleChatCommand(p));      //  /togglechat
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args)
+    {
+        return null;
+    }
+
+    @Override
+    public List<String> help(CommandSender sender)
+    {
+        return null;
+    }
+
+    @Override
+    public List<String> onListHelp(CommandSender sender)
+    {
+        return Collections.singletonList(i.t("cmd.teamHelpGui"));
     }
 }

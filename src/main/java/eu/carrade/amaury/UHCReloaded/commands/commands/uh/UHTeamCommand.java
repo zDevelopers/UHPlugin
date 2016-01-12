@@ -34,6 +34,7 @@ package eu.carrade.amaury.UHCReloaded.commands.commands.uh;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamAddCommand;
+import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamGUICommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamJoinCommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamLeaveCommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamListCommand;
@@ -76,6 +77,7 @@ public class UHTeamCommand extends AbstractCommand
         registerSubCommand(new UHTeamListCommand(p));
         registerSubCommand(new UHTeamSpyCommand(p));
         registerSubCommand(new UHTeamResetCommand(p));
+        registerSubCommand(new UHTeamGUICommand(p));
     }
 
     /**

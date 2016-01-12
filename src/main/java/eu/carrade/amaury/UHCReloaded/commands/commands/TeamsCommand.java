@@ -29,35 +29,18 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.commands;
+package eu.carrade.amaury.UHCReloaded.commands.commands;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.commands.commands.GlobalMessageCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.JoinCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.LeaveCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.TeamMessageCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.TeamsCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.ToggleChatCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.UHRootCommand;
-import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommandExecutor;
+import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamGUICommand;
+import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 
 
-public class UHCommandExecutor extends AbstractCommandExecutor
+@Command (name = "teams", noPermission = true, inheritPermission = false)
+public class TeamsCommand extends UHTeamGUICommand
 {
-
-    public UHCommandExecutor(UHCReloaded p)
+    public TeamsCommand(UHCReloaded plugin)
     {
-        super(p);
-
-
-        registerCommand(new UHRootCommand(p));          //  /uh
-
-        registerCommand(new JoinCommand(p));            //  /join
-        registerCommand(new LeaveCommand(p));           //  /leave
-        registerCommand(new TeamsCommand(p));           //  /teams
-
-        registerCommand(new TeamMessageCommand(p));     //  /t
-        registerCommand(new GlobalMessageCommand(p));   //  /g
-        registerCommand(new ToggleChatCommand(p));      //  /togglechat
+        super(plugin);
     }
 }

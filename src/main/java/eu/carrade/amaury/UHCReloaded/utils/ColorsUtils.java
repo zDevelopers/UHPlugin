@@ -29,35 +29,62 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.commands;
+package eu.carrade.amaury.UHCReloaded.utils;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.commands.commands.GlobalMessageCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.JoinCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.LeaveCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.TeamMessageCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.TeamsCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.ToggleChatCommand;
-import eu.carrade.amaury.UHCReloaded.commands.commands.UHRootCommand;
-import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommandExecutor;
+import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 
 
-public class UHCommandExecutor extends AbstractCommandExecutor
+public final class ColorsUtils
 {
+    private ColorsUtils() {}
 
-    public UHCommandExecutor(UHCReloaded p)
+    public static DyeColor chat2Dye(ChatColor chatColor)
     {
-        super(p);
+        switch (chatColor)
+        {
+            case BLACK:
+                return DyeColor.BLACK;
 
+            case BLUE:
+            case DARK_BLUE:
+                return DyeColor.BLUE;
 
-        registerCommand(new UHRootCommand(p));          //  /uh
+            case DARK_GREEN:
+                return DyeColor.GREEN;
 
-        registerCommand(new JoinCommand(p));            //  /join
-        registerCommand(new LeaveCommand(p));           //  /leave
-        registerCommand(new TeamsCommand(p));           //  /teams
+            case DARK_AQUA:
+                return DyeColor.CYAN;
 
-        registerCommand(new TeamMessageCommand(p));     //  /t
-        registerCommand(new GlobalMessageCommand(p));   //  /g
-        registerCommand(new ToggleChatCommand(p));      //  /togglechat
+            case DARK_RED:
+                return DyeColor.RED;
+
+            case DARK_PURPLE:
+                return DyeColor.PURPLE;
+
+            case GOLD:
+            case YELLOW:
+                return DyeColor.YELLOW;
+
+            case GRAY:
+            case DARK_GRAY:
+                return DyeColor.SILVER;
+
+            case GREEN:
+                return DyeColor.LIME;
+
+            case AQUA:
+                return DyeColor.LIGHT_BLUE;
+
+            case RED:
+                return DyeColor.ORANGE;
+
+            case LIGHT_PURPLE:
+                return DyeColor.PINK;
+
+            // White, reset & formatting
+            default:
+                return DyeColor.WHITE;
+        }
     }
 }
