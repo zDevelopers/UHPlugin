@@ -149,7 +149,7 @@ keys:
             fallback: "Langue par défaut : {0} (traduit par {1})."
         license:
             title: "{aqua}------ Licence ------"
-            license: "Publié sous licence générale publique GNU (version 3)."
+            license: "Publié sous la licence CeCILL-B."
     
     start:
         already: "{ce}Le jeu est déjà démarré ! Rechargez ou redémarrez le serveur pour redémarrer."

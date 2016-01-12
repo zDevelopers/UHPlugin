@@ -140,7 +140,7 @@ keys:
             fallback: "Zalozni jazyk: {0} (prelozil {1})."
         license:
             title: "{aqua}------ Licence ------"
-            license: "Publikovano pod GNU General Public License (verze 3)."
+            license: "Publikovano pod CeCILL-B License."
 
     start:
         already: "{ce}Hra jiz zacala! Reloadnete nebo restartujete server pro restart hry."

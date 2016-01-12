@@ -147,7 +147,6 @@ keys:
             fallback: "备用语言: {0} (由 {1} 翻译)"
         license:
             title: "{aqua}------ 许可 ------"
-            license: "GNU通用公共授权(GPLv3)"
     
     start:
         already: "{ce}游戏已开始! 要重新开始游戏请重启服务器."

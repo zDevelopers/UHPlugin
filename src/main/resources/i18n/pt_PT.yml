@@ -138,7 +138,7 @@ keys:
             fallback: "Linguagem para Erros: {0} (traduzido por {1})."
         license:
             title: "{aqua}------ Licenca ------"
-            license: "Publicado sobre a GNU General Public License (versao 3)."
+            license: "Publicado sobre a CeCILL-B License."
     
     start:
         already: "{ce}O Jogo ja comecou! Faz Reload ou Reinicia o server para reiniciar o Jogo."
