@@ -368,7 +368,7 @@ keys:
                 new:
                     title: "{white}Nouvelle équipe"
                 teamItem:
-                    title: "{white}Équipe {0} {gray}({1} players)"
+                    title: "{white}Équipe {0} {gray}({1} joueurs)"
                     titleWithMax: "{white}Équipe {0} {gray}({1}/{2})"
                     subtitlePlayers: "{blue}Joueurs"
                     bulletPlayers: "{darkgray}- {white}{0}"
