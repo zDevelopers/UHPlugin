@@ -34,6 +34,9 @@ package eu.carrade.amaury.UHCReloaded.teams;
 
 import org.bukkit.ChatColor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * Represents a team color.
@@ -59,6 +62,17 @@ public enum TeamColor
     WHITE("White", ChatColor.WHITE),
     YELLOW("Yellow", ChatColor.YELLOW),
     RANDOM("?", null);
+
+
+    private static Map<ChatColor, TeamColor> BY_CHAT_COLOR = new HashMap<>();
+
+    static
+    {
+        for (TeamColor color : values())
+            if (color.toChatColor() != null)
+                BY_CHAT_COLOR.put(color.toChatColor(), color);
+    }
+
 
     private String name;
     private ChatColor color;
@@ -117,5 +131,16 @@ public enum TeamColor
 
             return null;
         }
+    }
+
+    /**
+     * Returns the TeamColor enum member associated to the given ChatColor.
+     *
+     * @param color The ChatColor.
+     * @return The corresponding TeamColor.
+     */
+    public static TeamColor fromChatColor(ChatColor color)
+    {
+        return BY_CHAT_COLOR.get(color);
     }
 }

@@ -365,6 +365,8 @@ keys:
                 rename:
                     title: "{white}Renommer votre équipe"
                     selectBefore: "{gray}Vous devez être dans une équipe"
+                new:
+                    title: "{white}Nouvelle équipe"
                 teamItem:
                     title: "{white}Équipe {0} {gray}({1} players)"
                     titleWithMax: "{white}Équipe {0} {gray}({1}/{2})"
@@ -373,6 +375,36 @@ keys:
                     inviteJoin: "{darkgray}» {white}Cliquez {gray}pour rejoindre l'équipe"
                     inviteLeave: "{darkgray}» {white}Cliquez {gray}pour quitter l'équipe"
                     inviteManage: "{darkgray}» {white}Cliquez droit {gray}pour gérer cette équipe"
+            creator:
+                color:
+                    title: "Nouvelle équipe » {black}Couleur"
+                    breadcrumbs: "{gray}1. {white}{bold}Couleur de l'équipe"
+                    random: "{lightpurple}Couleur aléatoire"
+                name:
+                    title: "Nouvelle équipe » {black}Nom"
+                    breadcrumbs: "{gray}2. {white}{bold}Nom de l'équipe"
+                    nameItem:
+                        title: "{white}Nommer l'équipe"
+                        lore: "{gray}Cliquez ici pour ouvrir un panneau, et écrivez le nom de l'équipe dedans."
+                players:
+                    title: "Nouvelle équipe » {black}Membres"
+                    breadcrumbs: "{gray}3. {white}{bold}Membres de l'équipe"
+                    playerItem:
+                        title: "{reset}{0}"
+                        online: "{gray}En ligne"
+                        offline: "{gray}Hors ligne"
+                        currentTeam: "{gray}Équipe : {0}"
+                        noCurrentTeam: "{gray}Équipe : aucune"
+                        select: "{darkgray}» {white}Cliquez {gray}pour l'ajouter à l'équipe"
+                        selected: "{lightpurple}Ajouté !"
+                    doneItem:
+                        title: "{green}Créer l'équipe"
+                        summary: "{blue}{bold}Récapitulatif"
+                        name: "{gray}Nom : {white}{0}"
+                        color: "{gray}Couleur : {0}"
+                        members: "{gray}Membres : {white}{0}"
+                        memberBullet: "{darkgray}- {white}{0}"
+                    done: "{cs}Équipe créée."
         
         reset:
             success: "{cs}Toutes les équipes ont été supprimées."

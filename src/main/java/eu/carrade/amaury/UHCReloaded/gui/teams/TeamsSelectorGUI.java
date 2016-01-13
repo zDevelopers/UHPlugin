@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.gui.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.gui.teams.builder.TeamBuilderStepColorGUI;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
@@ -85,8 +86,19 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 
         if (getPlayer().hasPermission("uh.player.renameTeam"))
         {
-            List<String> lore = tm.getTeamForPlayer(getPlayer()) == null ? Collections.singletonList(i.t(IB + "rename.selectBefore")) : null;
-            action("rename", getSize() - 5, GuiUtils.makeItem(Material.BOOK_AND_QUILL, i.t(IB + "rename.title"), lore));
+            int renameSlot = getPlayer().hasPermission("uh.team") ? getSize() - 6 : getSize() - 5;
+
+            action("rename", renameSlot, GuiUtils.makeItem(
+                    Material.BOOK_AND_QUILL, i.t(IB + "rename.title"),
+                    tm.getTeamForPlayer(getPlayer()) == null ? Collections.singletonList(i.t(IB + "rename.selectBefore")) : null
+            ));
+        }
+
+        if (getPlayer().hasPermission("uh.team"))
+        {
+            int newTeamSlot = getPlayer().hasPermission("uh.player.renameTeam") ? getSize() - 4 : getSize() - 5;
+
+            action("new", newTeamSlot, GuiUtils.makeItem(Material.EMERALD, i.t(IB + "new.title")));
         }
     }
 
@@ -216,5 +228,11 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
                 team.setName(name);
             }
         }, team.getName()), this);
+    }
+
+    @GuiAction ("new")
+    public void newTeam()
+    {
+        Gui.open(getPlayer(), new TeamBuilderStepColorGUI());
     }
 }

@@ -365,6 +365,8 @@ keys:
                 rename:
                     title: "{white}Rename your team"
                     selectBefore: "{gray}You have to be in a team"
+                new:
+                    title: "{white}New team"
                 teamItem:
                     title: "{white}Team {0} {gray}({1} players)"
                     titleWithMax: "{white}Team {0} {gray}({1}/{2})"
@@ -373,6 +375,36 @@ keys:
                     inviteJoin: "{darkgray}» {white}Click {gray}to join this team"
                     inviteLeave: "{darkgray}» {white}Click {gray}to leave this team"
                     inviteManage: "{darkgray}» {white}Right-click {gray}to manage this team"
+            creator:
+                color:
+                    title: "New team » {black}Color"
+                    breadcrumbs: "{gray}1. {white}{bold}Team color"
+                    random: "{lightpurple}Random color"
+                name:
+                    title: "New team » {black}Name"
+                    breadcrumbs: "{gray}2. {white}{bold}Team name"
+                    nameItem:
+                        title: "{white}Name the team"
+                        lore: "{gray}When clicked, a sign will open; write the name of the team inside."
+                players:
+                    title: "New team » {black}Members"
+                    breadcrumbs: "{gray}3. {white}{bold}Team members"
+                    playerItem:
+                        title: "{reset}{0}"
+                        online: "{gray}Online"
+                        offline: "{gray}Offline"
+                        currentTeam: "{gray}Current team: {0}"
+                        noCurrentTeam: "{gray}Current team: none"
+                        select: "{darkgray}» {white}Click {gray}to add to the team"
+                        selected: "{lightpurple}Selected!"
+                    doneItem:
+                        title: "{green}Create the team"
+                        summary: "{blue}{bold}Summary"
+                        name: "{gray}Team name: {white}{0}"
+                        color: "{gray}Color: {0}"
+                        members: "{gray}Members: {white}{0}"
+                        memberBullet: "{darkgray}- {white}{0}"
+                    done: "{cs}Team created."
         
         reset:
             success: "{cs}All teams where removed."

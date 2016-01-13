@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.utils;
 
 import com.google.common.collect.Sets;
+import org.apache.commons.lang.WordUtils;
 
 import java.util.Set;
 
@@ -130,5 +131,10 @@ public final class TextUtils
         }
 
         return builder.toString();
+    }
+
+    public static String friendlyEnumName(Enum<?> enumConstant)
+    {
+        return WordUtils.capitalizeFully(enumConstant.name().replace("_", " "));
     }
 }
