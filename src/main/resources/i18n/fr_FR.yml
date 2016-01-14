@@ -405,6 +405,30 @@ keys:
                         members: "{gray}Membres : {white}{0}"
                         memberBullet: "{darkgray}- {white}{0}"
                     done: "{cs}Équipe créée."
+            editor:
+                title: "Équipes » {black}{0}"
+                banner:
+                    members: "{white}{0} {gray}membre(s)"
+                color:
+                    title: "{green}Changer la couleur"
+                    current: "{gray}Actuelle : {white}{0}"
+                    subGuiTitle: "{0} » {black}Couleur"
+                name:
+                    title: "{green}Renommer l'équipe"
+                    current: "{gray}Actuel : {white}{0}"
+                members:
+                    title: "{green}Modifier les membres"
+                    subGuiTitle: "{0} » {black}Membres"
+                    inviteAdd: "{darkgray}» {white}Cliquez {gray}pour ajouter ce joueur"
+                    inviteRemove: "{darkgray}» {white}Cliquez {gray}pour retirer ce joueur"
+                delete:
+                    title: "{red}Supprimer cette équipe"
+                    warning: "{gray}Non annulable"
+                    subGuiTitle: "{0} » {darkred}Supprimer"
+                    keep: "{green}Garder cette équipe en vie"
+                    delete: "{red}Supprimer cette équipe {italic}pour l'éternité"
+                exit:
+                    title: "{green}« Retour"
         
         reset:
             success: "{cs}Toutes les équipes ont été supprimées."

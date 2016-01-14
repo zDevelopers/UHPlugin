@@ -91,10 +91,6 @@ public class UHTeam
         this.plugin = plugin;
         this.i = plugin.getI18n();
 
-        // We don't use generateColor directly because we want to keep the "null" color.
-        if (color == TeamColor.RANDOM) this.color = plugin.getTeamManager().generateColor(color);
-        else this.color = color;
-
         // We use a random internal name because the name of a team, in Minecraft vanilla, is limited
         // (16 characters max).
         Random rand = new Random();
@@ -103,16 +99,12 @@ public class UHTeam
         Scoreboard sb = this.plugin.getScoreboardManager().getScoreboard();
         Team t = sb.registerNewTeam(this.internalName);
 
-        if (this.color != null)
-        {
-            t.setPrefix(this.color.toChatColor().toString());
-            t.setSuffix(ChatColor.RESET.toString());
-        }
-
+        t.setSuffix(ChatColor.RESET.toString());
         t.setCanSeeFriendlyInvisibles(plugin.getConfig().getBoolean("teams-options.canSeeFriendlyInvisibles", true));
         t.setAllowFriendlyFire(plugin.getConfig().getBoolean("teams-options.allowFriendlyFire", true));
 
         setName(name, true);
+        setColor(color);
     }
 
     /**
@@ -143,22 +135,8 @@ public class UHTeam
         if (name == null || (this.name != null && this.name.equals(name)))
             return;
 
-
         this.name = name;
-
-        if (color != null)
-        {
-            displayName = color.toChatColor() + name + ChatColor.RESET;
-        }
-        else
-        {
-            displayName = name;
-        }
-
-        Team t = plugin.getScoreboardManager().getScoreboard().getTeam(internalName);
-        if (t != null)
-            t.setDisplayName(displayName.substring(0, Math.min(displayName.length(), 32)));
-
+        updateDisplayName();
 
         if (!silent)
             for (Player player : getOnlinePlayers())
@@ -179,6 +157,15 @@ public class UHTeam
     public String getDisplayName()
     {
         return displayName;
+    }
+
+    private void updateDisplayName()
+    {
+        displayName = (color != null) ? color.toChatColor() + name + ChatColor.RESET : name;
+
+        Team t = plugin.getScoreboardManager().getScoreboard().getTeam(internalName);
+        if (t != null)
+            t.setDisplayName(displayName.substring(0, Math.min(displayName.length(), 32)));
     }
 
     /**
@@ -423,18 +410,18 @@ public class UHTeam
     /**
      * Teleports the entire team to the given location.
      *
-     * @param lo
+     * @param location The location.
      */
-    public void teleportTo(Location lo)
+    public void teleportTo(Location location)
     {
-        Validate.notNull(lo, "The location cannot be null.");
+        Validate.notNull(location, "The location cannot be null.");
 
         for (UUID id : players)
         {
             Player player = plugin.getServer().getPlayer(id);
             if (player != null && player.isOnline())
             {
-                player.teleport(lo, TeleportCause.PLUGIN);
+                player.teleport(location, TeleportCause.PLUGIN);
             }
         }
     }
@@ -445,6 +432,32 @@ public class UHTeam
     public TeamColor getColor()
     {
         return color;
+    }
+
+    /**
+     * Updates the team color.
+     *
+     * @param color The new color.
+     */
+    public void setColor(TeamColor color)
+    {
+        // We don't use generateColor directly because we want to keep the "null" color.
+        if (color == TeamColor.RANDOM) this.color = plugin.getTeamManager().generateColor(color);
+        else this.color = color;
+
+        updateDisplayName();
+
+        // The team color needs to be updated
+        if (this.color != null)
+        {
+            Team t = plugin.getScoreboardManager().getScoreboard().getTeam(internalName);
+            if (t != null)
+                t.setPrefix(this.color.toChatColor().toString());
+        }
+
+        // The players names too
+        for (Player player : getOnlinePlayers())
+            plugin.getTeamManager().colorizePlayer(player);
     }
 
 

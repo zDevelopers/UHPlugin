@@ -405,6 +405,30 @@ keys:
                         members: "{gray}Members: {white}{0}"
                         memberBullet: "{darkgray}- {white}{0}"
                     done: "{cs}Team created."
+            editor:
+                title: "Teams » {black}{0}"
+                banner:
+                    members: "{white}{0} {gray}member(s)"
+                color:
+                    title: "{green}Update the color"
+                    current: "{gray}Current: {white}{0}"
+                    subGuiTitle: "{0} » {black}Color"
+                name:
+                    title: "{green}Rename the team"
+                    current: "{gray}Current: {white}{0}"
+                members:
+                    title: "{green}Add or remove players"
+                    subGuiTitle: "{0} » {black}Members"
+                    inviteAdd: "{darkgray}» {white}Click {gray}to add this player"
+                    inviteRemove: "{darkgray}» {white}Click {gray}to remove this player"
+                delete:
+                    title: "{red}Delete this team"
+                    warning: "{gray}Cannot be undone"
+                    subGuiTitle: "{0} » {darkred}Delete"
+                    keep: "{green}Keep this team alive"
+                    delete: "{red}Delete this team {italic}forever"
+                exit:
+                    title: "{green}« Go back"
         
         reset:
             success: "{cs}All teams where removed."

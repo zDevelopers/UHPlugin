@@ -62,34 +62,40 @@ public class TeamBuilderStepColorGUI extends TeamBuilderBaseGUI
 
         generateBreadcrumbs(BuildingStep.COLOR);
 
+        insertColors(3);
+    }
 
-        action("random", 22, GuiUtils.makeItem(Material.WOOL, UHCReloaded.i().t("team.chestGui.creator.color.random")));
+    protected void insertColors(final int firstLine)
+    {
+        final int offset = (firstLine - 1) * 9;
 
-        insertColor(28, ChatColor.WHITE);
-        insertColor(29, ChatColor.AQUA);
-        insertColor(30, ChatColor.BLUE);
-        insertColor(31, ChatColor.GREEN);
-        insertColor(32, ChatColor.YELLOW);
-        insertColor(33, ChatColor.GOLD);
-        insertColor(34, ChatColor.LIGHT_PURPLE);
+        action("random", offset + 4, GuiUtils.makeItem(Material.WOOL, UHCReloaded.i().t("team.chestGui.creator.color.random")));
 
-        insertColor(37, ChatColor.RED);
-        insertColor(38, ChatColor.DARK_RED);
-        insertColor(39, ChatColor.DARK_GREEN);
-        insertColor(40, ChatColor.DARK_PURPLE);
-        insertColor(41, ChatColor.DARK_BLUE);
-        insertColor(42, ChatColor.DARK_AQUA);
-        insertColor(43, ChatColor.BLACK);
+        insertColor(offset + 10, ChatColor.WHITE);
+        insertColor(offset + 11, ChatColor.AQUA);
+        insertColor(offset + 12, ChatColor.BLUE);
+        insertColor(offset + 13, ChatColor.GREEN);
+        insertColor(offset + 14, ChatColor.YELLOW);
+        insertColor(offset + 15, ChatColor.GOLD);
+        insertColor(offset + 16, ChatColor.LIGHT_PURPLE);
 
-        insertColor(47, ChatColor.GRAY);
-        insertColor(51, ChatColor.DARK_GRAY);
+        insertColor(offset + 19, ChatColor.RED);
+        insertColor(offset + 20, ChatColor.DARK_RED);
+        insertColor(offset + 21, ChatColor.DARK_GREEN);
+        insertColor(offset + 22, ChatColor.DARK_PURPLE);
+        insertColor(offset + 23, ChatColor.DARK_BLUE);
+        insertColor(offset + 24, ChatColor.DARK_AQUA);
+        insertColor(offset + 25, ChatColor.BLACK);
 
+        insertColor(offset + 29, ChatColor.GRAY);
+        insertColor(offset + 33, ChatColor.DARK_GRAY);
 
-        randomUpdate = RunTask.timer(new Runnable() {
+        randomUpdate = RunTask.timer(new Runnable()
+        {
             @Override
             public void run()
             {
-                ItemStack random = getInventory().getItem(22);
+                ItemStack random = getInventory().getItem(offset + 4);
                 if (random != null)
                     random.setDurability((short) randomSource.nextInt(16));
             }
@@ -105,17 +111,17 @@ public class TeamBuilderStepColorGUI extends TeamBuilderBaseGUI
     @GuiAction ("random")
     protected void random()
     {
-        next(TeamColor.RANDOM);
+        saveColor(TeamColor.RANDOM);
     }
 
     @Override
     protected void unknown_action(String name, int slot, ItemStack item)
     {
         if (item.hasItemMeta() && item.getItemMeta().hasDisplayName())
-            next(TeamColor.fromChatColor(ChatColor.getByChar(ChatColor.getLastColors(item.getItemMeta().getDisplayName()).substring(1))));
+            saveColor(TeamColor.fromChatColor(ChatColor.getByChar(ChatColor.getLastColors(item.getItemMeta().getDisplayName()).substring(1))));
     }
 
-    private void next(TeamColor color)
+    protected void saveColor(TeamColor color)
     {
         Gui.open(getPlayer(), new TeamBuilderStepNameGUI(color));
     }

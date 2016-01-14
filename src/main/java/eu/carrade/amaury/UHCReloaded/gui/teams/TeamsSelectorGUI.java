@@ -33,6 +33,7 @@ package eu.carrade.amaury.UHCReloaded.gui.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.gui.teams.builder.TeamBuilderStepColorGUI;
+import eu.carrade.amaury.UHCReloaded.gui.teams.editor.TeamEditGUI;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
@@ -204,7 +205,7 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
     {
         if (getPlayer().hasPermission("uh.team"))  // TODO adapt with new granular permissions
         {
-            // TODO open management GUI
+            Gui.open(getPlayer(), new TeamEditGUI(team), this);
         }
         else
         {
