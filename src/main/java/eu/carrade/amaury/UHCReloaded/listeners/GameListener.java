@@ -444,6 +444,7 @@ public class GameListener implements Listener
         if (p.getGameManager().isGameStarted()
                 && p.getGameManager().isPlayerDead(ev.getPlayer())
                 && !p.getGameManager().isDeadPlayersToBeResurrected(ev.getPlayer())
+                && !p.getGameManager().getStartupSpectators().contains(ev.getPlayer().getName())
                 && !p.getConfig().getBoolean("death.kick.allow-reconnect", true))
         {
 
