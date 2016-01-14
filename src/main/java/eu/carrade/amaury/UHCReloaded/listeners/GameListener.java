@@ -54,6 +54,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
+import org.bukkit.block.Banner;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -78,6 +81,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.HashSet;
@@ -769,6 +773,55 @@ public class GameListener implements Listener
                     p.getRulesManager().broadcastRules();
                 }
             }, 15 * 20l);
+        }
+
+        // Banners
+        if (p.getGameManager().START_GIVE_BANNER || p.getGameManager().START_PLACE_BANNER_HEAD || p.getGameManager().START_PLACE_BANNER_SPAWN)
+        {
+            RunTask.later(new Runnable() {
+                @Override
+                public void run()
+                {
+                    for (UHTeam team : p.getTeamManager().getTeams())
+                    {
+                        if (!team.isEmpty())
+                        {
+                            ItemStack banner = team.getBanner();
+                            for (Player player : team.getOnlinePlayers())
+                            {
+                                if (p.getGameManager().START_GIVE_BANNER)
+                                    player.getInventory().setItem(8, banner);
+
+                                if (p.getGameManager().START_PLACE_BANNER_HEAD)
+                                    player.getInventory().setHelmet(banner);
+
+                                if (p.getGameManager().START_PLACE_BANNER_SPAWN)
+                                {
+                                    Block place = player.getWorld().getHighestBlockAt(player.getLocation());
+                                    Block under = place.getRelative(BlockFace.DOWN);
+
+                                    // We don't want a stack of banners
+                                    if (under.getType() != Material.STANDING_BANNER)
+                                    {
+                                        if (!under.getType().isSolid())
+                                            under.setType(Material.WOOD);
+
+                                        place.setType(Material.STANDING_BANNER);
+
+                                        Banner bannerBlock = (Banner) place.getState();
+                                        BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
+
+                                        bannerBlock.setBaseColor(bannerMeta.getBaseColor());
+                                        bannerBlock.setPatterns(bannerMeta.getPatterns());
+
+                                        bannerBlock.update();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 5l);
         }
     }
 

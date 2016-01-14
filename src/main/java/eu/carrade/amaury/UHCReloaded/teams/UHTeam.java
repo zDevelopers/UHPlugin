@@ -34,12 +34,20 @@ package eu.carrade.amaury.UHCReloaded.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
+import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
+import fr.zcraft.zlib.components.gui.GuiUtils;
+import fr.zcraft.zlib.tools.items.TextualBanners;
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -52,6 +60,9 @@ import java.util.UUID;
 
 public class UHTeam
 {
+    private static final boolean BANNER_SHAPE_WRITE_LETTER = UHCReloaded.get().getConfig().getBoolean("teams-options.banner.shape.writeLetter", true);
+    private static final boolean BANNER_SHAPE_ADD_BORDER = UHCReloaded.get().getConfig().getBoolean("teams-options.banner.shape.addBorder", true);
+
     private UHCReloaded plugin = null;
     private I18n i = null;
 
@@ -429,13 +440,40 @@ public class UHTeam
     }
 
     /**
-     * Returns the color of the team.
-     *
-     * @return
+     * @return the color of the team.
      */
     public TeamColor getColor()
     {
         return color;
+    }
+
+
+    /**
+     * Generates and return a banner for this team, following the banners options in the configuration file
+     *
+     * @return the generated banner.
+     */
+    public ItemStack getBanner()
+    {
+        ItemStack banner;
+        DyeColor dye = ColorsUtils.chat2Dye(color.toChatColor());
+
+        if (BANNER_SHAPE_WRITE_LETTER)
+        {
+            banner = TextualBanners.getCharBanner(Character.toUpperCase(TextUtils.getInitialLetter(name)), dye, BANNER_SHAPE_ADD_BORDER);
+        }
+        else
+        {
+            banner = new ItemStack(Material.BANNER);
+            BannerMeta meta = (BannerMeta) banner.getItemMeta();
+            meta.setBaseColor(dye);
+            banner.setItemMeta(meta);
+        }
+
+        GuiUtils.makeItem(banner, ChatColor.RESET + displayName, null);
+        GuiUtils.hideItemAttributes(banner);
+
+        return banner;
     }
 
 

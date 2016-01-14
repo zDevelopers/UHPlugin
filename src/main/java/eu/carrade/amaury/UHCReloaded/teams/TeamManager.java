@@ -47,20 +47,19 @@ import java.util.Set;
 
 public class TeamManager
 {
+    private final int MAX_PLAYERS_PER_TEAM;
 
-    private UHCReloaded p = null;
-    private I18n i = null;
-    private HashSet<UHTeam> teams = new HashSet<UHTeam>();
-
-    private int maxPlayersPerTeam;
+    private final UHCReloaded p;
+    private final I18n i;
+    private final HashSet<UHTeam> teams = new HashSet<>();
 
 
     public TeamManager(UHCReloaded plugin)
     {
-        this.p = plugin;
-        this.i = p.getI18n();
+        p = plugin;
+        i = p.getI18n();
 
-        this.maxPlayersPerTeam = p.getConfig().getInt("teams-options.maxPlayersPerTeam");
+        MAX_PLAYERS_PER_TEAM = p.getConfig().getInt("teams-options.maxPlayersPerTeam");
     }
 
     /**
@@ -342,7 +341,7 @@ public class TeamManager
      */
     public int getMaxPlayersPerTeam()
     {
-        return maxPlayersPerTeam;
+        return MAX_PLAYERS_PER_TEAM;
     }
 
     /**
@@ -508,9 +507,9 @@ public class TeamManager
 
                 // Team count (something like "[2/5]”)
                 text += "{";
-                if (maxPlayersPerTeam != 0)
+                if (MAX_PLAYERS_PER_TEAM != 0)
                 {
-                    text += "\"text\": \"" + i.t("team.gui.playersCount", String.valueOf(team.getSize()), String.valueOf(maxPlayersPerTeam)) + "\", ";
+                    text += "\"text\": \"" + i.t("team.gui.playersCount", String.valueOf(team.getSize()), String.valueOf(MAX_PLAYERS_PER_TEAM)) + "\", ";
                 }
                 else
                 {

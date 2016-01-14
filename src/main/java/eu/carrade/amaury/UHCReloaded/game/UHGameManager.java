@@ -75,6 +75,10 @@ import java.util.UUID;
 
 public class UHGameManager
 {
+    public final boolean START_GIVE_BANNER;
+    public final boolean START_PLACE_BANNER_HEAD;
+    public final boolean START_PLACE_BANNER_SPAWN;
+
     private final Boolean RANDOM_COLORS_IN_SOLO;
     private final Boolean BROADCAST_SLOW_START_PROGRESS;
     private final Long GRACE_PERIOD;
@@ -127,11 +131,19 @@ public class UHGameManager
 
 
         // Loads the config
+
         RANDOM_COLORS_IN_SOLO = p.getConfig().getBoolean("teams-options.randomColors");
+
         BROADCAST_SLOW_START_PROGRESS = p.getConfig().getBoolean("start.slow.broadcastProgress");
+
         GRACE_PERIOD = (long) Math.min(UHUtils.string2Time(p.getConfig().getString("start.gracePeriod"), 30), 15) * 20l;
         PEACE_PERIOD = (long) UHUtils.string2Time(p.getConfig().getString("start.peacePeriod"), 0) * 20l;
+
         DEATH_SOUND = new UHSound(p.getConfig().getConfigurationSection("death.announcements.sound"));
+
+        START_GIVE_BANNER       = p.getConfig().getBoolean("teams-options.banner.give.giveInHotbar");
+        START_PLACE_BANNER_SPAWN = p.getConfig().getBoolean("teams-options.banner.give.placeOnSpawn");
+        START_PLACE_BANNER_HEAD = p.getConfig().getBoolean("teams-options.banner.give.giveInHead");
     }
 
     /**

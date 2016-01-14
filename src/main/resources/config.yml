@@ -327,6 +327,19 @@ teams-options:
     # Randoms colors for solo games and solo teams (i.e. all the teams generated when the game starts)?
     # If false, no color (aka white) used.
     randomColors: true
+
+    # These options are related to the auto-generated banner of each team.
+    # This banner is used on the teams selector (if set to "banner"), and can be given to the
+    # players when the game starts.
+    banner:
+        shape:
+            writeLetter: true
+            addBorder: true
+        give:
+            placeOnSpawn: true   # Places the team banner on the spawn point.
+            giveInHotbar: false  # Gives a banner to each player.
+            giveInHead: false    # Places the banner on the head of each player.
+
     
     # Chat-based GUI to choose a team
     gui:

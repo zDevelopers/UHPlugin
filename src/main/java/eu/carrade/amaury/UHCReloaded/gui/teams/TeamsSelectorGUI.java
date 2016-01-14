@@ -37,7 +37,6 @@ import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
-import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
 import fr.zcraft.zlib.components.gui.ExplorerGui;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
@@ -45,7 +44,6 @@ import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.gui.PromptGui;
 import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.items.GlowEffect;
-import fr.zcraft.zlib.tools.items.TextualBanners;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -146,7 +144,7 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
         switch (TEAM_ITEM_TYPE)
         {
             case "banner":
-                item = TextualBanners.getCharBanner(Character.toUpperCase(TextUtils.getInitialLetter(team.getName())), dye, true);
+                item = team.getBanner();
                 break;
 
             case "clay":
