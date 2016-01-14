@@ -35,6 +35,7 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.gui.teams.TeamsSelectorGUI;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersComparator;
 import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
@@ -50,7 +51,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -83,19 +83,7 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
 
         // Players
 
-        Set<OfflinePlayer> players = new TreeSet<>(new Comparator<OfflinePlayer>() {
-            @Override
-            public int compare(OfflinePlayer player1, OfflinePlayer player2)
-            {
-                if (player1.isOnline() == player2.isOnline())
-                    return player1.getName().toLowerCase().compareTo(player2.getName().toLowerCase());
-                else if (player1.isOnline())
-                    return -1;
-                else
-                    return 1;
-            }
-        });
-
+        Set<OfflinePlayer> players = new TreeSet<>(new OfflinePlayersComparator());
         Collections.addAll(players, Bukkit.getOfflinePlayers());
 
         int slot = 9;
@@ -189,4 +177,5 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
 
     @Override
     protected String getName() { return name; }
+
 }

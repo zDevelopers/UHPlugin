@@ -33,6 +33,7 @@ package eu.carrade.amaury.UHCReloaded.gui.teams.editor;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersComparator;
 import fr.zcraft.zlib.components.gui.ExplorerGui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
@@ -45,7 +46,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -66,19 +66,7 @@ public class TeamEditMembersGUI extends ExplorerGui<OfflinePlayer>
         setTitle(UHCReloaded.i().t("team.chestGui.editor.members.subGuiTitle", team.getName()));
         setKeepHorizontalScrollingSpace(true);
 
-        Set<OfflinePlayer> players = new TreeSet<>(new Comparator<OfflinePlayer>() {
-            @Override
-            public int compare(OfflinePlayer player1, OfflinePlayer player2)
-            {
-                if (player1.isOnline() == player2.isOnline())
-                    return player1.getName().toLowerCase().compareTo(player2.getName().toLowerCase());
-                else if (player1.isOnline())
-                    return -1;
-                else
-                    return 1;
-            }
-        });
-
+        Set<OfflinePlayer> players = new TreeSet<>(new OfflinePlayersComparator());
         Collections.addAll(players, Bukkit.getOfflinePlayers());
         setData(players.toArray(new OfflinePlayer[players.size()]));
 
