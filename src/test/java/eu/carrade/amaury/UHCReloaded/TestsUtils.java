@@ -31,34 +31,59 @@
  */
 package eu.carrade.amaury.UHCReloaded;
 
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.components.i18n.I18n;
 import org.mockito.Matchers;
 import org.powermock.api.mockito.PowerMockito;
+
+import java.util.Locale;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class TestsUtils {
+public class TestsUtils
+{
+    private static boolean staticPluginMocked = false;
+    private static boolean i18nMocked = false;
 
-	public static I18n getMockedI18n() {
-		I18n mockedI18n = PowerMockito.mock(I18n.class);
+    public static void mockI18n()
+    {
+        if (i18nMocked)
+            return;
 
-		PowerMockito.when(mockedI18n.t(Matchers.anyString())).thenReturn("");
+        PowerMockito.mockStatic(I18n.class);
+        PowerMockito.mockStatic(I.class);
 
-		return mockedI18n;
-	}
+        when(I18n.getPrimaryLocale()).thenReturn(Locale.FRANCE);
+        when(I18n.getFallbackLocale()).thenReturn(Locale.US);
+        when(I18n.getLastTranslator(Matchers.any(Locale.class))).thenReturn("");
+        when(I18n.getTranslationTeam(Matchers.any(Locale.class))).thenReturn("");
+        when(I18n.getReportErrorsTo(Matchers.any(Locale.class))).thenReturn("");
 
-	public static UHCReloaded getMockedPluginInstance() {
-		UHCReloaded mockedPlugin = mock(UHCReloaded.class);
-		PowerMockito.mockStatic(UHCReloaded.class);
+        when(I.t(Matchers.anyString(), Matchers.any())).thenReturn("");
+        when(I.tc(Matchers.anyString(), Matchers.anyString(), Matchers.any())).thenReturn("");
+        when(I.tn(Matchers.anyString(), Matchers.anyString(), Matchers.anyInt(), Matchers.any())).thenReturn("");
+        when(I.tcn(Matchers.anyString(), Matchers.anyString(), Matchers.anyString(), Matchers.anyInt(), Matchers.any())).thenReturn("");
 
-		I18n i18n = getMockedI18n();
+        i18nMocked = true;
+    }
 
-		when(mockedPlugin.getI18n()).thenReturn(i18n);
-		when(UHCReloaded.i()).thenReturn(i18n);
+    public static void mockStaticPlugin()
+    {
+        if (staticPluginMocked)
+            return;
 
-		return mockedPlugin;
-	}
+        final UHCReloaded pluginInstance = getMockedPluginInstance();
 
+        PowerMockito.mockStatic(UHCReloaded.class);
+        when(UHCReloaded.get()).thenReturn(pluginInstance);
+
+        staticPluginMocked = true;
+    }
+
+    public static UHCReloaded getMockedPluginInstance()
+    {
+        return mock(UHCReloaded.class);
+    }
 }

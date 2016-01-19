@@ -36,13 +36,12 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
-
 
 /**
  * This command feeds a player.
@@ -52,13 +51,11 @@ import java.util.List;
 @Command (name = "healall")
 public class UHHealAllCommand extends AbstractCommand
 {
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHHealAllCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -94,14 +91,14 @@ public class UHHealAllCommand extends AbstractCommand
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(i.t("heal.errorNaN"));
+                sender.sendMessage(I.t("heal.errorNaN"));
                 return;
             }
         }
 
         if ((!add && diffHealth <= 0) || diffHealth <= -20)
         {
-            sender.sendMessage(i.t("heal.allErrorNoKill"));
+            sender.sendMessage(I.t("heal.allErrorNoKill"));
             return;
         }
 
@@ -112,7 +109,7 @@ public class UHHealAllCommand extends AbstractCommand
 
             if (health <= 0D)
             {
-                sender.sendMessage(i.t("heal.errorHealthNotUpdatedNoKill", player.getName()));
+                sender.sendMessage(I.t("heal.errorHealthNotUpdatedNoKill", player.getName()));
                 continue;
             }
             else if (health > 20D)
@@ -140,7 +137,7 @@ public class UHHealAllCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpHealall"));
+        return Collections.singletonList(I.t("cmd.helpHealall"));
     }
 
     @Override

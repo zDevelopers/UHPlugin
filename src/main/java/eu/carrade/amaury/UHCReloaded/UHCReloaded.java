@@ -34,7 +34,6 @@ package eu.carrade.amaury.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.borders.BorderManager;
 import eu.carrade.amaury.UHCReloaded.commands.UHCommandExecutor;
 import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.integration.UHDynmapIntegration;
 import eu.carrade.amaury.UHCReloaded.integration.UHProtocolLibIntegrationWrapper;
 import eu.carrade.amaury.UHCReloaded.integration.UHSpectatorPlusIntegration;
@@ -58,16 +57,21 @@ import eu.carrade.amaury.UHCReloaded.teams.TeamChatManager;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.timers.TimerManager;
 import fr.zcraft.zlib.components.gui.Gui;
+import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.components.i18n.I18n;
 import fr.zcraft.zlib.components.scoreboard.SidebarScoreboard;
 import fr.zcraft.zlib.core.ZPlugin;
 import org.bukkit.entity.Player;
 import org.mcstats.MetricsLite;
 
 import java.io.IOException;
+import java.util.Locale;
 
 
 public class UHCReloaded extends ZPlugin
 {
+    private static UHCReloaded instance;
+
     private TeamManager teamManager = null;
     private SpawnsManager spawnsManager = null;
     private UHGameManager gameManager = null;
@@ -92,8 +96,6 @@ public class UHCReloaded extends ZPlugin
     private UHDynmapIntegration dynmapintegration = null;
     private UHProtocolLibIntegrationWrapper protocollibintegrationwrapper = null;
 
-    private static I18n i18n;
-    private static UHCReloaded instance;
 
     @Override
     public void onEnable()
@@ -102,16 +104,21 @@ public class UHCReloaded extends ZPlugin
 
         this.saveDefaultConfig();
 
-        if (getConfig().getString("lang") == null)
+        loadComponents(SidebarScoreboard.class, Gui.class, I18n.class);
+
+        final String langInConfig = getConfig().getString("lang");
+        if (langInConfig == null || langInConfig.isEmpty())
         {
-            i18n = new I18n(this);
+            //i18n = new eu.carrade.amaury.UHCReloaded.i18n.I18n(this);
+            I18n.useDefaultPrimaryLocale();
         }
         else
         {
-            i18n = new I18n(this, getConfig().getString("lang"));
+            //i18n = new eu.carrade.amaury.UHCReloaded.i18n.I18n(this, langInConfig);
+            I18n.setPrimaryLocale(Locale.forLanguageTag(langInConfig));
         }
 
-        loadComponents(SidebarScoreboard.class, Gui.class);
+        I18n.setFallbackLocale(Locale.US);
 
 
         wbintegration = new UHWorldBorderIntegration();
@@ -199,7 +206,7 @@ public class UHCReloaded extends ZPlugin
             getLogger().info("Metrics disabled for this plugin in the configuration: nothing was sent.");
         }
 
-        getLogger().info(i18n.t("load.loaded"));
+        getLogger().info(I.t("load.loaded"));
     }
 
     /**
@@ -383,27 +390,6 @@ public class UHCReloaded extends ZPlugin
     public UHProtocolLibIntegrationWrapper getProtocolLibIntegrationWrapper()
     {
         return protocollibintegrationwrapper;
-    }
-
-
-    /**
-     * Returns the internationalization manager.
-     *
-     * @return
-     */
-    public I18n getI18n()
-    {
-        return i18n;
-    }
-
-    /**
-     * Returns the internationalization manager
-     *
-     * @return
-     */
-    public static I18n i()
-    {
-        return i18n;
     }
 
     /**

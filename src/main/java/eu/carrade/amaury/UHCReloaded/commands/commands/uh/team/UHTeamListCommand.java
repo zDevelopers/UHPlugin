@@ -35,12 +35,11 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,14 +47,11 @@ import java.util.List;
 @Command (name = "list")
 public class UHTeamListCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHTeamListCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = plugin.getI18n();
     }
 
     /**
@@ -71,26 +67,26 @@ public class UHTeamListCommand extends AbstractCommand
     {
         if (p.getTeamManager().getTeams().size() == 0)
         {
-            sender.sendMessage(i.t("team.list.nothing"));
+            sender.sendMessage(I.t("team.list.nothing"));
             return;
         }
 
         for (final UHTeam team : p.getTeamManager().getTeams())
         {
-            sender.sendMessage(i.t("team.list.itemTeam", team.getDisplayName(), ((Integer) team.getSize()).toString()));
+            sender.sendMessage(I.t("team.list.itemTeam", team.getDisplayName(), ((Integer) team.getSize()).toString()));
             for (final OfflinePlayer player : team.getPlayers())
             {
                 String bullet;
                 if (player.isOnline())
                 {
-                    bullet = i.t("team.list.bulletPlayerOnline");
+                    bullet = I.t("team.list.bulletPlayerOnline");
                 }
                 else
                 {
-                    bullet = i.t("team.list.bulletPlayerOffline");
+                    bullet = I.t("team.list.bulletPlayerOffline");
                 }
 
-                sender.sendMessage(bullet + i.t("team.list.itemPlayer", player.getName()));
+                sender.sendMessage(bullet + I.t("team.list.itemPlayer", player.getName()));
             }
         }
     }
@@ -118,6 +114,6 @@ public class UHTeamListCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.teamHelpList"));
+        return Collections.singletonList(I.t("cmd.teamHelpList"));
     }
 }

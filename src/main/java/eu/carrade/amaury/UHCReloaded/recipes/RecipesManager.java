@@ -33,7 +33,7 @@
 package eu.carrade.amaury.UHCReloaded.recipes;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
@@ -52,9 +52,7 @@ import java.util.List;
 
 public class RecipesManager
 {
-
     private UHCReloaded p = null;
-    private I18n i = null;
 
     private Material compassCentralIngredient = null;
     private int compassRecipeType = -1;
@@ -74,7 +72,6 @@ public class RecipesManager
     public RecipesManager(UHCReloaded plugin)
     {
         this.p = plugin;
-        this.i = p.getI18n();
     }
 
 
@@ -287,11 +284,11 @@ public class RecipesManager
                 List<String> lore = null;
                 if (wither)
                 {
-                    lore = Arrays.asList(i.t("craft.goldenApple.loreLine1Monster"), i.t("craft.goldenApple.loreLine2Monster"));
+                    lore = Arrays.asList(I.t("craft.goldenApple.loreLine1Monster"), I.t("craft.goldenApple.loreLine2Monster"));
                 }
                 else
                 {
-                    lore = Arrays.asList(i.t("craft.goldenApple.loreLine1Player", name), i.t("craft.goldenApple.loreLine2Player", name));
+                    lore = Arrays.asList(I.t("craft.goldenApple.loreLine1Player", name), I.t("craft.goldenApple.loreLine2Player", name));
                 }
                 meta.setLore(lore);
 
@@ -395,12 +392,12 @@ public class RecipesManager
     public ShapedRecipe getGoldenHeadHumanRecipe()
     {
         short damage = 0;
-        String name = i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal");
+        String name = I.t("craft.goldenApple.nameGoldenAppleFromHeadNormal");
 
         if (p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.craftNotchApple"))
         {
             damage = 1;
-            name = i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch");
+            name = I.t("craft.goldenApple.nameGoldenAppleFromHeadNotch");
         }
 
         ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, p.getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromHuman.numberCrafted", 1), damage);
@@ -426,12 +423,12 @@ public class RecipesManager
     public ShapedRecipe getGoldenHeadMonsterRecipe()
     {
         short damage = 0;
-        String name = i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal");
+        String name = I.t("craft.goldenApple.nameGoldenAppleFromHeadNormal");
 
         if (p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.craftNotchApple"))
         {
             damage = 1;
-            name = i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch");
+            name = I.t("craft.goldenApple.nameGoldenAppleFromHeadNotch");
         }
 
         ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, p.getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromWither.numberCrafted", 1), damage);

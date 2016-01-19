@@ -37,7 +37,7 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -45,7 +45,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 
 /**
  * This command freezes the players.
@@ -60,14 +59,11 @@ import java.util.List;
 @Command (name = "freeze")
 public class UHFreezeCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHFreezeCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = plugin.getI18n();
     }
 
     @Override
@@ -93,11 +89,11 @@ public class UHFreezeCommand extends AbstractCommand
 
                     if (on)
                     {
-                        sender.sendMessage(i.t("freeze.frozen", sender.getName()));
+                        sender.sendMessage(I.t("freeze.frozen", sender.getName()));
                     }
                     else
                     {
-                        sender.sendMessage(i.t("freeze.unfrozen", sender.getName()));
+                        sender.sendMessage(I.t("freeze.unfrozen", sender.getName()));
                     }
                 }
                 else
@@ -110,20 +106,20 @@ public class UHFreezeCommand extends AbstractCommand
                 Player player = p.getServer().getPlayer(args[1]);
                 if (player == null)
                 {
-                    sender.sendMessage(i.t("freeze.offline", args[1]));
+                    sender.sendMessage(I.t("freeze.offline", args[1]));
                 }
                 else
                 {
                     p.getFreezer().setPlayerFreezeState(player, on);
                     if (on)
                     {
-                        player.sendMessage(i.t("freeze.frozen", sender.getName()));
-                        sender.sendMessage(i.t("freeze.playerFrozen", player.getName()));
+                        player.sendMessage(I.t("freeze.frozen", sender.getName()));
+                        sender.sendMessage(I.t("freeze.playerFrozen", player.getName()));
                     }
                     else
                     {
-                        player.sendMessage(i.t("freeze.unfrozen", sender.getName()));
-                        sender.sendMessage(i.t("freeze.playerUnfrozen", player.getName()));
+                        player.sendMessage(I.t("freeze.unfrozen", sender.getName()));
+                        sender.sendMessage(I.t("freeze.playerUnfrozen", player.getName()));
                     }
                 }
             }
@@ -138,11 +134,11 @@ public class UHFreezeCommand extends AbstractCommand
 
             if (on)
             {
-                p.getServer().broadcastMessage(i.t("freeze.broadcast.globalFreeze"));
+                p.getServer().broadcastMessage(I.t("freeze.broadcast.globalFreeze"));
             }
             else
             {
-                p.getServer().broadcastMessage(i.t("freeze.broadcast.globalUnfreeze"));
+                p.getServer().broadcastMessage(I.t("freeze.broadcast.globalUnfreeze"));
             }
 
         }
@@ -182,18 +178,18 @@ public class UHFreezeCommand extends AbstractCommand
     public List<String> help(CommandSender sender)
     {
         return Arrays.asList(
-                i.t("cmd.freezeHelpTitle"),
-                i.t("cmd.freezeHelpOn"),
-                i.t("cmd.freezeHelpOff"),
-                i.t("cmd.freezeHelpAll"),
-                i.t("cmd.freezeHelpNone")
+                I.t("cmd.freezeHelpTitle"),
+                I.t("cmd.freezeHelpOn"),
+                I.t("cmd.freezeHelpOff"),
+                I.t("cmd.freezeHelpAll"),
+                I.t("cmd.freezeHelpNone")
         );
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpFreeze"));
+        return Collections.singletonList(I.t("cmd.helpFreeze"));
     }
 
     @Override

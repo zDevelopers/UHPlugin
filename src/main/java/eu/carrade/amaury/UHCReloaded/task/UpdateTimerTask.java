@@ -29,7 +29,6 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-
 package eu.carrade.amaury.UHCReloaded.task;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
@@ -39,7 +38,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class UpdateTimerTask extends BukkitRunnable
 {
-
     private UHCReloaded p = null;
 
     public UpdateTimerTask(UHCReloaded p)

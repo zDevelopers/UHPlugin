@@ -33,16 +33,14 @@
 package eu.carrade.amaury.UHCReloaded.misc;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.ChatColor;
 
 
 public class MOTDManager
 {
-
     private UHCReloaded p;
-    private I18n i;
 
     private boolean enabled;
     private String matchName = "";
@@ -52,7 +50,6 @@ public class MOTDManager
     public MOTDManager(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
 
         enabled = p.getConfig().getBoolean("motd.enabled");
 
@@ -88,7 +85,7 @@ public class MOTDManager
      */
     public void updateMOTDBeforeStart()
     {
-        if (enabled) currentMOTD = matchName + i.t("motd.beforeStart");
+        if (enabled) currentMOTD = matchName + I.t("motd.beforeStart");
     }
 
     /**
@@ -96,7 +93,7 @@ public class MOTDManager
      */
     public void updateMOTDDuringStart()
     {
-        if (enabled) currentMOTD = matchName + i.t("motd.starting");
+        if (enabled) currentMOTD = matchName + I.t("motd.starting");
     }
 
     /**
@@ -110,11 +107,11 @@ public class MOTDManager
         {
             if (!p.getGameManager().isGameWithTeams())
             {
-                currentMOTD = matchName + i.t("motd.runningSolo", String.valueOf(p.getGameManager().getAlivePlayersCount()));
+                currentMOTD = matchName + I.t("motd.runningSolo", String.valueOf(p.getGameManager().getAlivePlayersCount()));
             }
             else
             {
-                currentMOTD = matchName + i.t("motd.runningTeams", String.valueOf(p.getGameManager().getAlivePlayersCount()), String.valueOf(p.getGameManager().getAliveTeamsCount()));
+                currentMOTD = matchName + I.t("motd.runningTeams", String.valueOf(p.getGameManager().getAlivePlayersCount()), String.valueOf(p.getGameManager().getAliveTeamsCount()));
             }
         }
     }
@@ -130,11 +127,11 @@ public class MOTDManager
         {
             if (!p.getGameManager().isGameWithTeams())
             {
-                currentMOTD = matchName + i.t("motd.finishedSolo", winner.getName());
+                currentMOTD = matchName + I.t("motd.finishedSolo", winner.getName());
             }
             else
             {
-                currentMOTD = matchName + i.t("motd.finishedTeams", winner.getDisplayName());
+                currentMOTD = matchName + I.t("motd.finishedTeams", winner.getDisplayName());
             }
         }
     }

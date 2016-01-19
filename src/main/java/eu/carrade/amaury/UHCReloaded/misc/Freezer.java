@@ -29,7 +29,6 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-
 package eu.carrade.amaury.UHCReloaded.misc;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
@@ -51,16 +50,15 @@ import java.util.UUID;
 
 public class Freezer
 {
-
     private UHCReloaded p = null;
 
     private boolean isListenerRegistered = false;
     private FreezerListener freezerListener = null;
 
     private Boolean globalFreeze = false;
-    private ArrayList<UUID> frozenPlayers = new ArrayList<UUID>();
-    private HashMap<UUID, Boolean> oldAllowFly = new HashMap<UUID, Boolean>();
-    private HashMap<UUID, Boolean> oldFlyMode = new HashMap<UUID, Boolean>();
+    private ArrayList<UUID> frozenPlayers = new ArrayList<>();
+    private HashMap<UUID, Boolean> oldAllowFly = new HashMap<>();
+    private HashMap<UUID, Boolean> oldFlyMode = new HashMap<>();
 
     private boolean hiddenFreeze = false;
 
@@ -295,8 +293,7 @@ public class Freezer
      */
     public ArrayList<Player> getFrozenPlayers()
     {
-
-        ArrayList<Player> frozenPlayersList = new ArrayList<Player>();
+        ArrayList<Player> frozenPlayersList = new ArrayList<>();
 
         for (UUID id : frozenPlayers)
         {

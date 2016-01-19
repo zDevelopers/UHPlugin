@@ -31,13 +31,13 @@
  */
 package eu.carrade.amaury.UHCReloaded.gui.teams.builder;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -57,7 +57,7 @@ public class TeamBuilderStepColorGUI extends TeamBuilderBaseGUI
     @Override
     protected void onUpdate()
     {
-        setTitle(UHCReloaded.i().t("team.chestGui.creator.color.title"));
+        setTitle(I.t("team.chestGui.creator.color.title"));
         setSize(6 * 9);
 
         generateBreadcrumbs(BuildingStep.COLOR);
@@ -69,7 +69,7 @@ public class TeamBuilderStepColorGUI extends TeamBuilderBaseGUI
     {
         final int offset = (firstLine - 1) * 9;
 
-        action("random", offset + 4, GuiUtils.makeItem(Material.WOOL, UHCReloaded.i().t("team.chestGui.creator.color.random")));
+        action("random", offset + 4, GuiUtils.makeItem(Material.WOOL, I.t("team.chestGui.creator.color.random")));
 
         insertColor(offset + 10, ChatColor.WHITE);
         insertColor(offset + 11, ChatColor.AQUA);

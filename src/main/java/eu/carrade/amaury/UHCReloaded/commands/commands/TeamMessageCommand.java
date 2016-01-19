@@ -36,7 +36,7 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -50,14 +50,11 @@ import java.util.List;
 @Command (name = "t", noPermission = true)
 public class TeamMessageCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public TeamMessageCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     /**
@@ -106,7 +103,7 @@ public class TeamMessageCommand extends AbstractCommand
     @Override
     public List<String> help(CommandSender sender)
     {
-        return Collections.singletonList(i.t("team.message.usage", "t"));
+        return Collections.singletonList(I.t("team.message.usage", "t"));
     }
 
     @Override

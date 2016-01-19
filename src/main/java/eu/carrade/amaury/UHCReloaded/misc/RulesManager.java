@@ -33,7 +33,7 @@ package eu.carrade.amaury.UHCReloaded.misc;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -49,15 +49,11 @@ public class RulesManager
     private final boolean DISPLAY_ON_JOIN;
     private final boolean DISPLAY_ON_START;
 
-    private final I18n i;
-
     private final List<String> rules = new ArrayList<>();
 
 
     public RulesManager()
     {
-        i = UHCReloaded.i();
-
         ConfigurationSection config = UHCReloaded.get().getConfig().getConfigurationSection("rules");
 
         if (config != null)
@@ -121,7 +117,7 @@ public class RulesManager
     public void displayRulesTo(CommandSender receiver)
     {
         CommandUtils.displaySeparator(receiver);
-        receiver.sendMessage(i.t("rules.header"));
+        receiver.sendMessage(I.t("rules.header"));
 
         for (String rule : rules)
         {
@@ -131,7 +127,7 @@ public class RulesManager
             }
             else
             {
-                receiver.sendMessage(i.t("rules.bullet", rule));
+                receiver.sendMessage(I.t("rules.bullet", rule));
             }
         }
 

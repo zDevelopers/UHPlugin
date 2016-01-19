@@ -33,9 +33,9 @@
 package eu.carrade.amaury.UHCReloaded.listeners;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
 import eu.carrade.amaury.UHCReloaded.recipes.RecipesManager;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -62,12 +62,10 @@ import java.util.HashSet;
 public class CraftingListener implements Listener
 {
     private UHCReloaded p = null;
-    private I18n i = null;
 
     public CraftingListener(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
 
@@ -77,8 +75,6 @@ public class CraftingListener implements Listener
      *  - send a ProTip containing the craft to use, if an error occurred;
      *  - add a lure to the golden apples crafted from a head;
      *  - keep the name of the item when the anti-lore craft is used.
-     *
-     * @param ev
      */
     @EventHandler
     public void onPreCraftEvent(PrepareItemCraftEvent ev)
@@ -170,8 +166,6 @@ public class CraftingListener implements Listener
      *     (Thanks to Zelnehlun on BukkitDev.)
      *     <p>
      *   - Crafts the special compass (“semi-shapeless” recipe).
-     *
-     * @param ev
      */
     @EventHandler (ignoreCancelled = true)
     public void onInventoryClick(final InventoryClickEvent ev)
@@ -281,12 +275,12 @@ public class CraftingListener implements Listener
 
                             HashSet<String> prohibited = new HashSet<String>();
 
-                            prohibited.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"));
-                            prohibited.add(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch"));
+                            prohibited.add(ChatColor.RESET + I.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"));
+                            prohibited.add(ChatColor.RESET + I.t("craft.goldenApple.nameGoldenAppleFromHeadNotch"));
 
                             // It is possible that the client filters the name of the golden apple in the anvil UI,
                             // removing all §.
-                            for (String prohibition : new HashSet<String>(prohibited))
+                            for (String prohibition : new HashSet<>(prohibited))
                             {
                                 prohibited.add(prohibition.replace("§", ""));
                             }
@@ -324,8 +318,6 @@ public class CraftingListener implements Listener
 
     /**
      * Used to craft the special compass (“semi-shapeless” recipe).
-     *
-     * @param ev
      */
     @EventHandler (ignoreCancelled = true)
     public void onInventoryDrag(final InventoryDragEvent ev)

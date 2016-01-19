@@ -31,12 +31,12 @@
  */
 package eu.carrade.amaury.UHCReloaded.gui.teams.builder;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.gui.PromptGui;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.Callback;
 import org.bukkit.Material;
 
@@ -53,15 +53,15 @@ public class TeamBuilderStepNameGUI extends TeamBuilderBaseGUI
     @Override
     protected void onUpdate()
     {
-        setTitle(UHCReloaded.i().t("team.chestGui.creator.name.title"));
+        setTitle(I.t("team.chestGui.creator.name.title"));
         setSize(6 * 9);
 
         generateBreadcrumbs(BuildingStep.NAME);
 
         action("name", 22, GuiUtils.makeItem(
                 Material.BOOK_AND_QUILL,
-                UHCReloaded.i().t("team.chestGui.creator.name.nameItem.title"),
-                GuiUtils.generateLore(UHCReloaded.i().t("team.chestGui.creator.name.nameItem.lore"))
+                I.t("team.chestGui.creator.name.nameItem.title"),
+                GuiUtils.generateLore(I.t("team.chestGui.creator.name.nameItem.lore"))
         ));
     }
 

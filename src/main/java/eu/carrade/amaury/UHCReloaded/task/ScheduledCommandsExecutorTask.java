@@ -33,10 +33,10 @@
 package eu.carrade.amaury.UHCReloaded.task;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.command.CommandException;
 
 import java.util.HashSet;
-import java.util.logging.Level;
 
 
 /**
@@ -44,8 +44,8 @@ import java.util.logging.Level;
  */
 public class ScheduledCommandsExecutorTask implements Runnable
 {
-    UHCReloaded p = null;
-    HashSet<String> commands = null;
+    private UHCReloaded p = null;
+    private HashSet<String> commands = null;
 
     public ScheduledCommandsExecutorTask(UHCReloaded plugin, HashSet<String> commands)
     {
@@ -64,7 +64,7 @@ public class ScheduledCommandsExecutorTask implements Runnable
             }
             catch (CommandException e)
             {
-                p.getLogger().log(Level.WARNING, "The scheduled command '" + command + "' failed.", e);
+                PluginLogger.error("The scheduled command '{0}' failed.", e, command);
             }
         }
     }

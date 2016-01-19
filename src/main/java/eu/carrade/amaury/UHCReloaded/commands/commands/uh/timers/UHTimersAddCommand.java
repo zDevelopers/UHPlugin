@@ -35,9 +35,9 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
@@ -50,14 +50,11 @@ import java.util.List;
 @Command (name = "add")
 public class UHTimersAddCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHTimersAddCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -78,7 +75,7 @@ public class UHTimersAddCommand extends AbstractCommand
 
                 if (p.getTimerManager().getTimer(timerName) != null)
                 {
-                    sender.sendMessage(i.t("timers.alreadyExists", timerName));
+                    sender.sendMessage(I.t("timers.alreadyExists", timerName));
                     return;
                 }
 
@@ -86,12 +83,12 @@ public class UHTimersAddCommand extends AbstractCommand
                 timer.setDuration(duration);
 
                 p.getTimerManager().registerTimer(timer);
-                sender.sendMessage(i.t("timers.added", timer.getDisplayName(), args[0]));
+                sender.sendMessage(I.t("timers.added", timer.getDisplayName(), args[0]));
 
             }
             catch (IllegalArgumentException e)
             {
-                sender.sendMessage(i.t("timers.durationSyntaxError"));
+                sender.sendMessage(I.t("timers.durationSyntaxError"));
             }
         }
     }
@@ -111,6 +108,6 @@ public class UHTimersAddCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.timersHelpAdd"));
+        return Collections.singletonList(I.t("cmd.timersHelpAdd"));
     }
 }

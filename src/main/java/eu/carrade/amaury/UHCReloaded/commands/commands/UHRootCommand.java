@@ -57,7 +57,6 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.uh.UHTimersCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -66,14 +65,11 @@ import java.util.List;
 @Command (name = "uh")
 public class UHRootCommand extends AbstractCommand
 {
-
     private UHCReloaded p;
-    private I18n i;
 
     public UHRootCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
 
         // Game
         registerSubCommand(new UHStartCommand(p));

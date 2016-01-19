@@ -33,10 +33,10 @@
 package eu.carrade.amaury.UHCReloaded.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
 import fr.zcraft.zlib.components.gui.GuiUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.items.TextualBanners;
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
@@ -64,7 +64,6 @@ public class UHTeam
     private static final boolean BANNER_SHAPE_ADD_BORDER = UHCReloaded.get().getConfig().getBoolean("teams-options.banner.shape.addBorder", true);
 
     private UHCReloaded plugin = null;
-    private I18n i = null;
 
     private String name = null;
     private String internalName = null;
@@ -89,7 +88,6 @@ public class UHTeam
         Validate.notNull(plugin, "The plugin cannot be null.");
 
         this.plugin = plugin;
-        this.i = plugin.getI18n();
 
         // We use a random internal name because the name of a team, in Minecraft vanilla, is limited
         // (16 characters max).
@@ -140,7 +138,7 @@ public class UHTeam
 
         if (!silent)
             for (Player player : getOnlinePlayers())
-                player.sendMessage(i.t("team.rename.renamed", displayName));
+                player.sendMessage(I.t("team.rename.renamed", displayName));
     }
 
     /**
@@ -301,7 +299,7 @@ public class UHTeam
 
         if (!silent && player.isOnline())
         {
-            ((Player) player).sendMessage(i.t("team.addplayer.added", getDisplayName()));
+            ((Player) player).sendMessage(I.t("team.addplayer.added", getDisplayName()));
         }
     }
 
@@ -334,7 +332,7 @@ public class UHTeam
 
         if (!silent && player.isOnline())
         {
-            ((Player) player).sendMessage(i.t("team.removeplayer.removed", getDisplayName()));
+            ((Player) player).sendMessage(I.t("team.removeplayer.removed", getDisplayName()));
         }
     }
 
@@ -368,7 +366,7 @@ public class UHTeam
 
             if (player != null && player.isOnline())
             {
-                ((Player) player).sendMessage(plugin.getI18n().t("team.removeplayer.removed", getDisplayName()));
+                ((Player) player).sendMessage(I.t("team.removeplayer.removed", getDisplayName()));
             }
 
             unregisterPlayer(player);
@@ -378,7 +376,6 @@ public class UHTeam
 
         // Then the scoreboard team is deleted.
         plugin.getScoreboardManager().getScoreboard().getTeam(this.internalName).unregister();
-
     }
 
     /**

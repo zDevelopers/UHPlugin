@@ -31,20 +31,18 @@
  */
 package eu.carrade.amaury.UHCReloaded.commands.commands.uh.team;
 
-
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,15 +55,13 @@ import java.util.List;
 @Command (name = "join")
 public class UHTeamJoinCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHTeamJoinCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = plugin.getI18n();
     }
+
 
     /**
      * Runs the command.
@@ -112,7 +108,7 @@ public class UHTeamJoinCommand extends AbstractCommand
                 self = false;
                 if (target == null)
                 {
-                    sender.sendMessage(i.t("team.addplayer.disconnected", args[0], team.getName()));
+                    sender.sendMessage(I.t("team.addplayer.disconnected", args[0], team.getName()));
                     return;
                 }
             }
@@ -120,7 +116,7 @@ public class UHTeamJoinCommand extends AbstractCommand
 
         if (team == null)
         {
-            sender.sendMessage(i.t("team.addplayer.doesNotExists"));
+            sender.sendMessage(I.t("team.addplayer.doesNotExists"));
         }
         else
         {
@@ -133,7 +129,7 @@ public class UHTeamJoinCommand extends AbstractCommand
 
                 if (!sender.equals(target))
                 {
-                    sender.sendMessage(i.t("team.addplayer.success", target.getName(), team.getName()));
+                    sender.sendMessage(I.t("team.addplayer.success", target.getName(), team.getName()));
                 }
             }
             else
@@ -179,6 +175,6 @@ public class UHTeamJoinCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.teamHelpJoin"));
+        return Collections.singletonList(I.t("cmd.teamHelpJoin"));
     }
 }

@@ -35,10 +35,9 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,14 +45,11 @@ import java.util.List;
 @Command (name = "reset")
 public class UHSpawnsResetCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHSpawnsResetCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = plugin.getI18n();
     }
 
     /**
@@ -68,7 +64,7 @@ public class UHSpawnsResetCommand extends AbstractCommand
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
         p.getSpawnsManager().reset();
-        sender.sendMessage(i.t("spawns.reset"));
+        sender.sendMessage(I.t("spawns.reset"));
     }
 
     /**
@@ -94,6 +90,6 @@ public class UHSpawnsResetCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.spawnsHelpReset"));
+        return Collections.singletonList(I.t("cmd.spawnsHelpReset"));
     }
 }

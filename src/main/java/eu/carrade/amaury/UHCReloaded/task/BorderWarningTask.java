@@ -29,32 +29,27 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-
 package eu.carrade.amaury.UHCReloaded.task;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.borders.MapShape;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
 public class BorderWarningTask extends BukkitRunnable
 {
-
     private UHCReloaded p = null;
-    private I18n i = null;
 
     public BorderWarningTask(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
     public void run()
     {
-
         if (p.getFreezer().getGlobalFreezeState())
         {
             return; // No messages are sent if the game is frozen.
@@ -67,14 +62,14 @@ public class BorderWarningTask extends BukkitRunnable
 
             if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
             {
-                player.sendMessage(i.t("borders.warning.messageCircular", String.valueOf(p.getBorderManager().getWarningSize())));
+                player.sendMessage(I.t("borders.warning.messageCircular", String.valueOf(p.getBorderManager().getWarningSize())));
             }
             else
             {
-                player.sendMessage(i.t("borders.warning.messageSquared", String.valueOf(p.getBorderManager().getWarningSize())));
+                player.sendMessage(I.t("borders.warning.messageSquared", String.valueOf(p.getBorderManager().getWarningSize())));
             }
 
-            player.sendMessage(i.t("borders.warning.messageDistance", String.valueOf(distance)));
+            player.sendMessage(I.t("borders.warning.messageDistance", String.valueOf(distance)));
         }
     }
 }

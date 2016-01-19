@@ -36,14 +36,12 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
-
-
 /**
  * This command feeds all player.
  *
@@ -52,14 +50,11 @@ import java.util.List;
 @Command (name = "feedall")
 public class UHFeedAllCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHFeedAllCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -77,7 +72,7 @@ public class UHFeedAllCommand extends AbstractCommand
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(i.t("feed.errorNaN"));
+                sender.sendMessage(I.t("feed.errorNaN"));
                 return;
             }
 
@@ -90,7 +85,7 @@ public class UHFeedAllCommand extends AbstractCommand
                 }
                 catch (NumberFormatException e)
                 {
-                    sender.sendMessage(i.t("feed.errorNaN"));
+                    sender.sendMessage(I.t("feed.errorNaN"));
                     return;
                 }
             }
@@ -118,7 +113,7 @@ public class UHFeedAllCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpFeedall"));
+        return Collections.singletonList(I.t("cmd.helpFeedall"));
     }
 
     @Override

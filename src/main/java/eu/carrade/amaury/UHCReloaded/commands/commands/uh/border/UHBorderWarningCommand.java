@@ -36,7 +36,7 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -47,14 +47,11 @@ import java.util.List;
 @Command (name = "warning")
 public class UHBorderWarningCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHBorderWarningCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -67,7 +64,7 @@ public class UHBorderWarningCommand extends AbstractCommand
         else if (args[0].equalsIgnoreCase("cancel"))
         { // /uh border warning cancel
             p.getBorderManager().cancelWarning();
-            sender.sendMessage(i.t("borders.warning.canceled"));
+            sender.sendMessage(I.t("borders.warning.canceled"));
         }
         else
         { // /uh border warning <?>
@@ -82,12 +79,12 @@ public class UHBorderWarningCommand extends AbstractCommand
                 }
 
                 p.getBorderManager().setWarningSize(warnDiameter, warnTime, sender);
-                sender.sendMessage(i.t("borders.warning.set", p.getConfig().getString("map.border.warningInterval", "90")));
+                sender.sendMessage(I.t("borders.warning.set", p.getConfig().getString("map.border.warningInterval", "90")));
 
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(i.t("borders.NaN", args[0]));
+                sender.sendMessage(I.t("borders.NaN", args[0]));
             }
         }
     }
@@ -112,6 +109,6 @@ public class UHBorderWarningCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Arrays.asList(i.t("cmd.borderHelpWarning"), i.t("cmd.borderHelpWarningCancel"));
+        return Arrays.asList(I.t("cmd.borderHelpWarning"), I.t("cmd.borderHelpWarningCancel"));
     }
 }

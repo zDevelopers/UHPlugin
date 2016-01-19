@@ -37,7 +37,8 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.components.i18n.I18n;
 import org.bukkit.command.CommandSender;
 
 import java.io.IOException;
@@ -56,14 +57,11 @@ import java.util.jar.Manifest;
 @Command (name = "about")
 public class UHAboutCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHAboutCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = plugin.getI18n();
     }
 
     /**
@@ -78,7 +76,7 @@ public class UHAboutCommand extends AbstractCommand
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
         CommandUtils.displaySeparator(sender);
-        sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+        sender.sendMessage(I.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
 
         // Authors
 
@@ -92,7 +90,7 @@ public class UHAboutCommand extends AbstractCommand
             }
             else if (author == listAuthors.get(listAuthors.size() - 1))
             {
-                authors += " " + i.t("about.and") + " ";
+                authors += " " + I.t("about.and") + " ";
             }
             else
             {
@@ -100,7 +98,7 @@ public class UHAboutCommand extends AbstractCommand
             }
             authors += author;
         }
-        sender.sendMessage(i.t("about.authors", authors));
+        sender.sendMessage(I.t("about.authors", authors));
 
         // Build number
 
@@ -110,8 +108,8 @@ public class UHAboutCommand extends AbstractCommand
             Class<? extends UHCReloaded> clazz = p.getClass();
             String className = clazz.getSimpleName() + ".class";
             String classPath = clazz.getResource(className).toString();
-            if (classPath.startsWith("jar"))
-            { // Class from JAR
+            if (classPath.startsWith("jar"))  // Class from JAR
+            {
                 String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) +
                         "/META-INF/MANIFEST.MF";
                 Manifest manifest = new Manifest(new URL(manifestPath).openStream());
@@ -127,20 +125,20 @@ public class UHAboutCommand extends AbstractCommand
 
         if (build != null)
         {
-            sender.sendMessage(i.t("about.build.number", build));
+            sender.sendMessage(I.t("about.build.number", build));
         }
         else
         {
-            sender.sendMessage(i.t("about.build.notAvailable"));
+            sender.sendMessage(I.t("about.build.notAvailable"));
         }
 
         // Translation
 
-        sender.sendMessage(i.t("about.i18n.title"));
-        sender.sendMessage(i.t("about.i18n.selected", i.getSelectedLanguage(), i.getTranslator(i.getSelectedLanguage())));
-        sender.sendMessage(i.t("about.i18n.fallback", i.getDefaultLanguage(), i.getTranslator(i.getDefaultLanguage())));
-        sender.sendMessage(i.t("about.license.title"));
-        sender.sendMessage(i.t("about.license.license"));
+        sender.sendMessage(I.t("about.i18n.title"));
+        sender.sendMessage(I.t("about.i18n.selected", I18n.getPrimaryLocale(), I18n.getTranslationTeam(I18n.getPrimaryLocale())));
+        sender.sendMessage(I.t("about.i18n.fallback", I18n.getFallbackLocale(), I18n.getTranslationTeam(I18n.getFallbackLocale())));
+        sender.sendMessage(I.t("about.license.title"));
+        sender.sendMessage(I.t("about.license.license"));
 
         CommandUtils.displaySeparator(sender);
     }
@@ -168,7 +166,7 @@ public class UHAboutCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpAbout"));
+        return Collections.singletonList(I.t("cmd.helpAbout"));
     }
 
     @Override

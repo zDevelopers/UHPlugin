@@ -42,11 +42,11 @@ import eu.carrade.amaury.UHCReloaded.events.UHGameStartsEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHPlayerDeathEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHPlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHTeamDeathEvent;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
 import eu.carrade.amaury.UHCReloaded.misc.RuntimeCommandsExecutor;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Bukkit;
@@ -93,7 +93,6 @@ import java.util.UUID;
 public class GameListener implements Listener
 {
     private final UHCReloaded p;
-    private final I18n i;
 
     private final Set<UUID> enableSpectatorModeOnRespawn = new HashSet<>();
 
@@ -101,7 +100,6 @@ public class GameListener implements Listener
     public GameListener(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
 
@@ -123,8 +121,6 @@ public class GameListener implements Listener
      *  - notify the player about the possibility of respawn if hardcore hearts are enabled;
      *  - update the MOTD if needed;
      *  - disable the team-chat-lock if needed.
-     *
-     * @param ev
      */
     @EventHandler
     public void onPlayerDeath(final PlayerDeathEvent ev)
@@ -162,7 +158,7 @@ public class GameListener implements Listener
                 @Override
                 public void run()
                 {
-                    ev.getEntity().kickPlayer(i.t("death.kickMessage"));
+                    ev.getEntity().kickPlayer(I.t("death.kickMessage"));
                 }
             }, 20L * this.p.getConfig().getInt("death.kick.time", 30));
         }
@@ -208,9 +204,8 @@ public class GameListener implements Listener
         if (p.getConfig().getInt("death.give-xp-to-killer.levels") > 0)
         {
             Entity killer = ev.getEntity().getKiller();
-            if (killer != null && killer instanceof Player)
+            if (killer != null)
             {
-
                 boolean inSameTeam = p.getTeamManager().inSameTeam(ev.getEntity(), (Player) killer);
                 boolean onlyOtherTeam = p.getConfig().getBoolean("death.give-xp-to-killer.onlyOtherTeam");
 
@@ -249,7 +244,7 @@ public class GameListener implements Listener
                         public void run()
                         {
                             String format = ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.teamDeathMessagesFormat", ""));
-                            p.getServer().broadcastMessage(i.t("death.teamHasFallen", format, team.getDisplayName() + format));
+                            p.getServer().broadcastMessage(I.t("death.teamHasFallen", format, team.getDisplayName() + format));
                         }
                     }, 1L);
                 }
@@ -292,7 +287,7 @@ public class GameListener implements Listener
                 @Override
                 public void run()
                 {
-                    ev.getEntity().sendMessage(i.t("death.canRespawn"));
+                    ev.getEntity().sendMessage(I.t("death.canRespawn"));
                 }
             }, 2L);
         }
@@ -449,7 +444,7 @@ public class GameListener implements Listener
         {
 
             ev.setResult(Result.KICK_OTHER);
-            ev.setKickMessage(i.t("death.banMessage"));
+            ev.setKickMessage(I.t("death.banMessage"));
         }
     }
 
@@ -522,9 +517,9 @@ public class GameListener implements Listener
             // A warning to the administrators if WorldBorder is not present.
             if (!p.getWorldBorderIntegration().isWBIntegrationEnabled())
             {
-                ev.getPlayer().sendMessage(i.t("load.WBNotInstalled1"));
-                ev.getPlayer().sendMessage(i.t("load.WBNotInstalled2"));
-                ev.getPlayer().sendMessage(i.t("load.WBNotInstalled3"));
+                ev.getPlayer().sendMessage(I.t("load.WBNotInstalled1"));
+                ev.getPlayer().sendMessage(I.t("load.WBNotInstalled2"));
+                ev.getPlayer().sendMessage(I.t("load.WBNotInstalled3"));
             }
 
             // The same for ProtocolLib
@@ -534,11 +529,11 @@ public class GameListener implements Listener
 
                 if (enabledOptionsWithProtocolLibNeeded != null)
                 {
-                    ev.getPlayer().sendMessage(i.t("load.PLNotInstalled1"));
-                    ev.getPlayer().sendMessage(i.t("load.PLNotInstalled2"));
+                    ev.getPlayer().sendMessage(I.t("load.PLNotInstalled1"));
+                    ev.getPlayer().sendMessage(I.t("load.PLNotInstalled2"));
                     for (String option : enabledOptionsWithProtocolLibNeeded)
                     {
-                        ev.getPlayer().sendMessage(i.t("load.PLNotInstalledItem", option));
+                        ev.getPlayer().sendMessage(I.t("load.PLNotInstalledItem", option));
                     }
 
                     String pLibDownloadURL = "";
@@ -550,7 +545,7 @@ public class GameListener implements Listener
                     { // 1.8+
                         pLibDownloadURL = "http://www.spigotmc.org/resources/protocollib.1997/";
                     }
-                    ev.getPlayer().sendMessage(i.t("load.PLNotInstalled3", pLibDownloadURL));
+                    ev.getPlayer().sendMessage(I.t("load.PLNotInstalled3", pLibDownloadURL));
                 }
             }
         }
@@ -678,7 +673,7 @@ public class GameListener implements Listener
 
         if (ev.getTimer().equals(p.getBorderManager().getWarningTimer()) && ev.wasTimerUp())
         {
-            p.getBorderManager().getWarningSender().sendMessage(i.t("borders.warning.timerUp"));
+            p.getBorderManager().getWarningSender().sendMessage(I.t("borders.warning.timerUp"));
             p.getBorderManager().sendCheckMessage(p.getBorderManager().getWarningSender(), p.getBorderManager().getWarningSize());
         }
     }
@@ -710,11 +705,11 @@ public class GameListener implements Listener
 
         if (ev.getCause() == EpisodeChangedCause.SHIFTED)
         {
-            message = i.t("episodes.endForced", String.valueOf(ev.getNewEpisode() - 1), ev.getShifter());
+            message = I.t("episodes.endForced", String.valueOf(ev.getNewEpisode() - 1), ev.getShifter());
         }
         else
         {
-            message = i.t("episodes.end", String.valueOf(ev.getNewEpisode() - 1));
+            message = I.t("episodes.end", String.valueOf(ev.getNewEpisode() - 1));
         }
 
         p.getServer().broadcastMessage(message);
@@ -723,7 +718,7 @@ public class GameListener implements Listener
         // Broadcasts title
         if (p.getConfig().getBoolean("episodes.title"))
         {
-            Titles.broadcastTitle(5, 32, 8, i.t("episodes.title.title", ev.getNewEpisode(), ev.getNewEpisode() - 1), i.t("episodes.title.subtitle", ev.getNewEpisode(), ev.getNewEpisode() - 1));
+            Titles.broadcastTitle(5, 32, 8, I.t("episodes.title.title", ev.getNewEpisode(), ev.getNewEpisode() - 1), I.t("episodes.title.subtitle", ev.getNewEpisode(), ev.getNewEpisode() - 1));
         }
 
 
@@ -744,12 +739,12 @@ public class GameListener implements Listener
         new UHSound(p.getConfig().getConfigurationSection("start.sound")).broadcast();
 
         // Broadcast
-        Bukkit.getServer().broadcastMessage(i.t("start.go"));
+        Bukkit.getServer().broadcastMessage(I.t("start.go"));
 
         // Title
         if (p.getConfig().getBoolean("start.displayTitle"))
         {
-            Titles.broadcastTitle(5, 40, 8, i.t("start.title.title"), i.t("start.title.subtitle"));
+            Titles.broadcastTitle(5, 40, 8, I.t("start.title.title"), I.t("start.title.subtitle"));
         }
 
         // Commands
@@ -830,8 +825,6 @@ public class GameListener implements Listener
      * Used to:
      *  - broadcast the winner(s) and launch some fireworks if needed, a few seconds later;
      *  - schedule the commands executed after the end of the game.
-     *
-     * @param ev
      */
     @EventHandler
     public void onGameEnd(UHGameEndsEvent ev)
@@ -870,8 +863,6 @@ public class GameListener implements Listener
      *  - hide the death point from the dynmap;
      *  - broadcast this resurrection to all players;
      *  - update the MOTD.
-     *
-     * @param ev
      */
     @EventHandler
     public void onPlayerResurrected(UHPlayerResurrectedEvent ev)
@@ -883,7 +874,7 @@ public class GameListener implements Listener
         p.getDynmapIntegration().hideDeathLocation(ev.getPlayer());
 
         // All players are notified
-        p.getServer().broadcastMessage(i.t("resurrect.broadcastMessage", ev.getPlayer().getName()));
+        p.getServer().broadcastMessage(I.t("resurrect.broadcastMessage", ev.getPlayer().getName()));
 
         // Updates the MOTD.
         p.getMOTDManager().updateMOTDDuringGame();

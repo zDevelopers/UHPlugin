@@ -35,10 +35,10 @@ package eu.carrade.amaury.UHCReloaded.borders;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.borders.exceptions.CannotGenerateWallsException;
 import eu.carrade.amaury.UHCReloaded.borders.worldborders.WorldBorder;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.task.BorderWarningTask;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.Titles;
@@ -63,7 +63,6 @@ public class BorderManager
     private final double BORDER_SHRINKING_FINAL_SIZE;
 
     private UHCReloaded p = null;
-    private I18n i = null;
 
     private WorldBorder border = null;
 
@@ -80,9 +79,8 @@ public class BorderManager
     public BorderManager(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
 
-        warningTimerName = i.t("borders.warning.nameTimer");
+        warningTimerName = I.t("borders.warning.nameTimer");
 
         mapShape = MapShape.fromString(p.getConfig().getString("map.shape"));
         if (mapShape == null)
@@ -361,25 +359,25 @@ public class BorderManager
 
         if (playersOutside.size() == 0)
         {
-            to.sendMessage(i.t("borders.check.allPlayersInside"));
+            to.sendMessage(I.t("borders.check.allPlayersInside"));
         }
         else
         {
-            to.sendMessage(i.t("borders.check.countPlayersOutside", String.valueOf(playersOutside.size())));
+            to.sendMessage(I.t("borders.check.countPlayersOutside", String.valueOf(playersOutside.size())));
             for (Player player : getPlayersOutside(diameter))
             {
                 double distance = getDistanceToBorder(player.getLocation(), diameter);
                 if (distance > 150)
                 {
-                    to.sendMessage(i.t("borders.check.itemPlayerFar", player.getName()));
+                    to.sendMessage(I.t("borders.check.itemPlayerFar", player.getName()));
                 }
                 else if (distance > 25)
                 {
-                    to.sendMessage(i.t("borders.check.itemPlayerClose", player.getName()));
+                    to.sendMessage(I.t("borders.check.itemPlayerClose", player.getName()));
                 }
                 else
                 {
-                    to.sendMessage(i.t("borders.check.itemPlayerVeryClose", player.getName()));
+                    to.sendMessage(I.t("borders.check.itemPlayerVeryClose", player.getName()));
                 }
             }
         }
@@ -403,7 +401,7 @@ public class BorderManager
             throw new CannotGenerateWallsException("Cannot generate the walls: invalid blocks set in the config");
         }
 
-        mapShape.getWallGeneratorInstance(p, wallBlockAir, wallBlockSolid).build(world, getCurrentBorderDiameter(), wallHeight);
+        mapShape.getWallGeneratorInstance(wallBlockAir, wallBlockSolid).build(world, getCurrentBorderDiameter(), wallHeight);
     }
 
     /**
@@ -421,10 +419,10 @@ public class BorderManager
 
                     border.setDiameter(BORDER_SHRINKING_FINAL_SIZE, BORDER_SHRINKING_DURATION);
 
-                    Titles.broadcastTitle(5, 30, 8, i.t("borders.shrinking.title.title"), i.t("borders.shrinking.title.subtitle"));
+                    Titles.broadcastTitle(5, 30, 8, I.t("borders.shrinking.title.title"), I.t("borders.shrinking.title.subtitle"));
 
-                    Bukkit.broadcastMessage(i.t("borders.shrinking.message.title"));
-                    Bukkit.broadcastMessage(i.t("borders.shrinking.message.times", secondsPerBlock, BORDER_SHRINKING_FINAL_SIZE));
+                    Bukkit.broadcastMessage(I.t("borders.shrinking.message.title"));
+                    Bukkit.broadcastMessage(I.t("borders.shrinking.message.times", secondsPerBlock, BORDER_SHRINKING_FINAL_SIZE));
                 }
             }, BORDER_SHRINKING_STARTS_AFTER * 20l);
         }

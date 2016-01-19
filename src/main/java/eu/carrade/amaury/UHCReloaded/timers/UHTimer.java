@@ -32,9 +32,9 @@
 
 package eu.carrade.amaury.UHCReloaded.timers;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.events.TimerEndsEvent;
 import eu.carrade.amaury.UHCReloaded.events.TimerStartsEvent;
+import fr.zcraft.zlib.components.i18n.I;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -400,11 +400,11 @@ public class UHTimer
     {
         if (displayHours)
         {
-            return UHCReloaded.i().t("scoreboard.timerWithHours", formatter.format(hoursLeft), formatter.format(minutesLeft), formatter.format(secondsLeft));
+            return I.t("scoreboard.timerWithHours", formatter.format(hoursLeft), formatter.format(minutesLeft), formatter.format(secondsLeft));
         }
         else
         {
-            return UHCReloaded.i().t("scoreboard.timer", formatter.format(minutesLeft), formatter.format(secondsLeft));
+            return I.t("scoreboard.timer", formatter.format(minutesLeft), formatter.format(secondsLeft));
         }
     }
 

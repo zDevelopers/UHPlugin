@@ -37,7 +37,7 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
@@ -45,7 +45,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
-
 
 /**
  * This command generates the walls around the map.
@@ -55,14 +54,11 @@ import java.util.List;
 @Command (name = "generatewalls")
 public class UHGenerateWallsCommand extends AbstractCommand
 {
-
     private UHCReloaded p;
-    private I18n i;
 
     public UHGenerateWallsCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
     }
 
     /**
@@ -76,7 +72,7 @@ public class UHGenerateWallsCommand extends AbstractCommand
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-        sender.sendMessage(i.t("wall.startGen"));
+        sender.sendMessage(I.t("wall.startGen"));
 
         World world = null;
 
@@ -91,7 +87,7 @@ public class UHGenerateWallsCommand extends AbstractCommand
         else
         {
             world = p.getServer().getWorlds().get(0);
-            sender.sendMessage(i.t("wall.consoleDefaultWorld", world.getName()));
+            sender.sendMessage(I.t("wall.consoleDefaultWorld", world.getName()));
         }
 
         try
@@ -101,18 +97,18 @@ public class UHGenerateWallsCommand extends AbstractCommand
         }
         catch (CannotGenerateWallsException e)
         {
-            sender.sendMessage(i.t("wall.error"));
+            sender.sendMessage(I.t("wall.error"));
             return;
 
         }
         catch (Exception e)
         {
-            sender.sendMessage(i.t("wall.unknownError"));
+            sender.sendMessage(I.t("wall.unknownError"));
             e.printStackTrace();
             return;
         }
 
-        sender.sendMessage(i.t("wall.done"));
+        sender.sendMessage(I.t("wall.done"));
     }
 
     /**
@@ -138,7 +134,7 @@ public class UHGenerateWallsCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpWall"));
+        return Collections.singletonList(I.t("cmd.helpWall"));
     }
 
     @Override

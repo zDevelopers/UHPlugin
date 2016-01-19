@@ -29,9 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-
 package eu.carrade.amaury.UHCReloaded.commands.commands;
-
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamJoinCommand;
@@ -45,15 +43,12 @@ import org.bukkit.entity.Player;
 @Command (name = "join", noPermission = true, inheritPermission = false)
 public class JoinCommand extends UHTeamJoinCommand
 {
-
-    UHCReloaded p;
+    private UHCReloaded p;
 
     public JoinCommand(UHCReloaded plugin)
     {
-
         super(plugin);
         p = plugin;
-
     }
 
     @Override

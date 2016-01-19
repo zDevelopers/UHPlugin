@@ -36,26 +36,21 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 
 @Command (name = "shift")
 public class UHShiftCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHShiftCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -69,12 +64,12 @@ public class UHShiftCommand extends AbstractCommand
             }
             else
             {
-                p.getGameManager().shiftEpisode(i.t("shift.consoleName"));
+                p.getGameManager().shiftEpisode(I.t("shift.consoleName"));
             }
         }
         else
         {
-            sender.sendMessage(i.t("shift.cantNotStarted"));
+            sender.sendMessage(I.t("shift.cantNotStarted"));
         }
     }
 
@@ -93,7 +88,7 @@ public class UHShiftCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(UHCReloaded.i().t("cmd.helpShift"));
+        return Collections.singletonList(I.t("cmd.helpShift"));
     }
 
     @Override

@@ -35,13 +35,12 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,14 +48,11 @@ import java.util.List;
 @Command (name = "remove")
 public class UHSpawnsRemoveCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHSpawnsRemoveCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = plugin.getI18n();
     }
 
 
@@ -81,12 +77,12 @@ public class UHSpawnsRemoveCommand extends AbstractCommand
             {
                 Player pl = (Player) sender; // Just a way to avoid casts everywhere.
                 p.getSpawnsManager().removeSpawnPoint(pl.getLocation(), false);
-                sender.sendMessage(i.t("spawns.remove.removed", pl.getWorld().getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
+                sender.sendMessage(I.t("spawns.remove.removed", pl.getWorld().getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
             }
         }
         else if (args.length == 1)
         { // /uh spawns add <x>: Two coordinates needed!
-            sender.sendMessage(i.t("spawns.error2Coords"));
+            sender.sendMessage(I.t("spawns.error2Coords"));
         }
         else
         { // /uh spawns remove <x> <z>
@@ -103,11 +99,11 @@ public class UHSpawnsRemoveCommand extends AbstractCommand
                 }
 
                 p.getSpawnsManager().removeSpawnPoint(new Location(world, Double.parseDouble(args[2]), 0, Double.parseDouble(args[3])), true);
-                sender.sendMessage(i.t("spawns.remove.removed", p.getServer().getWorlds().get(0).getName(), args[2], args[3]));
+                sender.sendMessage(I.t("spawns.remove.removed", p.getServer().getWorlds().get(0).getName(), args[2], args[3]));
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(i.t("spawns.NaN"));
+                sender.sendMessage(I.t("spawns.NaN"));
             }
         }
     }
@@ -135,6 +131,6 @@ public class UHSpawnsRemoveCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.spawnsHelpRemove"));
+        return Collections.singletonList(I.t("cmd.spawnsHelpRemove"));
     }
 }

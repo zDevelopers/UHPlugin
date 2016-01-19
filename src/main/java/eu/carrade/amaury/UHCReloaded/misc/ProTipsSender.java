@@ -33,8 +33,8 @@
 package eu.carrade.amaury.UHCReloaded.misc;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -59,13 +59,11 @@ import java.util.UUID;
  */
 public class ProTipsSender
 {
+    private UHCReloaded p = null;
 
-    UHCReloaded p = null;
-    I18n i = null;
+    private Map<String, ArrayList<UUID>> protipsGiven = new HashMap<String, ArrayList<UUID>>();
 
-    Map<String, ArrayList<UUID>> protipsGiven = new HashMap<String, ArrayList<UUID>>();
-
-    UHSound proTipsSound = null;
+    private UHSound proTipsSound = null;
 
     public static final String PROTIP_LOCK_CHAT = "teamchat.lock";
     public static final String PROTIP_USE_G_COMMAND = "teamchat.useGCommand";
@@ -83,7 +81,6 @@ public class ProTipsSender
     public ProTipsSender(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
 
         // Initialization of the "protips" map
         protipsGiven.put(PROTIP_LOCK_CHAT, new ArrayList<UUID>());
@@ -136,7 +133,7 @@ public class ProTipsSender
         protipsGiven.get(protip).add(player.getUniqueId());
 
 
-        player.sendMessage(i.t("protips.base") + " " + ChatColor.RESET + i.t("protips." + protip));
+        player.sendMessage(I.t("protips.base") + " " + ChatColor.RESET + I.t("protips." + protip));
         proTipsSound.play(player);
 
         return false;

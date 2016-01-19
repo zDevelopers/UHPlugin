@@ -36,11 +36,11 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.spawns.Generator;
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException;
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.UnknownGeneratorException;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
@@ -55,14 +55,11 @@ import java.util.List;
 @Command (name = "generate")
 public class UHSpawnsGenerateCommand extends AbstractCommand
 {
-
     private UHCReloaded p;
-    private final I18n i;
 
     public UHSpawnsGenerateCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
     }
 
     /**
@@ -119,7 +116,7 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
         {
             if (spawnsCount == 0)
             { // Solo mode?
-                sender.sendMessage(i.t("spawns.assumptions.solo"));
+                sender.sendMessage(I.t("spawns.assumptions.solo"));
                 spawnsCount = p.getServer().getOnlinePlayers().size() - p.getGameManager().getStartupSpectators().size();
             }
             else
@@ -136,7 +133,7 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
 
                 if (playersWithoutTeam != 0)
                 {
-                    sender.sendMessage(i.t("spawns.assumptions.partialSolo"));
+                    sender.sendMessage(I.t("spawns.assumptions.partialSolo"));
                     spawnsCount += playersWithoutTeam;
                 }
             }
@@ -174,7 +171,7 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
                                     }
                                     else
                                     {
-                                        sender.sendMessage(i.t("spawns.generate.unknownWorld", args[6]));
+                                        sender.sendMessage(I.t("spawns.generate.unknownWorld", args[6]));
                                         return;
                                     }
                                 }
@@ -186,14 +183,14 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
         }
         catch (NumberFormatException e)
         {
-            sender.sendMessage(i.t("spawns.NaN"));
+            sender.sendMessage(I.t("spawns.NaN"));
             return;
         }
 
 
         if (spawnsCount <= 0)
         {
-            sender.sendMessage(i.t("spawns.generate.nothingToDo"));
+            sender.sendMessage(I.t("spawns.generate.nothingToDo"));
             return;
         }
 
@@ -205,17 +202,17 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
         }
         catch (UnknownGeneratorException e)
         {
-            sender.sendMessage(i.t("spawns.generate.unsupportedMethod", generationMethod));
+            sender.sendMessage(I.t("spawns.generate.unsupportedMethod", generationMethod));
             return;
 
         }
         catch (CannotGenerateSpawnPointsException e)
         {
-            sender.sendMessage(i.t("spawns.generate.impossible"));
+            sender.sendMessage(I.t("spawns.generate.impossible"));
             return;
         }
 
-        sender.sendMessage(i.t("spawns.generate.success"));
+        sender.sendMessage(I.t("spawns.generate.success"));
     }
 
     /**
@@ -277,24 +274,24 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
     public List<String> help(CommandSender sender)
     {
         return Arrays.asList(
-                i.t("cmd.spawnsHelpGenerateDetailsCmdTitle"),
-                i.t("cmd.spawnsHelpGenerateDetailsCmd"),
-                i.t("cmd.spawnsHelpGenerateDetailsShapesTitle"),
-                i.t("cmd.spawnsHelpGenerateDetailsShapesRandom"),
-                i.t("cmd.spawnsHelpGenerateDetailsShapesGrid"),
-                i.t("cmd.spawnsHelpGenerateDetailsShapesCircular"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsTitle"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsSize"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsDistanceMin"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsCount"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsCenter"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsWorld")
+                I.t("cmd.spawnsHelpGenerateDetailsCmdTitle"),
+                I.t("cmd.spawnsHelpGenerateDetailsCmd"),
+                I.t("cmd.spawnsHelpGenerateDetailsShapesTitle"),
+                I.t("cmd.spawnsHelpGenerateDetailsShapesRandom"),
+                I.t("cmd.spawnsHelpGenerateDetailsShapesGrid"),
+                I.t("cmd.spawnsHelpGenerateDetailsShapesCircular"),
+                I.t("cmd.spawnsHelpGenerateDetailsArgsTitle"),
+                I.t("cmd.spawnsHelpGenerateDetailsArgsSize"),
+                I.t("cmd.spawnsHelpGenerateDetailsArgsDistanceMin"),
+                I.t("cmd.spawnsHelpGenerateDetailsArgsCount"),
+                I.t("cmd.spawnsHelpGenerateDetailsArgsCenter"),
+                I.t("cmd.spawnsHelpGenerateDetailsArgsWorld")
         );
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.spawnsHelpGenerate"));
+        return Collections.singletonList(I.t("cmd.spawnsHelpGenerate"));
     }
 }

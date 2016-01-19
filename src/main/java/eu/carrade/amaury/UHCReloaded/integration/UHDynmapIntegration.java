@@ -33,9 +33,9 @@
 package eu.carrade.amaury.UHCReloaded.integration;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -51,9 +51,7 @@ import org.dynmap.markers.MarkerSet;
 
 public class UHDynmapIntegration
 {
-
     private UHCReloaded p = null;
-    private I18n i = null;
     private DynmapAPI api = null;
     private MarkerAPI markerAPI = null;
     private MarkerSet markerSet = null;
@@ -61,7 +59,6 @@ public class UHDynmapIntegration
     public UHDynmapIntegration(UHCReloaded plugin)
     {
         this.p = plugin;
-        this.i = p.getI18n();
 
         Plugin apiTest = Bukkit.getServer().getPluginManager().getPlugin("dynmap");
         if (apiTest == null || !apiTest.isEnabled())
@@ -151,7 +148,7 @@ public class UHDynmapIntegration
         Location deathPoint = p.getGameManager().getDeathLocation(player);
 
         String markerID = getDeathMarkerName(player);
-        String markerLabel = i.t("dynmap.markerLabelDeath", player.getName());
+        String markerLabel = I.t("dynmap.markerLabelDeath", player.getName());
         MarkerIcon icon = markerAPI.getMarkerIcon("skull");
 
         Marker marker = markerSet.createMarker(markerID, markerLabel, true, deathPoint.getWorld().getName(), deathPoint.getX(), deathPoint.getY(), deathPoint.getZ(), icon, false);
@@ -229,11 +226,11 @@ public class UHDynmapIntegration
         String markerLabel;
         if (p.getGameManager().isGameWithTeams())
         {
-            markerLabel = i.t("dynmap.markerLabelSpawn", team.getName());
+            markerLabel = I.t("dynmap.markerLabelSpawn", team.getName());
         }
         else
         {
-            markerLabel = i.t("dynmap.markerLabelSpawnNoTeam", team.getName());
+            markerLabel = I.t("dynmap.markerLabelSpawnNoTeam", team.getName());
         }
 
         showSpawnLocation(spawnPoint, teamColor, markerLabel, markerID);
@@ -288,7 +285,7 @@ public class UHDynmapIntegration
         }
 
         String markerID = getSpawnMarkerName(player);
-        String markerLabel = i.t("dynmap.markerLabelSpawnNoTeam", player.getName());
+        String markerLabel = I.t("dynmap.markerLabelSpawnNoTeam", player.getName());
 
         showSpawnLocation(spawnPoint, color, markerLabel, markerID);
     }

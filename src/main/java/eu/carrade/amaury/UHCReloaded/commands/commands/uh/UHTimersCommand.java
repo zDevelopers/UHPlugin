@@ -46,12 +46,11 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.uh.timers.UHTimersStopCom
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
 import java.util.List;
-
 
 /**
  * This command manages timers.
@@ -61,24 +60,18 @@ import java.util.List;
 @Command (name = "timers")
 public class UHTimersCommand extends AbstractCommand
 {
-    UHCReloaded p;
-    I18n i;
-
-    public UHTimersCommand(UHCReloaded p)
+    public UHTimersCommand(UHCReloaded plugin)
     {
-        this.p = p;
-        this.i = p.getI18n();
-
-        registerSubCommand(new UHTimersAddCommand(p));
-        registerSubCommand(new UHTimersSetCommand(p));
-        registerSubCommand(new UHTimersDisplayCommand(p));
-        registerSubCommand(new UHTimersHideCommand(p));
-        registerSubCommand(new UHTimersStartCommand(p));
-        registerSubCommand(new UHTimersPauseCommand(p));
-        registerSubCommand(new UHTimersResumeCommand(p));
-        registerSubCommand(new UHTimersStopCommand(p));
-        registerSubCommand(new UHTimersRemoveCommand(p));
-        registerSubCommand(new UHTimersListCommand(p));
+        registerSubCommand(new UHTimersAddCommand(plugin));
+        registerSubCommand(new UHTimersSetCommand(plugin));
+        registerSubCommand(new UHTimersDisplayCommand(plugin));
+        registerSubCommand(new UHTimersHideCommand(plugin));
+        registerSubCommand(new UHTimersStartCommand(plugin));
+        registerSubCommand(new UHTimersPauseCommand(plugin));
+        registerSubCommand(new UHTimersResumeCommand(plugin));
+        registerSubCommand(new UHTimersStopCommand(plugin));
+        registerSubCommand(new UHTimersRemoveCommand(plugin));
+        registerSubCommand(new UHTimersListCommand(plugin));
     }
 
     @Override
@@ -96,13 +89,13 @@ public class UHTimersCommand extends AbstractCommand
     @Override
     public List<String> help(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.timersHelpTitle"));
+        return Collections.singletonList(I.t("cmd.timersHelpTitle"));
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpTimers"));
+        return Collections.singletonList(I.t("cmd.helpTimers"));
     }
 
     @Override

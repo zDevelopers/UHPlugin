@@ -31,11 +31,11 @@
  */
 package eu.carrade.amaury.UHCReloaded.gui.teams.editor;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.gui.teams.builder.TeamBuilderStepColorGUI;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import fr.zcraft.zlib.components.gui.Gui;
+import fr.zcraft.zlib.components.i18n.I;
 
 
 public class TeamEditColorGUI extends TeamBuilderStepColorGUI
@@ -50,7 +50,7 @@ public class TeamEditColorGUI extends TeamBuilderStepColorGUI
     @Override
     protected void onUpdate()
     {
-        setTitle(UHCReloaded.i().t("team.chestGui.editor.color.subGuiTitle", team.getName()));
+        setTitle(I.t("team.chestGui.editor.color.subGuiTitle", team.getName()));
         setSize(6 * 9);
         insertColors(2);
     }

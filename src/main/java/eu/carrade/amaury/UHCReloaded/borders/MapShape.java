@@ -31,7 +31,6 @@
  */
 package eu.carrade.amaury.UHCReloaded.borders;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.borders.generators.CircularWallGenerator;
 import eu.carrade.amaury.UHCReloaded.borders.generators.SquaredWallGenerator;
 import eu.carrade.amaury.UHCReloaded.borders.generators.WallGenerator;
@@ -68,12 +67,12 @@ public enum MapShape
      *
      * @return The instance.
      */
-    public WallGenerator getWallGeneratorInstance(UHCReloaded p, Material wallBlockAir, Material wallBlockSolid)
+    public WallGenerator getWallGeneratorInstance(Material wallBlockAir, Material wallBlockSolid)
     {
         try
         {
-            Constructor constructor = generatorClass.getConstructor(UHCReloaded.class, Material.class, Material.class);
-            return (WallGenerator) constructor.newInstance(p, wallBlockAir, wallBlockSolid);
+            Constructor constructor = generatorClass.getConstructor(Material.class, Material.class);
+            return (WallGenerator) constructor.newInstance(wallBlockAir, wallBlockSolid);
 
         }
         catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e)

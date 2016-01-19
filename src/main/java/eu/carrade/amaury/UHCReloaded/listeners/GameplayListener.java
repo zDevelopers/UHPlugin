@@ -33,8 +33,8 @@
 package eu.carrade.amaury.UHCReloaded.listeners;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.task.CancelBrewTask;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -71,19 +71,15 @@ public class GameplayListener implements Listener
 {
 
     private UHCReloaded p = null;
-    private I18n i = null;
 
     public GameplayListener(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
 
     /**
      * Used to replace ghast tears with gold (if needed).
-     *
-     * @param ev
      */
     @EventHandler (ignoreCancelled = true)
     public void onEntityDeath(EntityDeathEvent ev)
@@ -108,8 +104,6 @@ public class GameplayListener implements Listener
 
     /**
      * Used to prevent the user to get a ghast tear, if forbidden by the config.
-     *
-     * @param ev
      */
     @EventHandler (ignoreCancelled = true)
     public void onPlayerPickupItem(PlayerPickupItemEvent ev)
@@ -123,8 +117,6 @@ public class GameplayListener implements Listener
 
     /**
      * Used to disable power-II potions.
-     *
-     * @param ev
      */
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent ev)
@@ -137,8 +129,6 @@ public class GameplayListener implements Listener
 
     /**
      * Used to disable power-II potions.
-     *
-     * @param ev
      */
     @EventHandler
     public void onInventoryClick(InventoryClickEvent ev)
@@ -152,8 +142,6 @@ public class GameplayListener implements Listener
 
     /**
      * Used to disable enderpearl damages (if needed).
-     *
-     * @param ev
      */
     @EventHandler (ignoreCancelled = true)
     public void onPlayerTeleport(final PlayerTeleportEvent ev)
@@ -171,8 +159,6 @@ public class GameplayListener implements Listener
 
     /**
      * Used to disable witch spawn (if needed).
-     *
-     * @param ev
      */
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent ev)
@@ -193,13 +179,10 @@ public class GameplayListener implements Listener
 
     /**
      * Used to change the amount of regenerated hearts from a golden apple.
-     *
-     * @param ev
      */
     @EventHandler
     public void onPlayerItemConsume(final PlayerItemConsumeEvent ev)
     {
-
         final int TICKS_BETWEEN_EACH_REGENERATION = 50;
         final int DEFAULT_NUMBER_OF_HEARTS_REGEN = 4;
         final int DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH = 180;
@@ -210,14 +193,13 @@ public class GameplayListener implements Listener
         {
             ItemMeta meta = ev.getItem().getItemMeta();
             short dataValue = ev.getItem().getDurability();
-            int halfHearts = 0;
-            int level = 0;
+            int halfHearts;
+            int level;
 
             if (meta.hasDisplayName()
-                    && (meta.getDisplayName().equals(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"))
-                    || meta.getDisplayName().equals(ChatColor.RESET + i.t("craft.goldenApple.nameGoldenAppleFromHeadNotch"))))
+                    && (meta.getDisplayName().equals(ChatColor.RESET + I.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"))
+                    || meta.getDisplayName().equals(ChatColor.RESET + I.t("craft.goldenApple.nameGoldenAppleFromHeadNotch"))))
             {
-
                 if (dataValue == 0)
                 { // Normal golden apple from a head
                     halfHearts = p.getConfig().getInt("gameplay-changes.goldenApple.regeneration.fromNormalHead", DEFAULT_NUMBER_OF_HEARTS_REGEN);
@@ -248,13 +230,11 @@ public class GameplayListener implements Listener
             if ((dataValue == 0 && halfHearts == DEFAULT_NUMBER_OF_HEARTS_REGEN)
                     || (dataValue == 1 && halfHearts == DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH))
             {
-
                 // Default behavior, nothing to do.
             }
             else if ((dataValue == 0 && halfHearts > DEFAULT_NUMBER_OF_HEARTS_REGEN)
                     || (dataValue == 1 && halfHearts > DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH))
             {
-
                 // If the heal needs to be increased, the effect can be applied immediately.
 
                 int duration = ((int) Math.floor(TICKS_BETWEEN_EACH_REGENERATION / (Math.pow(2, realLevel)))) * halfHearts;
@@ -267,7 +247,6 @@ public class GameplayListener implements Listener
                 // We can't apply the effect immediately, because the server will just ignore it.
                 // So, we apply it two ticks later, with one half-heart less (because in two ticks,
                 // one half-heart is given to the player).
-
                 final int healthApplied = halfHearts - 1;
 
                 Bukkit.getScheduler().runTaskLater(this.p, new Runnable()
@@ -290,8 +269,6 @@ public class GameplayListener implements Listener
 
     /**
      * Used to update the compass.
-     *
-     * @param ev
      */
     @SuppressWarnings ("deprecation")
     @EventHandler
@@ -323,7 +300,7 @@ public class GameplayListener implements Listener
 
             if (!foundRottenFlesh)
             {
-                player1.sendMessage(i.t("compass.noRottenFlesh"));
+                player1.sendMessage(I.t("compass.noRottenFlesh"));
                 player1.playSound(player1.getLocation(), Sound.STEP_WOOD, 1F, 1F);
                 return;
             }
@@ -353,13 +330,13 @@ public class GameplayListener implements Listener
 
             if (nearest == null)
             {
-                player1.sendMessage(i.t("compass.nothingFound"));
+                player1.sendMessage(I.t("compass.nothingFound"));
 
                 player1.playSound(player1.getLocation(), Sound.STEP_WOOD, 1F, 1F);
                 return;
             }
 
-            player1.sendMessage(i.t("compass.success"));
+            player1.sendMessage(I.t("compass.success"));
             player1.setCompassTarget(nearest.getLocation());
 
             player1.playSound(player1.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);
@@ -370,8 +347,6 @@ public class GameplayListener implements Listener
     /**
      * Used to disable the "bad" weather (aka non-clear weather).
      * The weather is initially clear.
-     *
-     * @param ev
      */
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent ev)

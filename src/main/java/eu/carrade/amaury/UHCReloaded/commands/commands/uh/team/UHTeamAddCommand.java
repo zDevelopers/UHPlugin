@@ -36,10 +36,10 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -50,14 +50,11 @@ import java.util.List;
 @Command (name = "add")
 public class UHTeamAddCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHTeamAddCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = plugin.getI18n();
     }
 
     /**
@@ -79,7 +76,7 @@ public class UHTeamAddCommand extends AbstractCommand
 
             if (color == null)
             {
-                sender.sendMessage(i.t("team.add.errorColor"));
+                sender.sendMessage(I.t("team.add.errorColor"));
             }
             else
             {
@@ -89,11 +86,11 @@ public class UHTeamAddCommand extends AbstractCommand
                 }
                 catch (IllegalArgumentException e)
                 {
-                    sender.sendMessage(i.t("team.add.errorExists"));
+                    sender.sendMessage(I.t("team.add.errorExists"));
                     return;
                 }
 
-                sender.sendMessage(i.t("team.add.added", team.getDisplayName()));
+                sender.sendMessage(I.t("team.add.added", team.getDisplayName()));
             }
 
         }
@@ -105,7 +102,7 @@ public class UHTeamAddCommand extends AbstractCommand
 
             if (color == null)
             {
-                sender.sendMessage(i.t("team.add.errorColor"));
+                sender.sendMessage(I.t("team.add.errorColor"));
             }
             else
             {
@@ -118,11 +115,11 @@ public class UHTeamAddCommand extends AbstractCommand
                 catch (IllegalArgumentException e)
                 {
                     e.printStackTrace();
-                    sender.sendMessage(i.t("team.add.errorExists"));
+                    sender.sendMessage(I.t("team.add.errorExists"));
                     return;
                 }
 
-                sender.sendMessage(i.t("team.add.added", team.getDisplayName()));
+                sender.sendMessage(I.t("team.add.added", team.getDisplayName()));
             }
 
         }
@@ -164,6 +161,6 @@ public class UHTeamAddCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.teamHelpAdd"));
+        return Collections.singletonList(I.t("cmd.teamHelpAdd"));
     }
 }

@@ -36,9 +36,9 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -49,14 +49,11 @@ import java.util.List;
 @Command (name = "pause")
 public class UHTimersPauseCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHTimersPauseCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -72,12 +69,12 @@ public class UHTimersPauseCommand extends AbstractCommand
 
         if (timer == null)
         {
-            sender.sendMessage(i.t("timers.timerDoesNotExists"));
+            sender.sendMessage(I.t("timers.timerDoesNotExists"));
             return;
         }
 
         timer.setPaused(true);
-        sender.sendMessage(i.t("timers.paused", timer.getDisplayName()));
+        sender.sendMessage(I.t("timers.paused", timer.getDisplayName()));
     }
 
     @Override
@@ -102,6 +99,6 @@ public class UHTimersPauseCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.timersHelpPause"));
+        return Collections.singletonList(I.t("cmd.timersHelpPause"));
     }
 }

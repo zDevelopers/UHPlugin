@@ -36,9 +36,9 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -50,14 +50,11 @@ import java.util.List;
 @Command (name = "list")
 public class UHTimersListCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHTimersListCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -65,7 +62,7 @@ public class UHTimersListCommand extends AbstractCommand
     {
         Collection<UHTimer> timers = p.getTimerManager().getTimers();
 
-        sender.sendMessage(i.t("timers.list.count", String.valueOf(timers.size())));
+        sender.sendMessage(I.t("timers.list.count", String.valueOf(timers.size())));
 
         for (UHTimer timer : timers)
         {
@@ -73,7 +70,7 @@ public class UHTimersListCommand extends AbstractCommand
             {
                 if (timer.isPaused())
                 {
-                    sender.sendMessage(i.t("timers.list.itemPaused",
+                    sender.sendMessage(I.t("timers.list.itemPaused",
                             timer.getDisplayName(),
                             String.valueOf(timer.getDuration()),
                             timer.toString()
@@ -81,7 +78,7 @@ public class UHTimersListCommand extends AbstractCommand
                 }
                 else
                 {
-                    sender.sendMessage(i.t("timers.list.itemRunning",
+                    sender.sendMessage(I.t("timers.list.itemRunning",
                             timer.getDisplayName(),
                             String.valueOf(timer.getDuration()),
                             timer.toString()
@@ -90,7 +87,7 @@ public class UHTimersListCommand extends AbstractCommand
             }
             else
             {
-                sender.sendMessage(i.t("timers.list.itemStopped",
+                sender.sendMessage(I.t("timers.list.itemStopped",
                         timer.getDisplayName(),
                         String.valueOf(timer.getDuration())));
             }
@@ -119,6 +116,6 @@ public class UHTimersListCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.timersHelpList"));
+        return Collections.singletonList(I.t("cmd.timersHelpList"));
     }
 }

@@ -40,7 +40,7 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.uh.border.UHBorderWarning
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
@@ -57,15 +57,8 @@ import java.util.List;
 @Command (name = "border")
 public class UHBorderCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
-
     public UHBorderCommand(UHCReloaded p)
     {
-        this.p = p;
-        this.i = p.getI18n();
-
         registerSubCommand(new UHBorderGetCommand(p));
         registerSubCommand(new UHBorderSetCommand(p));
         registerSubCommand(new UHBorderWarningCommand(p));
@@ -87,13 +80,13 @@ public class UHBorderCommand extends AbstractCommand
     @Override
     public List<String> help(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.borderHelpTitle"));
+        return Collections.singletonList(I.t("cmd.borderHelpTitle"));
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpBorder"));
+        return Collections.singletonList(I.t("cmd.helpBorder"));
     }
 
     @Override

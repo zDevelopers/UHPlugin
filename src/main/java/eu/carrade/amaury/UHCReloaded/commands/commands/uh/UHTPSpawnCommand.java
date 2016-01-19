@@ -36,8 +36,8 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -46,17 +46,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 @Command (name = "tpspawn")
 public class UHTPSpawnCommand extends AbstractCommand
 {
     private final UHCReloaded p;
-    private final I18n i;
 
     public UHTPSpawnCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
     }
 
 
@@ -66,7 +63,7 @@ public class UHTPSpawnCommand extends AbstractCommand
         // Spawns not assigned
         if (p.getGameManager().getTeleporter() == null)
         {
-            sender.sendMessage(i.t("tpspawn.notAssigned"));
+            sender.sendMessage(I.t("tpspawn.notAssigned"));
             return;
         }
 
@@ -79,7 +76,7 @@ public class UHTPSpawnCommand extends AbstractCommand
         Player player = p.getServer().getPlayer(args[0]);
         if (player == null || !player.isOnline())
         {
-            sender.sendMessage(i.t("tpspawn.offline", args[0]));
+            sender.sendMessage(I.t("tpspawn.offline", args[0]));
             return;
         }
 
@@ -87,7 +84,7 @@ public class UHTPSpawnCommand extends AbstractCommand
 
         if (spawnLocation == null)
         {
-            sender.sendMessage(i.t("tpspawn.noSpawnLocation", args[0]));
+            sender.sendMessage(I.t("tpspawn.noSpawnLocation", args[0]));
             return;
         }
 
@@ -95,16 +92,16 @@ public class UHTPSpawnCommand extends AbstractCommand
         if (args.length >= 2 && args[1].equalsIgnoreCase("force"))
         {
             p.getGameManager().getTeleporter().teleportPlayer(player.getUniqueId(), true);
-            sender.sendMessage(i.t("tpspawn.teleported", args[0]));
+            sender.sendMessage(I.t("tpspawn.teleported", args[0]));
         }
         else if (UHUtils.safeTP(player, spawnLocation))
         {
-            sender.sendMessage(i.t("tpspawn.teleported", args[0]));
+            sender.sendMessage(I.t("tpspawn.teleported", args[0]));
         }
         else
         {
-            sender.sendMessage(i.t("tpspawn.notTeleportedNoSafeSpot", args[0]));
-            sender.sendMessage(i.t("tpspawn.notTeleportedNoSafeSpotCmd", args[0]));
+            sender.sendMessage(I.t("tpspawn.notTeleportedNoSafeSpot", args[0]));
+            sender.sendMessage(I.t("tpspawn.notTeleportedNoSafeSpotCmd", args[0]));
         }
     }
 
@@ -148,6 +145,6 @@ public class UHTPSpawnCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpTpspawn"));
+        return Collections.singletonList(I.t("cmd.helpTpspawn"));
     }
 }

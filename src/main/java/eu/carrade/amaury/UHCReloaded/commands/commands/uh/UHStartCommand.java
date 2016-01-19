@@ -37,8 +37,8 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -48,7 +48,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * This command starts the game.
  *
@@ -57,14 +56,11 @@ import java.util.Map;
 @Command (name = "start")
 public class UHStartCommand extends AbstractCommand
 {
-
     private UHCReloaded p;
-    private I18n i;
 
     public UHStartCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
     }
 
     /**
@@ -103,7 +99,7 @@ public class UHStartCommand extends AbstractCommand
             }
             catch (IllegalStateException e)
             {
-                sender.sendMessage(i.t("start.already"));
+                sender.sendMessage(I.t("start.already"));
             }
             catch (Exception e)
             {
@@ -151,19 +147,19 @@ public class UHStartCommand extends AbstractCommand
     public List<String> help(CommandSender sender)
     {
         return Arrays.asList(
-                i.t("cmd.startHelpTitle"),
-                i.t("cmd.startHelpBasic"),
-                i.t("cmd.startHelpTagsTitle"),
-                i.t("cmd.startHelpTags"),
-                i.t("cmd.startHelpSlow"),
-                i.t("cmd.startHelpIgnoreTeams")
+                I.t("cmd.startHelpTitle"),
+                I.t("cmd.startHelpBasic"),
+                I.t("cmd.startHelpTagsTitle"),
+                I.t("cmd.startHelpTags"),
+                I.t("cmd.startHelpSlow"),
+                I.t("cmd.startHelpIgnoreTeams")
         );
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpStart"));
+        return Collections.singletonList(I.t("cmd.helpStart"));
     }
 
     @Override

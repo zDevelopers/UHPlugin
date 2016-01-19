@@ -32,7 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.misc;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.text.ListHeaderFooter;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
@@ -109,13 +109,12 @@ public class PlayerListHeaderFooterManager
     private String replaceTags(String raw)
     {
         Configuration config = UHCReloaded.get().getConfig();
-        I18n i = UHCReloaded.i();
 
         return raw
                 .replace("{title}", config.getString("scoreboard.title", ""))
-                .replace("{episodeText}", i.t("playersList.episode", String.valueOf(UHCReloaded.get().getGameManager().getEpisode())))
-                .replace("{playersText}", i.t("playersList.players", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount())))
-                .replace("{teamsText}", i.t("playersList.teams", String.valueOf(UHCReloaded.get().getGameManager().getAliveTeamsCount())))
+                .replace("{episodeText}", I.t("playersList.episode", String.valueOf(UHCReloaded.get().getGameManager().getEpisode())))
+                .replace("{playersText}", I.t("playersList.players", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount())))
+                .replace("{teamsText}", I.t("playersList.teams", String.valueOf(UHCReloaded.get().getGameManager().getAliveTeamsCount())))
                 .replace("{episodeNumber}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode()))
                 .replace("{playersCount}", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount()))
                 .replace("{teamsCount}", String.valueOf(UHCReloaded.get().getGameManager().getAliveTeamsCount()))

@@ -37,9 +37,9 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -54,14 +54,11 @@ import java.util.List;
 @Command (name = "togglechat", noPermission = true)
 public class ToggleChatCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public ToggleChatCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -72,19 +69,22 @@ public class ToggleChatCommand extends AbstractCommand
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
         }
 
+        // /togglechat
         if (args.length == 0)
-        { // /togglechat
+        {
             if (p.getTeamChatManager().toggleChatForPlayer((Player) sender))
             {
-                sender.sendMessage(i.t("team.message.toggle.nowTeamChat"));
+                sender.sendMessage(I.t("team.message.toggle.nowTeamChat"));
             }
             else
             {
-                sender.sendMessage(i.t("team.message.toggle.nowGlobalChat"));
+                sender.sendMessage(I.t("team.message.toggle.nowGlobalChat"));
             }
         }
+
+        // /togglechat <another team>
         else
-        { // /togglechat <another team>
+        {
             String teamName = UHUtils.getStringFromCommandArguments(args, 0);
             UHTeam team = p.getTeamManager().getTeam(teamName);
 
@@ -92,12 +92,12 @@ public class ToggleChatCommand extends AbstractCommand
             {
                 if (p.getTeamChatManager().toggleChatForPlayer((Player) sender, team))
                 {
-                    sender.sendMessage(i.t("team.message.toggle.nowOtherTeamChat", team.getDisplayName()));
+                    sender.sendMessage(I.t("team.message.toggle.nowOtherTeamChat", team.getDisplayName()));
                 }
             }
             else
             {
-                sender.sendMessage(i.t("team.message.toggle.unknownTeam"));
+                sender.sendMessage(I.t("team.message.toggle.unknownTeam"));
             }
         }
     }

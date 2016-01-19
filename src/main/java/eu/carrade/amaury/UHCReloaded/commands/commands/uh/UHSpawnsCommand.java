@@ -42,32 +42,23 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.uh.spawns.UHSpawnsResetCo
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 
 @Command (name = "spawns")
 public class UHSpawnsCommand extends AbstractCommand
 {
-
-    private UHCReloaded p;
-    private final I18n i;
-
     public UHSpawnsCommand(UHCReloaded plugin)
     {
-        p = plugin;
-        i = p.getI18n();
-
-        registerSubCommand(new UHSpawnsAddCommand(p));
-        registerSubCommand(new UHSpawnsGenerateCommand(p));
-        registerSubCommand(new UHSpawnsListCommand(p));
-        registerSubCommand(new UHSpawnsDumpCommand(p));
-        registerSubCommand(new UHSpawnsRemoveCommand(p));
-        registerSubCommand(new UHSpawnsResetCommand(p));
+        registerSubCommand(new UHSpawnsAddCommand(plugin));
+        registerSubCommand(new UHSpawnsGenerateCommand(plugin));
+        registerSubCommand(new UHSpawnsListCommand(plugin));
+        registerSubCommand(new UHSpawnsDumpCommand(plugin));
+        registerSubCommand(new UHSpawnsRemoveCommand(plugin));
+        registerSubCommand(new UHSpawnsResetCommand(plugin));
     }
 
     /**
@@ -100,13 +91,13 @@ public class UHSpawnsCommand extends AbstractCommand
     @Override
     public List<String> help(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.spawnsHelpTitle"));
+        return Collections.singletonList(I.t("cmd.spawnsHelpTitle"));
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpSpawns"));
+        return Collections.singletonList(I.t("cmd.helpSpawns"));
     }
 
     @Override

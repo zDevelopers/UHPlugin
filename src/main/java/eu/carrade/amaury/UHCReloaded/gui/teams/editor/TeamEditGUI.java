@@ -31,8 +31,6 @@
  */
 package eu.carrade.amaury.UHCReloaded.gui.teams.editor;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
@@ -41,6 +39,7 @@ import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.gui.PromptGui;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.Callback;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -54,7 +53,6 @@ import java.util.List;
 
 public class TeamEditGUI extends ActionGui
 {
-    private final I18n i = UHCReloaded.i();
     private final UHTeam team;
 
     public TeamEditGUI(UHTeam team)
@@ -66,54 +64,54 @@ public class TeamEditGUI extends ActionGui
     @Override
     protected void onUpdate()
     {
-        setTitle(i.t("team.chestGui.editor.title", team.getDisplayName()));
+        setTitle(I.t("team.chestGui.editor.title", team.getDisplayName()));
         setSize(36);
 
         // Banner
         ItemStack banner = team.getBanner();
-        GuiUtils.makeItem(banner, ChatColor.RESET + team.getDisplayName(), Collections.singletonList(i.t("team.chestGui.editor.banner.members", team.getSize())));
+        GuiUtils.makeItem(banner, ChatColor.RESET + team.getDisplayName(), Collections.singletonList(I.t("team.chestGui.editor.banner.members", team.getSize())));
         GuiUtils.hideItemAttributes(banner);
         action("", 9, banner);
 
         // Color
         action("color", 11, GuiUtils.makeItem(
                 new ItemStack(Material.WOOL, 1, ColorsUtils.chat2Dye(team.getColor().toChatColor()).getWoolData()),
-                i.t("team.chestGui.editor.color.title"),
-                Collections.singletonList(i.t("team.chestGui.editor.color.current", team.getColor().toChatColor() + TextUtils.friendlyEnumName(team.getColor())))
+                I.t("team.chestGui.editor.color.title"),
+                Collections.singletonList(I.t("team.chestGui.editor.color.current", team.getColor().toChatColor() + TextUtils.friendlyEnumName(team.getColor())))
         ));
 
         // Name
         action("name", 13, GuiUtils.makeItem(
                 Material.BOOK_AND_QUILL,
-                i.t("team.chestGui.editor.name.title"),
-                Collections.singletonList(i.t("team.chestGui.editor.name.current", team.getName()))
+                I.t("team.chestGui.editor.name.title"),
+                Collections.singletonList(I.t("team.chestGui.editor.name.current", team.getName()))
         ));
 
         // Members
         List<String> lore = new ArrayList<>();
         for (OfflinePlayer player : team.getPlayers())
             if (player.isOnline())
-                lore.add(i.t("team.list.bulletPlayerOnline") + ChatColor.RESET + player.getName());
+                lore.add(I.t("team.list.bulletPlayerOnline") + ChatColor.RESET + player.getName());
             else
-                lore.add(i.t("team.list.bulletPlayerOffline") + ChatColor.RESET + player.getName());
+                lore.add(I.t("team.list.bulletPlayerOffline") + ChatColor.RESET + player.getName());
 
         action("members", 15, GuiUtils.makeItem(
                 new ItemStack(Material.SKULL_ITEM, 1, (short) 3),
-                i.t("team.chestGui.editor.members.title"),
+                I.t("team.chestGui.editor.members.title"),
                 lore
         ));
 
         // Delete
         action("delete", 17, GuiUtils.makeItem(
                 Material.BARRIER,
-                i.t("team.chestGui.editor.delete.title"),
-                Collections.singletonList(i.t("team.chestGui.editor.delete.warning"))
+                I.t("team.chestGui.editor.delete.title"),
+                Collections.singletonList(I.t("team.chestGui.editor.delete.warning"))
         ));
 
         // Exit
         action("exit", getSize() - 5, GuiUtils.makeItem(
                 Material.EMERALD,
-                i.t("team.chestGui.editor.exit.title")
+                I.t("team.chestGui.editor.exit.title")
         ));
     }
 

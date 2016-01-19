@@ -40,6 +40,7 @@ import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -75,7 +76,7 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
     @Override
     protected void onUpdate()
     {
-        setTitle(UHCReloaded.i().t("team.chestGui.creator.players.title"));
+        setTitle(I.t("team.chestGui.creator.players.title"));
         setSize(6 * 9);
 
         generateBreadcrumbs(BuildingStep.PLAYERS);
@@ -100,18 +101,18 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
 
         List<String> lore = new ArrayList<>();
         lore.add("");
-        lore.add(UHCReloaded.i().t("team.chestGui.creator.players.doneItem.summary"));
-        lore.add(UHCReloaded.i().t("team.chestGui.creator.players.doneItem.name", getName()));
-        lore.add(UHCReloaded.i().t("team.chestGui.creator.players.doneItem.color", getColor() == TeamColor.RANDOM ? ChatColor.MAGIC + "Random" : getColor().toChatColor() + TextUtils.friendlyEnumName(getColor())));
-        lore.add(UHCReloaded.i().t("team.chestGui.creator.players.doneItem.members", teamMembers.size()));
+        lore.add(I.t("team.chestGui.creator.players.doneItem.summary"));
+        lore.add(I.t("team.chestGui.creator.players.doneItem.name", getName()));
+        lore.add(I.t("team.chestGui.creator.players.doneItem.color", getColor() == TeamColor.RANDOM ? ChatColor.MAGIC + "Random" : getColor().toChatColor() + TextUtils.friendlyEnumName(getColor())));
+        lore.add(I.t("team.chestGui.creator.players.doneItem.members", teamMembers.size()));
         lore.add("");
         for (UUID teamMember : teamMembers)
         {
             OfflinePlayer player = Bukkit.getOfflinePlayer(teamMember);
-            lore.add(UHCReloaded.i().t("team.chestGui.creator.players.doneItem.memberBullet", player != null ? player.getName() : teamMember));
+            lore.add(I.t("team.chestGui.creator.players.doneItem.memberBullet", player != null ? player.getName() : teamMember));
         }
 
-        action("done", getSize() - 5, GuiUtils.makeItem(Material.EMERALD, UHCReloaded.i().t("team.chestGui.creator.players.doneItem.title"), lore));
+        action("done", getSize() - 5, GuiUtils.makeItem(Material.EMERALD, I.t("team.chestGui.creator.players.doneItem.title"), lore));
     }
 
     private ItemStack generatePlayerButton(OfflinePlayer player)
@@ -123,12 +124,12 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
         UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
 
         meta.setOwner(player.getName());
-        meta.setDisplayName(UHCReloaded.i().t("team.chestGui.creator.players.playerItem.title", displayName));
+        meta.setDisplayName(I.t("team.chestGui.creator.players.playerItem.title", displayName));
         meta.setLore(Arrays.asList(
-                player.isOnline() ? UHCReloaded.i().t("team.chestGui.creator.players.playerItem.online") : UHCReloaded.i().t("team.chestGui.creator.players.playerItem.offline"),
-                team != null ? UHCReloaded.i().t("team.chestGui.creator.players.playerItem.currentTeam", team.getDisplayName()) : UHCReloaded.i().t("team.chestGui.creator.players.playerItem.noCurrentTeam"),
+                player.isOnline() ? I.t("team.chestGui.creator.players.playerItem.online") : I.t("team.chestGui.creator.players.playerItem.offline"),
+                team != null ? I.t("team.chestGui.creator.players.playerItem.currentTeam", team.getDisplayName()) : I.t("team.chestGui.creator.players.playerItem.noCurrentTeam"),
                 "",
-                teamMembers.contains(player.getUniqueId()) ? UHCReloaded.i().t("team.chestGui.creator.players.playerItem.selected") : UHCReloaded.i().t("team.chestGui.creator.players.playerItem.select")
+                teamMembers.contains(player.getUniqueId()) ? I.t("team.chestGui.creator.players.playerItem.selected") : I.t("team.chestGui.creator.players.playerItem.select")
         ));
 
         button.setItemMeta(meta);
@@ -161,11 +162,11 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
         try
         {
             UHCReloaded.get().getTeamManager().addTeam(team);
-            getPlayer().sendMessage(UHCReloaded.i().t("team.chestGui.creator.players.done"));
+            getPlayer().sendMessage(I.t("team.chestGui.creator.players.done"));
         }
         catch (IllegalArgumentException e)
         {
-            getPlayer().sendMessage(UHCReloaded.i().t("team.add.errorExists"));
+            getPlayer().sendMessage(I.t("team.add.errorExists"));
         }
 
         Gui.open(getPlayer(), new TeamsSelectorGUI());

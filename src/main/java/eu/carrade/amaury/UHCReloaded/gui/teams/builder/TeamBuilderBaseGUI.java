@@ -31,11 +31,11 @@
  */
 package eu.carrade.amaury.UHCReloaded.gui.teams.builder;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
 import fr.zcraft.zlib.components.gui.ActionGui;
 import fr.zcraft.zlib.components.gui.GuiUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -105,9 +105,9 @@ public abstract class TeamBuilderBaseGUI extends ActionGui
      */
     protected enum BuildingStep
     {
-        COLOR (UHCReloaded.i().t("team.chestGui.creator.color.breadcrumbs")),
-        NAME (UHCReloaded.i().t("team.chestGui.creator.name.breadcrumbs")),
-        PLAYERS (UHCReloaded.i().t("team.chestGui.creator.players.breadcrumbs"));
+        COLOR (I.t("team.chestGui.creator.color.breadcrumbs")),
+        NAME (I.t("team.chestGui.creator.name.breadcrumbs")),
+        PLAYERS (I.t("team.chestGui.creator.players.breadcrumbs"));
 
 
         private final String name;
