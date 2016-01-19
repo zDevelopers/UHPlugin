@@ -74,11 +74,11 @@ public class ToggleChatCommand extends AbstractCommand
         {
             if (p.getTeamChatManager().toggleChatForPlayer((Player) sender))
             {
-                sender.sendMessage(I.t("team.message.toggle.nowTeamChat"));
+                sender.sendMessage(I.t("{cs}You are now chatting with your team only."));
             }
             else
             {
-                sender.sendMessage(I.t("team.message.toggle.nowGlobalChat"));
+                sender.sendMessage(I.t("{cs}You are now chatting with everyone."));
             }
         }
 
@@ -92,12 +92,12 @@ public class ToggleChatCommand extends AbstractCommand
             {
                 if (p.getTeamChatManager().toggleChatForPlayer((Player) sender, team))
                 {
-                    sender.sendMessage(I.t("team.message.toggle.nowOtherTeamChat", team.getDisplayName()));
+                    sender.sendMessage(I.t("{cs}You are now chatting with the team {0}{cs}.", team.getDisplayName()));
                 }
             }
             else
             {
-                sender.sendMessage(I.t("team.message.toggle.unknownTeam"));
+                sender.sendMessage(I.t("{ce}This team does not exists."));
             }
         }
     }

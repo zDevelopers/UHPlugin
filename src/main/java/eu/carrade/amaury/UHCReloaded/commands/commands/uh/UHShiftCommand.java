@@ -64,12 +64,12 @@ public class UHShiftCommand extends AbstractCommand
             }
             else
             {
-                p.getGameManager().shiftEpisode(I.t("shift.consoleName"));
+                p.getGameManager().shiftEpisode(I.t("the console"));
             }
         }
         else
         {
-            sender.sendMessage(I.t("shift.cantNotStarted"));
+            sender.sendMessage(I.t("{ce}You can't shift the current episode because the game is not started."));
         }
     }
 
@@ -88,7 +88,7 @@ public class UHShiftCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpShift"));
+        return Collections.singletonList(I.t("{cc}/uh shift {ci}: shifts an episode."));
     }
 
     @Override

@@ -148,7 +148,8 @@ public class UHDynmapIntegration
         Location deathPoint = p.getGameManager().getDeathLocation(player);
 
         String markerID = getDeathMarkerName(player);
-        String markerLabel = I.t("dynmap.markerLabelDeath", player.getName());
+        /// Dynmap marker label of a death point
+        String markerLabel = I.t("Death point of {0}", player.getName());
         MarkerIcon icon = markerAPI.getMarkerIcon("skull");
 
         Marker marker = markerSet.createMarker(markerID, markerLabel, true, deathPoint.getWorld().getName(), deathPoint.getX(), deathPoint.getY(), deathPoint.getZ(), icon, false);
@@ -226,11 +227,13 @@ public class UHDynmapIntegration
         String markerLabel;
         if (p.getGameManager().isGameWithTeams())
         {
-            markerLabel = I.t("dynmap.markerLabelSpawn", team.getName());
+            /// Dynmap marker label of a spawn point of a team.
+            markerLabel = I.t("Spawn point of the team {0}", team.getName());
         }
         else
         {
-            markerLabel = I.t("dynmap.markerLabelSpawnNoTeam", team.getName());
+            /// Dynmap marker label of a spawn point of a player, in solo.
+            markerLabel = I.t("Spawn point of {0}", team.getName());
         }
 
         showSpawnLocation(spawnPoint, teamColor, markerLabel, markerID);
@@ -285,7 +288,9 @@ public class UHDynmapIntegration
         }
 
         String markerID = getSpawnMarkerName(player);
-        String markerLabel = I.t("dynmap.markerLabelSpawnNoTeam", player.getName());
+
+        /// Dynmap marker label of a spawn point of a player, when the teleportation ignores the teams.
+        String markerLabel = I.t("Spawn point of {0}", player.getName());
 
         showSpawnLocation(spawnPoint, color, markerLabel, markerID);
     }

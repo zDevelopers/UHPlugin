@@ -36,9 +36,9 @@ import fr.zcraft.zlib.components.i18n.I;
 
 public enum Category
 {
-    GAME(I.t("cmd.titleGameCmd")),
-    BUGS(I.t("cmd.titleBugCmd")),
-    MISC(I.t("cmd.titleMiscCmd"));
+    GAME(I.t("{aqua}------ Game-related commands ------")),
+    BUGS(I.t("{aqua}------ Bugs-related commands ------")),
+    MISC(I.t("{aqua}------ Miscellaneous commands ------"));
 
 
     private String title;

@@ -198,10 +198,8 @@ keys:
 
     craft:
         goldenApple:
-            loreLine1Player: "Vyrobeno z hlavy padleho"
-            loreLine2Player: "hrace {0}"
-            loreLine1Monster: "Vyrobeno z hlavy"
-            loreLine2Monster: "zhoubne prisery"
+            lorePlayer: "Vyrobeno z hlavy padleho hrace {0}"
+            loreMonster: "Vyrobeno z hlavy zhoubne prisery"
 
             nameGoldenAppleFromHeadNormal: "{aqua}Zlate jablko"
             nameGoldenAppleFromHeadNotch: "{lightpurple}Zlata hlava"

@@ -440,25 +440,25 @@ public class TeamManager
                     TeamColor color = TeamColor.fromString(teamRawSeparated[0]);
                     if (color == null)
                     {
-                        p.getLogger().warning(I.t("load.invalidTeam", (String) teamRaw));
+                        p.getLogger().warning(I.t("Invalid team set in config: {0}", (String) teamRaw));
                     }
                     else
                     {
                         if (teamRawSeparated.length == 2)
                         { // "color,name"
                             UHTeam newTeam = addTeam(color, teamRawSeparated[1]);
-                            p.getLogger().info(I.t("load.namedTeamAdded", newTeam.getName(), newTeam.getColor().toString()));
+                            p.getLogger().info(I.t("Team {0} ({1}) added from the config file", newTeam.getName(), newTeam.getColor().toString()));
                             teamsCount++;
                         }
                         else if (teamRawSeparated.length == 1)
                         { // "color"
                             UHTeam newTeam = addTeam(color, teamRawSeparated[0]);
-                            p.getLogger().info(I.t("load.teamAdded", newTeam.getColor().toString()));
+                            p.getLogger().info(I.t("Team {0} added from the config file", newTeam.getColor().toString()));
                             teamsCount++;
                         }
                         else
                         {
-                            p.getLogger().warning(I.t("load.invalidTeam", (String) teamRaw));
+                            p.getLogger().warning(I.t("Invalid team set in config: {0}", (String) teamRaw));
                         }
                     }
                 }
@@ -493,7 +493,8 @@ public class TeamManager
 
         if (p.getTeamManager().getTeams().size() != 0)
         {
-            player.sendMessage(I.t("team.gui.choose"));
+            /// Invite displayed in the chat team selector
+            player.sendMessage(I.t("{gold}Click on the names below to join a team"));
 
             boolean displayPlayers = p.getConfig().getBoolean("teams-options.gui.displayPlayersInTeams");
 
@@ -506,11 +507,13 @@ public class TeamManager
                 text += "{";
                 if (MAX_PLAYERS_PER_TEAM != 0)
                 {
-                    text += "\"text\": \"" + I.t("team.gui.playersCount", String.valueOf(team.getSize()), String.valueOf(MAX_PLAYERS_PER_TEAM)) + "\", ";
+                    /// Team count with max players (ex. [3/5]) followed in-game by the team name. {0} = current count, {1} = max.
+                    text += "\"text\": \"" + I.t("{gray}[{white}{0}{gray}/{white}{1}{gray}]", String.valueOf(team.getSize()), String.valueOf(MAX_PLAYERS_PER_TEAM)) + "\", ";
                 }
                 else
                 {
-                    text += "\"text\": \"" + I.t("team.gui.playersCountUnlimited", String.valueOf(team.getSize())) + "\", ";
+                    /// Team count without max players (ex. [3]) followed in-game by the team name. {0} = current count.
+                    text += "\"text\": \"" + I.t("{gray}[{white}{0}{gray}]", String.valueOf(team.getSize())) + "\", ";
                 }
 
                 String players = "";
@@ -521,22 +524,24 @@ public class TeamManager
                     {
                         if (!p.getGameManager().isGameRunning())
                         {
-                            players += bullet + I.t("team.list.itemPlayer", opl.getName());
+                            players += bullet + opl.getName();
                         }
                         else
                         {
                             if (p.getGameManager().isPlayerDead(opl.getUniqueId()))
                             {
-                                players += bullet + I.t("team.list.itemPlayerDead", opl.getName());
+                                /// Displayed in team tooltip of the chat team selector for a dead player
+                                players += bullet + I.t("{0} ({red}dead{reset})", opl.getName());
                             }
                             else
                             {
-                                players += bullet + I.t("team.list.itemPlayerAlive", opl.getName());
+                                /// Displayed in team tooltip of the chat team selector for an alive player
+                                players += bullet + I.t("{0} ({green}alive{reset})", opl.getName());
                             }
                         }
                     }
                 }
-                text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("team.guI.tooltipCount", String.valueOf(team.getPlayers().size())) + players + "\"}";
+                text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("{0} player(s) in this team", String.valueOf(team.getPlayers().size())) + players + "\"}";
                 text += "},";
 
                 text += "{\"text\":\" \"},{";
@@ -548,11 +553,13 @@ public class TeamManager
                 if (team.containsPlayer(player))
                 {
                     text += "\"bold\":\"true\",";
-                    text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("team.guI.tooltipJoinInside", team.getDisplayName()) + "\"}";
+                    /// Tooltip on the chat team selector GUI when the player is in the team. {0} = team display name.
+                    text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("You are in the team {0}", team.getDisplayName()) + "\"}";
                 }
                 else
                 {
-                    text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("team.guI.tooltipJoin", team.getDisplayName()) + "\"}";
+                    /// Tooltip on the chat team selector GUI when the player is not in the team. {0} = team display name.
+                    text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("Click here to join the team {0}", team.getDisplayName()) + "\"}";
                 }
                 text += "}";
 
@@ -564,7 +571,7 @@ public class TeamManager
             if (p.getTeamManager().getTeamForPlayer(player) != null && player.hasPermission("uh.player.leave.self"))
             {
                 String text = "{";
-                text += "\"text\":\"" + I.t("team.gui.leaveTeam") + "\",";
+                text += "\"text\":\"" + I.t("{darkred}[×] {red}Click here to leave your team") + "\",";
                 text += "\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/leave\"}";
                 text += "}";
 
@@ -572,13 +579,13 @@ public class TeamManager
             }
             else
             {
-                player.sendMessage(I.t("team.gui.howToDisplayAgain"));
+                player.sendMessage(I.t("{gray}Run /join to display this again"));
             }
         }
         else
         {
             // No teams.
-            player.sendMessage(I.t("team.gui.noTeams"));
+            player.sendMessage(I.t("{ce}There isn't any team available."));
         }
 
         player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");

@@ -138,7 +138,7 @@ public class UHTeam
 
         if (!silent)
             for (Player player : getOnlinePlayers())
-                player.sendMessage(I.t("team.rename.renamed", displayName));
+                player.sendMessage(I.t("{cs}Your team is now called {0}{cs}.", displayName));
     }
 
     /**
@@ -299,7 +299,7 @@ public class UHTeam
 
         if (!silent && player.isOnline())
         {
-            ((Player) player).sendMessage(I.t("team.addplayer.added", getDisplayName()));
+            ((Player) player).sendMessage(I.t("{aqua}You are now in the {0}{aqua} team.", getDisplayName()));
         }
     }
 
@@ -332,7 +332,7 @@ public class UHTeam
 
         if (!silent && player.isOnline())
         {
-            ((Player) player).sendMessage(I.t("team.removeplayer.removed", getDisplayName()));
+            ((Player) player).sendMessage(I.t("{darkaqua}You are no longer part of the {0}{darkaqua} team.", getDisplayName()));
         }
     }
 
@@ -366,7 +366,7 @@ public class UHTeam
 
             if (player != null && player.isOnline())
             {
-                ((Player) player).sendMessage(I.t("team.removeplayer.removed", getDisplayName()));
+                ((Player) player).sendMessage(I.t("{darkaqua}You are no longer part of the {0}{darkaqua} team.", getDisplayName()));
             }
 
             unregisterPlayer(player);

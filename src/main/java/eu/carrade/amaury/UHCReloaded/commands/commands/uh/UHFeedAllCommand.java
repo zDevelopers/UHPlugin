@@ -72,7 +72,7 @@ public class UHFeedAllCommand extends AbstractCommand
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(I.t("feed.errorNaN"));
+                sender.sendMessage(I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
                 return;
             }
 
@@ -85,7 +85,7 @@ public class UHFeedAllCommand extends AbstractCommand
                 }
                 catch (NumberFormatException e)
                 {
-                    sender.sendMessage(I.t("feed.errorNaN"));
+                    sender.sendMessage(I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
                     return;
                 }
             }
@@ -113,7 +113,7 @@ public class UHFeedAllCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpFeedall"));
+        return Collections.singletonList(I.t("{cc}/uh feedall [foodPoints=20] [saturation=max] {ci}: feeds all players."));
     }
 
     @Override

@@ -400,11 +400,13 @@ public class UHTimer
     {
         if (displayHours)
         {
-            return I.t("scoreboard.timerWithHours", formatter.format(hoursLeft), formatter.format(minutesLeft), formatter.format(secondsLeft));
+            /// Timer. {0} = hours; {1} = minutes; {2} = seconds.
+            return I.t("{0}{gray}:{white}{1}{gray}:{white}{2}", formatter.format(hoursLeft), formatter.format(minutesLeft), formatter.format(secondsLeft));
         }
         else
         {
-            return I.t("scoreboard.timer", formatter.format(minutesLeft), formatter.format(secondsLeft));
+            /// Timer. {0} = minutes; {1} = seconds.
+            return I.t("{white}{0}{gray}:{white}{1}", formatter.format(minutesLeft), formatter.format(secondsLeft));
         }
     }
 

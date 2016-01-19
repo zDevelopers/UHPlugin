@@ -52,7 +52,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -74,7 +73,8 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
     @Override
     protected void onUpdate()
     {
-        setTitle(I.t("team.chestGui.selector.title", tm.getTeams().size()));
+        /// The title of the teams selector GUI. {0} = teams count.
+        setTitle(I.t("{black}Select a team {reset}({0})", tm.getTeams().size()));
         setData(tm.getTeams().toArray(new UHTeam[tm.getTeams().size()]));
 
         setMode(Mode.READONLY);
@@ -85,8 +85,10 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
             int renameSlot = getPlayer().hasPermission("uh.team") ? getSize() - 6 : getSize() - 5;
 
             action("rename", renameSlot, GuiUtils.makeItem(
-                    Material.BOOK_AND_QUILL, I.t("team.chestGui.selector.rename.title"),
-                    tm.getTeamForPlayer(getPlayer()) == null ? Collections.singletonList(I.t("team.chestGui.selector.rename.selectBefore")) : null
+                    /// The title of a button to rename our team, in the selector GUI.
+                    Material.BOOK_AND_QUILL, I.t("{white}Rename your team"),
+                    /// Warning displayed in the "Rename your team" button, if the player is not in a team
+                    tm.getTeamForPlayer(getPlayer()) == null ? GuiUtils.generateLore(I.t("{gray}You have to be in a team")) : null
             ));
         }
 
@@ -94,7 +96,8 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
         {
             int newTeamSlot = getPlayer().hasPermission("uh.player.renameTeam") ? getSize() - 4 : getSize() - 5;
 
-            action("new", newTeamSlot, GuiUtils.makeItem(Material.EMERALD, I.t("team.chestGui.selector.new.title")));
+            /// The title of a button to create a new team, in the selector GUI.
+            action("new", newTeamSlot, GuiUtils.makeItem(Material.EMERALD, I.t("{white}New team")));
         }
     }
 
@@ -111,10 +114,12 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 
         if (team.getSize() != 0)
         {
-            lore.add(I.t("team.chestGui.selector.teamItem.subtitlePlayers"));
+            /// The "Players" title in the selector GUI, on a team's tooltip
+            lore.add(I.t("{blue}Players"));
             for (OfflinePlayer player : team.getPlayers())
             {
-                lore.add(I.t("team.chestGui.selector.teamItem.bulletPlayers", player.getName()));
+                /// An item of the players list in the selector GUI, on a team's tooltip
+                lore.add(I.t("{darkgray}- {white}{0}", player.getName()));
             }
 
             lore.add("");
@@ -122,16 +127,16 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 
         if (getPlayer().hasPermission("uh.player.join.self") && !playerInTeam)
         {
-            lore.add(I.t("team.chestGui.selector.teamItem.inviteJoin"));
+            lore.add(I.t("{darkgray}» {white}Click {gray}to join this team"));
         }
         else if (getPlayer().hasPermission("uh.player.leave.self") && playerInTeam)
         {
-            lore.add(I.t("team.chestGui.selector.teamItem.inviteLeave"));
+            lore.add(I.t("{darkgray}» {white}Click {gray}to leave this team"));
         }
 
         if (getPlayer().hasPermission("uh.team"))  // TODO adapt with new granular permissions
         {
-            lore.add(I.t("team.chestGui.selector.teamItem.inviteManage"));
+            lore.add(I.t("{darkgray}» {white}Right-click {gray}to manage this team"));
         }
 
 
@@ -167,7 +172,11 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 
 
         // Title
-        final String title = tm.getMaxPlayersPerTeam() != 0 ? I.t("team.chestGui.selector.teamItem.titleWithMax", team.getDisplayName(), team.getSize(), tm.getMaxPlayersPerTeam()) : I.t("team.chestGui.selector." + "teamItem.title", team.getDisplayName(), team.getSize());
+        final String title = tm.getMaxPlayersPerTeam() != 0
+                /// Title of the team item in the teams selector GUI (with max). {0}: team display name. {1}: players count. {2}: max count.
+                ? I.t("{white}Team {0} {gray}({1}/{2})", team.getDisplayName(), team.getSize(), tm.getMaxPlayersPerTeam())
+                /// Title of the team item in the teams selector GUI (without max) {0}: team display name. {1}: players count.
+                : I.t("{white}Team {0} {gray}({1} players)", team.getDisplayName(), team.getSize());
 
 
         GuiUtils.makeItem(item, title, lore);

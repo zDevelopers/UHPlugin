@@ -141,11 +141,11 @@ public class UHTPCommand extends AbstractCommand
                     {
                         if (mayBeNaNError)
                         {
-                            sender.sendMessage(I.t("tp.NaN"));
+                            sender.sendMessage(I.t("{ce}The coordinates must be three valid numbers."));
                         }
                         else
                         {
-                            sender.sendMessage(I.t("tp.teamDoesNotExists"));
+                            sender.sendMessage(I.t("{ce}This team is not registered."));
                         }
                     }
                     else
@@ -154,7 +154,7 @@ public class UHTPCommand extends AbstractCommand
 
                         if (target == null)
                         {
-                            sender.sendMessage(I.t("tp.targetOffline", args[1]));
+                            sender.sendMessage(I.t("{ce}{0} is offline!", args[1]));
                         }
                         else
                         {
@@ -185,7 +185,7 @@ public class UHTPCommand extends AbstractCommand
                     }
                     catch (NumberFormatException e)
                     {
-                        sender.sendMessage(I.t("tp.NaN"));
+                        sender.sendMessage(I.t("{ce}The coordinates must be three valid numbers."));
                     }
                 }
 
@@ -196,7 +196,7 @@ public class UHTPCommand extends AbstractCommand
 
                     if (target == null)
                     {
-                        sender.sendMessage(I.t("tp.targetOffline", args[1]));
+                        sender.sendMessage(I.t("{ce}{0} is offline!", args[1]));
                     }
                     else
                     {
@@ -260,16 +260,16 @@ public class UHTPCommand extends AbstractCommand
     public List<String> help(CommandSender sender)
     {
         return Arrays.asList(
-                I.t("cmd.tpHelpTitle"),
-                I.t("cmd.tpHelpTeam"),
-                I.t("cmd.tpHelpSpectators")
+                I.t("{aqua}------ Teleportation commands ------"),
+                I.t("{cc}/uh tp team <x> <y> <z> | <target> <team ...> {ci}: teleports the team to the given location/target."),
+                I.t("{cc}/uh tp spectators <x> <y> <z> | <target> {ci}: teleports the spectators (aka non-alive players) to the given location/target.")
         );
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpTP"));
+        return Collections.singletonList(I.t("{cc}/uh tp {ci}: teleports the spectators or an entire team. See /uh tp for details."));
     }
 
     @Override

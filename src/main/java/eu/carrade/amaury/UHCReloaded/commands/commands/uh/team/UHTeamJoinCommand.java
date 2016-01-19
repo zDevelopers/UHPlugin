@@ -108,7 +108,7 @@ public class UHTeamJoinCommand extends AbstractCommand
                 self = false;
                 if (target == null)
                 {
-                    sender.sendMessage(I.t("team.addplayer.disconnected", args[0], team.getName()));
+                    sender.sendMessage(I.t("{ce}Unable to add the player {0} to the team {1}. This player is unknown in the server.", args[0], team.getName()));
                     return;
                 }
             }
@@ -116,7 +116,7 @@ public class UHTeamJoinCommand extends AbstractCommand
 
         if (team == null)
         {
-            sender.sendMessage(I.t("team.addplayer.doesNotExists"));
+            sender.sendMessage(I.t("{ce}This team does not exists."));
         }
         else
         {
@@ -129,7 +129,7 @@ public class UHTeamJoinCommand extends AbstractCommand
 
                 if (!sender.equals(target))
                 {
-                    sender.sendMessage(I.t("team.addplayer.success", target.getName(), team.getName()));
+                    sender.sendMessage(I.t("{cs}The player {0} was successfully added to the team {1}", target.getName(), team.getName()));
                 }
             }
             else
@@ -175,6 +175,6 @@ public class UHTeamJoinCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.teamHelpJoin"));
+        return Collections.singletonList(I.t("{cc}/uh team join <player> <teamName ...> {ci}: adds a player inside the given team. The name of the team is it color, or the explicit name given."));
     }
 }

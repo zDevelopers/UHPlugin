@@ -233,7 +233,7 @@ keys:
         runningSolo: "Game running! {0} players alive."
         runningTeams: "Game running! {0} players alive in {1} teams."
         finishedSolo: "Game finished; congratulation to {0} for his victory!"
-        finishedTeams: "Game finished; the team {0} win this match!"
+        finishedTeams: "Game finished; the team {0} wins this match!"
     
     death:
         kickMessage: "jayjay"
@@ -244,10 +244,8 @@ keys:
     
     craft:
         goldenApple:
-            loreLine1Player: "Made from the fallen head"
-            loreLine2Player: "of {0}"
-            loreLine1Monster: "Made from the fallen head"
-            loreLine2Monster: "of a malignant monster"
+            lorePlayer: "Made from the fallen head of {0}"
+            loreMonster: "Made from the fallen head of a malignant monster"
             
             nameGoldenAppleFromHeadNormal: "{aqua}Golden head"
             nameGoldenAppleFromHeadNotch: "{lightpurple}Golden head"
@@ -565,7 +563,7 @@ keys:
         NaN: "{ce}“{0}” is not a number..."
         
         current: 
-            messageSquared: "{ci}The current map size is {0}*{0}."
+            messageSquared: "{ci}The current map size is {0}×{0}."
             messageCircular: "{ci}The current diameter of the map is {0} blocks."
         
         set:
@@ -573,7 +571,7 @@ keys:
             playersOutsideCanceledCmd: "{ci}Use {cc}/uh border set {0} force{ci} to resize the border regardless to this point."
             playersOutsideCanceledWarnWorldBorder: "{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will not be teleported!"
             
-            broadcastSquared: "{lightpurple}The size of the map is now {0}*{0}."
+            broadcastSquared: "{lightpurple}The size of the map is now {0}×{0}."
             broadcastCircular: "{lightpurple}The diameter of the map is now {0} blocks."
         
         warning:
@@ -581,7 +579,7 @@ keys:
             
             set: "{cs}Future size saved. All players outside this future border will be warned every {0} seconds."
             
-            messageSquared: "{ce}You are currently out of the future border of {0}*{0} blocks."
+            messageSquared: "{ce}You are currently out of the future border of {0}×{0} blocks."
             messageCircular: "{ce}You are currently out of the future border (diameter of {0} blocks)."
             
             messageDistance: "{ci}You have {0} blocks to go before being inside."

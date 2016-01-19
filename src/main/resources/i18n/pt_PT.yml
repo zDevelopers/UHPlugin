@@ -197,10 +197,9 @@ keys:
     
     craft:
         goldenApple:
-            loreLine1Player: "Feita da cabeca"
-            loreLine2Player: "de {0}"
-            loreLine1Monster: "Feita da cabeca"
-            loreLine2Monster: "de uma coisa Horrivel"
+            lorePlayer: "Feita da cabeca de {0}"
+            loreMonster: "Feita da cabeca de uma coisa Horrivel"
+
             nameGoldenAppleFromHeadNormal: "{aqua}Maca Dourada"
             nameGoldenAppleFromHeadNotch: "{lightpurple}Maca Dourada"
     

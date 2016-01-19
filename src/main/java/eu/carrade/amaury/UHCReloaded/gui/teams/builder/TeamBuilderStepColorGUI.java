@@ -57,7 +57,8 @@ public class TeamBuilderStepColorGUI extends TeamBuilderBaseGUI
     @Override
     protected void onUpdate()
     {
-        setTitle(I.t("team.chestGui.creator.color.title"));
+        /// The title of the color selector GUI, in the create team GUIs
+        setTitle(I.t("New team » {black}Color"));
         setSize(6 * 9);
 
         generateBreadcrumbs(BuildingStep.COLOR);
@@ -69,7 +70,8 @@ public class TeamBuilderStepColorGUI extends TeamBuilderBaseGUI
     {
         final int offset = (firstLine - 1) * 9;
 
-        action("random", offset + 4, GuiUtils.makeItem(Material.WOOL, I.t("team.chestGui.creator.color.random")));
+        /// The random color button in a colors selector GUI.
+        action("random", offset + 4, GuiUtils.makeItem(Material.WOOL, I.t("{lightpurple}Random color")));
 
         insertColor(offset + 10, ChatColor.WHITE);
         insertColor(offset + 11, ChatColor.AQUA);

@@ -72,11 +72,11 @@ public class UHSpawnsListCommand extends AbstractCommand
 
         if (spawnPoints.size() == 0)
         {
-            sender.sendMessage(I.t("spawns.list.nothing"));
+            sender.sendMessage(I.t("{ce}There isn't any registered spawn point."));
         }
         else
         {
-            sender.sendMessage(I.t("spawns.list.count", String.valueOf(spawnPoints.size())));
+            sender.sendMessage(I.t("{ci}There are {0} registered spawn points.", String.valueOf(spawnPoints.size())));
 
             // We want one list per world
             Map<World, List<Location>> spanwsInWorlds = new HashMap<World, List<Location>>();
@@ -97,7 +97,7 @@ public class UHSpawnsListCommand extends AbstractCommand
                     continue;
                 }
 
-                sender.sendMessage(I.t("spawns.list.world", spanwsInWorld.getKey().getName()));
+                sender.sendMessage(I.t("{lightpurple}World {0}", spanwsInWorld.getKey().getName()));
 
                 String itemDisplay;
                 if (spanwsInWorld.getKey().getEnvironment() == World.Environment.NORMAL)
@@ -177,6 +177,6 @@ public class UHSpawnsListCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.spawnsHelpList"));
+        return Collections.singletonList(I.t("{cc}/uh spawns list {ci}: lists the registered spawn points."));
     }
 }

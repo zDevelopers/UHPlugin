@@ -77,6 +77,6 @@ public class UHTeamGUICommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.teamHelpGui"));
+        return Collections.singletonList(I.t("{cc}/uh team gui {ci}: opens a GUI to join and manage the teams."));
     }
 }

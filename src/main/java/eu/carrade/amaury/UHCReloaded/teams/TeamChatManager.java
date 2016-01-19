@@ -81,12 +81,12 @@ public class TeamChatManager
         // Permission check
         if (team == null && !sender.hasPermission("uh.teamchat.self"))
         {
-            sender.sendMessage(I.t("team.message.notAllowed.self"));
+            sender.sendMessage(I.t("{ce}You are not allowed to send a private message to your team."));
             return;
         }
         if (team != null && !sender.hasPermission("uh.teamchat.others"))
         {
-            sender.sendMessage(I.t("team.message.notAllowed.others"));
+            sender.sendMessage(I.t("{ce}You are not allowed to enter in the private chat of another team."));
             return;
         }
 
@@ -95,18 +95,21 @@ public class TeamChatManager
 
         if (team == null)
         {
-            rawMessage = I.t("team.message.format", sender.getDisplayName(), message);
+            /// Format of a private team message from a team member. {0} = sender display name, {1} = message.
+            rawMessage = I.t("{gold}[{0}{gold} -> his team] {reset}{1}", sender.getDisplayName(), message);
             recipient = p.getTeamManager().getTeamForPlayer(sender);
 
             if (recipient == null)
             {
-                sender.sendMessage(I.t("team.message.noTeam"));
+                /// Error message if someone try to send a team private message out of any team
+                sender.sendMessage(I.t("{ce}You are not in a team!"));
                 return;
             }
         }
         else
         {
-            rawMessage = I.t("team.message.formatOtherTeam", sender.getDisplayName(), team.getDisplayName(), message);
+            /// Format of a private team message from a non-team-member. {0} = sender display name, {1} = team display name, {2} = message.
+            rawMessage = I.t("{gold}[{0}{gold} -> team {1}{gold}] {reset}{2}", sender.getDisplayName(), team.getDisplayName(), message);
             recipient = team;
         }
 
@@ -208,12 +211,12 @@ public class TeamChatManager
         // Permission check
         if (team == null && !player.hasPermission("uh.teamchat.self"))
         {
-            player.sendMessage(I.t("team.message.notAllowed.self"));
+            player.sendMessage(I.t("{ce}You are not allowed to send a private message to your team."));
             return false;
         }
         if (team != null && !player.hasPermission("uh.teamchat.others"))
         {
-            player.sendMessage(I.t("team.message.notAllowed.others"));
+            player.sendMessage(I.t("{ce}You are not allowed to enter in the private chat of another team."));
             return false;
         }
 

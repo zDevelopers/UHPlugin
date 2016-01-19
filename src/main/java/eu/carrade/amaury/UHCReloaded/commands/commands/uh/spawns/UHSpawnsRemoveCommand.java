@@ -77,12 +77,12 @@ public class UHSpawnsRemoveCommand extends AbstractCommand
             {
                 Player pl = (Player) sender; // Just a way to avoid casts everywhere.
                 p.getSpawnsManager().removeSpawnPoint(pl.getLocation(), false);
-                sender.sendMessage(I.t("spawns.remove.removed", pl.getWorld().getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
+                sender.sendMessage(I.t("{cs}The spawn point {1};{2} in the world {0} was removed.", pl.getWorld().getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
             }
         }
         else if (args.length == 1)
         { // /uh spawns add <x>: Two coordinates needed!
-            sender.sendMessage(I.t("spawns.error2Coords"));
+            sender.sendMessage(I.t("{ce}You need to specify two coordinates."));
         }
         else
         { // /uh spawns remove <x> <z>
@@ -99,11 +99,11 @@ public class UHSpawnsRemoveCommand extends AbstractCommand
                 }
 
                 p.getSpawnsManager().removeSpawnPoint(new Location(world, Double.parseDouble(args[2]), 0, Double.parseDouble(args[3])), true);
-                sender.sendMessage(I.t("spawns.remove.removed", p.getServer().getWorlds().get(0).getName(), args[2], args[3]));
+                sender.sendMessage(I.t("{cs}The spawn point {1};{2} in the world {0} was removed.", p.getServer().getWorlds().get(0).getName(), args[2], args[3]));
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(I.t("spawns.NaN"));
+                sender.sendMessage(I.t("{ce}This is not a number!"));
             }
         }
     }
@@ -131,6 +131,6 @@ public class UHSpawnsRemoveCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.spawnsHelpRemove"));
+        return Collections.singletonList(I.t("{cc}/uh spawns remove [<x> <z>] {ci}: removes the spawn points at the specified coordinates, or at the current location if the sender without coordinates."));
     }
 }

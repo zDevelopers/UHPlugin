@@ -69,7 +69,7 @@ public class UHTimersStartCommand extends AbstractCommand
 
         if (timer == null)
         {
-            sender.sendMessage(I.t("timers.timerDoesNotExists"));
+            sender.sendMessage(I.t("{ce}This timer is not registered."));
             return;
         }
 
@@ -79,7 +79,7 @@ public class UHTimersStartCommand extends AbstractCommand
         }
 
         timer.start();
-        sender.sendMessage(I.t("timers.started", timer.getDisplayName()));
+        sender.sendMessage(I.t("{cs}The timer {0}{cs} was started.", timer.getDisplayName()));
     }
 
     @Override
@@ -104,6 +104,6 @@ public class UHTimersStartCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.timersHelpStart"));
+        return Collections.singletonList(I.t("{cc}/uh timers start <title ...> {ci}: starts a timer."));
     }
 }

@@ -244,10 +244,8 @@ keys:
     
     craft:
         goldenApple:
-            loreLine1Player: "Fabriquée depuis la tête tranchée"
-            loreLine2Player: "de {0}"
-            loreLine1Monster: "Fabriquée depuis la tête tranchée"
-            loreLine2Monster: "d'un monstre maléfique"
+            lorePlayer: "Fabriquée depuis la tête tranchée de {0}"
+            loreMonster: "Fabriquée depuis la tête tranchée d'un monstre maléfique"
             
             nameGoldenAppleFromHeadNormal: "{aqua}Tête d'or"
             nameGoldenAppleFromHeadNotch: "{lightpurple}Tête d'or"
@@ -565,7 +563,7 @@ keys:
         NaN: "{ce}“{0}” n'est pas un nombre..."
         
         current: 
-            messageSquared: "{ci}La taille actuelle de la carte est {0}*{0}."
+            messageSquared: "{ci}La taille actuelle de la carte est {0}×{0}."
             messageCircular: "{ci}La carte a actuellement un diamètre de {0} blocs."
         
         set:
@@ -573,7 +571,7 @@ keys:
             playersOutsideCanceledCmd: "{ci}Utilisez {cc}/uh border set {0} force{ci} pour changer la taille de la carte malgré tout."
             playersOutsideCanceledWarnWorldBorder: "{ce}ATTENTION: {ci}WorldBorder n'étant pas installé, les joueurs hors de la bordure ne seront pas téléportés !"
             
-            broadcastSquared: "{lightpurple}La taille de la carte est désormais de {0}*{0}"
+            broadcastSquared: "{lightpurple}La taille de la carte est désormais de {0}×{0}"
             broadcastCircular: "{lightpurple}La carte a désormais un diamètre de {0} blocs."
         
         warning:
@@ -581,7 +579,7 @@ keys:
             
             set: "{cs}Future taille enregistrée. Les joueurs hors de la bordure vont être avertis toutes les {0} secondes."
             
-            messageSquared: "{ce}Vous êtes hors de la future bordure de {0}*{0} blocs."
+            messageSquared: "{ce}Vous êtes hors de la future bordure de {0}×{0} blocs."
             messageCircular: "{ce}Vous êtes hors de la future bordure de {0} blocs de diamètre."
             
             messageDistance: "{ci}Il vous reste {0} blocs à parcourir avant d'y être."

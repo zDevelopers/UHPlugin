@@ -57,11 +57,11 @@ public class UHBorderGetCommand extends AbstractCommand
     {
         if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
         {
-            sender.sendMessage(I.t("borders.current.messageCircular", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+            sender.sendMessage(I.t("{ci}The current diameter of the map is {0} blocks.", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
         }
         else
         {
-            sender.sendMessage(I.t("borders.current.messageSquared", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+            sender.sendMessage(I.t("{ci}The current map size is {0}×{0}.", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
         }
     }
 
@@ -80,6 +80,6 @@ public class UHBorderGetCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.borderHelpCurrent"));
+        return Collections.singletonList(I.t("{cc}/uh border get{ci}: returns the current size of the map."));
     }
 }

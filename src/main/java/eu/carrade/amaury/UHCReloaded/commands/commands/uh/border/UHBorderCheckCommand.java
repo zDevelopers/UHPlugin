@@ -68,7 +68,7 @@ public class UHBorderCheckCommand extends AbstractCommand
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(I.t("borders.NaN", args[0]));
+                sender.sendMessage(I.t("{ce}“{0}” is not a number...", args[0]));
             }
         }
     }
@@ -88,6 +88,6 @@ public class UHBorderCheckCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.borderHelpCheck"));
+        return Collections.singletonList(I.t("{cc}/uh border check <diameter>{ci}: returns a list of the players outside the given border size."));
     }
 }

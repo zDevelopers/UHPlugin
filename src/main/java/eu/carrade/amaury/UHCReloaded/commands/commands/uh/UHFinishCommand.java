@@ -73,11 +73,11 @@ public class UHFinishCommand extends AbstractCommand
 
             if (e.getMessage().equals(UHGameManager.FINISH_ERROR_NOT_STARTED))
             {
-                sender.sendMessage(I.t("finish.notStarted"));
+                sender.sendMessage(I.t("{ce}The game is not started!"));
             }
             else if (e.getMessage().equals(UHGameManager.FINISH_ERROR_NOT_FINISHED))
             {
-                sender.sendMessage(I.t("finish.notFinished"));
+                sender.sendMessage(I.t("{ce}There's not one team alive!"));
             }
             else
             {
@@ -101,7 +101,7 @@ public class UHFinishCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpFinish"));
+        return Collections.singletonList(I.t("{cc}/uh finish {ci}: displays the name of the winner(s) and launches some fireworks."));
     }
 
     @Override

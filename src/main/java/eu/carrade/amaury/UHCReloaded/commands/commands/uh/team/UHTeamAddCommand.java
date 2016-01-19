@@ -76,7 +76,7 @@ public class UHTeamAddCommand extends AbstractCommand
 
             if (color == null)
             {
-                sender.sendMessage(I.t("team.add.errorColor"));
+                sender.sendMessage(I.t("{ce}Unable to add the team, check the color name. Tip: use Tab to autocomplete."));
             }
             else
             {
@@ -86,11 +86,11 @@ public class UHTeamAddCommand extends AbstractCommand
                 }
                 catch (IllegalArgumentException e)
                 {
-                    sender.sendMessage(I.t("team.add.errorExists"));
+                    sender.sendMessage(I.t("{ce}This team already exists."));
                     return;
                 }
 
-                sender.sendMessage(I.t("team.add.added", team.getDisplayName()));
+                sender.sendMessage(I.t("{cs}Team {0}{cs} added.", team.getDisplayName()));
             }
 
         }
@@ -102,7 +102,7 @@ public class UHTeamAddCommand extends AbstractCommand
 
             if (color == null)
             {
-                sender.sendMessage(I.t("team.add.errorColor"));
+                sender.sendMessage(I.t("{ce}Unable to add the team, check the color name. Tip: use Tab to autocomplete."));
             }
             else
             {
@@ -115,11 +115,11 @@ public class UHTeamAddCommand extends AbstractCommand
                 catch (IllegalArgumentException e)
                 {
                     e.printStackTrace();
-                    sender.sendMessage(I.t("team.add.errorExists"));
+                    sender.sendMessage(I.t("{ce}This team already exists."));
                     return;
                 }
 
-                sender.sendMessage(I.t("team.add.added", team.getDisplayName()));
+                sender.sendMessage(I.t("{cs}Team {0}{cs} added.", team.getDisplayName()));
             }
 
         }
@@ -161,6 +161,6 @@ public class UHTeamAddCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.teamHelpAdd"));
+        return Collections.singletonList(I.t("{cc}/uh team add <color> [<name ...>] {ci}: adds a team with the provided color."));
     }
 }

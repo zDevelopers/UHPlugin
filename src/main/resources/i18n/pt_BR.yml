@@ -198,10 +198,8 @@ keys:
     
     craft:
         goldenApple:
-            loreLine1Player: "Feita da cabeça"
-            loreLine2Player: "de {0}"
-            loreLine1Monster: "Feita da cabeça"
-            loreLine2Monster: "de um monstro malígno"
+            lorePlayer: "Feita da cabeça de {0}"
+            loreMonster: "Feita da cabeça de um monstro malígno"
             
             nameGoldenAppleFromHeadNormal: "{aqua}Maçã Dourada"
             nameGoldenAppleFromHeadNotch: "{lightpurple}Maçã Dourada"

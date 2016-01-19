@@ -71,11 +71,11 @@ public class UHBorderSetCommand extends AbstractCommand
 
                 if (p.getBorderManager().getPlayersOutside(newDiameter).size() != 0)
                 { // Some players are outside
-                    sender.sendMessage(I.t("borders.set.playersOutsideCanceled"));
-                    sender.sendMessage(I.t("borders.set.playersOutsideCanceledCmd", args[0]));
+                    sender.sendMessage(I.t("{ce}Some players are outside the future border, so this operation was cancelled."));
+                    sender.sendMessage(I.t("{ci}Use {cc}/uh border set {0} force{ci} to resize the border regardless to this point.", args[0]));
                     if (!p.getWorldBorderIntegration().isWBIntegrationEnabled())
                     {
-                        sender.sendMessage(I.t("borders.set.playersOutsideCanceledWarnWorldBorder"));
+                        sender.sendMessage(I.t("{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will not be teleported!"));
                     }
                     p.getBorderManager().sendCheckMessage(sender, newDiameter);
                 }
@@ -85,18 +85,18 @@ public class UHBorderSetCommand extends AbstractCommand
 
                     if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
                     {
-                        p.getServer().broadcastMessage(I.t("borders.set.broadcastCircular", args[0]));
+                        p.getServer().broadcastMessage(I.t("{lightpurple}The diameter of the map is now {0} blocks.", args[0]));
                     }
                     else
                     {
-                        p.getServer().broadcastMessage(I.t("borders.set.broadcastSquared", args[0]));
+                        p.getServer().broadcastMessage(I.t("{lightpurple}The size of the map is now {0}×{0}.", args[0]));
                     }
                 }
 
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(I.t("borders.NaN", args[0]));
+                sender.sendMessage(I.t("{ce}“{0}” is not a number...", args[0]));
             }
         }
 
@@ -111,17 +111,17 @@ public class UHBorderSetCommand extends AbstractCommand
 
                 if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
                 {
-                    p.getServer().broadcastMessage(I.t("borders.set.broadcastCircular", args[0]));
+                    p.getServer().broadcastMessage(I.t("{lightpurple}The diameter of the map is now {0} blocks.", args[0]));
                 }
                 else
                 {
-                    p.getServer().broadcastMessage(I.t("borders.set.broadcastSquared", args[0]));
+                    p.getServer().broadcastMessage(I.t("{lightpurple}The size of the map is now {0}×{0}.", args[0]));
                 }
 
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(I.t("borders.NaN", args[0]));
+                sender.sendMessage(I.t("{ce}“{0}” is not a number...", args[0]));
             }
         }
     }
@@ -146,6 +146,6 @@ public class UHBorderSetCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.borderHelpSet"));
+        return Collections.singletonList(I.t("{cc}/uh border set <diameter> [force]{ci}: changes the size of the map. If force is not given, the operation will be canceled if there is a player outside the border."));
     }
 }

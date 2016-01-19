@@ -69,14 +69,14 @@ public class UHTimersRemoveCommand extends AbstractCommand
 
         if (timer == null)
         {
-            sender.sendMessage(I.t("timers.timerDoesNotExists"));
+            sender.sendMessage(I.t("{ce}This timer is not registered."));
             return;
         }
 
         p.getTimerManager().unregisterTimer(timer);
         timer.stop();
 
-        sender.sendMessage(I.t("timers.removed", timer.getDisplayName()));
+        sender.sendMessage(I.t("{cs}The timer {0}{cs} has been deleted.", timer.getDisplayName()));
     }
 
     @Override
@@ -101,6 +101,6 @@ public class UHTimersRemoveCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.timersHelpRemove"));
+        return Collections.singletonList(I.t("{cc}/uh timers remove <title ...> {ci}: deletes a timer."));
     }
 }

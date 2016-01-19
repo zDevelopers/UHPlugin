@@ -103,16 +103,16 @@ public class UHTeamCommand extends AbstractCommand
     public List<String> help(CommandSender sender)
     {
         return Arrays.asList(
-                I.t("cmd.teamHelpTitle"),
-                I.t("cmd.teamHelpJoinCmd"),
-                I.t("cmd.teamHelpLeaveCmd")
+                I.t("{aqua}------ Team commands ------"),
+                I.t("{cc}/join [player] <team ...> {ci}: adds “player” (or the sender) inside the given team. Without arguments, displays the chat-based team selector."),
+                I.t("{cc}/leave [player] {ci}: removes “player” (or the sender) from his team.")
         );
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpTeam"));
+        return Collections.singletonList(I.t("{cc}/uh team {ci}: manages the teams. Execute /uh team for details."));
     }
 
     @Override

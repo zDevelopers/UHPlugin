@@ -85,7 +85,8 @@ public class MOTDManager
      */
     public void updateMOTDBeforeStart()
     {
-        if (enabled) currentMOTD = matchName + I.t("motd.beforeStart");
+        /// MOTD when the game is not started.
+        if (enabled) currentMOTD = matchName + I.t("Waiting for players...");
     }
 
     /**
@@ -93,7 +94,8 @@ public class MOTDManager
      */
     public void updateMOTDDuringStart()
     {
-        if (enabled) currentMOTD = matchName + I.t("motd.starting");
+        /// MOTD when the game is starting (slow TP in progress).
+        if (enabled) currentMOTD = matchName + I.t("Starting in progress...");
     }
 
     /**
@@ -107,11 +109,13 @@ public class MOTDManager
         {
             if (!p.getGameManager().isGameWithTeams())
             {
-                currentMOTD = matchName + I.t("motd.runningSolo", String.valueOf(p.getGameManager().getAlivePlayersCount()));
+                /// Solo game running MOTD. {0} = players alive count.
+                currentMOTD = matchName + I.t("Game running! {0} players alive.", String.valueOf(p.getGameManager().getAlivePlayersCount()));
             }
             else
             {
-                currentMOTD = matchName + I.t("motd.runningTeams", String.valueOf(p.getGameManager().getAlivePlayersCount()), String.valueOf(p.getGameManager().getAliveTeamsCount()));
+                /// Teams game running MOTD. {0} = players alive count. {1} = teams alive count.
+                currentMOTD = matchName + I.t("Game running! {0} players alive in {1} teams.", String.valueOf(p.getGameManager().getAlivePlayersCount()), String.valueOf(p.getGameManager().getAliveTeamsCount()));
             }
         }
     }
@@ -127,11 +131,13 @@ public class MOTDManager
         {
             if (!p.getGameManager().isGameWithTeams())
             {
-                currentMOTD = matchName + I.t("motd.finishedSolo", winner.getName());
+                /// Game finished MOTD with solo winner ({0} = winner raw name).
+                currentMOTD = matchName + I.t("Game finished; congratulation to {0} for his victory!", winner.getName());
             }
             else
             {
-                currentMOTD = matchName + I.t("motd.finishedTeams", winner.getDisplayName());
+                /// Game finished MOTD with team winner ({0} = team display name).
+                currentMOTD = matchName + I.t("Game finished; the team {0} wins this match!", winner.getDisplayName());
             }
         }
     }

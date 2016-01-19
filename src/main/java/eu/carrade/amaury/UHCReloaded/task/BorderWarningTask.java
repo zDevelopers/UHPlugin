@@ -62,14 +62,14 @@ public class BorderWarningTask extends BukkitRunnable
 
             if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
             {
-                player.sendMessage(I.t("borders.warning.messageCircular", String.valueOf(p.getBorderManager().getWarningSize())));
+                player.sendMessage(I.t("{ce}You are currently out of the future border (diameter of {0} blocks).", String.valueOf(p.getBorderManager().getWarningSize())));
             }
             else
             {
-                player.sendMessage(I.t("borders.warning.messageSquared", String.valueOf(p.getBorderManager().getWarningSize())));
+                player.sendMessage(I.t("{ce}You are currently out of the future border of {0}×{0} blocks.", String.valueOf(p.getBorderManager().getWarningSize())));
             }
 
-            player.sendMessage(I.t("borders.warning.messageDistance", String.valueOf(distance)));
+            player.sendMessage(I.t("{ci}You have {0} blocks to go before being inside.", String.valueOf(distance)));
         }
     }
 }

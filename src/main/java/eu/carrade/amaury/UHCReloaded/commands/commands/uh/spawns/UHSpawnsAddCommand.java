@@ -94,40 +94,40 @@ public class UHSpawnsAddCommand extends AbstractCommand
                 try
                 {
                     p.getSpawnsManager().addSpawnPoint(pl.getLocation());
-                    sender.sendMessage(I.t("spawns.add.added", world.getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
+                    sender.sendMessage(I.t("{cs}Spawn added in the world {0}: {1};{2}", world.getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
                 }
                 catch (IllegalArgumentException e)
                 {
-                    sender.sendMessage(I.t("spawns.add.outOfLimits"));
+                    sender.sendMessage(I.t("{ce}You cannot add a spawn point out of the borders."));
                 }
                 catch (RuntimeException e)
                 {
-                    sender.sendMessage(I.t("spawns.add.noSafeSpot"));
+                    sender.sendMessage(I.t("{ce}Unable to add this spawn point: no safe spot found in the Nether."));
                 }
             }
         }
         else if (args.length == 1)
         { // /uh spawns add <x>: Two coordinates needed!
-            sender.sendMessage(I.t("spawns.error2Coords"));
+            sender.sendMessage(I.t("{ce}You need to specify two coordinates."));
         }
         else
         { // /uh spawns add <x> <z>
             try
             {
                 p.getSpawnsManager().addSpawnPoint(world, Double.parseDouble(args[0]), Double.parseDouble(args[1]));
-                sender.sendMessage(I.t("spawns.add.added", world.getName(), args[0], args[1]));
+                sender.sendMessage(I.t("{cs}Spawn added in the world {0}: {1};{2}", world.getName(), args[0], args[1]));
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(I.t("spawns.NaN"));
+                sender.sendMessage(I.t("{ce}This is not a number!"));
             }
             catch (IllegalArgumentException e)
             {
-                sender.sendMessage(I.t("spawns.add.outOfLimits"));
+                sender.sendMessage(I.t("{ce}You cannot add a spawn point out of the borders."));
             }
             catch (RuntimeException e)
             {
-                sender.sendMessage(I.t("spawns.add.noSafeSpot"));
+                sender.sendMessage(I.t("{ce}Unable to add this spawn point: no safe spot found in the Nether."));
             }
         }
     }
@@ -149,7 +149,7 @@ public class UHSpawnsAddCommand extends AbstractCommand
     @Override
     public List<String> help(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.spawnsHelpAdd"));
+        return Collections.singletonList(I.t("{cc}/uh spawns add {ci}: adds a spawn point for a team or a player, at the current location of the sender or at the provided coordinates."));
     }
 
     @Override

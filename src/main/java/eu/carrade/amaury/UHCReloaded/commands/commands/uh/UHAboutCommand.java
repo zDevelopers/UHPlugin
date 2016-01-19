@@ -76,7 +76,7 @@ public class UHAboutCommand extends AbstractCommand
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
         CommandUtils.displaySeparator(sender);
-        sender.sendMessage(I.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+        sender.sendMessage(I.t("{yellow}{0} - version {1}", p.getDescription().getDescription(), p.getDescription().getVersion()));
 
         // Authors
 
@@ -90,7 +90,8 @@ public class UHAboutCommand extends AbstractCommand
             }
             else if (author == listAuthors.get(listAuthors.size() - 1))
             {
-                authors += " " + I.t("about.and") + " ";
+                /// The "and" in the authors list (like "Amaury Carrade, azenet and João Roda")
+                authors += " " + I.tc("authors_list", "and") + " ";
             }
             else
             {
@@ -98,7 +99,7 @@ public class UHAboutCommand extends AbstractCommand
             }
             authors += author;
         }
-        sender.sendMessage(I.t("about.authors", authors));
+        sender.sendMessage(I.t("Plugin made with love by {0}.", authors));
 
         // Build number
 
@@ -125,20 +126,20 @@ public class UHAboutCommand extends AbstractCommand
 
         if (build != null)
         {
-            sender.sendMessage(I.t("about.build.number", build));
+            sender.sendMessage(I.t("Build number: {0}.", build));
         }
         else
         {
-            sender.sendMessage(I.t("about.build.notAvailable"));
+            sender.sendMessage(I.t("Build number not available."));
         }
 
         // Translation
 
-        sender.sendMessage(I.t("about.i18n.title"));
-        sender.sendMessage(I.t("about.i18n.selected", I18n.getPrimaryLocale(), I18n.getTranslationTeam(I18n.getPrimaryLocale())));
-        sender.sendMessage(I.t("about.i18n.fallback", I18n.getFallbackLocale(), I18n.getTranslationTeam(I18n.getFallbackLocale())));
-        sender.sendMessage(I.t("about.license.title"));
-        sender.sendMessage(I.t("about.license.license"));
+        sender.sendMessage(I.t("{aqua}------ Translations ------"));
+        sender.sendMessage(I.t("Current language: {0} (translated by {1}).", I18n.getPrimaryLocale(), I18n.getTranslationTeam(I18n.getPrimaryLocale())));
+        sender.sendMessage(I.t("Fallback language: {0} (translated by {1}).", I18n.getFallbackLocale(), I18n.getTranslationTeam(I18n.getFallbackLocale())));
+        sender.sendMessage(I.t("{aqua}------ License ------"));
+        sender.sendMessage(I.t("Published under the CeCILL-B License."));
 
         CommandUtils.displaySeparator(sender);
     }
@@ -166,7 +167,7 @@ public class UHAboutCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpAbout"));
+        return Collections.singletonList(I.t("{cc}/uh about {ci}: informations about the plugin and the translation."));
     }
 
     @Override

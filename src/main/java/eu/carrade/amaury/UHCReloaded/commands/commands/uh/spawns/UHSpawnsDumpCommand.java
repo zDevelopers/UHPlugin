@@ -123,6 +123,6 @@ public class UHSpawnsDumpCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.spawnsHelpDump"));
+        return Collections.singletonList(I.t("{cc}/uh spawns dump {ci}: displays the registered spawn points in an exportable format. {gray}Use this to plot the spawn points, as example."));
     }
 }

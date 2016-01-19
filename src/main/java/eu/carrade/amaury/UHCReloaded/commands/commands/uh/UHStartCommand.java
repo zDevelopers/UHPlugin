@@ -99,7 +99,7 @@ public class UHStartCommand extends AbstractCommand
             }
             catch (IllegalStateException e)
             {
-                sender.sendMessage(I.t("start.already"));
+                sender.sendMessage(I.t("{ce}The game is already started! Reload or restart the server to restart the game."));
             }
             catch (Exception e)
             {
@@ -147,19 +147,19 @@ public class UHStartCommand extends AbstractCommand
     public List<String> help(CommandSender sender)
     {
         return Arrays.asList(
-                I.t("cmd.startHelpTitle"),
-                I.t("cmd.startHelpBasic"),
-                I.t("cmd.startHelpTagsTitle"),
-                I.t("cmd.startHelpTags"),
-                I.t("cmd.startHelpSlow"),
-                I.t("cmd.startHelpIgnoreTeams")
+                I.t("{aqua}------ Beginning of the game ------"),
+                I.t("{cc}/uh start {ci}: starts the game. Period."),
+                I.t("{aqua}Startup options"),
+                I.t("{ci}You can add some tags to change the way the game is started, just append them to the command with spaces."),
+                I.t("{cc}slow:true {ci}: launches the game slowly, in two steps (teleportation then beginning of the game), for smaller servers."),
+                I.t("{cc}ignoreTeams:true {ci}: even with teams, teleports the players like in a solo game (only one player per spawn point, not a spawn point per team).")
         );
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpStart"));
+        return Collections.singletonList(I.t("{cc}/uh start {ci}: launches the game. See /uh start help for options (slow and ignoreTeams)."));
     }
 
     @Override

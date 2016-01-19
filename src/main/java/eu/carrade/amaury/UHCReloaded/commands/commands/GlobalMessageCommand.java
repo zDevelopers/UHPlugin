@@ -105,7 +105,8 @@ public class GlobalMessageCommand extends AbstractCommand
     @Override
     public List<String> help(CommandSender sender)
     {
-        return Collections.singletonList(I.t("team.message.usage", "g"));
+        /// Usage of the /g and /t commands
+        return Collections.singletonList(I.t("{ce}Usage: /{0} <message>", "g"));
     }
 
     @Override

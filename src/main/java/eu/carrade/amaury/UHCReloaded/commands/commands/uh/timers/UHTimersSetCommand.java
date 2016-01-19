@@ -78,17 +78,17 @@ public class UHTimersSetCommand extends AbstractCommand
                 UHTimer timer = p.getTimerManager().getTimer(timerName);
                 if (timer == null)
                 {
-                    sender.sendMessage(I.t("timers.timerDoesNotExists"));
+                    sender.sendMessage(I.t("{ce}This timer is not registered."));
                     return;
                 }
 
                 timer.setDuration(duration);
-                sender.sendMessage(I.t("timers.set", timer.getDisplayName(), args[0]));
+                sender.sendMessage(I.t("{cs}The duration of the timer {0}{cs} is now {1}.", timer.getDisplayName(), args[0]));
 
             }
             catch (IllegalArgumentException e)
             {
-                sender.sendMessage(I.t("timers.durationSyntaxError"));
+                sender.sendMessage(I.t("{ce}The duration' syntax is invalid; accepted formats are mm, mm:ss or hh:mm:ss."));
             }
         }
     }
@@ -121,6 +121,6 @@ public class UHTimersSetCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.timersHelpSet"));
+        return Collections.singletonList(I.t("{cc}/uh timers set <duration> <title ...> {ci}: sets the duration of a timer."));
     }
 }

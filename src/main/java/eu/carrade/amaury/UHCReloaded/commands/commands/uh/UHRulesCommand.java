@@ -60,7 +60,7 @@ public class UHRulesCommand extends AbstractCommand
     {
         if (!p.getRulesManager().isEnabled())
         {
-            sender.sendMessage(I.t("rules.command.unset"));
+            sender.sendMessage(I.t("{ce}No rules are set in the config file."));
             return;
         }
 
@@ -72,11 +72,11 @@ public class UHRulesCommand extends AbstractCommand
                 p.getRulesManager().displayRulesTo(player);
 
                 if (!sender.equals(player))
-                    sender.sendMessage(I.t("rules.command.sent", player.getName()));
+                    sender.sendMessage(I.t("{cs}Rules sent to {0}.", player.getName()));
             }
             else
             {
-                sender.sendMessage(I.t("rules.command.offline", args[0]));
+                sender.sendMessage(I.t("{ce}Cannot display the rules to {0} because he (or she) is offline.", args[0]));
             }
         }
         else
@@ -100,7 +100,7 @@ public class UHRulesCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpRules"));
+        return Collections.singletonList(I.t("{cc}/uh rules [player] {ci}: sends the server rules to the server or the given player."));
     }
 
     @Override

@@ -69,11 +69,11 @@ public class UHTimersDisplayCommand extends AbstractCommand
 
         if (timer == null)
         {
-            sender.sendMessage(I.t("timers.timerDoesNotExists"));
+            sender.sendMessage(I.t("{ce}This timer is not registered."));
             return;
         }
 
-        sender.sendMessage(I.t("timers.displayed", timer.getDisplayName()));
+        sender.sendMessage(I.t("{cs}The timer {0}{cs} is now displayed.", timer.getDisplayName()));
     }
 
     @Override
@@ -98,6 +98,6 @@ public class UHTimersDisplayCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.timersHelpDisplay"));
+        return Collections.singletonList(I.t("{cc}/uh timers display <title ...> {ci}: displays a timer in the scoreboard. Automatic when a timer is started."));
     }
 }

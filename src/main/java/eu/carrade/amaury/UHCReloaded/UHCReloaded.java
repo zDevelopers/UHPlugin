@@ -206,7 +206,7 @@ public class UHCReloaded extends ZPlugin
             getLogger().info("Metrics disabled for this plugin in the configuration: nothing was sent.");
         }
 
-        getLogger().info(I.t("load.loaded"));
+        getLogger().info(I.t("Ultra Hardcore plugin loaded."));
     }
 
     /**

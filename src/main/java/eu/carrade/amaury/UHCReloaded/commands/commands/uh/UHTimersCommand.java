@@ -89,13 +89,13 @@ public class UHTimersCommand extends AbstractCommand
     @Override
     public List<String> help(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.timersHelpTitle"));
+        return Collections.singletonList(I.t("{aqua}------ Timers commands ------"));
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpTimers"));
+        return Collections.singletonList(I.t("{cc}/uh timers {ci}: manages the timers. See /uh timers for details."));
     }
 
     @Override

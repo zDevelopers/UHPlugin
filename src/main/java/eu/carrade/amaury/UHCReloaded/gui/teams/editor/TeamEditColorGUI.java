@@ -50,7 +50,8 @@ public class TeamEditColorGUI extends TeamBuilderStepColorGUI
     @Override
     protected void onUpdate()
     {
-        setTitle(I.t("team.chestGui.editor.color.subGuiTitle", team.getName()));
+        /// The title of the edit team color GUI. {0} = team name (raw).
+        setTitle(I.t("{0} » {black}Color", team.getName()));
         setSize(6 * 9);
         insertColors(2);
     }

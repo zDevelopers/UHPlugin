@@ -80,13 +80,13 @@ public class UHBorderCommand extends AbstractCommand
     @Override
     public List<String> help(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.borderHelpTitle"));
+        return Collections.singletonList(I.t("{aqua}------ Border commands ------"));
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpBorder"));
+        return Collections.singletonList(I.t("{cc}/uh border {ci}: manages borders. Execute /uh border for details."));
     }
 
     @Override

@@ -67,12 +67,12 @@ public class UHTPBackCommand extends AbstractCommand
         Player player = p.getServer().getPlayer(args[0]);
         if (player == null || !player.isOnline())
         {
-            sender.sendMessage(I.t("tpback.offline", args[0]));
+            sender.sendMessage(I.t("{ce}The player {0} is not online.", args[0]));
             return;
         }
         else if (!p.getGameManager().hasDeathLocation(player))
         {
-            sender.sendMessage(I.t("tpback.noDeathLocation", args[0]));
+            sender.sendMessage(I.t("{ce}No death location available for the player {0}.", args[0]));
             return;
         }
 
@@ -82,18 +82,18 @@ public class UHTPBackCommand extends AbstractCommand
         if (args.length >= 2 && args[1].equalsIgnoreCase("force"))
         {
             UHUtils.safeTP(player, deathLocation, true);
-            sender.sendMessage(I.t("tpback.teleported", args[0]));
+            sender.sendMessage(I.t("{cs}The player {0} was teleported back.", args[0]));
             p.getGameManager().removeDeathLocation(player);
         }
         else if (UHUtils.safeTP(player, deathLocation))
         {
-            sender.sendMessage(I.t("tpback.teleported", args[0]));
+            sender.sendMessage(I.t("{cs}The player {0} was teleported back.", args[0]));
             p.getGameManager().removeDeathLocation(player);
         }
         else
         {
-            sender.sendMessage(I.t("tpback.notTeleportedNoSafeSpot", args[0]));
-            sender.sendMessage(I.t("tpback.notTeleportedNoSafeSpotCmd", args[0]));
+            sender.sendMessage(I.t("{ce}The player {0} was NOT teleported back because no safe spot was found.", args[0]));
+            sender.sendMessage(I.t("{ci}Use {cc}/uh tpback {0} force{ci} to teleport the player regardless this point.", args[0]));
         }
     }
 
@@ -132,6 +132,6 @@ public class UHTPBackCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpTpback"));
+        return Collections.singletonList(I.t("{cc}/uh tpback <player> [force] {ci}: safely teleports back a player to his death location."));
     }
 }

@@ -70,7 +70,7 @@ public class UHHealCommand extends AbstractCommand
         Player player = p.getServer().getPlayer(args[0]);
         if (player == null || !player.isOnline())
         {
-            sender.sendMessage(I.t("heal.offline"));
+            sender.sendMessage(I.t("{ce}This player is offline."));
             return;
         }
 
@@ -104,7 +104,7 @@ public class UHHealCommand extends AbstractCommand
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(I.t("heal.errorNaN"));
+                sender.sendMessage(I.t("{ce}Hey, this is not a number of half-hearts. It's a text. Pfff."));
                 return;
             }
 
@@ -112,7 +112,7 @@ public class UHHealCommand extends AbstractCommand
 
             if (health <= 0D)
             {
-                sender.sendMessage(I.t("heal.errorNoKill"));
+                sender.sendMessage(I.t("{ce}You can't kill a player with this command, to avoid typo fails."));
                 return;
             }
             else if (health > 20D)
@@ -140,7 +140,7 @@ public class UHHealCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpHeal"));
+        return Collections.singletonList(I.t("{cc}/uh heal <player> [half-hearts=20|±diff] {ci}: heals a player to the number of half-hearts provided (default 20)."));
     }
 
     @Override

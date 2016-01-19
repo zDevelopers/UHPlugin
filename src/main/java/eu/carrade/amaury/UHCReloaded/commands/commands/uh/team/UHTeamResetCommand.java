@@ -64,7 +64,7 @@ public class UHTeamResetCommand extends AbstractCommand
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
         p.getTeamManager().reset();
-        sender.sendMessage(I.t("team.reset.success"));
+        sender.sendMessage(I.t("{cs}All teams where removed."));
     }
 
     /**
@@ -90,6 +90,6 @@ public class UHTeamResetCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.teamHelpReset"));
+        return Collections.singletonList(I.t("{cc}/uh team reset {ci}: removes all teams."));
     }
 }

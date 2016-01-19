@@ -69,12 +69,12 @@ public class UHTimersPauseCommand extends AbstractCommand
 
         if (timer == null)
         {
-            sender.sendMessage(I.t("timers.timerDoesNotExists"));
+            sender.sendMessage(I.t("{ce}This timer is not registered."));
             return;
         }
 
         timer.setPaused(true);
-        sender.sendMessage(I.t("timers.paused", timer.getDisplayName()));
+        sender.sendMessage(I.t("{cs}The timer {0}{cs} is now paused.", timer.getDisplayName()));
     }
 
     @Override
@@ -99,6 +99,6 @@ public class UHTimersPauseCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.timersHelpPause"));
+        return Collections.singletonList(I.t("{cc}/uh timers pause <title ...> {ci}: pauses a timer."));
     }
 }

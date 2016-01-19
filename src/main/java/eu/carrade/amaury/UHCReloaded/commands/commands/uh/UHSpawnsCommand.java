@@ -91,13 +91,13 @@ public class UHSpawnsCommand extends AbstractCommand
     @Override
     public List<String> help(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.spawnsHelpTitle"));
+        return Collections.singletonList(I.t("{aqua}------ Spawns points commands ------"));
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpSpawns"));
+        return Collections.singletonList(I.t("{cc}/uh spawns {ci}: manages the spawn points. Execute /uh spawns for details."));
     }
 
     @Override

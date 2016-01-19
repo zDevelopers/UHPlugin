@@ -64,7 +64,7 @@ public class UHSpawnsResetCommand extends AbstractCommand
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
         p.getSpawnsManager().reset();
-        sender.sendMessage(I.t("spawns.reset"));
+        sender.sendMessage(I.t("{cs}All the spawn points were removed."));
     }
 
     /**
@@ -90,6 +90,6 @@ public class UHSpawnsResetCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.spawnsHelpReset"));
+        return Collections.singletonList(I.t("{cc}/uh spawns reset {ci}: removes all registered spawn points."));
     }
 }

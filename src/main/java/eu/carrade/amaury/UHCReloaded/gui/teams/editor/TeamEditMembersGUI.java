@@ -64,7 +64,8 @@ public class TeamEditMembersGUI extends ExplorerGui<OfflinePlayer>
     @Override
     protected void onUpdate()
     {
-        setTitle(I.t("team.chestGui.editor.members.subGuiTitle", team.getName()));
+        /// The title of the edit team members GUI. {0} = team name (raw).
+        setTitle(I.t("{0} » {black}Members", team.getName()));
         setKeepHorizontalScrollingSpace(true);
 
         Set<OfflinePlayer> players = new TreeSet<>(new OfflinePlayersComparator());
@@ -73,7 +74,7 @@ public class TeamEditMembersGUI extends ExplorerGui<OfflinePlayer>
 
         action("back", getSize() - 5, GuiUtils.makeItem(
                 Material.EMERALD,
-                I.t("team.chestGui.editor.exit.title")
+                I.t("{green}« Go back")
         ));
     }
 
@@ -89,12 +90,13 @@ public class TeamEditMembersGUI extends ExplorerGui<OfflinePlayer>
         Boolean inThisTeam = this.team.equals(team);
 
         meta.setOwner(player.getName());
-        meta.setDisplayName(I.t("team.chestGui.creator.players.playerItem.title", displayName));
+        /// The title of a button to select a player (a skull button). {0} = player's display name.
+        meta.setDisplayName(I.t("{reset}{0}", displayName));
         meta.setLore(Arrays.asList(
-                player.isOnline() ? I.t("team.chestGui.creator.players.playerItem.online") : I.t("team.chestGui.creator.players.playerItem.offline"),
-                team != null ? I.t("team.chestGui.creator.players.playerItem.currentTeam", team.getDisplayName()) : I.t("team.chestGui.creator.players.playerItem.noCurrentTeam"),
+                player.isOnline() ? I.t("{gray}Online") : I.t("{gray}Offline"),
+                team != null ? I.t("{gray}Current team: {0}", team.getDisplayName()) : I.t("{gray}Current team: none"),
                 "",
-                inThisTeam ? I.t("team.chestGui.editor.members.inviteAdd") : I.t("team.chestGui.editor.members.inviteRemove")
+                inThisTeam ? I.t("{darkgray}» {white}Click {gray}to add this player") : I.t("{darkgray}» {white}Click {gray}to remove this player")
         ));
 
         button.setItemMeta(meta);

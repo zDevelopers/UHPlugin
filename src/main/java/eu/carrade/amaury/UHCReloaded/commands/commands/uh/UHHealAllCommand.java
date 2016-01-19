@@ -91,14 +91,14 @@ public class UHHealAllCommand extends AbstractCommand
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(I.t("heal.errorNaN"));
+                sender.sendMessage(I.t("{ce}Hey, this is not a number of half-hearts. It's a text. Pfff."));
                 return;
             }
         }
 
         if ((!add && diffHealth <= 0) || diffHealth <= -20)
         {
-            sender.sendMessage(I.t("heal.allErrorNoKill"));
+            sender.sendMessage(I.t("{ce}Serial killer!"));
             return;
         }
 
@@ -109,7 +109,7 @@ public class UHHealAllCommand extends AbstractCommand
 
             if (health <= 0D)
             {
-                sender.sendMessage(I.t("heal.errorHealthNotUpdatedNoKill", player.getName()));
+                sender.sendMessage(I.t("{ce}The health of {0} was not updated to avoid a kill.", player.getName()));
                 continue;
             }
             else if (health > 20D)
@@ -137,7 +137,7 @@ public class UHHealAllCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpHealall"));
+        return Collections.singletonList(I.t("{cc}/uh healall [half-hearts=20|±diff] {ci}: heals all players instead of only one."));
     }
 
     @Override

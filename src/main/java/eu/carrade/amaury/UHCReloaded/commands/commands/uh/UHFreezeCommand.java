@@ -89,11 +89,11 @@ public class UHFreezeCommand extends AbstractCommand
 
                     if (on)
                     {
-                        sender.sendMessage(I.t("freeze.frozen", sender.getName()));
+                        sender.sendMessage(I.t("{cst}You where frozen by {0}.", sender.getName()));
                     }
                     else
                     {
-                        sender.sendMessage(I.t("freeze.unfrozen", sender.getName()));
+                        sender.sendMessage(I.t("{cst}You where unfrozen by {0}.", sender.getName()));
                     }
                 }
                 else
@@ -106,20 +106,20 @@ public class UHFreezeCommand extends AbstractCommand
                 Player player = p.getServer().getPlayer(args[1]);
                 if (player == null)
                 {
-                    sender.sendMessage(I.t("freeze.offline", args[1]));
+                    sender.sendMessage(I.t("{ce}{0} is offline!", args[1]));
                 }
                 else
                 {
                     p.getFreezer().setPlayerFreezeState(player, on);
                     if (on)
                     {
-                        player.sendMessage(I.t("freeze.frozen", sender.getName()));
-                        sender.sendMessage(I.t("freeze.playerFrozen", player.getName()));
+                        player.sendMessage(I.t("{cst}You where frozen by {0}.", sender.getName()));
+                        sender.sendMessage(I.t("{cs}{0} is now frozen.", player.getName()));
                     }
                     else
                     {
-                        player.sendMessage(I.t("freeze.unfrozen", sender.getName()));
-                        sender.sendMessage(I.t("freeze.playerUnfrozen", player.getName()));
+                        player.sendMessage(I.t("{cst}You where unfrozen by {0}.", sender.getName()));
+                        sender.sendMessage(I.t("{cs}{0} is now unfrozen.", player.getName()));
                     }
                 }
             }
@@ -134,11 +134,11 @@ public class UHFreezeCommand extends AbstractCommand
 
             if (on)
             {
-                p.getServer().broadcastMessage(I.t("freeze.broadcast.globalFreeze"));
+                p.getServer().broadcastMessage(I.t("{darkaqua}The entire game is now frozen."));
             }
             else
             {
-                p.getServer().broadcastMessage(I.t("freeze.broadcast.globalUnfreeze"));
+                p.getServer().broadcastMessage(I.t("{darkaqua}The game is now unfrozen."));
             }
 
         }
@@ -178,18 +178,18 @@ public class UHFreezeCommand extends AbstractCommand
     public List<String> help(CommandSender sender)
     {
         return Arrays.asList(
-                I.t("cmd.freezeHelpTitle"),
-                I.t("cmd.freezeHelpOn"),
-                I.t("cmd.freezeHelpOff"),
-                I.t("cmd.freezeHelpAll"),
-                I.t("cmd.freezeHelpNone")
+                I.t("{aqua}------ Freeze commands ------"),
+                I.t("{cc}/uh freeze on [player]{ci}: freezes a player, or the sender without a specified player."),
+                I.t("{cc}/uh freeze off [player]{ci}: unfreezes a player (or the sender), even if the entire game is frozen."),
+                I.t("{cc}/uh freeze all{ci}: freezes the entire game (players, mobs, timer)."),
+                I.t("{cc}/uh freeze none{ci}: unfreezes the entire game. You NEED to execute this in order to relaunch the timer.")
         );
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpFreeze"));
+        return Collections.singletonList(I.t("{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."));
     }
 
     @Override

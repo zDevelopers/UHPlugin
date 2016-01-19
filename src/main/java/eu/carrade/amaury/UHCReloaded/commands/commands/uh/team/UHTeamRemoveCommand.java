@@ -73,11 +73,11 @@ public class UHTeamRemoveCommand extends AbstractCommand
             String name = UHUtils.getStringFromCommandArguments(args, 0);
             if (!p.getTeamManager().removeTeam(name))
             {
-                sender.sendMessage(I.t("team.remove.doesNotExists"));
+                sender.sendMessage(I.t("{ce}This team does not exists."));
             }
             else
             {
-                sender.sendMessage(I.t("team.remove.removed", name));
+                sender.sendMessage(I.t("{cs}Team {0} deleted.", name));
             }
         }
         else
@@ -116,6 +116,6 @@ public class UHTeamRemoveCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.teamHelpRemove"));
+        return Collections.singletonList(I.t("{cc}/uh team remove <name ...> {ci}: removes a team"));
     }
 }

@@ -67,7 +67,7 @@ public class UHTeamSpyCommand extends AbstractCommand
                 target = Bukkit.getPlayer(args[0]);
                 if (target == null)
                 {
-                    sender.sendMessage(I.t("team.spy.offline", args[0]));
+                    sender.sendMessage(I.t("{ce}Cannot toggle the spy mode of {0} because he/she is offline.", args[0]));
                     return;
                 }
             }
@@ -92,12 +92,12 @@ public class UHTeamSpyCommand extends AbstractCommand
         if (p.getTeamChatManager().isGlobalSpy(target.getUniqueId()))
         {
             p.getTeamChatManager().removeGlobalSpy(target.getUniqueId());
-            message = I.t("team.spy.disabled", target.getName());
+            message = I.t("{cs}Spy mode {darkred}disabled{cs} for {0}.", target.getName());
         }
         else
         {
             p.getTeamChatManager().addGlobalSpy(target.getUniqueId());
-            message = I.t("team.spy.enabled", target.getName());
+            message = I.t("{cs}Spy mode {darkgreen}enabled{cs} for {0}.", target.getName());
         }
 
         target.sendMessage(message);
@@ -120,6 +120,6 @@ public class UHTeamSpyCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.teamHelpSpy"));
+        return Collections.singletonList(I.t("{cc}/uh team spy [player] {ci}: allows yourself (or the target player) to receive all the team chats (read-only). Execute again to stop."));
     }
 }

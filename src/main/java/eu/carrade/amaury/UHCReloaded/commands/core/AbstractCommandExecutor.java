@@ -205,8 +205,8 @@ public abstract class AbstractCommandExecutor implements TabExecutor
 
         if (!isAnError)
         {
-            sender.sendMessage(I.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
-            sender.sendMessage(I.t("cmd.legendHelp"));
+            sender.sendMessage(I.t("{yellow}{0} - version {1}", p.getDescription().getDescription(), p.getDescription().getVersion()));
+            sender.sendMessage(I.t("{ci}Legend: {cc}/uh command <required> [optional=default] <spaces allowed ...>{ci}."));
         }
 
         if (help != null)
@@ -222,8 +222,8 @@ public abstract class AbstractCommandExecutor implements TabExecutor
 
         if (isAnError)
         {
-            sender.sendMessage(I.t("cmd.errorBadUse"));
-            sender.sendMessage(I.t("cmd.errorBadUseHelpAbove"));
+            sender.sendMessage(I.t("{ce}{bold}You cannot execute this command this way."));
+            sender.sendMessage(I.t("{ce}The help is displayed above."));
             CommandUtils.displaySeparator(sender);
         }
     }
@@ -254,11 +254,11 @@ public abstract class AbstractCommandExecutor implements TabExecutor
             switch (e.getReason())
             {
                 case NOT_ALLOWED:
-                    sender.sendMessage(I.t("cmd.errorUnauthorized"));
+                    sender.sendMessage(I.t("{ce}You are not allowed to execute this command."));
                     break;
 
                 case ONLY_AS_A_PLAYER:
-                    sender.sendMessage(I.t("cmd.errorOnlyAsAPlayer"));
+                    sender.sendMessage(I.t("{ce}This can only be executed as a player."));
                     break;
 
                 case BAD_USE:

@@ -205,12 +205,12 @@ public class SpawnsManager
                     try
                     {
                         addSpawnPoint(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
-                        p.getLogger().info(I.t("load.spawnPointAdded", coords[0], coords[1]));
+                        p.getLogger().info(I.t("Spawn point {0},{1} added from the config file", coords[0], coords[1]));
                         spawnCount++;
                     }
                     catch (Exception e) // Not an integer or not enough coords
                     {
-                        p.getLogger().warning(I.t("load.invalidSpawnPoint", (String) position));
+                        p.getLogger().warning(I.t("Invalid spawn point set in config: {0}", (String) position));
                     }
                 }
             }

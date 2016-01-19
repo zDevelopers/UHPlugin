@@ -112,9 +112,14 @@ public class PlayerListHeaderFooterManager
 
         return raw
                 .replace("{title}", config.getString("scoreboard.title", ""))
-                .replace("{episodeText}", I.t("playersList.episode", String.valueOf(UHCReloaded.get().getGameManager().getEpisode())))
-                .replace("{playersText}", I.t("playersList.players", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount())))
-                .replace("{teamsText}", I.t("playersList.teams", String.valueOf(UHCReloaded.get().getGameManager().getAliveTeamsCount())))
+
+                /// Episode in the player list ({episodeText} replacement). {0} = current episode number.
+                .replace("{episodeText}", I.t("Episode {0}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode())))
+                /// Players in the player list ({playersText} replacement). {0} = current alive players count.
+                .replace("{playersText}", I.t("{0} players", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount())))
+                /// Teams in the player list ({teamsText} replacement). {0} = current alive teams count.
+                .replace("{teamsText}", I.t("{0} teams", String.valueOf(UHCReloaded.get().getGameManager().getAliveTeamsCount())))
+
                 .replace("{episodeNumber}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode()))
                 .replace("{playersCount}", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount()))
                 .replace("{teamsCount}", String.valueOf(UHCReloaded.get().getGameManager().getAliveTeamsCount()))

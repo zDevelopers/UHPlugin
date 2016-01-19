@@ -158,7 +158,8 @@ public class GameListener implements Listener
                 @Override
                 public void run()
                 {
-                    ev.getEntity().kickPlayer(I.t("death.kickMessage"));
+                    /// The kick message of a player when death.kick.do = true in config
+                    ev.getEntity().kickPlayer(I.t("jayjay"));
                 }
             }, 20L * this.p.getConfig().getInt("death.kick.time", 30));
         }
@@ -244,7 +245,7 @@ public class GameListener implements Listener
                         public void run()
                         {
                             String format = ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.teamDeathMessagesFormat", ""));
-                            p.getServer().broadcastMessage(I.t("death.teamHasFallen", format, team.getDisplayName() + format));
+                            p.getServer().broadcastMessage(I.t("{0}The team {1} has fallen!", format, team.getDisplayName() + format));
                         }
                     }, 1L);
                 }
@@ -287,7 +288,8 @@ public class GameListener implements Listener
                 @Override
                 public void run()
                 {
-                    ev.getEntity().sendMessage(I.t("death.canRespawn"));
+                    /// A message displayed to the players under the death screen, about the respawn possibility even if the death screen says the opposite (in hardcore mode)
+                    ev.getEntity().sendMessage(I.t("{darkpurple}{obfuscated}----{lightpurple}{italic} YOU CAN RESPAWN{lightpurple}, just click {italic}Respawn {lightpurple}on the next screen."));
                 }
             }, 2L);
         }
@@ -444,7 +446,8 @@ public class GameListener implements Listener
         {
 
             ev.setResult(Result.KICK_OTHER);
-            ev.setKickMessage(I.t("death.banMessage"));
+            /// The kick message displayed if a player tries to relog after his death and it's forbidden by the config.
+            ev.setKickMessage(I.t("You are dead!"));
         }
     }
 
@@ -517,9 +520,9 @@ public class GameListener implements Listener
             // A warning to the administrators if WorldBorder is not present.
             if (!p.getWorldBorderIntegration().isWBIntegrationEnabled())
             {
-                ev.getPlayer().sendMessage(I.t("load.WBNotInstalled1"));
-                ev.getPlayer().sendMessage(I.t("load.WBNotInstalled2"));
-                ev.getPlayer().sendMessage(I.t("load.WBNotInstalled3"));
+                ev.getPlayer().sendMessage(I.t("{darkred}[UHC] {ce}WorldBorder is not installed: no borders' check!"));
+                ev.getPlayer().sendMessage(I.t("{gray}Also, without WorldBorder, the border can't be reduced during the game (warnings excluded)."));
+                ev.getPlayer().sendMessage(I.t("{gray}Just install the plugin; UHPlugin will automatically configure it."));
             }
 
             // The same for ProtocolLib
@@ -529,23 +532,25 @@ public class GameListener implements Listener
 
                 if (enabledOptionsWithProtocolLibNeeded != null)
                 {
-                    ev.getPlayer().sendMessage(I.t("load.PLNotInstalled1"));
-                    ev.getPlayer().sendMessage(I.t("load.PLNotInstalled2"));
+                    ev.getPlayer().sendMessage(I.t("{darkred}[UHC] {ce}ProtocolLib is needed but not installed!"));
+                    ev.getPlayer().sendMessage(I.t("{gray}The following options require the presence of ProtocolLib:"));
                     for (String option : enabledOptionsWithProtocolLibNeeded)
                     {
-                        ev.getPlayer().sendMessage(I.t("load.PLNotInstalledItem", option));
+                        /// An option requiring ProtocolLib, in the “missing PLib” message. {0} = option path.
+                        ev.getPlayer().sendMessage(I.tc("protocollib_option", "{darkgray} - {gray}{0}", option));
                     }
 
-                    String pLibDownloadURL = "";
-                    if (p.getServer().getBukkitVersion().contains("1.7"))
-                    { // 1.7.9 or 1.7.10
+                    String pLibDownloadURL;
+                    if (p.getServer().getBukkitVersion().contains("1.7"))  // 1.7.9 or 1.7.10
+                    {
                         pLibDownloadURL = "http://dev.bukkit.org/bukkit-plugins/protocollib/";
                     }
-                    else
-                    { // 1.8+
+                    else  // 1.8+
+                    {
                         pLibDownloadURL = "http://www.spigotmc.org/resources/protocollib.1997/";
                     }
-                    ev.getPlayer().sendMessage(I.t("load.PLNotInstalled3", pLibDownloadURL));
+                    /// {0} = ProtocolLib download URL for the current Minecraft version.
+                    ev.getPlayer().sendMessage(I.t("{gray}ProtocolLib is available here: {0}", pLibDownloadURL));
                 }
             }
         }
@@ -673,7 +678,7 @@ public class GameListener implements Listener
 
         if (ev.getTimer().equals(p.getBorderManager().getWarningTimer()) && ev.wasTimerUp())
         {
-            p.getBorderManager().getWarningSender().sendMessage(I.t("borders.warning.timerUp"));
+            p.getBorderManager().getWarningSender().sendMessage(I.t("{cs}The timer before the new border is up!"));
             p.getBorderManager().sendCheckMessage(p.getBorderManager().getWarningSender(), p.getBorderManager().getWarningSize());
         }
     }
@@ -705,11 +710,11 @@ public class GameListener implements Listener
 
         if (ev.getCause() == EpisodeChangedCause.SHIFTED)
         {
-            message = I.t("episodes.endForced", String.valueOf(ev.getNewEpisode() - 1), ev.getShifter());
+            message = I.t("{aqua}-------- End of episode {0} [forced by {1}] --------", String.valueOf(ev.getNewEpisode() - 1), ev.getShifter());
         }
         else
         {
-            message = I.t("episodes.end", String.valueOf(ev.getNewEpisode() - 1));
+            message = I.t("{aqua}-------- End of episode {0} --------", String.valueOf(ev.getNewEpisode() - 1));
         }
 
         p.getServer().broadcastMessage(message);
@@ -718,7 +723,12 @@ public class GameListener implements Listener
         // Broadcasts title
         if (p.getConfig().getBoolean("episodes.title"))
         {
-            Titles.broadcastTitle(5, 32, 8, I.t("episodes.title.title", ev.getNewEpisode(), ev.getNewEpisode() - 1), I.t("episodes.title.subtitle", ev.getNewEpisode(), ev.getNewEpisode() - 1));
+            Titles.broadcastTitle(
+                    5, 32, 8,
+                    /// The title displayed when the episode change. {0} = new episode number; {1} = old.
+                    I.t("{darkaqua}Episode {aqua}{0}", ev.getNewEpisode(), ev.getNewEpisode() - 1),
+                    ""
+            );
         }
 
 
@@ -739,12 +749,19 @@ public class GameListener implements Listener
         new UHSound(p.getConfig().getConfigurationSection("start.sound")).broadcast();
 
         // Broadcast
-        Bukkit.getServer().broadcastMessage(I.t("start.go"));
+        /// Start message broadcasted in chat
+        Bukkit.getServer().broadcastMessage(I.t("{green}--- GO ---"));
 
         // Title
         if (p.getConfig().getBoolean("start.displayTitle"))
         {
-            Titles.broadcastTitle(5, 40, 8, I.t("start.title.title"), I.t("start.title.subtitle"));
+            Titles.broadcastTitle(
+                    5, 40, 8,
+                    /// Title of title displayed when the game starts.
+                    I.t("{darkgreen}Let's go!"),
+                    /// Subtitle of title displayed when the game starts.
+                    I.t("{green}Good luck, and have fun")
+            );
         }
 
         // Commands
@@ -874,7 +891,8 @@ public class GameListener implements Listener
         p.getDynmapIntegration().hideDeathLocation(ev.getPlayer());
 
         // All players are notified
-        p.getServer().broadcastMessage(I.t("resurrect.broadcastMessage", ev.getPlayer().getName()));
+        /// Resurrection notification. {0} = raw resurrected player name.
+        p.getServer().broadcastMessage(I.t("{gold}{0} returned from the dead!", ev.getPlayer().getName()));
 
         // Updates the MOTD.
         p.getMOTDManager().updateMOTDDuringGame();

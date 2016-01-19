@@ -87,7 +87,7 @@ public class UHTeamLeaveCommand extends AbstractCommand
 
         if (target == null)
         {
-            sender.sendMessage(I.t("team.removeplayer.disconnected", args[0])); // args.length >= 1 here.
+            sender.sendMessage(I.t("{ce}The player {0} is disconnected and never logged in before!", args[0])); // args.length >= 1 here.
         }
 
         else
@@ -104,7 +104,7 @@ public class UHTeamLeaveCommand extends AbstractCommand
 
                 if (!target.equals(sender))
                 {
-                    sender.sendMessage(I.t("team.removeplayer.success", target.getName()));
+                    sender.sendMessage(I.t("{cs}The player {0} was successfully removed from his team.", target.getName()));
                 }
 
             }
@@ -138,6 +138,6 @@ public class UHTeamLeaveCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.teamHelpLeave"));
+        return Collections.singletonList(I.t("{cc}/uh team leave <player> {ci}: removes a player from his team."));
     }
 }

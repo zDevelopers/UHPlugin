@@ -197,8 +197,8 @@ public class GameplayListener implements Listener
             int level;
 
             if (meta.hasDisplayName()
-                    && (meta.getDisplayName().equals(ChatColor.RESET + I.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"))
-                    || meta.getDisplayName().equals(ChatColor.RESET + I.t("craft.goldenApple.nameGoldenAppleFromHeadNotch"))))
+                    && (meta.getDisplayName().equals(ChatColor.RESET + I.t("{aqua}Golden head"))
+                    || meta.getDisplayName().equals(ChatColor.RESET + I.t("{lightpurple}Golden head"))))
             {
                 if (dataValue == 0)
                 { // Normal golden apple from a head
@@ -300,7 +300,8 @@ public class GameplayListener implements Listener
 
             if (!foundRottenFlesh)
             {
-                player1.sendMessage(I.t("compass.noRottenFlesh"));
+                /// Error message if a player tries to use his pointing compass without rotten flesh.
+                player1.sendMessage(I.t("{gray}{italic}You do not have rotten flesh."));
                 player1.playSound(player1.getLocation(), Sound.STEP_WOOD, 1F, 1F);
                 return;
             }
@@ -330,13 +331,15 @@ public class GameplayListener implements Listener
 
             if (nearest == null)
             {
-                player1.sendMessage(I.t("compass.nothingFound"));
+                /// Error message if a player tries to use his pointing compass without a player nearby.
+                player1.sendMessage(I.t("{gray}{italic}Only silence answers your request."));
 
                 player1.playSound(player1.getLocation(), Sound.STEP_WOOD, 1F, 1F);
                 return;
             }
 
-            player1.sendMessage(I.t("compass.success"));
+            /// Success message when a player uses his pointing compass.
+            player1.sendMessage(I.t("{gray}The compass now points to the closest player."));
             player1.setCompassTarget(nearest.getLocation());
 
             player1.playSound(player1.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);

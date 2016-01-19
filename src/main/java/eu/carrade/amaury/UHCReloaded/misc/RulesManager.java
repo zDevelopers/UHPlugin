@@ -117,7 +117,8 @@ public class RulesManager
     public void displayRulesTo(CommandSender receiver)
     {
         CommandUtils.displaySeparator(receiver);
-        receiver.sendMessage(I.t("rules.header"));
+        /// Title of the rules box.
+        receiver.sendMessage(I.t("{red}{bold}Rules and informations"));
 
         for (String rule : rules)
         {
@@ -127,7 +128,8 @@ public class RulesManager
             }
             else
             {
-                receiver.sendMessage(I.t("rules.bullet", rule));
+                /// Rule item in the rule box.
+                receiver.sendMessage(I.t("{darkgray}- {reset}{0}", rule));
             }
         }
 

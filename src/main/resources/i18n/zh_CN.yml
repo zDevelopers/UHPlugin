@@ -204,10 +204,8 @@ keys:
     
     craft:
         goldenApple:
-            loreLine1Player: "用"
-            loreLine2Player: "玩家 {0} 掉落的头颅制作"
-            loreLine1Monster: "用"
-            loreLine2Monster: "怪物掉落的头颅制作"
+            lorePlayer: "用玩家 {0} 掉落的头颅制作"
+            loreMonster: "用怪物掉落的头颅制作"
             
             nameGoldenAppleFromHeadNormal: "{aqua}金苹果(金头颅)"
             nameGoldenAppleFromHeadNotch: "{lightpurple}金苹果(金头颅)"

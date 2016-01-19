@@ -53,15 +53,18 @@ public class TeamBuilderStepNameGUI extends TeamBuilderBaseGUI
     @Override
     protected void onUpdate()
     {
-        setTitle(I.t("team.chestGui.creator.name.title"));
+        /// The title of the name selector GUI, in the create team GUIs
+        setTitle(I.t("New team » {black}Name"));
         setSize(6 * 9);
 
         generateBreadcrumbs(BuildingStep.NAME);
 
         action("name", 22, GuiUtils.makeItem(
                 Material.BOOK_AND_QUILL,
-                I.t("team.chestGui.creator.name.nameItem.title"),
-                GuiUtils.generateLore(I.t("team.chestGui.creator.name.nameItem.lore"))
+                /// The title of the button opening the sign to write the team name (creator GUIs)
+                I.t("{white}Name the team"),
+                /// The legend of the button opening the sign to write the team name (creator GUIs)
+                GuiUtils.generateLore(I.t("{gray}When clicked, a sign will open; write the name of the team inside."))
         ));
     }
 

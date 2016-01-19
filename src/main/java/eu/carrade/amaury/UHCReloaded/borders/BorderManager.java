@@ -80,7 +80,7 @@ public class BorderManager
     {
         p = plugin;
 
-        warningTimerName = I.t("borders.warning.nameTimer");
+        warningTimerName = I.t("Border shrinking");
 
         mapShape = MapShape.fromString(p.getConfig().getString("map.shape"));
         if (mapShape == null)
@@ -359,25 +359,25 @@ public class BorderManager
 
         if (playersOutside.size() == 0)
         {
-            to.sendMessage(I.t("borders.check.allPlayersInside"));
+            to.sendMessage(I.t("{cs}All players are inside the given border."));
         }
         else
         {
-            to.sendMessage(I.t("borders.check.countPlayersOutside", String.valueOf(playersOutside.size())));
+            to.sendMessage(I.t("{ci}There are {0} players outside the given border.", String.valueOf(playersOutside.size())));
             for (Player player : getPlayersOutside(diameter))
             {
                 double distance = getDistanceToBorder(player.getLocation(), diameter);
                 if (distance > 150)
                 {
-                    to.sendMessage(I.t("borders.check.itemPlayerFar", player.getName()));
+                    to.sendMessage(I.t("{lightpurple} - {red}{0}{ci} (far away from the border)", player.getName()));
                 }
                 else if (distance > 25)
                 {
-                    to.sendMessage(I.t("borders.check.itemPlayerClose", player.getName()));
+                    to.sendMessage(I.t("{lightpurple} - {yellow}{0}{ci} (close to the border)", player.getName()));
                 }
                 else
                 {
-                    to.sendMessage(I.t("borders.check.itemPlayerVeryClose", player.getName()));
+                    to.sendMessage(I.t("{lightpurple} - {green}{0}{ci} (very close to the border)", player.getName()));
                 }
             }
         }
@@ -419,10 +419,10 @@ public class BorderManager
 
                     border.setDiameter(BORDER_SHRINKING_FINAL_SIZE, BORDER_SHRINKING_DURATION);
 
-                    Titles.broadcastTitle(5, 30, 8, I.t("borders.shrinking.title.title"), I.t("borders.shrinking.title.subtitle"));
+                    Titles.broadcastTitle(5, 30, 8, I.t("{red}Warning!"), I.t("{white}The border begins to shrink..."));
 
-                    Bukkit.broadcastMessage(I.t("borders.shrinking.message.title"));
-                    Bukkit.broadcastMessage(I.t("borders.shrinking.message.times", secondsPerBlock, BORDER_SHRINKING_FINAL_SIZE));
+                    Bukkit.broadcastMessage(I.t("{red}{bold}The border begins to shrink..."));
+                    Bukkit.broadcastMessage(I.t("{gray}It will shrink by one block every {0} second(s) until {1} blocks in diameter.", secondsPerBlock, BORDER_SHRINKING_FINAL_SIZE));
                 }
             }, BORDER_SHRINKING_STARTS_AFTER * 20l);
         }

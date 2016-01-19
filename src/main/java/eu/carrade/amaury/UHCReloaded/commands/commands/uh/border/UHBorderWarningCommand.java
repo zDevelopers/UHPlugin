@@ -64,7 +64,7 @@ public class UHBorderWarningCommand extends AbstractCommand
         else if (args[0].equalsIgnoreCase("cancel"))
         { // /uh border warning cancel
             p.getBorderManager().cancelWarning();
-            sender.sendMessage(I.t("borders.warning.canceled"));
+            sender.sendMessage(I.t("{cs}Warning canceled."));
         }
         else
         { // /uh border warning <?>
@@ -79,12 +79,12 @@ public class UHBorderWarningCommand extends AbstractCommand
                 }
 
                 p.getBorderManager().setWarningSize(warnDiameter, warnTime, sender);
-                sender.sendMessage(I.t("borders.warning.set", p.getConfig().getString("map.border.warningInterval", "90")));
+                sender.sendMessage(I.t("{cs}Future size saved. All players outside this future border will be warned every {0} seconds.", p.getConfig().getString("map.border.warningInterval", "90")));
 
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(I.t("borders.NaN", args[0]));
+                sender.sendMessage(I.t("{ce}“{0}” is not a number...", args[0]));
             }
         }
     }
@@ -109,6 +109,6 @@ public class UHBorderWarningCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Arrays.asList(I.t("cmd.borderHelpWarning"), I.t("cmd.borderHelpWarningCancel"));
+        return Arrays.asList(I.t("{cc}/uh border warning <futureDiameter> [minutesBeforeReduction]{ci}: warns all players outside the given future diameter. It's just a notice, nothing else."), I.t("{cc}/uh border warning cancel{ci}: cancels a previously-set warning."));
     }
 }

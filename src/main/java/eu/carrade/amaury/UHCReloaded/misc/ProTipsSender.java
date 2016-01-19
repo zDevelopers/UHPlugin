@@ -61,7 +61,7 @@ public class ProTipsSender
 {
     private UHCReloaded p = null;
 
-    private Map<String, ArrayList<UUID>> protipsGiven = new HashMap<String, ArrayList<UUID>>();
+    private Map<String, ArrayList<UUID>> protipsGiven = new HashMap<>();
 
     private UHSound proTipsSound = null;
 
@@ -132,8 +132,8 @@ public class ProTipsSender
 
         protipsGiven.get(protip).add(player.getUniqueId());
 
-
-        player.sendMessage(I.t("protips.base") + " " + ChatColor.RESET + I.t("protips." + protip));
+        /// ProTip invite, displayed before a ProTip.
+        player.sendMessage(I.t("{darkpurple}ProTip!") + " " + ChatColor.RESET + I.t("protips." + protip));
         proTipsSound.play(player);
 
         return false;

@@ -69,7 +69,7 @@ public class UHFeedCommand extends AbstractCommand
         Player target = p.getServer().getPlayer(args[0]);
         if (target == null || !target.isOnline())
         {
-            sender.sendMessage(I.t("feed.offline"));
+            sender.sendMessage(I.t("{ce}This player is offline."));
             return;
         }
 
@@ -84,7 +84,7 @@ public class UHFeedCommand extends AbstractCommand
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(I.t("feed.errorNaN"));
+                sender.sendMessage(I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
                 return;
             }
 
@@ -97,7 +97,7 @@ public class UHFeedCommand extends AbstractCommand
                 }
                 catch (NumberFormatException e)
                 {
-                    sender.sendMessage(I.t("feed.errorNaN"));
+                    sender.sendMessage(I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
                     return;
                 }
             }
@@ -122,7 +122,7 @@ public class UHFeedCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpFeed"));
+        return Collections.singletonList(I.t("{cc}/uh feed <player> [foodPoints=20] [saturation=max] {ci}: feeds a player."));
     }
 
     @Override

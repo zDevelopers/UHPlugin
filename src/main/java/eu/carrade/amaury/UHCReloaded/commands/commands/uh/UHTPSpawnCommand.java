@@ -63,7 +63,7 @@ public class UHTPSpawnCommand extends AbstractCommand
         // Spawns not assigned
         if (p.getGameManager().getTeleporter() == null)
         {
-            sender.sendMessage(I.t("tpspawn.notAssigned"));
+            sender.sendMessage(I.t("{ce}The spawn points are not already assigned to the player, because the game is not started."));
             return;
         }
 
@@ -76,7 +76,7 @@ public class UHTPSpawnCommand extends AbstractCommand
         Player player = p.getServer().getPlayer(args[0]);
         if (player == null || !player.isOnline())
         {
-            sender.sendMessage(I.t("tpspawn.offline", args[0]));
+            sender.sendMessage(I.t("{ce}The player {0} is not online.", args[0]));
             return;
         }
 
@@ -84,7 +84,7 @@ public class UHTPSpawnCommand extends AbstractCommand
 
         if (spawnLocation == null)
         {
-            sender.sendMessage(I.t("tpspawn.noSpawnLocation", args[0]));
+            sender.sendMessage(I.t("{ce}No spawn location available for the player {0}.", args[0]));
             return;
         }
 
@@ -92,16 +92,16 @@ public class UHTPSpawnCommand extends AbstractCommand
         if (args.length >= 2 && args[1].equalsIgnoreCase("force"))
         {
             p.getGameManager().getTeleporter().teleportPlayer(player.getUniqueId(), true);
-            sender.sendMessage(I.t("tpspawn.teleported", args[0]));
+            sender.sendMessage(I.t("{cs}The player {0} was teleported to his spawn location.", args[0]));
         }
         else if (UHUtils.safeTP(player, spawnLocation))
         {
-            sender.sendMessage(I.t("tpspawn.teleported", args[0]));
+            sender.sendMessage(I.t("{cs}The player {0} was teleported to his spawn location.", args[0]));
         }
         else
         {
-            sender.sendMessage(I.t("tpspawn.notTeleportedNoSafeSpot", args[0]));
-            sender.sendMessage(I.t("tpspawn.notTeleportedNoSafeSpotCmd", args[0]));
+            sender.sendMessage(I.t("{ce}The player {0} was NOT teleported to his spawn because no safe spot was found.", args[0]));
+            sender.sendMessage(I.t("{ci}Use {cc}/uh tpspawn {0} force{ci} to teleport the player regardless this point.", args[0]));
         }
     }
 
@@ -145,6 +145,6 @@ public class UHTPSpawnCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpTpspawn"));
+        return Collections.singletonList(I.t("{cc}/uh tpspawn <player> [force] {ci}: safely teleports back a player to his spawn location."));
     }
 }

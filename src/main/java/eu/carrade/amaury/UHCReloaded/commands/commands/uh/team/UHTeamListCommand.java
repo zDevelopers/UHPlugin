@@ -67,26 +67,29 @@ public class UHTeamListCommand extends AbstractCommand
     {
         if (p.getTeamManager().getTeams().size() == 0)
         {
-            sender.sendMessage(I.t("team.list.nothing"));
+            sender.sendMessage(I.t("{ce}There isn't any team to show."));
             return;
         }
 
         for (final UHTeam team : p.getTeamManager().getTeams())
         {
-            sender.sendMessage(I.t("team.list.itemTeam", team.getDisplayName(), ((Integer) team.getSize()).toString()));
+            sender.sendMessage(I.t("{0} ({1} players)", team.getDisplayName(), ((Integer) team.getSize()).toString()));
             for (final OfflinePlayer player : team.getPlayers())
             {
                 String bullet;
                 if (player.isOnline())
                 {
-                    bullet = I.t("team.list.bulletPlayerOnline");
+                    /// Online dot in /uh team list
+                    bullet = I.t("{green} • ");
                 }
                 else
                 {
-                    bullet = I.t("team.list.bulletPlayerOffline");
+                    /// Offline dot in /uh team list
+                    bullet = I.t("{red} • ");
                 }
 
-                sender.sendMessage(bullet + I.t("team.list.itemPlayer", player.getName()));
+                /// Player name after the online status dot in /uh teams list
+                sender.sendMessage(bullet + I.tc("teams_list", "{0}", player.getName()));
             }
         }
     }
@@ -114,6 +117,6 @@ public class UHTeamListCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.teamHelpList"));
+        return Collections.singletonList(I.t("{cc}/uh team list {ci}: lists the teams and their players."));
     }
 }

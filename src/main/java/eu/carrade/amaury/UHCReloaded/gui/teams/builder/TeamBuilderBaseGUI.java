@@ -105,9 +105,12 @@ public abstract class TeamBuilderBaseGUI extends ActionGui
      */
     protected enum BuildingStep
     {
-        COLOR (I.t("team.chestGui.creator.color.breadcrumbs")),
-        NAME (I.t("team.chestGui.creator.name.breadcrumbs")),
-        PLAYERS (I.t("team.chestGui.creator.players.breadcrumbs"));
+        /// The title of the first step in the team creator GUIs
+        COLOR (I.t("{gray}1. {white}{bold}Team color")),
+        /// The title of the second step in the team creator GUIs
+        NAME (I.t("{gray}2. {white}{bold}Team name")),
+        /// The title of the third step in the team creator GUIs
+        PLAYERS (I.t("{gray}3. {white}{bold}Team members"));
 
 
         private final String name;

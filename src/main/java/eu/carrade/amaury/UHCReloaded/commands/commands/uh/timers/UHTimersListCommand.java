@@ -62,7 +62,7 @@ public class UHTimersListCommand extends AbstractCommand
     {
         Collection<UHTimer> timers = p.getTimerManager().getTimers();
 
-        sender.sendMessage(I.t("timers.list.count", String.valueOf(timers.size())));
+        sender.sendMessage(I.t("{ci}{0} timer(s) are registered.", String.valueOf(timers.size())));
 
         for (UHTimer timer : timers)
         {
@@ -70,7 +70,7 @@ public class UHTimersListCommand extends AbstractCommand
             {
                 if (timer.isPaused())
                 {
-                    sender.sendMessage(I.t("timers.list.itemPaused",
+                    sender.sendMessage(I.t("{yellow} • {{ci}{0}{ci} - total {1} seconds - {2}",
                             timer.getDisplayName(),
                             String.valueOf(timer.getDuration()),
                             timer.toString()
@@ -78,7 +78,7 @@ public class UHTimersListCommand extends AbstractCommand
                 }
                 else
                 {
-                    sender.sendMessage(I.t("timers.list.itemRunning",
+                    sender.sendMessage(I.t("{green} • {ci}{0}{ci} - total {1} seconds - {2}",
                             timer.getDisplayName(),
                             String.valueOf(timer.getDuration()),
                             timer.toString()
@@ -87,7 +87,7 @@ public class UHTimersListCommand extends AbstractCommand
             }
             else
             {
-                sender.sendMessage(I.t("timers.list.itemStopped",
+                sender.sendMessage(I.t("{red} • {ci}{0}{ci} - total {1} seconds",
                         timer.getDisplayName(),
                         String.valueOf(timer.getDuration())));
             }
@@ -116,6 +116,6 @@ public class UHTimersListCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.timersHelpList"));
+        return Collections.singletonList(I.t("{cc}/uh timers list {ci}: lists the registered timers."));
     }
 }

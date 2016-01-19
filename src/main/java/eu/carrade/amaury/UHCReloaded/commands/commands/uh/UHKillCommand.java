@@ -74,7 +74,7 @@ public class UHKillCommand extends AbstractCommand
 
         if (player == null)
         {
-            sender.sendMessage(I.t("kill.neverPlayed"));
+            sender.sendMessage(I.t("{ce}This player was never seen on this server."));
             return;
         }
 
@@ -89,11 +89,11 @@ public class UHKillCommand extends AbstractCommand
                 p.getGameManager().addDead(player.getUniqueId());
             }
 
-            sender.sendMessage(I.t("kill.killed", player.getName()));
+            sender.sendMessage(I.t("{cs}The player {0} is now marked as dead.", player.getName()));
         }
         else
         {
-            sender.sendMessage(I.t("kill.notAlive", player.getName()));
+            sender.sendMessage(I.t("{ce}{0} is not an alive player.", player.getName()));
         }
     }
 
@@ -124,6 +124,6 @@ public class UHKillCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("cmd.helpKill"));
+        return Collections.singletonList(I.t("{cc}/uh kill <player> {ci}: mark a player as dead, even if he is offline."));
     }
 }

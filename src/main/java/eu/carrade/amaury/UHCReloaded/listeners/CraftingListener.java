@@ -275,8 +275,8 @@ public class CraftingListener implements Listener
 
                             HashSet<String> prohibited = new HashSet<String>();
 
-                            prohibited.add(ChatColor.RESET + I.t("craft.goldenApple.nameGoldenAppleFromHeadNormal"));
-                            prohibited.add(ChatColor.RESET + I.t("craft.goldenApple.nameGoldenAppleFromHeadNotch"));
+                            prohibited.add(ChatColor.RESET + I.t("{aqua}Golden head"));
+                            prohibited.add(ChatColor.RESET + I.t("{lightpurple}Golden head"));
 
                             // It is possible that the client filters the name of the golden apple in the anvil UI,
                             // removing all §.

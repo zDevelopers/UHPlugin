@@ -47,7 +47,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -64,54 +63,64 @@ public class TeamEditGUI extends ActionGui
     @Override
     protected void onUpdate()
     {
-        setTitle(I.t("team.chestGui.editor.title", team.getDisplayName()));
+        /// The title of the edit team GUI. {0} = team display name.
+        setTitle(I.t("Teams » {black}{0}", team.getDisplayName()));
         setSize(36);
 
         // Banner
         ItemStack banner = team.getBanner();
-        GuiUtils.makeItem(banner, ChatColor.RESET + team.getDisplayName(), Collections.singletonList(I.t("team.chestGui.editor.banner.members", team.getSize())));
+        /// Members count in the banner description, in the team edit GUI.
+        GuiUtils.makeItem(banner, ChatColor.RESET + team.getDisplayName(), GuiUtils.generateLore(I.t("{white}{0} {gray}member(s)", team.getSize())));
         GuiUtils.hideItemAttributes(banner);
         action("", 9, banner);
 
         // Color
         action("color", 11, GuiUtils.makeItem(
                 new ItemStack(Material.WOOL, 1, ColorsUtils.chat2Dye(team.getColor().toChatColor()).getWoolData()),
-                I.t("team.chestGui.editor.color.title"),
-                Collections.singletonList(I.t("team.chestGui.editor.color.current", team.getColor().toChatColor() + TextUtils.friendlyEnumName(team.getColor())))
+                /// Update team color button in edit GUI.
+                I.t("{green}Update the color"),
+                /// Current team color in edit GUI. {0} = formatted color name.
+                GuiUtils.generateLore(I.tc("current_team_color", "{gray}Current: {white}{0}", team.getColor().toChatColor() + TextUtils.friendlyEnumName(team.getColor())))
         ));
 
         // Name
         action("name", 13, GuiUtils.makeItem(
                 Material.BOOK_AND_QUILL,
-                I.t("team.chestGui.editor.name.title"),
-                Collections.singletonList(I.t("team.chestGui.editor.name.current", team.getName()))
+                /// Rename team button in edit GUI.
+                I.t("{green}Rename the team"),
+                /// Current team name in edit GUI. {0} = raw team name.
+                GuiUtils.generateLore(I.tc("current_team_name", "{gray}Current: {white}{0}", team.getName()))
         ));
 
         // Members
         List<String> lore = new ArrayList<>();
         for (OfflinePlayer player : team.getPlayers())
             if (player.isOnline())
-                lore.add(I.t("team.list.bulletPlayerOnline") + ChatColor.RESET + player.getName());
+                lore.add(I.t("{green} • ") + ChatColor.RESET + player.getName());
             else
-                lore.add(I.t("team.list.bulletPlayerOffline") + ChatColor.RESET + player.getName());
+                lore.add(I.t("{red} • ") + ChatColor.RESET + player.getName());
 
         action("members", 15, GuiUtils.makeItem(
                 new ItemStack(Material.SKULL_ITEM, 1, (short) 3),
-                I.t("team.chestGui.editor.members.title"),
+                /// Update team members button in edit GUI.
+                I.t("{green}Add or remove players"),
                 lore
         ));
 
         // Delete
         action("delete", 17, GuiUtils.makeItem(
                 Material.BARRIER,
-                I.t("team.chestGui.editor.delete.title"),
-                Collections.singletonList(I.t("team.chestGui.editor.delete.warning"))
+                /// Delete team button in edit GUI.
+                I.t("{red}Delete this team"),
+                /// Warning under the "delete team" button title.
+                GuiUtils.generateLore(I.t("{gray}Cannot be undone"))
         ));
 
         // Exit
         action("exit", getSize() - 5, GuiUtils.makeItem(
                 Material.EMERALD,
-                I.t("team.chestGui.editor.exit.title")
+                /// Go back button in GUIs.
+                I.t("{green}« Go back")
         ));
     }
 
