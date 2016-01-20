@@ -35,6 +35,7 @@ msgstr ""
 "PO-Revision-Date: 2016-01-20 14:19:50.251245\n"
 "Last-Translator: Nojp\n"
 "Language-Team: Nojp\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -239,8 +240,10 @@ msgstr ""
 
 #. Members count in the banner description, in the team edit GUI.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:73
-msgid "{white}{0} {gray}member(s)"
-msgstr ""
+msgid "{white}{0} {gray}member"
+msgid_plural "{white}{0} {gray}members"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Update team color button in edit GUI.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:81
@@ -352,8 +355,11 @@ msgstr ""
 #. Title of the team item in the teams selector GUI (without max) {0}: team
 #. display name. {1}: players count.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:179
-msgid "{white}Team {0} {gray}({1} players)"
-msgstr ""
+msgid "{white}Team {0} {gray}({1} player)"
+msgid_plural "{white}Team {0} {gray}({1} players)"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #. The title of the first step in the team creator GUIs
 #: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/builder/TeamBuilderBaseGUI.java:109
@@ -545,8 +551,11 @@ msgstr ""
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:544
 #, java-format
-msgid "{0} player(s) in this team"
-msgstr "{0} hracu v tomto tymu"
+msgid "{0} player in this team"
+msgid_plural "{0} players in this team"
+msgstr[0] "{0} hracu v tomto tymu"
+msgstr[1] "{0} hracu v tomto tymu"
+msgstr[2] "{0} hracu v tomto tymu"
 
 #. Tooltip on the chat team selector GUI when the player is in the team. {0} =
 #. team display name.
@@ -770,13 +779,19 @@ msgstr "{gray}Epizoda {white}{0}"
 #. Players alive in the sidebar
 #: src/main/java/eu/carrade/amaury/UHCReloaded/scoreboard/GameSidebar.java:150
 #: src/main/java/eu/carrade/amaury/UHCReloaded/scoreboard/GameSidebar.java:159
-msgid "{white}{0}{gray} players"
-msgstr "{white}{0}{gray} hracu"
+msgid "{white}{0}{gray} player"
+msgid_plural "{white}{0}{gray} players"
+msgstr[0] "{white}{0}{gray} hracu"
+msgstr[1] "{white}{0}{gray} hracu"
+msgstr[2] "{white}{0}{gray} hracu"
 
 #. Teams alive in the sidebar
 #: src/main/java/eu/carrade/amaury/UHCReloaded/scoreboard/GameSidebar.java:163
-msgid "{white}{0}{gray} teams"
-msgstr "{white}{0}{gray} tymu"
+msgid "{white}{0}{gray} team"
+msgid_plural "{white}{0}{gray} teams"
+msgstr[0] "{white}{0}{gray} tymu"
+msgstr[1] "{white}{0}{gray} tymu"
+msgstr[2] "{white}{0}{gray} tymu"
 
 #. Title of the team section in the sidebar
 #: src/main/java/eu/carrade/amaury/UHCReloaded/scoreboard/GameSidebar.java:205
@@ -785,8 +800,11 @@ msgstr ""
 
 #. Kills count in the sidebar
 #: src/main/java/eu/carrade/amaury/UHCReloaded/scoreboard/GameSidebar.java:278
-msgid "{white}{0}{gray} players killed"
-msgstr ""
+msgid "{white}{0}{gray} player killed"
+msgid_plural "{white}{0}{gray} players killed"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #. Title of the border section in the sidebar
 #: src/main/java/eu/carrade/amaury/UHCReloaded/scoreboard/GameSidebar.java:309
@@ -795,13 +813,19 @@ msgstr ""
 
 #. Border diameter for a squared map in the sidebar
 #: src/main/java/eu/carrade/amaury/UHCReloaded/scoreboard/GameSidebar.java:317
-msgid "{white}{0} blocks wide"
-msgstr ""
+msgid "{white}{0} block wide"
+msgid_plural "{white}{0} blocks wide"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #. Border diameter for a circular map in the sidebar
 #: src/main/java/eu/carrade/amaury/UHCReloaded/scoreboard/GameSidebar.java:320
-msgid "{gray}Diameter: {white}{0} blocks"
-msgstr ""
+msgid "{gray}Diameter: {white}{0} block"
+msgid_plural "{gray}Diameter: {white}{0} blocks"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #. Min & max coordinates in the sidebar, to locate the border. Ex: "-500
 #. +500". {0} = minimal coord, {1} = maximal coord.
@@ -848,15 +872,21 @@ msgstr "Epizoda {0}"
 #. players count.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/PlayerListHeaderFooterManager.java:119
 #, java-format
-msgid "{0} players"
-msgstr "{0} hracu"
+msgid "{0} player"
+msgid_plural "{0} players"
+msgstr[0] "{0} hracu"
+msgstr[1] "{0} hracu"
+msgstr[2] "{0} hracu"
 
 #. Teams in the player list ({teamsText} replacement). {0} = current alive
 #. teams count.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/PlayerListHeaderFooterManager.java:121
 #, java-format
-msgid "{0} teams"
-msgstr "{0} tymu"
+msgid "{0} team"
+msgid_plural "{0} teams"
+msgstr[0] "{0} tymu"
+msgstr[1] "{0} tymu"
+msgstr[2] "{0} tymu"
 
 #. MOTD when the game is not started.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/MOTDManager.java:89
@@ -871,15 +901,19 @@ msgstr "Probiha start hry..."
 #. Solo game running MOTD. {0} = players alive count.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/MOTDManager.java:113
 #, java-format
-msgid "Game running! {0} players alive."
-msgstr "Hra bezi! {0} hracu je nazivu."
+msgid "Game running! {0} player alive."
+msgid_plural "Game running! {0} players alive."
+msgstr[0] "Hra bezi! {0} hracu je nazivu."
+msgstr[1] "Hra bezi! {0} hracu je nazivu."
 
 #. Teams game running MOTD. {0} = players alive count. {1} = teams alive
 #. count.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/MOTDManager.java:118
 #, java-format
-msgid "Game running! {0} players alive in {1} teams."
-msgstr "Hra bezi! {0} hracu v {1} tymech je nazivu."
+msgid "Game running! {0} player alive in {1} team."
+msgid_plural "Game running! {0} players alive in {1} teams."
+msgstr[0] "Hra bezi! {0} hracu v {1} tymech je nazivu."
+msgstr[1] "Hra bezi! {0} hracu v {1} tymech je nazivu."
 
 #. Game finished MOTD with solo winner ({0} = winner raw name).
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/MOTDManager.java:135
@@ -1033,9 +1067,18 @@ msgstr "{cs}Varovani bylo zruseno."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/border/UHBorderWarningCommand.java:82
 msgid ""
-"{cs}Future size saved. All players outside this future border will be warned"
-" every {0} seconds."
-msgstr ""
+"{cs}Future size saved. All players outside this future border will be warned "
+"every {0} second."
+msgid_plural ""
+"{cs}Future size saved. All players outside this future border will be warned "
+"every {0} seconds."
+msgstr[0] ""
+"{cs}Budouci velikost byla ulozena. Vsichni hraci za touto budouci hranici "
+"mapy budou varovani kazdych {0} sekund."
+msgstr[1] ""
+"{cs}Budouci velikost byla ulozena. Vsichni hraci za touto budouci hranici "
+"mapy budou varovani kazdych {0} sekund."
+msgstr[2] ""
 "{cs}Budouci velikost byla ulozena. Vsichni hraci za touto budouci hranici "
 "mapy budou varovani kazdych {0} sekund."
 
@@ -1085,8 +1128,11 @@ msgstr ""
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/border/UHBorderSetCommand.java:88
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/border/UHBorderSetCommand.java:114
-msgid "{lightpurple}The diameter of the map is now {0} blocks."
-msgstr "{lightpurple}Prumer mapy je nyni {0} bloku."
+msgid "{lightpurple}The diameter of the map is now {0} block."
+msgid_plural "{lightpurple}The diameter of the map is now {0} blocks."
+msgstr[0] "{lightpurple}Prumer mapy je nyni {0} bloku."
+msgstr[1] "{lightpurple}Prumer mapy je nyni {0} bloku."
+msgstr[2] "{lightpurple}Prumer mapy je nyni {0} bloku."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/border/UHBorderSetCommand.java:92
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/border/UHBorderSetCommand.java:118
@@ -1112,20 +1158,27 @@ msgstr ""
 "velikosti mapy."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/border/UHBorderGetCommand.java:60
-msgid "{ci}The current diameter of the map is {0} blocks."
-msgstr "{ci}Soucasny prumer mapy je {0} bloku."
+msgid "{ci}The current diameter of the map is {0} block."
+msgid_plural "{ci}The current diameter of the map is {0} blocks."
+msgstr[0] "{ci}Soucasny prumer mapy je {0} bloku."
+msgstr[1] "{ci}Soucasny prumer mapy je {0} bloku."
+msgstr[2] "{ci}Soucasny prumer mapy je {0} bloku."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/border/UHBorderGetCommand.java:64
 msgid "{ci}The current map size is {0}×{0}."
-msgstr "{ci}Soucasna velikost mapy je {0}*{0}."
+msgstr "{ci}Soucasna velikost mapy je {0}×{0}."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/border/UHBorderGetCommand.java:83
 msgid "{cc}/uh border get{ci}: returns the current size of the map."
 msgstr "{cc}/uh border get{ci}: vrati mapu do jeji puvodni velikosti."
 
+#. Header of the /uh infos command. Plural based on the players count.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHInfosCommand.java:69
-msgid "{ci}{0} players alive in {1} teams."
-msgstr "{ci}{0} hracu nazivu v {1} tymech."
+msgid "{ci}{0} player alive in {1} team."
+msgid_plural "{ci}{0} players alive in {1} teams."
+msgstr[0] "{ci}{0} hracu nazivu v {1} tymech."
+msgstr[1] "{ci}{0} hracu nazivu v {1} tymech."
+msgstr[2] "{ci}{0} hracu nazivu v {1} tymech."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHInfosCommand.java:73
 msgid "{ci}The game is not started."
@@ -1240,7 +1293,7 @@ msgid "{ce}The world {0} doesn't exists."
 msgstr "{ce}Svet {0} neexistuje."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/spawns/UHSpawnsGenerateCommand.java:193
-msgid "{ci}You asked a void generation. Thus, the generation is empty."
+msgid "{ci}You asked for a void generation. Thus, the generation is empty."
 msgstr "{ci}Zazadali jste o generaci voidu, proto je tato generace prazdna."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/spawns/UHSpawnsGenerateCommand.java:205
@@ -1585,8 +1638,11 @@ msgstr "{ce}Nejsou zadne definovane tymy."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamListCommand.java:76
 #, java-format
-msgid "{0} ({1} players)"
-msgstr "{0} ({1} hracu)"
+msgid "{0} ({1} player)"
+msgid_plural "{0} ({1} players)"
+msgstr[0] "{0} ({1} hracu)"
+msgstr[1] "{0} ({1} hracu)"
+msgstr[2] "{0} ({1} hracu)"
 
 #. Player name after the online status dot in /uh teams list
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamListCommand.java:92
@@ -1773,20 +1829,32 @@ msgstr ""
 "funkce casovac nezastavi."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/timers/UHTimersListCommand.java:65
-msgid "{ci}{0} timer(s) are registered."
-msgstr "{ci}{0} casovac(u) je registrovano."
+msgid "{ci}{0} timer is registered."
+msgid_plural "{ci}{0} timers are registered."
+msgstr[0] "{ci}{0} casovac(u) je registrovano."
+msgstr[1] "{ci}{0} casovac(u) je registrovano."
+msgstr[2] "{ci}{0} casovac(u) je registrovano."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/timers/UHTimersListCommand.java:73
-msgid "{yellow} • {{ci}{0}{ci} - total {1} seconds - {2}"
-msgstr "{yellow} • {ci}{0}{ci} - celkem {1} sekund - {2}"
+msgid "{yellow} • {{ci}{0}{ci} - total {1} second - {2}"
+msgid_plural "{yellow} • {{ci}{0}{ci} - total {1} seconds - {2}"
+msgstr[0] "{yellow} • {ci}{0}{ci} - celkem {1} sekund - {2}"
+msgstr[1] "{yellow} • {ci}{0}{ci} - celkem {1} sekund - {2}"
+msgstr[2] "{yellow} • {ci}{0}{ci} - celkem {1} sekund - {2}"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/timers/UHTimersListCommand.java:81
-msgid "{green} • {ci}{0}{ci} - total {1} seconds - {2}"
-msgstr "{green} • {ci}{0}{ci} - celkem {1} sekund - {2}"
+msgid "{green} • {ci}{0}{ci} - total {1} second - {2}"
+msgid_plural "{green} • {ci}{0}{ci} - total {1} seconds - {2}"
+msgstr[0] "{green} • {ci}{0}{ci} - celkem {1} sekund - {2}"
+msgstr[1] "{green} • {ci}{0}{ci} - celkem {1} sekund - {2}"
+msgstr[2] "{green} • {ci}{0}{ci} - celkem {1} sekund - {2}"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/timers/UHTimersListCommand.java:90
-msgid "{red} • {ci}{0}{ci} - total {1} seconds"
-msgstr "{red} • {ci}{0}{ci} - celkem {1} sekund"
+msgid "{red} • {ci}{0}{ci} - total {1} second"
+msgid_plural "{red} • {ci}{0}{ci} - total {1} seconds"
+msgstr[0] "{red} • {ci}{0}{ci} - celkem {1} sekund"
+msgstr[1] "{red} • {ci}{0}{ci} - celkem {1} sekund"
+msgstr[2] "{red} • {ci}{0}{ci} - celkem {1} sekund"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/timers/UHTimersListCommand.java:119
 msgid "{cc}/uh timers list {ci}: lists the registered timers."
@@ -2022,8 +2090,11 @@ msgid "{ce}There isn't any spectator to list."
 msgstr "{ce}Neni mozne vypsat spectatory, jelikoz zadni neexistuji."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHSpectatorsCommand.java:129
-msgid "{ci}{0} registered spectator(s)."
-msgstr "{ci}{0} registrovanych spectatoru."
+msgid "{ci}{0} registered spectator."
+msgid_plural "{ci}{0} registered spectators."
+msgstr[0] "{ci}{0} registrovanych spectatoru."
+msgstr[1] "{ci}{0} registrovanych spectatoru."
+msgstr[2] "{ci}{0} registrovanych spectatoru."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHSpectatorsCommand.java:130
 msgid "{ci}This count includes only the initial spectators."
@@ -2112,9 +2183,14 @@ msgid "{ce}This can only be executed as a player."
 msgstr ""
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/task/BorderWarningTask.java:65
+#, fuzzy
 msgid ""
+"{ce}You are currently out of the future border (diameter of {0} block)."
+msgid_plural ""
 "{ce}You are currently out of the future border (diameter of {0} blocks)."
-msgstr "{ce}Nyni jsi za budouci hranici mapy (prumer {0} bloku)."
+msgstr[0] "{ce}Nyni jsi za budouci hranici mapy (prumer {0} bloku)."
+msgstr[1] "{ce}Nyni jsi za budouci hranici mapy (prumer {0} bloku)."
+msgstr[2] "{ce}Nyni jsi za budouci hranici mapy (prumer {0} bloku)."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/task/BorderWarningTask.java:69
 msgid "{ce}You are currently out of the future border of {0}×{0} blocks."
@@ -2122,8 +2198,12 @@ msgstr ""
 "{ce}Nyni jsi za budouci hranici mapy, ktera bude mit velikost {0}*{0}."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/task/BorderWarningTask.java:72
-msgid "{ci}You have {0} blocks to go before being inside."
-msgstr "{ci}Musis ujit jeste {0} bloku, nez budes uvnitr mapy."
+#, fuzzy
+msgid "{ci}You have {0} block to go before being inside."
+msgid_plural "{ci}You have {0} blocks to go before being inside."
+msgstr[0] "{ci}Musis ujit jeste {0} bloku, nez budes uvnitr mapy."
+msgstr[1] "{ci}Musis ujit jeste {0} bloku, nez budes uvnitr mapy."
+msgstr[2] "{ci}Musis ujit jeste {0} bloku, nez budes uvnitr mapy."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:325
 msgid "{ce}Unable to start the game: not enough teleportation spots."

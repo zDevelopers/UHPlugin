@@ -116,9 +116,9 @@ public class PlayerListHeaderFooterManager
                 /// Episode in the player list ({episodeText} replacement). {0} = current episode number.
                 .replace("{episodeText}", I.t("Episode {0}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode())))
                 /// Players in the player list ({playersText} replacement). {0} = current alive players count.
-                .replace("{playersText}", I.t("{0} players", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount())))
+                .replace("{playersText}", I.tn("{0} player", "{0} players", UHCReloaded.get().getGameManager().getAlivePlayersCount(), UHCReloaded.get().getGameManager().getAlivePlayersCount()))
                 /// Teams in the player list ({teamsText} replacement). {0} = current alive teams count.
-                .replace("{teamsText}", I.t("{0} teams", String.valueOf(UHCReloaded.get().getGameManager().getAliveTeamsCount())))
+                .replace("{teamsText}", I.tn("{0} team", "{0} teams", UHCReloaded.get().getGameManager().getAliveTeamsCount(), UHCReloaded.get().getGameManager().getAliveTeamsCount()))
 
                 .replace("{episodeNumber}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode()))
                 .replace("{playersCount}", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount()))

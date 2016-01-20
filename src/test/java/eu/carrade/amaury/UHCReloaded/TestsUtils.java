@@ -33,6 +33,7 @@ package eu.carrade.amaury.UHCReloaded;
 
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.i18n.I18n;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.mockito.Matchers;
 import org.powermock.api.mockito.PowerMockito;
 
@@ -84,6 +85,22 @@ public class TestsUtils
 
     public static UHCReloaded getMockedPluginInstance()
     {
-        return mock(UHCReloaded.class);
+        final FileConfiguration config = mock(FileConfiguration.class);
+        when(config.get(Matchers.anyString())).thenReturn(null);
+        when(config.get(Matchers.anyString(), Matchers.anyObject())).thenReturn(null);
+        when(config.getBoolean(Matchers.anyString())).thenReturn(true);
+        when(config.getBoolean(Matchers.anyString(), Matchers.anyBoolean())).thenReturn(true);
+        when(config.getInt(Matchers.anyString())).thenReturn(0);
+        when(config.getInt(Matchers.anyString(), Matchers.anyInt())).thenReturn(0);
+        when(config.getDouble(Matchers.anyString())).thenReturn(0d);
+        when(config.getDouble(Matchers.anyString(), Matchers.anyDouble())).thenReturn(0d);
+        when(config.getString(Matchers.anyString())).thenReturn("");
+        when(config.getString(Matchers.anyString(), Matchers.anyString())).thenReturn("");
+        when(config.getConfigurationSection(Matchers.anyString())).thenReturn(config);
+
+        final UHCReloaded uhcReloaded = mock(UHCReloaded.class);
+        when(uhcReloaded.getConfig()).thenReturn(config);
+
+        return uhcReloaded;
     }
 }

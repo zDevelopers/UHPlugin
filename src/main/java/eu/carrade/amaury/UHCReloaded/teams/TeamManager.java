@@ -541,7 +541,7 @@ public class TeamManager
                         }
                     }
                 }
-                text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("{0} player(s) in this team", String.valueOf(team.getPlayers().size())) + players + "\"}";
+                text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.tn("{0} player in this team", "{0} players in this team", team.getPlayers().size(), team.getPlayers().size()) + players + "\"}";
                 text += "},";
 
                 text += "{\"text\":\" \"},{";

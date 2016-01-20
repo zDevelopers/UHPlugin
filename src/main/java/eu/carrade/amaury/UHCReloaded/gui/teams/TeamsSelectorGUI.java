@@ -176,7 +176,7 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
                 /// Title of the team item in the teams selector GUI (with max). {0}: team display name. {1}: players count. {2}: max count.
                 ? I.t("{white}Team {0} {gray}({1}/{2})", team.getDisplayName(), team.getSize(), tm.getMaxPlayersPerTeam())
                 /// Title of the team item in the teams selector GUI (without max) {0}: team display name. {1}: players count.
-                : I.t("{white}Team {0} {gray}({1} players)", team.getDisplayName(), team.getSize());
+                : I.tn("{white}Team {0} {gray}({1} player)", "{white}Team {0} {gray}({1} players)", team.getSize(), team.getDisplayName(), team.getSize());
 
 
         GuiUtils.makeItem(item, title, lore);

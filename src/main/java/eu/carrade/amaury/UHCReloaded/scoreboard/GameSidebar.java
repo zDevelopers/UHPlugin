@@ -147,7 +147,7 @@ public class GameSidebar extends Sidebar
         {
             if (PLAYERS_IN_SIDEBAR)
                 /// Players alive in the sidebar
-                sidebarTop.add(I.t("{white}{0}{gray} players", String.valueOf(Bukkit.getOnlinePlayers().size())));
+                sidebarTop.add(I.tn("{white}{0}{gray} player", "{white}{0}{gray} players", Bukkit.getOnlinePlayers().size(), Bukkit.getOnlinePlayers().size()));
         }
         else
         {
@@ -156,11 +156,11 @@ public class GameSidebar extends Sidebar
 
             if (PLAYERS_IN_SIDEBAR)
                 /// Players alive in the sidebar
-                sidebarTop.add(I.t("{white}{0}{gray} players", String.valueOf(gameManager.getAlivePlayersCount())));
+                sidebarTop.add(I.tn("{white}{0}{gray} player", "{white}{0}{gray} players", gameManager.getAlivePlayersCount(), gameManager.getAlivePlayersCount()));
 
             if (gameManager.isGameWithTeams() && TEAMS_IN_SIDEBAR)
                 /// Teams alive in the sidebar
-                sidebarTop.add(I.t("{white}{0}{gray} teams", String.valueOf(gameManager.getAliveTeamsCount())));
+                sidebarTop.add(I.tn("{white}{0}{gray} team", "{white}{0}{gray} teams", gameManager.getAliveTeamsCount(), gameManager.getAliveTeamsCount()));
         }
 
 
@@ -275,7 +275,7 @@ public class GameSidebar extends Sidebar
             SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(player.getUniqueId());
 
             /// Kills count in the sidebar
-            sidebar.add(I.t("{white}{0}{gray} players killed", String.valueOf(cache.getPlayersKilled().size())));
+            sidebar.add(I.tn("{white}{0}{gray} player killed", "{white}{0}{gray} players killed", cache.getPlayersKilled().size(), cache.getPlayersKilled().size()));
             sidebar.add("");
         }
 
@@ -314,10 +314,10 @@ public class GameSidebar extends Sidebar
             {
                 if (border.getShape() == MapShape.SQUARED)
                     /// Border diameter for a squared map in the sidebar
-                    sidebar.add(I.t("{white}{0} blocks wide", diameter));
+                    sidebar.add(I.tn("{white}{0} block wide", "{white}{0} blocks wide", diameter, diameter));
                 else
                     /// Border diameter for a circular map in the sidebar
-                    sidebar.add(I.t("{gray}Diameter: {white}{0} blocks", diameter));
+                    sidebar.add(I.tn("{gray}Diameter: {white}{0} block", "{gray}Diameter: {white}{0} blocks", diameter, diameter));
             }
             else
             {

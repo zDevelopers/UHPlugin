@@ -73,7 +73,7 @@ public class UHTeamListCommand extends AbstractCommand
 
         for (final UHTeam team : p.getTeamManager().getTeams())
         {
-            sender.sendMessage(I.t("{0} ({1} players)", team.getDisplayName(), ((Integer) team.getSize()).toString()));
+            sender.sendMessage(I.tn("{0} ({1} player)", "{0} ({1} players)", team.getSize(), team.getDisplayName(), team.getSize()));
             for (final OfflinePlayer player : team.getPlayers())
             {
                 String bullet;

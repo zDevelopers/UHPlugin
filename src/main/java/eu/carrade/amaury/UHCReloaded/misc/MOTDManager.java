@@ -110,12 +110,12 @@ public class MOTDManager
             if (!p.getGameManager().isGameWithTeams())
             {
                 /// Solo game running MOTD. {0} = players alive count.
-                currentMOTD = matchName + I.t("Game running! {0} players alive.", String.valueOf(p.getGameManager().getAlivePlayersCount()));
+                currentMOTD = matchName + I.tn("Game running! {0} player alive.", "Game running! {0} players alive.", p.getGameManager().getAlivePlayersCount(), p.getGameManager().getAlivePlayersCount());
             }
             else
             {
-                /// Teams game running MOTD. {0} = players alive count. {1} = teams alive count.
-                currentMOTD = matchName + I.t("Game running! {0} players alive in {1} teams.", String.valueOf(p.getGameManager().getAlivePlayersCount()), String.valueOf(p.getGameManager().getAliveTeamsCount()));
+                /// Teams game running MOTD. {0} = players alive count. {1} = teams alive count. Plural based on players count.
+                currentMOTD = matchName + I.tn("Game running! {0} player alive in {1} team.", "Game running! {0} players alive in {1} teams.", p.getGameManager().getAlivePlayersCount(), p.getGameManager().getAlivePlayersCount(), p.getGameManager().getAliveTeamsCount());
             }
         }
     }

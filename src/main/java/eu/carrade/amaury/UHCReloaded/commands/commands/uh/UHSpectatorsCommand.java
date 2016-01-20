@@ -126,7 +126,7 @@ public class UHSpectatorsCommand extends AbstractCommand
                 }
                 else
                 {
-                    sender.sendMessage(I.t("{ci}{0} registered spectator(s).", String.valueOf(spectators.size())));
+                    sender.sendMessage(I.tn("{ci}{0} registered spectator.", "{ci}{0} registered spectators.", spectators.size()));
                     sender.sendMessage(I.t("{ci}This count includes only the initial spectators."));
                     for (String spectator : spectators)
                     {

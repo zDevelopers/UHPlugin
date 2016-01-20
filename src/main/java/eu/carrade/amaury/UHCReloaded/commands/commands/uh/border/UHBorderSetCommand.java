@@ -85,14 +85,13 @@ public class UHBorderSetCommand extends AbstractCommand
 
                     if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
                     {
-                        p.getServer().broadcastMessage(I.t("{lightpurple}The diameter of the map is now {0} blocks.", args[0]));
+                        p.getServer().broadcastMessage(I.tn("{lightpurple}The diameter of the map is now {0} block.", "{lightpurple}The diameter of the map is now {0} blocks.", newDiameter));
                     }
                     else
                     {
-                        p.getServer().broadcastMessage(I.t("{lightpurple}The size of the map is now {0}×{0}.", args[0]));
+                        p.getServer().broadcastMessage(I.t("{lightpurple}The size of the map is now {0}×{0}.", newDiameter));
                     }
                 }
-
             }
             catch (NumberFormatException e)
             {
@@ -111,13 +110,12 @@ public class UHBorderSetCommand extends AbstractCommand
 
                 if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
                 {
-                    p.getServer().broadcastMessage(I.t("{lightpurple}The diameter of the map is now {0} blocks.", args[0]));
+                    p.getServer().broadcastMessage(I.tn("{lightpurple}The diameter of the map is now {0} block.", "{lightpurple}The diameter of the map is now {0} blocks.", newDiameter));
                 }
                 else
                 {
-                    p.getServer().broadcastMessage(I.t("{lightpurple}The size of the map is now {0}×{0}.", args[0]));
+                    p.getServer().broadcastMessage(I.t("{lightpurple}The size of the map is now {0}×{0}.", newDiameter));
                 }
-
             }
             catch (NumberFormatException e)
             {

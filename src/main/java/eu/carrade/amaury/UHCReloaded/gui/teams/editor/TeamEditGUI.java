@@ -70,7 +70,7 @@ public class TeamEditGUI extends ActionGui
         // Banner
         ItemStack banner = team.getBanner();
         /// Members count in the banner description, in the team edit GUI.
-        GuiUtils.makeItem(banner, ChatColor.RESET + team.getDisplayName(), GuiUtils.generateLore(I.t("{white}{0} {gray}member(s)", team.getSize())));
+        GuiUtils.makeItem(banner, ChatColor.RESET + team.getDisplayName(), GuiUtils.generateLore(I.tn("{white}{0} {gray}member", "{white}{0} {gray}members", team.getSize(), team.getSize())));
         GuiUtils.hideItemAttributes(banner);
         action("", 9, banner);
 

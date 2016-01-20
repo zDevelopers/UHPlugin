@@ -61,12 +61,12 @@ public class UHInfosCommand extends AbstractCommand
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-
         CommandUtils.displaySeparator(sender);
 
         if (p.getGameManager().isGameStarted())
         {
-            sender.sendMessage(I.t("{ci}{0} players alive in {1} teams.", String.valueOf(p.getGameManager().getAlivePlayersCount()), String.valueOf(p.getGameManager().getAliveTeamsCount())));
+            /// Header of the /uh infos command. Plural based on the players count.
+            sender.sendMessage(I.tn("{ci}{0} player alive in {1} team.", "{ci}{0} players alive in {1} teams.", p.getGameManager().getAlivePlayersCount(), p.getGameManager().getAlivePlayersCount(), p.getGameManager().getAliveTeamsCount()));
         }
         else
         {

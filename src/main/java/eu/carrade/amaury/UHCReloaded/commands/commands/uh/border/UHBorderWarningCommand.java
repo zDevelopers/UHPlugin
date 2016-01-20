@@ -47,11 +47,16 @@ import java.util.List;
 @Command (name = "warning")
 public class UHBorderWarningCommand extends AbstractCommand
 {
-    private UHCReloaded p;
+    private final Integer WARNING_INTERVAL;
+
+    private final UHCReloaded p;
+
 
     public UHBorderWarningCommand(UHCReloaded p)
     {
         this.p = p;
+
+        WARNING_INTERVAL = p.getConfig().getInt("map.border.warningInterval", 90);
     }
 
     @Override
@@ -79,7 +84,7 @@ public class UHBorderWarningCommand extends AbstractCommand
                 }
 
                 p.getBorderManager().setWarningSize(warnDiameter, warnTime, sender);
-                sender.sendMessage(I.t("{cs}Future size saved. All players outside this future border will be warned every {0} seconds.", p.getConfig().getString("map.border.warningInterval", "90")));
+                sender.sendMessage(I.tn("{cs}Future size saved. All players outside this future border will be warned every {0} second.", "{cs}Future size saved. All players outside this future border will be warned every {0} seconds.", WARNING_INTERVAL));
 
             }
             catch (NumberFormatException e)

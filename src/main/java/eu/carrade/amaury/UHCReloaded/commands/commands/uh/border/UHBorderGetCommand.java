@@ -57,11 +57,11 @@ public class UHBorderGetCommand extends AbstractCommand
     {
         if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
         {
-            sender.sendMessage(I.t("{ci}The current diameter of the map is {0} blocks.", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+            sender.sendMessage(I.tn("{ci}The current diameter of the map is {0} block.", "{ci}The current diameter of the map is {0} blocks.", p.getBorderManager().getCurrentBorderDiameter()));
         }
         else
         {
-            sender.sendMessage(I.t("{ci}The current map size is {0}×{0}.", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+            sender.sendMessage(I.t("{ci}The current map size is {0}×{0}.", p.getBorderManager().getCurrentBorderDiameter()));
         }
     }
 

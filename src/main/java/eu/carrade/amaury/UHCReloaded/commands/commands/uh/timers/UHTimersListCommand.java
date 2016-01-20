@@ -62,7 +62,7 @@ public class UHTimersListCommand extends AbstractCommand
     {
         Collection<UHTimer> timers = p.getTimerManager().getTimers();
 
-        sender.sendMessage(I.t("{ci}{0} timer(s) are registered.", String.valueOf(timers.size())));
+        sender.sendMessage(I.tn("{ci}{0} timer is registered.", "{ci}{0} timers are registered.", timers.size()));
 
         for (UHTimer timer : timers)
         {
@@ -70,26 +70,30 @@ public class UHTimersListCommand extends AbstractCommand
             {
                 if (timer.isPaused())
                 {
-                    sender.sendMessage(I.t("{yellow} • {{ci}{0}{ci} - total {1} seconds - {2}",
+                    sender.sendMessage(I.t("{yellow} • {{ci}{0}{ci} - total {1} second - {2}", "{yellow} • {{ci}{0}{ci} - total {1} seconds - {2}",
+                            timer.getDuration(),
                             timer.getDisplayName(),
-                            String.valueOf(timer.getDuration()),
+                            timer.getDuration(),
                             timer.toString()
                     ));
                 }
                 else
                 {
-                    sender.sendMessage(I.t("{green} • {ci}{0}{ci} - total {1} seconds - {2}",
+                    sender.sendMessage(I.t("{green} • {ci}{0}{ci} - total {1} second - {2}", "{green} • {ci}{0}{ci} - total {1} seconds - {2}",
+                            timer.getDuration(),
                             timer.getDisplayName(),
-                            String.valueOf(timer.getDuration()),
+                            timer.getDuration(),
                             timer.toString()
                     ));
                 }
             }
             else
             {
-                sender.sendMessage(I.t("{red} • {ci}{0}{ci} - total {1} seconds",
+                sender.sendMessage(I.t("{red} • {ci}{0}{ci} - total {1} second", "{red} • {ci}{0}{ci} - total {1} seconds",
+                        timer.getDuration(),
                         timer.getDisplayName(),
-                        String.valueOf(timer.getDuration())));
+                        timer.getDuration()
+                ));
             }
         }
     }

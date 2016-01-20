@@ -190,7 +190,7 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
 
         if (spawnsCount <= 0)
         {
-            sender.sendMessage(I.t("{ci}You asked a void generation. Thus, the generation is empty."));
+            sender.sendMessage(I.t("{ci}You asked for a void generation. Thus, the generation is empty."));
             return;
         }
 
