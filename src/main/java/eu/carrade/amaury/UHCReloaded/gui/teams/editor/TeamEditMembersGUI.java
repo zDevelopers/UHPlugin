@@ -96,7 +96,7 @@ public class TeamEditMembersGUI extends ExplorerGui<OfflinePlayer>
                 player.isOnline() ? I.t("{gray}Online") : I.t("{gray}Offline"),
                 team != null ? I.t("{gray}Current team: {0}", team.getDisplayName()) : I.t("{gray}Current team: none"),
                 "",
-                inThisTeam ? I.t("{darkgray}» {white}Click {gray}to add this player") : I.t("{darkgray}» {white}Click {gray}to remove this player")
+                inThisTeam ? I.t("{darkgray}» {white}Click {gray}to remove this player") : I.t("{darkgray}» {white}Click {gray}to add this player")
         ));
 
         button.setItemMeta(meta);
