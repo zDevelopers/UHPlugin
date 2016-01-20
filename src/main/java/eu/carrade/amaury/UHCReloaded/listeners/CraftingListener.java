@@ -33,9 +33,10 @@
 package eu.carrade.amaury.UHCReloaded.listeners;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
+import eu.carrade.amaury.UHCReloaded.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.recipes.RecipesManager;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -95,7 +96,7 @@ public class CraftingListener implements Listener
             // ProTips
             final String failedRecipe = p.getRecipesManager().getLastFailedRecipe();
             final Player player = (Player) ev.getViewers().get(0); // crafting inventory: only one viewer in all cases.
-            Bukkit.getScheduler().runTaskLater(p, new Runnable()
+            RunTask.later(new Runnable()
             {
                 @Override
                 public void run()
@@ -106,24 +107,24 @@ public class CraftingListener implements Listener
                             switch (p.getRecipesManager().getCompassRecipeType())
                             {
                                 case RecipesManager.COMPASS_EASY:
-                                    p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_CRAFT_COMPASS_EASY);
+                                    ProTips.CRAFT_COMPASS_EASY.sendTo(player);
                                     break;
                                 case RecipesManager.COMPASS_MEDIUM:
-                                    p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_CRAFT_COMPASS_MEDIUM);
+                                    ProTips.CRAFT_COMPASS_MEDIUM.sendTo(player);
                                     break;
                                 case RecipesManager.COMPASS_HARD:
-                                    p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_CRAFT_COMPASS_HARD);
+                                    ProTips.CRAFT_COMPASS_HARD.sendTo(player);
                                     break;
                             }
 
                             break;
 
                         case RecipesManager.RECIPE_GLISTERING_MELON:
-                            p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_CRAFT_GLISTERING_MELON);
+                            ProTips.CRAFT_GLISTERING_MELON.sendTo(player);
                             break;
 
                         case RecipesManager.RECIPE_ENCHANTED_GOLDEN_APPLE:
-                            p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_CRAFT_NO_ENCHANTED_GOLDEN_APPLE);
+                            ProTips.CRAFT_NO_ENCHANTED_GOLDEN_APPLE.sendTo(player);
                             break;
                     }
                 }

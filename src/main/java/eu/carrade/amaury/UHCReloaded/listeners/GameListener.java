@@ -42,8 +42,8 @@ import eu.carrade.amaury.UHCReloaded.events.UHGameStartsEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHPlayerDeathEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHPlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHTeamDeathEvent;
-import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
 import eu.carrade.amaury.UHCReloaded.misc.RuntimeCommandsExecutor;
+import eu.carrade.amaury.UHCReloaded.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import fr.zcraft.zlib.components.i18n.I;
@@ -167,36 +167,28 @@ public class GameListener implements Listener
         // Drops the skull of the player.
         if (p.getConfig().getBoolean("death.head.drop"))
         {
-            if (!p.getConfig().getBoolean("death.head.pvpOnly")
-                    || (p.getConfig().getBoolean("death.head.pvpOnly") && ev.getEntity().getKiller() != null && ev.getEntity().getKiller() instanceof Player))
+            if (!p.getConfig().getBoolean("death.head.pvpOnly") || (p.getConfig().getBoolean("death.head.pvpOnly") && ev.getEntity().getKiller() != null))
             {
                 Location l = ev.getEntity().getLocation();
-                try
-                {
-                    ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
-                    SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-                    skullMeta.setOwner(ev.getEntity().getName());
-                    skullMeta.setDisplayName(ChatColor.RESET + ev.getEntity().getName());
-                    skull.setItemMeta(skullMeta);
-                    l.getWorld().dropItem(l, skull);
+                ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
+                SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+                skullMeta.setOwner(ev.getEntity().getName());
+                skullMeta.setDisplayName(ChatColor.RESET + ev.getEntity().getDisplayName());
+                skull.setItemMeta(skullMeta);
+                l.getWorld().dropItem(l, skull);
 
-                    // Protip
-                    if (ev.getEntity().getKiller() instanceof Player)
-                    {
-                        final Player killer = ev.getEntity().getKiller();
-                        Bukkit.getScheduler().runTaskLater(p, new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                p.getProtipsSender().sendProtip(killer, ProTipsSender.PROTIP_CRAFT_GOLDEN_HEAD);
-                            }
-                        }, 200L);
-                    }
-                }
-                catch (Exception e)
+                // Protip
+                if (ev.getEntity().getKiller() instanceof Player)
                 {
-                    e.printStackTrace();
+                    final Player killer = ev.getEntity().getKiller();
+                    RunTask.later(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            ProTips.CRAFT_GOLDEN_HEAD.sendTo(killer);
+                        }
+                    }, 200L);
                 }
             }
         }

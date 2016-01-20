@@ -32,10 +32,10 @@
 package eu.carrade.amaury.UHCReloaded.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
+import eu.carrade.amaury.UHCReloaded.protips.ProTips;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.MessageSender;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -159,17 +159,14 @@ public class TeamChatManager
             p.getServer().getConsoleSender().sendMessage(rawMessage);
         }
 
-        if (!p.getProtipsSender().wasProtipSent(sender, ProTipsSender.PROTIP_LOCK_CHAT))
+        RunTask.later(new Runnable()
         {
-            Bukkit.getScheduler().runTaskLater(p, new Runnable()
+            @Override
+            public void run()
             {
-                @Override
-                public void run()
-                {
-                    p.getProtipsSender().sendProtip(sender, ProTipsSender.PROTIP_LOCK_CHAT);
-                }
-            }, 30L);
-        }
+                ProTips.LOCK_CHAT.sendTo(sender);
+            }
+        }, 30L);
     }
 
     /**
@@ -246,12 +243,12 @@ public class TeamChatManager
             {
                 teamChatLocked.add(player.getUniqueId());
 
-                Bukkit.getScheduler().runTaskLater(p, new Runnable()
+                RunTask.later(new Runnable()
                 {
                     @Override
                     public void run()
                     {
-                        p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_USE_G_COMMAND);
+                        ProTips.USE_G_COMMAND.sendTo(player);
                     }
                 }, 10L);
 

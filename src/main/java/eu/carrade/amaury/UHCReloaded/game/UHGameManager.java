@@ -36,7 +36,7 @@ import eu.carrade.amaury.UHCReloaded.events.EpisodeChangedCause;
 import eu.carrade.amaury.UHCReloaded.events.UHEpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHGameStartsEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHPlayerResurrectedEvent;
-import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
+import eu.carrade.amaury.UHCReloaded.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.task.FireworksOnWinnersTask;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
@@ -650,7 +650,7 @@ public class UHGameManager
                 {
                     for (Player player : getOnlineAlivePlayers())
                     {
-                        p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_USE_T_COMMAND);
+                        ProTips.USE_T_COMMAND.sendTo(player);
                     }
                 }
             }, 400L);
@@ -664,7 +664,7 @@ public class UHGameManager
             {
                 for (Player player : getOnlineAlivePlayers())
                 {
-                    p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_STARTUP_INVINCIBILITY);
+                    ProTips.STARTUP_INVINCIBILITY.sendTo(player);
                 }
             }
         }, 100L);

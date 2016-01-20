@@ -45,7 +45,6 @@ import eu.carrade.amaury.UHCReloaded.listeners.SpawnsListener;
 import eu.carrade.amaury.UHCReloaded.misc.Freezer;
 import eu.carrade.amaury.UHCReloaded.misc.MOTDManager;
 import eu.carrade.amaury.UHCReloaded.misc.PlayerListHeaderFooterManager;
-import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
 import eu.carrade.amaury.UHCReloaded.misc.RulesManager;
 import eu.carrade.amaury.UHCReloaded.misc.RuntimeCommandsExecutor;
 import eu.carrade.amaury.UHCReloaded.recipes.RecipesManager;
@@ -88,8 +87,6 @@ public class UHCReloaded extends ZPlugin
     private RuntimeCommandsExecutor runtimeCommandsExecutor = null;
 
     private Freezer freezer = null;
-
-    private ProTipsSender protipsSender = null;
 
     private UHWorldBorderIntegration wbintegration = null;
     private UHSpectatorPlusIntegration spintegration = null;
@@ -142,8 +139,6 @@ public class UHCReloaded extends ZPlugin
         runtimeCommandsExecutor = new RuntimeCommandsExecutor(this);
 
         freezer = new Freezer(this);
-
-        protipsSender = new ProTipsSender(this);
 
         scoreboardManager = new ScoreboardManager(this);
         motdManager = new MOTDManager(this);
@@ -340,16 +335,6 @@ public class UHCReloaded extends ZPlugin
     public Freezer getFreezer()
     {
         return freezer;
-    }
-
-    /**
-     * Returns the ProTips sender.
-     *
-     * @return
-     */
-    public ProTipsSender getProtipsSender()
-    {
-        return protipsSender;
     }
 
     /**

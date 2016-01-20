@@ -80,6 +80,7 @@ public class BorderManager
     {
         p = plugin;
 
+        /// The name of the warning timer displaying the time left before the next border
         warningTimerName = I.t("Border shrinking");
 
         mapShape = MapShape.fromString(p.getConfig().getString("map.shape"));
