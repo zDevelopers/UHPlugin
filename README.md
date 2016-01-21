@@ -23,7 +23,7 @@ Please note, this README reflects the last development version. Some features li
    1. [Miscellaneous](#miscellaneous-features)
 1. [Commands & permissions](#commands--permissions)
 1. [Installation](#installation)
-1. [How to translate the plugin](#how-to-translate-the-plugin-in-your-own-language)
+1. [How to translate the plugin](#how-to-translate-the-plugin-or-change-strings-in-your-own-language)
    1. [If you want to translate it for yourself](#if-you-want-to-translate-it-for-yourself)
    1. [If you want to translate it for everyone](#if-you-want-to-translate-it-for-everyone)
    1. [Inside the translations](#inside-the-translations)
