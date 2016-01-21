@@ -745,7 +745,6 @@ msgstr "Fabriquée depuis la tête tranchée d'un monstre maléfique"
 
 #. Golden head lore for players. {0} = player name.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/recipes/RecipesManager.java:290
-
 msgid "Made from the fallen head of {0}"
 msgstr "Fabriquée depuis la tête tranchée de {0}"
 
