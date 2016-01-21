@@ -35,11 +35,11 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.borders.MapShape;
 import eu.carrade.amaury.UHCReloaded.borders.worldborders.WorldBorder;
 import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.misc.Freezer;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
 import fr.zcraft.zlib.components.scoreboard.SidebarMode;
 import org.bukkit.Bukkit;
@@ -55,7 +55,6 @@ import java.util.UUID;
 
 public class GameSidebar extends Sidebar
 {
-    private final I18n i;
     private final UHGameManager gameManager;
     private final WorldBorder border;
 
@@ -92,8 +91,6 @@ public class GameSidebar extends Sidebar
 
     public GameSidebar()
     {
-        i = UHCReloaded.i();
-
         Configuration config = UHCReloaded.get().getConfig();
         gameManager = UHCReloaded.get().getGameManager();
         border = UHCReloaded.get().getBorderManager().getBorderProxy();
@@ -140,8 +137,8 @@ public class GameSidebar extends Sidebar
 
         if (EPISODES_ENABLED && EPISODES_IN_SIDEBAR)
         {
-            sidebarTop.add(i.t(
-                    "scoreboard.episode",
+            /// Current episode in the sidebar
+            sidebarTop.add(I.t("{gray}Episode {white}{0}",
                     String.valueOf(gameManager.isGameStarted() ? gameManager.getEpisode() : 0)
             ));
         }
@@ -149,7 +146,8 @@ public class GameSidebar extends Sidebar
         if (!gameManager.isGameStarted())
         {
             if (PLAYERS_IN_SIDEBAR)
-                sidebarTop.add(i.t("scoreboard.players", String.valueOf(Bukkit.getOnlinePlayers().size())));
+                /// Players alive in the sidebar
+                sidebarTop.add(I.tn("{white}{0}{gray} player", "{white}{0}{gray} players", Bukkit.getOnlinePlayers().size(), Bukkit.getOnlinePlayers().size()));
         }
         else
         {
@@ -157,10 +155,12 @@ public class GameSidebar extends Sidebar
                 sidebarTop.add("");
 
             if (PLAYERS_IN_SIDEBAR)
-                sidebarTop.add(i.t("scoreboard.players", String.valueOf(gameManager.getAlivePlayersCount())));
+                /// Players alive in the sidebar
+                sidebarTop.add(I.tn("{white}{0}{gray} player", "{white}{0}{gray} players", gameManager.getAlivePlayersCount(), gameManager.getAlivePlayersCount()));
 
             if (gameManager.isGameWithTeams() && TEAMS_IN_SIDEBAR)
-                sidebarTop.add(i.t("scoreboard.teams", String.valueOf(gameManager.getAliveTeamsCount())));
+                /// Teams alive in the sidebar
+                sidebarTop.add(I.tn("{white}{0}{gray} team", "{white}{0}{gray} teams", gameManager.getAliveTeamsCount(), gameManager.getAliveTeamsCount()));
         }
 
 
@@ -201,7 +201,8 @@ public class GameSidebar extends Sidebar
             {
                 sidebar.add(
                           (OWN_TEAM_TITLE_COLOR.isEmpty() ? team.getColor().toChatColor() : OWN_TEAM_TITLE_COLOR)
-                        + (OWN_TEAM_TITLE_IS_NAME ? ChatColor.BOLD + team.getName() : i.t("scoreboard.yourTeam"))
+                          /// Title of the team section in the sidebar
+                        + (OWN_TEAM_TITLE_IS_NAME ? ChatColor.BOLD + team.getName() : I.t("{bold}Your team"))
                 );
 
                 Location playerLocation = player.getLocation();
@@ -273,7 +274,8 @@ public class GameSidebar extends Sidebar
         {
             SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(player.getUniqueId());
 
-            sidebar.add(i.t("scoreboard.kills", String.valueOf(cache.getPlayersKilled().size())));
+            /// Kills count in the sidebar
+            sidebar.add(I.tn("{white}{0}{gray} player killed", "{white}{0}{gray} players killed", cache.getPlayersKilled().size(), cache.getPlayersKilled().size()));
             sidebar.add("");
         }
 
@@ -303,16 +305,19 @@ public class GameSidebar extends Sidebar
     {
         if (BORDER_IN_SIDEBAR)
         {
-            sidebar.add(i.t("scoreboard.border.title"));
+            /// Title of the border section in the sidebar
+            sidebar.add(I.t("{blue}{bold}Border"));
 
             int diameter = (int) Math.ceil(border.getDiameter());
 
             if (BORDER_DISPLAY_DIAMETER || border.getShape() == MapShape.CIRCULAR)
             {
                 if (border.getShape() == MapShape.SQUARED)
-                    sidebar.add(i.t("scoreboard.border.diameter.squared", diameter));
+                    /// Border diameter for a squared map in the sidebar
+                    sidebar.add(I.tn("{white}{0} block wide", "{white}{0} blocks wide", diameter, diameter));
                 else
-                    sidebar.add(i.t("scoreboard.border.diameter.circular", diameter));
+                    /// Border diameter for a circular map in the sidebar
+                    sidebar.add(I.tn("{gray}Diameter: {white}{0} block", "{gray}Diameter: {white}{0} blocks", diameter, diameter));
             }
             else
             {
@@ -327,12 +332,15 @@ public class GameSidebar extends Sidebar
                 // Same min & max, we can display both at once
                 if (minX == minZ && maxX == maxZ)
                 {
-                    sidebar.add(i.t("scoreboard.border.coordinates.both", UHUtils.integerToStringWithSign(minX), UHUtils.integerToStringWithSign(maxZ)));
+                    /// Min & max coordinates in the sidebar, to locate the border. Ex: "-500 +500". {0} = minimal coord, {1} = maximal coord.
+                    sidebar.add(I.t("{white}{0} {1}", UHUtils.integerToStringWithSign(minX), UHUtils.integerToStringWithSign(maxZ)));
                 }
                 else
                 {
-                    sidebar.add(i.t("scoreboard.border.coordinates.x", UHUtils.integerToStringWithSign(minX), UHUtils.integerToStringWithSign(maxX)));
-                    sidebar.add(i.t("scoreboard.border.coordinates.z", UHUtils.integerToStringWithSign(minZ), UHUtils.integerToStringWithSign(maxZ)));
+                    /// Min & max X coordinates in the sidebar, to locate the border. Ex: "X: -500 +500". {0} = minimal coord, {1} = maximal coord.
+                    sidebar.add(I.t("{gray}X: {white}{0} {1}", UHUtils.integerToStringWithSign(minX), UHUtils.integerToStringWithSign(maxX)));
+                    /// Min & max Z coordinates in the sidebar, to locate the border. Ex: "Z: -500 +500". {0} = minimal coord, {1} = maximal coord.
+                    sidebar.add(I.t("{gray}Z: {white}{0} {1}", UHUtils.integerToStringWithSign(minZ), UHUtils.integerToStringWithSign(maxZ)));
                 }
             }
 
@@ -372,7 +380,8 @@ public class GameSidebar extends Sidebar
         if ((freezer.getGlobalFreezeState() && !freezer.isHiddenFreeze()) || freezer.isPlayerFrozen(player))
         {
             sidebar.add("");
-            sidebar.add(i.t("freeze.scoreboard"));
+            /// Notice displayed at the bottom of the sidebar if the game is paused (/uh freeze all).
+            sidebar.add(I.t("{darkaqua}Game frozen"));
         }
     }
 }

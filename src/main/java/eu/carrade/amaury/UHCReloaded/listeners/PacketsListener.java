@@ -51,7 +51,6 @@ import java.lang.reflect.InvocationTargetException;
 
 public class PacketsListener extends PacketAdapter implements Listener
 {
-
     private UHCReloaded p = null;
     private ProtocolManager pm = ProtocolLibrary.getProtocolManager();
 
@@ -71,8 +70,6 @@ public class PacketsListener extends PacketAdapter implements Listener
 
     /**
      * Used to present the server as an hardcore server, for the clients to display hardcore hearts.
-     *
-     * @param ev
      */
     @Override
     public void onPacketSending(PacketEvent ev)
@@ -86,8 +83,6 @@ public class PacketsListener extends PacketAdapter implements Listener
 
     /**
      * Used to automatically respawn the dead players.
-     *
-     * @param ev
      */
     @EventHandler
     public void onPlayerDeath(final PlayerDeathEvent ev)

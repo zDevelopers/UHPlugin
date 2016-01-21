@@ -36,25 +36,20 @@ import eu.carrade.amaury.UHCReloaded.borders.MapShape;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 
 @Command (name = "get")
 public class UHBorderGetCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHBorderGetCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -62,11 +57,11 @@ public class UHBorderGetCommand extends AbstractCommand
     {
         if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
         {
-            sender.sendMessage(i.t("borders.current.messageCircular", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+            sender.sendMessage(I.tn("{ci}The current diameter of the map is {0} block.", "{ci}The current diameter of the map is {0} blocks.", p.getBorderManager().getCurrentBorderDiameter()));
         }
         else
         {
-            sender.sendMessage(i.t("borders.current.messageSquared", String.valueOf(p.getBorderManager().getCurrentBorderDiameter())));
+            sender.sendMessage(I.t("{ci}The current map size is {0}×{0}.", p.getBorderManager().getCurrentBorderDiameter()));
         }
     }
 
@@ -85,6 +80,6 @@ public class UHBorderGetCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.borderHelpCurrent"));
+        return Collections.singletonList(I.t("{cc}/uh border get{ci}: returns the current size of the map."));
     }
 }

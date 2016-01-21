@@ -29,14 +29,13 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-
 package eu.carrade.amaury.UHCReloaded.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
-import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
+import eu.carrade.amaury.UHCReloaded.protips.ProTips;
+import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.MessageSender;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -49,7 +48,6 @@ import java.util.UUID;
 public class TeamChatManager
 {
     private final UHCReloaded p;
-    private final I18n i;
 
     private final Set<UUID> teamChatLocked = new HashSet<>();
     private final Map<UUID, UHTeam> otherTeamChatLocked = new HashMap<>();
@@ -58,7 +56,6 @@ public class TeamChatManager
     public TeamChatManager(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     /**
@@ -81,16 +78,15 @@ public class TeamChatManager
      */
     public void sendTeamMessage(Player sender, String message, UHTeam team)
     {
-
         // Permission check
         if (team == null && !sender.hasPermission("uh.teamchat.self"))
         {
-            sender.sendMessage(i.t("team.message.notAllowed.self"));
+            sender.sendMessage(I.t("{ce}You are not allowed to send a private message to your team."));
             return;
         }
         if (team != null && !sender.hasPermission("uh.teamchat.others"))
         {
-            sender.sendMessage(i.t("team.message.notAllowed.others"));
+            sender.sendMessage(I.t("{ce}You are not allowed to enter in the private chat of another team."));
             return;
         }
 
@@ -99,18 +95,21 @@ public class TeamChatManager
 
         if (team == null)
         {
-            rawMessage = i.t("team.message.format", sender.getDisplayName(), message);
+            /// Format of a private team message from a team member. {0} = sender display name, {1} = message.
+            rawMessage = I.t("{gold}[{0}{gold} -> his team] {reset}{1}", sender.getDisplayName(), message);
             recipient = p.getTeamManager().getTeamForPlayer(sender);
 
             if (recipient == null)
             {
-                sender.sendMessage(i.t("team.message.noTeam"));
+                /// Error message if someone try to send a team private message out of any team
+                sender.sendMessage(I.t("{ce}You are not in a team!"));
                 return;
             }
         }
         else
         {
-            rawMessage = i.t("team.message.formatOtherTeam", sender.getDisplayName(), team.getDisplayName(), message);
+            /// Format of a private team message from a non-team-member. {0} = sender display name, {1} = team display name, {2} = message.
+            rawMessage = I.t("{gold}[{0}{gold} -> team {1}{gold}] {reset}{2}", sender.getDisplayName(), team.getDisplayName(), message);
             recipient = team;
         }
 
@@ -160,17 +159,14 @@ public class TeamChatManager
             p.getServer().getConsoleSender().sendMessage(rawMessage);
         }
 
-        if (!p.getProtipsSender().wasProtipSent(sender, ProTipsSender.PROTIP_LOCK_CHAT))
+        RunTask.later(new Runnable()
         {
-            Bukkit.getScheduler().runTaskLater(p, new Runnable()
+            @Override
+            public void run()
             {
-                @Override
-                public void run()
-                {
-                    p.getProtipsSender().sendProtip(sender, ProTipsSender.PROTIP_LOCK_CHAT);
-                }
-            }, 30L);
-        }
+                ProTips.LOCK_CHAT.sendTo(sender);
+            }
+        }, 30L);
     }
 
     /**
@@ -185,7 +181,6 @@ public class TeamChatManager
         // The players' messages are sent asynchronously.
         // That's how we differentiates the messages sent through /g and the messages sent using
         // the normal chat.
-
         sender.chat(message);
     }
 
@@ -194,7 +189,7 @@ public class TeamChatManager
      * Toggles the chat between the global chat and the team chat.
      *
      * @param player The chat of this player will be toggled.
-     * @return true if the chat is now the team chat; false else.
+     * @return {@code true} if the chat is now the team chat; false else.
      */
     public boolean toggleChatForPlayer(Player player)
     {
@@ -206,20 +201,19 @@ public class TeamChatManager
      *
      * @param player The chat of this player will be toggled.
      * @param team The team to chat with. If null, the player's team will be used.
-     * @return true if the chat is now the team chat; false else.
+     * @return {@code true} if the chat is now the team chat; false else.
      */
     public boolean toggleChatForPlayer(final Player player, UHTeam team)
     {
-
         // Permission check
         if (team == null && !player.hasPermission("uh.teamchat.self"))
         {
-            player.sendMessage(i.t("team.message.notAllowed.self"));
+            player.sendMessage(I.t("{ce}You are not allowed to send a private message to your team."));
             return false;
         }
         if (team != null && !player.hasPermission("uh.teamchat.others"))
         {
-            player.sendMessage(i.t("team.message.notAllowed.others"));
+            player.sendMessage(I.t("{ce}You are not allowed to enter in the private chat of another team."));
             return false;
         }
 
@@ -249,12 +243,12 @@ public class TeamChatManager
             {
                 teamChatLocked.add(player.getUniqueId());
 
-                Bukkit.getScheduler().runTaskLater(p, new Runnable()
+                RunTask.later(new Runnable()
                 {
                     @Override
                     public void run()
                     {
-                        p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_USE_G_COMMAND);
+                        ProTips.USE_G_COMMAND.sendTo(player);
                     }
                 }, 10L);
 
@@ -268,7 +262,7 @@ public class TeamChatManager
      *
      * @param player The player.
      * @param team If non-null, this will check if the given player is spying the current team.
-     * @return
+     * @return {@code true} if the team chat is enabled for the given player.
      */
     public boolean isTeamChatEnabled(Player player, UHTeam team)
     {
@@ -288,7 +282,7 @@ public class TeamChatManager
      * Returns true if the team chat is enabled for the given player.
      *
      * @param player The player.
-     * @return
+     * @return {@code true} if the team chat is enabled for the given player.
      */
     public boolean isTeamChatEnabled(Player player)
     {
@@ -299,7 +293,7 @@ public class TeamChatManager
      * Returns true if the given player is in the team chat of another team.
      *
      * @param player The player.
-     * @return
+     * @return {@code true} if the given player is in the team chat of another team.
      */
     public boolean isOtherTeamChatEnabled(Player player)
     {
@@ -310,7 +304,7 @@ public class TeamChatManager
      * Returns true if a team chat is enabled for the given player.
      *
      * @param player The player.
-     * @return
+     * @return {@code true} if a team chat is enabled for the given player.
      */
     public boolean isAnyTeamChatEnabled(Player player)
     {
@@ -322,7 +316,7 @@ public class TeamChatManager
      * the chat of another team.
      *
      * @param player The player.
-     * @return
+     * @return The other team viewed by the given player.
      */
     public UHTeam getOtherTeamEnabled(Player player)
     {
@@ -335,7 +329,8 @@ public class TeamChatManager
      *
      * @param id The spy's UUID.
      */
-    public void addGlobalSpy(UUID id) {
+    public void addGlobalSpy(UUID id)
+    {
         globalSpies.add(id);
     }
 
@@ -344,7 +339,8 @@ public class TeamChatManager
      *
      * @param id The spy's UUID.
      */
-    public void removeGlobalSpy(UUID id) {
+    public void removeGlobalSpy(UUID id)
+    {
         globalSpies.remove(id);
     }
 
@@ -354,7 +350,8 @@ public class TeamChatManager
      * @param id The spy's UUID.
      * @return {@code true} if spying.
      */
-    public boolean isGlobalSpy(UUID id) {
+    public boolean isGlobalSpy(UUID id)
+    {
         return globalSpies.contains(id);
     }
 }

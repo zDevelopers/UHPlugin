@@ -29,7 +29,6 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-
 package eu.carrade.amaury.UHCReloaded.recipes;
 
 import org.bukkit.inventory.FurnaceRecipe;
@@ -209,7 +208,7 @@ public class RecipeUtil
      */
     public static List<ItemStack> getListOfIngredients(Recipe recipe)
     {
-        List<ItemStack> listOfItems = null;
+        List<ItemStack> listOfItems;
         if (recipe instanceof ShapelessRecipe)
         {
             listOfItems = ((ShapelessRecipe) recipe).getIngredientList();
@@ -218,11 +217,11 @@ public class RecipeUtil
         {
             try
             {
-                listOfItems = new LinkedList<ItemStack>(((ShapedRecipe) recipe).getIngredientMap().values());
+                listOfItems = new LinkedList<>(((ShapedRecipe) recipe).getIngredientMap().values());
             }
-            catch (NullPointerException e)
-            { // If the list of items is null
-                listOfItems = new LinkedList<ItemStack>(); // empty list
+            catch (NullPointerException e)  // If the list of items is null
+            {
+                listOfItems = new LinkedList<>(); // empty list
             }
         }
 

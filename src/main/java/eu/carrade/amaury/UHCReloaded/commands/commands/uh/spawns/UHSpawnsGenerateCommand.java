@@ -36,11 +36,11 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.spawns.Generator;
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException;
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.UnknownGeneratorException;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
@@ -55,14 +55,11 @@ import java.util.List;
 @Command (name = "generate")
 public class UHSpawnsGenerateCommand extends AbstractCommand
 {
-
     private UHCReloaded p;
-    private final I18n i;
 
     public UHSpawnsGenerateCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
     }
 
     /**
@@ -119,7 +116,7 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
         {
             if (spawnsCount == 0)
             { // Solo mode?
-                sender.sendMessage(i.t("spawns.assumptions.solo"));
+                sender.sendMessage(I.t("{ci}No team found: assuming the game is a solo game."));
                 spawnsCount = p.getServer().getOnlinePlayers().size() - p.getGameManager().getStartupSpectators().size();
             }
             else
@@ -136,7 +133,7 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
 
                 if (playersWithoutTeam != 0)
                 {
-                    sender.sendMessage(i.t("spawns.assumptions.partialSolo"));
+                    sender.sendMessage(I.t("{ci}Some players are not in a team; their number was added to the spawn count."));
                     spawnsCount += playersWithoutTeam;
                 }
             }
@@ -174,7 +171,7 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
                                     }
                                     else
                                     {
-                                        sender.sendMessage(i.t("spawns.generate.unknownWorld", args[6]));
+                                        sender.sendMessage(I.t("{ce}The world {0} doesn't exists.", args[6]));
                                         return;
                                     }
                                 }
@@ -186,14 +183,14 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
         }
         catch (NumberFormatException e)
         {
-            sender.sendMessage(i.t("spawns.NaN"));
+            sender.sendMessage(I.t("{ce}This is not a number!"));
             return;
         }
 
 
         if (spawnsCount <= 0)
         {
-            sender.sendMessage(i.t("spawns.generate.nothingToDo"));
+            sender.sendMessage(I.t("{ci}You asked for a void generation. Thus, the generation is empty."));
             return;
         }
 
@@ -205,17 +202,17 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
         }
         catch (UnknownGeneratorException e)
         {
-            sender.sendMessage(i.t("spawns.generate.unsupportedMethod", generationMethod));
+            sender.sendMessage(I.t("{ce}The generation method “{0}” is not (yet?) supported.", generationMethod));
             return;
 
         }
         catch (CannotGenerateSpawnPointsException e)
         {
-            sender.sendMessage(i.t("spawns.generate.impossible"));
+            sender.sendMessage(I.t("{ce}You asked for the impossible: there are too many spawn points on a too small surface. Decrease the spawn count or the minimal distance between two points."));
             return;
         }
 
-        sender.sendMessage(i.t("spawns.generate.success"));
+        sender.sendMessage(I.t("{cs}Successfully generated the asked spawn points."));
     }
 
     /**
@@ -277,24 +274,24 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
     public List<String> help(CommandSender sender)
     {
         return Arrays.asList(
-                i.t("cmd.spawnsHelpGenerateDetailsCmdTitle"),
-                i.t("cmd.spawnsHelpGenerateDetailsCmd"),
-                i.t("cmd.spawnsHelpGenerateDetailsShapesTitle"),
-                i.t("cmd.spawnsHelpGenerateDetailsShapesRandom"),
-                i.t("cmd.spawnsHelpGenerateDetailsShapesGrid"),
-                i.t("cmd.spawnsHelpGenerateDetailsShapesCircular"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsTitle"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsSize"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsDistanceMin"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsCount"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsCenter"),
-                i.t("cmd.spawnsHelpGenerateDetailsArgsWorld")
+                I.t("{aqua}Command"),
+                I.t("{cc}/uh spawns generate <circular|grid|random> [size] [distanceMin] [count] [xCenter] [zCenter] [world]"),
+                I.t("{aqua}Shapes"),
+                I.t(" - {cc}random{ci}: generates random spawn points on the map, with a minimal distance between them."),
+                I.t(" - {cc}grid{ci}: generates the spawn points on concentric squares, with a constant distance between two generated points."),
+                I.t(" - {cc}circular{ci}: generates the spawn points on concentric circles, with a minimal distance between two generated points. In each circle, the angle (and the distance) between two spawn points is constant."),
+                I.t("{aqua}Arguments"),
+                I.t(" - {cc}size{ci}: the size of the region where the spawn points will be generated. Squared or circular, following the shape of the map. Default: map' size."),
+                I.t(" - {cc}distanceMin{ci}: the minimal distance between two spawn points. Default: 250 blocks."),
+                I.t(" - {cc}count{ci}: the number of spawn points to generate. Default: the number of players or teams."),
+                I.t(" - {cc}xCenter{ci}, {cc}zCenter{ci}: the center of the region where the points are generated. Default: world' spawn point."),
+                I.t(" - {cc}world{ci}: the world where the spawn points will be generated.")
         );
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.spawnsHelpGenerate"));
+        return Collections.singletonList(I.t("{cc}/uh spawns generate {ci}: automagically generates spawn points. See /uh spawns generate for details."));
     }
 }

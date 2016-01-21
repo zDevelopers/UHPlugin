@@ -42,7 +42,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class TimerManager
 {
-
     private Map<String, UHTimer> timers = new ConcurrentHashMap<>();
     private UHTimer mainTimer = null;
 
@@ -58,11 +57,6 @@ public class TimerManager
      */
     private Set<UHTimer> timersToResume = new CopyOnWriteArraySet<>();
 
-
-    public TimerManager()
-    {
-
-    }
 
     /**
      * Registers the main timer, used to display the episodes countdown.

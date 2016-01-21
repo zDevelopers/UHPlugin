@@ -37,6 +37,7 @@ import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersComparator;
 import fr.zcraft.zlib.components.gui.ExplorerGui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -63,7 +64,8 @@ public class TeamEditMembersGUI extends ExplorerGui<OfflinePlayer>
     @Override
     protected void onUpdate()
     {
-        setTitle(UHCReloaded.i().t("team.chestGui.editor.members.subGuiTitle", team.getName()));
+        /// The title of the edit team members GUI. {0} = team name (raw).
+        setTitle(I.t("{0} » {black}Members", team.getName()));
         setKeepHorizontalScrollingSpace(true);
 
         Set<OfflinePlayer> players = new TreeSet<>(new OfflinePlayersComparator());
@@ -72,7 +74,7 @@ public class TeamEditMembersGUI extends ExplorerGui<OfflinePlayer>
 
         action("back", getSize() - 5, GuiUtils.makeItem(
                 Material.EMERALD,
-                UHCReloaded.i().t("team.chestGui.editor.exit.title")
+                I.t("{green}« Go back")
         ));
     }
 
@@ -88,12 +90,13 @@ public class TeamEditMembersGUI extends ExplorerGui<OfflinePlayer>
         Boolean inThisTeam = this.team.equals(team);
 
         meta.setOwner(player.getName());
-        meta.setDisplayName(UHCReloaded.i().t("team.chestGui.creator.players.playerItem.title", displayName));
+        /// The title of a button to select a player (a skull button). {0} = player's display name.
+        meta.setDisplayName(I.t("{reset}{0}", displayName));
         meta.setLore(Arrays.asList(
-                player.isOnline() ? UHCReloaded.i().t("team.chestGui.creator.players.playerItem.online") : UHCReloaded.i().t("team.chestGui.creator.players.playerItem.offline"),
-                team != null ? UHCReloaded.i().t("team.chestGui.creator.players.playerItem.currentTeam", team.getDisplayName()) : UHCReloaded.i().t("team.chestGui.creator.players.playerItem.noCurrentTeam"),
+                player.isOnline() ? I.t("{gray}Online") : I.t("{gray}Offline"),
+                team != null ? I.t("{gray}Current team: {0}", team.getDisplayName()) : I.t("{gray}Current team: none"),
                 "",
-                inThisTeam ? UHCReloaded.i().t("team.chestGui.editor.members.inviteAdd") : UHCReloaded.i().t("team.chestGui.editor.members.inviteRemove")
+                inThisTeam ? I.t("{darkgray}» {white}Click {gray}to remove this player") : I.t("{darkgray}» {white}Click {gray}to add this player")
         ));
 
         button.setItemMeta(meta);

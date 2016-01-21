@@ -38,9 +38,9 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
@@ -53,7 +53,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
 /**
  * This command teleports a team or the spectators to a given location.
  *
@@ -65,21 +64,19 @@ import java.util.List;
 @Command (name = "tp")
 public class UHTPCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHTPCommand(UHCReloaded plugin)
     {
         this.p = plugin;
-        this.i = plugin.getI18n();
     }
 
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
+        // No action provided: doc
         if (args.length == 0)
-        { // No action provided: doc
+        {
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
         }
 
@@ -105,13 +102,15 @@ public class UHTPCommand extends AbstractCommand
             {
                 boolean mayBeNaNError = false;
 
+                // possibly /uh tp team <x> <y> <z> <team ...>
                 if (args.length >= 6)
-                { // possibly /uh tp team <x> <y> <z> <team ...>
+                {
                     String teamName = UHUtils.getStringFromCommandArguments(args, 4);
                     UHTeam team = p.getTeamManager().getTeam(teamName);
 
+                    // ok, the team exists.
                     if (team != null)
-                    { // ok, the team exists.
+                    {
                         try
                         {
                             double x = Integer.parseInt(args[1]) + 0.5;
@@ -131,8 +130,10 @@ public class UHTPCommand extends AbstractCommand
                         }
                     }
                 }
+
+                // /uh tp team <target> <team ...>
                 if (args.length >= 3)
-                { // /uh tp team <target> <team ...>
+                {
                     String teamName = UHUtils.getStringFromCommandArguments(args, 2);
                     UHTeam team = p.getTeamManager().getTeam(teamName);
 
@@ -140,11 +141,11 @@ public class UHTPCommand extends AbstractCommand
                     {
                         if (mayBeNaNError)
                         {
-                            sender.sendMessage(i.t("tp.NaN"));
+                            sender.sendMessage(I.t("{ce}The coordinates must be three valid numbers."));
                         }
                         else
                         {
-                            sender.sendMessage(i.t("tp.teamDoesNotExists"));
+                            sender.sendMessage(I.t("{ce}This team is not registered."));
                         }
                     }
                     else
@@ -153,7 +154,7 @@ public class UHTPCommand extends AbstractCommand
 
                         if (target == null)
                         {
-                            sender.sendMessage(i.t("tp.targetOffline", args[1]));
+                            sender.sendMessage(I.t("{ce}{0} is offline!", args[1]));
                         }
                         else
                         {
@@ -165,8 +166,9 @@ public class UHTPCommand extends AbstractCommand
 
             else if (subcommand.equalsIgnoreCase("spectators"))
             {
+                // /uh tp spectators <x> <y> <z>
                 if (args.length == 4)
-                { // /uh tp spectators <x> <y> <z>
+                {
                     try
                     {
                         double x = Integer.parseInt(args[1]) + 0.5;
@@ -183,16 +185,18 @@ public class UHTPCommand extends AbstractCommand
                     }
                     catch (NumberFormatException e)
                     {
-                        sender.sendMessage(i.t("tp.NaN"));
+                        sender.sendMessage(I.t("{ce}The coordinates must be three valid numbers."));
                     }
                 }
+
+                // /uh tp spectators <target>
                 else if (args.length == 2)
-                { // /uh tp spectators <target>
+                {
                     Player target = p.getServer().getPlayer(args[1]);
 
                     if (target == null)
                     {
-                        sender.sendMessage(i.t("tp.targetOffline", args[1]));
+                        sender.sendMessage(I.t("{ce}{0} is offline!", args[1]));
                     }
                     else
                     {
@@ -256,16 +260,16 @@ public class UHTPCommand extends AbstractCommand
     public List<String> help(CommandSender sender)
     {
         return Arrays.asList(
-                i.t("cmd.tpHelpTitle"),
-                i.t("cmd.tpHelpTeam"),
-                i.t("cmd.tpHelpSpectators")
+                I.t("{aqua}------ Teleportation commands ------"),
+                I.t("{cc}/uh tp team <x> <y> <z> | <target> <team ...> {ci}: teleports the team to the given location/target."),
+                I.t("{cc}/uh tp spectators <x> <y> <z> | <target> {ci}: teleports the spectators (aka non-alive players) to the given location/target.")
         );
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpTP"));
+        return Collections.singletonList(I.t("{cc}/uh tp {ci}: teleports the spectators or an entire team. See /uh tp for details."));
     }
 
     @Override

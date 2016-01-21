@@ -33,17 +33,16 @@
 package eu.carrade.amaury.UHCReloaded.commands.commands.uh;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
 import java.util.List;
-
 
 /**
  * This commands broadcast the winner(s) of the game and sends some fireworks at these players.
@@ -54,14 +53,11 @@ import java.util.List;
 @Command (name = "finish")
 public class UHFinishCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHFinishCommand(UHCReloaded plugin)
     {
         this.p = plugin;
-        this.i = plugin.getI18n();
     }
 
     @Override
@@ -77,11 +73,11 @@ public class UHFinishCommand extends AbstractCommand
 
             if (e.getMessage().equals(UHGameManager.FINISH_ERROR_NOT_STARTED))
             {
-                sender.sendMessage(i.t("finish.notStarted"));
+                sender.sendMessage(I.t("{ce}The game is not started!"));
             }
             else if (e.getMessage().equals(UHGameManager.FINISH_ERROR_NOT_FINISHED))
             {
-                sender.sendMessage(i.t("finish.notFinished"));
+                sender.sendMessage(I.t("{ce}There's not one team alive!"));
             }
             else
             {
@@ -105,7 +101,7 @@ public class UHFinishCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpFinish"));
+        return Collections.singletonList(I.t("{cc}/uh finish {ci}: displays the name of the winner(s) and launches some fireworks."));
     }
 
     @Override

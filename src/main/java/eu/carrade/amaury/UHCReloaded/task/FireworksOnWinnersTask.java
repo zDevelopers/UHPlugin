@@ -45,7 +45,6 @@ import java.util.Set;
 
 public class FireworksOnWinnersTask extends BukkitRunnable
 {
-
     private UHCReloaded p = null;
     private Set<OfflinePlayer> winners = null;
 

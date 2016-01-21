@@ -37,7 +37,7 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -46,7 +46,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-
 
 /**
  * This command manages startup spectators (aka ignored players).
@@ -57,14 +56,11 @@ import java.util.List;
 @Command (name = "spec")
 public class UHSpectatorsCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHSpectatorsCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -90,12 +86,12 @@ public class UHSpectatorsCommand extends AbstractCommand
                     Player newSpectator = p.getServer().getPlayer(args[1]);
                     if (newSpectator == null)
                     {
-                        sender.sendMessage(i.t("spectators.offline", args[1]));
+                        sender.sendMessage(I.t("{ce}The player {0} is not online.", args[1]));
                     }
                     else
                     {
                         p.getGameManager().addStartupSpectator(newSpectator);
-                        sender.sendMessage(i.t("spectators.add.success", args[1]));
+                        sender.sendMessage(I.t("{cs}The player {0} is now a spectator.", args[1]));
                     }
                 }
             }
@@ -111,12 +107,12 @@ public class UHSpectatorsCommand extends AbstractCommand
                     Player oldSpectator = p.getServer().getPlayer(args[1]);
                     if (oldSpectator == null)
                     {
-                        sender.sendMessage(i.t("spectators.offline", args[1]));
+                        sender.sendMessage(I.t("{ce}The player {0} is not online.", args[1]));
                     }
                     else
                     {
                         p.getGameManager().removeStartupSpectator(oldSpectator);
-                        sender.sendMessage(i.t("spectators.remove.success", args[1]));
+                        sender.sendMessage(I.t("{cs}The player {0} is now a player.", args[1]));
                     }
                 }
             }
@@ -126,15 +122,16 @@ public class UHSpectatorsCommand extends AbstractCommand
                 HashSet<String> spectators = p.getGameManager().getStartupSpectators();
                 if (spectators.size() == 0)
                 {
-                    sender.sendMessage(i.t("spectators.list.nothing"));
+                    sender.sendMessage(I.t("{ce}There isn't any spectator to list."));
                 }
                 else
                 {
-                    sender.sendMessage(i.t("spectators.list.countSpectators", String.valueOf(spectators.size())));
-                    sender.sendMessage(i.t("spectators.list.countOnlyInitial"));
+                    sender.sendMessage(I.tn("{ci}{0} registered spectator.", "{ci}{0} registered spectators.", spectators.size()));
+                    sender.sendMessage(I.t("{ci}This count includes only the initial spectators."));
                     for (String spectator : spectators)
                     {
-                        sender.sendMessage(i.t("spectators.list.itemSpec", spectator));
+                        /// A list item in the startup spectators list
+                        sender.sendMessage(I.tc("startup_specs", "{lightpurple} - {0}", spectator));
                     }
                 }
             }
@@ -144,15 +141,15 @@ public class UHSpectatorsCommand extends AbstractCommand
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args)
     {
-
         // Manual suggestions needed because we don't use sub-commands.
         if (args.length == 1)
         {
             return CommandUtils.getAutocompleteSuggestions(args[0], Arrays.asList("add", "remove", "list"));
         }
 
+        // /... spec remove <?>
         else if (args.length == 2 && args[1].equalsIgnoreCase("remove"))
-        { // /... spec remove <?>
+        {
             List<String> suggestions = new ArrayList<>();
 
             for (String spectatorName : p.getGameManager().getStartupSpectators())
@@ -171,11 +168,11 @@ public class UHSpectatorsCommand extends AbstractCommand
     {
         List<String> help = new ArrayList<>();
 
-        help.add(i.t("cmd.specHelpTitle"));
+        help.add(I.t("{aqua}------ Startup spectators commands ------"));
 
-        help.add(i.t("cmd.specHelpAdd"));
-        help.add(i.t("cmd.specHelpRemove"));
-        help.add(i.t("cmd.specHelpList"));
+        help.add(I.t("{cc}/uh spec add <player>{ci}: adds a startup spectator."));
+        help.add(I.t("{cc}/uh spec remove <player>{ci}: removes a startup spectator."));
+        help.add(I.t("{cc}/uh spec list{ci}: lists the startup spectators."));
 
         return help;
     }
@@ -183,7 +180,7 @@ public class UHSpectatorsCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpSpec"));
+        return Collections.singletonList(I.t("{cc}/uh spec {ci}: manages the spectators. Execute /uh spec for details."));
     }
 
     @Override

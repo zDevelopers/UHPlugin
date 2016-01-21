@@ -42,7 +42,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class CancelBrewTask extends BukkitRunnable
 {
-
     private BrewerInventory inventory = null;
     private HumanEntity whoClicked = null;
 
@@ -84,20 +83,21 @@ public class CancelBrewTask extends BukkitRunnable
                     }
                 }
 
+                // Failed... We adds the glowstone to the first empty slot found.
                 if (!added)
                 {
-                    // Failed... We adds the glowstone to the first empty slot found.
-
                     Integer slotEmpty = whoClicked.getInventory().firstEmpty();
 
+                    // -1 is returned if there isn't any empty slot
                     if (slotEmpty != -1)
-                    { // -1 is returned if there isn't any empty slot
+                    {
                         whoClicked.getInventory().setItem(slotEmpty, ingredient);
                     }
+
+                    // Failed again (!). Maybe an item captured between the click and this execution.
+                    // The stack is dropped at the player's location.
                     else
                     {
-                        // Failed again (!). Maybe an item captured between the click and this execution.
-                        // The stack is dropped at the player's location.
                         whoClicked.getWorld().dropItem(whoClicked.getLocation(), ingredient);
                     }
                 }
@@ -106,5 +106,4 @@ public class CancelBrewTask extends BukkitRunnable
             }
         }
     }
-
 }

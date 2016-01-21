@@ -36,8 +36,7 @@ import eu.carrade.amaury.UHCReloaded.events.EpisodeChangedCause;
 import eu.carrade.amaury.UHCReloaded.events.UHEpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHGameStartsEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHPlayerResurrectedEvent;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
-import eu.carrade.amaury.UHCReloaded.misc.ProTipsSender;
+import eu.carrade.amaury.UHCReloaded.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.task.FireworksOnWinnersTask;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
@@ -45,6 +44,7 @@ import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.ActionBar;
@@ -87,7 +87,6 @@ public class UHGameManager
 
     private UHCReloaded p = null;
     private TeamManager tm = null;
-    private I18n i = null;
     private Random random = null;
 
     private Boolean damagesEnabled = false;
@@ -124,7 +123,6 @@ public class UHGameManager
     public UHGameManager(UHCReloaded plugin)
     {
         this.p = plugin;
-        this.i = p.getI18n();
         this.tm = p.getTeamManager();
 
         this.random = new Random();
@@ -141,9 +139,9 @@ public class UHGameManager
 
         DEATH_SOUND = new UHSound(p.getConfig().getConfigurationSection("death.announcements.sound"));
 
-        START_GIVE_BANNER       = p.getConfig().getBoolean("teams-options.banner.give.giveInHotbar");
+        START_GIVE_BANNER        = p.getConfig().getBoolean("teams-options.banner.give.giveInHotbar");
         START_PLACE_BANNER_SPAWN = p.getConfig().getBoolean("teams-options.banner.give.placeOnSpawn");
-        START_PLACE_BANNER_HEAD = p.getConfig().getBoolean("teams-options.banner.give.giveInHead");
+        START_PLACE_BANNER_HEAD  = p.getConfig().getBoolean("teams-options.banner.give.giveInHead");
     }
 
     /**
@@ -324,8 +322,8 @@ public class UHGameManager
         if (p.getSpawnsManager().getSpawnPoints().size() < spawnsNeeded)
         {
             if (sender instanceof Player) sender.sendMessage("");
-            sender.sendMessage(i.t("start.notEnoughTP"));
-            sender.sendMessage(i.t("start.notEnoughTPHelp"));
+            sender.sendMessage(I.t("{ce}Unable to start the game: not enough teleportation spots."));
+            sender.sendMessage(I.t("{ci}You can use {cc}/uh spawns generate <random|circular|grid>{ci} to generate the missing spawns automatically."));
 
             // We clears the teams created on-the-fly
             for (UHTeam team : onTheFlyTeams)
@@ -398,7 +396,7 @@ public class UHGameManager
             p.getFreezer().setGlobalFreezeState(true, false);
 
             // A simple information, because this start is slower (yeah, Captain Obvious here)
-            p.getServer().broadcastMessage(i.t("start.teleportationInProgress"));
+            p.getServer().broadcastMessage(I.t("{lightpurple}Teleportation in progress... Please wait."));
 
             teleporter.whenTeleportationOccurs(new Callback<UUID>()
             {
@@ -412,7 +410,8 @@ public class UHGameManager
 
                     if (BROADCAST_SLOW_START_PROGRESS)
                     {
-                        final String message = i.t("start.teleportationInProgressInActionBar", teleported, total);
+                        /// Displayed in the action bar while the slow teleportation occurs.
+                        final String message = I.t("{lightpurple}Teleporting... {gray}({0}/{1})", teleported, total);
                         for (Player player : Bukkit.getOnlinePlayers())
                         {
                             ActionBar.sendPermanentMessage(player, message);
@@ -432,7 +431,7 @@ public class UHGameManager
 
                         if (slow)
                         {
-                            sender.sendMessage(i.t("start.startSlowTP", player.getName()));
+                            sender.sendMessage(I.t("{gray}Player {0}{gray} teleported.", player.getName()));
 
                             RunTask.nextTick(new Runnable() {
                                 @Override
@@ -484,14 +483,15 @@ public class UHGameManager
 
                             try
                             {
-                                sender.sendMessage(i.t("start.startSlowAllTeamsTP"));
-                                sender.sendMessage(i.t("start.startSlowAllTeamsTPCmd"));
+                                sender.sendMessage(I.t("{cs}All teams are teleported."));
+                                sender.sendMessage(I.t("{gray}Use {cc}/uh start slow go{gray} to start the game."));
                             }
                             catch (NullPointerException ignored) {}
 
                             if (BROADCAST_SLOW_START_PROGRESS)
                             {
-                                String message = i.t("start.teleportationFinishedInActionBar");
+                                /// Displayed in the action bar when the slow teleportation is finished but the game not started.
+                                String message = I.t("{lightpurple}Teleportation complete. {gray}The game will start soon...");
                                 for (Player player : Bukkit.getOnlinePlayers())
                                 {
                                     ActionBar.sendPermanentMessage(player, message);
@@ -522,13 +522,13 @@ public class UHGameManager
     {
         if (!slowStartInProgress)
         {
-            sender.sendMessage(i.t("start.startSlowBeforeStartSlowGo"));
+            sender.sendMessage(I.t("{ce}Please execute {cc}/uh start slow{ce} before."));
             return;
         }
 
         if (!slowStartTPFinished)
         {
-            sender.sendMessage(i.t("start.startSlowWaitBeforeGo"));
+            sender.sendMessage(I.t("{ce}Please wait while the players are teleported."));
             return;
         }
 
@@ -628,7 +628,7 @@ public class UHGameManager
                     for (World world : Bukkit.getWorlds())
                         world.setPVP(true);
 
-                    Bukkit.broadcastMessage(i.t("pvp.enabled"));
+                    Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} PvP is now enabled."));
                 }
             }, PEACE_PERIOD);
         }
@@ -650,7 +650,7 @@ public class UHGameManager
                 {
                     for (Player player : getOnlineAlivePlayers())
                     {
-                        p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_USE_T_COMMAND);
+                        ProTips.USE_T_COMMAND.sendTo(player);
                     }
                 }
             }, 400L);
@@ -664,7 +664,7 @@ public class UHGameManager
             {
                 for (Player player : getOnlineAlivePlayers())
                 {
-                    p.getProtipsSender().sendProtip(player, ProTipsSender.PROTIP_STARTUP_INVINCIBILITY);
+                    ProTips.STARTUP_INVINCIBILITY.sendTo(player);
                 }
             }
         }, 100L);
@@ -1079,7 +1079,8 @@ public class UHGameManager
                     {
                         if (j == listWinners.size() - 1)
                         {
-                            winners += " " + i.t("finish.and") + " ";
+                            /// The "and" in the winners players list (like "player1, player2 and player3").
+                            winners += " " + I.tc("winners_list", "and") + " ";
                         }
                         else
                         {
@@ -1091,11 +1092,11 @@ public class UHGameManager
                     j++;
                 }
 
-                p.getServer().broadcastMessage(i.t("finish.broadcast.withTeams", winners, winnerTeam.getDisplayName()));
+                p.getServer().broadcastMessage(I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} (team {1}{green}) for their victory! {darkgreen}{obfuscated}--", winners, winnerTeam.getDisplayName()));
             }
             else
             {
-                p.getServer().broadcastMessage(i.t("finish.broadcast.withoutTeams", winnerTeam.getName()));
+                p.getServer().broadcastMessage(I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} for his victory! {darkgreen}{obfuscated}--", winnerTeam.getName()));
             }
         }
 
@@ -1106,13 +1107,17 @@ public class UHGameManager
 
             if (isGameWithTeams())
             {
-                title = i.t("finish.titles.withTeams.title", winnerTeam.getDisplayName());
-                subtitle = i.t("finish.titles.withTeams.subtitle", winnerTeam.getDisplayName());
+                /// The main title of the /title displayed when a team wins the game. {0} becomes the team display name (with colors).
+                title = I.t("{darkgreen}{0}", winnerTeam.getDisplayName());
+                /// The subtitle of the /title displayed when a team wins the game. {0} becomes the team display name (with colors).
+                subtitle = I.t("{green}This team wins the game!", winnerTeam.getDisplayName());
             }
             else
             {
-                title = i.t("finish.titles.withoutTeams.title", winnerTeam.getDisplayName());
-                subtitle = i.t("finish.titles.withoutTeams.subtitle", winnerTeam.getDisplayName());
+                /// The main title of the /title displayed when a player wins the game (in solo). {0} becomes the player display name (with colors).
+                title = I.t("{darkgreen}{0}", winnerTeam.getDisplayName());
+                /// The subtitle of the /title displayed when a player wins the game (in solo). {0} becomes the player display name (with colors).
+                subtitle = I.t("{green}wins the game!", winnerTeam.getDisplayName());
             }
 
             Titles.broadcastTitle(5, 142, 21, title, subtitle);

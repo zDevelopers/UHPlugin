@@ -36,7 +36,7 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -52,13 +52,11 @@ import java.util.List;
 @Command (name = "heal")
 public class UHHealCommand extends AbstractCommand
 {
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHHealCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -72,7 +70,7 @@ public class UHHealCommand extends AbstractCommand
         Player player = p.getServer().getPlayer(args[0]);
         if (player == null || !player.isOnline())
         {
-            sender.sendMessage(i.t("heal.offline"));
+            sender.sendMessage(I.t("{ce}This player is offline."));
             return;
         }
 
@@ -106,7 +104,7 @@ public class UHHealCommand extends AbstractCommand
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(i.t("heal.errorNaN"));
+                sender.sendMessage(I.t("{ce}Hey, this is not a number of half-hearts. It's a text. Pfff."));
                 return;
             }
 
@@ -114,7 +112,7 @@ public class UHHealCommand extends AbstractCommand
 
             if (health <= 0D)
             {
-                sender.sendMessage(i.t("heal.errorNoKill"));
+                sender.sendMessage(I.t("{ce}You can't kill a player with this command, to avoid typo fails."));
                 return;
             }
             else if (health > 20D)
@@ -142,7 +140,7 @@ public class UHHealCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpHeal"));
+        return Collections.singletonList(I.t("{cc}/uh heal <player> [half-hearts=20|±diff] {ci}: heals a player to the number of half-hearts provided (default 20)."));
     }
 
     @Override

@@ -37,7 +37,8 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.components.i18n.I18n;
 import org.bukkit.command.CommandSender;
 
 import java.io.IOException;
@@ -56,14 +57,11 @@ import java.util.jar.Manifest;
 @Command (name = "about")
 public class UHAboutCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHAboutCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = plugin.getI18n();
     }
 
     /**
@@ -78,7 +76,7 @@ public class UHAboutCommand extends AbstractCommand
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
         CommandUtils.displaySeparator(sender);
-        sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
+        sender.sendMessage(I.t("{yellow}{0} - version {1}", p.getDescription().getDescription(), p.getDescription().getVersion()));
 
         // Authors
 
@@ -92,7 +90,8 @@ public class UHAboutCommand extends AbstractCommand
             }
             else if (author == listAuthors.get(listAuthors.size() - 1))
             {
-                authors += " " + i.t("about.and") + " ";
+                /// The "and" in the authors list (like "Amaury Carrade, azenet and João Roda")
+                authors += " " + I.tc("authors_list", "and") + " ";
             }
             else
             {
@@ -100,7 +99,7 @@ public class UHAboutCommand extends AbstractCommand
             }
             authors += author;
         }
-        sender.sendMessage(i.t("about.authors", authors));
+        sender.sendMessage(I.t("Plugin made with love by {0}.", authors));
 
         // Build number
 
@@ -110,8 +109,8 @@ public class UHAboutCommand extends AbstractCommand
             Class<? extends UHCReloaded> clazz = p.getClass();
             String className = clazz.getSimpleName() + ".class";
             String classPath = clazz.getResource(className).toString();
-            if (classPath.startsWith("jar"))
-            { // Class from JAR
+            if (classPath.startsWith("jar"))  // Class from JAR
+            {
                 String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) +
                         "/META-INF/MANIFEST.MF";
                 Manifest manifest = new Manifest(new URL(manifestPath).openStream());
@@ -127,20 +126,20 @@ public class UHAboutCommand extends AbstractCommand
 
         if (build != null)
         {
-            sender.sendMessage(i.t("about.build.number", build));
+            sender.sendMessage(I.t("Build number: {0}.", build));
         }
         else
         {
-            sender.sendMessage(i.t("about.build.notAvailable"));
+            sender.sendMessage(I.t("Build number not available."));
         }
 
         // Translation
 
-        sender.sendMessage(i.t("about.i18n.title"));
-        sender.sendMessage(i.t("about.i18n.selected", i.getSelectedLanguage(), i.getTranslator(i.getSelectedLanguage())));
-        sender.sendMessage(i.t("about.i18n.fallback", i.getDefaultLanguage(), i.getTranslator(i.getDefaultLanguage())));
-        sender.sendMessage(i.t("about.license.title"));
-        sender.sendMessage(i.t("about.license.license"));
+        sender.sendMessage(I.t("{aqua}------ Translations ------"));
+        sender.sendMessage(I.t("Current language: {0} (translated by {1}).", I18n.getPrimaryLocale(), I18n.getTranslationTeam(I18n.getPrimaryLocale())));
+        sender.sendMessage(I.t("Fallback language: {0} (translated by {1}).", I18n.getFallbackLocale(), I18n.getTranslationTeam(I18n.getFallbackLocale())));
+        sender.sendMessage(I.t("{aqua}------ License ------"));
+        sender.sendMessage(I.t("Published under the CeCILL-B License."));
 
         CommandUtils.displaySeparator(sender);
     }
@@ -168,7 +167,7 @@ public class UHAboutCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpAbout"));
+        return Collections.singletonList(I.t("{cc}/uh about {ci}: informations about the plugin and the translation."));
     }
 
     @Override

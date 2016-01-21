@@ -29,7 +29,6 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-
 package eu.carrade.amaury.UHCReloaded.commands.commands;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
@@ -41,10 +40,8 @@ import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 @Command (name = "leave", noPermission = true, inheritPermission = false)
 public class LeaveCommand extends UHTeamLeaveCommand
 {
-
     public LeaveCommand(UHCReloaded plugin)
     {
         super(plugin);
     }
-
 }

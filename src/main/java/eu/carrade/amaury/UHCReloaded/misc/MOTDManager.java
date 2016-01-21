@@ -33,16 +33,14 @@
 package eu.carrade.amaury.UHCReloaded.misc;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.ChatColor;
 
 
 public class MOTDManager
 {
-
     private UHCReloaded p;
-    private I18n i;
 
     private boolean enabled;
     private String matchName = "";
@@ -52,7 +50,6 @@ public class MOTDManager
     public MOTDManager(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
 
         enabled = p.getConfig().getBoolean("motd.enabled");
 
@@ -88,7 +85,8 @@ public class MOTDManager
      */
     public void updateMOTDBeforeStart()
     {
-        if (enabled) currentMOTD = matchName + i.t("motd.beforeStart");
+        /// MOTD when the game is not started.
+        if (enabled) currentMOTD = matchName + I.t("Waiting for players...");
     }
 
     /**
@@ -96,7 +94,8 @@ public class MOTDManager
      */
     public void updateMOTDDuringStart()
     {
-        if (enabled) currentMOTD = matchName + i.t("motd.starting");
+        /// MOTD when the game is starting (slow TP in progress).
+        if (enabled) currentMOTD = matchName + I.t("Starting in progress...");
     }
 
     /**
@@ -110,11 +109,13 @@ public class MOTDManager
         {
             if (!p.getGameManager().isGameWithTeams())
             {
-                currentMOTD = matchName + i.t("motd.runningSolo", String.valueOf(p.getGameManager().getAlivePlayersCount()));
+                /// Solo game running MOTD. {0} = players alive count.
+                currentMOTD = matchName + I.tn("Game running! {0} player alive.", "Game running! {0} players alive.", p.getGameManager().getAlivePlayersCount(), p.getGameManager().getAlivePlayersCount());
             }
             else
             {
-                currentMOTD = matchName + i.t("motd.runningTeams", String.valueOf(p.getGameManager().getAlivePlayersCount()), String.valueOf(p.getGameManager().getAliveTeamsCount()));
+                /// Teams game running MOTD. {0} = players alive count. {1} = teams alive count. Plural based on players count.
+                currentMOTD = matchName + I.tn("Game running! {0} player alive in {1} team.", "Game running! {0} players alive in {1} teams.", p.getGameManager().getAlivePlayersCount(), p.getGameManager().getAlivePlayersCount(), p.getGameManager().getAliveTeamsCount());
             }
         }
     }
@@ -130,11 +131,13 @@ public class MOTDManager
         {
             if (!p.getGameManager().isGameWithTeams())
             {
-                currentMOTD = matchName + i.t("motd.finishedSolo", winner.getName());
+                /// Game finished MOTD with solo winner ({0} = winner raw name).
+                currentMOTD = matchName + I.t("Game finished; congratulation to {0} for his victory!", winner.getName());
             }
             else
             {
-                currentMOTD = matchName + i.t("motd.finishedTeams", winner.getDisplayName());
+                /// Game finished MOTD with team winner ({0} = team display name).
+                currentMOTD = matchName + I.t("Game finished; the team {0} wins this match!", winner.getDisplayName());
             }
         }
     }

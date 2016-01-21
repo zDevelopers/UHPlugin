@@ -38,6 +38,7 @@ import fr.zcraft.zlib.components.gui.ActionGui;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -56,14 +57,16 @@ public class TeamEditDeleteGUI extends ActionGui
     @Override
     protected void onUpdate()
     {
-        setTitle(UHCReloaded.i().t("team.chestGui.editor.delete.subGuiTitle", team.getName()));
+        /// The title of the delete team GUI. {0} = team name (raw).
+        setTitle(I.t("{0} » {darkred}Delete", team.getName()));
         setSize(9);
 
         for (int slot = 0; slot < 3; slot++)
         {
             action("keep", slot, GuiUtils.makeItem(
                     new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.LIME.getWoolData()),
-                    UHCReloaded.i().t("team.chestGui.editor.delete.keep"),
+                    /// The title of the "keep" button in the delete team GUI
+                    I.t("{green}Keep this team alive"),
                     null
             ));
         }
@@ -74,7 +77,8 @@ public class TeamEditDeleteGUI extends ActionGui
         {
             action("delete", slot, GuiUtils.makeItem(
                     new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.RED.getWoolData()),
-                    UHCReloaded.i().t("team.chestGui.editor.delete.delete"),
+                    /// The title of the "delete" button in the delete team GUI
+                    I.t("{red}Delete this team {italic}forever"),
                     null
             ));
         }

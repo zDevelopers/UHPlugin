@@ -31,12 +31,14 @@
  */
 package eu.carrade.amaury.UHCReloaded.commands;
 
-import junit.framework.Assert;
 import eu.carrade.amaury.UHCReloaded.TestsUtils;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommandExecutor;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
+import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.components.i18n.I18n;
+import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -47,23 +49,23 @@ import java.util.Set;
 
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(UHCReloaded.class)
+@PrepareForTest({UHCReloaded.class, I18n.class, I.class})
 public class TestCommandsAnnotation
 {
 	@Test
 	public void testCommandAnnotationIsPresentEverywhere()
 	{
+		TestsUtils.mockStaticPlugin();
+		TestsUtils.mockI18n();
+
 		// Data
 		Set<AbstractCommandExecutor> executors = new HashSet<>();
 		executors.add(new UHCommandExecutor(TestsUtils.getMockedPluginInstance()));
 
-
 		// Tests
-		for(AbstractCommandExecutor executor : executors) {
-			for(AbstractCommand command : executor.getMainCommands().values()) {
+		for(AbstractCommandExecutor executor : executors)
+			for (AbstractCommand command : executor.getMainCommands().values())
 				testCommandAnnotationIsPresentEverywhere(command);
-			}
-		}
 	}
 
 	/**

@@ -31,7 +31,6 @@
  */
 package eu.carrade.amaury.UHCReloaded.borders.generators;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -39,10 +38,9 @@ import org.bukkit.block.Block;
 
 public class CircularWallGenerator extends WallGenerator
 {
-
-    public CircularWallGenerator(UHCReloaded p, Material wallBlockAir, Material wallBlockSolid)
+    public CircularWallGenerator(Material wallBlockAir, Material wallBlockSolid)
     {
-        super(p, wallBlockAir, wallBlockSolid);
+        super(wallBlockAir, wallBlockSolid);
     }
 
     /**

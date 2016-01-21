@@ -34,7 +34,6 @@ package eu.carrade.amaury.UHCReloaded.gui.teams;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.gui.teams.builder.TeamBuilderStepColorGUI;
 import eu.carrade.amaury.UHCReloaded.gui.teams.editor.TeamEditGUI;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
@@ -43,6 +42,7 @@ import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.gui.PromptGui;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.items.GlowEffect;
 import org.bukkit.DyeColor;
@@ -52,18 +52,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
 public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 {
-    private final String IB = "team.chestGui.selector.";  // I18n base key
-
     private final String TEAM_ITEM_TYPE;
     private final boolean GLOW_ON_CURRENT_TEAM;
 
-    private final I18n i = UHCReloaded.i();
     private final TeamManager tm = UHCReloaded.get().getTeamManager();
 
     public TeamsSelectorGUI()
@@ -77,7 +73,8 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
     @Override
     protected void onUpdate()
     {
-        setTitle(i.t(IB + "title", tm.getTeams().size()));
+        /// The title of the teams selector GUI. {0} = teams count.
+        setTitle(I.t("{black}Select a team {reset}({0})", tm.getTeams().size()));
         setData(tm.getTeams().toArray(new UHTeam[tm.getTeams().size()]));
 
         setMode(Mode.READONLY);
@@ -88,8 +85,10 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
             int renameSlot = getPlayer().hasPermission("uh.team") ? getSize() - 6 : getSize() - 5;
 
             action("rename", renameSlot, GuiUtils.makeItem(
-                    Material.BOOK_AND_QUILL, i.t(IB + "rename.title"),
-                    tm.getTeamForPlayer(getPlayer()) == null ? Collections.singletonList(i.t(IB + "rename.selectBefore")) : null
+                    /// The title of a button to rename our team, in the selector GUI.
+                    Material.BOOK_AND_QUILL, I.t("{white}Rename your team"),
+                    /// Warning displayed in the "Rename your team" button, if the player is not in a team
+                    tm.getTeamForPlayer(getPlayer()) == null ? GuiUtils.generateLore(I.t("{gray}You have to be in a team")) : null
             ));
         }
 
@@ -97,7 +96,8 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
         {
             int newTeamSlot = getPlayer().hasPermission("uh.player.renameTeam") ? getSize() - 4 : getSize() - 5;
 
-            action("new", newTeamSlot, GuiUtils.makeItem(Material.EMERALD, i.t(IB + "new.title")));
+            /// The title of a button to create a new team, in the selector GUI.
+            action("new", newTeamSlot, GuiUtils.makeItem(Material.EMERALD, I.t("{white}New team")));
         }
     }
 
@@ -114,10 +114,12 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 
         if (team.getSize() != 0)
         {
-            lore.add(i.t(IB + "teamItem.subtitlePlayers"));
+            /// The "Players" title in the selector GUI, on a team's tooltip
+            lore.add(I.t("{blue}Players"));
             for (OfflinePlayer player : team.getPlayers())
             {
-                lore.add(i.t(IB + "teamItem.bulletPlayers", player.getName()));
+                /// An item of the players list in the selector GUI, on a team's tooltip
+                lore.add(I.t("{darkgray}- {white}{0}", player.getName()));
             }
 
             lore.add("");
@@ -125,16 +127,16 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 
         if (getPlayer().hasPermission("uh.player.join.self") && !playerInTeam)
         {
-            lore.add(i.t(IB + "teamItem.inviteJoin"));
+            lore.add(I.t("{darkgray}» {white}Click {gray}to join this team"));
         }
         else if (getPlayer().hasPermission("uh.player.leave.self") && playerInTeam)
         {
-            lore.add(i.t(IB + "teamItem.inviteLeave"));
+            lore.add(I.t("{darkgray}» {white}Click {gray}to leave this team"));
         }
 
         if (getPlayer().hasPermission("uh.team"))  // TODO adapt with new granular permissions
         {
-            lore.add(i.t(IB + "teamItem.inviteManage"));
+            lore.add(I.t("{darkgray}» {white}Right-click {gray}to manage this team"));
         }
 
 
@@ -170,7 +172,11 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 
 
         // Title
-        final String title = tm.getMaxPlayersPerTeam() != 0 ? i.t(IB + "teamItem.titleWithMax", team.getDisplayName(), team.getSize(), tm.getMaxPlayersPerTeam()) : i.t(IB + "teamItem.title", team.getDisplayName(), team.getSize());
+        final String title = tm.getMaxPlayersPerTeam() != 0
+                /// Title of the team item in the teams selector GUI (with max). {0}: team display name. {1}: players count. {2}: max count.
+                ? I.t("{white}Team {0} {gray}({1}/{2})", team.getDisplayName(), team.getSize(), tm.getMaxPlayersPerTeam())
+                /// Title of the team item in the teams selector GUI (without max) {0}: team display name. {1}: players count.
+                : I.tn("{white}Team {0} {gray}({1} player)", "{white}Team {0} {gray}({1} players)", team.getSize(), team.getDisplayName(), team.getSize());
 
 
         GuiUtils.makeItem(item, title, lore);

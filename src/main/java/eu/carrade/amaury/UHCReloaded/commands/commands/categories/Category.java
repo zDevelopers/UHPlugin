@@ -31,24 +31,22 @@
  */
 package eu.carrade.amaury.UHCReloaded.commands.commands.categories;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import fr.zcraft.zlib.components.i18n.I;
 
 
 public enum Category
 {
-
-    GAME(UHCReloaded.i().t("cmd.titleGameCmd")),
-    BUGS(UHCReloaded.i().t("cmd.titleBugCmd")),
-    MISC(UHCReloaded.i().t("cmd.titleMiscCmd"));
+    GAME(I.t("{aqua}------ Game-related commands ------")),
+    BUGS(I.t("{aqua}------ Bugs-related commands ------")),
+    MISC(I.t("{aqua}------ Miscellaneous commands ------"));
 
 
     private String title;
 
-    private Category(String title)
+    Category(String title)
     {
         this.title = title;
     }
-
 
     public String getTitle()
     {

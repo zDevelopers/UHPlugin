@@ -35,12 +35,11 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -51,14 +50,11 @@ import java.util.Map;
 @Command (name = "list")
 public class UHSpawnsListCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHSpawnsListCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = plugin.getI18n();
     }
 
     /**
@@ -76,11 +72,11 @@ public class UHSpawnsListCommand extends AbstractCommand
 
         if (spawnPoints.size() == 0)
         {
-            sender.sendMessage(i.t("spawns.list.nothing"));
+            sender.sendMessage(I.t("{ce}There isn't any registered spawn point."));
         }
         else
         {
-            sender.sendMessage(i.t("spawns.list.count", String.valueOf(spawnPoints.size())));
+            sender.sendMessage(I.t("{ci}There are {0} registered spawn points.", String.valueOf(spawnPoints.size())));
 
             // We want one list per world
             Map<World, List<Location>> spanwsInWorlds = new HashMap<World, List<Location>>();
@@ -101,7 +97,7 @@ public class UHSpawnsListCommand extends AbstractCommand
                     continue;
                 }
 
-                sender.sendMessage(i.t("spawns.list.world", spanwsInWorld.getKey().getName()));
+                sender.sendMessage(I.t("{lightpurple}World {0}", spanwsInWorld.getKey().getName()));
 
                 String itemDisplay;
                 if (spanwsInWorld.getKey().getEnvironment() == World.Environment.NORMAL)
@@ -132,7 +128,7 @@ public class UHSpawnsListCommand extends AbstractCommand
                     {
                         if (spawnPoints.size() > j * spawnsPerLine + k)
                         {
-                            line += i.t(itemDisplay, String.valueOf(spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockX()), String.valueOf(spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockZ())) + "  ";
+                            line += I.t(itemDisplay, String.valueOf(spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockX()), String.valueOf(spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockZ())) + "  ";
                         }
                     }
 
@@ -181,6 +177,6 @@ public class UHSpawnsListCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.spawnsHelpList"));
+        return Collections.singletonList(I.t("{cc}/uh spawns list {ci}: lists the registered spawn points."));
     }
 }

@@ -55,7 +55,6 @@ import java.util.Map;
  */
 public abstract class AbstractCommand
 {
-
     /**
      * Stores the sub-commands of this complex command.
      *
@@ -198,7 +197,6 @@ public abstract class AbstractCommand
 
     /**
      * Registers a subcommand of this command.
-     * A subcommand can be a complex command.
      *
      * @param command The command to register.
      *

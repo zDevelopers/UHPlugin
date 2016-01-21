@@ -29,11 +29,10 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-
 package eu.carrade.amaury.UHCReloaded.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.text.RawMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -50,14 +49,12 @@ public class TeamManager
     private final int MAX_PLAYERS_PER_TEAM;
 
     private final UHCReloaded p;
-    private final I18n i;
     private final HashSet<UHTeam> teams = new HashSet<>();
 
 
     public TeamManager(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
 
         MAX_PLAYERS_PER_TEAM = p.getConfig().getInt("teams-options.maxPlayersPerTeam");
     }
@@ -443,25 +440,25 @@ public class TeamManager
                     TeamColor color = TeamColor.fromString(teamRawSeparated[0]);
                     if (color == null)
                     {
-                        p.getLogger().warning(i.t("load.invalidTeam", (String) teamRaw));
+                        p.getLogger().warning(I.t("Invalid team set in config: {0}", (String) teamRaw));
                     }
                     else
                     {
                         if (teamRawSeparated.length == 2)
                         { // "color,name"
                             UHTeam newTeam = addTeam(color, teamRawSeparated[1]);
-                            p.getLogger().info(i.t("load.namedTeamAdded", newTeam.getName(), newTeam.getColor().toString()));
+                            p.getLogger().info(I.t("Team {0} ({1}) added from the config file", newTeam.getName(), newTeam.getColor().toString()));
                             teamsCount++;
                         }
                         else if (teamRawSeparated.length == 1)
                         { // "color"
                             UHTeam newTeam = addTeam(color, teamRawSeparated[0]);
-                            p.getLogger().info(i.t("load.teamAdded", newTeam.getColor().toString()));
+                            p.getLogger().info(I.t("Team {0} added from the config file", newTeam.getColor().toString()));
                             teamsCount++;
                         }
                         else
                         {
-                            p.getLogger().warning(i.t("load.invalidTeam", (String) teamRaw));
+                            p.getLogger().warning(I.t("Invalid team set in config: {0}", (String) teamRaw));
                         }
                     }
                 }
@@ -496,7 +493,8 @@ public class TeamManager
 
         if (p.getTeamManager().getTeams().size() != 0)
         {
-            player.sendMessage(i.t("team.gui.choose"));
+            /// Invite displayed in the chat team selector
+            player.sendMessage(I.t("{gold}Click on the names below to join a team"));
 
             boolean displayPlayers = p.getConfig().getBoolean("teams-options.gui.displayPlayersInTeams");
 
@@ -509,11 +507,13 @@ public class TeamManager
                 text += "{";
                 if (MAX_PLAYERS_PER_TEAM != 0)
                 {
-                    text += "\"text\": \"" + i.t("team.gui.playersCount", String.valueOf(team.getSize()), String.valueOf(MAX_PLAYERS_PER_TEAM)) + "\", ";
+                    /// Team count with max players (ex. [3/5]) followed in-game by the team name. {0} = current count, {1} = max.
+                    text += "\"text\": \"" + I.t("{gray}[{white}{0}{gray}/{white}{1}{gray}]", String.valueOf(team.getSize()), String.valueOf(MAX_PLAYERS_PER_TEAM)) + "\", ";
                 }
                 else
                 {
-                    text += "\"text\": \"" + i.t("team.gui.playersCountUnlimited", String.valueOf(team.getSize())) + "\", ";
+                    /// Team count without max players (ex. [3]) followed in-game by the team name. {0} = current count.
+                    text += "\"text\": \"" + I.t("{gray}[{white}{0}{gray}]", String.valueOf(team.getSize())) + "\", ";
                 }
 
                 String players = "";
@@ -524,22 +524,24 @@ public class TeamManager
                     {
                         if (!p.getGameManager().isGameRunning())
                         {
-                            players += bullet + i.t("team.list.itemPlayer", opl.getName());
+                            players += bullet + opl.getName();
                         }
                         else
                         {
                             if (p.getGameManager().isPlayerDead(opl.getUniqueId()))
                             {
-                                players += bullet + i.t("team.list.itemPlayerDead", opl.getName());
+                                /// Displayed in team tooltip of the chat team selector for a dead player
+                                players += bullet + I.t("{0} ({red}dead{reset})", opl.getName());
                             }
                             else
                             {
-                                players += bullet + i.t("team.list.itemPlayerAlive", opl.getName());
+                                /// Displayed in team tooltip of the chat team selector for an alive player
+                                players += bullet + I.t("{0} ({green}alive{reset})", opl.getName());
                             }
                         }
                     }
                 }
-                text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipCount", String.valueOf(team.getPlayers().size())) + players + "\"}";
+                text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.tn("{0} player in this team", "{0} players in this team", team.getPlayers().size(), team.getPlayers().size()) + players + "\"}";
                 text += "},";
 
                 text += "{\"text\":\" \"},{";
@@ -551,11 +553,13 @@ public class TeamManager
                 if (team.containsPlayer(player))
                 {
                     text += "\"bold\":\"true\",";
-                    text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipJoinInside", team.getDisplayName()) + "\"}";
+                    /// Tooltip on the chat team selector GUI when the player is in the team. {0} = team display name.
+                    text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("You are in the team {0}", team.getDisplayName()) + "\"}";
                 }
                 else
                 {
-                    text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("team.gui.tooltipJoin", team.getDisplayName()) + "\"}";
+                    /// Tooltip on the chat team selector GUI when the player is not in the team. {0} = team display name.
+                    text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("Click here to join the team {0}", team.getDisplayName()) + "\"}";
                 }
                 text += "}";
 
@@ -567,7 +571,7 @@ public class TeamManager
             if (p.getTeamManager().getTeamForPlayer(player) != null && player.hasPermission("uh.player.leave.self"))
             {
                 String text = "{";
-                text += "\"text\":\"" + i.t("team.gui.leaveTeam") + "\",";
+                text += "\"text\":\"" + I.t("{darkred}[×] {red}Click here to leave your team") + "\",";
                 text += "\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/leave\"}";
                 text += "}";
 
@@ -575,13 +579,13 @@ public class TeamManager
             }
             else
             {
-                player.sendMessage(i.t("team.gui.howToDisplayAgain"));
+                player.sendMessage(I.t("{gray}Run /join to display this again"));
             }
         }
         else
         {
             // No teams.
-            player.sendMessage(i.t("team.gui.noTeams"));
+            player.sendMessage(I.t("{ce}There isn't any team available."));
         }
 
         player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");

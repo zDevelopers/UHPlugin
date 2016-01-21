@@ -36,8 +36,8 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.gui.teams.TeamsSelectorGUI;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import fr.zcraft.zlib.components.gui.Gui;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -48,12 +48,7 @@ import java.util.List;
 @Command (name = "gui", noPermission = true, inheritPermission = false)
 public class UHTeamGUICommand extends AbstractCommand
 {
-    private final I18n i;
-
-    public UHTeamGUICommand(UHCReloaded plugin)
-    {
-        i = plugin.getI18n();
-    }
+    public UHTeamGUICommand(UHCReloaded plugin) {}
 
 
     @Override
@@ -82,6 +77,6 @@ public class UHTeamGUICommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.teamHelpGui"));
+        return Collections.singletonList(I.t("{cc}/uh team gui {ci}: opens a GUI to join and manage the teams."));
     }
 }

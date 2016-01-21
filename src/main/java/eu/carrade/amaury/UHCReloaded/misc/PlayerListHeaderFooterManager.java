@@ -32,7 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.misc;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.text.ListHeaderFooter;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
@@ -109,13 +109,17 @@ public class PlayerListHeaderFooterManager
     private String replaceTags(String raw)
     {
         Configuration config = UHCReloaded.get().getConfig();
-        I18n i = UHCReloaded.i();
 
         return raw
                 .replace("{title}", config.getString("scoreboard.title", ""))
-                .replace("{episodeText}", i.t("playersList.episode", String.valueOf(UHCReloaded.get().getGameManager().getEpisode())))
-                .replace("{playersText}", i.t("playersList.players", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount())))
-                .replace("{teamsText}", i.t("playersList.teams", String.valueOf(UHCReloaded.get().getGameManager().getAliveTeamsCount())))
+
+                /// Episode in the player list ({episodeText} replacement). {0} = current episode number.
+                .replace("{episodeText}", I.t("Episode {0}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode())))
+                /// Players in the player list ({playersText} replacement). {0} = current alive players count.
+                .replace("{playersText}", I.tn("{0} player", "{0} players", UHCReloaded.get().getGameManager().getAlivePlayersCount(), UHCReloaded.get().getGameManager().getAlivePlayersCount()))
+                /// Teams in the player list ({teamsText} replacement). {0} = current alive teams count.
+                .replace("{teamsText}", I.tn("{0} team", "{0} teams", UHCReloaded.get().getGameManager().getAliveTeamsCount(), UHCReloaded.get().getGameManager().getAliveTeamsCount()))
+
                 .replace("{episodeNumber}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode()))
                 .replace("{playersCount}", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount()))
                 .replace("{teamsCount}", String.valueOf(UHCReloaded.get().getGameManager().getAliveTeamsCount()))

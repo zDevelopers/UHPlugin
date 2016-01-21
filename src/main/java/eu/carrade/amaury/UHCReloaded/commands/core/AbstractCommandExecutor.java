@@ -35,7 +35,7 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
@@ -58,9 +58,7 @@ import java.util.Map;
  */
 public abstract class AbstractCommandExecutor implements TabExecutor
 {
-
     private UHCReloaded p;
-    private I18n i;
 
     /**
      * Stores the main commands, i.e. the commands registered in the {@code plugin.yml} file.
@@ -72,10 +70,10 @@ public abstract class AbstractCommandExecutor implements TabExecutor
      */
     private Map<String, String> mainCommandsPermissions = new LinkedHashMap<>();
 
+
     public AbstractCommandExecutor(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
     }
 
 
@@ -207,8 +205,8 @@ public abstract class AbstractCommandExecutor implements TabExecutor
 
         if (!isAnError)
         {
-            sender.sendMessage(i.t("cmd.titleHelp", p.getDescription().getDescription(), p.getDescription().getVersion()));
-            sender.sendMessage(i.t("cmd.legendHelp"));
+            sender.sendMessage(I.t("{yellow}{0} - version {1}", p.getDescription().getDescription(), p.getDescription().getVersion()));
+            sender.sendMessage(I.t("{ci}Legend: {cc}/uh command <required> [optional=default] <spaces allowed ...>{ci}."));
         }
 
         if (help != null)
@@ -224,8 +222,8 @@ public abstract class AbstractCommandExecutor implements TabExecutor
 
         if (isAnError)
         {
-            sender.sendMessage(i.t("cmd.errorBadUse"));
-            sender.sendMessage(i.t("cmd.errorBadUseHelpAbove"));
+            sender.sendMessage(I.t("{ce}{bold}You cannot execute this command this way."));
+            sender.sendMessage(I.t("{ce}The help is displayed above."));
             CommandUtils.displaySeparator(sender);
         }
     }
@@ -256,11 +254,11 @@ public abstract class AbstractCommandExecutor implements TabExecutor
             switch (e.getReason())
             {
                 case NOT_ALLOWED:
-                    sender.sendMessage(i.t("cmd.errorUnauthorized"));
+                    sender.sendMessage(I.t("{ce}You are not allowed to execute this command."));
                     break;
 
                 case ONLY_AS_A_PLAYER:
-                    sender.sendMessage(i.t("cmd.errorOnlyAsAPlayer"));
+                    sender.sendMessage(I.t("{ce}This can only be executed as a player."));
                     break;
 
                 case BAD_USE:

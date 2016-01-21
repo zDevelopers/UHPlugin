@@ -36,7 +36,7 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -44,17 +44,14 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 
-
 @Command (name = "rules")
 public class UHRulesCommand extends AbstractCommand
 {
     private UHCReloaded p;
-    private I18n i;
 
     public UHRulesCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
     }
 
 
@@ -63,7 +60,7 @@ public class UHRulesCommand extends AbstractCommand
     {
         if (!p.getRulesManager().isEnabled())
         {
-            sender.sendMessage(i.t("rules.command.unset"));
+            sender.sendMessage(I.t("{ce}No rules are set in the config file."));
             return;
         }
 
@@ -75,11 +72,11 @@ public class UHRulesCommand extends AbstractCommand
                 p.getRulesManager().displayRulesTo(player);
 
                 if (!sender.equals(player))
-                    sender.sendMessage(i.t("rules.command.sent", player.getName()));
+                    sender.sendMessage(I.t("{cs}Rules sent to {0}.", player.getName()));
             }
             else
             {
-                sender.sendMessage(i.t("rules.command.offline", args[0]));
+                sender.sendMessage(I.t("{ce}Cannot display the rules to {0} because he (or she) is offline.", args[0]));
             }
         }
         else
@@ -103,7 +100,7 @@ public class UHRulesCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpRules"));
+        return Collections.singletonList(I.t("{cc}/uh rules [player] {ci}: sends the server rules to the server or the given player."));
     }
 
     @Override

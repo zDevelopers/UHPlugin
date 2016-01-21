@@ -33,11 +33,11 @@
 package eu.carrade.amaury.UHCReloaded.spawns;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException;
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.UnknownGeneratorException;
 import eu.carrade.amaury.UHCReloaded.spawns.generators.SpawnPointsGenerator;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -51,16 +51,13 @@ public class SpawnsManager
 {
     private final boolean AVOID_WATER;
 
-    UHCReloaded p = null;
-    I18n i = null;
-
+    private UHCReloaded p;
     private LinkedList<Location> spawnPoints = new LinkedList<Location>();
 
 
     public SpawnsManager(UHCReloaded plugin)
     {
         this.p = plugin;
-        this.i = p.getI18n();
 
         AVOID_WATER = p.getConfig().getBoolean("map.spawnPoints.dontGenerateAboveWater");
     }
@@ -208,12 +205,12 @@ public class SpawnsManager
                     try
                     {
                         addSpawnPoint(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
-                        p.getLogger().info(i.t("load.spawnPointAdded", coords[0], coords[1]));
+                        p.getLogger().info(I.t("Spawn point {0},{1} added from the config file", coords[0], coords[1]));
                         spawnCount++;
                     }
                     catch (Exception e) // Not an integer or not enough coords
                     {
-                        p.getLogger().warning(i.t("load.invalidSpawnPoint", (String) position));
+                        p.getLogger().warning(I.t("Invalid spawn point set in config: {0}", (String) position));
                     }
                 }
             }

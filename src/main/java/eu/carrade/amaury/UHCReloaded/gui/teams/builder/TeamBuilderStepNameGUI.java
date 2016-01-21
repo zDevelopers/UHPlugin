@@ -31,12 +31,12 @@
  */
 package eu.carrade.amaury.UHCReloaded.gui.teams.builder;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.gui.PromptGui;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.Callback;
 import org.bukkit.Material;
 
@@ -53,15 +53,18 @@ public class TeamBuilderStepNameGUI extends TeamBuilderBaseGUI
     @Override
     protected void onUpdate()
     {
-        setTitle(UHCReloaded.i().t("team.chestGui.creator.name.title"));
+        /// The title of the name selector GUI, in the create team GUIs
+        setTitle(I.t("New team » {black}Name"));
         setSize(6 * 9);
 
         generateBreadcrumbs(BuildingStep.NAME);
 
         action("name", 22, GuiUtils.makeItem(
                 Material.BOOK_AND_QUILL,
-                UHCReloaded.i().t("team.chestGui.creator.name.nameItem.title"),
-                GuiUtils.generateLore(UHCReloaded.i().t("team.chestGui.creator.name.nameItem.lore"))
+                /// The title of the button opening the sign to write the team name (creator GUIs)
+                I.t("{white}Name the team"),
+                /// The legend of the button opening the sign to write the team name (creator GUIs)
+                GuiUtils.generateLore(I.t("{gray}When clicked, a sign will open; write the name of the team inside."))
         ));
     }
 

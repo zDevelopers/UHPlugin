@@ -32,8 +32,6 @@
 
 package eu.carrade.amaury.UHCReloaded.borders.generators;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -42,19 +40,13 @@ import org.bukkit.block.Block;
 public abstract class WallGenerator
 {
 
-    private UHCReloaded p;
-    private I18n i;
-
     private Material wallBlockAir = null;
     private Material wallBlockSolid = null;
 
     private int blocksSet = 0;
 
-    public WallGenerator(UHCReloaded p, Material wallBlockAir, Material wallBlockSolid)
+    public WallGenerator(Material wallBlockAir, Material wallBlockSolid)
     {
-        this.p = p;
-        this.i = p.getI18n();
-
         this.wallBlockAir = wallBlockAir;
         this.wallBlockSolid = wallBlockSolid;
     }

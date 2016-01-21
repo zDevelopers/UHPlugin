@@ -44,13 +44,12 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamSpyCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 
 /**
  * This command is used to manage the teams.
@@ -61,23 +60,16 @@ import java.util.List;
 @Command (name = "team")
 public class UHTeamCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
-
     public UHTeamCommand(UHCReloaded plugin)
     {
-        p = plugin;
-        i = plugin.getI18n();
-
-        registerSubCommand(new UHTeamAddCommand(p));
-        registerSubCommand(new UHTeamRemoveCommand(p));
-        registerSubCommand(new UHTeamJoinCommand(p));
-        registerSubCommand(new UHTeamLeaveCommand(p));
-        registerSubCommand(new UHTeamListCommand(p));
-        registerSubCommand(new UHTeamSpyCommand(p));
-        registerSubCommand(new UHTeamResetCommand(p));
-        registerSubCommand(new UHTeamGUICommand(p));
+        registerSubCommand(new UHTeamAddCommand(plugin));
+        registerSubCommand(new UHTeamRemoveCommand(plugin));
+        registerSubCommand(new UHTeamJoinCommand(plugin));
+        registerSubCommand(new UHTeamLeaveCommand(plugin));
+        registerSubCommand(new UHTeamListCommand(plugin));
+        registerSubCommand(new UHTeamSpyCommand(plugin));
+        registerSubCommand(new UHTeamResetCommand(plugin));
+        registerSubCommand(new UHTeamGUICommand(plugin));
     }
 
     /**
@@ -111,16 +103,16 @@ public class UHTeamCommand extends AbstractCommand
     public List<String> help(CommandSender sender)
     {
         return Arrays.asList(
-                i.t("cmd.teamHelpTitle"),
-                i.t("cmd.teamHelpJoinCmd"),
-                i.t("cmd.teamHelpLeaveCmd")
+                I.t("{aqua}------ Team commands ------"),
+                I.t("{cc}/join [player] <team ...> {ci}: adds “player” (or the sender) inside the given team. Without arguments, displays the chat-based team selector."),
+                I.t("{cc}/leave [player] {ci}: removes “player” (or the sender) from his team.")
         );
     }
 
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpTeam"));
+        return Collections.singletonList(I.t("{cc}/uh team {ci}: manages the teams. Execute /uh team for details."));
     }
 
     @Override

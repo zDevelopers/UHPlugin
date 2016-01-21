@@ -37,13 +37,12 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,14 +50,11 @@ import java.util.List;
 @Command (name = "remove")
 public class UHTeamRemoveCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHTeamRemoveCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = plugin.getI18n();
     }
 
     /**
@@ -77,11 +73,11 @@ public class UHTeamRemoveCommand extends AbstractCommand
             String name = UHUtils.getStringFromCommandArguments(args, 0);
             if (!p.getTeamManager().removeTeam(name))
             {
-                sender.sendMessage(i.t("team.remove.doesNotExists"));
+                sender.sendMessage(I.t("{ce}This team does not exists."));
             }
             else
             {
-                sender.sendMessage(i.t("team.remove.removed", name));
+                sender.sendMessage(I.t("{cs}Team {0} deleted.", name));
             }
         }
         else
@@ -120,6 +116,6 @@ public class UHTeamRemoveCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.teamHelpRemove"));
+        return Collections.singletonList(I.t("{cc}/uh team remove <name ...> {ci}: removes a team"));
     }
 }

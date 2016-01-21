@@ -35,25 +35,20 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 
 @Command (name = "check")
 public class UHBorderCheckCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHBorderCheckCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -73,7 +68,7 @@ public class UHBorderCheckCommand extends AbstractCommand
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(i.t("borders.NaN", args[0]));
+                sender.sendMessage(I.t("{ce}“{0}” is not a number...", args[0]));
             }
         }
     }
@@ -93,6 +88,6 @@ public class UHBorderCheckCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.borderHelpCheck"));
+        return Collections.singletonList(I.t("{cc}/uh border check <diameter>{ci}: returns a list of the players outside the given border size."));
     }
 }

@@ -36,7 +36,7 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -44,7 +44,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 
 /**
  * This command marks a player as dead, even if he is offline.
@@ -56,13 +55,11 @@ import java.util.List;
 @Command (name = "kill")
 public class UHKillCommand extends AbstractCommand
 {
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHKillCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -77,7 +74,7 @@ public class UHKillCommand extends AbstractCommand
 
         if (player == null)
         {
-            sender.sendMessage(i.t("kill.neverPlayed"));
+            sender.sendMessage(I.t("{ce}This player was never seen on this server."));
             return;
         }
 
@@ -92,11 +89,11 @@ public class UHKillCommand extends AbstractCommand
                 p.getGameManager().addDead(player.getUniqueId());
             }
 
-            sender.sendMessage(i.t("kill.killed", player.getName()));
+            sender.sendMessage(I.t("{cs}The player {0} is now marked as dead.", player.getName()));
         }
         else
         {
-            sender.sendMessage(i.t("kill.notAlive", player.getName()));
+            sender.sendMessage(I.t("{ce}{0} is not an alive player.", player.getName()));
         }
     }
 
@@ -127,6 +124,6 @@ public class UHKillCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpKill"));
+        return Collections.singletonList(I.t("{cc}/uh kill <player> {ci}: mark a player as dead, even if he is offline."));
     }
 }

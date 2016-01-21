@@ -35,12 +35,11 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,14 +47,11 @@ import java.util.List;
 @Command (name = "leave")
 public class UHTeamLeaveCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHTeamLeaveCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = plugin.getI18n();
     }
 
     /**
@@ -91,7 +87,7 @@ public class UHTeamLeaveCommand extends AbstractCommand
 
         if (target == null)
         {
-            sender.sendMessage(i.t("team.removeplayer.disconnected", args[0])); // args.length >= 1 here.
+            sender.sendMessage(I.t("{ce}The player {0} is disconnected and never logged in before!", args[0])); // args.length >= 1 here.
         }
 
         else
@@ -108,7 +104,7 @@ public class UHTeamLeaveCommand extends AbstractCommand
 
                 if (!target.equals(sender))
                 {
-                    sender.sendMessage(i.t("team.removeplayer.success", target.getName()));
+                    sender.sendMessage(I.t("{cs}The player {0} was successfully removed from his team.", target.getName()));
                 }
 
             }
@@ -142,6 +138,6 @@ public class UHTeamLeaveCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.teamHelpLeave"));
+        return Collections.singletonList(I.t("{cc}/uh team leave <player> {ci}: removes a player from his team."));
     }
 }

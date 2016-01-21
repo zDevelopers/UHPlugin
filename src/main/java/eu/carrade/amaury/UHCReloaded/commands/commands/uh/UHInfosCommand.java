@@ -37,8 +37,8 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.text.RawMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -48,32 +48,29 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 
-
 @Command (name = "infos")
 public class UHInfosCommand extends AbstractCommand
 {
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHInfosCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-
         CommandUtils.displaySeparator(sender);
 
         if (p.getGameManager().isGameStarted())
         {
-            sender.sendMessage(i.t("infos.players", String.valueOf(p.getGameManager().getAlivePlayersCount()), String.valueOf(p.getGameManager().getAliveTeamsCount())));
+            /// Header of the /uh infos command. Plural based on the players count.
+            sender.sendMessage(I.tn("{ci}{0} player alive in {1} team.", "{ci}{0} players alive in {1} teams.", p.getGameManager().getAlivePlayersCount(), p.getGameManager().getAlivePlayersCount(), p.getGameManager().getAliveTeamsCount()));
         }
         else
         {
-            sender.sendMessage(i.t("infos.notStarted"));
+            sender.sendMessage(I.t("{ci}The game is not started."));
         }
 
         for (UHTeam team : p.getTeamManager().getTeams())
@@ -91,13 +88,15 @@ public class UHInfosCommand extends AbstractCommand
                     json += "{";
                     if (player.isOnline())
                     {
-                        json += "\"text\":\"" + i.t("infos.bulletOnline") + "\",";
-                        json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("infos.tooltips.online") + "\"}";
+                        /// Online status dot in /uh infos
+                        json += "\"text\":\"" + I.t("{green} • ") + "\",";
+                        json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("Currently online") + "\"}";
                     }
                     else
                     {
-                        json += "\"text\":\"" + i.t("infos.bulletOffline") + "\",";
-                        json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("infos.tooltips.offline") + "\"}";
+                        /// Offline status dot in /uh infos
+                        json += "\"text\":\"" + I.t("{red} • ") + "\",";
+                        json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("Currently offline") + "\"}";
                     }
                     json += "},";
 
@@ -105,28 +104,31 @@ public class UHInfosCommand extends AbstractCommand
                     // Name and team
                     json += "{";
                     json += "\"text\":\"" + team.getColor().toChatColor() + player.getName() + ChatColor.RESET + "\",";
-                    json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("infos.tooltips.team", team.getDisplayName()) + "\"}";
+                    /// Team name in tooltip in /uh infos
+                    json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("Team: {0}", team.getDisplayName()) + "\"}";
                     json += "}";
 
 
                     if (p.getGameManager().isGameStarted())
                     {
-                        // Separator
-                        json += ",{\"text\":\"" + i.t("infos.separatorAliveState") + "\"},";
+                        /// Separator in /uh infos
+                        json += ",{\"text\":\"" + I.t("{gray} - ") + "\"},";
 
                         // Alive state
                         json += "{";
                         if (!p.getGameManager().isPlayerDead(player.getUniqueId()))
                         {
-                            json += "\"text\":\"" + i.t("infos.alive") + "\",";
+                            /// Alive state in /uh infos
+                            json += "\"text\":\"" + I.t("{green}alive") + "\",";
                             if (player.isOnline())
                             {
-                                json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + i.t("infos.tooltips.health", String.valueOf((int) ((Player) player).getHealth())) + "\"}";
+                                json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("{0} half-hearts", String.valueOf((int) ((Player) player).getHealth())) + "\"}";
                             }
                         }
                         else
                         {
-                            json += "\"text\":\"" + i.t("infos.dead") + "\"";
+                            /// Alive state in /uh infos
+                            json += "\"text\":\"" + I.t("{red}dead") + "\"";
                         }
                         json += "}";
                     }
@@ -140,30 +142,30 @@ public class UHInfosCommand extends AbstractCommand
                 {
 					/* Fallback to a simple display for the console */
 
-                    String info = null;
+                    String info;
 
                     if (player.isOnline())
                     {
-                        info = i.t("infos.bulletOnline");
+                        info = I.t("{green} • ");
                     }
                     else
                     {
-                        info = i.t("infos.bulletOffline");
+                        info = I.t("{red} • ");
                     }
 
                     info += team.getColor().toChatColor() + player.getName() + ChatColor.RESET;
 
                     if (p.getGameManager().isGameStarted())
                     {
-                        info += i.t("infos.separatorAliveState");
+                        info += I.t("{gray} - ");
 
                         if (!p.getGameManager().isPlayerDead(player.getUniqueId()))
                         {
-                            info += i.t("infos.alive");
+                            info += I.t("{green}alive");
                         }
                         else
                         {
-                            info += i.t("infos.dead");
+                            info += I.t("{red}dead");
                         }
                     }
 
@@ -191,7 +193,7 @@ public class UHInfosCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpInfos"));
+        return Collections.singletonList(I.t("{cc}/uh infos {ci}: prints some infos about the current game."));
     }
 
     @Override

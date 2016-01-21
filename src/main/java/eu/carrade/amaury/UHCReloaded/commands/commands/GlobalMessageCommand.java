@@ -36,11 +36,10 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,14 +51,11 @@ import java.util.List;
 @Command (name = "g", noPermission = true)
 public class GlobalMessageCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public GlobalMessageCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     /**
@@ -77,8 +73,9 @@ public class GlobalMessageCommand extends AbstractCommand
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
         }
 
+        //  /t
         if (args.length == 0)
-        { // /t
+        {
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
         }
 
@@ -108,7 +105,8 @@ public class GlobalMessageCommand extends AbstractCommand
     @Override
     public List<String> help(CommandSender sender)
     {
-        return Collections.singletonList(i.t("team.message.usage", "g"));
+        /// Usage of the /g and /t commands
+        return Collections.singletonList(I.t("{ce}Usage: /{0} <message>", "g"));
     }
 
     @Override

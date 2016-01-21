@@ -36,16 +36,14 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 
 /**
  * This command resurrects a player.
@@ -55,13 +53,11 @@ import java.util.List;
 @Command (name = "resurrect")
 public class UHResurrectCommand extends AbstractCommand
 {
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHResurrectCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -77,20 +73,21 @@ public class UHResurrectCommand extends AbstractCommand
         Player player = p.getServer().getPlayer(args[0]);
         if (player == null || !player.isOnline())
         {
-            if (!success)
-            { // Player does not exists or is nod dead.
-                sender.sendMessage(i.t("resurrect.unknownOrDead"));
+            if (!success)  // Player does not exists or is nod dead.
+            {
+                sender.sendMessage(I.t("{ce}This player is not playing or dead!"));
             }
-            else
-            { // Resurrected
-                sender.sendMessage(i.t("resurrect.offlineOk", args[0]));
+            else  // Resurrected
+            {
+                sender.sendMessage(I.t("{cs}Because {0} is offline, he will be resurrected when he logins. If he was, he is no longer banned.", args[0]));
             }
         }
         else
         {
-            if (!success)
-            { // The player is not dead
-                sender.sendMessage(i.t("resurrect.notDead", args[0]));
+            if (!success)  // The player is not dead
+            {
+                /// Trying to resurrect an alive player
+                sender.sendMessage(I.t("{ce}{0} is not dead!", args[0]));
             }
         }
     }
@@ -127,6 +124,6 @@ public class UHResurrectCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.helpResurrect"));
+        return Collections.singletonList(I.t("{cc}/uh resurrect <player> {ci}: resurrects a player."));
     }
 }

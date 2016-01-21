@@ -36,9 +36,9 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -52,14 +52,11 @@ import java.util.List;
 @Command (name = "set")
 public class UHTimersSetCommand extends AbstractCommand
 {
-
-    UHCReloaded p;
-    I18n i;
+    private UHCReloaded p;
 
     public UHTimersSetCommand(UHCReloaded p)
     {
         this.p = p;
-        this.i = p.getI18n();
     }
 
     @Override
@@ -81,17 +78,17 @@ public class UHTimersSetCommand extends AbstractCommand
                 UHTimer timer = p.getTimerManager().getTimer(timerName);
                 if (timer == null)
                 {
-                    sender.sendMessage(i.t("timers.timerDoesNotExists"));
+                    sender.sendMessage(I.t("{ce}This timer is not registered."));
                     return;
                 }
 
                 timer.setDuration(duration);
-                sender.sendMessage(i.t("timers.set", timer.getDisplayName(), args[0]));
+                sender.sendMessage(I.t("{cs}The duration of the timer {0}{cs} is now {1}.", timer.getDisplayName(), args[0]));
 
             }
             catch (IllegalArgumentException e)
             {
-                sender.sendMessage(i.t("timers.durationSyntaxError"));
+                sender.sendMessage(I.t("{ce}The duration' syntax is invalid; accepted formats are mm, mm:ss or hh:mm:ss."));
             }
         }
     }
@@ -124,6 +121,6 @@ public class UHTimersSetCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.timersHelpSet"));
+        return Collections.singletonList(I.t("{cc}/uh timers set <duration> <title ...> {ci}: sets the duration of a timer."));
     }
 }

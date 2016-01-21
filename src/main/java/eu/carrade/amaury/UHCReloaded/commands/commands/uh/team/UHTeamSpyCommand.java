@@ -35,7 +35,7 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.i18n.I18n;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -48,12 +48,10 @@ import java.util.List;
 public class UHTeamSpyCommand extends AbstractCommand
 {
     private final UHCReloaded p;
-    private final I18n i;
 
     public UHTeamSpyCommand(UHCReloaded plugin)
     {
         p = plugin;
-        i = p.getI18n();
     }
 
 
@@ -69,7 +67,7 @@ public class UHTeamSpyCommand extends AbstractCommand
                 target = Bukkit.getPlayer(args[0]);
                 if (target == null)
                 {
-                    sender.sendMessage(i.t("team.spy.offline", args[0]));
+                    sender.sendMessage(I.t("{ce}Cannot toggle the spy mode of {0} because he/she is offline.", args[0]));
                     return;
                 }
             }
@@ -94,12 +92,12 @@ public class UHTeamSpyCommand extends AbstractCommand
         if (p.getTeamChatManager().isGlobalSpy(target.getUniqueId()))
         {
             p.getTeamChatManager().removeGlobalSpy(target.getUniqueId());
-            message = i.t("team.spy.disabled", target.getName());
+            message = I.t("{cs}Spy mode {darkred}disabled{cs} for {0}.", target.getName());
         }
         else
         {
             p.getTeamChatManager().addGlobalSpy(target.getUniqueId());
-            message = i.t("team.spy.enabled", target.getName());
+            message = I.t("{cs}Spy mode {darkgreen}enabled{cs} for {0}.", target.getName());
         }
 
         target.sendMessage(message);
@@ -122,6 +120,6 @@ public class UHTeamSpyCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(i.t("cmd.teamHelpSpy"));
+        return Collections.singletonList(I.t("{cc}/uh team spy [player] {ci}: allows yourself (or the target player) to receive all the team chats (read-only). Execute again to stop."));
     }
 }
