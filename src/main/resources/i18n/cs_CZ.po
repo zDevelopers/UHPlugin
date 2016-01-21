@@ -26,7 +26,6 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL-B license and that you accept its terms.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
@@ -905,6 +904,7 @@ msgid "Game running! {0} player alive."
 msgid_plural "Game running! {0} players alive."
 msgstr[0] "Hra bezi! {0} hracu je nazivu."
 msgstr[1] "Hra bezi! {0} hracu je nazivu."
+msgstr[2] "Hra bezi! {0} hracu je nazivu."
 
 #. Teams game running MOTD. {0} = players alive count. {1} = teams alive
 #. count.
@@ -914,6 +914,7 @@ msgid "Game running! {0} player alive in {1} team."
 msgid_plural "Game running! {0} players alive in {1} teams."
 msgstr[0] "Hra bezi! {0} hracu v {1} tymech je nazivu."
 msgstr[1] "Hra bezi! {0} hracu v {1} tymech je nazivu."
+msgstr[2] "Hra bezi! {0} hracu v {1} tymech je nazivu."
 
 #. Game finished MOTD with solo winner ({0} = winner raw name).
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/MOTDManager.java:135

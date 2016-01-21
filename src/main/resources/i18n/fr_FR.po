@@ -28,7 +28,6 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL-B license and that you accept its terms.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
@@ -370,6 +369,7 @@ msgstr "{white}Équipe {0} {gray}({1}/{2})"
 msgid "{white}Team {0} {gray}({1} player)"
 msgid_plural "{white}Team {0} {gray}({1} players)"
 msgstr[0] "{white}Équipe {0} {gray}({1} joueur)"
+msgstr[1] "{white}Équipe {0} {gray}({1} joueurs)"
 
 #. The title of the first step in the team creator GUIs
 #: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/builder/TeamBuilderBaseGUI.java:109
@@ -469,12 +469,10 @@ msgid "{ce}This team already exists."
 msgstr "{ce}Cette équipe existe déjà."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/spawns/SpawnsManager.java:208
-#, java-format
 msgid "Spawn point {0},{1} added from the config file"
 msgstr "Point de démarrage {0},{1} ajouté depuis le fichier de configuration."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/spawns/SpawnsManager.java:213
-#, java-format
 msgid "Invalid spawn point set in config: {0}"
 msgstr "Point de démarrage invalide dans la configuration : {0}"
 
@@ -522,17 +520,14 @@ msgstr "{gold}[{0}{gold} -> équipe {1}{gold}] {reset}{2}"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:443
 #: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:461
-#, java-format
 msgid "Invalid team set in config: {0}"
 msgstr "Équipe invalide dans la configuration : {0}"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:450
-#, java-format
 msgid "Team {0} ({1}) added from the config file"
 msgstr "Équipe {0} ({1}) ajoutée depuis le fichier de configuration."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:456
-#, java-format
 msgid "Team {0} added from the config file"
 msgstr "Équipe {0} ajoutée depuis le fichier de configuration."
 
@@ -564,7 +559,6 @@ msgid "{0} ({green}alive{reset})"
 msgstr "{0} ({green}en vie{reset})"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:544
-#, java-format
 msgid "{0} player in this team"
 msgid_plural "{0} players in this team"
 msgstr[0] "{0} joueur dans cette équipe"
@@ -573,14 +567,12 @@ msgstr[1] "{0} joueurs dans cette équipe"
 #. Tooltip on the chat team selector GUI when the player is in the team. {0} =
 #. team display name.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:557
-#, java-format
 msgid "You are in the team {0}"
 msgstr "Vous êtes dans l'équipe {0}"
 
 #. Tooltip on the chat team selector GUI when the player is not in the team.
 #. {0} = team display name.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:562
-#, java-format
 msgid "Click here to join the team {0}"
 msgstr "Cliquez ici pour rejoindre l'équipe {0}"
 
@@ -602,7 +594,6 @@ msgid "jayjay"
 msgstr "jayjay"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/listeners/GameListener.java:240
-#, java-format
 msgid "{0}The team {1} has fallen!"
 msgstr "{0}L'équipe {1} est vaincue !"
 
@@ -731,13 +722,11 @@ msgstr "{gray}Le compas pointe désormais vers le joueur le plus proche."
 
 #. Dynmap marker label of a death point
 #: src/main/java/eu/carrade/amaury/UHCReloaded/integration/UHDynmapIntegration.java:152
-#, java-format
 msgid "Death point of {0}"
 msgstr "Ici disparu {0}"
 
 #. Dynmap marker label of a spawn point of a team.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/integration/UHDynmapIntegration.java:231
-#, java-format
 msgid "Spawn point of the team {0}"
 msgstr "Lieu de démarrage de l'équipe {0}"
 
@@ -746,7 +735,6 @@ msgstr "Lieu de démarrage de l'équipe {0}"
 #. ignores the teams.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/integration/UHDynmapIntegration.java:236
 #: src/main/java/eu/carrade/amaury/UHCReloaded/integration/UHDynmapIntegration.java:293
-#, java-format
 msgid "Spawn point of {0}"
 msgstr "Lieu de démarrage de {0}"
 
@@ -757,7 +745,7 @@ msgstr "Fabriquée depuis la tête tranchée d'un monstre maléfique"
 
 #. Golden head lore for players. {0} = player name.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/recipes/RecipesManager.java:290
-#, java-format
+
 msgid "Made from the fallen head of {0}"
 msgstr "Fabriquée depuis la tête tranchée de {0}"
 
@@ -873,14 +861,12 @@ msgstr "{darkgray}- {reset}{0}"
 #. Episode in the player list ({episodeText} replacement). {0} = current
 #. episode number.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/PlayerListHeaderFooterManager.java:117
-#, java-format
 msgid "Episode {0}"
 msgstr "Épisode {0}"
 
 #. Players in the player list ({playersText} replacement). {0} = current alive
 #. players count.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/PlayerListHeaderFooterManager.java:119
-#, java-format
 msgid "{0} player"
 msgid_plural "{0} players"
 msgstr[0] "{0} joueur"
@@ -889,7 +875,6 @@ msgstr[1] "{0} joueurs"
 #. Teams in the player list ({teamsText} replacement). {0} = current alive
 #. teams count.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/PlayerListHeaderFooterManager.java:121
-#, java-format
 msgid "{0} team"
 msgid_plural "{0} teams"
 msgstr[0] "{0} équipe"
@@ -907,7 +892,6 @@ msgstr "Démarrage en cours..."
 
 #. Solo game running MOTD. {0} = players alive count.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/MOTDManager.java:113
-#, java-format
 msgid "Game running! {0} player alive."
 msgid_plural "Game running! {0} players alive."
 msgstr[0] "Partie en cours ! {0} joueur encore en vie."
@@ -916,7 +900,6 @@ msgstr[1] "Partie en cours ! {0} joueurs encore en vie."
 #. Teams game running MOTD. {0} = players alive count. {1} = teams alive
 #. count.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/MOTDManager.java:118
-#, java-format
 msgid "Game running! {0} player alive in {1} team."
 msgid_plural "Game running! {0} players alive in {1} teams."
 msgstr[0] "Partie en cours ! {0} joueur en vie dans {1} équipe."
@@ -924,13 +907,11 @@ msgstr[1] "Partie en cours ! {0} joueurs en vie dans {1} équipes."
 
 #. Game finished MOTD with solo winner ({0} = winner raw name).
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/MOTDManager.java:135
-#, java-format
 msgid "Game finished; congratulation to {0} for his victory!"
 msgstr "Partie terminée ; félicitation à {0} pour sa victoire !"
 
 #. Game finished MOTD with team winner ({0} = team display name).
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/MOTDManager.java:140
-#, java-format
 msgid "Game finished; the team {0} wins this match!"
 msgstr "Partie terminée ; l'équipe {0} remporte la victoire !"
 
@@ -1029,12 +1010,10 @@ msgid "and"
 msgstr "et"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHAboutCommand.java:102
-#, java-format
 msgid "Plugin made with love by {0}."
 msgstr "Plugin réalisé avec amour par {0}."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHAboutCommand.java:129
-#, java-format
 msgid "Build number: {0}."
 msgstr "Numéro de construction : {0}."
 
@@ -1047,12 +1026,10 @@ msgid "{aqua}------ Translations ------"
 msgstr "{aqua}------ Traductions ------"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHAboutCommand.java:139
-#, java-format
 msgid "Current language: {0} (translated by {1})."
 msgstr "Langue courante : {0} (traduit par {1})."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHAboutCommand.java:140
-#, java-format
 msgid "Fallback language: {0} (translated by {1})."
 msgstr "Langue par défaut : {0} (traduit par {1})."
 
@@ -1198,7 +1175,6 @@ msgstr "Actuellement hors-ligne"
 
 #. Team name in tooltip in /uh infos
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHInfosCommand.java:108
-#, java-format
 msgid "Team: {0}"
 msgstr "Équipe : {0}"
 
@@ -1215,7 +1191,6 @@ msgid "{green}alive"
 msgstr "{green}vivant"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHInfosCommand.java:125
-#, java-format
 msgid "{0} half-hearts"
 msgstr "{0} demi-cœurs"
 
@@ -1662,7 +1637,6 @@ msgid "{ce}There isn't any team to show."
 msgstr "{ce}Il n'y a pas d'équipe à lister."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamListCommand.java:76
-#, java-format
 msgid "{0} ({1} player)"
 msgid_plural "{0} ({1} players)"
 msgstr[0] "{0} ({1} joueur)"
@@ -1670,7 +1644,6 @@ msgstr[1] "{0} ({1} joueurs)"
 
 #. Player name after the online status dot in /uh teams list
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamListCommand.java:92
-#, java-format
 msgctxt "teams_list"
 msgid "{0}"
 msgstr "{0}"
