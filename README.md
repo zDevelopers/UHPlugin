@@ -24,9 +24,14 @@ Please note, this README reflects the last development version. Some features li
 1. [Commands & permissions](#commands--permissions)
 1. [Installation](#installation)
 1. [How to translate the plugin](#how-to-translate-the-plugin-in-your-own-language)
+   1. [If you want to translate it for yourself](#if-you-want-to-translate-it-for-yourself)
+   1. [If you want to translate it for everyone](#if-you-want-to-translate-it-for-everyone)
+   1. [Inside the translations](#inside-the-translations)
 1. [Metrics](#metrics)
 1. [Thanks](#thanks)
+   1. [Translators](#translators)
 1. [License](#license)
+
 
 ## Features
 
@@ -267,29 +272,34 @@ After the installation, I recommend you to:
 5. only after that, generate the wall (`/uh generatewalls`) (don't forget to configure the shape and the size in the config file before). Otherwise, holes will be formed in the wall when Minecraft will populate the terrain.
 
 
-## How to translate the plugin in your own language
+## How to translate the plugin (or change strings) in your own language
 
-It's pretty simple.
+### If you want to translate it for yourself
 
-1. **Duplicate a language file** in the `plugins/UHPlugin/i18n/` folder of your server.  
-   Name the file `language_COUNTRY.yml` (like the other ones).
-2. Open the new language file with a text editor (like notepad, gedit, kate, vi, etc.) and **translate the strings**.  
-   *DON'T change the keys*, only the strings after the comas.  
-   Also, *never use tabulations in these files*, *don't change the indentation* and *don't remove the quotes around the sentences*.
-3. When the translation is done, open the `manifest.yml` file (in the same folder) and **add the name of the new language file** (without the `.yml`) in the list:
-   
-   ```yml
-   version: 1.0
-   languages:
-    - en_US
-    - fr_FR
-    - # ...
-    - language_COUNTRY
-   ```
-4. In the `config.yml`, **change the `lang` key** to the name of the new language. That's all!
+1. Go to the `plugins/UHPlugin/i18n` folder in your server directory. You have to start the server with this plugin at least one time before.
+2. Locate your language file. The name is `language_COUNTRY.po`.
+3. Open it, either using a simple text editor, or, if you like GUIs, with POEdit, a translation files editor.
+4. Add or update translations, save the file, reload the server.
 
-Also, send me the translation, so I can integrate it inside the plugin!
+If you update the plugin to a new version, the translation files will be replaced by the new ones, but a backup of your changes will be automatically made in the `plugins/UHPlugin/i18n/backups/<version>/` folder.
 
+
+### If you want to translate it for everyone
+
+We use [Transifex](https://www.transifex.com/zdevelopers/uhcreloaded/dashboard/) to translate the plugin.
+
+1. Go to [the Transifex project page of this plugin](https://www.transifex.com/zdevelopers/uhcreloaded/dashboard/). Create an account if you don't have one.
+2. Click « **Join team** » on the top left of the page.
+3. Select your langage in the list.
+    - If your language is not listed, request it by clicking on [`... » Request language`](http://raw.carrade.eu/s/1453385835.png).
+4. Translate.
+
+When translated, we update the translations in the plugin as soon as possible.
+
+You can also open a Pull-Request with a new or updated `po` file, if you want.
+
+
+### Inside the translations
 
 While translating, you will see some special keys, like `{0}` or `{blue}`.  
 These values are replaced by the plugin; see below.
@@ -334,7 +344,23 @@ To opt out of metrics you can edit the `config.yml` file in the `PluginMetrics` 
 
  - This work is a fork of [the KTP plugin](https://github.com/Azenet/KTP) made by [@Azenet](https://github.com/Azenet).
    *The original project was published under GPLv3, but without any piece of code in common between this original and the current project, the license was changed to CeCILL-B.*
- - Special thanks to [@jonyroda97](https://github.com/jonyroda97), for many interesting suggestions and Portuguese translation.
+ - Special thanks to [@jonyroda97](https://github.com/jonyroda97) and [@Amauryroco](https://github.com/Amauryroco), for many interesting suggestions.
+
+
+### Translators
+
+ - **English** *(original)*
+    - [Amaury Carrade](https://github.com/AmauryCarrade)
+ - **French**
+    - [Amaury Carrade](https://github.com/AmauryCarrade)
+ - **Portuguese (Portugal)**
+    - [João Roda](https://github.com/jonyroda97)
+ - **Portuguese (Brazil)**
+    - [eraizel](https://github.com/eraizel)
+ - **Czech**
+    - [Nojp (Amunak)](https://github.com/Amunak)
+ - **Simplified Chinese**
+    - [h404bi](https://github.com/h404bi)
 
 
 ## License
