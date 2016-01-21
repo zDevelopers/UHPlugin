@@ -70,7 +70,7 @@ public class UHTimersListCommand extends AbstractCommand
             {
                 if (timer.isPaused())
                 {
-                    sender.sendMessage(I.t("{yellow} • {{ci}{0}{ci} - total {1} second - {2}", "{yellow} • {{ci}{0}{ci} - total {1} seconds - {2}",
+                    sender.sendMessage(I.tn("{yellow} • {{ci}{0}{ci} - total {1} second - {2}", "{yellow} • {{ci}{0}{ci} - total {1} seconds - {2}",
                             timer.getDuration(),
                             timer.getDisplayName(),
                             timer.getDuration(),
@@ -79,7 +79,7 @@ public class UHTimersListCommand extends AbstractCommand
                 }
                 else
                 {
-                    sender.sendMessage(I.t("{green} • {ci}{0}{ci} - total {1} second - {2}", "{green} • {ci}{0}{ci} - total {1} seconds - {2}",
+                    sender.sendMessage(I.tn("{green} • {ci}{0}{ci} - total {1} second - {2}", "{green} • {ci}{0}{ci} - total {1} seconds - {2}",
                             timer.getDuration(),
                             timer.getDisplayName(),
                             timer.getDuration(),
@@ -89,7 +89,7 @@ public class UHTimersListCommand extends AbstractCommand
             }
             else
             {
-                sender.sendMessage(I.t("{red} • {ci}{0}{ci} - total {1} second", "{red} • {ci}{0}{ci} - total {1} seconds",
+                sender.sendMessage(I.tn("{red} • {ci}{0}{ci} - total {1} second", "{red} • {ci}{0}{ci} - total {1} seconds",
                         timer.getDuration(),
                         timer.getDisplayName(),
                         timer.getDuration()
