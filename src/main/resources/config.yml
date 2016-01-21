@@ -257,6 +257,8 @@ colorizeChat: true
 
 
 gameplay-changes:
+    naturalRegeneration: false  # If true, the health will regenerate with food (just like in the default vanilla game).
+
     weather: true  # If false, the "bad" weather (rain, thunder) is disabled.
     
     replaceGhastTearsWithGold: true

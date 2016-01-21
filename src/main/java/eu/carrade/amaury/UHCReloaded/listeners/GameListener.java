@@ -67,8 +67,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -76,7 +74,6 @@ import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.event.server.ServerListPingEvent;
@@ -338,21 +335,6 @@ public class GameListener implements Listener
 
 
     /**
-     * Used to prevent the life to be gained with food.
-     *
-     * @param ev
-     */
-    @EventHandler
-    public void onEntityRegainHealth(EntityRegainHealthEvent ev)
-    {
-        if (ev.getRegainReason() == RegainReason.SATIATED)
-        {
-            ev.setCancelled(true);
-        }
-    }
-
-
-    /**
      * Used to prevent the food level from dropping if the game has not started.
      *
      * @param ev
@@ -560,15 +542,6 @@ public class GameListener implements Listener
         {
             p.getSpectatorsManager().setSpectating(ev.getPlayer(), true);
         }
-    }
-
-    /**
-     * Used to update the scoreboard before the beginning of the game.
-     */
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent ev)
-    {
-        // TODO udpate the online status for the scoreboard
     }
 
     /**

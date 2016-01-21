@@ -573,6 +573,7 @@ public class UHGameManager
 
         w.setGameRuleValue("doDaylightCycle", ((Boolean) p.getConfig().getBoolean("daylightCycle.do")).toString());
         w.setGameRuleValue("keepInventory", Boolean.FALSE.toString()); // Just in case...
+        w.setGameRuleValue("naturalRegeneration", ((Boolean) p.getConfig().getBoolean("gameplay-changes.naturalRegeneration")).toString());
 
         w.setTime(p.getConfig().getLong("daylightCycle.time"));
         w.setStorm(false);
