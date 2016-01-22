@@ -80,13 +80,20 @@ public class UHStartCommand extends AbstractCommand
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
         }
 
+        // /uh start slow go
         else if (args.length == 2 && args[0].equalsIgnoreCase("slow") && args[1].equalsIgnoreCase("go"))
-        { // /uh start slow go
+        {
             p.getGameManager().finalizeStartSlow(sender);
         }
 
         else
         {
+            if (p.getGameManager().isSlowStartInProgress())
+            {
+                p.getGameManager().finalizeStartSlow(sender);
+                return;
+            }
+
             Map<String, String> defaultTags = new HashMap<>();
             defaultTags.put("slow", "false");
             defaultTags.put("ignoreTeams", "false");
