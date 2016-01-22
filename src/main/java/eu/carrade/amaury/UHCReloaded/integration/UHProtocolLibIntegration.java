@@ -42,10 +42,6 @@ public class UHProtocolLibIntegration
 {
     public UHProtocolLibIntegration(UHCReloaded p)
     {
-        if (!p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled())
-            return;
-
-
         PacketsListener packetsListener = new PacketsListener(p);
 
         if (p.getConfig().getBoolean("hardcore-hearts.display"))
