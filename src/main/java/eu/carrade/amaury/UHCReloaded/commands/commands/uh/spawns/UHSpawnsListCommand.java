@@ -99,23 +99,6 @@ public class UHSpawnsListCommand extends AbstractCommand
 
                 sender.sendMessage(I.t("{lightpurple}World {0}", spanwsInWorld.getKey().getName()));
 
-                String itemDisplay;
-                if (spanwsInWorld.getKey().getEnvironment() == World.Environment.NORMAL)
-                {
-                    itemDisplay = "spawns.list.item.overworld";
-                }
-                else if (spanwsInWorld.getKey().getEnvironment() == World.Environment.NETHER)
-                {
-                    itemDisplay = "spawns.list.item.nether";
-                }
-                else if (spanwsInWorld.getKey().getEnvironment() == World.Environment.THE_END)
-                {
-                    itemDisplay = "spawns.list.item.end";
-                }
-                else
-                {
-                    itemDisplay = "spawns.list.item.other";
-                }
 
                 // Displaying this number of spawn points per line
                 final Integer spawnsPerLine = 5;
@@ -128,13 +111,31 @@ public class UHSpawnsListCommand extends AbstractCommand
                     {
                         if (spawnPoints.size() > j * spawnsPerLine + k)
                         {
-                            line += I.t(itemDisplay, String.valueOf(spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockX()), String.valueOf(spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockZ())) + "  ";
+                            line += getSpawnItem(spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockX(), spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockZ(), spanwsInWorld.getKey().getEnvironment()) + "  ";
                         }
                     }
 
                     sender.sendMessage(line);
                 }
             }
+        }
+    }
+
+    private String getSpawnItem(int x, int z, World.Environment environment)
+    {
+        switch (environment)
+        {
+            case NORMAL:
+                return I.t("{green}{0}{darkgreen};{green}{1}", x, z);
+
+            case NETHER:
+                return I.t("{red}{0}{darkred};{red}{1}", x, z);
+
+            case THE_END:
+                return I.t("{yellow}{0}{gold};{yellow}{1}", x, z);
+
+            default:
+                return I.t("{gray}{0}{darkgray};{gray}{1}", x, z);
         }
     }
 
