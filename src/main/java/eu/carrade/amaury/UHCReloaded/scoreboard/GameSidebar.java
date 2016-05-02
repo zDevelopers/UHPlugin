@@ -180,7 +180,10 @@ public class GameSidebar extends Sidebar
             if (!gameManager.isGameStarted())
                 sidebarTimers.add(FROOZEN_NULL_TIMER_TEXT);
             else
-                sidebarTimers.add(UHCReloaded.get().getTimerManager().getMainTimer().toString());
+            {
+                final UHTimer mainTimer = UHCReloaded.get().getTimerManager().getMainTimer();
+                if (mainTimer != null) sidebarTimers.add(mainTimer.toString());
+            }
         }
     }
 
