@@ -33,6 +33,7 @@
 package eu.carrade.amaury.UHCReloaded.listeners;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.task.CancelBrewTask;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
@@ -84,7 +85,7 @@ public class GameplayListener implements Listener
     @EventHandler (ignoreCancelled = true)
     public void onEntityDeath(EntityDeathEvent ev)
     {
-        if (ev.getEntity() instanceof Ghast && p.getConfig().getBoolean("gameplay-changes.replaceGhastTearsWithGold"))
+        if (ev.getEntity() instanceof Ghast && UHConfig.GAMEPLAY_CHANGES.REPLACE_GHAST_TEARS_WITH_GOLD.get())
         {
             List<ItemStack> drops = new ArrayList<ItemStack>(ev.getDrops());
             ev.getDrops().clear();
@@ -108,7 +109,7 @@ public class GameplayListener implements Listener
     @EventHandler (ignoreCancelled = true)
     public void onPlayerPickupItem(PlayerPickupItemEvent ev)
     {
-        if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL) && p.getConfig().getBoolean("gameplay-changes.replaceGhastTearsWithGold"))
+        if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL) && UHConfig.GAMEPLAY_CHANGES.REPLACE_GHAST_TEARS_WITH_GOLD.get())
         {
             ev.setCancelled(true);
         }
@@ -121,7 +122,7 @@ public class GameplayListener implements Listener
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent ev)
     {
-        if (p.getConfig().getBoolean("gameplay-changes.disableLevelIIPotions") && ev.getInventory() instanceof BrewerInventory)
+        if (UHConfig.GAMEPLAY_CHANGES.DISABLE_LEVEL_II_POTIONS.get() && ev.getInventory() instanceof BrewerInventory)
         {
             new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()).runTaskLater(p, 1l);
         }
@@ -133,7 +134,7 @@ public class GameplayListener implements Listener
     @EventHandler
     public void onInventoryClick(InventoryClickEvent ev)
     {
-        if (p.getConfig().getBoolean("gameplay-changes.disableLevelIIPotions") && ev.getInventory() instanceof BrewerInventory)
+        if (UHConfig.GAMEPLAY_CHANGES.DISABLE_LEVEL_II_POTIONS.get() && ev.getInventory() instanceof BrewerInventory)
         {
             new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()).runTaskLater(p, 1l);
         }
@@ -146,7 +147,7 @@ public class GameplayListener implements Listener
     @EventHandler (ignoreCancelled = true)
     public void onPlayerTeleport(final PlayerTeleportEvent ev)
     {
-        if (p.getConfig().getBoolean("gameplay-changes.disableEnderpearlsDamages"))
+        if (UHConfig.GAMEPLAY_CHANGES.DISABLE_ENDERPEARLS_DAMAGES.get())
         {
             if (ev.getCause() == TeleportCause.ENDER_PEARL)
             {
@@ -165,11 +166,11 @@ public class GameplayListener implements Listener
     {
         if (ev.getEntityType().equals(EntityType.WITCH))
         {
-            if (p.getConfig().getBoolean("gameplay-changes.witch.disableNaturalSpawn") && ev.getSpawnReason().equals(SpawnReason.NATURAL))
+            if (UHConfig.GAMEPLAY_CHANGES.WITCH.DISABLE_NATURAL_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.NATURAL))
             {
                 ev.setCancelled(true);
             }
-            if (p.getConfig().getBoolean("gameplay-changes.witch.disableLightningSpawn") && ev.getSpawnReason().equals(SpawnReason.LIGHTNING))
+            if (UHConfig.GAMEPLAY_CHANGES.WITCH.DISABLE_LIGHTNING_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.LIGHTNING))
             {
                 ev.setCancelled(true);
             }
@@ -202,23 +203,23 @@ public class GameplayListener implements Listener
             {
                 if (dataValue == 0)
                 { // Normal golden apple from a head
-                    halfHearts = p.getConfig().getInt("gameplay-changes.goldenApple.regeneration.fromNormalHead", DEFAULT_NUMBER_OF_HEARTS_REGEN);
+                    halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.FROM_NORMAL_HEAD.get();
                     level = REGENERATION_LEVEL_GOLDEN_APPLE;
                 }
                 else
                 { // Notch golden apple from a head
-                    halfHearts = p.getConfig().getInt("gameplay-changes.goldenApple.regeneration.fromNotchHead", DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH);
+                    halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.FROM_NOTCH_HEAD.get();
                     level = REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
                 }
             }
             else if (dataValue == 0)
             { // Normal golden apple from an apple
-                halfHearts = p.getConfig().getInt("gameplay-changes.goldenApple.regeneration.normal", DEFAULT_NUMBER_OF_HEARTS_REGEN);
+                halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.NORMAL.get();
                 level = REGENERATION_LEVEL_GOLDEN_APPLE;
             }
             else
             { // Notch golden apple from an apple
-                halfHearts = p.getConfig().getInt("gameplay-changes.goldenApple.regeneration.notch", DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH);
+                halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.NOTCH.get();
                 level = REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
             }
 
@@ -354,7 +355,7 @@ public class GameplayListener implements Listener
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent ev)
     {
-        if (!p.getConfig().getBoolean("gameplay-changes.weather"))
+        if (!UHConfig.GAMEPLAY_CHANGES.WEATHER.get())
         {
             ev.setCancelled(true);
         }

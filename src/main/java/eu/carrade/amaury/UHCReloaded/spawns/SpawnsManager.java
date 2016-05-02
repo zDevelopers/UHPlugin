@@ -33,6 +33,7 @@
 package eu.carrade.amaury.UHCReloaded.spawns;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException;
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.UnknownGeneratorException;
 import eu.carrade.amaury.UHCReloaded.spawns.generators.SpawnPointsGenerator;
@@ -52,14 +53,14 @@ public class SpawnsManager
     private final boolean AVOID_WATER;
 
     private UHCReloaded p;
-    private LinkedList<Location> spawnPoints = new LinkedList<Location>();
+    private LinkedList<Location> spawnPoints = new LinkedList<>();
 
 
     public SpawnsManager(UHCReloaded plugin)
     {
         this.p = plugin;
 
-        AVOID_WATER = p.getConfig().getBoolean("map.spawnPoints.dontGenerateAboveWater");
+        AVOID_WATER = UHConfig.MAP.SPAWN_POINTS.DONT_GENERATE_ABOVE_WATER.get();
     }
 
     /**
@@ -183,7 +184,7 @@ public class SpawnsManager
      */
     public void reset()
     {
-        spawnPoints = new LinkedList<Location>();
+        spawnPoints.clear();
     }
 
 
@@ -194,14 +195,14 @@ public class SpawnsManager
      */
     public int importSpawnPointsFromConfig()
     {
-        if (p.getConfig().getList("spawnpoints") != null)
+        if (UHConfig.SPAWN_POINTS.isDefined())
         {
             int spawnCount = 0;
-            for (Object position : p.getConfig().getList("spawnpoints"))
+            for (String position : UHConfig.SPAWN_POINTS.get())
             {
-                if (position instanceof String && !((String) position).isEmpty())
+                if (position != null && !position.isEmpty())
                 {
-                    String[] coords = ((String) position).split(",");
+                    String[] coords = position.split(",");
                     try
                     {
                         addSpawnPoint(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));

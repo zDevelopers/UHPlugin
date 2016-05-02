@@ -34,6 +34,7 @@ package eu.carrade.amaury.UHCReloaded.integration;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.listeners.PacketsListener;
 import fr.zcraft.zlib.tools.PluginLogger;
 
@@ -44,12 +45,12 @@ public class UHProtocolLibIntegration
     {
         PacketsListener packetsListener = new PacketsListener(p);
 
-        if (p.getConfig().getBoolean("hardcore-hearts.display"))
+        if (UHConfig.HARDCORE_HEARTS.DISPLAY.get())
         {
             ProtocolLibrary.getProtocolManager().addPacketListener(packetsListener);
         }
 
-        if (p.getConfig().getBoolean("auto-respawn.do"))
+        if (UHConfig.AUTO_RESPAWN.DO.get())
         {
             p.getServer().getPluginManager().registerEvents(packetsListener, p);
         }

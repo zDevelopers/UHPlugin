@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.scoreboard;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -65,7 +66,7 @@ public class ScoreboardManager
 
 
         // Initialization of the scoreboard (match info in the sidebar)
-        if (p.getConfig().getBoolean("scoreboard.enabled"))
+        if (UHConfig.SCOREBOARD.ENABLED.get())
         {
             sidebar = new GameSidebar();
 
@@ -76,7 +77,7 @@ public class ScoreboardManager
         }
 
         // Initialization of the scoreboard (health in players' list)
-        if (p.getConfig().getBoolean("scoreboard.health"))
+        if (UHConfig.SCOREBOARD.HEALTH.get())
         {
             Objective healthObjective = sb.registerNewObjective("Health", Criterias.HEALTH);
             healthObjective.setDisplayName("Health");
@@ -152,7 +153,7 @@ public class ScoreboardManager
      */
     public String getScoreboardName()
     {
-        String s = ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("scoreboard.title", "Kill the Patrick"));
+        String s = ChatColor.translateAlternateColorCodes('&', UHConfig.SCOREBOARD.TITLE.get());
         return s.substring(0, Math.min(s.length(), 32));
     }
 

@@ -101,9 +101,9 @@ public class UHCReloaded extends ZPlugin
 
         this.saveDefaultConfig();
 
-        loadComponents(SidebarScoreboard.class, Gui.class, I18n.class);
+        loadComponents(SidebarScoreboard.class, Gui.class, I18n.class, UHConfig.class);
 
-        final String langInConfig = getConfig().getString("lang");
+        final String langInConfig = UHConfig.LANG.get();
         if (langInConfig == null || langInConfig.isEmpty())
         {
             //i18n = new eu.carrade.amaury.UHCReloaded.i18n.I18n(this);
@@ -155,7 +155,7 @@ public class UHCReloaded extends ZPlugin
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
         getServer().getPluginManager().registerEvents(new GameplayListener(this), this);
         getServer().getPluginManager().registerEvents(new CraftingListener(this), this);
-        getServer().getPluginManager().registerEvents(new SpawnsListener(this), this);
+        getServer().getPluginManager().registerEvents(new SpawnsListener(), this);
         // The freezer listener is registered by the freezer when it is needed.
 
         recipesManager.registerRecipes();
@@ -184,7 +184,7 @@ public class UHCReloaded extends ZPlugin
         runtimeCommandsExecutor.registerCommandsInScheduler(RuntimeCommandsExecutor.AFTER_SERVER_START);
 
         // Launch metrics
-        if (getConfig().getBoolean("metrics"))
+        if (UHConfig.METRICS.get())
         {
             try
             {
@@ -206,8 +206,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the team manager.
-     *
-     * @return
      */
     public TeamManager getTeamManager()
     {
@@ -216,8 +214,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the game manager.
-     *
-     * @return
      */
     public UHGameManager getGameManager()
     {
@@ -234,8 +230,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the scoreboard manager.
-     *
-     * @return
      */
     public ScoreboardManager getScoreboardManager()
     {
@@ -244,8 +238,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the MOTD manager.
-     *
-     * @return
      */
     public MOTDManager getMOTDManager()
     {
@@ -262,8 +254,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the players list's headers & footers manager.
-     *
-     * @return
      */
     public PlayerListHeaderFooterManager getPlayerListHeaderFooterManager()
     {
@@ -272,8 +262,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the spawns points manager.
-     *
-     * @return
      */
     public SpawnsManager getSpawnsManager()
     {
@@ -282,8 +270,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the border manager.
-     *
-     * @return
      */
     public BorderManager getBorderManager()
     {
@@ -292,7 +278,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the recipe manager.
-     * @return
      */
     public RecipesManager getRecipesManager()
     {
@@ -301,7 +286,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the team-chat manager.
-     * @return
      */
     public TeamChatManager getTeamChatManager()
     {
@@ -310,7 +294,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the timer manager.
-     * @return
      */
     public TimerManager getTimerManager()
     {
@@ -320,7 +303,6 @@ public class UHCReloaded extends ZPlugin
     /**
      * Returns the manager used to manage the commands executed after the start/the end of the
      * game (or any other moment using the generic API).
-     * @return
      */
     public RuntimeCommandsExecutor getRuntimeCommandsExecutor()
     {
@@ -329,8 +311,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the freezer.
-     *
-     * @return
      */
     public Freezer getFreezer()
     {
@@ -339,8 +319,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the representation of the WorldBorder integration in the plugin.
-     *
-     * @return
      */
     public UHWorldBorderIntegration getWorldBorderIntegration()
     {
@@ -349,8 +327,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the representation of the SpectatorPlus integration in the plugin.
-     *
-     * @return
      */
     public UHSpectatorPlusIntegration getSpectatorPlusIntegration()
     {
@@ -359,8 +335,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the representation of the dynmap integration in the plugin.
-     *
-     * @return
      */
     public UHDynmapIntegration getDynmapIntegration()
     {
@@ -369,8 +343,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns a wrapper of the representation of the ProtocolLib integration in the plugin.
-     *
-     * @return
      */
     public UHProtocolLibIntegrationWrapper getProtocolLibIntegrationWrapper()
     {
@@ -379,8 +351,6 @@ public class UHCReloaded extends ZPlugin
 
     /**
      * Returns the plugin's instance.
-     *
-     * @return
      */
     public static UHCReloaded get()
     {

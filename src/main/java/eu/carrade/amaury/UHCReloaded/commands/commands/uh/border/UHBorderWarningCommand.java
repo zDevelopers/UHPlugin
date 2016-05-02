@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.commands.commands.uh.border;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
@@ -56,7 +57,7 @@ public class UHBorderWarningCommand extends AbstractCommand
     {
         this.p = p;
 
-        WARNING_INTERVAL = p.getConfig().getInt("map.border.warningInterval", 90);
+        WARNING_INTERVAL = UHConfig.MAP.BORDER.WARNING_INTERVAL.get();
     }
 
     @Override

@@ -33,6 +33,7 @@
 package eu.carrade.amaury.UHCReloaded.integration;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import fr.zcraft.zlib.components.i18n.I;
@@ -135,7 +136,7 @@ public class UHDynmapIntegration
             return;
         }
 
-        if (!p.getConfig().getBoolean("dynmap.showDeathLocations"))
+        if (!UHConfig.DYNMAP.SHOW_DEATH_LOCATIONS.get())
         {
             return;
         }
@@ -210,7 +211,7 @@ public class UHDynmapIntegration
             return;
         }
 
-        if (!p.getConfig().getBoolean("dynmap.showSpawnLocations"))
+        if (!UHConfig.DYNMAP.SHOW_SPAWN_LOCATIONS.get())
         {
             return;
         }
@@ -276,7 +277,7 @@ public class UHDynmapIntegration
             return;
         }
 
-        if (!p.getConfig().getBoolean("dynmap.showSpawnLocations"))
+        if (!UHConfig.DYNMAP.SHOW_SPAWN_LOCATIONS.get())
         {
             return;
         }

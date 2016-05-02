@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.protips.ProTips;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.runners.RunTask;
@@ -154,7 +155,7 @@ public class TeamChatManager
         }
 
         // ... and to the console.
-        if (p.getConfig().getBoolean("teams-options.teamChat.log"))
+        if (UHConfig.TEAMS_OPTIONS.TEAM_CHAT.LOG.get())
         {
             p.getServer().getConsoleSender().sendMessage(rawMessage);
         }

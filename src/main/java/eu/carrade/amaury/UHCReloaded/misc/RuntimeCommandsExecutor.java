@@ -58,7 +58,7 @@ public class RuntimeCommandsExecutor
      * executed this number of seconds after the call of the {@link #registerCommandsInScheduler(String)}
      * method.
      */
-    private Map<String, HashMap<Integer, HashSet<String>>> scheduled = new HashMap<String, HashMap<Integer, HashSet<String>>>();
+    private Map<String, HashMap<Integer, HashSet<String>>> scheduled = new HashMap<>();
 
 
     /**

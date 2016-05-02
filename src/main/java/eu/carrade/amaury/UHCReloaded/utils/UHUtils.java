@@ -250,7 +250,7 @@ public class UHUtils
         Location safeSpot = null;
         final int maxHeight = (location.getWorld().getEnvironment() == World.Environment.NETHER) ? 125 : location.getWorld().getMaxHeight() - 2; // (thx to WorldBorder)
 
-        for (int yGrow = (int) location.getBlockY(), yDecr = (int) location.getBlockY(); yDecr >= 1 || yGrow <= maxHeight; yDecr--, yGrow++)
+        for (int yGrow = location.getBlockY(), yDecr = location.getBlockY(); yDecr >= 1 || yGrow <= maxHeight; yDecr--, yGrow++)
         {
             // Above?
             if (yGrow < maxHeight)
@@ -304,15 +304,8 @@ public class UHUtils
         {
             // two breathable blocks: ok
 
-            if (blockBelow.getType().isSolid() || blockBelow.getType().equals(Material.WATER) || blockBelow.getType().equals(Material.STATIONARY_WATER))
-            {
-                // The block below is solid, or liquid (but not lava)
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            // The block below is solid, or liquid (but not lava)
+            return blockBelow.getType().isSolid() || blockBelow.getType().equals(Material.WATER) || blockBelow.getType().equals(Material.STATIONARY_WATER);
         }
         else
         {

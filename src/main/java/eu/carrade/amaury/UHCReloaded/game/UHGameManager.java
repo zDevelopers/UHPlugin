@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.game;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.events.EpisodeChangedCause;
 import eu.carrade.amaury.UHCReloaded.events.UHEpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHGameStartsEvent;
@@ -130,18 +131,18 @@ public class UHGameManager
 
         // Loads the config
 
-        RANDOM_COLORS_IN_SOLO = p.getConfig().getBoolean("teams-options.randomColors");
+        RANDOM_COLORS_IN_SOLO = UHConfig.TEAMS_OPTIONS.RANDOM_COLORS.get();
 
-        BROADCAST_SLOW_START_PROGRESS = p.getConfig().getBoolean("start.slow.broadcastProgress");
+        BROADCAST_SLOW_START_PROGRESS = UHConfig.START.SLOW.BROADCAST_PROGRESS.get();
 
-        GRACE_PERIOD = (long) Math.min(UHUtils.string2Time(p.getConfig().getString("start.gracePeriod"), 30), 15) * 20l;
-        PEACE_PERIOD = (long) UHUtils.string2Time(p.getConfig().getString("start.peacePeriod"), 0) * 20l;
+        GRACE_PERIOD = (long) Math.min(UHUtils.string2Time(UHConfig.START.GRACE_PERIOD.get(), 30), 15) * 20l;
+        PEACE_PERIOD = (long) UHUtils.string2Time(UHConfig.START.PEACE_PERIOD.get(), 0) * 20l;
 
-        DEATH_SOUND = new UHSound(p.getConfig().getConfigurationSection("death.announcements.sound"));
+        DEATH_SOUND = new UHSound(UHConfig.DEATH.ANNOUNCEMENTS.SOUND);
 
-        START_GIVE_BANNER        = p.getConfig().getBoolean("teams-options.banner.give.giveInHotbar");
-        START_PLACE_BANNER_SPAWN = p.getConfig().getBoolean("teams-options.banner.give.placeOnSpawn");
-        START_PLACE_BANNER_HEAD  = p.getConfig().getBoolean("teams-options.banner.give.giveInHead");
+        START_GIVE_BANNER        = UHConfig.TEAMS_OPTIONS.BANNER.GIVE.GIVE_IN_HOTBAR.get();
+        START_PLACE_BANNER_SPAWN = UHConfig.TEAMS_OPTIONS.BANNER.GIVE.PLACE_ON_SPAWN.get();
+        START_PLACE_BANNER_HEAD  = UHConfig.TEAMS_OPTIONS.BANNER.GIVE.GIVE_IN_HEAD.get();
     }
 
     /**
@@ -169,8 +170,7 @@ public class UHGameManager
      */
     public void initPlayer(final Player player)
     {
-
-        if (p.getConfig().getBoolean("teleportToSpawnIfNotStarted"))
+        if (UHConfig.TELEPORT_TO_SPAWN_IF_NOT_STARTED.get())
         {
             Location l = player.getWorld().getSpawnLocation().add(0.5, 0.5, 0.5);
             if (!UHUtils.safeTP(player, l))
@@ -201,7 +201,7 @@ public class UHGameManager
         p.getSpectatorsManager().setSpectating(player, false);
 
         // Resets the achievements
-        if (p.getConfig().getBoolean("achievements.resetAchievementsAtStartup", true))
+        if (UHConfig.ACHIEVEMENTS.RESET_ACHIEVEMENTS_AT_STARTUP.get())
         {
             player.removeAchievement(Achievement.OPEN_INVENTORY);
         }
@@ -571,11 +571,11 @@ public class UHGameManager
     {
         World w = p.getServer().getWorlds().get(0);
 
-        w.setGameRuleValue("doDaylightCycle", ((Boolean) p.getConfig().getBoolean("daylightCycle.do")).toString());
+        w.setGameRuleValue("doDaylightCycle", (UHConfig.DAYLIGHT_CYCLE.DO.get()).toString());
         w.setGameRuleValue("keepInventory", Boolean.FALSE.toString()); // Just in case...
-        w.setGameRuleValue("naturalRegeneration", ((Boolean) p.getConfig().getBoolean("gameplay-changes.naturalRegeneration")).toString());
+        w.setGameRuleValue("naturalRegeneration", (UHConfig.GAMEPLAY_CHANGES.NATURAL_REGENERATION.get()).toString());
 
-        w.setTime(p.getConfig().getLong("daylightCycle.time"));
+        w.setTime(UHConfig.DAYLIGHT_CYCLE.TIME.get());
         w.setStorm(false);
         w.setDifficulty(Difficulty.HARD);
     }
@@ -585,7 +585,7 @@ public class UHGameManager
      */
     private void startTimer()
     {
-        if (p.getConfig().getBoolean("episodes.enabled"))
+        if (UHConfig.EPISODES.ENABLED.get())
         {
             this.episode = 1;
 
@@ -738,7 +738,7 @@ public class UHGameManager
      */
     public void shiftEpisode(String shifter)
     {
-        if (p.getConfig().getBoolean("episodes.enabled"))
+        if (UHConfig.EPISODES.ENABLED.get())
         {
             this.episode++;
 
@@ -1067,7 +1067,7 @@ public class UHGameManager
         UHTeam winnerTeam = p.getGameManager().getAliveTeams().iterator().next();
         Set<OfflinePlayer> listWinners = winnerTeam.getPlayers();
 
-        if (p.getConfig().getBoolean("finish.message"))
+        if (UHConfig.FINISH.MESSAGE.get())
         {
             if (isGameWithTeams())
             {
@@ -1101,7 +1101,7 @@ public class UHGameManager
             }
         }
 
-        if (p.getConfig().getBoolean("finish.title"))
+        if (UHConfig.FINISH.TITLE.get())
         {
             final String title;
             final String subtitle;
@@ -1124,9 +1124,9 @@ public class UHGameManager
             Titles.broadcastTitle(5, 142, 21, title, subtitle);
         }
 
-        if (p.getConfig().getBoolean("finish.fireworks.enabled"))
+        if (UHConfig.FINISH.FIREWORKS.ENABLED.get())
         {
-            new FireworksOnWinnersTask(p, listWinners).runTaskTimer(p, 0l, 10l);
+            new FireworksOnWinnersTask(listWinners).runTaskTimer(p, 0l, 10l);
         }
     }
 
@@ -1203,14 +1203,7 @@ public class UHGameManager
      */
     public Integer getEpisodeLength()
     {
-        try
-        {
-            return UHUtils.string2Time(p.getConfig().getString("episodes.length"));
-        }
-        catch (IllegalArgumentException e)
-        {
-            return 20 * 60; // default value, 20 minutes
-        }
+        return UHUtils.string2Time(UHConfig.EPISODES.LENGTH.get(), 20*60);
     }
 
     /**

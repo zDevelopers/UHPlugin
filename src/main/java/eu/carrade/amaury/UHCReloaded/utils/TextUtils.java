@@ -126,7 +126,7 @@ public final class TextUtils
                 character = Character.toUpperCase(character);
 
             // Only keeps alphanumeric characters
-            else if ((character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z') || (character >= '0' && character <= '9'))
+            if ((character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z') || (character >= '0' && character <= '9'))
                 builder.append(character);
         }
 

@@ -33,6 +33,7 @@
 package eu.carrade.amaury.UHCReloaded.listeners;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.events.EpisodeChangedCause;
 import eu.carrade.amaury.UHCReloaded.events.TimerEndsEvent;
 import eu.carrade.amaury.UHCReloaded.events.TimerStartsEvent;
@@ -135,7 +136,7 @@ public class GameListener implements Listener
         p.getGameManager().getDeathSound().broadcast();
 
         // Send lightning strike if needed.
-        if (p.getConfig().getBoolean("death.announcements.lightning-strike"))
+        if (UHConfig.DEATH.ANNOUNCEMENTS.LIGHTNING_STRIKE.get())
         {
             ev.getEntity().getLocation().getWorld().strikeLightningEffect(ev.getEntity().getLocation());
         }
@@ -147,7 +148,7 @@ public class GameListener implements Listener
         enableSpectatorModeOnRespawn.add(ev.getEntity().getUniqueId());
 
         // Kicks the player if needed.
-        if (this.p.getConfig().getBoolean("death.kick.do", true))
+        if (UHConfig.DEATH.KICK.DO.get())
         {
             Bukkit.getScheduler().runTaskLater(this.p, new Runnable()
             {
@@ -158,13 +159,13 @@ public class GameListener implements Listener
                     /// The kick message of a player when death.kick.do = true in config
                     ev.getEntity().kickPlayer(I.t("jayjay"));
                 }
-            }, 20L * this.p.getConfig().getInt("death.kick.time", 30));
+            }, 20L * UHConfig.DEATH.KICK.TIME.get());
         }
 
         // Drops the skull of the player.
-        if (p.getConfig().getBoolean("death.head.drop"))
+        if (UHConfig.DEATH.HEAD.DROP.get())
         {
-            if (!p.getConfig().getBoolean("death.head.pvpOnly") || (p.getConfig().getBoolean("death.head.pvpOnly") && ev.getEntity().getKiller() != null))
+            if (!UHConfig.DEATH.HEAD.PVP_ONLY.get() || (UHConfig.DEATH.HEAD.PVP_ONLY.get() && ev.getEntity().getKiller() != null))
             {
                 Location l = ev.getEntity().getLocation();
                 ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
@@ -191,17 +192,17 @@ public class GameListener implements Listener
         }
 
         // Give XP to the killer (if needed)
-        if (p.getConfig().getInt("death.give-xp-to-killer.levels") > 0)
+        if (UHConfig.DEATH.GIVE_XP_TO_KILLER.LEVELS.get() > 0)
         {
             Entity killer = ev.getEntity().getKiller();
             if (killer != null)
             {
                 boolean inSameTeam = p.getTeamManager().inSameTeam(ev.getEntity(), (Player) killer);
-                boolean onlyOtherTeam = p.getConfig().getBoolean("death.give-xp-to-killer.onlyOtherTeam");
+                boolean onlyOtherTeam = UHConfig.DEATH.GIVE_XP_TO_KILLER.ONLY_OTHER_TEAM.get();
 
                 if ((onlyOtherTeam && !inSameTeam) || !onlyOtherTeam)
                 {
-                    ((Player) killer).giveExpLevels(p.getConfig().getInt("death.give-xp-to-killer.levels"));
+                    ((Player) killer).giveExpLevels(UHConfig.DEATH.GIVE_XP_TO_KILLER.LEVELS.get());
                 }
             }
         }
@@ -225,7 +226,7 @@ public class GameListener implements Listener
             {
                 p.getServer().getPluginManager().callEvent(new UHTeamDeathEvent(team));
 
-                if (p.getConfig().getBoolean("death.messages.notifyIfTeamHasFallen", false))
+                if (UHConfig.DEATH.MESSAGES.NOTIFY_IF_TEAM_HAS_FALLEN.get())
                 {
                     // Used to display this message after the death message.
                     Bukkit.getScheduler().runTaskLater(p, new Runnable()
@@ -233,7 +234,7 @@ public class GameListener implements Listener
                         @Override
                         public void run()
                         {
-                            String format = ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.teamDeathMessagesFormat", ""));
+                            String format = ChatColor.translateAlternateColorCodes('&', UHConfig.DEATH.MESSAGES.TEAM_DEATH_MESSAGES_FORMAT.get());
                             p.getServer().broadcastMessage(I.t("{0}The team {1} has fallen!", format, team.getDisplayName() + format));
                         }
                     }, 1L);
@@ -245,7 +246,7 @@ public class GameListener implements Listener
         p.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "-- Death of " + ev.getEntity().getDisplayName() + ChatColor.GOLD + " (" + ev.getDeathMessage() + ") --");
 
         // Customizes the death message
-        String dmFormat = ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("death.messages.deathMessagesFormat", ""));
+        String dmFormat = ChatColor.translateAlternateColorCodes('&', UHConfig.DEATH.MESSAGES.DEATH_MESSAGES_FORMAT.get());
         String deathMessage = dmFormat + ev.getDeathMessage();
         deathMessage = deathMessage.replace(ev.getEntity().getName(), ev.getEntity().getDisplayName() + dmFormat);
         if (ev.getEntity().getKiller() != null)
@@ -270,7 +271,7 @@ public class GameListener implements Listener
         }
 
         // Notifies the player about the possibility of respawn if hardcore hearts are enabled
-        if (p.getConfig().getBoolean("hardcore-hearts.display") && p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled() && p.getConfig().getBoolean("hardcore-hearts.respawnMessage"))
+        if (UHConfig.HARDCORE_HEARTS.DISPLAY.get() && p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled() && UHConfig.HARDCORE_HEARTS.RESPAWN_MESSAGE.get())
         {
             Bukkit.getScheduler().runTaskLater(p, new Runnable()
             {
@@ -284,7 +285,7 @@ public class GameListener implements Listener
         }
 
         // Disables the team-chat-lock if needed
-        if (p.getConfig().getBoolean("teams-options.teamChat.disableLockOnDeath"))
+        if (UHConfig.TEAMS_OPTIONS.TEAM_CHAT.DISABLE_LOCK_ON_DEATH.get())
         {
             if (p.getTeamChatManager().isTeamChatEnabled(ev.getEntity()))
             {
@@ -416,7 +417,7 @@ public class GameListener implements Listener
                 && p.getGameManager().isPlayerDead(ev.getPlayer())
                 && !p.getGameManager().isDeadPlayersToBeResurrected(ev.getPlayer())
                 && !p.getGameManager().getStartupSpectators().contains(ev.getPlayer().getName())
-                && !p.getConfig().getBoolean("death.kick.allow-reconnect", true))
+                && !UHConfig.DEATH.KICK.ALLOW_RECONNECT.get())
         {
 
             ev.setResult(Result.KICK_OTHER);
@@ -445,7 +446,7 @@ public class GameListener implements Listener
                 p.getGameManager().initPlayer(ev.getPlayer());
 
                 // Teams selector.
-                if (p.getConfig().getBoolean("teams-options.gui.autoDisplay") && p.getTeamManager().getTeams().size() != 0)
+                if (UHConfig.TEAMS_OPTIONS.GUI.AUTO_DISPLAY.get() && p.getTeamManager().getTeams().size() != 0)
                 {
                     RunTask.later(new Runnable()
                     {
@@ -457,7 +458,7 @@ public class GameListener implements Listener
                                 p.getTeamManager().displayTeamChooserChatGUI(ev.getPlayer());
                             }
                         }
-                    }, 20l * p.getConfig().getInt("teams-options.gui.delay"));
+                    }, 20l * UHConfig.TEAMS_OPTIONS.GUI.DELAY.get());
                 }
 
                 // Rules
@@ -537,7 +538,7 @@ public class GameListener implements Listener
         }
 
         // If the player is a new one, the game is started, and the option is set to true...
-        if (p.getGameManager().isGameRunning() && p.getConfig().getBoolean("spectatorModeWhenNewPlayerJoinAfterStart")
+        if (p.getGameManager().isGameRunning() && UHConfig.SPECTATOR_MODE_WHEN_NEW_PLAYER_JOIN_AFTER_START.get()
                 && !p.getGameManager().getAlivePlayers().contains(ev.getPlayer()))
         {
             p.getSpectatorsManager().setSpectating(ev.getPlayer(), true);
@@ -550,7 +551,7 @@ public class GameListener implements Listener
     @EventHandler
     public void onPlayerAchievementAwarded(PlayerAchievementAwardedEvent ev)
     {
-        if (!p.getGameManager().isGameStarted() && p.getConfig().getBoolean("achievements.disableAchievementsBeforeStart", true))
+        if (!p.getGameManager().isGameStarted() && UHConfig.ACHIEVEMENTS.DISABLE_ACHIEVEMENTS_BEFORE_START.get())
         {
             ev.setCancelled(true);
         }
@@ -562,7 +563,7 @@ public class GameListener implements Listener
     @EventHandler
     public void onPlayerStatisticIncrement(PlayerStatisticIncrementEvent ev)
     {
-        if (!p.getGameManager().isGameStarted() && p.getConfig().getBoolean("statistics.disableStatisticsBeforeStart", true))
+        if (!p.getGameManager().isGameStarted() && UHConfig.STATISTICS.DISABLE_STATISTICS_BEFORE_START.get())
         {
             ev.setCancelled(true);
         }
@@ -686,7 +687,7 @@ public class GameListener implements Listener
 
 
         // Broadcasts title
-        if (p.getConfig().getBoolean("episodes.title"))
+        if (UHConfig.EPISODES.TITLE.get())
         {
             Titles.broadcastTitle(
                     5, 32, 8,
@@ -711,14 +712,14 @@ public class GameListener implements Listener
     public void onGameStarts(UHGameStartsEvent ev)
     {
         // Start sound
-        new UHSound(p.getConfig().getConfigurationSection("start.sound")).broadcast();
+        new UHSound(UHConfig.START.SOUND).broadcast();
 
         // Broadcast
         /// Start message broadcasted in chat
         Bukkit.getServer().broadcastMessage(I.t("{green}--- GO ---"));
 
         // Title
-        if (p.getConfig().getBoolean("start.displayTitle"))
+        if (UHConfig.START.DISPLAY_TITLE.get())
         {
             Titles.broadcastTitle(
                     5, 40, 8,
@@ -811,7 +812,7 @@ public class GameListener implements Listener
     @EventHandler
     public void onGameEnd(UHGameEndsEvent ev)
     {
-        if (p.getConfig().getBoolean("finish.auto.do"))
+        if (UHConfig.FINISH.AUTO.DO.get())
         {
             Bukkit.getScheduler().runTaskLater(p, new Runnable()
             {
@@ -828,7 +829,7 @@ public class GameListener implements Listener
                         e.printStackTrace();
                     }
                 }
-            }, p.getConfig().getInt("finish.auto.timeAfterLastDeath", 3) * 20L);
+            }, UHConfig.FINISH.AUTO.TIME_AFTER_LAST_DEATH.get() * 20L);
         }
 
         // Commands

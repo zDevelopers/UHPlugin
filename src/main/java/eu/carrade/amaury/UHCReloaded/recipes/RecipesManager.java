@@ -33,6 +33,7 @@
 package eu.carrade.amaury.UHCReloaded.recipes;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.ChatColor;
@@ -80,23 +81,23 @@ public class RecipesManager
     public void registerRecipes()
     {
 
-        if (p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.do"))
+        if (UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.DO.get())
         {
             p.getServer().addRecipe(getGoldenHeadHumanRecipe());
         }
 
-        if (p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.do"))
+        if (UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.DO.get())
         {
             p.getServer().addRecipe(getGoldenHeadMonsterRecipe());
         }
 
-        if (p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore"))
+        if (UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.ADD_LORE.get() || UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.ADD_LORE.get())
         {
             p.getServer().addRecipe(getLoreRemoverNormalRecipe());
             p.getServer().addRecipe(getLoreRemoverNotchRecipe());
         }
 
-        if (p.getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock"))
+        if (UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_MELON_WITH_GOLD_BLOCK.get())
         {
             p.getServer().addRecipe(getGoldenMelonRecipe());
         }
@@ -132,14 +133,14 @@ public class RecipesManager
     {
 
         // Vanilla compass recipe is disabled if the special compass is used.
-        if (p.getConfig().getBoolean("gameplay-changes.compass.enabled") && RecipeUtil.areSimilar(recipe, getVanillaCompassRecipe()))
+        if (UHConfig.GAMEPLAY_CHANGES.COMPASS.ENABLED.get() && RecipeUtil.areSimilar(recipe, getVanillaCompassRecipe()))
         {
             this.lastFailedRecipe = RECIPE_COMPASS;
             return false;
         }
 
         // Vanilla golden melon recipe is disabled if the craft with a gold block is enabled.
-        if (p.getConfig().getBoolean("gameplay-changes.craftGoldenMelonWithGoldBlock") && RecipeUtil.areSimilar(recipe, getVanillaGoldenMelonRecipe()))
+        if (UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_MELON_WITH_GOLD_BLOCK.get() && RecipeUtil.areSimilar(recipe, getVanillaGoldenMelonRecipe()))
         {
             this.lastFailedRecipe = RECIPE_GLISTERING_MELON;
             return false;
@@ -147,7 +148,7 @@ public class RecipesManager
 
         // If enchanted golden apples are disabled...
         // The same technique does not work, this is a workaround
-        if (p.getConfig().getBoolean("gameplay-changes.goldenApple.disableNotchApples"))
+        if (UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.DISABLE_NOTCH_APPLES.get())
         {
             if (recipe.getResult().getType() == Material.GOLDEN_APPLE)
             {
@@ -223,21 +224,16 @@ public class RecipesManager
 
         // 2: check of the dynamic part (loots)
 
-        ArrayList<Material> corners = new ArrayList<Material>();
+        ArrayList<Material> corners = new ArrayList<>();
         corners.add(matrix[0].getType());
         corners.add(matrix[2].getType());
         corners.add(matrix[6].getType());
         corners.add(matrix[8].getType());
 
-        if (!(corners.contains(Material.BONE)
+        return corners.contains(Material.BONE)
                 && corners.contains(Material.ROTTEN_FLESH)
                 && corners.contains(Material.SPIDER_EYE)
-                && corners.contains(Material.SULPHUR)))
-        {
-            return false;
-        }
-
-        return true;
+                && corners.contains(Material.SULPHUR);
     }
 
 
@@ -250,11 +246,10 @@ public class RecipesManager
      */
     public ItemStack addLore(Recipe recipe, CraftingInventory inventory)
     {
-        if ((p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.do") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.do"))
-                && (p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore"))
+        if ((UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.DO.get() || UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.DO.get())
+                && (UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.ADD_LORE.get() || UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.ADD_LORE.get())
                 && (RecipeUtil.areSimilar(recipe, getGoldenHeadHumanRecipe()) || RecipeUtil.areSimilar(recipe, getGoldenHeadMonsterRecipe())))
         {
-
             ItemStack result = recipe.getResult();
             ItemMeta meta = result.getItemMeta();
 
@@ -276,8 +271,8 @@ public class RecipesManager
                 }
             }
 
-            if ((wither && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore"))
-                    || (!wither && p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore")))
+            if ((wither && UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.ADD_LORE.get())
+                    || (!wither && UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.ADD_LORE.get()))
             {
                 if (wither)
                 {
@@ -308,7 +303,7 @@ public class RecipesManager
      */
     public ItemStack keepNameOnLoreRemover(Recipe recipe, CraftingInventory inventory)
     {
-        if ((p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.addLore") || p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.addLore"))
+        if ((UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.ADD_LORE.get() || UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.ADD_LORE.get())
                 && (RecipeUtil.areSimilar(recipe, getLoreRemoverNormalRecipe()) || RecipeUtil.areSimilar(recipe, getLoreRemoverNotchRecipe())))
         {
 
@@ -355,9 +350,9 @@ public class RecipesManager
             return compassRecipeType;
         }
 
-        if (p.getConfig().getBoolean("gameplay-changes.compass.enabled"))
+        if (UHConfig.GAMEPLAY_CHANGES.COMPASS.ENABLED.get())
         {
-            switch (p.getConfig().getString("gameplay-changes.compass.recipe").toLowerCase())
+            switch (UHConfig.GAMEPLAY_CHANGES.COMPASS.RECIPE.get().toLowerCase())
             {
                 case "easy":
                     compassRecipeType = COMPASS_EASY;
@@ -392,14 +387,14 @@ public class RecipesManager
         /// Item name of a golden head (from a player)
         String name = I.tc("player_head", "{aqua}Golden head");
 
-        if (p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromHuman.craftNotchApple"))
+        if (UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.CRAFT_NOTCH_APPLE.get())
         {
             damage = 1;
             /// Item name of an enchanted golden head (from a player)
             name = I.tc("player_head", "{lightpurple}Golden head");
         }
 
-        ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, p.getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromHuman.numberCrafted", 1), damage);
+        ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.NUMBER_CRAFTED.get(), damage);
         ItemMeta goldenAppleMeta = goldenAppleStack.getItemMeta();
         goldenAppleMeta.setDisplayName(ChatColor.RESET + name);
         goldenAppleStack.setItemMeta(goldenAppleMeta);
@@ -425,14 +420,14 @@ public class RecipesManager
         /// Item name of a golden head (from a monster)
         String name = I.tc("monster_head", "{aqua}Golden head");
 
-        if (p.getConfig().getBoolean("gameplay-changes.craftGoldenAppleFromHead.fromWither.craftNotchApple"))
+        if (UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.CRAFT_NOTCH_APPLE.get())
         {
             damage = 1;
             /// Item name of an enchanted golden head (from a monster)
             name = I.tc("monster_head", "{lightpurple}Golden head");
         }
 
-        ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, p.getConfig().getInt("gameplay-changes.craftGoldenAppleFromHead.fromWither.numberCrafted", 1), damage);
+        ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.NUMBER_CRAFTED.get(), damage);
         ItemMeta goldenAppleMeta = goldenAppleStack.getItemMeta();
         goldenAppleMeta.setDisplayName(ChatColor.RESET + name);
         goldenAppleStack.setItemMeta(goldenAppleMeta);

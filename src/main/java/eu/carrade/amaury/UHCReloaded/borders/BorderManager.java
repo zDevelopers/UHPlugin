@@ -33,7 +33,9 @@
 package eu.carrade.amaury.UHCReloaded.borders;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.borders.exceptions.CannotGenerateWallsException;
+import eu.carrade.amaury.UHCReloaded.borders.generators.WallGenerator;
 import eu.carrade.amaury.UHCReloaded.borders.worldborders.WorldBorder;
 import eu.carrade.amaury.UHCReloaded.task.BorderWarningTask;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
@@ -83,10 +85,10 @@ public class BorderManager
         /// The name of the warning timer displaying the time left before the next border
         warningTimerName = I.t("Border shrinking");
 
-        mapShape = MapShape.fromString(p.getConfig().getString("map.shape"));
+        mapShape = MapShape.fromString(UHConfig.MAP.SHAPE.get());
         if (mapShape == null)
         {
-            PluginLogger.warning("Invalid shape '" + p.getConfig().getString("map.shape") + "'; using 'squared' instead.");
+            PluginLogger.warning("Invalid shape '" + UHConfig.MAP.SHAPE.get() + "'; using 'squared' instead.");
             mapShape = MapShape.SQUARED;
         }
 
@@ -99,21 +101,21 @@ public class BorderManager
             PluginLogger.warning("Cannot find overworld! Using the world '{0}' instead (environment: {1}).", world.getName(), world.getEnvironment());
         }
 
-        border = WorldBorder.getInstance(world, p.getConfig().getString("map.border.motor"), mapShape);
+        border = WorldBorder.getInstance(world, UHConfig.MAP.BORDER.MOTOR.get(), mapShape);
 
         border.setShape(mapShape);
         border.setCenter(world.getSpawnLocation());
-        border.setDiameter(p.getConfig().getInt("map.size", 2000));
+        border.setDiameter(UHConfig.MAP.SIZE.get());
 
         border.init();
 
         PluginLogger.info("Using {0} to set the world border.", border.getClass().getSimpleName());
 
 
-        BORDER_SHRINKING = p.getConfig().getBoolean("map.border.shrinking.enabled", false);
-        BORDER_SHRINKING_STARTS_AFTER = UHUtils.string2Time(p.getConfig().getString("map.border.shrinking.startsAfter"), 30*60);  // Seconds
-        BORDER_SHRINKING_DURATION = UHUtils.string2Time(p.getConfig().getString("map.border.shrinking.shrinksDuring"), 60*60*2);  // Same
-        BORDER_SHRINKING_FINAL_SIZE = p.getConfig().getDouble("map.border.shrinking.diameterAfterShrink", 200);
+        BORDER_SHRINKING = UHConfig.MAP.BORDER.SHRINKING.ENABLED.get();
+        BORDER_SHRINKING_STARTS_AFTER = UHUtils.string2Time(UHConfig.MAP.BORDER.SHRINKING.STARTS_AFTER.get(), 30*60);  // Seconds
+        BORDER_SHRINKING_DURATION = UHUtils.string2Time(UHConfig.MAP.BORDER.SHRINKING.SHRINKS_DURING.get(), 60*60*2);  // Same
+        BORDER_SHRINKING_FINAL_SIZE = UHConfig.MAP.BORDER.SHRINKING.DIAMETER_AFTER_SHRINK.get();
     }
 
     /**
@@ -392,17 +394,21 @@ public class BorderManager
      */
     public void generateWalls(World world) throws CannotGenerateWallsException
     {
-        Integer wallHeight = p.getConfig().getInt("map.wall.height");
+        Integer wallHeight = UHConfig.MAP.WALL.HEIGHT.get();
 
-        Material wallBlockAir = Material.matchMaterial(p.getConfig().getString("map.wall.block.replaceAir"));
-        Material wallBlockSolid = Material.matchMaterial(p.getConfig().getString("map.wall.block.replaceSolid"));
+        Material wallBlockAir = Material.matchMaterial(UHConfig.MAP.WALL.BLOCK.REPLACE_AIR.get());
+        Material wallBlockSolid = Material.matchMaterial(UHConfig.MAP.WALL.BLOCK.REPLACE_SOLID.get());
 
         if (wallBlockAir == null || !wallBlockAir.isSolid() || wallBlockSolid == null || !wallBlockSolid.isSolid())
         {
             throw new CannotGenerateWallsException("Cannot generate the walls: invalid blocks set in the config");
         }
 
-        mapShape.getWallGeneratorInstance(wallBlockAir, wallBlockSolid).build(world, getCurrentBorderDiameter(), wallHeight);
+        WallGenerator generator = mapShape.getWallGeneratorInstance(wallBlockAir, wallBlockSolid);
+        if (generator != null)
+            generator.build(world, getCurrentBorderDiameter(), wallHeight);
+        else
+            throw new CannotGenerateWallsException("Unable to load walls generator.");
     }
 
     /**

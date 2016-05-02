@@ -31,7 +31,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.listeners;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.event.EventHandler;
@@ -50,12 +50,12 @@ public class SpawnsListener implements Listener
     private final double RABBIT_SPAWN_PROBABILITY;
     private final String RABBIT_NAME;
 
-    public SpawnsListener(UHCReloaded plugin)
+    public SpawnsListener()
     {
-        RABBIT_SPAWN_ENABLED = plugin.getConfig().getBoolean("gameplay-changes.rabbit.killerRabbitSpawn");
-        RABBIT_SPAWN_PROBABILITY = plugin.getConfig().getDouble("gameplay-changes.rabbit.killerRabbitSpawnProbability");
+        RABBIT_SPAWN_ENABLED = UHConfig.GAMEPLAY_CHANGES.RABBIT.KILLER_RABBIT_SPAWN.get();
+        RABBIT_SPAWN_PROBABILITY = UHConfig.GAMEPLAY_CHANGES.RABBIT.KILLER_RABBIT_SPAWN_PROBABILITY.get();
 
-        RABBIT_NAME = plugin.getConfig().getString("gameplay-changes.rabbit.killerRabbitName");
+        RABBIT_NAME = UHConfig.GAMEPLAY_CHANGES.RABBIT.KILLER_RABBIT_NAME.get().trim();
     }
 
     @EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)

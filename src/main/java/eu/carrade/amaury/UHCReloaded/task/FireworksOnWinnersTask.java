@@ -32,7 +32,7 @@
 
 package eu.carrade.amaury.UHCReloaded.task;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -45,7 +45,6 @@ import java.util.Set;
 
 public class FireworksOnWinnersTask extends BukkitRunnable
 {
-    private UHCReloaded p = null;
     private Set<OfflinePlayer> winners = null;
 
     private Double areaSize;
@@ -53,12 +52,11 @@ public class FireworksOnWinnersTask extends BukkitRunnable
 
     private long startTime = 0L;
 
-    public FireworksOnWinnersTask(UHCReloaded p, Set<OfflinePlayer> listWinners)
+    public FireworksOnWinnersTask(Set<OfflinePlayer> listWinners)
     {
-        this.p = p;
         this.winners = listWinners;
 
-        this.areaSize = p.getConfig().getDouble("finish.fireworks.areaSize");
+        this.areaSize = UHConfig.FINISH.FIREWORKS.AREA_SIZE.get();
         this.rand = new Random();
 
         this.startTime = System.currentTimeMillis();
@@ -86,7 +84,7 @@ public class FireworksOnWinnersTask extends BukkitRunnable
             }
         }
 
-        if ((System.currentTimeMillis() - startTime) / 1000 > p.getConfig().getInt("finish.fireworks.duration", 10))
+        if ((System.currentTimeMillis() - startTime) / 1000 > UHConfig.FINISH.FIREWORKS.DURATION.get())
         {
             this.cancel();
         }

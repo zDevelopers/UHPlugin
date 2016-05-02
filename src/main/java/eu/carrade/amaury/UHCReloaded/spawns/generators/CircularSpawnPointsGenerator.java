@@ -73,7 +73,7 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
         int usedRegionDiameter = regionDiameter - 1;
 
         int countGeneratedPoints = 0;
-        Set<Location> generatedPoints = new HashSet<Location>();
+        Set<Location> generatedPoints = new HashSet<>();
 
         int currentCircleDiameter = usedRegionDiameter;
 

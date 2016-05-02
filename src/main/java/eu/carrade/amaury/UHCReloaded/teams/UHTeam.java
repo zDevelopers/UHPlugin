@@ -33,6 +33,7 @@
 package eu.carrade.amaury.UHCReloaded.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
 import fr.zcraft.zlib.components.gui.GuiUtils;
@@ -60,10 +61,10 @@ import java.util.UUID;
 
 public class UHTeam
 {
-    private static final boolean BANNER_SHAPE_WRITE_LETTER = UHCReloaded.get().getConfig().getBoolean("teams-options.banner.shape.writeLetter", true);
-    private static final boolean BANNER_SHAPE_ADD_BORDER = UHCReloaded.get().getConfig().getBoolean("teams-options.banner.shape.addBorder", true);
+    private static final boolean BANNER_SHAPE_WRITE_LETTER = UHConfig.TEAMS_OPTIONS.BANNER.SHAPE.WRITE_LETTER.get();
+    private static final boolean BANNER_SHAPE_ADD_BORDER = UHConfig.TEAMS_OPTIONS.BANNER.SHAPE.ADD_BORDER.get();
 
-    private UHCReloaded plugin = null;
+    private UHCReloaded plugin = UHCReloaded.get();
 
     private String name = null;
     private String internalName = null;
@@ -75,19 +76,7 @@ public class UHTeam
 
     public UHTeam(String name, TeamColor color)
     {
-        this(name, color, UHCReloaded.get());
-    }
-
-    /**
-     * @deprecated Use {@link #UHTeam(String, TeamColor)} instead.
-     */
-    @Deprecated
-    public UHTeam(String name, TeamColor color, UHCReloaded plugin)
-    {
         Validate.notNull(name, "The name cannot be null.");
-        Validate.notNull(plugin, "The plugin cannot be null.");
-
-        this.plugin = plugin;
 
         // We use a random internal name because the name of a team, in Minecraft vanilla, is limited
         // (16 characters max).
@@ -98,11 +87,20 @@ public class UHTeam
         Team t = sb.registerNewTeam(this.internalName);
 
         t.setSuffix(ChatColor.RESET.toString());
-        t.setCanSeeFriendlyInvisibles(plugin.getConfig().getBoolean("teams-options.canSeeFriendlyInvisibles", true));
-        t.setAllowFriendlyFire(plugin.getConfig().getBoolean("teams-options.allowFriendlyFire", true));
+        t.setCanSeeFriendlyInvisibles(UHConfig.TEAMS_OPTIONS.CAN_SEE_FRIENDLY_INVISIBLES.get());
+        t.setAllowFriendlyFire(UHConfig.TEAMS_OPTIONS.ALLOW_FRIENDLY_FIRE.get());
 
         setName(name, true);
         setColor(color);
+    }
+
+    /**
+     * @deprecated Use {@link #UHTeam(String, TeamColor)} instead.
+     */
+    @Deprecated
+    public UHTeam(String name, TeamColor color, UHCReloaded plugin)
+    {
+        this(name, color);
     }
 
     /**
@@ -173,7 +171,7 @@ public class UHTeam
      */
     public Set<OfflinePlayer> getPlayers()
     {
-        HashSet<OfflinePlayer> playersList = new HashSet<OfflinePlayer>();
+        HashSet<OfflinePlayer> playersList = new HashSet<>();
 
         for (UUID id : players)
         {
@@ -198,7 +196,7 @@ public class UHTeam
      */
     public Set<Player> getOnlinePlayers()
     {
-        HashSet<Player> playersList = new HashSet<Player>();
+        HashSet<Player> playersList = new HashSet<>();
 
         for (UUID id : players)
         {
@@ -230,7 +228,7 @@ public class UHTeam
      */
     public Set<UUID> getOnlinePlayersUUID()
     {
-        HashSet<UUID> playersList = new HashSet<UUID>();
+        HashSet<UUID> playersList = new HashSet<>();
 
         for (UUID id : players)
         {

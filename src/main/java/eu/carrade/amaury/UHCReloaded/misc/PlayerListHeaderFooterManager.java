@@ -32,10 +32,10 @@
 package eu.carrade.amaury.UHCReloaded.misc;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.text.ListHeaderFooter;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
 
@@ -52,10 +52,10 @@ public class PlayerListHeaderFooterManager
 
     public PlayerListHeaderFooterManager()
     {
-        WAITING_HEADER_PATTERN = UHCReloaded.get().getConfig().getString("playersList.waitingTime.header", "");
-        WAITING_FOOTER_PATTERN = UHCReloaded.get().getConfig().getString("playersList.waitingTime.footer", "");
-        IN_GAME_HEADER_PATTERN = UHCReloaded.get().getConfig().getString("playersList.inGameTime.header",  "");
-        IN_GAME_FOOTER_PATTERN = UHCReloaded.get().getConfig().getString("playersList.inGameTime.footer",  "");
+        WAITING_HEADER_PATTERN = UHConfig.PLAYERS_LIST.WAITING_TIME.HEADER.get();
+        WAITING_FOOTER_PATTERN = UHConfig.PLAYERS_LIST.WAITING_TIME.FOOTER.get();
+        IN_GAME_HEADER_PATTERN = UHConfig.PLAYERS_LIST.IN_GAME_TIME.HEADER.get();
+        IN_GAME_FOOTER_PATTERN = UHConfig.PLAYERS_LIST.IN_GAME_TIME.FOOTER.get();
 
         updateHeadersFooters();
     }
@@ -108,10 +108,8 @@ public class PlayerListHeaderFooterManager
      */
     private String replaceTags(String raw)
     {
-        Configuration config = UHCReloaded.get().getConfig();
-
         return raw
-                .replace("{title}", config.getString("scoreboard.title", ""))
+                .replace("{title}", UHConfig.SCOREBOARD.TITLE.get())
 
                 /// Episode in the player list ({episodeText} replacement). {0} = current episode number.
                 .replace("{episodeText}", I.t("Episode {0}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode())))

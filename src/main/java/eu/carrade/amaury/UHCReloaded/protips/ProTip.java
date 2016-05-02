@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.protips;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
@@ -48,7 +49,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class ProTip
 {
-    private static final UHSound proTipsSound = new UHSound(UHCReloaded.get().getConfig().getConfigurationSection("protips.sound"));
+    private static final UHSound proTipsSound = new UHSound(UHConfig.PROTIPS.SOUND);
 
     private String text;
     private Boolean enabled;

@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.game;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.tools.Callback;
 import org.bukkit.Bukkit;
@@ -234,7 +235,7 @@ public class Teleporter
         else
         {
             new TeleportationRunnable(this, spawnPoints.keySet(), onTeleportation, onTeleportationSuccessful, onTeleportationFailed, onTeleportationProcessFinished)
-                    .runTaskTimer(UHCReloaded.get(), 1l, UHCReloaded.get().getConfig().getInt("start.slow.delayBetweenTP") * 20l);
+                    .runTaskTimer(UHCReloaded.get(), 1l, UHConfig.START.SLOW.DELAY_BETWEEN_TP.get() * 20l);
         }
     }
 }

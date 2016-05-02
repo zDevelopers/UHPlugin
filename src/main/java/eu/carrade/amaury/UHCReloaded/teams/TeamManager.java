@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.text.RawMessage;
 import org.bukkit.ChatColor;
@@ -56,7 +57,7 @@ public class TeamManager
     {
         p = plugin;
 
-        MAX_PLAYERS_PER_TEAM = p.getConfig().getInt("teams-options.maxPlayersPerTeam");
+        MAX_PLAYERS_PER_TEAM = UHConfig.TEAMS_OPTIONS.MAX_PLAYERS_PER_TEAM.get();
     }
 
     /**
@@ -290,7 +291,7 @@ public class TeamManager
      */
     public void colorizePlayer(OfflinePlayer offlinePlayer)
     {
-        if (!p.getConfig().getBoolean("colorizeChat"))
+        if (!UHConfig.COLORIZE_CHAT.get())
         {
             return;
         }
@@ -429,14 +430,14 @@ public class TeamManager
      */
     public int importTeamsFromConfig()
     {
-        if (p.getConfig().getList("teams") != null)
+        if (UHConfig.TEAMS.get() != null)
         {
             int teamsCount = 0;
-            for (Object teamRaw : p.getConfig().getList("teams"))
+            for (String teamRaw : UHConfig.TEAMS.get())
             {
-                if (teamRaw instanceof String && teamRaw != null)
+                if (teamRaw != null)
                 {
-                    String[] teamRawSeparated = ((String) teamRaw).split(",");
+                    String[] teamRawSeparated = teamRaw.split(",");
                     TeamColor color = TeamColor.fromString(teamRawSeparated[0]);
                     if (color == null)
                     {
@@ -444,14 +445,17 @@ public class TeamManager
                     }
                     else
                     {
+                        // "color,name"
                         if (teamRawSeparated.length == 2)
-                        { // "color,name"
+                        {
                             UHTeam newTeam = addTeam(color, teamRawSeparated[1]);
                             p.getLogger().info(I.t("Team {0} ({1}) added from the config file", newTeam.getName(), newTeam.getColor().toString()));
                             teamsCount++;
                         }
+
+                        // "color"
                         else if (teamRawSeparated.length == 1)
-                        { // "color"
+                        {
                             UHTeam newTeam = addTeam(color, teamRawSeparated[0]);
                             p.getLogger().info(I.t("Team {0} added from the config file", newTeam.getColor().toString()));
                             teamsCount++;
@@ -496,7 +500,7 @@ public class TeamManager
             /// Invite displayed in the chat team selector
             player.sendMessage(I.t("{gold}Click on the names below to join a team"));
 
-            boolean displayPlayers = p.getConfig().getBoolean("teams-options.gui.displayPlayersInTeams");
+            boolean displayPlayers = UHConfig.TEAMS_OPTIONS.GUI.DISPLAY_PLAYERS_IN_TEAMS.get();
 
             for (UHTeam team : p.getTeamManager().getTeams())
             {

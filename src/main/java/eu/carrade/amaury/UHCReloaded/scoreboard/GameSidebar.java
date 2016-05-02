@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.scoreboard;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.borders.MapShape;
 import eu.carrade.amaury.UHCReloaded.borders.worldborders.WorldBorder;
 import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
@@ -45,7 +46,6 @@ import fr.zcraft.zlib.components.scoreboard.SidebarMode;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -91,31 +91,30 @@ public class GameSidebar extends Sidebar
 
     public GameSidebar()
     {
-        Configuration config = UHCReloaded.get().getConfig();
         gameManager = UHCReloaded.get().getGameManager();
         border = UHCReloaded.get().getBorderManager().getBorderProxy();
 
-        EPISODES_ENABLED = config.getBoolean("episodes.enabled");
-        EPISODES_IN_SIDEBAR = config.getBoolean("scoreboard.episode");
-        PLAYERS_IN_SIDEBAR = config.getBoolean("scoreboard.players");
-        TEAMS_IN_SIDEBAR = config.getBoolean("scoreboard.teams");
-        BORDER_IN_SIDEBAR = config.getBoolean("scoreboard.border.displayed");
-        KILLS_IN_SIDEBAR = config.getBoolean("scoreboard.kills");
-        TIMER_IN_SIDEBAR = config.getBoolean("scoreboard.timer");
-        FREEZE_STATUS_IN_SIDEBAR = config.getBoolean("scoreboard.freezeStatus");
+        EPISODES_ENABLED = UHConfig.EPISODES.ENABLED.get();
+        EPISODES_IN_SIDEBAR = UHConfig.SCOREBOARD.EPISODE.get();
+        PLAYERS_IN_SIDEBAR = UHConfig.SCOREBOARD.PLAYERS.get();
+        TEAMS_IN_SIDEBAR = UHConfig.SCOREBOARD.TEAMS.get();
+        BORDER_IN_SIDEBAR = UHConfig.SCOREBOARD.BORDER.DISPLAYED.get();
+        KILLS_IN_SIDEBAR = UHConfig.SCOREBOARD.KILLS.get();
+        TIMER_IN_SIDEBAR = UHConfig.SCOREBOARD.TIMER.get();
+        FREEZE_STATUS_IN_SIDEBAR = UHConfig.SCOREBOARD.FREEZE_STATUS.get();
 
-        OWN_TEAM_IN_SIDEBAR = config.getBoolean("scoreboard.ownTeam.enabled");
-        OWN_TEAM_TITLE_COLOR = ChatColor.translateAlternateColorCodes('&', config.getString("scoreboard.ownTeam.title.color"));
-        OWN_TEAM_TITLE_IS_NAME = config.getBoolean("scoreboard.ownTeam.title.useTeamName");
-        OWN_TEAM_DISPLAY_HEARTS = config.getBoolean("scoreboard.ownTeam.content.displayHearts");
-        OWN_TEAM_COLOR_WHOLE_NAME = config.getBoolean("scoreboard.ownTeam.content.colorName");
-        OWN_TEAM_STRIKE_DEAD_PLAYERS = config.getBoolean("scoreboard.ownTeam.content.strikeDeadPlayers");
-        OWN_TEAM_DISPLAY_LOGIN_STATE_ITALIC = config.getBoolean("scoreboard.ownTeam.content.loginState.italic");
-        OWN_TEAM_DISPLAY_LOGIN_STATE_SUFFIX = ChatColor.translateAlternateColorCodes('&', config.getString("scoreboard.ownTeam.content.loginState.suffix"));
-        OWN_TEAM_DISPLAY_MET_PLAYERS_ONLY = config.getBoolean("scoreboard.ownTeam.content.displayMetPlayersOnly.enabled");
-        OWN_TEAM_DISPLAY_MET_PLAYERS_MIN_DISTANCE_SQUARED = Math.pow(config.getDouble("scoreboard.ownTeam.content.displayMetPlayersOnly.displayedWhenCloserThan"), 2);
+        OWN_TEAM_IN_SIDEBAR = UHConfig.SCOREBOARD.OWN_TEAM.ENABLED.get();
+        OWN_TEAM_TITLE_COLOR = ChatColor.translateAlternateColorCodes('&', UHConfig.SCOREBOARD.OWN_TEAM.TITLE.COLOR.get());
+        OWN_TEAM_TITLE_IS_NAME = UHConfig.SCOREBOARD.OWN_TEAM.TITLE.USE_TEAM_NAME.get();
+        OWN_TEAM_DISPLAY_HEARTS = UHConfig.SCOREBOARD.OWN_TEAM.CONTENT.DISPLAY_HEARTS.get();
+        OWN_TEAM_COLOR_WHOLE_NAME = UHConfig.SCOREBOARD.OWN_TEAM.CONTENT.COLOR_NAME.get();
+        OWN_TEAM_STRIKE_DEAD_PLAYERS = UHConfig.SCOREBOARD.OWN_TEAM.CONTENT.STRIKE_DEAD_PLAYERS.get();
+        OWN_TEAM_DISPLAY_LOGIN_STATE_ITALIC = UHConfig.SCOREBOARD.OWN_TEAM.CONTENT.LOGIN_STATE.ITALIC.get();
+        OWN_TEAM_DISPLAY_LOGIN_STATE_SUFFIX = ChatColor.translateAlternateColorCodes('&', UHConfig.SCOREBOARD.OWN_TEAM.CONTENT.LOGIN_STATE.SUFFIX.get());
+        OWN_TEAM_DISPLAY_MET_PLAYERS_ONLY = UHConfig.SCOREBOARD.OWN_TEAM.CONTENT.DISPLAY_MET_PLAYERS_ONLY.ENABLED.get();
+        OWN_TEAM_DISPLAY_MET_PLAYERS_MIN_DISTANCE_SQUARED = Math.pow(UHConfig.SCOREBOARD.OWN_TEAM.CONTENT.DISPLAY_MET_PLAYERS_ONLY.DISPLAYED_WHEN_CLOSER_THAN.get(), 2);
 
-        BORDER_DISPLAY_DIAMETER = config.getBoolean("scoreboard.border.displayDiameter");
+        BORDER_DISPLAY_DIAMETER = UHConfig.SCOREBOARD.BORDER.DISPLAY_DIAMETER.get();
 
         FROOZEN_NULL_TIMER_TEXT = new UHTimer("").toString();
 
@@ -123,7 +122,7 @@ public class GameSidebar extends Sidebar
         setAutoRefreshDelay(20);
         setContentMode(SidebarMode.PER_PLAYER);
 
-        sidebarTitle = ChatColor.translateAlternateColorCodes('&', UHCReloaded.get().getConfig().getString("scoreboard.title", "Kill the Patrick"));
+        sidebarTitle = ChatColor.translateAlternateColorCodes('&', UHConfig.SCOREBOARD.TITLE.get());
     }
 
     @Override

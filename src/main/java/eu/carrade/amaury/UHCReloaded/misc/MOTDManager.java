@@ -33,6 +33,7 @@
 package eu.carrade.amaury.UHCReloaded.misc;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.ChatColor;
@@ -51,11 +52,11 @@ public class MOTDManager
     {
         p = plugin;
 
-        enabled = p.getConfig().getBoolean("motd.enabled");
+        enabled = UHConfig.MOTD.ENABLED.get();
 
-        if (enabled && p.getConfig().getBoolean("motd.displayMatchName"))
+        if (enabled && UHConfig.MOTD.DISPLAY_MATCH_NAME.get())
         {
-            matchName = ChatColor.translateAlternateColorCodes('&', p.getConfig().getString("motd.matchNamePrefix")) + p.getScoreboardManager().getScoreboardName() + ChatColor.RESET + "\n";
+            matchName = ChatColor.translateAlternateColorCodes('&', UHConfig.MOTD.MATCH_NAME_PREFIX.get()) + p.getScoreboardManager().getScoreboardName() + ChatColor.RESET + "\n";
         }
     }
 

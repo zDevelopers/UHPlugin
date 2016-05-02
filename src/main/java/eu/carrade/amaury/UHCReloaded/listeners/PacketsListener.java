@@ -41,6 +41,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -87,7 +88,7 @@ public class PacketsListener extends PacketAdapter implements Listener
     @EventHandler
     public void onPlayerDeath(final PlayerDeathEvent ev)
     {
-        if (p.getConfig().getBoolean("auto-respawn.do"))
+        if (UHConfig.AUTO_RESPAWN.DO.get())
         {
             Bukkit.getScheduler().runTaskLater(p, new Runnable()
             {
@@ -103,7 +104,7 @@ public class PacketsListener extends PacketAdapter implements Listener
                         e.printStackTrace();
                     }
                 }
-            }, p.getConfig().getInt("auto-respawn.delay", 6) * 20L);
+            }, UHConfig.AUTO_RESPAWN.DELAY.get() * 20L);
         }
     }
 }

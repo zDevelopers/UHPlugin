@@ -32,6 +32,7 @@
 
 package eu.carrade.amaury.UHCReloaded.utils;
 
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -47,9 +48,9 @@ import org.bukkit.entity.Player;
 public class UHSound
 {
 
-    private Sound sound = null;
+    private Sound sound  = null;
     private Float volume = 1f;
-    private Float pitch = 1f;
+    private Float pitch  = 1f;
 
     /**
      * Constructs a sound with volume = 1f and pitch = 1f.
@@ -63,9 +64,9 @@ public class UHSound
 
     public UHSound(Sound sound, Float volume, Float pitch)
     {
-        this.sound = sound;
+        this.sound  = sound;
         this.volume = volume;
-        this.pitch = pitch;
+        this.pitch  = pitch;
     }
 
     /**
@@ -88,9 +89,34 @@ public class UHSound
             return;
         }
 
-        this.sound = string2Sound(config.getString("name"));
+        this.sound  = string2Sound(config.getString("name"));
         this.volume = (float) config.getDouble("volume");
-        this.pitch = (float) config.getDouble("pitch");
+        this.pitch  = (float) config.getDouble("pitch");
+    }
+
+    /**
+     * Constructs a sound from a zLib sound configuration section.
+     * <p>
+     * Format:
+     * <pre>
+     * key:
+     *     name: string parsable as a sound. If not parsable, null used (i.e. no sound played).
+     *     volume: decimal number
+     *     pitch: decimal number
+     * </pre>
+     *
+     * @param config The configuration section.
+     */
+    public UHSound(UHConfig.SoundSection config)
+    {
+        if (config == null)
+        {
+            return;
+        }
+
+        this.sound  = string2Sound(config.NAME.get());
+        this.volume = (float) config.VOLUME.get();
+        this.pitch  = (float) config.PITCH.get();
     }
 
     /**

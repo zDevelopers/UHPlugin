@@ -31,13 +31,12 @@
  */
 package eu.carrade.amaury.UHCReloaded.misc;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -54,19 +53,19 @@ public class RulesManager
 
     public RulesManager()
     {
-        ConfigurationSection config = UHCReloaded.get().getConfig().getConfigurationSection("rules");
-
-        if (config != null)
+        if (UHConfig.RULES.isDefined() && UHConfig.RULES.RULES.get() != null)
         {
-            DISPLAY_ON_JOIN  = config.getBoolean("display.onJoin", false);
-            DISPLAY_ON_START = config.getBoolean("display.onStart", true);
+            DISPLAY_ON_JOIN  = UHConfig.RULES.DISPLAY.ON_JOIN.get();
+            DISPLAY_ON_START = UHConfig.RULES.DISPLAY.ON_START.get();
 
 
             // We check if the list is non-empty, i.e. if there is at least a non-empty rule.
             boolean empty = true;
 
-            for (String rule : config.getStringList("rules"))
+            for (String rule : UHConfig.RULES.RULES.get())
             {
+                if (rule == null) continue;
+
                 rule = rule.trim();
                 rules.add(ChatColor.translateAlternateColorCodes('&',rule));
 

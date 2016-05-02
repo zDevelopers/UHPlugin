@@ -33,6 +33,7 @@ package eu.carrade.amaury.UHCReloaded;
 
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.i18n.I18n;
+import fr.zcraft.zlib.core.ZLib;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.mockito.Matchers;
 import org.powermock.api.mockito.PowerMockito;
@@ -79,6 +80,8 @@ public class TestsUtils
 
         PowerMockito.mockStatic(UHCReloaded.class);
         when(UHCReloaded.get()).thenReturn(pluginInstance);
+
+        ZLib.init(pluginInstance);
 
         staticPluginMocked = true;
     }

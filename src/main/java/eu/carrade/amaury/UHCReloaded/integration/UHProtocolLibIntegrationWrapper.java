@@ -33,6 +33,8 @@
 package eu.carrade.amaury.UHCReloaded.integration;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
+import fr.zcraft.zlib.components.configuration.ConfigurationItem;
 import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -74,7 +76,6 @@ public class UHProtocolLibIntegrationWrapper
 
     /**
      * Returns true if ProtocolLib is installed and integrated into the plugin.
-     * @return
      */
     public boolean isProtocolLibIntegrationEnabled()
     {
@@ -90,17 +91,17 @@ public class UHProtocolLibIntegrationWrapper
     public List<String> isProtocolLibNeeded()
     {
 
-        ArrayList<String> options = new ArrayList<String>();
-        options.add("hardcore-hearts.display");
-        options.add("auto-respawn.do");
+        ArrayList<ConfigurationItem<Boolean>> options = new ArrayList<>();
+        options.add(UHConfig.HARDCORE_HEARTS.DISPLAY);
+        options.add(UHConfig.AUTO_RESPAWN.DO);
 
-        ArrayList<String> enabledOptions = new ArrayList<String>();
+        ArrayList<String> enabledOptions = new ArrayList<>();
 
-        for (String option : options)
+        for (ConfigurationItem<Boolean> option : options)
         {
-            if (p.getConfig().getBoolean(option))
+            if (option.get())
             {
-                enabledOptions.add(option);
+                enabledOptions.add(option.getFieldName());
             }
         }
 
@@ -116,8 +117,6 @@ public class UHProtocolLibIntegrationWrapper
 
     /**
      * Returns the wrapped integration.
-     *
-     * @return
      */
     public UHProtocolLibIntegration getIntegration()
     {

@@ -31,11 +31,10 @@
  */
 package eu.carrade.amaury.UHCReloaded.borders.worldborders;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.borders.MapShape;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 
 
 /**
@@ -58,12 +57,11 @@ public class VanillaWorldBorder extends WorldBorder
     @Override
     public void init()
     {
-        ConfigurationSection config = UHCReloaded.get().getConfig().getConfigurationSection("map.border");
-        if (config != null)
+        if (UHConfig.MAP.BORDER.isDefined())
         {
-            setDamageBuffer(config.getDouble("damagesBuffer"));
-            setDamageAmount(config.getDouble("damagesAmount"));
-            setWarningDistance(config.getInt("warningDistance"));
+            setDamageBuffer(UHConfig.MAP.BORDER.DAMAGES_BUFFER.get());
+            setDamageAmount(UHConfig.MAP.BORDER.DAMAGES_AMOUNT.get());
+            setWarningDistance(UHConfig.MAP.BORDER.WARNING_DISTANCE.get());
         }
     }
 

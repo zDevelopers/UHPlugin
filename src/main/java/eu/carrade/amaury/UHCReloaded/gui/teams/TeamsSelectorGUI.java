@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.gui.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.gui.teams.builder.TeamBuilderStepColorGUI;
 import eu.carrade.amaury.UHCReloaded.gui.teams.editor.TeamEditGUI;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
@@ -48,7 +49,6 @@ import fr.zcraft.zlib.tools.items.GlowEffect;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -64,10 +64,8 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 
     public TeamsSelectorGUI()
     {
-        final FileConfiguration config = UHCReloaded.get().getConfig();
-
-        TEAM_ITEM_TYPE       = config.getString("teams-options.chestGui.display.teamItem").toLowerCase();
-        GLOW_ON_CURRENT_TEAM = config.getBoolean("teams-options.chestGui.display.glowOnSelectedTeam");
+        TEAM_ITEM_TYPE       = UHConfig.TEAMS_OPTIONS.CHEST_GUI.DISPLAY.TEAM_ITEM.get().toLowerCase();
+        GLOW_ON_CURRENT_TEAM = UHConfig.TEAMS_OPTIONS.CHEST_GUI.DISPLAY.GLOW_ON_SELECTED_TEAM.get();
     }
 
     @Override
