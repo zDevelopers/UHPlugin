@@ -149,7 +149,7 @@
         <repository>
             <id>pgmann-repo</id>
             <name>PGMann repository (SpectatorPlus)</name>
-            <url>https://mvn.pgmann.cf/</url>
+            <url>https://mvn.pgmann.cf/repository/maven-snapshots/</url>
         </repository>
         <repository>
             <id>carrade-repo</id>
@@ -184,7 +184,7 @@
         <dependency>
             <groupId>com.pgcraft</groupId>
             <artifactId>SpectatorPlus</artifactId>
-            <version>LATEST</version>
+            <version>B3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.dynmap</groupId>
