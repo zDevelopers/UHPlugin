@@ -105,11 +105,11 @@
                     <relocations>
                         <relocation>
                             <pattern>org.mcstats</pattern>
-                            <shadedPattern>eu.carrade.amaury.UHCReloaded</shadedPattern>
+                            <shadedPattern>eu.carrade.amaury.UHCReloaded.mcstats</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>fr.zcraft.zlib</pattern>
-                            <shadedPattern>me.azenet.UHPlugin</shadedPattern>
+                            <shadedPattern>eu.carrade.amaury.UHCReloaded.zlib</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -149,7 +149,7 @@
         <repository>
             <id>pgmann-repo</id>
             <name>PGMann repository (SpectatorPlus)</name>
-            <url>https://ci.pgmann.cf/maven/</url>
+            <url>https://mvn.pgmann.cf/</url>
         </repository>
         <repository>
             <id>carrade-repo</id>
