@@ -36,8 +36,8 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
-import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import fr.zcraft.zlib.tools.items.TextualBanners;
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
@@ -70,6 +70,7 @@ public class UHTeam
     private String internalName = null;
     private String displayName = null;
     private TeamColor color = null;
+    private ItemStack banner = null;
 
     private HashSet<UUID> players = new HashSet<>();
 
@@ -92,6 +93,7 @@ public class UHTeam
 
         setName(name, true);
         setColor(color);
+        setBanner(getDefaultBanner());
     }
 
     /**
@@ -457,11 +459,12 @@ public class UHTeam
 
 
     /**
-     * Generates and return a banner for this team, following the banners options in the configuration file
+     * Generates and return the default banner for this team, following the
+     * banners options in the configuration file.
      *
      * @return the generated banner.
      */
-    public ItemStack getBanner()
+    public ItemStack getDefaultBanner()
     {
         ItemStack banner;
         DyeColor dye = ColorsUtils.chat2Dye(color.toChatColor());
@@ -478,9 +481,29 @@ public class UHTeam
             banner.setItemMeta(meta);
         }
 
-        GuiUtils.makeItem(banner, ChatColor.RESET + displayName, null);
-        GuiUtils.hideItemAttributes(banner);
+        return banner;
+    }
 
+    /**
+     * Updates this team's banner.
+     *
+     * @param banner The new banner.
+     */
+    public void setBanner(ItemStack banner)
+    {
+        this.banner = new ItemStackBuilder(banner.clone())
+                .title(displayName)
+                .hideAttributes()
+                .item();
+    }
+
+    /**
+     * Returns this team's banner.
+     *
+     * @return the banner.
+     */
+    public ItemStack getBanner()
+    {
         return banner;
     }
 

@@ -34,6 +34,8 @@ package eu.carrade.amaury.UHCReloaded.commands.commands.uh;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamAddCommand;
+import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamBannerCommand;
+import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamBannerResetCommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamGUICommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamJoinCommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.team.UHTeamLeaveCommand;
@@ -55,7 +57,7 @@ import java.util.List;
  * This command is used to manage the teams.
  *
  * Usage: /uh team (for the doc).
- * Usage: /uh team <add|remove|join|leave|list|spy|reset> (see doc for details).
+ * Usage: /uh team <add|remove|join|leave|banner|list|spy|reset> (see doc for details).
  */
 @Command (name = "team")
 public class UHTeamCommand extends AbstractCommand
@@ -66,6 +68,8 @@ public class UHTeamCommand extends AbstractCommand
         registerSubCommand(new UHTeamRemoveCommand(plugin));
         registerSubCommand(new UHTeamJoinCommand(plugin));
         registerSubCommand(new UHTeamLeaveCommand(plugin));
+        registerSubCommand(new UHTeamBannerCommand());
+        registerSubCommand(new UHTeamBannerResetCommand());
         registerSubCommand(new UHTeamListCommand(plugin));
         registerSubCommand(new UHTeamSpyCommand(plugin));
         registerSubCommand(new UHTeamResetCommand(plugin));

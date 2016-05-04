@@ -41,9 +41,11 @@ import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.gui.PromptGui;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.Callback;
+import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -68,11 +70,14 @@ public class TeamEditGUI extends ActionGui
         setSize(36);
 
         // Banner
-        ItemStack banner = team.getBanner();
-        /// Members count in the banner description, in the team edit GUI.
-        GuiUtils.makeItem(banner, ChatColor.RESET + team.getDisplayName(), GuiUtils.generateLore(I.tn("{white}{0} {gray}member", "{white}{0} {gray}members", team.getSize(), team.getSize())));
-        GuiUtils.hideItemAttributes(banner);
-        action("", 9, banner);
+        action("banner", 9, new ItemStackBuilder(team.getBanner())
+                .title(team.getDisplayName())
+                 /// Members count in the banner description, in the team edit GUI.
+                .lore(GuiUtils.generateLore(I.tn("{white}{0} {gray}member", "{white}{0} {gray}members", team.getSize(), team.getSize())))
+                .lore(" ")
+                .lore(GuiUtils.generateLore(I.t("{white}Click with a banner {gray}to update this team's banner")))
+                .hideAttributes()
+        );
 
         // Color
         action("color", 11, GuiUtils.makeItem(
@@ -124,6 +129,16 @@ public class TeamEditGUI extends ActionGui
         ));
     }
 
+
+    @GuiAction ("banner")
+    protected void banner(InventoryClickEvent ev)
+    {
+        if (ev.getCursor() != null && ev.getCursor().getType() == Material.BANNER)
+        {
+            team.setBanner(ev.getCursor());
+            update();
+        }
+    }
 
     @GuiAction ("color")
     protected void color()
