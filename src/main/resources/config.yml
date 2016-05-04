@@ -197,6 +197,26 @@ statistics:
 
 
 
+before-start:
+    inventory:
+        # True to clear the inventory of the players before the beginning of the game.
+        clear: true
+
+        # True to prevent users from using their inventory when the game is not started.
+        preventUsage: true
+
+        # True to disable all the inventory points above for players with the uh.build permission.
+        allowForBuilders: true
+
+    teamSelector:
+        # True to give to the players a team selector, opening the teams inventory GUI (same as /teams).
+        enabled: true
+
+        # The item to use as the team selector. Right-clicking it will open the GUI.
+        item: NETHER_STAR
+
+
+
 start:
     slow:
         delayBetweenTP: 3  # in seconds

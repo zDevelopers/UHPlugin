@@ -195,6 +195,28 @@ public class UHConfig extends Configuration
         public final ConfigurationItem<Boolean> DISABLE_STATISTICS_BEFORE_START = item("disableStatisticsBeforeStart", true);
     }
 
+    static public final BeforeStartSection BEFORE_START = section("before-start", BeforeStartSection.class);
+
+    static public class BeforeStartSection extends ConfigurationSection
+    {
+        public final InventorySection INVENTORY = section("inventory", InventorySection.class);
+
+        static public class InventorySection extends ConfigurationSection
+        {
+            public final ConfigurationItem<Boolean> CLEAR = item("clear", true);
+            public final ConfigurationItem<Boolean> PREVENT_USAGE = item("preventUsage", true);
+            public final ConfigurationItem<Boolean> ALLOW_FOR_BUILDERS = item("allowForBuilders", true);
+        }
+
+        public final TeamSelectorSection TEAM_SELECTOR = section("teamSelector", TeamSelectorSection.class);
+
+        static public class TeamSelectorSection extends ConfigurationSection
+        {
+            public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
+            public final ConfigurationItem<String> ITEM = item("item", "NETHER_STAR");
+        }
+    }
+
     static public final StartSection START = section("start", StartSection.class);
 
     static public class StartSection extends ConfigurationSection

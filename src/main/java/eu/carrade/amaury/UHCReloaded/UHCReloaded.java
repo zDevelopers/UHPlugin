@@ -38,6 +38,7 @@ import eu.carrade.amaury.UHCReloaded.integration.UHDynmapIntegration;
 import eu.carrade.amaury.UHCReloaded.integration.UHProtocolLibIntegrationWrapper;
 import eu.carrade.amaury.UHCReloaded.integration.UHSpectatorPlusIntegration;
 import eu.carrade.amaury.UHCReloaded.integration.UHWorldBorderIntegration;
+import eu.carrade.amaury.UHCReloaded.listeners.BeforeGameListener;
 import eu.carrade.amaury.UHCReloaded.listeners.CraftingListener;
 import eu.carrade.amaury.UHCReloaded.listeners.GameListener;
 import eu.carrade.amaury.UHCReloaded.listeners.GameplayListener;
@@ -59,6 +60,7 @@ import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.i18n.I18n;
 import fr.zcraft.zlib.components.scoreboard.SidebarScoreboard;
+import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.core.ZPlugin;
 import org.bukkit.entity.Player;
 import org.mcstats.MetricsLite;
@@ -152,10 +154,12 @@ public class UHCReloaded extends ZPlugin
             getCommand(commandName).setTabCompleter(executor);
         }
 
-        getServer().getPluginManager().registerEvents(new GameListener(this), this);
-        getServer().getPluginManager().registerEvents(new GameplayListener(this), this);
-        getServer().getPluginManager().registerEvents(new CraftingListener(this), this);
-        getServer().getPluginManager().registerEvents(new SpawnsListener(), this);
+        ZLib.registerEvents(new GameListener(this));
+        ZLib.registerEvents(new GameplayListener(this));
+        ZLib.registerEvents(new CraftingListener(this));
+        ZLib.registerEvents(new SpawnsListener());
+        ZLib.registerEvents(new BeforeGameListener());
+
         // The freezer listener is registered by the freezer when it is needed.
 
         recipesManager.registerRecipes();
