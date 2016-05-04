@@ -136,6 +136,8 @@ public class TeamBuilderStepColorGUI extends TeamBuilderBaseGUI
             randomUpdate.cancel();
             randomUpdate = null;
         }
+
+        super.onClose();
     }
 
     @Override
