@@ -240,6 +240,15 @@ start:
     # Format: "mm", "mm:ss", "hh:mm:ss"
     peacePeriod: 0
 
+    # The hostile mobs will not be allowed to spawn on the surface during this amount of time after
+    # the beginning of the game. This prevents mobs from lightning errors to cause deaths during the
+    # early game, when players just started and are not protected.
+    # This option is here to prevent lightning-bugs-related deaths or damages, so spawns on surface
+    # areas normally dark (like overhangs or floating islands) are not cancelled. Also, mobs will
+    # still spawn on caves.
+    # Format: "mm", "mm:ss", "hh:mm:ss". To disable, set to 0.
+    surfaceMobsFreePeriod: "15:00"
+
 
 
 death:

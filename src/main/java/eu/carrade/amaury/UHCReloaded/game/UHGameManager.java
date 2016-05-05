@@ -84,6 +84,7 @@ public class UHGameManager
     private final Boolean BROADCAST_SLOW_START_PROGRESS;
     private final Long GRACE_PERIOD;
     private final Long PEACE_PERIOD;
+    private final Long SURFACE_MOBS_FREE_PERIOD;
     private final UHSound DEATH_SOUND;
 
     private UHCReloaded p = null;
@@ -91,6 +92,7 @@ public class UHGameManager
     private Random random = null;
 
     private Boolean damagesEnabled = false;
+    private Boolean mobsOnSurface = false;
 
     private HashSet<String> players = new HashSet<>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available
     private HashSet<UUID> alivePlayers = new HashSet<>();
@@ -137,6 +139,7 @@ public class UHGameManager
 
         GRACE_PERIOD = (long) Math.min(UHUtils.string2Time(UHConfig.START.GRACE_PERIOD.get(), 30), 15) * 20l;
         PEACE_PERIOD = (long) UHUtils.string2Time(UHConfig.START.PEACE_PERIOD.get(), 0) * 20l;
+        SURFACE_MOBS_FREE_PERIOD = (long) UHUtils.string2Time(UHConfig.START.SURFACE_MOBS_FREE_PERIOD.get(), 900) * 20l;
 
         DEATH_SOUND = new UHSound(UHConfig.DEATH.ANNOUNCEMENTS.SOUND);
 
@@ -601,7 +604,7 @@ public class UHGameManager
     }
 
     /**
-     * Enables the damages 30 seconds (600 ticks) later.
+     * Enables the damages 30 seconds (600 ticks) later, the PvP after if needed, and the mobs spawns.
      */
     private void scheduleDamages()
     {
@@ -633,6 +636,16 @@ public class UHGameManager
                 }
             }, PEACE_PERIOD);
         }
+
+        // Allows mobs to spawn on the surface after the mobs-free period
+        RunTask.later(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                mobsOnSurface = true;
+            }
+        }, SURFACE_MOBS_FREE_PERIOD);
     }
 
     /**
@@ -995,6 +1008,11 @@ public class UHGameManager
     public boolean isTakingDamage()
     {
         return damagesEnabled;
+    }
+
+    public boolean isSurfaceSpawnEnabled()
+    {
+        return mobsOnSurface;
     }
 
     /**
