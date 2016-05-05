@@ -395,6 +395,13 @@ public class UHConfig extends Configuration
                 public final ConfigurationItem<Boolean> GIVE_IN_HOTBAR = item("giveInHotbar", false);
                 public final ConfigurationItem<Boolean> GIVE_IN_HEAD = item("giveInHead", false);
             }
+
+            public final ShieldSection SHIELDS = section("shields", ShieldSection.class);
+
+            static public class ShieldSection extends ConfigurationSection
+            {
+                public final ConfigurationItem<Boolean> ADD_ON_SHIELDS = item("addOnShields", true);
+            }
         }
 
         public final GuiSection GUI = section("gui", GuiSection.class);

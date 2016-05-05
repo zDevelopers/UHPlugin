@@ -361,8 +361,10 @@ teams-options:
             placeOnSpawn: true   # Places the team banner on the spawn point.
             giveInHotbar: false  # Gives a banner to each player.
             giveInHead: false    # Places the banner on the head of each player.
+        shields:
+            addOnShields: true   # Crafted shields will have the team banner on them. MC 1.9+ only.
 
-    
+
     # Chat-based GUI to choose a team
     gui:
         # Display the players in each team, in the tooltip linked to the players count?

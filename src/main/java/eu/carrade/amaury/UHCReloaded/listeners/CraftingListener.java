@@ -33,13 +33,16 @@
 package eu.carrade.amaury.UHCReloaded.listeners;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.recipes.RecipesManager;
+import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Banner;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
@@ -49,12 +52,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashSet;
@@ -171,8 +171,9 @@ public class CraftingListener implements Listener
     @EventHandler (ignoreCancelled = true)
     public void onInventoryClick(final InventoryClickEvent ev)
     {
+        // Just in case
         if (ev.getWhoClicked() instanceof Player)
-        { // Just in case
+        {
             final Inventory inventory = ev.getInventory();
 
             /** Workaround to fix the crafting grid being not updated when the item is taken
@@ -337,6 +338,56 @@ public class CraftingListener implements Listener
                     }
                 }
             }, 1L);
+        }
+    }
+
+
+    /**
+     * Adds the team banner on crafted shields.
+     *
+     * Done indirectly because the plugin must be able to run
+     * on Minecraft 1.8.
+     */
+    @EventHandler (ignoreCancelled = true)
+    public void onShieldPreCraft(PrepareItemCraftEvent ev)
+    {
+        if (!UHConfig.TEAMS_OPTIONS.BANNER.SHIELDS.ADD_ON_SHIELDS.get()) return;
+
+        final Player player = (Player) ev.getViewers().get(0);
+        final UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
+
+        if (team == null || team.getBanner() == null) return;
+
+        final ItemStack result = ev.getRecipe().getResult();
+
+        Material MATERIAL_SHIELD = Material.getMaterial("SHIELD");
+        if (MATERIAL_SHIELD == null) return; // MC 1.8
+
+        if (result != null && result.getType() == MATERIAL_SHIELD)
+        {
+            try
+            {
+                BannerMeta banner = (BannerMeta) team.getBanner().getItemMeta();
+
+                ItemMeta meta = result.getItemMeta();
+                BlockStateMeta bsMeta = (BlockStateMeta) meta;
+
+                Banner shieldBanner = (Banner) bsMeta.getBlockState();
+
+                shieldBanner.setBaseColor(banner.getBaseColor());
+                shieldBanner.setPatterns(banner.getPatterns());
+
+                shieldBanner.update();
+
+                bsMeta.setBlockState(shieldBanner);
+                result.setItemMeta(bsMeta);
+
+                ev.getInventory().setResult(result);
+            }
+            catch (ClassCastException | NullPointerException ignored)
+            {
+                // Bad Minecraft version (1.8)
+            }
         }
     }
 }
