@@ -34,6 +34,7 @@ package eu.carrade.amaury.UHCReloaded.teams;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.tools.text.RawMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -493,7 +494,7 @@ public class TeamManager
             }
         }
 
-        player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
+        player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
 
         if (p.getTeamManager().getTeams().size() != 0)
         {
@@ -504,22 +505,6 @@ public class TeamManager
 
             for (UHTeam team : p.getTeamManager().getTeams())
             {
-
-                String text = "{\"text\":\"\",\"extra\":[";
-
-                // Team count (something like "[2/5]”)
-                text += "{";
-                if (MAX_PLAYERS_PER_TEAM != 0)
-                {
-                    /// Team count with max players (ex. [3/5]) followed in-game by the team name. {0} = current count, {1} = max.
-                    text += "\"text\": \"" + I.t("{gray}[{white}{0}{gray}/{white}{1}{gray}]", String.valueOf(team.getSize()), String.valueOf(MAX_PLAYERS_PER_TEAM)) + "\", ";
-                }
-                else
-                {
-                    /// Team count without max players (ex. [3]) followed in-game by the team name. {0} = current count.
-                    text += "\"text\": \"" + I.t("{gray}[{white}{0}{gray}]", String.valueOf(team.getSize())) + "\", ";
-                }
-
                 String players = "";
                 if (displayPlayers)
                 {
@@ -545,41 +530,40 @@ public class TeamManager
                         }
                     }
                 }
-                text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.tn("{0} player in this team", "{0} players in this team", team.getPlayers().size(), team.getPlayers().size()) + players + "\"}";
-                text += "},";
 
-                text += "{\"text\":\" \"},{";
+                RawMessage.send(player, new RawText("")
+                        .then(
+                                MAX_PLAYERS_PER_TEAM != 0
+                                        /// Team count with max players (ex. [3/5]) followed in-game by the team name. {0} = current count, {1} = max.
+                                        ? I.t("{gray}[{white}{0}{gray}/{white}{1}{gray}]", String.valueOf(team.getSize()), String.valueOf(MAX_PLAYERS_PER_TEAM))
+                                        /// Team count without max players (ex. [3]) followed in-game by the team name. {0} = current count.
+                                        : I.t("{gray}[{white}{0}{gray}]", String.valueOf(team.getSize()))
+                        )
+                                .hover(new RawText(I.tn("{0} player in this team", "{0} players in this team", team.getPlayers().size(), team.getPlayers().size()) + players))
 
-                // Team name (click event is here)
-                text += "\"text\":\"" + team.getName() + "\",";
-                text += "\"color\":\"" + team.getColor().toString().toLowerCase() + "\",";
-                text += "\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/join " + team.getName() + "\"},";
-                if (team.containsPlayer(player))
-                {
-                    text += "\"bold\":\"true\",";
-                    /// Tooltip on the chat team selector GUI when the player is in the team. {0} = team display name.
-                    text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("You are in the team {0}", team.getDisplayName()) + "\"}";
-                }
-                else
-                {
-                    /// Tooltip on the chat team selector GUI when the player is not in the team. {0} = team display name.
-                    text += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("Click here to join the team {0}", team.getDisplayName()) + "\"}";
-                }
-                text += "}";
+                        .then(" ")
 
-                text += "]}";
+                        .then(team.getName())
+                            .color(team.getColor().toChatColor())
+                            .command("/join " + team.getName())
+                            .style(team.containsPlayer(player) ? ChatColor.BOLD : null)
+                            .hover(new RawText(
+                                    team.containsPlayer(player)
+                                            /// Tooltip on the chat team selector GUI when the player is in the team. {0} = team display name.
+                                            ? I.t("You are in the team {0}", team.getDisplayName())
+                                            /// Tooltip on the chat team selector GUI when the player is not in the team. {0} = team display name.
+                                            : I.t("Click here to join the team {0}", team.getDisplayName())
+                            ))
 
-                RawMessage.send(player, text);
+                        .build()
+                );
             }
 
             if (p.getTeamManager().getTeamForPlayer(player) != null && player.hasPermission("uh.player.leave.self"))
             {
-                String text = "{";
-                text += "\"text\":\"" + I.t("{darkred}[×] {red}Click here to leave your team") + "\",";
-                text += "\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/leave\"}";
-                text += "}";
-
-                RawMessage.send(player, text);
+                RawMessage.send(player,
+                        new RawText(I.t("{darkred}[×] {red}Click here to leave your team")).command("/leave")
+                );
             }
             else
             {
@@ -592,6 +576,6 @@ public class TeamManager
             player.sendMessage(I.t("{ce}There isn't any team available."));
         }
 
-        player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
+        player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
     }
 }
