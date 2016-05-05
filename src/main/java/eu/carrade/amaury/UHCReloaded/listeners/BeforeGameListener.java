@@ -102,9 +102,10 @@ public class BeforeGameListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent ev)
     {
         if (UHCReloaded.get().getGameManager().isGameStarted()) return;
-        if (excludeBuilder(ev.getPlayer())) return;
 
-        if (UHConfig.BEFORE_START.INVENTORY.CLEAR.get())
+        final boolean builder = excludeBuilder(ev.getPlayer());
+
+        if (!builder && UHConfig.BEFORE_START.INVENTORY.CLEAR.get())
         {
             ev.getPlayer().getInventory().clear();
             ev.getPlayer().getInventory().setArmorContents(null);
@@ -122,7 +123,9 @@ public class BeforeGameListener implements Listener
                     .hideAttributes()
                     .item();
 
-            ev.getPlayer().getInventory().setItem(4, item);
+            final ItemStack centralItem = ev.getPlayer().getInventory().getItem(4);
+            if (!builder || centralItem == null || centralItem.getType() == org.bukkit.Material.AIR)
+                ev.getPlayer().getInventory().setItem(4, item);
         }
     }
 
