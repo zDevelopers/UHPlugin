@@ -115,7 +115,9 @@ public class BeforeGameListener implements Listener
             Material itemType = getTeamSelectorItemType();
 
             ItemStack item = new ItemStackBuilder(itemType)
+                    /// The title of the item given before the game to select a team
                     .title(I.t("{green}{bold}Select a team {gray}(Right-Click)"))
+                    /// The lore of  the item given before the game to select a team
                     .lore(GuiUtils.generateLore(I.t("{gray}Right-click to select your team for this game")))
                     .hideAttributes()
                     .item();

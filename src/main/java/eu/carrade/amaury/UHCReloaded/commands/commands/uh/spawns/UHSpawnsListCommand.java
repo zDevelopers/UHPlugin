@@ -126,15 +126,19 @@ public class UHSpawnsListCommand extends AbstractCommand
         switch (environment)
         {
             case NORMAL:
+                /// A spawn point in the /uh spawns list command (in the overworld)
                 return I.t("{green}{0}{darkgreen};{green}{1}", x, z);
 
             case NETHER:
+                /// A spawn point in the /uh spawns list command (in the Nether)
                 return I.t("{red}{0}{darkred};{red}{1}", x, z);
 
             case THE_END:
+                /// A spawn point in the /uh spawns list command (in the End)
                 return I.t("{yellow}{0}{gold};{yellow}{1}", x, z);
 
             default:
+                /// A spawn point in the /uh spawns list command (in a custom world)
                 return I.t("{gray}{0}{darkgray};{gray}{1}", x, z);
         }
     }
