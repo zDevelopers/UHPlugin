@@ -52,7 +52,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -360,19 +365,17 @@ public class CraftingListener implements Listener
 
         final ItemStack result = ev.getRecipe().getResult();
 
-        Material MATERIAL_SHIELD = Material.getMaterial("SHIELD");
+        final Material MATERIAL_SHIELD = Material.getMaterial("SHIELD");
         if (MATERIAL_SHIELD == null) return; // MC 1.8
 
         if (result != null && result.getType() == MATERIAL_SHIELD)
         {
             try
             {
-                BannerMeta banner = (BannerMeta) team.getBanner().getItemMeta();
+                final BannerMeta banner = (BannerMeta) team.getBanner().getItemMeta();
 
-                ItemMeta meta = result.getItemMeta();
-                BlockStateMeta bsMeta = (BlockStateMeta) meta;
-
-                Banner shieldBanner = (Banner) bsMeta.getBlockState();
+                final BlockStateMeta bsMeta = (BlockStateMeta) result.getItemMeta();
+                final Banner shieldBanner   = (Banner) bsMeta.getBlockState();
 
                 shieldBanner.setBaseColor(banner.getBaseColor());
                 shieldBanner.setPatterns(banner.getPatterns());
