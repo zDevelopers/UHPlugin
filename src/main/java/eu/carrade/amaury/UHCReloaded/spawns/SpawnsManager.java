@@ -38,7 +38,6 @@ import eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPoints
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.UnknownGeneratorException;
 import eu.carrade.amaury.UHCReloaded.spawns.generators.SpawnPointsGenerator;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
-import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -46,6 +45,7 @@ import org.bukkit.World.Environment;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import org.bukkit.util.Vector;
 
 
 public class SpawnsManager
@@ -63,6 +63,16 @@ public class SpawnsManager
         AVOID_WATER = UHConfig.MAP.SPAWN_POINTS.DONT_GENERATE_ABOVE_WATER.get();
     }
 
+    /**
+     * Adds a spawn point at (x;z) in the default world.
+     *
+     * @param vec The vector representing the X and Z coordinates.
+     */
+    public void addSpawnPoint(final Vector vec)
+    {
+        addSpawnPoint(p.getServer().getWorlds().get(0), vec.getX(), vec.getZ());
+    }
+    
     /**
      * Adds a spawn point at (x;z) in the default world.
      *
@@ -195,31 +205,15 @@ public class SpawnsManager
      */
     public int importSpawnPointsFromConfig()
     {
-        if (UHConfig.SPAWN_POINTS.isDefined())
+        int spawnCount = 0;
+        
+        for (Vector position: UHConfig.SPAWN_POINTS)
         {
-            int spawnCount = 0;
-            for (String position : UHConfig.SPAWN_POINTS.get())
-            {
-                if (position != null && !position.isEmpty())
-                {
-                    String[] coords = position.split(",");
-                    try
-                    {
-                        addSpawnPoint(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
-                        p.getLogger().info(I.t("Spawn point {0},{1} added from the config file", coords[0], coords[1]));
-                        spawnCount++;
-                    }
-                    catch (Exception e) // Not an integer or not enough coords
-                    {
-                        p.getLogger().warning(I.t("Invalid spawn point set in config: {0}", (String) position));
-                    }
-                }
-            }
-
-            return spawnCount;
+            addSpawnPoint(position);
+            ++spawnCount;
         }
 
-        return 0;
+        return spawnCount;
     }
 
 

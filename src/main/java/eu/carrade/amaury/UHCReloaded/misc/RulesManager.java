@@ -53,7 +53,7 @@ public class RulesManager
 
     public RulesManager()
     {
-        if (UHConfig.RULES.isDefined() && UHConfig.RULES.RULES.get() != null)
+        if (UHConfig.RULES.isDefined() && !UHConfig.RULES.RULES.isEmpty() )
         {
             DISPLAY_ON_JOIN  = UHConfig.RULES.DISPLAY.ON_JOIN.get();
             DISPLAY_ON_START = UHConfig.RULES.DISPLAY.ON_START.get();
@@ -62,7 +62,7 @@ public class RulesManager
             // We check if the list is non-empty, i.e. if there is at least a non-empty rule.
             boolean empty = true;
 
-            for (String rule : UHConfig.RULES.RULES.get())
+            for (String rule : UHConfig.RULES.RULES)
             {
                 if (rule == null) continue;
 

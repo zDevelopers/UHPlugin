@@ -1,13 +1,16 @@
 package eu.carrade.amaury.UHCReloaded;
 
+import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
 import fr.zcraft.zlib.components.configuration.Configuration;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;
 import fr.zcraft.zlib.components.configuration.ConfigurationSection;
-
-import java.util.List;
+import fr.zcraft.zlib.components.configuration.ConfigurationList;
 
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.list;
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.section;
+import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
+import org.bukkit.util.Vector;
 
 
 public class UHConfig extends Configuration
@@ -499,16 +502,16 @@ public class UHConfig extends Configuration
             public final ConfigurationItem<Boolean> ON_START = item("onStart", true);
         }
 
-        public final ConfigurationItem<List<String>> RULES = item("rules", null);
+        public final ConfigurationList<String> RULES = list("rules", String.class);
     }
 
     static public final CommandsSection COMMANDS = section("commands", CommandsSection.class);
 
     static public class CommandsSection extends ConfigurationSection
     {
-        public final ConfigurationItem<List<String>> EXECUTE_SERVER_START = item("execute-server-start", null);
-        public final ConfigurationItem<List<String>> EXECUTE_START = item("execute-start", null);
-        public final ConfigurationItem<List<String>> EXECUTE_END = item("execute-end", null);
+        public final ConfigurationList<String> EXECUTE_SERVER_START = list("execute-server-start", String.class);
+        public final ConfigurationList<String> EXECUTE_START = list("execute-start", String.class);
+        public final ConfigurationList<String> EXECUTE_END = list("execute-end", String.class);
     }
 
     static public final ProtipsSection PROTIPS = section("protips", ProtipsSection.class);
@@ -546,16 +549,23 @@ public class UHConfig extends Configuration
         }
     }
 
-    static public final ConfigurationItem<List<String>> SPAWN_POINTS = item("spawnpoints", null);
-    static public final ConfigurationItem<List<String>> TEAMS = item("teams", null);
+    static public final ConfigurationList<Vector> SPAWN_POINTS = list("spawnpoints", Vector.class);
+    static public final ConfigurationList<String> TEAMS = list("teams", String.class);
 
 
     /* ** Helper sub-sections ** */
 
     static public class SoundSection extends ConfigurationSection
     {
-        public final ConfigurationItem<String> NAME = item("name");
+        public final ConfigurationItem<String> NAME = item("name", "");
         public final ConfigurationItem<Integer> VOLUME = item("volume", 1);
         public final ConfigurationItem<Integer> PITCH = item("pitch", 1);
     }
+    
+    /* ** Helper value handlers ** */
+    
+    static {
+        ConfigurationValueHandlers.registerHandlers(TeamManager.class);
+    }
+    
 }

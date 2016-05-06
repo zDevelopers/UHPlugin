@@ -33,8 +33,11 @@ package eu.carrade.amaury.UHCReloaded.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
+import fr.zcraft.zlib.components.configuration.ConfigurationParseException;
+import fr.zcraft.zlib.components.configuration.ConfigurationValueHandler;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.rawtext.RawText;
+import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.text.RawMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -42,6 +45,8 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -155,7 +160,7 @@ public class TeamManager
         teams.add(team);
         return team;
     }
-
+    
     /**
      * Deletes a team.
      *
@@ -431,48 +436,21 @@ public class TeamManager
      */
     public int importTeamsFromConfig()
     {
-        if (UHConfig.TEAMS.get() != null)
+        int teamsCount = 0;
+        for (String teamDescription : UHConfig.TEAMS)
         {
-            int teamsCount = 0;
-            for (String teamRaw : UHConfig.TEAMS.get())
-            {
-                if (teamRaw != null)
-                {
-                    String[] teamRawSeparated = teamRaw.split(",");
-                    TeamColor color = TeamColor.fromString(teamRawSeparated[0]);
-                    if (color == null)
-                    {
-                        p.getLogger().warning(I.t("Invalid team set in config: {0}", (String) teamRaw));
-                    }
-                    else
-                    {
-                        // "color,name"
-                        if (teamRawSeparated.length == 2)
-                        {
-                            UHTeam newTeam = addTeam(color, teamRawSeparated[1]);
-                            p.getLogger().info(I.t("Team {0} ({1}) added from the config file", newTeam.getName(), newTeam.getColor().toString()));
-                            teamsCount++;
-                        }
-
-                        // "color"
-                        else if (teamRawSeparated.length == 1)
-                        {
-                            UHTeam newTeam = addTeam(color, teamRawSeparated[0]);
-                            p.getLogger().info(I.t("Team {0} added from the config file", newTeam.getColor().toString()));
-                            teamsCount++;
-                        }
-                        else
-                        {
-                            p.getLogger().warning(I.t("Invalid team set in config: {0}", (String) teamRaw));
-                        }
-                    }
-                }
+            try
+            {   //TODO: Sanitize UHTeam to allow it being loaded directly by the configuration.
+                addTeam(handleTeamValue(teamDescription));
             }
-
-            return teamsCount;
+            catch (ConfigurationParseException ex)
+            {
+                PluginLogger.warning("Invalid team value : ''{0}''.", ex.getValue());
+                PluginLogger.warning("\tReason : {0}", ex.getMessage());
+            }
         }
 
-        return 0;
+        return teamsCount;
     }
 
     /**
@@ -577,5 +555,67 @@ public class TeamManager
         }
 
         player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
+    }
+    
+    
+    @ConfigurationValueHandler
+    static public TeamColor handleTeamColorValue(Object value) throws ConfigurationParseException
+    {
+        TeamColor color = TeamColor.fromString(value.toString());
+        if(color == null)
+            throw new ConfigurationParseException("Invalid team color name.", value);
+        
+        return color;
+    }
+    
+    @ConfigurationValueHandler
+    static public UHTeam handleTeamValue(Object value) throws ConfigurationParseException
+    {
+        if(value instanceof List)
+        {
+            return handleTeamValue((List) value);
+        }
+        else if(value instanceof Map)
+        {
+            return handleTeamValue((Map) value);
+        }
+        else
+        {
+            return handleTeamValue(value.toString());
+        }
+    }
+    
+    
+    static public UHTeam handleTeamValue(String str) throws ConfigurationParseException
+    {
+        return handleTeamValue(Arrays.asList(str.split(",")));
+    }
+    
+    static public UHTeam handleTeamValue(List list) throws ConfigurationParseException 
+    {
+        if(list.size() < 1)
+            throw new ConfigurationParseException("Not enough values, at least 1 required.", list);
+        if(list.size() > 2)
+            throw new ConfigurationParseException("Too many values, at most 2 (color, name) can be used.", list);
+        
+        if(list.size() == 1)
+        {
+            return new UHTeam(list.get(0).toString().trim(), handleTeamColorValue(list.get(0)));
+        }
+        else
+        {
+            return new UHTeam(list.get(1).toString().trim(), handleTeamColorValue(list.get(0)));
+        }
+    }
+    
+    static public UHTeam handleTeamValue(Map map) throws ConfigurationParseException
+    {
+        TeamColor color = map.containsKey("color") ? handleTeamColorValue(map.get("color")) : TeamColor.RANDOM;
+        Object name = map.containsKey("name") ? map.get("name") : map.get("color");
+        
+        if(name == null)
+            throw new ConfigurationParseException("Either color or name must be specified", map);
+        
+        return new UHTeam(name.toString(), color);
     }
 }
