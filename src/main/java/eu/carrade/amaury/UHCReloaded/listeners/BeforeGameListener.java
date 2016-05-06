@@ -69,16 +69,6 @@ public class BeforeGameListener implements Listener
     }
 
     /**
-     * @return The type of the team selector item.
-     */
-    private Material getTeamSelectorItemType()
-    {
-        Material itemType = Material.matchMaterial(UHConfig.BEFORE_START.TEAM_SELECTOR.ITEM.get());
-        if (itemType == null) itemType = Material.NETHER_STAR;
-        return itemType;
-    }
-
-    /**
      * Opens the teams selector GUI, if needed (enabled, game not started, needed item).
      *
      * TODO improve selector item detection.
@@ -92,7 +82,7 @@ public class BeforeGameListener implements Listener
 
         if (UHConfig.BEFORE_START.TEAM_SELECTOR.ENABLED.get()
                 && item != null
-                && item.getType() == getTeamSelectorItemType())
+                && item.getType() == UHConfig.BEFORE_START.TEAM_SELECTOR.ITEM.get())
         {
             Gui.open(player, new TeamsSelectorGUI());
         }
@@ -113,7 +103,7 @@ public class BeforeGameListener implements Listener
 
         if (UHConfig.BEFORE_START.TEAM_SELECTOR.ENABLED.get())
         {
-            Material itemType = getTeamSelectorItemType();
+            Material itemType = UHConfig.BEFORE_START.TEAM_SELECTOR.ITEM.get();
 
             ItemStack item = new ItemStackBuilder(itemType)
                     /// The title of the item given before the game to select a team

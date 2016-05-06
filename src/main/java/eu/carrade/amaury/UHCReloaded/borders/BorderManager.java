@@ -85,7 +85,7 @@ public class BorderManager
         /// The name of the warning timer displaying the time left before the next border
         warningTimerName = I.t("Border shrinking");
 
-        mapShape = MapShape.fromString(UHConfig.MAP.SHAPE.get());
+        mapShape = UHConfig.MAP.SHAPE.get();
         if (mapShape == null)
         {
             PluginLogger.warning("Invalid shape '" + UHConfig.MAP.SHAPE.get() + "'; using 'squared' instead.");
@@ -396,8 +396,8 @@ public class BorderManager
     {
         Integer wallHeight = UHConfig.MAP.WALL.HEIGHT.get();
 
-        Material wallBlockAir = Material.matchMaterial(UHConfig.MAP.WALL.BLOCK.REPLACE_AIR.get());
-        Material wallBlockSolid = Material.matchMaterial(UHConfig.MAP.WALL.BLOCK.REPLACE_SOLID.get());
+        Material wallBlockAir = UHConfig.MAP.WALL.BLOCK.REPLACE_AIR.get();
+        Material wallBlockSolid = UHConfig.MAP.WALL.BLOCK.REPLACE_SOLID.get();
 
         if (wallBlockAir == null || !wallBlockAir.isSolid() || wallBlockSolid == null || !wallBlockSolid.isSolid())
         {

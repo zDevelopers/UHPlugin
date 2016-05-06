@@ -1,16 +1,18 @@
 package eu.carrade.amaury.UHCReloaded;
 
+import eu.carrade.amaury.UHCReloaded.borders.MapShape;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
 import fr.zcraft.zlib.components.configuration.Configuration;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;
-import fr.zcraft.zlib.components.configuration.ConfigurationSection;
 import fr.zcraft.zlib.components.configuration.ConfigurationList;
+import fr.zcraft.zlib.components.configuration.ConfigurationSection;
+import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
+import org.bukkit.Material;
+import org.bukkit.util.Vector;
 
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.list;
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.section;
-import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
-import org.bukkit.util.Vector;
 
 
 public class UHConfig extends Configuration
@@ -32,7 +34,7 @@ public class UHConfig extends Configuration
     static public class MapSection extends ConfigurationSection
     {
         public final ConfigurationItem<Integer> SIZE = item("size", 2000);
-        public final ConfigurationItem<String> SHAPE = item("shape", "squared");
+        public final ConfigurationItem<MapShape> SHAPE = item("shape", MapShape.SQUARED);
 
         public final WallSection WALL = section("wall", WallSection.class);
 
@@ -44,8 +46,8 @@ public class UHConfig extends Configuration
 
             static public class BlockSection extends ConfigurationSection
             {
-                public final ConfigurationItem<String> REPLACE_AIR = item("replaceAir", "GLASS");
-                public final ConfigurationItem<String> REPLACE_SOLID = item("replaceSolid", "BEDROCK");
+                public final ConfigurationItem<Material> REPLACE_AIR = item("replaceAir", Material.GLASS);
+                public final ConfigurationItem<Material> REPLACE_SOLID = item("replaceSolid", Material.BEDROCK);
             }
         }
 
@@ -216,7 +218,7 @@ public class UHConfig extends Configuration
         static public class TeamSelectorSection extends ConfigurationSection
         {
             public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
-            public final ConfigurationItem<String> ITEM = item("item", "NETHER_STAR");
+            public final ConfigurationItem<Material> ITEM = item("item", Material.NETHER_STAR);
         }
     }
 
@@ -564,8 +566,8 @@ public class UHConfig extends Configuration
     
     /* ** Helper value handlers ** */
     
-    static {
+    static
+    {
         ConfigurationValueHandlers.registerHandlers(TeamManager.class);
     }
-    
 }
