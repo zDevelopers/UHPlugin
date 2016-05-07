@@ -37,6 +37,7 @@ import eu.carrade.amaury.UHCReloaded.events.EpisodeChangedCause;
 import eu.carrade.amaury.UHCReloaded.events.UHEpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHGameStartsEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHPlayerResurrectedEvent;
+import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.task.FireworksOnWinnersTask;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
@@ -921,7 +922,7 @@ public class UHGameManager
      *
      * @param player The player to register as a spectator.
      */
-    public void addStartupSpectator(Player player)
+    public void addStartupSpectator(OfflinePlayer player)
     {
         spectators.add(player.getUniqueId());
         tm.removePlayerFromTeam(player);
@@ -932,7 +933,7 @@ public class UHGameManager
      *
      * @param player The spectator to remove.
      */
-    public void removeStartupSpectator(Player player)
+    public void removeStartupSpectator(OfflinePlayer player)
     {
         spectators.remove(player.getUniqueId());
     }
@@ -948,12 +949,18 @@ public class UHGameManager
      */
     public HashSet<String> getStartupSpectators()
     {
-
         HashSet<String> spectatorNames = new HashSet<>();
 
         for (UUID id : spectators)
         {
-            spectatorNames.add(p.getServer().getPlayer(id).getName());
+            final OfflinePlayer player = OfflinePlayersLoader.getOfflinePlayer(id);
+            final String playerName = player.getName();
+
+            if (playerName != null)
+                spectatorNames.add(playerName);
+            else
+                /// Spectators list item if the nick cannot be found
+                spectatorNames.add(I.t("Unknown player with UUID {0}", player.getUniqueId()));
         }
 
         return spectatorNames;

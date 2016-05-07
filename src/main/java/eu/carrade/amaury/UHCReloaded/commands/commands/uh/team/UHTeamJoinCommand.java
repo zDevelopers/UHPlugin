@@ -36,9 +36,13 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.Callback;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -72,16 +76,14 @@ public class UHTeamJoinCommand extends AbstractCommand
      * @throws eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException If the command cannot be executed.
      */
     @Override
-    public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
+    public void run(final CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-
         if (args.length == 0)
-        {
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
-        }
 
         UHTeam team;
-        Player target = null;
+
+        String targetName = "";
         Boolean self = null;
 
         // /... join <team>?
@@ -90,7 +92,7 @@ public class UHTeamJoinCommand extends AbstractCommand
         {
             if (sender instanceof Player)
             {
-                target = (Player) sender;
+                targetName = sender.getName();
                 self = true;
             }
             else
@@ -98,19 +100,15 @@ public class UHTeamJoinCommand extends AbstractCommand
                 throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
             }
         }
+
+        // /... join <player> <team>?
         else if (args.length >= 2)
         {
-            // /... join <player> <team>?
             team = p.getTeamManager().getTeam(UHUtils.getStringFromCommandArguments(args, 1));
             if (team != null)
             {
-                target = p.getServer().getPlayer(args[0]);
+                targetName = args[0];
                 self = false;
-                if (target == null)
-                {
-                    sender.sendMessage(I.t("{ce}Unable to add the player {0} to the team {1}. This player is unknown in the server.", args[0], team.getName()));
-                    return;
-                }
             }
         }
 
@@ -118,24 +116,38 @@ public class UHTeamJoinCommand extends AbstractCommand
         {
             sender.sendMessage(I.t("{ce}This team does not exists."));
         }
+        else if (sender.hasPermission("uh.team.join")
+                || (self && sender.hasPermission("uh.player.join.self"))
+                || (!self && sender.hasPermission("uh.player.join.others")))
+        {
+            final UHTeam finalTeam = team;
+            OfflinePlayersLoader.loadPlayer(targetName, new Callback<OfflinePlayer>()
+            {
+                @Override
+                public void call(OfflinePlayer player)
+                {
+                    if (player == null)
+                    {
+                        sender.sendMessage(I.t("{ce}Unable to retrieve the player {0}."));
+
+                        if (!Bukkit.getOnlineMode())
+                            sender.sendMessage(I.t("{ce}In offline mode, you cannot add players if they never came to this server."));
+
+                        return;
+                    }
+
+                    finalTeam.addPlayer(player);
+
+                    if (!sender.equals(player))
+                    {
+                        sender.sendMessage(I.t("{cs}The player {0} was successfully added to the team {1}", player.getName(), finalTeam.getName()));
+                    }
+                }
+            });
+        }
         else
         {
-            if (sender.hasPermission("uh.team.join")
-                    || (self && sender.hasPermission("uh.player.join.self"))
-                    || (!self && sender.hasPermission("uh.player.join.others")))
-            {
-
-                team.addPlayer(target);
-
-                if (!sender.equals(target))
-                {
-                    sender.sendMessage(I.t("{cs}The player {0} was successfully added to the team {1}", target.getName(), team.getName()));
-                }
-            }
-            else
-            {
-                throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NOT_ALLOWED, this);
-            }
+            throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NOT_ALLOWED, this);
         }
     }
 

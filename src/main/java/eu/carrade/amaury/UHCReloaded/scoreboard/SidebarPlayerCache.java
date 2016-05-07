@@ -31,8 +31,11 @@
  */
 package eu.carrade.amaury.UHCReloaded.scoreboard;
 
+import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
@@ -71,7 +74,7 @@ public class SidebarPlayerCache
         }
         else
         {
-            playerName = "Unknown player";
+            playerName = null;
             isOnline = false;
         }
     }
@@ -116,7 +119,18 @@ public class SidebarPlayerCache
 
     public String getPlayerName()
     {
-        return playerName;
+        if (playerName != null && !playerName.isEmpty())
+            return playerName;
+
+        OfflinePlayer player = OfflinePlayersLoader.getOfflinePlayer(playerId);
+        if (player != null && player.getName() != null && !player.getName().isEmpty())
+        {
+            playerName = player.getName();
+            return playerName;
+        }
+
+        /// Default nick name when a player cannot be recognized.
+        return I.t("Unknown");
     }
 
     public ChatColor getHealthColor()

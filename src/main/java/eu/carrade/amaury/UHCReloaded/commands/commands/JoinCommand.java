@@ -57,7 +57,6 @@ public class JoinCommand extends UHTeamJoinCommand
         if (args.length == 0 && sender instanceof Player
                 && sender.hasPermission("uh.player.join.self"))
         {
-
             p.getTeamManager().displayTeamChooserChatGUI((Player) sender);
         }
 

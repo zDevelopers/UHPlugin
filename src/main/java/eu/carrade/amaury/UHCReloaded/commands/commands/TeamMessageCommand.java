@@ -72,8 +72,9 @@ public class TeamMessageCommand extends AbstractCommand
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
         }
 
+        // /t
         if (args.length == 0)
-        { // /t
+        {
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
         }
 

@@ -45,6 +45,7 @@ import eu.carrade.amaury.UHCReloaded.listeners.GameplayListener;
 import eu.carrade.amaury.UHCReloaded.listeners.SpawnsListener;
 import eu.carrade.amaury.UHCReloaded.misc.Freezer;
 import eu.carrade.amaury.UHCReloaded.misc.MOTDManager;
+import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.misc.PlayerListHeaderFooterManager;
 import eu.carrade.amaury.UHCReloaded.misc.RulesManager;
 import eu.carrade.amaury.UHCReloaded.misc.RuntimeCommandsExecutor;
@@ -103,7 +104,7 @@ public class UHCReloaded extends ZPlugin
 
         this.saveDefaultConfig();
 
-        loadComponents(SidebarScoreboard.class, Gui.class, I18n.class, UHConfig.class);
+        loadComponents(SidebarScoreboard.class, Gui.class, I18n.class, UHConfig.class, OfflinePlayersLoader.class);
 
         final String langInConfig = UHConfig.LANG.get();
         if (langInConfig == null || langInConfig.isEmpty())

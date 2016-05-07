@@ -43,6 +43,7 @@ import eu.carrade.amaury.UHCReloaded.commands.commands.uh.UHHealAllCommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.UHHealCommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.UHInfosCommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.UHKillCommand;
+import eu.carrade.amaury.UHCReloaded.commands.commands.uh.UHLoadPlayersCommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.UHResurrectCommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.UHRulesCommand;
 import eu.carrade.amaury.UHCReloaded.commands.commands.uh.UHShiftCommand;
@@ -97,6 +98,7 @@ public class UHRootCommand extends AbstractCommand
         registerSubCommand(new UHTPCommand(p));
         registerSubCommand(new UHInfosCommand(p));
         registerSubCommand(new UHRulesCommand(p));
+        registerSubCommand(new UHLoadPlayersCommand());
         registerSubCommand(new UHAboutCommand(p));
     }
 

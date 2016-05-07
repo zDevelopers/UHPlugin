@@ -32,13 +32,13 @@
 package eu.carrade.amaury.UHCReloaded.gui.teams.editor;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersComparator;
 import fr.zcraft.zlib.components.gui.ExplorerGui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.i18n.I;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -46,7 +46,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -69,7 +68,7 @@ public class TeamEditMembersGUI extends ExplorerGui<OfflinePlayer>
         setKeepHorizontalScrollingSpace(true);
 
         Set<OfflinePlayer> players = new TreeSet<>(new OfflinePlayersComparator());
-        Collections.addAll(players, Bukkit.getOfflinePlayers());
+        players.addAll(OfflinePlayersLoader.getOfflinePlayers());
         setData(players.toArray(new OfflinePlayer[players.size()]));
 
         action("back", getSize() - 5, GuiUtils.makeItem(

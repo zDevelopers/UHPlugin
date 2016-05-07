@@ -29,102 +29,67 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.commands.commands.uh.team;
+package eu.carrade.amaury.UHCReloaded.commands.commands.uh;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.Callback;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 
-@Command (name = "leave")
-public class UHTeamLeaveCommand extends AbstractCommand
+@Command(name = "loadplayers")
+public class UHLoadPlayersCommand extends AbstractCommand
 {
-    private UHCReloaded p;
-
-    public UHTeamLeaveCommand(UHCReloaded plugin)
-    {
-        p = plugin;
-    }
-
-    /**
-     * Runs the command.
-     *
-     * @param sender The sender of the command.
-     * @param args   The arguments passed to the command.
-     *
-     * @throws eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException If the command cannot be executed.
-     */
     @Override
-    public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
+    public void run(final CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-        final OfflinePlayer target;
+        if (!Bukkit.getOnlineMode())
+        {
+            sender.sendMessage(I.t("{ce}You cannot load unknown players in offline mode, sorry."));
+            return;
+        }
 
         if (args.length == 0)
         {
-            if (sender instanceof Player)
-            {
-                target = (OfflinePlayer) sender;
-            }
-            else
-            {
-                throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
-            }
+            /// Error returned if one calls /uh loadplayers without arguments.
+            sender.sendMessage(I.t("{ce}You need to provide at least one player name."));
+            return;
         }
 
-        // /uh team leave <player>
-        else
+        /// Message displayed when the /uh loadplayers command is used, as the execution may take some time.
+        sender.sendMessage(I.t("{cst}Loading players..."));
+
+        OfflinePlayersLoader.loadPlayers(Arrays.asList(args), new Callback<Map<UUID, OfflinePlayer>>()
         {
-            target = OfflinePlayersLoader.getOfflinePlayer(args[0]);
-        }
-
-
-        if (target == null)
-        {
-            sender.sendMessage(I.t("{ce}The player {0} is disconnected and never logged in before!", args[0])); // args.length >= 1 here.
-        }
-
-        else
-        {
-
-            // Permissions check
-            if (sender.hasPermission("uh.team.leave")
-                    || (target.equals(sender) && sender.hasPermission("uh.player.leave.self"))
-                    || (!target.equals(sender) && sender.hasPermission("uh.player.leave.others")))
+            @Override
+            public void call(Map<UUID, OfflinePlayer> addedPlayers)
             {
-
-
-                p.getTeamManager().removePlayerFromTeam(target);
-
-                if (!target.equals(sender))
-                {
-                    sender.sendMessage(I.t("{cs}The player {0} was successfully removed from his team.", target.getName()));
-                }
-
+                sender.sendMessage(I.tn("{cs}Loaded {0} player successfully.", "{cs}Loaded {0} players successfully.", addedPlayers.size()));
             }
-            else
+        }, new Callback<List<String>>()
+        {
+            @Override
+            public void call(List<String> notFound)
             {
-                throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NOT_ALLOWED);
+                /// Message sent if some players cannot be loaded while /uh loadplayers is used. 0 = amount of players missing; 1 = list of nicknames (format "nick1, nick2, nick3").
+                sender.sendMessage(I.tn("{ce}{0} player is missing: {1}.", "{ce}{0} players are missing: {1}.", notFound.size(), notFound.size(), StringUtils.join(notFound, ", ")));
             }
-        }
+        });
     }
 
-    /**
-     * Tab-completes this command.
-     *
-     * @param sender The sender.
-     * @param args   The arguments passed to the command.
-     *
-     * @return A list of suggestions.
-     */
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args)
     {
@@ -140,6 +105,12 @@ public class UHTeamLeaveCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("{cc}/uh team leave <player> {ci}: removes a player from his team."));
+        return Collections.singletonList(I.t("{cc}/uh loadplayers <pseudo> [pseudo] ... {ci}: loads the given players in the server so they can be added to teams even if they never logged in."));
+    }
+
+    @Override
+    public String getCategory()
+    {
+        return Category.MISC.getTitle();
     }
 }

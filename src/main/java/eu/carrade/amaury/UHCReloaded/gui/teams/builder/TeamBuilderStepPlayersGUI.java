@@ -33,6 +33,7 @@ package eu.carrade.amaury.UHCReloaded.gui.teams.builder;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.gui.teams.TeamsSelectorGUI;
+import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersComparator;
@@ -51,7 +52,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -86,7 +86,7 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
         // Players
 
         Set<OfflinePlayer> players = new TreeSet<>(new OfflinePlayersComparator());
-        Collections.addAll(players, Bukkit.getOfflinePlayers());
+        players.addAll(OfflinePlayersLoader.getOfflinePlayers());
 
         int slot = 9;
         for (OfflinePlayer player : players)

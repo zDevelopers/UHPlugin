@@ -37,9 +37,12 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.Callback;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,10 +67,11 @@ public class UHSpectatorsCommand extends AbstractCommand
     }
 
     @Override
-    public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
+    public void run(final CommandSender sender, final String[] args) throws CannotExecuteCommandException
     {
+        // /uh spec
         if (args.length == 0)
-        { // /uh spec
+        {
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
         }
 
@@ -77,37 +81,52 @@ public class UHSpectatorsCommand extends AbstractCommand
 
             if (subcommand.equalsIgnoreCase("add"))
             {
+                // /uh spec add
                 if (args.length == 1)
-                { // /uh spec add
+                {
                     throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
                 }
+
+                // /uh spec add <player>
                 else
-                { // /uh spec add <player>
-                    Player newSpectator = p.getServer().getPlayer(args[1]);
-                    if (newSpectator == null)
+                {
+                    OfflinePlayersLoader.loadPlayer(args[1], new Callback<OfflinePlayer>()
                     {
-                        sender.sendMessage(I.t("{ce}The player {0} is not online.", args[1]));
-                    }
-                    else
-                    {
-                        p.getGameManager().addStartupSpectator(newSpectator);
-                        sender.sendMessage(I.t("{cs}The player {0} is now a spectator.", args[1]));
-                    }
+                        @Override
+                        public void call(OfflinePlayer player)
+                        {
+                            if (player == null)
+                            {
+                                sender.sendMessage(I.t("{ce}Unable to retrieve the player {0}."));
+
+                                if (!Bukkit.getOnlineMode())
+                                    sender.sendMessage(I.t("{ce}In offline mode, you cannot add players if they never came to this server."));
+
+                                return;
+                            }
+
+                            p.getGameManager().addStartupSpectator(player);
+                            sender.sendMessage(I.t("{cs}The player {0} is now a spectator.", player.getName()));
+                        }
+                    });
                 }
             }
 
             else if (subcommand.equalsIgnoreCase("remove"))
             {
+                // /uh spec remove
                 if (args.length == 1)
-                { // /uh spec remove
+                {
                     throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
                 }
+
+                // /uh spec remove <player>
                 else
-                { // /uh spec remove <player>
-                    Player oldSpectator = p.getServer().getPlayer(args[1]);
+                {
+                    OfflinePlayer oldSpectator = OfflinePlayersLoader.getOfflinePlayer(args[1]);
                     if (oldSpectator == null)
                     {
-                        sender.sendMessage(I.t("{ce}The player {0} is not online.", args[1]));
+                        sender.sendMessage(I.t("{ce}The player {0} was not found.", args[1]));
                     }
                     else
                     {
@@ -128,6 +147,7 @@ public class UHSpectatorsCommand extends AbstractCommand
                 {
                     sender.sendMessage(I.tn("{ci}{0} registered spectator.", "{ci}{0} registered spectators.", spectators.size()));
                     sender.sendMessage(I.t("{ci}This count includes only the initial spectators."));
+
                     for (String spectator : spectators)
                     {
                         /// A list item in the startup spectators list
