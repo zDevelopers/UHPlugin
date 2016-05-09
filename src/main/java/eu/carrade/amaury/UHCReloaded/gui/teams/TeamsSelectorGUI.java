@@ -45,7 +45,7 @@ import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.gui.PromptGui;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.Callback;
-import fr.zcraft.zlib.tools.items.GlowEffect;
+import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -176,14 +176,26 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
                 /// Title of the team item in the teams selector GUI (without max) {0}: team display name. {1}: players count.
                 : I.tn("{white}Team {0} {gray}({1} player)", "{white}Team {0} {gray}({1} players)", team.getSize(), team.getDisplayName(), team.getSize());
 
+        return new ItemStackBuilder(item)
+                .title(title)
+                .lore(lore)
+                .glow(GLOW_ON_CURRENT_TEAM && playerInTeam)
+                .hideAttributes()
+                .item();
+    }
 
-        GuiUtils.makeItem(item, title, lore);
-        GuiUtils.hideItemAttributes(item);
-
-        if (GLOW_ON_CURRENT_TEAM && playerInTeam)
-            GlowEffect.addGlow(item);
-
-        return item;
+    @Override
+    protected ItemStack getEmptyViewItem()
+    {
+        return new ItemStackBuilder(Material.BARRIER)
+                .title(I.t("{red}No team created"))
+                .lore(getPlayer().hasPermission("uh.team")
+                        /// Subtitle of the item displayed in the teams selector GUI if there isn't anything to display.
+                        ? GuiUtils.generateLore(I.t("{gray}Click the emerald button below to create one."))
+                        /// Subtitle of the item displayed in the teams selector GUI if there isn't anything to display and the player cannot create a team.
+                        : GuiUtils.generateLore(I.t("{gray}Wait for an administrator to create one.")))
+                .hideAttributes()
+                .item();
     }
 
     @Override
