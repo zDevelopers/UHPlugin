@@ -38,6 +38,7 @@ import fr.zcraft.zlib.components.configuration.ConfigurationValueHandler;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.tools.PluginLogger;
+import fr.zcraft.zlib.tools.text.ActionBar;
 import fr.zcraft.zlib.tools.text.RawMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -555,6 +556,21 @@ public class TeamManager
         }
 
         player.sendMessage(ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅");
+    }
+
+
+    /**
+     * Displays the team of the given player in his action bar.
+     * If the player is not in a team, does nothing.
+     *
+     * @param player The player.
+     */
+    public void displayTeamInActionBar(Player player)
+    {
+        UHTeam team = getTeamForPlayer(player);
+        if (team == null) return;
+
+        ActionBar.sendPermanentMessage(player, I.t("{gold}Your team: {0}", team.getDisplayName()));
     }
     
     

@@ -220,6 +220,8 @@ public class UHConfig extends Configuration
             public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
             public final ConfigurationItem<Material> ITEM = item("item", Material.NETHER_STAR);
         }
+
+        public final ConfigurationItem<Boolean> TEAM_IN_ACTION_BAR = item("teamInActionBar", true);
     }
 
     static public final StartSection START = section("start", StartSection.class);

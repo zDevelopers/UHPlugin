@@ -215,6 +215,10 @@ before-start:
         # The item to use as the team selector. Right-clicking it will open the GUI.
         item: NETHER_STAR
 
+    # Displays the current team in the action bar before the game. Nothing is displayed if the player is
+    # not in a team.
+    teamInActionBar: true
+
 
 
 start:

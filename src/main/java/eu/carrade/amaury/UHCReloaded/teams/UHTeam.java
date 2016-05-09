@@ -39,6 +39,7 @@ import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import fr.zcraft.zlib.tools.items.TextualBanners;
+import fr.zcraft.zlib.tools.text.ActionBar;
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -297,9 +298,13 @@ public class UHTeam
 
         plugin.getTeamManager().colorizePlayer(player);
 
-        if (!silent && player.isOnline())
+        if (player.isOnline())
         {
-            ((Player) player).sendMessage(I.t("{aqua}You are now in the {0}{aqua} team.", getDisplayName()));
+            if (!silent)
+                ((Player) player).sendMessage(I.t("{aqua}You are now in the {0}{aqua} team.", getDisplayName()));
+
+            if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
+                plugin.getTeamManager().displayTeamInActionBar((Player) player);
         }
     }
 
@@ -330,9 +335,13 @@ public class UHTeam
         players.remove(player.getUniqueId());
         unregisterPlayer(player);
 
-        if (!silent && player.isOnline())
+        if (player.isOnline())
         {
-            ((Player) player).sendMessage(I.t("{darkaqua}You are no longer part of the {0}{darkaqua} team.", getDisplayName()));
+            if (!silent)
+                ((Player) player).sendMessage(I.t("{darkaqua}You are no longer part of the {0}{darkaqua} team.", getDisplayName()));
+
+            if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
+                ActionBar.removeMessage((Player) player);
         }
     }
 

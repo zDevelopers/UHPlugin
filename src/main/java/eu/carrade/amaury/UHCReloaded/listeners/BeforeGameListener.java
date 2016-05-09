@@ -117,6 +117,11 @@ public class BeforeGameListener implements Listener
             if (!builder || centralItem == null || centralItem.getType() == org.bukkit.Material.AIR)
                 ev.getPlayer().getInventory().setItem(4, item);
         }
+
+        if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
+        {
+            UHCReloaded.get().getTeamManager().displayTeamInActionBar(ev.getPlayer());
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
