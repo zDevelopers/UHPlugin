@@ -347,6 +347,18 @@ public class UHGameManager
         p.getMOTDManager().updateMOTDDuringStart();
 
 
+        /** Removes the teams action bar (if any) **/
+        if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
+        {
+            for (UHTeam team : tm.getTeams())
+            {
+                for (OfflinePlayer player : team.getPlayers())
+                {
+                    ActionBar.removeMessage(player.getUniqueId(), true);
+                }
+            }
+        }
+
         /** Initialization of the spectator mode **/
 
         for (Player player : Bukkit.getOnlinePlayers())

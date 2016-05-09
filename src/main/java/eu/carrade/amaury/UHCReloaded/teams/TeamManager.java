@@ -561,7 +561,7 @@ public class TeamManager
 
     /**
      * Displays the team of the given player in his action bar.
-     * If the player is not in a team, does nothing.
+     * If the player is not in a team, or the game is started, does nothing.
      *
      * @param player The player.
      */
@@ -570,7 +570,22 @@ public class TeamManager
         UHTeam team = getTeamForPlayer(player);
         if (team == null) return;
 
-        ActionBar.sendPermanentMessage(player, I.t("{gold}Your team: {0}", team.getDisplayName()));
+        displayTeamInActionBar(player, team);
+    }
+
+    /**
+     * Displays the team of the given player in his action bar.
+     * If the player is not in a team, or the game is started, does nothing.
+     *
+     * Internal use when an instance of the team is accessible (avoids lookup).
+     *
+     * @param player The player.
+     * @param team The team.
+     */
+    void displayTeamInActionBar(Player player, UHTeam team)
+    {
+        if (!UHCReloaded.get().getGameManager().isGameStarted())
+            ActionBar.sendPermanentMessage(player, I.t("{gold}Your team: {0}", team.getDisplayName()));
     }
     
     

@@ -164,13 +164,12 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
     {
         UHTeam team = new UHTeam(getName(), getColor());
 
-        for (UUID member : teamMembers)
-            team.addPlayer(Bukkit.getOfflinePlayer(member));
-
         try
         {
             UHCReloaded.get().getTeamManager().addTeam(team);
             getPlayer().sendMessage(I.t("{cs}Team created."));
+
+            for (UUID member : teamMembers) team.addPlayer(OfflinePlayersLoader.getOfflinePlayer(member));
         }
         catch (IllegalArgumentException e)
         {

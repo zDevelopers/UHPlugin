@@ -77,7 +77,7 @@ public class UHTeamBannerResetCommand extends AbstractCommand
         }
         else
         {
-            team.setBanner(team.getDefaultBanner());
+            team.setBanner(null);
             sender.sendMessage(I.t("{cs}The banner of the team {0}{cs} was successfully reset to the default one.", team.getDisplayName()));
         }
     }

@@ -71,6 +71,7 @@ public class UHTeam
     private String internalName = null;
     private String displayName = null;
     private TeamColor color = null;
+    private ItemStack defaultBanner = null;
     private ItemStack banner = null;
 
     private HashSet<UUID> players = new HashSet<>();
@@ -94,7 +95,7 @@ public class UHTeam
 
         setName(name, true);
         setColor(color);
-        setBanner(getDefaultBanner());
+        updateDefaultBanner();
     }
 
     /**
@@ -135,11 +136,18 @@ public class UHTeam
             return;
 
         this.name = name;
-        updateDisplayName();
 
-        if (!silent)
-            for (Player player : getOnlinePlayers())
+        updateDisplayName();
+        updateDefaultBanner();
+
+        for (Player player : getOnlinePlayers())
+        {
+            if (!silent)
                 player.sendMessage(I.t("{cs}Your team is now called {0}{cs}.", displayName));
+
+            if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
+                plugin.getTeamManager().displayTeamInActionBar(player, this);
+        }
     }
 
     /**
@@ -304,7 +312,7 @@ public class UHTeam
                 ((Player) player).sendMessage(I.t("{aqua}You are now in the {0}{aqua} team.", getDisplayName()));
 
             if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
-                plugin.getTeamManager().displayTeamInActionBar((Player) player);
+                plugin.getTeamManager().displayTeamInActionBar((Player) player, this);
         }
     }
 
@@ -341,7 +349,7 @@ public class UHTeam
                 ((Player) player).sendMessage(I.t("{darkaqua}You are no longer part of the {0}{darkaqua} team.", getDisplayName()));
 
             if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
-                ActionBar.removeMessage((Player) player);
+                ActionBar.removeMessage((Player) player, true);
         }
     }
 
@@ -463,7 +471,16 @@ public class UHTeam
 
         // The players names too
         for (Player player : getOnlinePlayers())
+        {
             plugin.getTeamManager().colorizePlayer(player);
+
+            // Also we update the action bar if needed
+            if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
+                plugin.getTeamManager().displayTeamInActionBar(player, this);
+        }
+
+        // The default banner too
+        updateDefaultBanner();
     }
 
 
@@ -494,6 +511,16 @@ public class UHTeam
     }
 
     /**
+     * Regenerates the default banner.
+     */
+    private void updateDefaultBanner()
+    {
+        // Avoid updating in the constructor before all the object is populated.
+        if (name != null && color != null)
+            defaultBanner = getDefaultBanner();
+    }
+
+    /**
      * Updates this team's banner.
      *
      * @param banner The new banner.
@@ -513,7 +540,7 @@ public class UHTeam
      */
     public ItemStack getBanner()
     {
-        return banner;
+        return banner == null ? defaultBanner : banner;
     }
 
 
