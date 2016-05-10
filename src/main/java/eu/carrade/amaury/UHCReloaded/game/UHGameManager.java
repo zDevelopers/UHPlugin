@@ -48,6 +48,7 @@ import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.Callback;
+import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.ActionBar;
 import fr.zcraft.zlib.tools.text.Titles;
@@ -138,7 +139,7 @@ public class UHGameManager
 
         BROADCAST_SLOW_START_PROGRESS = UHConfig.START.SLOW.BROADCAST_PROGRESS.get();
 
-        GRACE_PERIOD = (long) Math.min(UHUtils.string2Time(UHConfig.START.GRACE_PERIOD.get(), 30), 15) * 20l;
+        GRACE_PERIOD = (long) Math.max(UHUtils.string2Time(UHConfig.START.GRACE_PERIOD.get(), 30), 15) * 20l;
         PEACE_PERIOD = (long) UHUtils.string2Time(UHConfig.START.PEACE_PERIOD.get(), 0) * 20l;
         SURFACE_MOBS_FREE_PERIOD = (long) UHUtils.string2Time(UHConfig.START.SURFACE_MOBS_FREE_PERIOD.get(), 900) * 20l;
 
