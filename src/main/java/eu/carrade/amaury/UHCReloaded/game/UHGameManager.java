@@ -585,15 +585,21 @@ public class UHGameManager
      */
     private void startEnvironment()
     {
-        World w = p.getServer().getWorlds().get(0);
+        World overworld = UHUtils.getOverworld();
 
-        w.setGameRuleValue("doDaylightCycle", (UHConfig.DAYLIGHT_CYCLE.DO.get()).toString());
-        w.setGameRuleValue("keepInventory", Boolean.FALSE.toString()); // Just in case...
-        w.setGameRuleValue("naturalRegeneration", (UHConfig.GAMEPLAY_CHANGES.NATURAL_REGENERATION.get()).toString());
+        if (overworld != null)
+        {
+            overworld.setGameRuleValue("doDaylightCycle", (UHConfig.DAYLIGHT_CYCLE.DO.get()).toString());
+            overworld.setTime(UHConfig.DAYLIGHT_CYCLE.TIME.get());
+            overworld.setStorm(false);
+        }
 
-        w.setTime(UHConfig.DAYLIGHT_CYCLE.TIME.get());
-        w.setStorm(false);
-        w.setDifficulty(Difficulty.HARD);
+        for (World world : Bukkit.getWorlds())
+        {
+            world.setGameRuleValue("keepInventory", Boolean.FALSE.toString()); // Just in case...
+            world.setGameRuleValue("naturalRegeneration", (UHConfig.GAMEPLAY_CHANGES.NATURAL_REGENERATION.get()).toString());
+            world.setDifficulty(Difficulty.HARD);
+        }
     }
 
     /**
