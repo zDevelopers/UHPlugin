@@ -2,12 +2,14 @@ package eu.carrade.amaury.UHCReloaded;
 
 import eu.carrade.amaury.UHCReloaded.borders.MapShape;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
+import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import fr.zcraft.zlib.components.configuration.Configuration;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;
 import fr.zcraft.zlib.components.configuration.ConfigurationList;
 import fr.zcraft.zlib.components.configuration.ConfigurationSection;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.util.Vector;
 
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
@@ -561,7 +563,7 @@ public class UHConfig extends Configuration
 
     static public class SoundSection extends ConfigurationSection
     {
-        public final ConfigurationItem<String> NAME = item("name", "");
+        public final ConfigurationItem<Sound> NAME = item("name", Sound.class);
         public final ConfigurationItem<Integer> VOLUME = item("volume", 1);
         public final ConfigurationItem<Integer> PITCH = item("pitch", 1);
     }
@@ -571,5 +573,6 @@ public class UHConfig extends Configuration
     static
     {
         ConfigurationValueHandlers.registerHandlers(TeamManager.class);
+        ConfigurationValueHandlers.registerHandlers(UHSound.class);
     }
 }

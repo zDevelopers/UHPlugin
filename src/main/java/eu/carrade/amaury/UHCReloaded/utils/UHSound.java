@@ -33,6 +33,7 @@
 package eu.carrade.amaury.UHCReloaded.utils;
 
 import eu.carrade.amaury.UHCReloaded.UHConfig;
+import fr.zcraft.zlib.components.configuration.ConfigurationValueHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -114,7 +115,7 @@ public class UHSound
             return;
         }
 
-        this.sound  = string2Sound(config.NAME.get());
+        this.sound  = config.NAME.get();
         this.volume = (float) config.VOLUME.get();
         this.pitch  = (float) config.PITCH.get();
     }
@@ -270,11 +271,24 @@ public class UHSound
             }
             catch (IllegalArgumentException e)
             {
+                String[] prefixes = new String[] {"BLOCK_", "ENTITY_", "ITEM_", "MUSIC_", "WEATHER_"};
+                for (String prefix : prefixes)
+                {
+                    try { return Sound.valueOf(prefix + soundName); }
+                    catch(IllegalArgumentException ignored) {}
+                }
+
                 // Non-existent sound
                 return null;
             }
         }
 
         return null;
+    }
+
+    @ConfigurationValueHandler
+    public static Sound handleSoundValue(Object object)
+    {
+        return string2Sound(object.toString());
     }
 }
