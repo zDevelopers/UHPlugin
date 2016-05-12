@@ -114,7 +114,6 @@ public class UHTeamAddCommand extends AbstractCommand
                 }
                 catch (IllegalArgumentException e)
                 {
-                    e.printStackTrace();
                     sender.sendMessage(I.t("{ce}This team already exists."));
                     return;
                 }

@@ -34,7 +34,6 @@ package eu.carrade.amaury.UHCReloaded.gui.teams.editor;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import eu.carrade.amaury.UHCReloaded.utils.TextUtils;
-import fr.zcraft.zlib.components.gui.ActionGui;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
@@ -52,13 +51,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TeamEditGUI extends ActionGui
+public class TeamEditGUI extends TeamActionGUI
 {
-    private final UHTeam team;
-
     public TeamEditGUI(UHTeam team)
     {
-        this.team = team;
+        super(team);
     }
 
 
@@ -68,6 +65,12 @@ public class TeamEditGUI extends ActionGui
         /// The title of the edit team GUI. {0} = team display name.
         setTitle(I.t("Teams » {black}{0}", team.getDisplayName()));
         setSize(36);
+
+        if (!exists())
+        {
+            action("", 13, getDeletedItem());
+            return;
+        }
 
         // Banner
         action("banner", 9, new ItemStackBuilder(team.getBanner())

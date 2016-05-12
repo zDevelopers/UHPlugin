@@ -33,8 +33,13 @@ package eu.carrade.amaury.UHCReloaded.teams;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
+import eu.carrade.amaury.UHCReloaded.gui.teams.TeamsSelectorGUI;
+import eu.carrade.amaury.UHCReloaded.gui.teams.editor.TeamEditDeleteGUI;
+import eu.carrade.amaury.UHCReloaded.gui.teams.editor.TeamEditGUI;
+import eu.carrade.amaury.UHCReloaded.gui.teams.editor.TeamEditMembersGUI;
 import fr.zcraft.zlib.components.configuration.ConfigurationParseException;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandler;
+import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.tools.PluginLogger;
@@ -107,8 +112,10 @@ public class TeamManager
             throw new IllegalArgumentException("There is already a team named " + name + " registered!");
         }
 
-        UHTeam team = new UHTeam(name, generateColor(color), p);
+        UHTeam team = new UHTeam(name, generateColor(color));
         teams.add(team);
+
+        updateGUIs();
 
         return team;
     }
@@ -128,8 +135,8 @@ public class TeamManager
         color = generateColor(color);
         String teamName = color.toString().toLowerCase();
 
-        if (isTeamRegistered(teamName))
-        { // Taken!
+        if (isTeamRegistered(teamName))  // Taken!
+        {
             Random rand = new Random();
             do
             {
@@ -137,8 +144,10 @@ public class TeamManager
             } while (isTeamRegistered(teamName));
         }
 
-        UHTeam team = new UHTeam(teamName, color, p);
+        UHTeam team = new UHTeam(teamName, color);
         teams.add(team);
+
+        updateGUIs();
 
         return team;
     }
@@ -159,6 +168,9 @@ public class TeamManager
         }
 
         teams.add(team);
+
+        updateGUIs();
+
         return team;
     }
     
@@ -184,7 +196,11 @@ public class TeamManager
             team.deleteTeam();
         }
 
-        return teams.remove(team);
+        final boolean removed = teams.remove(team);
+
+        updateGUIs();
+
+        return removed;
     }
 
     /**
@@ -281,6 +297,8 @@ public class TeamManager
 
         // 2: internal list reset
         teams.clear();
+
+        updateGUIs();
     }
 
     /**
@@ -586,6 +604,18 @@ public class TeamManager
     {
         if (!UHCReloaded.get().getGameManager().isGameStarted())
             ActionBar.sendPermanentMessage(player, I.t("{gold}Your team: {0}", team.getDisplayName()));
+    }
+
+    /**
+     * Updates the teams GUIs. Called when a team is created, deleted, or updated,
+     * so the GUIs update in real time.
+     */
+    void updateGUIs()
+    {
+        Gui.update(TeamsSelectorGUI.class);
+        Gui.update(TeamEditGUI.class);
+        Gui.update(TeamEditMembersGUI.class);
+        Gui.update(TeamEditDeleteGUI.class);
     }
     
     

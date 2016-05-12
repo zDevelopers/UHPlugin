@@ -140,6 +140,8 @@ public class UHTeam
         updateDisplayName();
         updateDefaultBanner();
 
+        plugin.getTeamManager().updateGUIs();
+
         for (Player player : getOnlinePlayers())
         {
             if (!silent)
@@ -306,6 +308,8 @@ public class UHTeam
 
         plugin.getTeamManager().colorizePlayer(player);
 
+        plugin.getTeamManager().updateGUIs();
+
         if (player.isOnline())
         {
             if (!silent)
@@ -341,7 +345,23 @@ public class UHTeam
         Validate.notNull(player, "The player cannot be null.");
 
         players.remove(player.getUniqueId());
-        unregisterPlayer(player);
+        unregisterPlayer(player, silent);
+
+        plugin.getTeamManager().updateGUIs();
+    }
+
+    /**
+     * Unregisters a player from the scoreboard and uncolorizes the pseudo.
+     *
+     * Internal use, avoids a ConcurrentModificationException in this.deleteTeam()
+     * (this.players is listed and emptied simultaneously, else).
+     */
+    private void unregisterPlayer(OfflinePlayer player, boolean silent)
+    {
+        if (player == null) return;
+
+        plugin.getScoreboardManager().getScoreboard().getTeam(this.internalName).removePlayer(player);
+        plugin.getTeamManager().colorizePlayer(player);
 
         if (player.isOnline())
         {
@@ -354,22 +374,6 @@ public class UHTeam
     }
 
     /**
-     * Unregisters a player from the scoreboard and uncolorizes the pseudo.
-     *
-     * Internal use, avoids a ConcurrentModificationException in this.deleteTeam()
-     * (this.players is listed and emptied simultaneously, else).
-     *
-     * @param player
-     */
-    private void unregisterPlayer(OfflinePlayer player)
-    {
-        if (player == null) return;
-
-        plugin.getScoreboardManager().getScoreboard().getTeam(this.internalName).removePlayer(player);
-        plugin.getTeamManager().colorizePlayer(player);
-    }
-
-    /**
      * Deletes this team.
      *
      * The players inside the team are left without any team.
@@ -378,18 +382,9 @@ public class UHTeam
     {
         // We removes the players from the team (scoreboard team too)
         for (UUID id : players)
-        {
-            OfflinePlayer player = plugin.getServer().getOfflinePlayer(id);
+            unregisterPlayer(plugin.getServer().getOfflinePlayer(id), false);
 
-            if (player != null && player.isOnline())
-            {
-                ((Player) player).sendMessage(I.t("{darkaqua}You are no longer part of the {0}{darkaqua} team.", getDisplayName()));
-            }
-
-            unregisterPlayer(player);
-        }
-
-        this.players.clear();
+        players.clear();
 
         // Then the scoreboard team is deleted.
         plugin.getScoreboardManager().getScoreboard().getTeam(this.internalName).unregister();
@@ -481,6 +476,8 @@ public class UHTeam
 
         // The default banner too
         updateDefaultBanner();
+
+        plugin.getTeamManager().updateGUIs();
     }
 
 
@@ -523,10 +520,16 @@ public class UHTeam
     /**
      * Updates this team's banner.
      *
-     * @param banner The new banner.
+     * @param banner The new banner. {@code null} to use the default banner.
      */
     public void setBanner(ItemStack banner)
     {
+        if (banner == null)
+        {
+            this.banner = null;
+            return;
+        }
+
         if (banner.getType() != Material.BANNER)
             throw new IllegalArgumentException("A banner is required");
 
@@ -542,6 +545,8 @@ public class UHTeam
             meta.setBaseColor(((BannerMeta) banner.getItemMeta()).getBaseColor());
             this.banner.setItemMeta(meta);
         }
+
+        plugin.getTeamManager().updateGUIs();
     }
 
     /**

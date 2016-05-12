@@ -32,72 +32,48 @@
 package eu.carrade.amaury.UHCReloaded.gui.teams.editor;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.gui.teams.TeamsSelectorGUI;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
-import fr.zcraft.zlib.components.gui.Gui;
-import fr.zcraft.zlib.components.gui.GuiAction;
+import fr.zcraft.zlib.components.gui.ActionGui;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.i18n.I;
-import org.bukkit.DyeColor;
+import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
-public class TeamEditDeleteGUI extends TeamActionGUI
+public abstract class TeamActionGUI extends ActionGui
 {
-    public TeamEditDeleteGUI(UHTeam team)
+    protected final UHTeam team;
+
+    public TeamActionGUI(UHTeam team)
     {
-        super(team);
+        this.team = team;
     }
 
-
-    @Override
-    protected void onUpdate()
+    /**
+     * Checks if the team still exists.
+     * @return {@code true} if the team exists.
+     */
+    protected boolean exists()
     {
-        /// The title of the delete team GUI. {0} = team name (raw).
-        setTitle(I.t("{0} » {darkred}Delete", team.getName()));
-        setSize(9);
-
-        if (!exists())
-        {
-            action("", 4, getDeletedItem());
-            return;
-        }
-
-        for (int slot = 0; slot < 3; slot++)
-        {
-            action("keep", slot, GuiUtils.makeItem(
-                    new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.LIME.getWoolData()),
-                    /// The title of the "keep" button in the delete team GUI
-                    I.t("{green}Keep this team alive"),
-                    null
-            ));
-        }
-
-        action("", 4, team.getBanner());
-
-        for (int slot = 6; slot < 9; slot++)
-        {
-            action("delete", slot, GuiUtils.makeItem(
-                    new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.RED.getWoolData()),
-                    /// The title of the "delete" button in the delete team GUI
-                    I.t("{red}Delete this team {italic}forever"),
-                    null
-            ));
-        }
+        return UHCReloaded.get().getTeamManager().isTeamRegistered(team);
     }
 
-
-    @GuiAction ("keep")
-    protected void keep()
+    /**
+     * Generates the item to display if the team was deleted while a player edited the team on a GUI.
+     * @return the item.
+     */
+    protected ItemStack getDeletedItem()
     {
-        close();
-    }
-
-    @GuiAction ("delete")
-    protected void delete()
-    {
-        UHCReloaded.get().getTeamManager().removeTeam(team);
-        Gui.open(getPlayer(), new TeamsSelectorGUI());
+        return new ItemStackBuilder(Material.BARRIER)
+                /// Title of the item displayed if a team was deleted while someone edited it in a GUI.
+                .title(I.t("{red}Team deleted"))
+                /// Lore of the item displayed if a team was deleted while someone edited it in a GUI.
+                .lore(GuiUtils.generateLore(I.t("{gray}The team {0}{gray} was deleted by another player.", team.getDisplayName())))
+                .lore("")
+                /// Lore of the item displayed if a team was deleted while someone edited it in a GUI.
+                .lore(GuiUtils.generateLore(I.t("{gray}Press {white}Escape{gray} to go back to the teams list.")))
+                .hideAttributes()
+                .item();
     }
 }
