@@ -527,10 +527,21 @@ public class UHTeam
      */
     public void setBanner(ItemStack banner)
     {
+        if (banner.getType() != Material.BANNER)
+            throw new IllegalArgumentException("A banner is required");
+
         this.banner = new ItemStackBuilder(banner.clone())
                 .title(displayName)
+                .amount(1)
                 .hideAttributes()
                 .item();
+
+        if (banner.hasItemMeta())
+        {
+            BannerMeta meta = (BannerMeta) this.banner.getItemMeta();
+            meta.setBaseColor(((BannerMeta) banner.getItemMeta()).getBaseColor());
+            this.banner.setItemMeta(meta);
+        }
     }
 
     /**
