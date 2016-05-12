@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-10 23:34+0200\n"
-"PO-Revision-Date: 2016-05-11 01:04+0100\n"
+"POT-Creation-Date: 2016-05-12 16:25+0200\n"
+"PO-Revision-Date: 2016-05-12 17:44+0100\n"
 "Last-Translator: Amaury Carrade\n"
 "Language-Team: Amaury Carrade\n"
 "Language: fr_FR\n"
@@ -390,7 +390,7 @@ msgstr "{ci}Le jeu n'est pas encore démarré."
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHInfosCommand.java:92
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHInfosCommand.java:149
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamListCommand.java:83
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:104
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:107
 msgid "{green} • "
 msgstr "{green} • "
 
@@ -403,7 +403,7 @@ msgstr "Actuellement connecté(e)"
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHInfosCommand.java:98
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHInfosCommand.java:153
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamListCommand.java:88
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:106
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:109
 msgid "{red} • "
 msgstr "{red} • "
 
@@ -1191,17 +1191,17 @@ msgstr ""
 "utilisez l'autocomplétion."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamAddCommand.java:89
-#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamAddCommand.java:118
+#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamAddCommand.java:117
 #: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/builder/TeamBuilderStepPlayersGUI.java:176
 msgid "{ce}This team already exists."
 msgstr "{ce}Cette équipe existe déjà."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamAddCommand.java:93
-#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamAddCommand.java:122
+#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamAddCommand.java:121
 msgid "{cs}Team {0}{cs} added."
 msgstr "{cs}Équipe {0}{cs} ajoutée."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamAddCommand.java:164
+#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamAddCommand.java:163
 msgid ""
 "{cc}/uh team add <color> [<name ...>] {ci}: adds a team with the provided "
 "color."
@@ -1789,82 +1789,98 @@ msgstr "{lightpurple}Ajouté !"
 msgid "{cs}Team created."
 msgstr "{cs}Équipe créée."
 
+#. Title of the item displayed if a team was deleted while someone edited it in a GUI.
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamActionGUI.java:70
+msgid "{red}Team deleted"
+msgstr "{red}Équipe supprimée."
+
+#. Lore of the item displayed if a team was deleted while someone edited it in a GUI.
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamActionGUI.java:72
+msgid "{gray}The team {0}{gray} was deleted by another player."
+msgstr "{gray}L'équipe {0}{gray} a été supprimée par un autre joueur."
+
+#. Lore of the item displayed if a team was deleted while someone edited it in a GUI.
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamActionGUI.java:75
+msgid "{gray}Press {white}Escape{gray} to go back to the teams list."
+msgstr ""
+"{gray}Appuyez sur {white}Échap{gray} pour retourner à la liste des équipes."
+
 #. The title of the edit team color GUI. {0} = team name (raw).
 #: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditColorGUI.java:54
 msgid "{0} » {black}Color"
 msgstr "{0} » {black}Couleur"
 
 #. The title of the delete team GUI. {0} = team name (raw).
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditDeleteGUI.java:61
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditDeleteGUI.java:58
 msgid "{0} » {darkred}Delete"
 msgstr "{0} » {darkred}Supprimer"
 
 #. The title of the "keep" button in the delete team GUI
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditDeleteGUI.java:69
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditDeleteGUI.java:72
 msgid "{green}Keep this team alive"
 msgstr "{green}Garder cette équipe en vie"
 
 #. The title of the "delete" button in the delete team GUI
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditDeleteGUI.java:81
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditDeleteGUI.java:84
 msgid "{red}Delete this team {italic}forever"
 msgstr "{red}Supprimer cette équipe {italic}pour l'éternité"
 
 #. The title of the edit team GUI. {0} = team display name.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:69
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:66
 msgid "Teams » {black}{0}"
 msgstr "Équipes » {black}{0}"
 
 #. Members count in the banner description, in the team edit GUI.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:76
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:79
 msgid "{white}{0} {gray}member"
 msgid_plural "{white}{0} {gray}members"
 msgstr[0] "{white}{0} {gray}membre"
 msgstr[1] "{white}{0} {gray}membres"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:78
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:81
 msgid "{white}Click with a banner {gray}to update this team's banner"
 msgstr ""
 "{white}Cliquez avec une bannière {gray}pour changer la bannière de l'équipe"
 
 #. Update team color button in edit GUI.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:86
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:89
 msgid "{green}Update the color"
 msgstr "{green}Changer la couleur"
 
 #. Current team color in edit GUI. {0} = formatted color name.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:88
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:91
 msgctxt "current_team_color"
 msgid "{gray}Current: {white}{0}"
-msgstr "{gray}Actuel : {white}{0}"
+msgstr "{gray}Actuelle : {white}{0}"
 
 #. Rename team button in edit GUI.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:95
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:98
 msgid "{green}Rename the team"
 msgstr "{green}Renommer l'équipe"
 
 #. Current team name in edit GUI. {0} = raw team name.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:97
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:100
 msgctxt "current_team_name"
 msgid "{gray}Current: {white}{0}"
 msgstr "{gray}Actuel : {white}{0}"
 
 #. Update team members button in edit GUI.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:111
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:114
 msgid "{green}Add or remove players"
 msgstr "{green}Modifier les membres"
 
 #. Delete team button in edit GUI.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:119
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:122
 msgid "{red}Delete this team"
 msgstr "{red}Supprimer cette équipe"
 
 #. Warning under the "delete team" button title.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:121
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:124
 msgid "{gray}Cannot be undone"
 msgstr "{gray}Non annulable"
 
 #. Go back button in GUIs.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:128
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditGUI.java:131
 #: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/editor/TeamEditMembersGUI.java:76
 msgid "{green}« Go back"
 msgstr "{green}« Retour"
@@ -2346,31 +2362,31 @@ msgid "{gold}[{0}{gold} -> team {1}{gold}] {reset}{2}"
 msgstr "{gold}[{0}{gold} -> équipe {1}{gold}] {reset}{2}"
 
 #. Invite displayed in the chat team selector
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:481
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:499
 msgid "{gold}Click on the names below to join a team"
 msgstr "{gold}Cliquez ci-dessous pour rejoindre une équipe"
 
 #. Displayed in team tooltip of the chat team selector for a dead player
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:502
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:520
 msgid "{0} ({red}dead{reset})"
 msgstr "{0} ({red}mort{reset})"
 
 #. Displayed in team tooltip of the chat team selector for an alive player
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:507
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:525
 msgid "{0} ({green}alive{reset})"
 msgstr "{0} ({green}en vie{reset})"
 
 #. Team count with max players (ex. [3/5]) followed in-game by the team name. {0} = current count, {1} = max.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:517
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:535
 msgid "{gray}[{white}{0}{gray}/{white}{1}{gray}]"
 msgstr "{gray}[{white}{0}{gray}/{white}{1}{gray}]"
 
 #. Team count without max players (ex. [3]) followed in-game by the team name. {0} = current count.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:519
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:537
 msgid "{gray}[{white}{0}{gray}]"
 msgstr "{gray}[{white}{0}{gray}]"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:521
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:539
 #, java-format
 msgid "{0} player in this team"
 msgid_plural "{0} players in this team"
@@ -2378,43 +2394,42 @@ msgstr[0] "{0} joueur dans cette équipe"
 msgstr[1] "{0} joueurs dans cette équipe"
 
 #. Tooltip on the chat team selector GUI when the player is in the team. {0} = team display name.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:532
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:550
 #, java-format
 msgid "You are in the team {0}"
 msgstr "Vous êtes dans l'équipe {0}"
 
 #. Tooltip on the chat team selector GUI when the player is not in the team. {0} = team display name.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:534
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:552
 #, java-format
 msgid "Click here to join the team {0}"
 msgstr "Cliquez ici pour rejoindre l'équipe {0}"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:544
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:562
 msgid "{darkred}[×] {red}Click here to leave your team"
 msgstr "{darkred}[×] {red}Cliquez ici pour quitter votre équipe"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:549
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:567
 msgid "{gray}Run /join to display this again"
 msgstr "{gray}Exécutez /join pour réafficher ceci"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:555
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:573
 msgid "{ce}There isn't any team available."
 msgstr "{ce}Il n'y a aucune équipe disponible."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:588
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:606
 msgid "{gold}Your team: {0}"
 msgstr "{gold}Votre équipe : {0}"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:146
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:148
 msgid "{cs}Your team is now called {0}{cs}."
 msgstr "{cs}Votre équipe s'appelle désormais {0}{cs}."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:312
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:316
 msgid "{aqua}You are now in the {0}{aqua} team."
 msgstr "{aqua}Vous faites désormais partie de l'équipe {0}{aqua}."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:349
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:386
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:369
 msgid "{darkaqua}You are no longer part of the {0}{darkaqua} team."
 msgstr "{darkaqua}Vous ne faites plus partie de l'équipe {0}{darkaqua}."
 
