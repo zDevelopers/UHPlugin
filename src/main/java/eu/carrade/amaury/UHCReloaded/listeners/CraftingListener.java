@@ -376,7 +376,7 @@ public class CraftingListener implements Listener
 
                 final BlockStateMeta bsMeta = (BlockStateMeta) result.getItemMeta();
                 final Banner shieldBanner   = (Banner) bsMeta.getBlockState();
-
+                
                 shieldBanner.setBaseColor(banner.getBaseColor());
                 shieldBanner.setPatterns(banner.getPatterns());
 

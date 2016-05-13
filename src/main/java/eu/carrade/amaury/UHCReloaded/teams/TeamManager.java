@@ -39,12 +39,16 @@ import eu.carrade.amaury.UHCReloaded.gui.teams.editor.TeamEditGUI;
 import eu.carrade.amaury.UHCReloaded.gui.teams.editor.TeamEditMembersGUI;
 import fr.zcraft.zlib.components.configuration.ConfigurationParseException;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandler;
+import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
+import static fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers.getListValue;
+import static fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers.getValue;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.text.ActionBar;
 import fr.zcraft.zlib.tools.text.RawMessage;
+import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -53,8 +57,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+import org.bukkit.DyeColor;
+import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.material.Banner;
 
 
 public class TeamManager
@@ -468,6 +476,13 @@ public class TeamManager
                 PluginLogger.warning("\tReason : {0}", ex.getMessage());
             }
         }
+        
+        for(Entry<String, BannerMeta> bannerEntry : UHConfig.TEAM_BANNERS)
+        {
+            UHTeam team = getTeam(bannerEntry.getKey());
+            if(team == null) continue;
+            team.setBanner(bannerEntry.getValue());
+        }
 
         return teamsCount;
     }
@@ -620,9 +635,9 @@ public class TeamManager
     
     
     @ConfigurationValueHandler
-    static public TeamColor handleTeamColorValue(Object value) throws ConfigurationParseException
+    static public TeamColor handleTeamColorValue(String value) throws ConfigurationParseException
     {
-        TeamColor color = TeamColor.fromString(value.toString());
+        TeamColor color = TeamColor.fromString(value);
         if(color == null)
             throw new ConfigurationParseException("Invalid team color name.", value);
         
@@ -630,28 +645,12 @@ public class TeamManager
     }
     
     @ConfigurationValueHandler
-    static public UHTeam handleTeamValue(Object value) throws ConfigurationParseException
-    {
-        if(value instanceof List)
-        {
-            return handleTeamValue((List) value);
-        }
-        else if(value instanceof Map)
-        {
-            return handleTeamValue((Map) value);
-        }
-        else
-        {
-            return handleTeamValue(value.toString());
-        }
-    }
-    
-    
     static public UHTeam handleTeamValue(String str) throws ConfigurationParseException
     {
         return handleTeamValue(Arrays.asList(str.split(",")));
     }
     
+    @ConfigurationValueHandler
     static public UHTeam handleTeamValue(List list) throws ConfigurationParseException 
     {
         if(list.size() < 1)
@@ -661,17 +660,18 @@ public class TeamManager
         
         if(list.size() == 1)
         {
-            return new UHTeam(list.get(0).toString().trim(), handleTeamColorValue(list.get(0)));
+            return new UHTeam(list.get(0).toString().trim(), handleTeamColorValue(list.get(0).toString()));
         }
         else
         {
-            return new UHTeam(list.get(1).toString().trim(), handleTeamColorValue(list.get(0)));
+            return new UHTeam(list.get(1).toString().trim(), handleTeamColorValue(list.get(0).toString()));
         }
     }
     
+    @ConfigurationValueHandler
     static public UHTeam handleTeamValue(Map map) throws ConfigurationParseException
     {
-        TeamColor color = map.containsKey("color") ? handleTeamColorValue(map.get("color")) : TeamColor.RANDOM;
+        TeamColor color = map.containsKey("color") ? handleTeamColorValue(map.get("color").toString()) : TeamColor.RANDOM;
         Object name = map.containsKey("name") ? map.get("name") : map.get("color");
         
         if(name == null)
@@ -679,4 +679,6 @@ public class TeamManager
         
         return new UHTeam(name.toString(), color);
     }
+    
+    
 }

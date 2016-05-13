@@ -548,6 +548,30 @@ public class UHTeam
 
         plugin.getTeamManager().updateGUIs();
     }
+    
+    /**
+     * Updates this team's banner.
+     *
+     * @param banner The new banner. {@code null} to use the default banner.
+     */
+    public void setBanner(BannerMeta banner)
+    {
+        if (banner == null)
+        {
+            this.banner = null;
+            return;
+        }
+
+        this.banner = new ItemStackBuilder(Material.BANNER)
+                .title(displayName)
+                .amount(1)
+                .hideAttributes()
+                .item();
+
+        this.banner.setItemMeta(banner.clone());
+
+        plugin.getTeamManager().updateGUIs();
+    }
 
     /**
      * Returns this team's banner.

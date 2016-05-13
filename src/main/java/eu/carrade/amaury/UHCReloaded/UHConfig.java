@@ -15,6 +15,9 @@ import org.bukkit.util.Vector;
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.list;
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.section;
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.map;
+import fr.zcraft.zlib.components.configuration.ConfigurationMap;
+import org.bukkit.inventory.meta.BannerMeta;
 
 
 public class UHConfig extends Configuration
@@ -557,7 +560,7 @@ public class UHConfig extends Configuration
 
     static public final ConfigurationList<Vector> SPAWN_POINTS = list("spawnpoints", Vector.class);
     static public final ConfigurationList<String> TEAMS = list("teams", String.class);
-
+    static public final ConfigurationMap<String, BannerMeta> TEAM_BANNERS = map("teambanners", String.class, BannerMeta.class);
 
     /* ** Helper sub-sections ** */
 

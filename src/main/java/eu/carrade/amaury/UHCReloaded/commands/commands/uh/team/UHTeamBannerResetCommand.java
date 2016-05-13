@@ -45,6 +45,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.bukkit.inventory.ItemStack;
 
 
 @Command (name = "bannerreset")
@@ -77,7 +78,7 @@ public class UHTeamBannerResetCommand extends AbstractCommand
         }
         else
         {
-            team.setBanner(null);
+            team.setBanner((ItemStack) null);
             sender.sendMessage(I.t("{cs}The banner of the team {0}{cs} was successfully reset to the default one.", team.getDisplayName()));
         }
     }
