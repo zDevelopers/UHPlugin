@@ -117,7 +117,7 @@ public class RulesManager
     {
         CommandUtils.displaySeparator(receiver);
         /// Title of the rules box.
-        receiver.sendMessage(I.t("{red}{bold}Rules and informations"));
+        receiver.sendMessage(I.t("{red}{bold}Rules and information"));
 
         for (String rule : rules)
         {

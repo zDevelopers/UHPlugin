@@ -90,7 +90,7 @@ permissions:
         description: Allows an user to manage the teams with /uh team *
         default: op
     uh.team.spy:
-        description: Allows an user to receive all teams chat if he executes /uh team spy
+        description: Allows an user to receive all teams chat if they execute /uh team spy
         default: op
     uh.team.spy.others:
         description: Allows an user to toggle spy for another player; this other one will receive all the teams chat.
@@ -147,7 +147,7 @@ permissions:
         description: Allows an user to broadcast or send the rules on-demand
         default: op
     uh.about:
-        description: Prints some informations about the plugin and the translation.
+        description: Prints some information about the plugin and the translation.
         default: true
     
     

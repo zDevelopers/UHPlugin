@@ -169,7 +169,7 @@ All these gameplay tweaks are optional — see [the configuration file](https://
 - `/uh heal <player> [half-hearts=20|±diff]` to heal a player to the exact number of hearts given, or to add/remove the given number of life points. Avoid trying to find the good health effect level/duration, the id of the effect, etc.
 - `/uh healall [half-hearts=20|±diff]`: the same, for all players, because Bukkit does not allow the use of the @a selector out of a command block.
 - You cannot kill a player with these commands.
-- With `/uh resurrect <player>`, you can resurrect (and deban, if he was banned) a player killed by lag (or other bug).
+- With `/uh resurrect <player>`, you can resurrect (and deban, if they were banned) a player killed by lag (or other bug).
 - With `/uh tpback <player>`, you can teleport a player back to his death location.
 
 ### Miscellaneous features
@@ -234,7 +234,7 @@ Legend: `/uh command <required> [optional=default]`.
     - `/togglechat` : toggles the chat between the main chat and the private team chat.
     - `/togglechat <team ...>` : enters the private team chat of another team.
     - `/g <message>` : sends a message to the main chat.
- - `/uh about` : prints informations about the plugin and the translations.
+ - `/uh about` : prints information about the plugin and the translations.
 
 ### Permissions
 

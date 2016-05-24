@@ -67,7 +67,7 @@ public class UHTeamSpyCommand extends AbstractCommand
                 target = Bukkit.getPlayer(args[0]);
                 if (target == null)
                 {
-                    sender.sendMessage(I.t("{ce}Cannot toggle the spy mode of {0} because he/she is offline.", args[0]));
+                    sender.sendMessage(I.t("{ce}Cannot toggle the spy mode of {0} because they are offline.", args[0]));
                     return;
                 }
             }

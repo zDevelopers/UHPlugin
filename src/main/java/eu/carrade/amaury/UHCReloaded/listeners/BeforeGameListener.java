@@ -61,7 +61,7 @@ public class BeforeGameListener implements Listener
 {
     /**
      * @param player A player
-     * @return True if an inventory action should not be done because he is a builder.
+     * @return True if an inventory action should not be done because they are a builder.
      */
     private boolean excludeBuilder(Permissible player)
     {

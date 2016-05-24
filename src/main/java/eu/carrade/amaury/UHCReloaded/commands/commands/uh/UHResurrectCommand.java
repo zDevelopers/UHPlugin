@@ -79,7 +79,7 @@ public class UHResurrectCommand extends AbstractCommand
             }
             else  // Resurrected
             {
-                sender.sendMessage(I.t("{cs}Because {0} is offline, he will be resurrected when he logins. If he was, he is no longer banned.", args[0]));
+                sender.sendMessage(I.t("{cs}Because {0} is offline, they will be resurrected when they login. If they were, they are no longer banned.", args[0]));
             }
         }
         else

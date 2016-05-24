@@ -211,7 +211,7 @@ public class UHGameManager
             player.removeAchievement(Achievement.OPEN_INVENTORY);
         }
 
-        // If the user has the permission to build before the game, he will probably needs
+        // If the user has the permission to build before the game, they will probably need
         // the creative mode.
         if (!player.hasPermission("uh.build"))
         {
