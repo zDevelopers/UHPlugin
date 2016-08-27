@@ -219,6 +219,7 @@ before-start:
     # not in a team.
     teamInActionBar: true
 
+    enablePVP: false
 
 
 start:

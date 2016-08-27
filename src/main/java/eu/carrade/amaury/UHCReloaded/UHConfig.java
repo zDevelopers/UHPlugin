@@ -227,6 +227,8 @@ public class UHConfig extends Configuration
         }
 
         public final ConfigurationItem<Boolean> TEAM_IN_ACTION_BAR = item("teamInActionBar", true);
+
+        public final ConfigurationItem<Boolean> ENABLE_PVP = item("enablePVP", false);
     }
 
     static public final StartSection START = section("start", StartSection.class);

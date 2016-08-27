@@ -149,7 +149,7 @@
         <repository>
             <id>pgmann-repo</id>
             <name>PGMann repository (SpectatorPlus)</name>
-            <url>https://mvn.pgmann.cf/repository/maven-snapshots/</url>
+            <url>https://mvn.pgmann.cf/</url>
         </repository>
         <repository>
             <id>carrade-repo</id>
