@@ -33,6 +33,8 @@
 package eu.carrade.amaury.UHCReloaded.events;
 
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
 /**
@@ -40,7 +42,7 @@ import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
  *
  * @author Amaury Carrade
  */
-public final class TimerStartsEvent extends UHEvent
+public final class TimerStartsEvent extends Event
 {
     private UHTimer timer;
 
@@ -57,5 +59,19 @@ public final class TimerStartsEvent extends UHEvent
     public UHTimer getTimer()
     {
         return timer;
+    }
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

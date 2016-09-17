@@ -33,11 +33,15 @@
 package eu.carrade.amaury.UHCReloaded.events;
 
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
-public class UHGameEndsEvent extends UHEvent
+public class UHGameEndsEvent extends Event implements Cancellable
 {
     private UHTeam winner;
+    private boolean cancelled = false;
 
     public UHGameEndsEvent(UHTeam winner)
     {
@@ -52,5 +56,38 @@ public class UHGameEndsEvent extends UHEvent
     public UHTeam getWinnerTeam()
     {
         return winner;
+    }
+
+
+    @Override
+    public boolean isCancelled()
+    {
+        return cancelled;
+    }
+
+    /**
+     * Cancels the game ends. If cancelled, the end message / effects will not be broadcasted.
+     *
+     * @param cancelled {@code true} to cancel.
+     */
+    @Override
+    public void setCancelled(boolean cancelled)
+    {
+        this.cancelled = cancelled;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

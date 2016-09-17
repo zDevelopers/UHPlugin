@@ -33,6 +33,8 @@
 package eu.carrade.amaury.UHCReloaded.events;
 
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
 /**
@@ -40,9 +42,8 @@ import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
  * <p>
  * It is fired before all the values of the timer are reset.
  */
-public final class TimerEndsEvent extends UHEvent
+public final class TimerEndsEvent extends Event
 {
-
     private UHTimer timer;
     private Boolean timerWasUp = false;
     private Boolean restart = false;
@@ -93,5 +94,20 @@ public final class TimerEndsEvent extends UHEvent
     public boolean getRestart()
     {
         return this.restart;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

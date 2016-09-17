@@ -33,6 +33,8 @@
 package eu.carrade.amaury.UHCReloaded.events;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 
@@ -41,9 +43,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
  * <p>
  * This event is called before all the action executed on player death (sound, scoreboard updates, etc.).
  */
-public class UHPlayerDeathEvent extends UHEvent
+public class UHPlayerDeathEvent extends Event
 {
-
     private Player player;
     private PlayerDeathEvent ev;
 
@@ -69,5 +70,20 @@ public class UHPlayerDeathEvent extends UHEvent
     public PlayerDeathEvent getPlayerDeathEvent()
     {
         return ev;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

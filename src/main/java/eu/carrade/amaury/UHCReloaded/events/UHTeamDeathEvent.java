@@ -33,14 +33,15 @@
 package eu.carrade.amaury.UHCReloaded.events;
 
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
 /**
  * Event fired when the last member of a team die.
  */
-public class UHTeamDeathEvent extends UHEvent
+public class UHTeamDeathEvent extends Event
 {
-
     private UHTeam team;
 
     public UHTeamDeathEvent(UHTeam team)
@@ -56,5 +57,20 @@ public class UHTeamDeathEvent extends UHEvent
     public UHTeam getTeam()
     {
         return team;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

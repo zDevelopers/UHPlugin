@@ -32,12 +32,15 @@
 
 package eu.carrade.amaury.UHCReloaded.events;
 
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+
+
 /**
  * Called when an episode changes.
  */
-public class UHEpisodeChangedEvent extends UHEvent
+public class UHEpisodeChangedEvent extends Event
 {
-
     private int newEpisode;
     private EpisodeChangedCause cause;
     private String shifter;
@@ -80,5 +83,20 @@ public class UHEpisodeChangedEvent extends UHEvent
     public String getShifter()
     {
         return shifter;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

@@ -33,6 +33,8 @@
 package eu.carrade.amaury.UHCReloaded.events;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
 /**
@@ -45,9 +47,8 @@ import org.bukkit.entity.Player;
  * </ul>
  * (i.e. when the message “the player is resurrected” is broadcasted).
  */
-public class UHPlayerResurrectedEvent extends UHEvent
+public class UHPlayerResurrectedEvent extends Event
 {
-
     private Player resurrectedPlayer;
 
     public UHPlayerResurrectedEvent(Player player)
@@ -63,5 +64,20 @@ public class UHPlayerResurrectedEvent extends UHEvent
     public Player getPlayer()
     {
         return resurrectedPlayer;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

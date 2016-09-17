@@ -339,7 +339,7 @@ public class GameListener implements Listener
      * @param ev
      */
     @EventHandler
-    public void onFoodUpdate(FoodLevelChangeEvent ev)
+    public void onFoodUpdate(final FoodLevelChangeEvent ev)
     {
         if (!p.getGameManager().isGameRunning())
         {
@@ -358,7 +358,7 @@ public class GameListener implements Listener
      * Used to display our custom state-based MOTD (if needed).
      */
     @EventHandler
-    public void onServerListPing(ServerListPingEvent ev)
+    public void onServerListPing(final ServerListPingEvent ev)
     {
         if (p.getMOTDManager().isEnabled())
         {
@@ -371,7 +371,7 @@ public class GameListener implements Listener
      * Used to prevent the player to login after his death (if needed).
      */
     @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent ev)
+    public void onPlayerLogin(final PlayerLoginEvent ev)
     {
         if (p.getGameManager().isGameStarted()
                 && p.getGameManager().isPlayerDead(ev.getPlayer())
@@ -509,7 +509,7 @@ public class GameListener implements Listener
      * Used to disable the achievements before the game.
      */
     @EventHandler
-    public void onPlayerAchievementAwarded(PlayerAchievementAwardedEvent ev)
+    public void onPlayerAchievementAwarded(final PlayerAchievementAwardedEvent ev)
     {
         if (!p.getGameManager().isGameStarted() && UHConfig.ACHIEVEMENTS.DISABLE_ACHIEVEMENTS_BEFORE_START.get())
         {
@@ -521,7 +521,7 @@ public class GameListener implements Listener
      * Used to disable the statistics before the game.
      */
     @EventHandler
-    public void onPlayerStatisticIncrement(PlayerStatisticIncrementEvent ev)
+    public void onPlayerStatisticIncrement(final PlayerStatisticIncrementEvent ev)
     {
         if (!p.getGameManager().isGameStarted() && UHConfig.STATISTICS.DISABLE_STATISTICS_BEFORE_START.get())
         {
@@ -560,7 +560,7 @@ public class GameListener implements Listener
      */
     // Priority LOWEST to be able to cancel the event before all other plugins
     @EventHandler (priority = EventPriority.LOWEST)
-    public void onAsyncPlayerChat(AsyncPlayerChatEvent ev)
+    public void onAsyncPlayerChat(final AsyncPlayerChatEvent ev)
     {
         // If the event is asynchronous, the message was sent by a "real" player.
         // Else, the message was sent by a plugin (like our /g command, or another plugin), and
@@ -587,7 +587,7 @@ public class GameListener implements Listener
      *  - hide an other timer when it is up.
      */
     @EventHandler
-    public void onTimerEnds(TimerEndsEvent ev)
+    public void onTimerEnds(final TimerEndsEvent ev)
     {
         p.getTimerManager().updateStartedTimersList();
 
@@ -615,7 +615,7 @@ public class GameListener implements Listener
      *  - display a timer when it is started.
      */
     @EventHandler
-    public void onTimerStarts(TimerStartsEvent ev)
+    public void onTimerStarts(final TimerStartsEvent ev)
     {
         p.getTimerManager().updateStartedTimersList();
 
@@ -630,7 +630,7 @@ public class GameListener implements Listener
      * Used to broadcast the episode change.
      */
     @EventHandler
-    public void onEpisodeChange(UHEpisodeChangedEvent ev)
+    public void onEpisodeChange(final UHEpisodeChangedEvent ev)
     {
         String message;
 
@@ -669,7 +669,7 @@ public class GameListener implements Listener
      *  - schedule the commands executed after the beginning of the game.
      */
     @EventHandler
-    public void onGameStarts(UHGameStartsEvent ev)
+    public void onGameStarts(final UHGameStartsEvent ev)
     {
         // Start sound
         new UHSound(UHConfig.START.SOUND).broadcast();
@@ -769,8 +769,8 @@ public class GameListener implements Listener
      *  - broadcast the winner(s) and launch some fireworks if needed, a few seconds later;
      *  - schedule the commands executed after the end of the game.
      */
-    @EventHandler
-    public void onGameEnd(UHGameEndsEvent ev)
+    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onGameEnd(final UHGameEndsEvent ev)
     {
         if (UHConfig.FINISH.AUTO.DO.get())
         {
@@ -808,7 +808,7 @@ public class GameListener implements Listener
      *  - update the MOTD.
      */
     @EventHandler
-    public void onPlayerResurrected(UHPlayerResurrectedEvent ev)
+    public void onPlayerResurrected(final UHPlayerResurrectedEvent ev)
     {
         // Spectator mode disabled
         p.getSpectatorsManager().setSpectating(ev.getPlayer(), false);
