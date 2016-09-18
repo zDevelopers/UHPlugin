@@ -336,16 +336,16 @@ public class UHGameManager
 
             /// In the sentence: "Or click here to generate the spawns randomly."
             RawMessage.send(sender, new RawText(I.t("Or"))
-                            .then(" ")
-                                    /// In the sentence: "Or click here to generate the spawns randomly."
-                            .then(I.t("click here"))
-                            .color(ChatColor.GREEN).style(ChatColor.BOLD)
-                            .command("/uh spawns generate random")
-                            .hover(new RawText("/uh spawns generate random"))
-                            .then(" ")
-                                    /// In the sentence: "Or click here to generate the spawns randomly."
-                            .then(I.t("to generate the spawns randomly.")).color(ChatColor.WHITE)
-                            .build()
+                    .then(" ")
+                    /// In the sentence: "Or click here to generate the spawns randomly."
+                    .then(I.t("click here"))
+                        .color(ChatColor.GREEN).style(ChatColor.BOLD)
+                        .command("/uh spawns generate random")
+                        .hover(new RawText("/uh spawns generate random"))
+                    .then(" ")
+                    /// In the sentence: "Or click here to generate the spawns randomly."
+                    .then(I.t("to generate the spawns randomly.")).color(ChatColor.WHITE)
+                    .build()
             );
 
             // We clears the teams created on-the-fly
