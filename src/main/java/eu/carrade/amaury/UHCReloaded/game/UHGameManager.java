@@ -44,19 +44,23 @@ import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
+import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.tools.Callback;
-import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.ActionBar;
+import fr.zcraft.zlib.tools.text.RawMessage;
 import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -330,6 +334,20 @@ public class UHGameManager
             sender.sendMessage(I.t("{ce}Unable to start the game: not enough teleportation spots."));
             sender.sendMessage(I.t("{ci}You can use {cc}/uh spawns generate <random|circular|grid>{ci} to generate the missing spawns automatically."));
 
+            /// In the sentence: "Or click here to generate the spawns randomly."
+            RawMessage.send(sender, new RawText(I.t("Or"))
+                            .then(" ")
+                                    /// In the sentence: "Or click here to generate the spawns randomly."
+                            .then(I.t("click here"))
+                            .color(ChatColor.GREEN).style(ChatColor.BOLD)
+                            .command("/uh spawns generate random")
+                            .hover(new RawText("/uh spawns generate random"))
+                            .then(" ")
+                                    /// In the sentence: "Or click here to generate the spawns randomly."
+                            .then(I.t("to generate the spawns randomly.")).color(ChatColor.WHITE)
+                            .build()
+            );
+
             // We clears the teams created on-the-fly
             for (UHTeam team : onTheFlyTeams)
             {
@@ -381,15 +399,48 @@ public class UHGameManager
         {
             if (team.isEmpty()) continue;
 
+            Material cageMaterial = null;
+            Byte cageData = null;
+
+            if (UHConfig.START.SLOW.CAGES.ENABLED.get())
+            {
+                switch (UHConfig.START.SLOW.CAGES.TYPE.get())
+                {
+                    case TEAM_COLOR_TRANSPARENT:
+                        cageMaterial = Material.STAINED_GLASS;
+                        cageData = ColorsUtils.chat2Dye(team.getColor().toChatColor()).getWoolData();
+                        break;
+
+                    case TEAM_COLOR_SOLID:
+                        cageMaterial = Material.STAINED_CLAY;
+                        cageData = ColorsUtils.chat2Dye(team.getColor().toChatColor()).getWoolData();
+                        break;
+
+                    case CUSTOM:
+                        cageMaterial = UHConfig.START.SLOW.CAGES.CUSTOM_BLOCK.get();
+                        break;
+                }
+            }
+
             if (!ignoreTeams && gameWithTeams)
             {
                 final Location teamSpawn = unusedTP.poll();
+
+                Cage cage = null;
+                if (cageMaterial != null)
+                {
+                    cage = new Cage(teamSpawn, UHConfig.START.SLOW.CAGES.BUILD_CEILING.get(), UHConfig.START.SLOW.CAGES.VISIBLE_WALLS.get());
+                    cage.setCustomMaterial(cageMaterial, cageData != null ? cageData : 0);
+                    cage.setInternalHeight(UHConfig.START.SLOW.CAGES.HEIGHT.get());
+                    cage.setRadius(UHConfig.START.SLOW.CAGES.RADIUS.get());
+                }
 
                 p.getDynmapIntegration().showSpawnLocation(team, teamSpawn);
 
                 for (final UUID player : team.getPlayersUUID())
                 {
                     teleporter.setSpawnForPlayer(player, teamSpawn);
+                    if (cage != null) teleporter.setCageForPlayer(player, cage);
                 }
             }
             else
@@ -398,7 +449,18 @@ public class UHGameManager
                 {
                     final Location playerSpawn = unusedTP.poll();
 
+                    Cage cage = null;
+                    if (cageMaterial != null)
+                    {
+                        cage = new Cage(playerSpawn, UHConfig.START.SLOW.CAGES.BUILD_CEILING.get(), UHConfig.START.SLOW.CAGES.VISIBLE_WALLS.get());
+                        cage.setCustomMaterial(cageMaterial, cageData != null ? cageData : 0);
+                        cage.setInternalHeight(UHConfig.START.SLOW.CAGES.HEIGHT.get());
+                        cage.setRadius(UHConfig.START.SLOW.CAGES.RADIUS.get());
+                    }
+
                     teleporter.setSpawnForPlayer(player, playerSpawn);
+                    if (cage != null) teleporter.setCageForPlayer(player, cage);
+
                     p.getDynmapIntegration().showSpawnLocation(Bukkit.getOfflinePlayer(player), playerSpawn);
                 }
             }
@@ -409,8 +471,9 @@ public class UHGameManager
             slowStartInProgress = true;
             slowStartTPFinished = false;
 
-            // The players are frozen during the start.
-            p.getFreezer().setGlobalFreezeState(true, false);
+            // The players are frozen during the start (if cages are not used).
+            if (!UHConfig.START.SLOW.CAGES.ENABLED.get())
+                p.getFreezer().setGlobalFreezeState(true, false);
 
             // A simple information, because this start is slower (yeah, Captain Obvious here)
             p.getServer().broadcastMessage(I.t("{lightpurple}Teleportation in progress... Please wait."));
@@ -450,17 +513,24 @@ public class UHGameManager
                         {
                             sender.sendMessage(I.t("{gray}Player {0}{gray} teleported.", player.getName()));
 
-                            RunTask.nextTick(new Runnable() {
-                                @Override
-                                public void run()
+                            if (!UHConfig.START.SLOW.CAGES.ENABLED.get())
+                            {
+                                RunTask.nextTick(new Runnable()
                                 {
-                                    player.setAllowFlight(true);
-                                    player.setFlying(true);
-                                }
-                            });
+                                    @Override
+                                    public void run()
+                                    {
+                                        player.setAllowFlight(true);
+                                        player.setFlying(true);
+                                    }
+                                });
+                            }
                         }
 
-                        player.setGameMode(GameMode.SURVIVAL);
+                        if (UHConfig.START.SLOW.CAGES.ENABLED.get())
+                            player.setGameMode(GameMode.ADVENTURE);
+                        else
+                            player.setGameMode(GameMode.SURVIVAL);
 
                         player.setHealth(20D);
                         player.setFoodLevel(20);
@@ -539,7 +609,7 @@ public class UHGameManager
     {
         if (!slowStartInProgress)
         {
-            sender.sendMessage(I.t("{ce}Please execute {cc}/uh start slow{ce} before."));
+            sender.sendMessage(I.t("{ce}Please execute {cc}/uh start slow:true{ce} before."));
             return;
         }
 
@@ -550,15 +620,29 @@ public class UHGameManager
         }
 
         // The freeze is removed.
-        p.getFreezer().setGlobalFreezeState(false, false);
-
-        // The fly is removed to everyone
-        for (Player player : p.getServer().getOnlinePlayers())
+        if (!UHConfig.START.SLOW.CAGES.ENABLED.get())
         {
-            if (alivePlayers.contains(player.getUniqueId()))
+            p.getFreezer().setGlobalFreezeState(false, false);
+
+            // The fly is removed to everyone
+            for (Player player : p.getServer().getOnlinePlayers())
             {
-                player.setFlying(false);
-                player.setAllowFlight(false);
+                if (alivePlayers.contains(player.getUniqueId()))
+                {
+                    player.setFlying(false);
+                    player.setAllowFlight(false);
+                }
+            }
+        }
+        else
+        {
+            // Survival gamemode for everyone
+            for (Player player : p.getServer().getOnlinePlayers())
+            {
+                if (alivePlayers.contains(player.getUniqueId()))
+                {
+                    player.setGameMode(GameMode.SURVIVAL);
+                }
             }
         }
 
@@ -669,8 +753,9 @@ public class UHGameManager
     }
 
     /**
-     * Sends two ProTips: - about the team chat, to all players, 20 seconds after the beginning of
-     * the game; - about the invincibility, 5 seconds after the beginning of the game.
+     * Sends two ProTips:
+     * - about the team chat, to all players, 20 seconds after the beginning of the game;
+     * - about the invincibility, 5 seconds after the beginning of the game.
      */
     private void sendStartupProTips()
     {
@@ -712,8 +797,10 @@ public class UHGameManager
     {
         p.getFreezer().setGlobalFreezeState(false);
 
-        this.gameStarted = true;
-        this.gameFinished = false;
+        teleporter.cleanup();
+
+        gameStarted = true;
+        gameFinished = false;
 
         updateAliveCache();
 
@@ -722,9 +809,7 @@ public class UHGameManager
     }
 
     /**
-     * Returns true if the slow start is in progress.
-     *
-     * @return
+     * @return true if the slow start is in progress.
      */
     public boolean isSlowStartInProgress()
     {

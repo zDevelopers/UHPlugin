@@ -1,23 +1,21 @@
 package eu.carrade.amaury.UHCReloaded;
 
 import eu.carrade.amaury.UHCReloaded.borders.MapShape;
+import eu.carrade.amaury.UHCReloaded.game.Cage;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import fr.zcraft.zlib.components.configuration.Configuration;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;
 import fr.zcraft.zlib.components.configuration.ConfigurationList;
+import fr.zcraft.zlib.components.configuration.ConfigurationMap;
 import fr.zcraft.zlib.components.configuration.ConfigurationSection;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.util.Vector;
 
-import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
-import static fr.zcraft.zlib.components.configuration.ConfigurationItem.list;
-import static fr.zcraft.zlib.components.configuration.ConfigurationItem.section;
-import static fr.zcraft.zlib.components.configuration.ConfigurationItem.map;
-import fr.zcraft.zlib.components.configuration.ConfigurationMap;
-import org.bukkit.inventory.meta.BannerMeta;
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.*;
 
 
 public class UHConfig extends Configuration
@@ -213,7 +211,7 @@ public class UHConfig extends Configuration
 
         static public class InventorySection extends ConfigurationSection
         {
-            public final ConfigurationItem<Boolean> CLEAR = item("clear", true);
+            public final ConfigurationItem<Boolean> CLEAR = item("destroy", true);
             public final ConfigurationItem<Boolean> PREVENT_USAGE = item("preventUsage", true);
             public final ConfigurationItem<Boolean> ALLOW_FOR_BUILDERS = item("allowForBuilders", true);
         }
@@ -241,6 +239,19 @@ public class UHConfig extends Configuration
         {
             public final ConfigurationItem<Long> DELAY_BETWEEN_TP = item("delayBetweenTP", 3l);
             public final ConfigurationItem<Boolean> BROADCAST_PROGRESS = item("broadcastProgress", true);
+
+            public final CagesSection CAGES = section("cages", CagesSection.class);
+
+            static public class CagesSection extends ConfigurationSection
+            {
+                public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
+                public final ConfigurationItem<Cage.CageType> TYPE = item("type", Cage.CageType.TEAM_COLOR_TRANSPARENT);
+                public final ConfigurationItem<Material> CUSTOM_BLOCK = item("customBlock", Material.BARRIER);
+                public final ConfigurationItem<Boolean> BUILD_CEILING = item("buildCeiling", false);
+                public final ConfigurationItem<Boolean> VISIBLE_WALLS = item("visibleWalls", false);
+                public final ConfigurationItem<Integer> RADIUS = item("radius", 1);
+                public final ConfigurationItem<Integer> HEIGHT = item("height", 3);
+            }
         }
 
         public final SoundSection SOUND = section("sound", SoundSection.class);

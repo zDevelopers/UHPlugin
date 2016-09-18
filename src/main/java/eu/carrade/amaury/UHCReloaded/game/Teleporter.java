@@ -56,6 +56,11 @@ public class Teleporter
      */
     private final Map<UUID, Location> spawnPoints = new HashMap<>();
 
+    /**
+     * The cages generated for each team
+     */
+    private final Map<UUID, Cage> cages = new HashMap<>();
+
 
     /**
      * Called when a player is teleported, during the teleportation process.
@@ -89,7 +94,7 @@ public class Teleporter
      * @param playerUUID The player's UUID.
      * @param spawn      The spawn location.
      */
-    public void setSpawnForPlayer(UUID playerUUID, Location spawn)
+    public void setSpawnForPlayer(final UUID playerUUID, final Location spawn)
     {
         spawnPoints.put(playerUUID, spawn);
     }
@@ -100,7 +105,7 @@ public class Teleporter
      * @param playerUUID The player UUID.
      * @return {@code true} if a spawn point is registered.
      */
-    public boolean hasSpawnForPlayer(UUID playerUUID)
+    public boolean hasSpawnForPlayer(final UUID playerUUID)
     {
         return spawnPoints.containsKey(playerUUID);
     }
@@ -109,10 +114,42 @@ public class Teleporter
      * @param playerUUID A player's UUID.
      * @return The registered spawn point for that player, or {@code null} if no-one was ever registered.
      */
-    public Location getSpawnForPlayer(UUID playerUUID)
+    public Location getSpawnForPlayer(final UUID playerUUID)
     {
         return spawnPoints.get(playerUUID).clone();
     }
+
+
+    /**
+     * Registers a cage for a player.
+     *
+     * @param player The player
+     * @param cage The cage
+     */
+    public void setCageForPlayer(final UUID player, final Cage cage)
+    {
+        cages.put(player, cage);
+    }
+
+    /**
+     * Checks if a cage is registered for the given player.
+     * @param player The player.
+     * @return {@code true} if a cage is registered.
+     */
+    public boolean hasCageForPlayer(final UUID player)
+    {
+        return cages.containsKey(player);
+    }
+
+    /**
+     * @param player A player
+     * @return The registered {@link Cage} for this player, or {@code null} if no one is registered.
+     */
+    public Cage getCageForPlayer(final UUID player)
+    {
+        return cages.get(player);
+    }
+
 
     /**
      * Teleports the given player to the spawn point.
@@ -137,6 +174,12 @@ public class Teleporter
 
         else if (teleportOnGround)
             spawn = spawn.getWorld().getHighestBlockAt(spawn).getLocation().add(0, 2, 0);
+
+        if (!teleportOnGround)
+        {
+            final Cage cage = cages.get(playerUUID);
+            if (cage != null) cage.build();
+        }
 
         player.teleport(spawn);
         return true;
@@ -237,5 +280,14 @@ public class Teleporter
             new TeleportationRunnable(this, spawnPoints.keySet(), onTeleportation, onTeleportationSuccessful, onTeleportationFailed, onTeleportationProcessFinished)
                     .runTaskTimer(UHCReloaded.get(), 1l, UHConfig.START.SLOW.DELAY_BETWEEN_TP.get() * 20l);
         }
+    }
+
+    /**
+     * Cleanups the cages left by the teleportation process, to be executed when the game really starts.
+     */
+    public void cleanup()
+    {
+        for (final Cage nicolas : cages.values()) // sorry
+            nicolas.destroy();
     }
 }
