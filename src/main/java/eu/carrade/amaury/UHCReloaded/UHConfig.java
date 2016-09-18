@@ -211,7 +211,7 @@ public class UHConfig extends Configuration
 
         static public class InventorySection extends ConfigurationSection
         {
-            public final ConfigurationItem<Boolean> CLEAR = item("destroy", true);
+            public final ConfigurationItem<Boolean> CLEAR = item("clear", true);
             public final ConfigurationItem<Boolean> PREVENT_USAGE = item("preventUsage", true);
             public final ConfigurationItem<Boolean> ALLOW_FOR_BUILDERS = item("allowForBuilders", true);
         }
