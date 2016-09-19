@@ -59,7 +59,8 @@ public class Cage
 
 
     /**
-     * @param baseLocation The cage base location (where a player can be teleported to be on the ground).
+     * @param baseLocation The cage base location (where a player can be
+     *                     teleported to be on the ground).
      * @param buildCeiling {@code true} to build the ceiling of the cage.
      */
     public Cage(Location baseLocation, boolean buildCeiling, boolean visibleWalls)
@@ -70,9 +71,10 @@ public class Cage
     }
 
     /**
-     * Sets the custom material to use if the cage type is set to {@link eu.carrade.amaury.UHCReloaded.game.Cage.CageType#CUSTOM CUSTOM}.
-     * @param customMaterial a material.
-     * @param data the data value (or {@code null}).
+     * Sets the custom material to use.
+     *
+     * @param customMaterial A material.
+     * @param data           The data value (or {@code null}).
      */
     public void setCustomMaterial(Material customMaterial, MaterialData data)
     {
@@ -81,9 +83,10 @@ public class Cage
     }
 
     /**
-     * Sets the custom material to use if the cage type is set to {@link eu.carrade.amaury.UHCReloaded.game.Cage.CageType#CUSTOM CUSTOM}.
-     * @param customMaterial a material.
-     * @param data the data value (or {@code null}).
+     * Sets the custom material to use.
+     *
+     * @param customMaterial A material.
+     * @param data           The data value.
      */
     public void setCustomMaterial(Material customMaterial, byte data)
     {
@@ -91,8 +94,9 @@ public class Cage
     }
 
     /**
-     * Sets the custom material to use if the cage type is set to {@link eu.carrade.amaury.UHCReloaded.game.Cage.CageType#CUSTOM CUSTOM}.
-     * @param customMaterial a material.
+     * Sets the custom material to use.
+     *
+     * @param customMaterial A material.
      */
     public void setCustomMaterial(Material customMaterial)
     {
@@ -101,8 +105,10 @@ public class Cage
 
 
     /**
-     * Sets the internal height, i.e. the height of the open space for players (the ceiling will be above this height, and the ground under).
-     * @param internalHeight the height.
+     * Sets the internal height, i.e. the height of the open space for players
+     * (the ceiling will be above this height, and the ground under).
+     *
+     * @param internalHeight The height.
      */
     public void setInternalHeight(int internalHeight)
     {
@@ -112,9 +118,8 @@ public class Cage
     /**
      * Sets the square radius of the cage.
      *
-     * With 0, you'll have a cage with one block to walk.
-     * With 1, you'll have a 3×3 cage.
-     * With 2, a 5×5 cage. Etc.
+     * With 0, you'll have a cage with one block to walk. With 1, you'll have a
+     * 3×3 cage. With 2, a 5×5 cage. Etc.
      *
      * @param radius The radius.
      */
@@ -139,7 +144,7 @@ public class Cage
      *
      * @param location The location
      * @param material The block material
-     * @param data The block data value (as byte)
+     * @param data     The block data value (as byte)
      */
     private void setBlock(final Location location, final Material material, final byte data)
     {
@@ -151,7 +156,7 @@ public class Cage
      *
      * @param location The location
      * @param material The block material
-     * @param data The block data value (as {@link MaterialData})
+     * @param data     The block data value (as {@link MaterialData})
      */
     private void setBlock(final Location location, final Material material, final MaterialData data)
     {
@@ -184,15 +189,15 @@ public class Cage
         // Builds the base barrier square under any cage, to support falling blocks and to avoid players falling
         // through the blocks when teleported
 
-        for (int x = xMin ; x <= xMax ; x++)
-            for (int z = zMin ; z <= zMax ; z++)
+        for (int x = xMin; x <= xMax; x++)
+            for (int z = zMin; z <= zMax; z++)
                 setBlock(new Location(world, x, baseLocation.getBlockY() - 2, z), Material.BARRIER);
 
 
         // Builds the ground
 
-        for (int x = xMin + 1 ; x <= xMax - 1 ; x++)
-            for (int z = zMin + 1 ; z <= zMax - 1 ; z++)
+        for (int x = xMin + 1; x <= xMax - 1; x++)
+            for (int z = zMin + 1; z <= zMax - 1; z++)
                 setBlock(new Location(world, x, baseLocation.getBlockY() - 1, z), material, materialData);
 
 
@@ -201,7 +206,7 @@ public class Cage
         final Material wallsMaterial = visibleWalls ? material : Material.BARRIER;
         final MaterialData wallsMaterialData = visibleWalls ? materialData : null;
 
-        for (int x = xMin ; x <= xMax ; x++)
+        for (int x = xMin; x <= xMax; x++)
         {
             for (int y = baseLocation.getBlockY() - 1; y < baseLocation.getBlockY() + internalHeight; y++)
             {
@@ -210,7 +215,7 @@ public class Cage
             }
         }
 
-        for (int z = zMin ; z <= zMax ; z++)
+        for (int z = zMin; z <= zMax; z++)
         {
             for (int y = baseLocation.getBlockY() - 1; y < baseLocation.getBlockY() + internalHeight; y++)
             {
@@ -235,8 +240,8 @@ public class Cage
             zMaxCeiling--;
         }
 
-        for (int x = xMinCeiling ; x <= xMaxCeiling ; x++)
-            for (int z = zMinCeiling ; z <= zMaxCeiling ; z++)
+        for (int x = xMinCeiling; x <= xMaxCeiling; x++)
+            for (int z = zMinCeiling; z <= zMaxCeiling; z++)
                 setBlock(new Location(world, x, baseLocation.getBlockY() + internalHeight, z), ceilingMaterial, ceilingMaterialData);
 
         built = true;
@@ -262,13 +267,33 @@ public class Cage
     }
 
 
+    /**
+     * Cage type, enum used for the configuration
+     */
     public enum CageType
     {
+        /**
+         * Cages in stained glass, using the team color (or the closest color
+         * available).
+         */
         TEAM_COLOR_TRANSPARENT,
+
+        /**
+         * Cages in stained hardened clay, using the team color (or the closest
+         * color available).
+         */
         TEAM_COLOR_SOLID,
+
+        /**
+         * Cages in a custom provided block.
+         */
         CUSTOM
     }
 
+    /**
+     * A block + data value (storage class used to restore old blocks when the
+     * cage is destroyed).
+     */
     private class SimpleBlock
     {
         public Material material;
