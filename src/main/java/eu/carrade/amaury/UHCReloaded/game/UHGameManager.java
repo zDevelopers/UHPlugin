@@ -634,17 +634,6 @@ public class UHGameManager
                 }
             }
         }
-        else
-        {
-            // Survival gamemode for everyone
-            for (Player player : p.getServer().getOnlinePlayers())
-            {
-                if (alivePlayers.contains(player.getUniqueId()))
-                {
-                    player.setGameMode(GameMode.SURVIVAL);
-                }
-            }
-        }
 
         // The action bar is cleared
         if (BROADCAST_SLOW_START_PROGRESS)
@@ -803,6 +792,15 @@ public class UHGameManager
         gameFinished = false;
 
         updateAliveCache();
+
+        // Survival gamemode for everyone
+        for (Player player : p.getServer().getOnlinePlayers())
+        {
+            if (alivePlayers.contains(player.getUniqueId()))
+            {
+                player.setGameMode(GameMode.SURVIVAL);
+            }
+        }
 
         // Fires the event
         p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
