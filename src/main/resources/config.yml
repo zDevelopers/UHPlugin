@@ -270,6 +270,9 @@ start:
     # Format: "mm", "mm:ss", "hh:mm:ss"
     gracePeriod: "00:30"
 
+    # If true, a message will be broadcasted when the grace period ends.
+    broadcastGraceEnd: true
+
     # PVP is enabled after this amount of time.
     # If 0, enabled immediately.
     # Format: "mm", "mm:ss", "hh:mm:ss"

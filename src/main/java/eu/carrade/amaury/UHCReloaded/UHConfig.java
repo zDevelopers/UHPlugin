@@ -258,6 +258,7 @@ public class UHConfig extends Configuration
 
         public final ConfigurationItem<Boolean> DISPLAY_TITLE = item("displayTitle", true);
         public final ConfigurationItem<String> GRACE_PERIOD = item("gracePeriod", "00:30");
+        public final ConfigurationItem<Boolean> BROADCAST_GRACE_END = item("broadcastGraceEnd", true);
         public final ConfigurationItem<String> PEACE_PERIOD = item("peacePeriod", "00");
         public final ConfigurationItem<String> SURFACE_MOBS_FREE_PERIOD = item("surfaceMobsFreePeriod", "15:00");
     }

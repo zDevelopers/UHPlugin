@@ -708,6 +708,11 @@ public class UHGameManager
             public void run()
             {
                 damagesEnabled = true;
+
+                if (UHConfig.START.BROADCAST_GRACE_END.get())
+                {
+                    Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} The grace period ended, you are now vulnerable."));
+                }
             }
         }, GRACE_PERIOD);
 
