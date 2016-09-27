@@ -31,6 +31,8 @@
  */
 package eu.carrade.amaury.UHCReloaded;
 
+import fr.zcraft.zlib.components.configuration.Configuration;
+import fr.zcraft.zlib.components.configuration.ConfigurationItem;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.i18n.I18n;
 import fr.zcraft.zlib.core.ZLib;
@@ -48,6 +50,14 @@ public class TestsUtils
 {
     private static boolean staticPluginMocked = false;
     private static boolean i18nMocked = false;
+
+    public static void mockConfig()
+    {
+        PowerMockito.mockStatic(UHConfig.class);
+        PowerMockito.mockStatic(ConfigurationItem.class);
+
+        Configuration.init(UHConfig.class);
+    }
 
     public static void mockI18n()
     {

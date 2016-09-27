@@ -57,6 +57,7 @@ public class TestCommandsAnnotation
 	{
 		TestsUtils.mockStaticPlugin();
 		TestsUtils.mockI18n();
+		TestsUtils.mockConfig();
 
 		// Data
 		Set<AbstractCommandExecutor> executors = new HashSet<>();
