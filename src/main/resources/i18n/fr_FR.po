@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-12 16:25+0200\n"
-"PO-Revision-Date: 2016-05-12 17:44+0100\n"
+"POT-Creation-Date: 2016-09-27 15:10+0200\n"
+"PO-Revision-Date: 2016-09-27 15:16+0100\n"
 "Last-Translator: Amaury Carrade\n"
 "Language-Team: Amaury Carrade\n"
 "Language: fr_FR\n"
@@ -1210,7 +1210,7 @@ msgstr ""
 "donnée."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamBannerCommand.java:74
-#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamBannerResetCommand.java:76
+#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamBannerResetCommand.java:77
 msgid "{ce}Either this team does not exists, or you are not in a team."
 msgstr "{ce}Cette équipe n'existe pas, ou vous n'êtes pas dans une équipe."
 
@@ -1235,16 +1235,16 @@ msgstr ""
 "l'équipe n'est pas spécifié, celle de l'exécuteur est utilisée."
 
 #. Error message of /uh team bannerreset from the console without name
-#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamBannerResetCommand.java:70
+#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamBannerResetCommand.java:71
 msgid "{ce}From the console, you must provide a team name."
 msgstr "{ce}Depuis la console, vous devez préciser le nom d'une équipe."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamBannerResetCommand.java:81
+#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamBannerResetCommand.java:82
 msgid ""
 "{cs}The banner of the team {0}{cs} was successfully reset to the default one."
 msgstr "{cs}La bannière de l'équipe {0}{cs} a été réinitialisée avec succès."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamBannerResetCommand.java:107
+#: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamBannerResetCommand.java:108
 msgid ""
 "{cc}/uh team bannerreset [team name ...] {ci}: resets the banner of the team "
 "to the default. If the team name is not provided, uses the sender's team."
@@ -1513,11 +1513,11 @@ msgstr "{ce}Vous n'avez pas le droit d'exécuter cette commande."
 msgid "{ce}This can only be executed as a player."
 msgstr "{ce}Vous ne pouvez exécuter cela qu'en étant un joueur."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:330
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:334
 msgid "{ce}Unable to start the game: not enough teleportation spots."
 msgstr "{ce}Impossible de démarrer : pas assez de points de téléportation."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:331
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:335
 msgid ""
 "{ci}You can use {cc}/uh spawns generate <random|circular|grid>{ci} to "
 "generate the missing spawns automatically."
@@ -1525,57 +1525,79 @@ msgstr ""
 "{ci}Vous pouvez utiliser {cc}/uh spawns generate <random|circular|grid>{ci} "
 "pour automatiquement générer les points de téléportation manquant."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:416
+#. In the sentence: "Or click here to generate the spawns randomly."
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:338
+msgid "Or"
+msgstr "Ou"
+
+#. In the sentence: "Or click here to generate the spawns randomly."
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:341
+msgid "click here"
+msgstr "cliquez ici"
+
+#. In the sentence: "Or click here to generate the spawns randomly."
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:347
+msgid "to generate the spawns randomly."
+msgstr "afin de générer les points de démarrage aléatoirement."
+
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:479
 msgid "{lightpurple}Teleportation in progress... Please wait."
 msgstr "{lightpurple}Téléportation en cours... Merci de patienter."
 
 #. Displayed in the action bar while the slow teleportation occurs.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:431
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:494
 msgid "{lightpurple}Teleporting... {gray}({0}/{1})"
 msgstr "{lightpurple}Téléportation... {gray}({0}/{1})"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:451
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:514
 msgid "{gray}Player {0}{gray} teleported."
 msgstr "{gray}Joueur {0}{gray} téléporté."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:503
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:573
 msgid "{cs}All teams are teleported."
 msgstr "{cs}Toutes les équipes ont été téléportées."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:504
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:574
 msgid "{gray}Use {cc}/uh start slow go{gray} to start the game."
 msgstr "{gray}Utilisez {cc}/uh start slow go{gray} pour démarrer le jeu."
 
 #. Displayed in the action bar when the slow teleportation is finished but the game not started.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:511
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:581
 msgid "{lightpurple}Teleportation complete. {gray}The game will start soon..."
 msgstr "{lightpurple}Téléportation terminée. {gray}Ça ne devrait pas tarder..."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:542
-msgid "{ce}Please execute {cc}/uh start slow{ce} before."
-msgstr "{ce}Veuillez exécuter {cc}/uh start slow{ce} avant."
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:612
+msgid "{ce}Please execute {cc}/uh start slow:true{ce} before."
+msgstr "{ce}Veuillez exécuter {cc}/uh start slow:true{ce} avant."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:548
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:618
 msgid "{ce}Please wait while the players are teleported."
 msgstr "{ce}Veuillez patienter, les équipes sont en train d'être téléportées."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:655
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:714
+msgid ""
+"{red}{bold}Warning!{white} The grace period ended, you are now vulnerable."
+msgstr ""
+"{red}{bold}Attention !{white} La période de grâce est terminée ; vous êtes "
+"désormais vulnérable."
+
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:733
 msgid "{red}{bold}Warning!{white} PvP is now enabled."
 msgstr "{red}{bold}Attention !{white} Le PvP est désormais actif."
 
 #. Spectators list item if the nick cannot be found
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:982
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1070
 #, java-format
 msgid "Unknown player with UUID {0}"
 msgstr "Joueur inconnu ayant l'UUID {0}"
 
 #. The "and" in the winners players list (like "player1, player2 and player3").
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1128
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1216
 msgctxt "winners_list"
 msgid "and"
 msgstr "et"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1140
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1228
 msgid ""
 "{darkgreen}{obfuscated}--{green} Congratulations to {0} (team {1}{green}) "
 "for their victory! {darkgreen}{obfuscated}--"
@@ -1583,7 +1605,7 @@ msgstr ""
 "{darkgreen}{obfuscated}--{green} Félicitations à {0} (équipe {1}{green}) "
 "pour leur victoire ! {darkgreen}{obfuscated}--"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1144
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1232
 msgid ""
 "{darkgreen}{obfuscated}--{green} Congratulations to {0} for his victory! "
 "{darkgreen}{obfuscated}--"
@@ -1593,18 +1615,18 @@ msgstr ""
 
 #. The main title of the /title displayed when a team wins the game. {0} becomes the team display name (with colors).
 #. The main title of the /title displayed when a player wins the game (in solo). {0} becomes the player display name (with colors).
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1156
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1163
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1244
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1251
 msgid "{darkgreen}{0}"
 msgstr "{darkgreen}{0}"
 
 #. The subtitle of the /title displayed when a team wins the game. {0} becomes the team display name (with colors).
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1158
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1246
 msgid "{green}This team wins the game!"
 msgstr "{green}Cette équipe remporte la victoire !"
 
 #. The subtitle of the /title displayed when a player wins the game (in solo). {0} becomes the player display name (with colors).
-#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1165
+#: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:1253
 msgid "{green}wins the game!"
 msgstr "{green}remporte la partie !"
 
@@ -2362,31 +2384,31 @@ msgid "{gold}[{0}{gold} -> team {1}{gold}] {reset}{2}"
 msgstr "{gold}[{0}{gold} -> équipe {1}{gold}] {reset}{2}"
 
 #. Invite displayed in the chat team selector
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:499
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:514
 msgid "{gold}Click on the names below to join a team"
 msgstr "{gold}Cliquez ci-dessous pour rejoindre une équipe"
 
 #. Displayed in team tooltip of the chat team selector for a dead player
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:520
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:535
 msgid "{0} ({red}dead{reset})"
 msgstr "{0} ({red}mort{reset})"
 
 #. Displayed in team tooltip of the chat team selector for an alive player
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:525
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:540
 msgid "{0} ({green}alive{reset})"
 msgstr "{0} ({green}en vie{reset})"
 
 #. Team count with max players (ex. [3/5]) followed in-game by the team name. {0} = current count, {1} = max.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:535
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:550
 msgid "{gray}[{white}{0}{gray}/{white}{1}{gray}]"
 msgstr "{gray}[{white}{0}{gray}/{white}{1}{gray}]"
 
 #. Team count without max players (ex. [3]) followed in-game by the team name. {0} = current count.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:537
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:552
 msgid "{gray}[{white}{0}{gray}]"
 msgstr "{gray}[{white}{0}{gray}]"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:539
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:554
 #, java-format
 msgid "{0} player in this team"
 msgid_plural "{0} players in this team"
@@ -2394,30 +2416,30 @@ msgstr[0] "{0} joueur dans cette équipe"
 msgstr[1] "{0} joueurs dans cette équipe"
 
 #. Tooltip on the chat team selector GUI when the player is in the team. {0} = team display name.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:550
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:565
 #, java-format
 msgid "You are in the team {0}"
 msgstr "Vous êtes dans l'équipe {0}"
 
 #. Tooltip on the chat team selector GUI when the player is not in the team. {0} = team display name.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:552
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:567
 #, java-format
 msgid "Click here to join the team {0}"
 msgstr "Cliquez ici pour rejoindre l'équipe {0}"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:562
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:577
 msgid "{darkred}[×] {red}Click here to leave your team"
 msgstr "{darkred}[×] {red}Cliquez ici pour quitter votre équipe"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:567
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:582
 msgid "{gray}Run /join to display this again"
 msgstr "{gray}Exécutez /join pour réafficher ceci"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:573
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:588
 msgid "{ce}There isn't any team available."
 msgstr "{ce}Il n'y a aucune équipe disponible."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:606
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/TeamManager.java:621
 msgid "{gold}Your team: {0}"
 msgstr "{gold}Votre équipe : {0}"
 
