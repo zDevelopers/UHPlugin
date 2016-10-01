@@ -40,6 +40,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -72,16 +73,19 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
      * @throws CannotGenerateSpawnPointsException In case of fail
      */
     @Override
-    public Set<Location> generate(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter, boolean avoidWater) throws CannotGenerateSpawnPointsException
+    public Set<Location> generate(final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter, final boolean avoidWater) throws CannotGenerateSpawnPointsException
     {
+        final double minimalDistanceBetweenTwoPointsSquared = Math.pow(minimalDistanceBetweenTwoPoints, 2);
+
+
         /** Possible? **/
 
         // If the surface of the map is too close of the sum of the surfaces of the private part
         // around each spawn point (a circle with, as radius, the minimal distance between two spawn
         // points), the generation will fail.
 
-        double surfacePrivatePartsAroundSpawnPoints = (int) (spawnCount * (Math.PI * Math.pow(minimalDistanceBetweenTwoPoints, 2)));
-        double surfaceRegion;
+        final double surfacePrivatePartsAroundSpawnPoints = (int) (spawnCount * (Math.PI * minimalDistanceBetweenTwoPointsSquared));
+        final double surfaceRegion;
         if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
         {
             surfaceRegion = (Math.PI * Math.pow(regionDiameter, 2)) / 4;
@@ -91,7 +95,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
             surfaceRegion = Math.pow(regionDiameter, 2);
         }
 
-        Double packingDensity = surfacePrivatePartsAroundSpawnPoints / surfaceRegion;
+        final double packingDensity = surfacePrivatePartsAroundSpawnPoints / surfaceRegion;
 
         // According to Lagrange and Thue's works on circle packagings, the highest density possible is
         // approximately 0.9069 (with an hexagonal arrangement of the circles).
@@ -104,7 +108,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
 
         /** Generation **/
 
-        Set<Location> randomSpawnPoints = new HashSet<>();
+        final Set<Location> randomSpawnPoints = new HashSet<>();
         int generatedSpawnPoints = 0;
 
         // If the first points are badly located, and if the density is high, the generation may
@@ -124,7 +128,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
             // "Too many fails" test
             if (currentErrorCount >= 16) // restart
             {
-                randomSpawnPoints = new HashSet<>();
+                randomSpawnPoints.clear();
                 generatedSpawnPoints = 0;
                 currentErrorCount = 0;
             }
@@ -151,10 +155,11 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
                 continue; // outside: nope
             }
 
-            Block surfaceBlock = world.getHighestBlockAt(randomPoint);
+            final Block surfaceAirBlock = world.getHighestBlockAt(randomPoint);
+            final Block surfaceBlock = surfaceAirBlock.getRelative(BlockFace.DOWN);
 
             // Safe spot available?
-            if (!UHUtils.isSafeSpot(surfaceBlock.getLocation()))
+            if (!UHUtils.isSafeSpot(surfaceAirBlock.getLocation()))
             {
                 continue; // not safe: nope
             }
@@ -172,7 +177,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
             // Is that point at a correct distance of the other ones?
             for (Location spawn : randomSpawnPoints)
             {
-                if (spawn.distance(randomPoint) < minimalDistanceBetweenTwoPoints)
+                if (spawn.distanceSquared(randomPoint) < minimalDistanceBetweenTwoPointsSquared)
                 {
                     currentErrorCount++;
                     continue generationLoop; // too close: nope

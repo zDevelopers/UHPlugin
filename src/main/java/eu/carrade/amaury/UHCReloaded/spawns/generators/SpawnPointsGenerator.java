@@ -64,5 +64,5 @@ public interface SpawnPointsGenerator
      *
      * @throws CannotGenerateSpawnPointsException In case of fail.
      */
-    Set<Location> generate(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter, boolean avoidWater) throws CannotGenerateSpawnPointsException;
+    Set<Location> generate(final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter, final boolean avoidWater) throws CannotGenerateSpawnPointsException;
 }

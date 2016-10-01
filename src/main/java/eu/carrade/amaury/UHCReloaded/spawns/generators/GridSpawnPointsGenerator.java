@@ -29,9 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-
 package eu.carrade.amaury.UHCReloaded.spawns.generators;
-
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.borders.MapShape;
@@ -41,6 +39,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -71,14 +70,14 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
      * @throws CannotGenerateSpawnPointsException In case of fail.
      */
     @Override
-    public Set<Location> generate(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter, boolean avoidWater) throws CannotGenerateSpawnPointsException
+    public Set<Location> generate(final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter, final boolean avoidWater) throws CannotGenerateSpawnPointsException
     {
         // We starts the generation on a smaller grid, to avoid false outside tests if the point is on the edge
-        int usedRegionDiameter = regionDiameter - 1;
+        final int usedRegionDiameter = regionDiameter - 1;
 
         // To check the possibility of the generation, we calculates the maximal number of columns/rows
         // possible, based on the minimal distance between two points.
-        int maxColumnsCount = (int) Math.ceil(usedRegionDiameter / minimalDistanceBetweenTwoPoints);
+        final int maxColumnsCount = (int) Math.ceil(usedRegionDiameter / minimalDistanceBetweenTwoPoints);
 
         // The points are on a grid
         int neededColumnsCount = (int) Math.ceil(Math.sqrt(spawnCount));
@@ -102,7 +101,7 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
 
 
         // We generates the points on a grid in squares, starting by the biggest square.
-        int distanceBetweenTwoPoints = (int) ((double) usedRegionDiameter / ((double) (neededColumnsCount - 1)));
+        final int distanceBetweenTwoPoints = (int) ((double) usedRegionDiameter / ((double) (neededColumnsCount)));
 
         // Check related to the case the column count was increased.
         if (distanceBetweenTwoPoints < minimalDistanceBetweenTwoPoints)
@@ -112,16 +111,16 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
 
 
         int countGeneratedPoints = 0;
-        HashSet<Location> generatedPoints = new HashSet<>();
+        final HashSet<Location> generatedPoints = new HashSet<>();
 
-        int halfDiameter = (int) Math.floor(usedRegionDiameter / 2);
+        final int halfDiameter = (int) Math.floor(usedRegionDiameter / 2);
 
         Integer currentSquareSize = usedRegionDiameter;
         Location currentSquareStartPoint = new Location(world, xCenter + halfDiameter, 0, zCenter - halfDiameter);
         Location currentPoint;
 
         // Represents the location to add on each side of the squares
-        Location[] addOnSide = new Location[4];
+        final Location[] addOnSide = new Location[4];
         addOnSide[0] = new Location(world, -distanceBetweenTwoPoints, 0, 0); // North side, direction east
         addOnSide[1] = new Location(world, 0, 0, distanceBetweenTwoPoints);  // East side,  direction south
         addOnSide[2] = new Location(world, distanceBetweenTwoPoints, 0, 0);  // South side, direction west
@@ -162,10 +161,11 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
                         continue;
                     }
 
-                    Block surfaceBlock = world.getHighestBlockAt(currentPoint);
+                    final Block surfaceAirBlock = world.getHighestBlockAt(currentPoint);
+                    final Block surfaceBlock = surfaceAirBlock.getRelative(BlockFace.DOWN);
 
                     // Safe spot available?
-                    if (!UHUtils.isSafeSpot(surfaceBlock.getLocation()))
+                    if (!UHUtils.isSafeSpot(surfaceAirBlock.getLocation()))
                     {
                         continue; // not safe: nope
                     }

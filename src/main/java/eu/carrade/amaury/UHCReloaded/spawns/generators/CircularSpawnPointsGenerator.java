@@ -39,6 +39,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -67,13 +68,13 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
      * @throws CannotGenerateSpawnPointsException In case of fail.
      */
     @Override
-    public Set<Location> generate(World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter, boolean avoidWater) throws CannotGenerateSpawnPointsException
+    public Set<Location> generate(final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter, final boolean avoidWater) throws CannotGenerateSpawnPointsException
     {
         // We starts the generation on a smaller grid, to avoid false outside tests if the point is on the edge
-        int usedRegionDiameter = regionDiameter - 1;
+        final int usedRegionDiameter = regionDiameter - 1;
 
         int countGeneratedPoints = 0;
-        Set<Location> generatedPoints = new HashSet<>();
+        final Set<Location> generatedPoints = new HashSet<>();
 
         int currentCircleDiameter = usedRegionDiameter;
 
@@ -90,10 +91,10 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
             // a = 2 Arcsin((d/2)/R)
             // (Just draw the situation, you'll see.)
 
-            double denseCircleAngle = 2 * Math.asin(((double) minimalDistanceBetweenTwoPoints / 2) / ((double) currentCircleDiameter / 2));
-            int pointsPerDenseCircles = (int) Math.floor(2 * Math.PI / denseCircleAngle);
+            final double denseCircleAngle = 2 * Math.asin(((double) minimalDistanceBetweenTwoPoints / 2) / ((double) currentCircleDiameter / 2));
+            final int pointsPerDenseCircles = (int) Math.floor(2 * Math.PI / denseCircleAngle);
 
-            double angleBetweenTwoPoints;
+            final double angleBetweenTwoPoints;
 
             // Not all the points can be in this circle. We generate the densiest circle.
             if (pointsPerDenseCircles < spawnCount - countGeneratedPoints)
@@ -109,7 +110,7 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
             }
 
             // Let's generate these points.
-            double startAngle = (new Random()).nextDouble() * 2 * Math.PI;
+            final double startAngle = (new Random()).nextDouble() * 2 * Math.PI;
             double currentAngle = startAngle;
 
             while (currentAngle <= 2 * Math.PI - angleBetweenTwoPoints + startAngle)
@@ -131,10 +132,11 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
                     continue;
                 }
 
-                Block surfaceBlock = world.getHighestBlockAt(point);
+                final Block surfaceAirBlock = world.getHighestBlockAt(point);
+                final Block surfaceBlock = surfaceAirBlock.getRelative(BlockFace.DOWN);
 
                 // Safe spot available?
-                if (!UHUtils.isSafeSpot(surfaceBlock.getLocation()))
+                if (!UHUtils.isSafeSpot(surfaceAirBlock.getLocation()))
                 {
                     continue; // not safe: nope
                 }
