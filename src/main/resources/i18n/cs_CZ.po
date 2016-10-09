@@ -852,7 +852,7 @@ msgstr "{darkaqua}Hra pozastavena"
 
 #. Title of the rules box.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/RulesManager.java:121
-msgid "{red}{bold}Rules and informations"
+msgid "{red}{bold}Rules and information"
 msgstr ""
 
 #. Rule item in the rule box.
@@ -1059,7 +1059,7 @@ msgid "Published under the CeCILL-B License."
 msgstr "Publikovano pod CeCILL-B License."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHAboutCommand.java:170
-msgid "{cc}/uh about {ci}: informations about the plugin and the translation."
+msgid "{cc}/uh about {ci}: information about the plugin and the translation."
 msgstr "{cc}/uh about {ci}: zobrazi informace o pluginu a jeho prekladu."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/border/UHBorderWarningCommand.java:67
@@ -1544,8 +1544,8 @@ msgstr "{ce}Tento hrace nehraje nebo neni mrtvy!"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHResurrectCommand.java:82
 msgid ""
-"{cs}Because {0} is offline, he will be resurrected when he logins. If he "
-"was, he is no longer banned."
+"{cs}Because {0} is offline, they will be resurrected when they login. If they "
+"were, they are no longer banned."
 msgstr ""
 "{cs}Protoze hrace {0} je offline, bude vzkristen po pripojeni. Pripadny ban "
 "byl odstranen."
@@ -1661,7 +1661,7 @@ msgid "{cc}/uh team gui {ci}: opens a GUI to join and manage the teams."
 msgstr ""
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamSpyCommand.java:70
-msgid "{ce}Cannot toggle the spy mode of {0} because he/she is offline."
+msgid "{ce}Cannot toggle the spy mode of {0} because they are offline."
 msgstr ""
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamSpyCommand.java:95
@@ -2031,7 +2031,7 @@ msgstr "{ce}{0} neni zivy hrac."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHKillCommand.java:127
 msgid ""
-"{cc}/uh kill <player> {ci}: mark a player as dead, even if he is offline."
+"{cc}/uh kill <player> {ci}: mark a player as dead, even if they are offline."
 msgstr ""
 "{cc}/uh kill <player> {ci}: oznaci hrace za mrtveho, i kdyz je offline."
 
@@ -2138,7 +2138,7 @@ msgid "{cs}Rules sent to {0}."
 msgstr ""
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHRulesCommand.java:79
-msgid "{ce}Cannot display the rules to {0} because he (or she) is offline."
+msgid "{ce}Cannot display the rules to {0} because they are offline."
 msgstr ""
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHRulesCommand.java:103

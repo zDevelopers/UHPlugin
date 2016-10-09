@@ -76,7 +76,7 @@ public class UHRulesCommand extends AbstractCommand
             }
             else
             {
-                sender.sendMessage(I.t("{ce}Cannot display the rules to {0} because he (or she) is offline.", args[0]));
+                sender.sendMessage(I.t("{ce}Cannot display the rules to {0} because they are offline.", args[0]));
             }
         }
         else

@@ -73,7 +73,7 @@ public class Freezer
 
     /**
      * Freezes a player, if needed.
-     * The player is blocked inside the block he is currently.
+     * The player is blocked inside the block they are currently.
      *
      * This method is intended to be executed when a player moves.
      *
@@ -85,7 +85,7 @@ public class Freezer
     {
         if (frozenPlayers.contains(player.getUniqueId()))
         {
-            // If the X, Y or Z coordinate of the player change, he needs to be teleported inside the old block.
+            // If the X, Y or Z coordinate of the player change, they need to be teleported inside the old block.
             // The yaw and pitch are conserved, to teleport more smoothly.
             if (from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() || from.getBlockZ() != to.getBlockZ())
             {
@@ -195,8 +195,8 @@ public class Freezer
             this.oldAllowFly.put(player.getUniqueId(), player.getAllowFlight());
             this.oldFlyMode.put(player.getUniqueId(), player.isFlying());
 
-            // Used to prevent the player to be kicked for fly if he was frozen during a fall.
-            // He is blocked inside his current block anyway.
+            // Used to prevent the player to be kicked for fly if they were frozen during a fall.
+            // they are blocked inside their current block anyway.
             player.setAllowFlight(true);
         }
 

@@ -46,7 +46,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This command marks a player as dead, even if he is offline.
+ * This command marks a player as dead, even if they are offline.
  *
  * If the player is online, this has the same effect as {@code /kill}.
  *
@@ -124,6 +124,6 @@ public class UHKillCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("{cc}/uh kill <player> {ci}: mark a player as dead, even if he is offline."));
+        return Collections.singletonList(I.t("{cc}/uh kill <player> {ci}: mark a player as dead, even if they are offline."));
     }
 }

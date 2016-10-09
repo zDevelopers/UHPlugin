@@ -50,7 +50,7 @@ import java.util.jar.Manifest;
 
 
 /**
- * This command prints some informations about the plugin and the translation.
+ * This command prints some information about the plugin and the translation.
  *
  * Usage: /uh about
  */
@@ -167,7 +167,7 @@ public class UHAboutCommand extends AbstractCommand
     @Override
     public List<String> onListHelp(CommandSender sender)
     {
-        return Collections.singletonList(I.t("{cc}/uh about {ci}: informations about the plugin and the translation."));
+        return Collections.singletonList(I.t("{cc}/uh about {ci}: information about the plugin and the translation."));
     }
 
     @Override

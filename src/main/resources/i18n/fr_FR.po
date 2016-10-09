@@ -176,7 +176,7 @@ msgid "Published under the CeCILL-B License."
 msgstr "Publié sous la licence CeCILL-B."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHAboutCommand.java:170
-msgid "{cc}/uh about {ci}: informations about the plugin and the translation."
+msgid "{cc}/uh about {ci}: information about the plugin and the translation."
 msgstr ""
 "{cc}/uh about {ci}: informations à propos du plugin et des traductions."
 
@@ -458,7 +458,7 @@ msgstr "{ce}{0} n'est pas un joueur vivant."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHKillCommand.java:127
 msgid ""
-"{cc}/uh kill <player> {ci}: mark a player as dead, even if he is offline."
+"{cc}/uh kill <player> {ci}: mark a player as dead, even if they are offline."
 msgstr ""
 "{cc}/uh kill <joueur> {ci}: marque un joueur comme mort, même s'il est hors-"
 "ligne."
@@ -507,8 +507,8 @@ msgstr "{ce}Ce joueur ne joue pas ou n'est pas mort !"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHResurrectCommand.java:82
 msgid ""
-"{cs}Because {0} is offline, he will be resurrected when he logins. If he "
-"was, he is no longer banned."
+"{cs}Because {0} is offline, they will be resurrected when they login. If they "
+"were, they are no longer banned."
 msgstr ""
 "{cs}Comme {0} est déconnecté, il sera ressuscité dés qu'il se connectera. "
 "S'il l'était, il n'est plus banni."
@@ -531,7 +531,7 @@ msgid "{cs}Rules sent to {0}."
 msgstr "{cs}Les règles ont été envoyées à {0}."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/UHRulesCommand.java:79
-msgid "{ce}Cannot display the rules to {0} because he (or she) is offline."
+msgid "{ce}Cannot display the rules to {0} because they are offline."
 msgstr ""
 "{ce}Impossible d'afficher les règles à {0} car il ou elle est hors-ligne."
 
@@ -1325,7 +1325,7 @@ msgid "{cc}/uh team reset {ci}: removes all teams."
 msgstr "{cc}/uh team reset {ci}: supprime toutes les équipes."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/commands/commands/uh/team/UHTeamSpyCommand.java:70
-msgid "{ce}Cannot toggle the spy mode of {0} because he/she is offline."
+msgid "{ce}Cannot toggle the spy mode of {0} because they are offline."
 msgstr ""
 "{ce}Impossible d'inverser le mode d'espoinnage de {0} car il (ou elle) n'est "
 "pas connecté(e)."
@@ -2137,7 +2137,7 @@ msgstr[1] "{0} équipes"
 
 #. Title of the rules box.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/misc/RulesManager.java:120
-msgid "{red}{bold}Rules and informations"
+msgid "{red}{bold}Rules and information"
 msgstr "{red}{bold}Règles et informations"
 
 #. Rule item in the rule box.

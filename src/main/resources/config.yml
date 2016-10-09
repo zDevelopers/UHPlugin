@@ -130,7 +130,7 @@ scoreboard:
                 suffix: "\u27A5"      # This string is displayed after the name of logged-out players
             displayMetPlayersOnly:
                 enabled: false               # If enabled, the sidebar will only contains players met at some time.
-                displayedWhenCloserThan: 10  # If enabled, a teammate will be displayed to the reference player if he/she is closer that this amount of blocks to the player.
+                displayedWhenCloserThan: 10  # If enabled, a teammate will be displayed to the reference player if they are closer that this amount of blocks to the player.
     border:
         displayed: true
         displayDiameter: false  # If true, displays the border diameter (ex. "2000 blocks wide"). Else, the min/max coordinates (ex. "-1000 +1000"). Ignored if the border is circular.
@@ -488,7 +488,7 @@ spectatorModeWhenNewPlayerJoinAfterStart: true
 
 
 
-# Rules are a way to display rules & other informations to the players.
+# Rules are a way to display rules & other information to the players.
 # The content is completly up to you, formatting included (using standard
 # formatting codes with either § or &). It will be displayed as a list to
 # the players (one bullet per line in the `rules.rules` entry).
