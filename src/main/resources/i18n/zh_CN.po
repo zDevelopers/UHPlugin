@@ -2068,8 +2068,8 @@ msgid "{cs}All teams are teleported."
 msgstr "{cs}所有队伍已被传送."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:487
-msgid "{gray}Use {cc}/uh start slow go{gray} to start the game."
-msgstr "{gray}请用 {cc}/uh start slow go{gray} 来开始游戏."
+msgid "{gray}Use {cc}/uh start{gray} or click here to start the game."
+msgstr "{gray}请用 {cc}/uh start{gray} 来开始游戏."
 
 #. Displayed in the action bar when the slow teleportation is finished but the
 #. game not started.

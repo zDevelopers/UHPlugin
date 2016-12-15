@@ -571,7 +571,10 @@ public class UHGameManager
                             try
                             {
                                 sender.sendMessage(I.t("{cs}All teams are teleported."));
-                                sender.sendMessage(I.t("{gray}Use {cc}/uh start slow go{gray} to start the game."));
+                                RawMessage.send(sender, new RawText(I.t("{gray}Use {cc}/uh start{gray} or click here to start the game."))
+                                        .hover(new RawText(I.t("Click here to start the game")))
+                                        .command("/uh start")
+                                );
                             }
                             catch (NullPointerException ignored) {}
 

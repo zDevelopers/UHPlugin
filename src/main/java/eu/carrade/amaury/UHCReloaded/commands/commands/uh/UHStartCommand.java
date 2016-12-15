@@ -51,7 +51,7 @@ import java.util.Map;
 /**
  * This command starts the game.
  *
- * Usage: /uh start [slow [go]]
+ * Usage: /uh start [slow:true] [ignoreTeams:true]
  */
 @Command (name = "start")
 public class UHStartCommand extends AbstractCommand
@@ -74,44 +74,33 @@ public class UHStartCommand extends AbstractCommand
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-
         if (args.length == 1 && args[0].equalsIgnoreCase("help"))
         {
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
         }
-
-        // /uh start slow go
-        else if (args.length == 2 && args[0].equalsIgnoreCase("slow") && args[1].equalsIgnoreCase("go"))
+        else if (p.getGameManager().isSlowStartInProgress())
         {
             p.getGameManager().finalizeStartSlow(sender);
+            return;
         }
 
-        else
+        final Map<String, String> defaultTags = new HashMap<>();
+        defaultTags.put("slow", "false");
+        defaultTags.put("ignoreTeams", "false");
+
+        final Map<String, String> tags = CommandUtils.getTagsInArgs(args, defaultTags);
+
+        try
         {
-            if (p.getGameManager().isSlowStartInProgress())
-            {
-                p.getGameManager().finalizeStartSlow(sender);
-                return;
-            }
-
-            Map<String, String> defaultTags = new HashMap<>();
-            defaultTags.put("slow", "false");
-            defaultTags.put("ignoreTeams", "false");
-
-            Map<String, String> tags = CommandUtils.getTagsInArgs(args, defaultTags);
-
-            try
-            {
-                p.getGameManager().start(sender, UHUtils.stringToBoolean(tags.get("slow")), UHUtils.stringToBoolean(tags.get("ignoreTeams")));
-            }
-            catch (IllegalStateException e)
-            {
-                sender.sendMessage(I.t("{ce}The game is already started! Reload or restart the server to restart the game."));
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            p.getGameManager().start(sender, UHUtils.stringToBoolean(tags.get("slow")), UHUtils.stringToBoolean(tags.get("ignoreTeams")));
+        }
+        catch (IllegalStateException e)
+        {
+            sender.sendMessage(I.t("{ce}The game is already started! Reload or restart the server to restart the game."));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -126,28 +115,15 @@ public class UHStartCommand extends AbstractCommand
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args)
     {
+        final List<String> suggestions = new ArrayList<>();
 
-        if (args.length == 2 && args[0].equalsIgnoreCase("slow"))
-        { // /uh start slow <?>
-            return CommandUtils.getAutocompleteSuggestions(args[1], Collections.singletonList("go"));
-        }
+        suggestions.add("slow:true");
+        suggestions.add("ignoreTeams:true");
 
-        else
-        {
-            // Can be improved
+        if (args.length == 1)
+            suggestions.add("help");
 
-            List<String> suggestions = new ArrayList<>();
-            suggestions.add("slow:true");
-            suggestions.add("ignoreTeams:true");
-
-            if (args.length == 1)
-            {
-                suggestions.add("slow");
-                suggestions.add("help");
-            }
-
-            return CommandUtils.getAutocompleteSuggestions(args[args.length - 1], suggestions);
-        }
+        return CommandUtils.getAutocompleteSuggestions(args[args.length - 1], suggestions);
     }
 
     @Override

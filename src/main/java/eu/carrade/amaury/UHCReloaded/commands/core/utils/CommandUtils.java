@@ -143,8 +143,8 @@ public class CommandUtils
         for (String arg : args)
         {
             String[] argSpilt = arg.split(":");
-            if (argSpilt.length >= 2)
-            { // valid
+            if (argSpilt.length >= 2)  // valid
+            {
                 String key = argSpilt[0];
                 String value = StringUtils.join(Arrays.copyOfRange(argSpilt, 1, argSpilt.length), ":");
 
