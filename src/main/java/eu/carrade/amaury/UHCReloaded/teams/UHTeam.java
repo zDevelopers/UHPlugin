@@ -275,6 +275,11 @@ public class UHTeam
         return getSize() == 0;
     }
 
+    public boolean isFull()
+    {
+        return plugin.getTeamManager().getMaxPlayersPerTeam() != 0 && getSize() >= plugin.getTeamManager().getMaxPlayersPerTeam();
+    }
+
     /**
      * Adds a player inside this team.
      *

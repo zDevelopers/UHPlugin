@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-15 14:41+0100\n"
-"PO-Revision-Date: 2016-12-15 14:42+0100\n"
+"POT-Creation-Date: 2016-12-19 16:34+0100\n"
+"PO-Revision-Date: 2016-12-19 16:35+0100\n"
 "Last-Translator: Amaury Carrade\n"
 "Language-Team: Amaury Carrade\n"
 "Language: fr_FR\n"
@@ -360,41 +360,45 @@ msgstr "{blue}Joueurs"
 msgid "{darkgray}- {white}{0}"
 msgstr "{darkgray}- {white}{0}"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:128
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:130
 msgid "{darkgray}» {white}Click {gray}to join this team"
 msgstr "{darkgray}» {white}Cliquez {gray}pour rejoindre l'équipe"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:132
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:134
+msgid "{darkgray}» {red}This team is full"
+msgstr "{darkgray}» {red}Cette équipe est pleine"
+
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:139
 msgid "{darkgray}» {white}Click {gray}to leave this team"
 msgstr "{darkgray}» {white}Cliquez {gray}pour quitter l'équipe"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:137
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:144
 msgid "{darkgray}» {white}Right-click {gray}to manage this team"
 msgstr "{darkgray}» {white}Cliquez droit {gray}pour gérer cette équipe"
 
 #. Title of the team item in the teams selector GUI (with max). {0}: team display name. {1}: players count. {2}: max count.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:175
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:182
 msgid "{white}Team {0} {gray}({1}/{2})"
 msgstr "{white}Équipe {0} {gray}({1}/{2})"
 
 #. Title of the team item in the teams selector GUI (without max) {0}: team display name. {1}: players count.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:177
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:184
 msgid "{white}Team {0} {gray}({1} player)"
 msgid_plural "{white}Team {0} {gray}({1} players)"
 msgstr[0] "{white}Équipe {0} {gray}({1} joueur)"
 msgstr[1] "{white}Équipe {0} {gray}({1} joueurs)"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:191
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:198
 msgid "{red}No team created"
 msgstr "{cs}Aucune équipe créée"
 
 #. Subtitle of the item displayed in the teams selector GUI if there isn't anything to display.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:194
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:201
 msgid "{gray}Click the emerald button below to create one."
 msgstr "{gray}Cliquez sur le bouton d'émeraude ci-dessous pour en créer une."
 
 #. Subtitle of the item displayed in the teams selector GUI if there isn't anything to display and the player cannot create a team.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:196
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:203
 msgid "{gray}Wait for an administrator to create one."
 msgstr "{gray}Patientez le temps qu'un administrateur en ajoute une."
 
@@ -493,11 +497,11 @@ msgstr "{ce}Cette équipe existe déjà."
 msgid "{cs}Your team is now called {0}{cs}."
 msgstr "{cs}Votre équipe s'appelle désormais {0}{cs}."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:316
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:321
 msgid "{aqua}You are now in the {0}{aqua} team."
 msgstr "{aqua}Vous faites désormais partie de l'équipe {0}{aqua}."
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:369
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:374
 msgid "{darkaqua}You are no longer part of the {0}{darkaqua} team."
 msgstr "{darkaqua}Vous ne faites plus partie de l'équipe {0}{darkaqua}."
 

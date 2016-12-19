@@ -125,7 +125,14 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 
         if (getPlayer().hasPermission("uh.player.join.self") && !playerInTeam)
         {
-            lore.add(I.t("{darkgray}» {white}Click {gray}to join this team"));
+            if (!team.isFull())
+            {
+                lore.add(I.t("{darkgray}» {white}Click {gray}to join this team"));
+            }
+            else
+            {
+                lore.add(I.t("{darkgray}» {red}This team is full"));
+            }
         }
         else if (getPlayer().hasPermission("uh.player.leave.self") && playerInTeam)
         {
@@ -205,7 +212,11 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 
         if (getPlayer().hasPermission("uh.player.join.self") && !playerInTeam)
         {
-            team.addPlayer(getPlayer());
+            try
+            {
+                team.addPlayer(getPlayer());
+            }
+            catch (RuntimeException ignored) {} // team full, does nothing
         }
         else if (getPlayer().hasPermission("uh.player.leave.self") && playerInTeam)
         {

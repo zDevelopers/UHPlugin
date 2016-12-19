@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-15 14:41+0100\n"
-"PO-Revision-Date: 2016-12-15 14:43+0100\n"
+"POT-Creation-Date: 2016-12-19 16:34+0100\n"
+"PO-Revision-Date: 2016-12-19 16:35+0100\n"
 "Last-Translator: Amaury Carrade\n"
 "Language-Team: Amaury Carrade\n"
 "Language: en_US\n"
@@ -338,41 +338,45 @@ msgstr ""
 msgid "{darkgray}- {white}{0}"
 msgstr ""
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:128
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:130
 msgid "{darkgray}» {white}Click {gray}to join this team"
 msgstr ""
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:132
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:134
+msgid "{darkgray}» {red}This team is full"
+msgstr ""
+
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:139
 msgid "{darkgray}» {white}Click {gray}to leave this team"
 msgstr ""
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:137
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:144
 msgid "{darkgray}» {white}Right-click {gray}to manage this team"
 msgstr ""
 
 #. Title of the team item in the teams selector GUI (with max). {0}: team display name. {1}: players count. {2}: max count.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:175
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:182
 msgid "{white}Team {0} {gray}({1}/{2})"
 msgstr ""
 
 #. Title of the team item in the teams selector GUI (without max) {0}: team display name. {1}: players count.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:177
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:184
 msgid "{white}Team {0} {gray}({1} player)"
 msgid_plural "{white}Team {0} {gray}({1} players)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:191
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:198
 msgid "{red}No team created"
 msgstr ""
 
 #. Subtitle of the item displayed in the teams selector GUI if there isn't anything to display.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:194
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:201
 msgid "{gray}Click the emerald button below to create one."
 msgstr ""
 
 #. Subtitle of the item displayed in the teams selector GUI if there isn't anything to display and the player cannot create a team.
-#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:196
+#: src/main/java/eu/carrade/amaury/UHCReloaded/gui/teams/TeamsSelectorGUI.java:203
 msgid "{gray}Wait for an administrator to create one."
 msgstr ""
 
@@ -469,11 +473,11 @@ msgstr ""
 msgid "{cs}Your team is now called {0}{cs}."
 msgstr ""
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:316
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:321
 msgid "{aqua}You are now in the {0}{aqua} team."
 msgstr ""
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:369
+#: src/main/java/eu/carrade/amaury/UHCReloaded/teams/UHTeam.java:374
 msgid "{darkaqua}You are no longer part of the {0}{darkaqua} team."
 msgstr ""
 
