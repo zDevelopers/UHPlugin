@@ -33,19 +33,19 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.carrade.amaury</groupId>
     <artifactId>UHCReloaded</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.4</version>
     <name>UHCReloaded</name>
     <description>Ultra Hardcore plugin</description>
-    <url>https://github.com/AmauryCarrade/UHPlugin/</url>
+    <url>https://github.com/zDevelopers/UHPlugin/</url>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/AmauryCarrade/UHPlugin/issues</url>
+        <url>https://github.com/zDevelopers/UHPlugin/issues</url>
     </issueManagement>
 
     <scm>
-        <connection>scm:git:https://github.com/AmauryCarrade/UHPlugin.git</connection>
-        <url>https://github.com/AmauryCarrade/UHPlugin.git</url>
+        <connection>scm:git:https://github.com/zDevelopers/UHPlugin.git</connection>
+        <url>https://github.com/zDevelopers/UHPlugin.git</url>
     </scm>
 
     <build>
