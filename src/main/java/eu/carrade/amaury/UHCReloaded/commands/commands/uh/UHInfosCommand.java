@@ -103,7 +103,7 @@ public class UHInfosCommand extends AbstractCommand
 
                     // Name and team
                     json += "{";
-                    json += "\"text\":\"" + team.getColor().toChatColor() + player.getName() + ChatColor.RESET + "\",";
+                    json += "\"text\":\"" + team.getColorOrWhite().toChatColor() + player.getName() + ChatColor.RESET + "\",";
                     /// Team name in tooltip in /uh infos
                     json += "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + I.t("Team: {0}", team.getDisplayName()) + "\"}";
                     json += "}";
@@ -153,7 +153,7 @@ public class UHInfosCommand extends AbstractCommand
                         info = I.t("{red} • ");
                     }
 
-                    info += team.getColor().toChatColor() + player.getName() + ChatColor.RESET;
+                    info += team.getColorOrWhite().toChatColor() + player.getName() + ChatColor.RESET;
 
                     if (p.getGameManager().isGameStarted())
                     {

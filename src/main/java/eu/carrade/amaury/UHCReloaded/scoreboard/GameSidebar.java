@@ -202,7 +202,7 @@ public class GameSidebar extends Sidebar
             if (team != null)
             {
                 sidebar.add(
-                          (OWN_TEAM_TITLE_COLOR.isEmpty() ? team.getColor().toChatColor() : OWN_TEAM_TITLE_COLOR)
+                          (OWN_TEAM_TITLE_COLOR.isEmpty() ? team.getColorOrWhite().toChatColor() : OWN_TEAM_TITLE_COLOR)
                           /// Title of the team section in the sidebar
                         + (OWN_TEAM_TITLE_IS_NAME ? ChatColor.BOLD + team.getName() : I.t("{bold}Your team"))
                 );

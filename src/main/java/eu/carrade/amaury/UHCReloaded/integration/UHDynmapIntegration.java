@@ -256,7 +256,7 @@ public class UHDynmapIntegration
 
         UHTeam team = p.getTeamManager().getTeamForPlayer(player);
 
-        showSpawnLocation(player, team != null ? team.getColor() : null, spawnPoint);
+        showSpawnLocation(player, team != null && team.getColor() != null ? team.getColor() : null, spawnPoint);
     }
 
     /**

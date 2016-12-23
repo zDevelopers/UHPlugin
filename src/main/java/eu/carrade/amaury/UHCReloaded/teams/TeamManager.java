@@ -39,19 +39,16 @@ import eu.carrade.amaury.UHCReloaded.gui.teams.editor.TeamEditGUI;
 import eu.carrade.amaury.UHCReloaded.gui.teams.editor.TeamEditMembersGUI;
 import fr.zcraft.zlib.components.configuration.ConfigurationParseException;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandler;
-import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
-import static fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers.getListValue;
-import static fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers.getValue;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.text.ActionBar;
 import fr.zcraft.zlib.tools.text.RawMessage;
-import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.BannerMeta;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -60,9 +57,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
-import org.bukkit.DyeColor;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.material.Banner;
 
 
 public class TeamManager
@@ -344,14 +338,7 @@ public class TeamManager
         }
         else
         {
-            if (team.getColor() != null)
-            {
-                player.setDisplayName(team.getColor().toChatColor() + player.getName() + ChatColor.RESET);
-            }
-            else
-            {
-                player.setDisplayName(player.getName());
-            }
+            player.setDisplayName(team.getColorOrWhite().toChatColor() + player.getName() + ChatColor.RESET);
         }
     }
 
@@ -442,7 +429,7 @@ public class TeamManager
         availableColors.remove(TeamColor.RANDOM);
         for (UHTeam team : getTeams())
         {
-            availableColors.remove(team.getColor());
+            availableColors.remove(team.getColorOrWhite());
         }
 
         if (availableColors.size() != 0)
@@ -556,7 +543,7 @@ public class TeamManager
                         .then(" ")
 
                         .then(team.getName())
-                            .color(team.getColor().toChatColor())
+                            .color(team.getColorOrWhite().toChatColor())
                             .command("/join " + team.getName())
                             .style(team.containsPlayer(player) ? ChatColor.BOLD : null)
                             .hover(new RawText(

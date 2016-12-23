@@ -84,11 +84,11 @@ public class TeamEditGUI extends TeamActionGUI
 
         // Color
         action("color", 11, GuiUtils.makeItem(
-                new ItemStack(Material.WOOL, 1, ColorsUtils.chat2Dye(team.getColor().toChatColor()).getWoolData()),
+                new ItemStack(Material.WOOL, 1, ColorsUtils.chat2Dye(team.getColorOrWhite().toChatColor()).getWoolData()),
                 /// Update team color button in edit GUI.
                 I.t("{green}Update the color"),
                 /// Current team color in edit GUI. {0} = formatted color name.
-                GuiUtils.generateLore(I.tc("current_team_color", "{gray}Current: {white}{0}", team.getColor().toChatColor() + TextUtils.friendlyEnumName(team.getColor())))
+                GuiUtils.generateLore(I.tc("current_team_color", "{gray}Current: {white}{0}", team.getColorOrWhite().toChatColor() + TextUtils.friendlyEnumName(team.getColorOrWhite())))
         ));
 
         // Name
