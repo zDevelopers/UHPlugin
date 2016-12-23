@@ -20,4 +20,5 @@
 
 ### Suggestions
 
-1. Please check if the feature is not already implemented in the [latest development build](http://jenkins.carrade.eu/job/UltraHardcoreReloaded/), or [planned in the future](https://github.com/AmauryCarrade/UHPlugin/labels/enhancement).
+1. Please **check if the feature is not already implemented** in the [latest development build](http://jenkins.carrade.eu/job/UltraHardcoreReloaded/), **or [planned in the future](https://github.com/AmauryCarrade/UHPlugin/labels/enhancement)**.
+2. Open **one issue per suggestion**, not one issue with multiple ideas.

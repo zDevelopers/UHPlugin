@@ -1,7 +1,7 @@
 name: UHPlugin
-description: Ultra Hardcore plugin
-main: me.azenet.UHPlugin.UHPlugin
-version: 1.3 §cdev
+description: UltraHardcore Reloaded
+main: eu.carrade.amaury.UHCReloaded.UHCReloaded
+version: 1.4
 author: "Amaury Carrade"
 authors: [azenet, "João Roda"]
 
@@ -17,26 +17,30 @@ softdepend:
 commands:
    uh:
       description: UltraHardcore Reloaded base command
-      usage: /uh <subcommand> - see /uh for available subcommands.
+      usage: /<command> <subcommand> - see /<command> for available subcommands.
    t:
       description: Allows an user to send a message to his team.
-      usage: /t <message>
-   
+      usage: /<command> <message>
+
    g:
       description: Allows an user to send a message to everyone.
-      usage: /g <message>
-   
+      usage: /<command> <message>
+
    togglechat:
        description: Allows an user to toggle the chat between the global chat and a team chat.
-       usage: /togglechat
-   
+       usage: /<command>
+
    join:
        description: Use this to join an UltraHardcore team.
-       usage: /join [player] <team>
-   
+       usage: /<command> [player] <team>
+
    leave:
        description: Use this to quit your current UltraHardcore team.
-       usage: /leave [player]
+       usage: /<command> [player]
+
+   teams:
+       description: Displays a GUI to manage the UHCReloaded teams
+       usage: /<command>
 
 permissions:
 
@@ -64,8 +68,11 @@ permissions:
             uh.spec: true
             uh.finish: true
             uh.infos: true
+            uh.rules: true
             uh.timers: true
             uh.tp: true
+            uh.team.spy: true
+            uh.team.spy.others: true
             
             uh.teamchat: true
             uh.player: true
@@ -81,6 +88,12 @@ permissions:
         default: op
     uh.team:
         description: Allows an user to manage the teams with /uh team *
+        default: op
+    uh.team.spy:
+        description: Allows an user to receive all teams chat if he executes /uh team spy
+        default: op
+    uh.team.spy.others:
+        description: Allows an user to toggle spy for another player; this other one will receive all the teams chat.
         default: op
     uh.spawns:
         description: Allows an user to manage the spawn points with /uh spawns *
@@ -130,6 +143,9 @@ permissions:
     uh.infos:
         description: Allows an user to get infos about the current game with /uh infos
         default: true
+    uh.rules:
+        description: Allows an user to broadcast or send the rules on-demand
+        default: op
     uh.about:
         description: Prints some informations about the plugin and the translation.
         default: true
@@ -158,6 +174,8 @@ permissions:
         children:
             uh.player.join: true
             uh.player.leave: true
+            uh.player.renameTeam: true
+            uh.team.gui: true
     
     
     uh.player.join.*:
@@ -165,6 +183,7 @@ permissions:
         children:
             uh.player.join.self: true
             uh.player.join.others: true
+            uh.team.gui: true
     
     uh.player.join.self:
         description: Allows a player to use /join <team> (changes his own team).
@@ -179,6 +198,7 @@ permissions:
         children:
             uh.player.leave.self: true
             uh.player.leave.others: true
+            uh.team.gui: true
     
     uh.player.leave.self:
         description: Allows a player to use /leave (quits his own team).
@@ -186,3 +206,14 @@ permissions:
     uh.player.leave.others:
         description: Allows a player to use /leave <player>.
         default: op
+
+
+    uh.player.renameTeam:
+        default: Allows a player to rename his own team.
+        default: op
+
+
+    uh.team.gui:
+        description: Allows a player to use the teams GUI (/uh team gui)
+        default: true
+
