@@ -408,12 +408,12 @@ public class UHGameManager
                 {
                     case TEAM_COLOR_TRANSPARENT:
                         cageMaterial = Material.STAINED_GLASS;
-                        cageData = ColorsUtils.chat2Dye(team.getColor().toChatColor()).getWoolData();
+                        cageData = ColorsUtils.chat2Dye(team.getColorOrWhite().toChatColor()).getWoolData();
                         break;
 
                     case TEAM_COLOR_SOLID:
                         cageMaterial = Material.STAINED_CLAY;
-                        cageData = ColorsUtils.chat2Dye(team.getColor().toChatColor()).getWoolData();
+                        cageData = ColorsUtils.chat2Dye(team.getColorOrWhite().toChatColor()).getWoolData();
                         break;
 
                     case CUSTOM:

@@ -147,7 +147,7 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
 
         // Item
         final ItemStack item;
-        final DyeColor dye = team.getColor() != null ? ColorsUtils.chat2Dye(team.getColor().toChatColor()) : DyeColor.WHITE;
+        final DyeColor dye = ColorsUtils.chat2Dye(team.getColorOrWhite().toChatColor());
 
         switch (TEAM_ITEM_TYPE)
         {

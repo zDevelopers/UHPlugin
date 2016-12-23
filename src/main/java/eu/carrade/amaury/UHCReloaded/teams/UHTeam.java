@@ -449,6 +449,14 @@ public class UHTeam
     }
 
     /**
+     * @return the color of the team, or white if the color is set to null. Never returns {@code null}.
+     */
+    public TeamColor getColorOrWhite()
+    {
+        return color != null ? color : TeamColor.WHITE;
+    }
+
+    /**
      * Updates the team color.
      *
      * @param color The new color.
@@ -494,8 +502,8 @@ public class UHTeam
      */
     public ItemStack getDefaultBanner()
     {
-        ItemStack banner;
-        DyeColor dye = ColorsUtils.chat2Dye(color.toChatColor());
+        final ItemStack banner;
+        final DyeColor dye = ColorsUtils.chat2Dye(getColorOrWhite().toChatColor());
 
         if (BANNER_SHAPE_WRITE_LETTER)
         {
@@ -518,8 +526,10 @@ public class UHTeam
     private void updateDefaultBanner()
     {
         // Avoid updating in the constructor before all the object is populated.
-        if (name != null && color != null)
+        if (name != null)
             defaultBanner = getDefaultBanner();
+        else
+            defaultBanner = new ItemStack(Material.BANNER);
     }
 
     /**
