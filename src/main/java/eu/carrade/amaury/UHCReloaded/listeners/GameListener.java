@@ -325,7 +325,7 @@ public class GameListener implements Listener
     {
         if (ev.getEntity() instanceof Player)
         {
-            if ((!p.getGameManager().isGameRunning() && !UHConfig.BEFORE_START.ENABLE_PVP.get()) || (p.getGameManager().isGameRunning() && !p.getGameManager().isTakingDamage()))
+            if (p.getGameManager().isSlowStartInProgress() || (!p.getGameManager().isGameRunning() && !UHConfig.BEFORE_START.ENABLE_PVP.get()) || (p.getGameManager().isGameRunning() && !p.getGameManager().isTakingDamage()))
             {
                 ev.setCancelled(true);
             }

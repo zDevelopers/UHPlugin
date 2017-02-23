@@ -532,14 +532,7 @@ public class UHGameManager
                         else
                             player.setGameMode(GameMode.SURVIVAL);
 
-                        player.setHealth(20D);
-                        player.setFoodLevel(20);
-                        player.setSaturation(20);
-                        player.getInventory().clear();
-                        player.getInventory().setArmorContents(null);
-                        player.setExp(0L);
-                        player.setLevel(0);
-                        player.closeInventory();
+                        resetPlayer(player);
 
                         for (PotionEffect effect : player.getActivePotionEffects())
                         {
@@ -807,11 +800,29 @@ public class UHGameManager
             if (alivePlayers.contains(player.getUniqueId()))
             {
                 player.setGameMode(GameMode.SURVIVAL);
+                resetPlayer(player);
             }
         }
 
         // Fires the event
         p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
+    }
+
+    /**
+     * Reinitializes a player (health, XP, inventory...).
+     *
+     * @param player The player
+     */
+    private void resetPlayer(Player player)
+    {
+        player.setHealth(20D);
+        player.setFoodLevel(20);
+        player.setSaturation(20);
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
+        player.setExp(0L);
+        player.setLevel(0);
+        player.closeInventory();
     }
 
     /**
