@@ -64,9 +64,7 @@ import fr.zcraft.zlib.components.scoreboard.SidebarScoreboard;
 import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.core.ZPlugin;
 import org.bukkit.entity.Player;
-import org.mcstats.MetricsLite;
 
-import java.io.IOException;
 import java.util.Locale;
 
 
@@ -187,24 +185,6 @@ public class UHCReloaded extends ZPlugin
 
         // Schedule commands
         runtimeCommandsExecutor.registerCommandsInScheduler(RuntimeCommandsExecutor.AFTER_SERVER_START);
-
-        // Launch metrics
-        if (UHConfig.METRICS.get())
-        {
-            try
-            {
-                MetricsLite metrics = new MetricsLite(this);
-                metrics.start();
-            }
-            catch (IOException e)
-            {
-                // Failed to submit the stats :-(
-            }
-        }
-        else
-        {
-            getLogger().info("Metrics disabled for this plugin in the configuration: nothing was sent.");
-        }
 
         getLogger().info(I.t("Ultra Hardcore plugin loaded."));
     }

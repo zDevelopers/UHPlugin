@@ -21,7 +21,6 @@ import static fr.zcraft.zlib.components.configuration.ConfigurationItem.*;
 public class UHConfig extends Configuration
 {
     static public final ConfigurationItem<String> LANG = item("lang", "");
-    static public final ConfigurationItem<Boolean> METRICS = item("metrics", true);
 
     static public final EpisodesSection EPISODES = section("episodes", EpisodesSection.class);
 

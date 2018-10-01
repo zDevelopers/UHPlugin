@@ -98,15 +98,10 @@
                     <minimizeJar>true</minimizeJar>
                     <artifactSet>
                         <includes>
-                            <include>org.mcstats.*:*</include>
                             <include>fr.zcraft:zlib</include>
                         </includes>
                     </artifactSet>
                     <relocations>
-                        <relocation>
-                            <pattern>org.mcstats</pattern>
-                            <shadedPattern>eu.carrade.amaury.UHCReloaded.mcstats</shadedPattern>
-                        </relocation>
                         <relocation>
                             <pattern>fr.zcraft.zlib</pattern>
                             <shadedPattern>eu.carrade.amaury.UHCReloaded.zlib</shadedPattern>
@@ -121,14 +116,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
-                <configuration>
-                    <argLine>-XX:-UseSplitVerifier -noverify</argLine> <!-- Needed to avoid a java.lang.VerifyError when mocking a static method. -->
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -153,15 +140,11 @@
         </repository>
         <repository>
             <id>carrade-repo</id>
-            <url>http://depot.carrade.eu/maven2/</url>
+            <url>http://raw.carrade.eu/maven2/</url>
         </repository>
         <repository>
             <id>zDevelopers</id>
             <url>http://maven.carrade.eu/artifactory/snapshots</url>
-        </repository>
-        <repository>
-            <id>Plugin Metrics</id>
-            <url>http://repo.mcstats.org/content/repositories/public</url>
         </repository>
     </repositories>
     <dependencies>
@@ -195,39 +178,6 @@
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>3.6.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mcstats.bukkit</groupId>
-            <artifactId>metrics-lite</artifactId>
-            <version>R8-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <type>jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>1.4.9</version>
-            <type>jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <version>1.4.9</version>
-            <type>jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.18.2-GA</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
