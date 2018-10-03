@@ -31,7 +31,6 @@
  */
 package eu.carrade.amaury.UHCReloaded.borders.generators;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 
@@ -53,38 +52,31 @@ public class SquaredWallGenerator extends WallGenerator
     @Override
     public void build(World world, int diameter, int wallHeight)
     {
-        Integer halfDiameter = (int) Math.floor(diameter / 2);
+        final int halfDiameter = (int) Math.floor(diameter / 2);
 
-        Location spawn = world.getSpawnLocation();
-        Integer limitXInf = spawn.add(-halfDiameter, 0, 0).getBlockX();
+        final int limitXInf = world.getSpawnLocation().add(-halfDiameter, 0, 0).getBlockX();
+        final int limitXSup = world.getSpawnLocation().add(halfDiameter, 0, 0).getBlockX();
+        final int limitZInf = world.getSpawnLocation().add(0, 0, -halfDiameter).getBlockZ();
+        final int limitZSup = world.getSpawnLocation().add(0, 0, halfDiameter).getBlockZ();
 
-        spawn = world.getSpawnLocation();
-        Integer limitXSup = spawn.add(halfDiameter, 0, 0).getBlockX();
-
-        spawn = world.getSpawnLocation();
-        Integer limitZInf = spawn.add(0, 0, -halfDiameter).getBlockZ();
-
-        spawn = world.getSpawnLocation();
-        Integer limitZSup = spawn.add(0, 0, halfDiameter).getBlockZ();
-
-        for (Integer x = limitXInf; x <= limitXSup; x++)
+        for (int x = limitXInf; x <= limitXSup; x++)
         {
             world.getBlockAt(x, 1, limitZInf).setType(Material.BEDROCK);
             world.getBlockAt(x, 1, limitZSup).setType(Material.BEDROCK);
 
-            for (Integer y = 2; y <= wallHeight; y++)
+            for (int y = 2; y <= wallHeight; y++)
             {
                 setBlock(world.getBlockAt(x, y, limitZInf), WallPosition.NORTH);
                 setBlock(world.getBlockAt(x, y, limitZSup), WallPosition.SOUTH);
             }
         }
 
-        for (Integer z = limitZInf + 1; z <= limitZSup - 1; z++)
+        for (int z = limitZInf + 1; z <= limitZSup - 1; z++)
         {
             world.getBlockAt(limitXInf, 1, z).setType(Material.BEDROCK);
             world.getBlockAt(limitXSup, 1, z).setType(Material.BEDROCK);
 
-            for (Integer y = 2; y <= wallHeight; y++)
+            for (int y = 2; y <= wallHeight; y++)
             {
                 setBlock(world.getBlockAt(limitXInf, y, z), WallPosition.WEST);
                 setBlock(world.getBlockAt(limitXSup, y, z), WallPosition.EAST);

@@ -78,7 +78,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
         final double minimalDistanceBetweenTwoPointsSquared = Math.pow(minimalDistanceBetweenTwoPoints, 2);
 
 
-        /** Possible? **/
+        /* *** Possible? *** */
 
         // If the surface of the map is too close of the sum of the surfaces of the private part
         // around each spawn point (a circle with, as radius, the minimal distance between two spawn
@@ -86,6 +86,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
 
         final double surfacePrivatePartsAroundSpawnPoints = (int) (spawnCount * (Math.PI * minimalDistanceBetweenTwoPointsSquared));
         final double surfaceRegion;
+
         if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
         {
             surfaceRegion = (Math.PI * Math.pow(regionDiameter, 2)) / 4;
@@ -106,7 +107,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
             throw new CannotGenerateSpawnPointsException("Unable to generate spawn points randomly: packing density too high");
         }
 
-        /** Generation **/
+        /* *** Generation *** */
 
         final Set<Location> randomSpawnPoints = new HashSet<>();
         int generatedSpawnPoints = 0;

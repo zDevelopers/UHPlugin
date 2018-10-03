@@ -74,7 +74,7 @@ public class UHGenerateWallsCommand extends AbstractCommand
     {
         sender.sendMessage(I.t("{cst}Generating the walls..."));
 
-        World world = null;
+        final World world;
 
         if (sender instanceof Player)
         {

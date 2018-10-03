@@ -62,14 +62,14 @@ public class CircularWallGenerator extends WallGenerator
         // distance from the center to these blocks.
         // The good block if the one with the closest distance to the radius.
 
-        Integer radius = (int) Math.floor(diameter / 2);
+        final int radius = (int) Math.floor(diameter / 2);
 
-        Integer xSpawn = world.getSpawnLocation().getBlockX();
-        Integer ySpawn = world.getSpawnLocation().getBlockY();
-        Integer zSpawn = world.getSpawnLocation().getBlockZ();
+        final int xSpawn = world.getSpawnLocation().getBlockX();
+        final int ySpawn = world.getSpawnLocation().getBlockY();
+        final int zSpawn = world.getSpawnLocation().getBlockZ();
 
         // First block.
-        Block currentBlock = world.getBlockAt((int) (xSpawn + radius), ySpawn, zSpawn);
+        Block currentBlock = world.getBlockAt(xSpawn + radius, ySpawn, zSpawn);
 
         Block candidate1;
         Block candidate2;
@@ -100,12 +100,14 @@ public class CircularWallGenerator extends WallGenerator
             Double distanceCandidate2ToRef = Math.abs((candidate2.getLocation().distance(world.getSpawnLocation()) - radius));
             Double distanceCandidate3ToRef = Math.abs((candidate3.getLocation().distance(world.getSpawnLocation()) - radius));
 
+            // The first is better
             if (distanceCandidate1ToRef < distanceCandidate2ToRef && distanceCandidate1ToRef < distanceCandidate3ToRef)
-            { // The first is better
+            {
                 currentBlock = candidate1;
             }
+            // The second is better
             else if (distanceCandidate2ToRef < distanceCandidate1ToRef && distanceCandidate2ToRef < distanceCandidate3ToRef)
-            { // The second is better
+            {
                 currentBlock = candidate2;
             }
             else
@@ -128,14 +130,13 @@ public class CircularWallGenerator extends WallGenerator
      */
     private void buildWallPoint(World world, int x, int z, int wallHeight, int diameter)
     {
-
         WallPosition positionOriginal;
         WallPosition positionSymmetricX;
         WallPosition positionSymmetricZ;
         WallPosition positionOpposite;
 
-        Integer xSpawn = world.getSpawnLocation().getBlockX();
-        Integer zSpawn = world.getSpawnLocation().getBlockZ();
+        final int xSpawn = world.getSpawnLocation().getBlockX();
+        final int zSpawn = world.getSpawnLocation().getBlockZ();
 
         // We generates first the bedrock at y=0
         world.getBlockAt(x, 0, z).setType(Material.BEDROCK);

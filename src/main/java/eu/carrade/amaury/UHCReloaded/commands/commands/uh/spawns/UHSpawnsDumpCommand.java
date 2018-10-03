@@ -72,7 +72,7 @@ public class UHSpawnsDumpCommand extends AbstractCommand
         Map<World, List<Location>> spanwsInWorlds = new HashMap<World, List<Location>>();
         for (World world : p.getServer().getWorlds())
         {
-            spanwsInWorlds.put(world, new LinkedList<Location>());
+            spanwsInWorlds.put(world, new LinkedList<>());
         }
 
         for (Location spawn : p.getSpawnsManager().getSpawnPoints())
@@ -80,7 +80,7 @@ public class UHSpawnsDumpCommand extends AbstractCommand
             spanwsInWorlds.get(spawn.getWorld()).add(spawn);
         }
 
-        String dump = "";
+        StringBuilder dump = new StringBuilder();
 
         for (Map.Entry<World, List<Location>> spanwsInWorld : spanwsInWorlds.entrySet())
         {
@@ -89,15 +89,15 @@ public class UHSpawnsDumpCommand extends AbstractCommand
                 continue;
             }
 
-            dump += "\n* " + spanwsInWorld.getKey().getName() + "\n";
+            dump.append("\n* ").append(spanwsInWorld.getKey().getName()).append("\n");
 
             for (Location spawn : spanwsInWorld.getValue())
             {
-                dump += spawn.getBlockX() + "," + spawn.getBlockZ() + "\n";
+                dump.append(spawn.getBlockX()).append(",").append(spawn.getBlockZ()).append("\n");
             }
         }
 
-        sender.sendMessage(dump);
+        sender.sendMessage(dump.toString());
     }
 
     /**

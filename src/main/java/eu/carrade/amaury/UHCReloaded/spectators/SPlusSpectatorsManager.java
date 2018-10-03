@@ -40,7 +40,7 @@ import org.bukkit.entity.Player;
  */
 public class SPlusSpectatorsManager extends SpectatorsManager
 {
-    UHCReloaded p;
+    private UHCReloaded p;
 
     public SPlusSpectatorsManager()
     {
@@ -57,6 +57,8 @@ public class SPlusSpectatorsManager extends SpectatorsManager
     @Override
     public boolean isSpectating(Player player)
     {
-        return player != null && p.getSpectatorPlusIntegration().isSPIntegrationEnabled() && p.getSpectatorPlusIntegration().getSPAPI().isSpectator(player);
+        return player != null
+                && p.getSpectatorPlusIntegration().isSPIntegrationEnabled()
+                && p.getSpectatorPlusIntegration().getSPAPI().isSpectator(player);
     }
 }

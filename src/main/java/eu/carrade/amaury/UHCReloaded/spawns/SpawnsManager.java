@@ -41,11 +41,12 @@ import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.util.Vector;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.bukkit.util.Vector;
+import java.util.stream.Collectors;
 
 
 public class SpawnsManager
@@ -156,26 +157,14 @@ public class SpawnsManager
      */
     public boolean removeSpawnPoint(Location location, boolean precise)
     {
-        List<Location> toRemove = new LinkedList<>();
-
-        for (Location spawn : getSpawnPoints())
-        {
-            if (location.getWorld().equals(spawn.getWorld()))
-            {
-                if (precise
-                        && location.getX() == spawn.getX()
-                        && location.getZ() == spawn.getZ())
-                {
-                    toRemove.add(spawn);
-                }
-                else if (!precise
-                        && location.getBlockX() == spawn.getBlockX()
-                        && location.getBlockZ() == spawn.getBlockZ())
-                {
-                    toRemove.add(spawn);
-                }
-            }
-        }
+        final List<Location> toRemove = getSpawnPoints().stream()
+                .filter(spawn -> location.getWorld().equals(spawn.getWorld()))
+                .filter(spawn -> precise
+                    && location.getX() == spawn.getX()
+                    && location.getZ() == spawn.getZ() || !precise
+                    && location.getBlockX() == spawn.getBlockX()
+                    && location.getBlockZ() == spawn.getBlockZ())
+                .collect(Collectors.toCollection(LinkedList::new));
 
         for (Location spawnToRemove : toRemove)
         {
@@ -295,11 +284,8 @@ public class SpawnsManager
      */
     public void generateSpawnPoints(SpawnPointsGenerator generator, World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter) throws CannotGenerateSpawnPointsException
     {
-        Set<Location> spawnPoints = generator.generate(world, spawnCount, regionDiameter, minimalDistanceBetweenTwoPoints, xCenter, zCenter, AVOID_WATER);
+        final Set<Location> spawnPoints = generator.generate(world, spawnCount, regionDiameter, minimalDistanceBetweenTwoPoints, xCenter, zCenter, AVOID_WATER);
 
-        for (Location spawn : spawnPoints)
-        {
-            addSpawnPoint(spawn);
-        }
+        spawnPoints.forEach(this::addSpawnPoint);
     }
 }

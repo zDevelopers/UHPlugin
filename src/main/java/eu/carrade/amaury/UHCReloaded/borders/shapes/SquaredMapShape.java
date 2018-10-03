@@ -49,14 +49,14 @@ public class SquaredMapShape implements MapShapeDescriptor
     @Override
     public boolean isInsideBorder(final Location location, final Double diameter, final Location center)
     {
-        Integer halfMapSize = (int) Math.floor(diameter / 2);
-        Integer x = location.getBlockX();
-        Integer z = location.getBlockZ();
+        final Integer halfMapSize = (int) Math.floor(diameter / 2);
+        final Integer x = location.getBlockX();
+        final Integer z = location.getBlockZ();
 
-        Integer limitXInf = center.clone().add(-halfMapSize, 0, 0).getBlockX();
-        Integer limitXSup = center.clone().add(halfMapSize, 0, 0).getBlockX();
-        Integer limitZInf = center.clone().add(0, 0, -halfMapSize).getBlockZ();
-        Integer limitZSup = center.clone().add(0, 0, halfMapSize).getBlockZ();
+        final Integer limitXInf = center.clone().add(-halfMapSize, 0, 0).getBlockX();
+        final Integer limitXSup = center.clone().add(halfMapSize, 0, 0).getBlockX();
+        final Integer limitZInf = center.clone().add(0, 0, -halfMapSize).getBlockZ();
+        final Integer limitZSup = center.clone().add(0, 0, halfMapSize).getBlockZ();
 
         return !(x < limitXInf || x > limitXSup || z < limitZInf || z > limitZSup);
     }
@@ -85,14 +85,14 @@ public class SquaredMapShape implements MapShapeDescriptor
             return -1;
         }
 
-        Integer halfMapSize = (int) Math.floor(diameter / 2);
-        Integer x = location.getBlockX();
-        Integer z = location.getBlockZ();
+        final Integer halfMapSize = (int) Math.floor(diameter / 2);
+        final Integer x = location.getBlockX();
+        final Integer z = location.getBlockZ();
 
-        Integer limitXInf = center.clone().add(-halfMapSize, 0, 0).getBlockX();
-        Integer limitXSup = center.clone().add(halfMapSize, 0, 0).getBlockX();
-        Integer limitZInf = center.clone().add(0, 0, -halfMapSize).getBlockZ();
-        Integer limitZSup = center.clone().add(0, 0, halfMapSize).getBlockZ();
+        final Integer limitXInf = center.clone().add(-halfMapSize, 0, 0).getBlockX();
+        final Integer limitXSup = center.clone().add(halfMapSize, 0, 0).getBlockX();
+        final Integer limitZInf = center.clone().add(0, 0, -halfMapSize).getBlockZ();
+        final Integer limitZSup = center.clone().add(0, 0, halfMapSize).getBlockZ();
 
         if (x > limitXSup && z < limitZSup && z > limitZInf)       // East of the border
         {

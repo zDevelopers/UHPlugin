@@ -96,7 +96,7 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
 
             final double angleBetweenTwoPoints;
 
-            // Not all the points can be in this circle. We generate the densiest circle.
+            // Not all the points can be in this circle. We generate the densest circle.
             if (pointsPerDenseCircles < spawnCount - countGeneratedPoints)
             {
                 angleBetweenTwoPoints = 2 * Math.PI / ((double) pointsPerDenseCircles);

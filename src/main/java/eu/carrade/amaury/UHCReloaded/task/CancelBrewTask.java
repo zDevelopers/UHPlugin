@@ -42,8 +42,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class CancelBrewTask extends BukkitRunnable
 {
-    private BrewerInventory inventory = null;
-    private HumanEntity whoClicked = null;
+    private final BrewerInventory inventory;
+    private final HumanEntity whoClicked;
 
     public CancelBrewTask(BrewerInventory inventory, HumanEntity whoClicked)
     {
@@ -68,7 +68,7 @@ public class CancelBrewTask extends BukkitRunnable
                 inventory.setIngredient(new ItemStack(Material.AIR)); // The glowstone is removed.
 
                 // First try: try to add the glowstone to an existing stack
-                Boolean added = false;
+                boolean added = false;
                 for (ItemStack item : whoClicked.getInventory().getContents())
                 {
                     if (item != null && item.getType() != null && item.getType().equals(Material.GLOWSTONE_DUST))
@@ -86,7 +86,7 @@ public class CancelBrewTask extends BukkitRunnable
                 // Failed... We adds the glowstone to the first empty slot found.
                 if (!added)
                 {
-                    Integer slotEmpty = whoClicked.getInventory().firstEmpty();
+                    int slotEmpty = whoClicked.getInventory().firstEmpty();
 
                     // -1 is returned if there isn't any empty slot
                     if (slotEmpty != -1)

@@ -36,7 +36,7 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.task.CancelBrewTask;
 import fr.zcraft.zlib.components.i18n.I;
-import org.bukkit.Bukkit;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -70,12 +70,11 @@ import java.util.List;
 
 public class GameplayListener implements Listener
 {
+    private final UHCReloaded p;
 
-    private UHCReloaded p = null;
-
-    public GameplayListener(UHCReloaded p)
+    public GameplayListener()
     {
-        this.p = p;
+        this.p = UHCReloaded.get();
     }
 
 
@@ -87,9 +86,10 @@ public class GameplayListener implements Listener
     {
         if (ev.getEntity() instanceof Ghast && UHConfig.GAMEPLAY_CHANGES.REPLACE_GHAST_TEARS_WITH_GOLD.get())
         {
-            List<ItemStack> drops = new ArrayList<ItemStack>(ev.getDrops());
+            final List<ItemStack> drops = new ArrayList<ItemStack>(ev.getDrops());
             ev.getDrops().clear();
-            for (ItemStack i : drops)
+
+            for (final ItemStack i : drops)
             {
                 if (i.getType() == Material.GHAST_TEAR)
                 {
@@ -109,7 +109,9 @@ public class GameplayListener implements Listener
     @EventHandler (ignoreCancelled = true)
     public void onPlayerPickupItem(PlayerPickupItemEvent ev)
     {
-        if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL) && UHConfig.GAMEPLAY_CHANGES.REPLACE_GHAST_TEARS_WITH_GOLD.get())
+        if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR
+                && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL)
+                && UHConfig.GAMEPLAY_CHANGES.REPLACE_GHAST_TEARS_WITH_GOLD.get())
         {
             ev.setCancelled(true);
         }
@@ -124,7 +126,7 @@ public class GameplayListener implements Listener
     {
         if (UHConfig.GAMEPLAY_CHANGES.DISABLE_LEVEL_II_POTIONS.get() && ev.getInventory() instanceof BrewerInventory)
         {
-            new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()).runTaskLater(p, 1l);
+            RunTask.later(new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()), 1L);
         }
     }
 
@@ -136,13 +138,13 @@ public class GameplayListener implements Listener
     {
         if (UHConfig.GAMEPLAY_CHANGES.DISABLE_LEVEL_II_POTIONS.get() && ev.getInventory() instanceof BrewerInventory)
         {
-            new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()).runTaskLater(p, 1l);
+           RunTask.later(new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()), 1L);
         }
     }
 
 
     /**
-     * Used to disable enderpearl damages (if needed).
+     * Used to disable ender pearl damages (if needed).
      */
     @EventHandler (ignoreCancelled = true)
     public void onPlayerTeleport(final PlayerTeleportEvent ev)
@@ -152,7 +154,9 @@ public class GameplayListener implements Listener
             if (ev.getCause() == TeleportCause.ENDER_PEARL)
             {
                 ev.setCancelled(true);
-                ev.getPlayer().teleport(ev.getTo(), TeleportCause.PLUGIN);
+                ev.getPlayer().teleport(ev.getTo(), TeleportCause.PLUGIN); // Technically its an ender pearl teleportation, but
+                                                                           // if we use that, an infinite loop will occur due to
+                                                                           // the event being re-captured and re-emitted.
             }
         }
     }
@@ -201,24 +205,28 @@ public class GameplayListener implements Listener
                     && (meta.getDisplayName().equals(ChatColor.RESET + I.t("{aqua}Golden head"))
                     || meta.getDisplayName().equals(ChatColor.RESET + I.t("{lightpurple}Golden head"))))
             {
+                // Normal golden apple from a head
                 if (dataValue == 0)
-                { // Normal golden apple from a head
+                {
                     halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.FROM_NORMAL_HEAD.get();
                     level = REGENERATION_LEVEL_GOLDEN_APPLE;
                 }
+                // Notch golden apple from a head
                 else
-                { // Notch golden apple from a head
+                {
                     halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.FROM_NOTCH_HEAD.get();
                     level = REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
                 }
             }
+            // Normal golden apple from an apple
             else if (dataValue == 0)
-            { // Normal golden apple from an apple
+            {
                 halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.NORMAL.get();
                 level = REGENERATION_LEVEL_GOLDEN_APPLE;
             }
+            // Notch golden apple from an apple
             else
-            { // Notch golden apple from an apple
+            {
                 halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.NOTCH.get();
                 level = REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
             }
@@ -250,19 +258,14 @@ public class GameplayListener implements Listener
                 // one half-heart is given to the player).
                 final int healthApplied = halfHearts - 1;
 
-                Bukkit.getScheduler().runTaskLater(this.p, new Runnable()
+                RunTask.later(() ->
                 {
-                    @Override
-                    public void run()
-                    {
-                        // The original, vanilla, effect is removed
-                        ev.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
+                    // The original, vanilla, effect is removed
+                    ev.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
 
-                        int duration = ((int) Math.floor(TICKS_BETWEEN_EACH_REGENERATION / (Math.pow(2, realLevel)))) * healthApplied;
-
-                        new PotionEffect(PotionEffectType.REGENERATION, duration, realLevel).apply(ev.getPlayer());
-                    }
-                }, 2l);
+                    int duration = ((int) Math.floor(TICKS_BETWEEN_EACH_REGENERATION / (Math.pow(2, realLevel)))) * healthApplied;
+                    new PotionEffect(PotionEffectType.REGENERATION, duration, realLevel).apply(ev.getPlayer());
+                }, 2L);
             }
         }
     }
@@ -275,11 +278,14 @@ public class GameplayListener implements Listener
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent ev)
     {
-        if ((ev.getAction() == Action.RIGHT_CLICK_AIR || ev.getAction() == Action.RIGHT_CLICK_BLOCK) && ev.getPlayer().getItemInHand().getType() == Material.COMPASS && p.getConfig().getBoolean("gameplay-changes.compass.enabled") && !p.getGameManager().isPlayerDead(ev.getPlayer()))
+        if ((ev.getAction() == Action.RIGHT_CLICK_AIR || ev.getAction() == Action.RIGHT_CLICK_BLOCK)
+                && ev.getPlayer().getItemInHand().getType() == Material.COMPASS
+                && p.getConfig().getBoolean("gameplay-changes.compass.enabled")
+                && !p.getGameManager().isPlayerDead(ev.getPlayer()))
         {
             Player player1 = ev.getPlayer();
 
-            Boolean foundRottenFlesh = false;
+            boolean foundRottenFlesh = false;
             for (ItemStack item : player1.getInventory().getContents())
             {
                 if (item != null && item.getType() == Material.ROTTEN_FLESH)
@@ -313,7 +319,7 @@ public class GameplayListener implements Listener
             {
                 try
                 {
-                    Double calc = player1.getLocation().distance(player2.getLocation());
+                    Double calc = player1.getLocation().distanceSquared(player2.getLocation());
 
                     if (calc > 1 && calc < distance)
                     {

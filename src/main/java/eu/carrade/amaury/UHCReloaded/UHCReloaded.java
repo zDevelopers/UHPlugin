@@ -120,8 +120,8 @@ public class UHCReloaded extends ZPlugin
 
 
         wbintegration = new UHWorldBorderIntegration();
-        spintegration = new UHSpectatorPlusIntegration(this);
-        dynmapintegration = new UHDynmapIntegration(this);
+        spintegration = new UHSpectatorPlusIntegration();
+        dynmapintegration = new UHDynmapIntegration();
 
         // Needed to avoid a NoClassDefFoundError.
         // I don't like this way of doing this, but else, the plugin will not load without ProtocolLib.
@@ -129,7 +129,7 @@ public class UHCReloaded extends ZPlugin
 
 
         spectatorsManager = SpectatorsManager.getInstance();
-        teamManager = new TeamManager(this);
+        teamManager = new TeamManager();
         gameManager = new UHGameManager(this);
         spawnsManager = new SpawnsManager(this);
         borderManager = new BorderManager(this);
@@ -137,7 +137,7 @@ public class UHCReloaded extends ZPlugin
         teamChatManager = new TeamChatManager(this);
         timerManager = new TimerManager();
 
-        runtimeCommandsExecutor = new RuntimeCommandsExecutor(this);
+        runtimeCommandsExecutor = new RuntimeCommandsExecutor();
 
         freezer = new Freezer(this);
 
@@ -153,8 +153,8 @@ public class UHCReloaded extends ZPlugin
             getCommand(commandName).setTabCompleter(executor);
         }
 
-        ZLib.registerEvents(new GameListener(this));
-        ZLib.registerEvents(new GameplayListener(this));
+        ZLib.registerEvents(new GameListener());
+        ZLib.registerEvents(new GameplayListener());
         ZLib.registerEvents(new CraftingListener(this));
         ZLib.registerEvents(new SpawnsListener());
         ZLib.registerEvents(new BeforeGameListener());
@@ -181,7 +181,7 @@ public class UHCReloaded extends ZPlugin
         // Starts the task that updates the timers.
         // Started here, so a timer can be displayed before the start of the game
         // (example: countdown before the start).
-        new UpdateTimerTask(this).runTaskTimer(this, 20l, 20l);
+        new UpdateTimerTask().runTaskTimer(this, 20L, 20L);
 
         // Schedule commands
         runtimeCommandsExecutor.registerCommandsInScheduler(RuntimeCommandsExecutor.AFTER_SERVER_START);

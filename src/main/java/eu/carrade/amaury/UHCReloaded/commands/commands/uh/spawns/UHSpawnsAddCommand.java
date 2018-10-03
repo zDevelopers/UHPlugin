@@ -66,7 +66,6 @@ public class UHSpawnsAddCommand extends AbstractCommand
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-
         // World?
         World world;
         if (sender instanceof Player)
@@ -82,8 +81,9 @@ public class UHSpawnsAddCommand extends AbstractCommand
             world = p.getServer().getWorlds().get(0);
         }
 
+        // /uh spawns add
         if (args.length == 0)
-        { // /uh spawns add
+        {
             if (!(sender instanceof Player))
             {
                 throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
@@ -106,12 +106,16 @@ public class UHSpawnsAddCommand extends AbstractCommand
                 }
             }
         }
+
+        // /uh spawns add <x>: Two coordinates needed!
         else if (args.length == 1)
-        { // /uh spawns add <x>: Two coordinates needed!
+        {
             sender.sendMessage(I.t("{ce}You need to specify two coordinates."));
         }
+
+        // /uh spawns add <x> <z>
         else
-        { // /uh spawns add <x> <z>
+        {
             try
             {
                 p.getSpawnsManager().addSpawnPoint(world, Double.parseDouble(args[0]), Double.parseDouble(args[1]));

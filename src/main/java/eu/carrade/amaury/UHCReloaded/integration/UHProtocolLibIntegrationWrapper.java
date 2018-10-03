@@ -39,8 +39,9 @@ import fr.zcraft.zlib.tools.PluginLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class UHProtocolLibIntegrationWrapper
@@ -90,29 +91,12 @@ public class UHProtocolLibIntegrationWrapper
      */
     public List<String> isProtocolLibNeeded()
     {
+        final List<String> enabledOptions = Stream.of(UHConfig.HARDCORE_HEARTS.DISPLAY, UHConfig.AUTO_RESPAWN.DO)
+                .filter(ConfigurationItem::get)
+                .map(ConfigurationItem::getFieldName)
+                .collect(Collectors.toList());
 
-        ArrayList<ConfigurationItem<Boolean>> options = new ArrayList<>();
-        options.add(UHConfig.HARDCORE_HEARTS.DISPLAY);
-        options.add(UHConfig.AUTO_RESPAWN.DO);
-
-        ArrayList<String> enabledOptions = new ArrayList<>();
-
-        for (ConfigurationItem<Boolean> option : options)
-        {
-            if (option.get())
-            {
-                enabledOptions.add(option.getFieldName());
-            }
-        }
-
-        if (enabledOptions.size() != 0)
-        {
-            return enabledOptions;
-        }
-        else
-        {
-            return null;
-        }
+        return enabledOptions.size() != 0 ? enabledOptions : null;
     }
 
     /**

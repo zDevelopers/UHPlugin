@@ -66,7 +66,7 @@ public class UHFeedCommand extends AbstractCommand
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
         }
 
-        Player target = p.getServer().getPlayer(args[0]);
+        final Player target = p.getServer().getPlayer(args[0]);
         if (target == null || !target.isOnline())
         {
             sender.sendMessage(I.t("{ce}This player is offline."));

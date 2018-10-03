@@ -80,26 +80,27 @@ public class UHAboutCommand extends AbstractCommand
 
         // Authors
 
-        String authors = "";
-        List<String> listAuthors = p.getDescription().getAuthors();
-        for (String author : listAuthors)
+        final StringBuilder authors = new StringBuilder();
+        final List<String> listAuthors = p.getDescription().getAuthors();
+
+        for (final String author : listAuthors)
         {
-            if (author == listAuthors.get(0))
+            if (!author.equals(listAuthors.get(0)))
             {
-                // Nothing
+                if (author.equals(listAuthors.get(listAuthors.size() - 1)))
+                {
+                    /// The "and" in the authors list (like "Amaury Carrade, azenet and João Roda")
+                    authors.append(" ").append(I.tc("authors_list", "and")).append(" ");
+                }
+                else
+                {
+                    authors.append(", ");
+                }
             }
-            else if (author == listAuthors.get(listAuthors.size() - 1))
-            {
-                /// The "and" in the authors list (like "Amaury Carrade, azenet and João Roda")
-                authors += " " + I.tc("authors_list", "and") + " ";
-            }
-            else
-            {
-                authors += ", ";
-            }
-            authors += author;
+
+            authors.append(author);
         }
-        sender.sendMessage(I.t("Plugin made with love by {0}.", authors));
+        sender.sendMessage(I.t("Plugin made with love by {0}.", authors.toString()));
 
         // Build number
 

@@ -31,6 +31,9 @@
  */
 package eu.carrade.amaury.UHCReloaded.game;
 
+import eu.carrade.amaury.UHCReloaded.UHConfig;
+import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -264,6 +267,76 @@ public class Cage
         }
 
         built = false;
+    }
+
+
+    /**
+     * Creates a Cage instance for the given team.
+     *
+     * @param team The team
+     * @param location The spawn location
+     *
+     * @return A Cage
+     */
+    static public Cage createInstanceForTeam(final UHTeam team, final Location location)
+    {
+        final Material cageMaterial;
+        final Byte cageData;
+
+        switch (UHConfig.START.SLOW.CAGES.TYPE.get())
+        {
+            case TEAM_COLOR_TRANSPARENT:
+                cageMaterial = Material.STAINED_GLASS;
+                cageData = ColorsUtils.chat2Dye(team.getColorOrWhite().toChatColor()).getWoolData();
+                break;
+
+            case TEAM_COLOR_SOLID:
+                cageMaterial = Material.STAINED_CLAY;
+                cageData = ColorsUtils.chat2Dye(team.getColorOrWhite().toChatColor()).getWoolData();
+                break;
+
+            case CUSTOM:
+                cageMaterial = UHConfig.START.SLOW.CAGES.CUSTOM_BLOCK.get();
+                cageData = null;
+                break;
+
+            // Should never happen
+            default:
+                cageMaterial = null;
+                cageData = null;
+        }
+
+        final Cage cage = new Cage(
+                location,
+                UHConfig.START.SLOW.CAGES.BUILD_CEILING.get(),
+                UHConfig.START.SLOW.CAGES.VISIBLE_WALLS.get()
+        );
+
+        if (cageMaterial != null) // Should always be true
+        {
+            cage.setCustomMaterial(cageMaterial, cageData != null ? cageData : 0);
+            cage.setInternalHeight(UHConfig.START.SLOW.CAGES.HEIGHT.get());
+            cage.setRadius(UHConfig.START.SLOW.CAGES.RADIUS.get());
+        }
+
+        return cage;
+    }
+
+    /**
+     * Creates a Cage instance for the given team if cages are enabled.
+     *
+     * @param team The team.
+     * @param location The spawn location.
+     *
+     * @return A Cage, or null if cages are disabled.
+     */
+    static public Cage createInstanceForTeamIfEnabled(final UHTeam team, final Location location)
+    {
+        if (UHConfig.START.SLOW.CAGES.ENABLED.get())
+        {
+            return createInstanceForTeam(team, location);
+        }
+        else return null;
     }
 
 

@@ -33,6 +33,7 @@ package eu.carrade.amaury.UHCReloaded.teams;
 
 import org.bukkit.ChatColor;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,16 +61,17 @@ public enum TeamColor
     RED("Red", ChatColor.RED),
     WHITE("White", ChatColor.WHITE),
     YELLOW("Yellow", ChatColor.YELLOW),
-    RANDOM("?", null);
+
+    RANDOM("?", null); // Must be the last one.
 
 
     private static Map<ChatColor, TeamColor> BY_CHAT_COLOR = new HashMap<>();
 
     static
     {
-        for (TeamColor color : values())
-            if (color.toChatColor() != null)
-                BY_CHAT_COLOR.put(color.toChatColor(), color);
+        Arrays.stream(values())
+                .filter(color -> color.toChatColor() != null)
+                .forEach(color -> BY_CHAT_COLOR.put(color.toChatColor(), color));
     }
 
 
@@ -95,12 +97,11 @@ public enum TeamColor
      */
     public static ChatColor getChatColorByName(String name)
     {
-        for (TeamColor color : values())
-        {
-            if (color.name.equalsIgnoreCase(name)) return color.color;
-        }
-
-        return null;
+        return Arrays.stream(values())
+                .filter(color -> color.name.equalsIgnoreCase(name))
+                .findFirst()
+                .map(color -> color.color)
+                .orElse(null);
     }
 
     /**
@@ -123,12 +124,9 @@ public enum TeamColor
         catch (IllegalArgumentException e)
         {
             // Maybe a color without underscore
-            for (TeamColor color : values())
-            {
-                if (color.name.equalsIgnoreCase(name)) return color;
-            }
-
-            return null;
+            return Arrays.stream(values())
+                    .filter(color -> color.name.equalsIgnoreCase(name))
+                    .findFirst().orElse(null);
         }
     }
 

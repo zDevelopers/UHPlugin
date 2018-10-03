@@ -48,7 +48,9 @@ import eu.carrade.amaury.UHCReloaded.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.tools.runners.RunTask;
+import fr.zcraft.zlib.tools.text.RawMessage;
 import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -58,7 +60,6 @@ import org.bukkit.SkullType;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -80,6 +81,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -93,9 +95,9 @@ public class GameListener implements Listener
     private final Set<UUID> enableSpectatorModeOnRespawn = new HashSet<>();
 
 
-    public GameListener(UHCReloaded p)
+    public GameListener()
     {
-        this.p = p;
+        this.p = UHCReloaded.get();
     }
 
 
@@ -148,15 +150,10 @@ public class GameListener implements Listener
         // Kicks the player if needed.
         if (UHConfig.DEATH.KICK.DO.get())
         {
-            Bukkit.getScheduler().runTaskLater(this.p, new Runnable()
+            RunTask.later(() ->
             {
-
-                @Override
-                public void run()
-                {
-                    /// The kick message of a player when death.kick.do = true in config
-                    ev.getEntity().kickPlayer(I.t("jayjay"));
-                }
+                /// The kick message of a player when death.kick.do = true in config
+                ev.getEntity().kickPlayer(I.t("jayjay"));
             }, 20L * UHConfig.DEATH.KICK.TIME.get());
         }
 
@@ -174,17 +171,10 @@ public class GameListener implements Listener
                 l.getWorld().dropItem(l, skull);
 
                 // Protip
-                if (ev.getEntity().getKiller() instanceof Player)
+                if (ev.getEntity().getKiller() != null)
                 {
                     final Player killer = ev.getEntity().getKiller();
-                    RunTask.later(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ProTips.CRAFT_GOLDEN_HEAD.sendTo(killer);
-                        }
-                    }, 200L);
+                    RunTask.later(() -> ProTips.CRAFT_GOLDEN_HEAD.sendTo(killer), 200L);
                 }
             }
         }
@@ -192,15 +182,15 @@ public class GameListener implements Listener
         // Give XP to the killer (if needed)
         if (UHConfig.DEATH.GIVE_XP_TO_KILLER.LEVELS.get() > 0)
         {
-            Entity killer = ev.getEntity().getKiller();
+            Player killer = ev.getEntity().getKiller();
             if (killer != null)
             {
-                boolean inSameTeam = p.getTeamManager().inSameTeam(ev.getEntity(), (Player) killer);
+                boolean inSameTeam = p.getTeamManager().inSameTeam(ev.getEntity(), killer);
                 boolean onlyOtherTeam = UHConfig.DEATH.GIVE_XP_TO_KILLER.ONLY_OTHER_TEAM.get();
 
-                if ((onlyOtherTeam && !inSameTeam) || !onlyOtherTeam)
+                if (!onlyOtherTeam || !inSameTeam)
                 {
-                    ((Player) killer).giveExpLevels(UHConfig.DEATH.GIVE_XP_TO_KILLER.LEVELS.get());
+                    killer.giveExpLevels(UHConfig.DEATH.GIVE_XP_TO_KILLER.LEVELS.get());
                 }
             }
         }
@@ -227,14 +217,9 @@ public class GameListener implements Listener
                 if (UHConfig.DEATH.MESSAGES.NOTIFY_IF_TEAM_HAS_FALLEN.get())
                 {
                     // Used to display this message after the death message.
-                    Bukkit.getScheduler().runTaskLater(p, new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            String format = ChatColor.translateAlternateColorCodes('&', UHConfig.DEATH.MESSAGES.TEAM_DEATH_MESSAGES_FORMAT.get());
-                            p.getServer().broadcastMessage(I.t("{0}The team {1} has fallen!", format, team.getDisplayName() + format));
-                        }
+                    RunTask.later(() -> {
+                        String format = ChatColor.translateAlternateColorCodes('&', UHConfig.DEATH.MESSAGES.TEAM_DEATH_MESSAGES_FORMAT.get());
+                        p.getServer().broadcastMessage(I.t("{0}The team {1} has fallen!", format, team.getDisplayName() + format));
                     }, 1L);
                 }
             }
@@ -271,14 +256,9 @@ public class GameListener implements Listener
         // Notifies the player about the possibility of respawn if hardcore hearts are enabled
         if (UHConfig.HARDCORE_HEARTS.DISPLAY.get() && p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled() && UHConfig.HARDCORE_HEARTS.RESPAWN_MESSAGE.get())
         {
-            Bukkit.getScheduler().runTaskLater(p, new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    /// A message displayed to the players under the death screen, about the respawn possibility even if the death screen says the opposite (in hardcore mode)
-                    ev.getEntity().sendMessage(I.t("{darkpurple}{obfuscated}----{lightpurple}{italic} YOU CAN RESPAWN{lightpurple}, just click {italic}Respawn {lightpurple}on the next screen."));
-                }
+            RunTask.later(() -> {
+                /// A message displayed to the players under the death screen, about the respawn possibility even if the death screen says the opposite (in hardcore mode)
+                ev.getEntity().sendMessage(I.t("{darkpurple}{obfuscated}----{lightpurple}{italic} YOU CAN RESPAWN{lightpurple}, just click {italic}Respawn {lightpurple}on the next screen."));
             }, 2L);
         }
 
@@ -304,13 +284,7 @@ public class GameListener implements Listener
     {
         if (enableSpectatorModeOnRespawn.remove(ev.getPlayer().getUniqueId()))
         {
-            RunTask.nextTick(new Runnable() {
-                @Override
-                public void run()
-                {
-                    p.getSpectatorsManager().setSpectating(ev.getPlayer(), true);
-                }
-            });
+            RunTask.nextTick(() -> p.getSpectatorsManager().setSpectating(ev.getPlayer(), true));
         }
     }
 
@@ -408,29 +382,18 @@ public class GameListener implements Listener
                 // Teams selector.
                 if (UHConfig.TEAMS_OPTIONS.GUI.AUTO_DISPLAY.get() && p.getTeamManager().getTeams().size() != 0)
                 {
-                    RunTask.later(new Runnable()
-                    {
-                        @Override
-                        public void run()
+                    RunTask.later(() -> {
+                        if (p.getTeamManager().getTeamForPlayer(ev.getPlayer()) == null)
                         {
-                            if (p.getTeamManager().getTeamForPlayer(ev.getPlayer()) == null)
-                            {
-                                p.getTeamManager().displayTeamChooserChatGUI(ev.getPlayer());
-                            }
+                            p.getTeamManager().displayTeamChooserChatGUI(ev.getPlayer());
                         }
-                    }, 20l * UHConfig.TEAMS_OPTIONS.GUI.DELAY.get());
+                    }, 20L * UHConfig.TEAMS_OPTIONS.GUI.DELAY.get());
                 }
 
                 // Rules
                 if (p.getRulesManager().displayOnJoin())
                 {
-                    RunTask.later(new Runnable() {
-                        @Override
-                        public void run()
-                        {
-                            p.getRulesManager().displayRulesTo(ev.getPlayer());
-                        }
-                    }, 15 * 20l);
+                    RunTask.later(() -> p.getRulesManager().displayRulesTo(ev.getPlayer()), 15 * 20L);
                 }
             }
             else
@@ -452,23 +415,16 @@ public class GameListener implements Listener
 
         if (!p.getGameManager().isGameStarted() && ev.getPlayer().hasPermission("uh.*"))
         {
-            // A warning to the administrators if WorldBorder is not present.
-            if (!p.getWorldBorderIntegration().isWBIntegrationEnabled())
-            {
-                ev.getPlayer().sendMessage(I.t("{darkred}[UHC] {ce}WorldBorder is not installed: no borders' check!"));
-                ev.getPlayer().sendMessage(I.t("{gray}Also, without WorldBorder, the border can't be reduced during the game (warnings excluded)."));
-                ev.getPlayer().sendMessage(I.t("{gray}Just install the plugin; UHPlugin will automatically configure it."));
-            }
-
-            // The same for ProtocolLib
+            // A warning to the administrators if ProtocolLib is not present.
             if (!p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled())
             {
-                List<String> enabledOptionsWithProtocolLibNeeded = p.getProtocolLibIntegrationWrapper().isProtocolLibNeeded();
+                final List<String> enabledOptionsWithProtocolLibNeeded = p.getProtocolLibIntegrationWrapper().isProtocolLibNeeded();
 
                 if (enabledOptionsWithProtocolLibNeeded != null)
                 {
                     ev.getPlayer().sendMessage(I.t("{darkred}[UHC] {ce}ProtocolLib is needed but not installed!"));
                     ev.getPlayer().sendMessage(I.t("{gray}The following options require the presence of ProtocolLib:"));
+
                     for (String option : enabledOptionsWithProtocolLibNeeded)
                     {
                         /// An option requiring ProtocolLib, in the “missing PLib” message. {0} = option path.
@@ -484,8 +440,23 @@ public class GameListener implements Listener
                     {
                         pLibDownloadURL = "http://www.spigotmc.org/resources/protocollib.1997/";
                     }
-                    /// {0} = ProtocolLib download URL for the current Minecraft version.
-                    ev.getPlayer().sendMessage(I.t("{gray}ProtocolLib is available here: {0}", pLibDownloadURL));
+
+                    try
+                    {
+                        RawMessage.send(ev.getPlayer(),
+                            new RawText(I.t("{gray}You can download ProtocolLib by clicking here."))
+                                .uri(pLibDownloadURL)
+                                .hover(ChatColor.GRAY + pLibDownloadURL)
+                            .build()
+                        );
+                    }
+                    catch (URISyntaxException e)
+                    {
+                        e.printStackTrace();
+
+                        /// {0} = ProtocolLib download URL for the current Minecraft version.
+                        ev.getPlayer().sendMessage(I.t("{gray}ProtocolLib is available here: {0}", pLibDownloadURL));
+                    }
                 }
             }
         }
@@ -705,62 +676,53 @@ public class GameListener implements Listener
         // Rules
         if (p.getRulesManager().displayOnStart())
         {
-            RunTask.later(new Runnable() {
-                @Override
-                public void run()
-                {
-                    p.getRulesManager().broadcastRules();
-                }
-            }, 15 * 20l);
+            RunTask.later(() -> p.getRulesManager().broadcastRules(), 15 * 20L);
         }
 
         // Banners
         if (p.getGameManager().START_GIVE_BANNER || p.getGameManager().START_PLACE_BANNER_HEAD || p.getGameManager().START_PLACE_BANNER_SPAWN)
         {
-            RunTask.later(new Runnable() {
-                @Override
-                public void run()
+            RunTask.later(() ->
+            {
+                for (UHTeam team : p.getTeamManager().getTeams())
                 {
-                    for (UHTeam team : p.getTeamManager().getTeams())
+                    if (!team.isEmpty())
                     {
-                        if (!team.isEmpty())
+                        final ItemStack banner = team.getBanner();
+                        for (Player player : team.getOnlinePlayers())
                         {
-                            ItemStack banner = team.getBanner();
-                            for (Player player : team.getOnlinePlayers())
+                            if (p.getGameManager().START_GIVE_BANNER)
+                                player.getInventory().setItem(8, banner);
+
+                            if (p.getGameManager().START_PLACE_BANNER_HEAD)
+                                player.getInventory().setHelmet(banner);
+
+                            if (p.getGameManager().START_PLACE_BANNER_SPAWN)
                             {
-                                if (p.getGameManager().START_GIVE_BANNER)
-                                    player.getInventory().setItem(8, banner);
+                                final Block place = player.getWorld().getHighestBlockAt(player.getLocation());
+                                final Block under = place.getRelative(BlockFace.DOWN);
 
-                                if (p.getGameManager().START_PLACE_BANNER_HEAD)
-                                    player.getInventory().setHelmet(banner);
-
-                                if (p.getGameManager().START_PLACE_BANNER_SPAWN)
+                                // We don't want a stack of banners
+                                if (under.getType() != Material.STANDING_BANNER)
                                 {
-                                    Block place = player.getWorld().getHighestBlockAt(player.getLocation());
-                                    Block under = place.getRelative(BlockFace.DOWN);
+                                    if (!under.getType().isSolid())
+                                        under.setType(Material.WOOD);
 
-                                    // We don't want a stack of banners
-                                    if (under.getType() != Material.STANDING_BANNER)
-                                    {
-                                        if (!under.getType().isSolid())
-                                            under.setType(Material.WOOD);
+                                    place.setType(Material.STANDING_BANNER);
 
-                                        place.setType(Material.STANDING_BANNER);
+                                    Banner bannerBlock = (Banner) place.getState();
+                                    BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
 
-                                        Banner bannerBlock = (Banner) place.getState();
-                                        BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
+                                    bannerBlock.setBaseColor(bannerMeta.getBaseColor());
+                                    bannerBlock.setPatterns(bannerMeta.getPatterns());
 
-                                        bannerBlock.setBaseColor(bannerMeta.getBaseColor());
-                                        bannerBlock.setPatterns(bannerMeta.getPatterns());
-
-                                        bannerBlock.update();
-                                    }
+                                    bannerBlock.update();
                                 }
                             }
                         }
                     }
                 }
-            }, 5l);
+            }, 5L);
         }
     }
 
@@ -774,20 +736,16 @@ public class GameListener implements Listener
     {
         if (UHConfig.FINISH.AUTO.DO.get())
         {
-            Bukkit.getScheduler().runTaskLater(p, new Runnable()
+            RunTask.later(() ->
             {
-                @Override
-                public void run()
+                try
                 {
-                    try
-                    {
-                        p.getGameManager().finishGame();
-                    }
-                    catch (IllegalStateException e)
-                    {
-                        // The game is not finished (..what?).
-                        e.printStackTrace();
-                    }
+                    p.getGameManager().finishGame();
+                }
+                catch (IllegalStateException e)
+                {
+                    // The game is not finished (...what?).
+                    e.printStackTrace();
                 }
             }, UHConfig.FINISH.AUTO.TIME_AFTER_LAST_DEATH.get() * 20L);
         }

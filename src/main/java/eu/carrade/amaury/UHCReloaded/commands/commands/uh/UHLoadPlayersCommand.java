@@ -37,17 +37,13 @@ import eu.carrade.amaury.UHCReloaded.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.i18n.I;
-import fr.zcraft.zlib.tools.Callback;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 
 @Command(name = "loadplayers")
@@ -72,22 +68,14 @@ public class UHLoadPlayersCommand extends AbstractCommand
         /// Message displayed when the /uh loadplayers command is used, as the execution may take some time.
         sender.sendMessage(I.t("{cst}Loading players..."));
 
-        OfflinePlayersLoader.loadPlayers(Arrays.asList(args), new Callback<Map<UUID, OfflinePlayer>>()
-        {
-            @Override
-            public void call(Map<UUID, OfflinePlayer> addedPlayers)
-            {
-                sender.sendMessage(I.tn("{cs}Loaded {0} player successfully.", "{cs}Loaded {0} players successfully.", addedPlayers.size()));
-            }
-        }, new Callback<List<String>>()
-        {
-            @Override
-            public void call(List<String> notFound)
-            {
-                /// Message sent if some players cannot be loaded while /uh loadplayers is used. 0 = amount of players missing; 1 = list of nicknames (format "nick1, nick2, nick3").
-                sender.sendMessage(I.tn("{ce}{0} player is missing: {1}.", "{ce}{0} players are missing: {1}.", notFound.size(), notFound.size(), StringUtils.join(notFound, ", ")));
-            }
-        });
+        OfflinePlayersLoader.loadPlayers(
+                Arrays.asList(args),
+                addedPlayers -> sender.sendMessage(I.tn("{cs}Loaded {0} player successfully.", "{cs}Loaded {0} players successfully.", addedPlayers.size())),
+                notFound -> {
+                    /// Message sent if some players cannot be loaded while /uh loadplayers is used. 0 = amount of players missing; 1 = list of nicknames (format "nick1, nick2, nick3").
+                    sender.sendMessage(I.tn("{ce}{0} player is missing: {1}.", "{ce}{0} players are missing: {1}.", notFound.size(), notFound.size(), StringUtils.join(notFound, ", ")));
+                }
+        );
     }
 
     @Override

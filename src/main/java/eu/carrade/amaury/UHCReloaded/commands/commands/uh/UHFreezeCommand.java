@@ -78,11 +78,11 @@ public class UHFreezeCommand extends AbstractCommand
 
         if (subCommand.equalsIgnoreCase("on") || subCommand.equalsIgnoreCase("off"))
         {
+            final boolean on = subCommand.equalsIgnoreCase("on");
 
-            boolean on = subCommand.equalsIgnoreCase("on");
-
+            // /uh freeze on: freezes the sender
             if (args.length == 1)
-            { // /uh freeze on: freezes the sender
+            {
                 if (sender instanceof Player)
                 {
                     p.getFreezer().setPlayerFreezeState((Player) sender, on);
@@ -101,8 +101,10 @@ public class UHFreezeCommand extends AbstractCommand
                     throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
                 }
             }
+
+            // /uh freeze on <player>: freezes <player>.
             else if (args.length == 2)
-            { // /uh freeze on <player>: freezes <player>.
+            {
                 Player player = p.getServer().getPlayer(args[1]);
                 if (player == null)
                 {
@@ -127,8 +129,7 @@ public class UHFreezeCommand extends AbstractCommand
 
         else if (subCommand.equalsIgnoreCase("all") || subCommand.equalsIgnoreCase("none"))
         {
-
-            boolean on = subCommand.equalsIgnoreCase("all");
+            final boolean on = subCommand.equalsIgnoreCase("all");
 
             p.getFreezer().setGlobalFreezeState(on);
 

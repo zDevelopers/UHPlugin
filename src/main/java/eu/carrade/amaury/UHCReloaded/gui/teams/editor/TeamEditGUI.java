@@ -39,7 +39,6 @@ import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.gui.PromptGui;
 import fr.zcraft.zlib.components.i18n.I;
-import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -152,13 +151,9 @@ public class TeamEditGUI extends TeamActionGUI
     @GuiAction ("name")
     protected void name()
     {
-        Gui.open(getPlayer(), new PromptGui(new Callback<String>() {
-            @Override
-            public void call(String name)
-            {
-                if (!name.trim().isEmpty())
-                    team.setName(name);
-            }
+        Gui.open(getPlayer(), new PromptGui(name ->
+        {
+            if (!name.trim().isEmpty()) team.setName(name);
         }, team.getName()), this);
     }
 

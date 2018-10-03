@@ -68,8 +68,9 @@ public class UHTeamAddCommand extends AbstractCommand
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
+        // /uh team add <color>
         if (args.length == 1)
-        { // /uh team add <color>
+        {
 
             TeamColor color = TeamColor.fromString(args[0]);
             UHTeam team;

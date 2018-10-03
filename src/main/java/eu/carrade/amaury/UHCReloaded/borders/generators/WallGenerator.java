@@ -39,9 +39,8 @@ import org.bukkit.block.Block;
 
 public abstract class WallGenerator
 {
-
-    private Material wallBlockAir = null;
-    private Material wallBlockSolid = null;
+    final private Material wallBlockAir;
+    final private Material wallBlockSolid;
 
     private int blocksSet = 0;
 
@@ -81,7 +80,7 @@ public abstract class WallGenerator
         // We set the block according to the block near it inside the border.
         else
         {
-            Material innerMaterial = getInnerBlock(block, position).getType();
+            final Material innerMaterial = getInnerBlock(block, position).getType();
             if (isBlockTransparentOrNatural(innerMaterial))
             {
                 block.setType(wallBlockAir);
@@ -163,10 +162,10 @@ public abstract class WallGenerator
     protected Block getInnerBlock(Block block, WallPosition position)
     {
         // Just for readability.
-        World world = block.getWorld();
-        Integer x = block.getX();
-        Integer y = block.getY();
-        Integer z = block.getZ();
+        final World world = block.getWorld();
+        final int x = block.getX();
+        final int y = block.getY();
+        final int z = block.getZ();
 
         switch (position)
         {

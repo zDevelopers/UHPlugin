@@ -1,7 +1,7 @@
 name: UHPlugin
 description: UltraHardcore Reloaded
 main: eu.carrade.amaury.UHCReloaded.UHCReloaded
-version: 1.4
+version: 1.5
 author: "Amaury Carrade"
 authors: [azenet, "João Roda"]
 

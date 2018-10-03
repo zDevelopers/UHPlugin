@@ -33,10 +33,8 @@ package eu.carrade.amaury.UHCReloaded.borders.exceptions;
 
 public class UnknownWallGenerator extends Exception
 {
-
     public UnknownWallGenerator(String message)
     {
         super(message);
     }
-
 }

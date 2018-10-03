@@ -56,7 +56,9 @@ public class MOTDManager
 
         if (enabled && UHConfig.MOTD.DISPLAY_MATCH_NAME.get())
         {
-            matchName = ChatColor.translateAlternateColorCodes('&', UHConfig.MOTD.MATCH_NAME_PREFIX.get()) + p.getScoreboardManager().getScoreboardName() + ChatColor.RESET + "\n";
+            matchName = ChatColor.translateAlternateColorCodes('&', UHConfig.MOTD.MATCH_NAME_PREFIX.get())
+                    + p.getScoreboardManager().getScoreboardName()
+                    + ChatColor.RESET + "\n";
         }
     }
 

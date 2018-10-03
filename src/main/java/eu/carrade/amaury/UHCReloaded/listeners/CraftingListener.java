@@ -39,11 +39,9 @@ import eu.carrade.amaury.UHCReloaded.recipes.RecipesManager;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.runners.RunTask;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
@@ -63,6 +61,7 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashSet;
+import java.util.Set;
 
 
 public class CraftingListener implements Listener
@@ -92,7 +91,7 @@ public class CraftingListener implements Listener
             return;
         }
 
-        /** Prevents items to be crafted **/
+        /* *** Prevents items to be crafted *** */
 
         if (!p.getRecipesManager().isRecipeAllowed(recipe))
         {
@@ -101,37 +100,34 @@ public class CraftingListener implements Listener
             // ProTips
             final String failedRecipe = p.getRecipesManager().getLastFailedRecipe();
             final Player player = (Player) ev.getViewers().get(0); // crafting inventory: only one viewer in all cases.
-            RunTask.later(new Runnable()
+
+            RunTask.later(() ->
             {
-                @Override
-                public void run()
+                switch (failedRecipe)
                 {
-                    switch (failedRecipe)
-                    {
-                        case RecipesManager.RECIPE_COMPASS:
-                            switch (p.getRecipesManager().getCompassRecipeType())
-                            {
-                                case RecipesManager.COMPASS_EASY:
-                                    ProTips.CRAFT_COMPASS_EASY.sendTo(player);
-                                    break;
-                                case RecipesManager.COMPASS_MEDIUM:
-                                    ProTips.CRAFT_COMPASS_MEDIUM.sendTo(player);
-                                    break;
-                                case RecipesManager.COMPASS_HARD:
-                                    ProTips.CRAFT_COMPASS_HARD.sendTo(player);
-                                    break;
-                            }
+                    case RecipesManager.RECIPE_COMPASS:
+                        switch (p.getRecipesManager().getCompassRecipeType())
+                        {
+                            case RecipesManager.COMPASS_EASY:
+                                ProTips.CRAFT_COMPASS_EASY.sendTo(player);
+                                break;
+                            case RecipesManager.COMPASS_MEDIUM:
+                                ProTips.CRAFT_COMPASS_MEDIUM.sendTo(player);
+                                break;
+                            case RecipesManager.COMPASS_HARD:
+                                ProTips.CRAFT_COMPASS_HARD.sendTo(player);
+                                break;
+                        }
 
-                            break;
+                        break;
 
-                        case RecipesManager.RECIPE_GLISTERING_MELON:
-                            ProTips.CRAFT_GLISTERING_MELON.sendTo(player);
-                            break;
+                    case RecipesManager.RECIPE_GLISTERING_MELON:
+                        ProTips.CRAFT_GLISTERING_MELON.sendTo(player);
+                        break;
 
-                        case RecipesManager.RECIPE_ENCHANTED_GOLDEN_APPLE:
-                            ProTips.CRAFT_NO_ENCHANTED_GOLDEN_APPLE.sendTo(player);
-                            break;
-                    }
+                    case RecipesManager.RECIPE_ENCHANTED_GOLDEN_APPLE:
+                        ProTips.CRAFT_NO_ENCHANTED_GOLDEN_APPLE.sendTo(player);
+                        break;
                 }
             }, 40L);
 
@@ -139,7 +135,7 @@ public class CraftingListener implements Listener
         }
 
 
-        /** Adds a lore to the golden apples crafted from a head **/
+        /* *** Adds a lore to the golden apples crafted from a head *** */
 
         ItemStack loreResult = p.getRecipesManager().addLore(recipe, ev.getInventory());
         if (loreResult != null)
@@ -149,7 +145,7 @@ public class CraftingListener implements Listener
         }
 
 
-        /** The lore remover don't change the name of the item **/
+        /* *** The lore remover don't change the name of the item *** */
 
         ItemStack keepNameResult = p.getRecipesManager().keepNameOnLoreRemover(recipe, ev.getInventory());
         if (keepNameResult != null)
@@ -181,116 +177,103 @@ public class CraftingListener implements Listener
         {
             final Inventory inventory = ev.getInventory();
 
-            /** Workaround to fix the crafting grid being not updated when the item is taken
-             from the grid. **/
+            // Workaround to fix the crafting grid being not updated when the item is taken
+            // from the grid.
             if (inventory instanceof CraftingInventory && ev.getSlotType() == SlotType.RESULT)
             {
-                p.getServer().getScheduler().runTaskLater(p, new Runnable()
-                {
-
-                    @Override
-                    public void run()
-                    {
-                        for (HumanEntity viewer : ev.getViewers())
-                        {
-                            if (viewer instanceof Player)
-                            {
-                                ((Player) viewer).updateInventory();
-                            }
-                        }
-                    }
-                }, 1L);
+                RunTask.later(
+                    () -> ev.getViewers().stream()
+                            .filter(viewer -> viewer instanceof Player)
+                            .forEach(viewer -> ((Player) viewer).updateInventory()),
+                    1L
+                );
             }
 
 
-            /** Allows any shape for the loots in the compass recipe. **/
+            /* *** Allows any shape for the loots in the compass recipe. *** */
 
             if (inventory instanceof CraftingInventory)
             {
-
                 // This is ran one tick after the click because when the event is fired, the inventory
                 // object is not updated, and so the result of the isValidCompassResult is invalid.
 
-                Bukkit.getScheduler().runTaskLater(p, new Runnable()
+                RunTask.later(() ->
                 {
-                    @Override
-                    public void run()
+                    if (p.getRecipesManager().isValidCompassRecipe(((CraftingInventory) inventory).getMatrix()))
                     {
-                        if (p.getRecipesManager().isValidCompassRecipe(((CraftingInventory) inventory).getMatrix()))
+
+                        // Puts the compass in the result slot
+                        if (ev.getSlotType() == SlotType.CRAFTING)
                         {
+                            ((CraftingInventory) inventory).setResult(new ItemStack(Material.COMPASS));
+                            ev.setResult(Result.ALLOW);
 
-                            // Puts the compass in the result slot
-                            if (ev.getSlotType() == SlotType.CRAFTING)
+                            ((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
+                        }
+
+                        // Consumes the materials in the crafting grid.
+                        // Because this is not an "official" recipe, we need to do that manually.
+                        else if (ev.getSlotType() == SlotType.RESULT)
+                        {
+                            int index = 1;
+                            for (ItemStack stack : ((CraftingInventory) inventory).getMatrix())
                             {
-                                ((CraftingInventory) inventory).setResult(new ItemStack(Material.COMPASS));
-                                ev.setResult(Result.ALLOW);
+                                if (stack == null) continue;
 
-                                ((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
-                            }
-
-                            // Consumes the materials in the crafting grid.
-                            // Because this is not an "official" recipe, we need to do that manually.
-                            else if (ev.getSlotType() == SlotType.RESULT)
-                            {
-                                int index = 1;
-                                for (ItemStack stack : ((CraftingInventory) inventory).getMatrix())
+                                if (stack.getAmount() != 1)
                                 {
-                                    if (stack == null) continue;
-
-                                    if (stack.getAmount() != 1)
-                                    {
-                                        stack.setAmount(stack.getAmount() - 1);
-                                        inventory.setItem(index, stack);
-                                    }
-                                    else
-                                    {
-                                        inventory.setItem(index, new ItemStack(Material.AIR));
-                                    }
-
-                                    index++;
+                                    stack.setAmount(stack.getAmount() - 1);
+                                    inventory.setItem(index, stack);
+                                }
+                                else
+                                {
+                                    inventory.setItem(index, new ItemStack(Material.AIR));
                                 }
 
-                                ev.setCurrentItem(new ItemStack(Material.COMPASS));
-                                ev.setResult(Result.ALLOW);
-
-                                ((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
+                                index++;
                             }
 
-                            return;
+                            ev.setCurrentItem(new ItemStack(Material.COMPASS));
+                            ev.setResult(Result.ALLOW);
+
+                            ((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
                         }
                     }
-
                 }, 1L);
             }
 
 
-            /** Prevent an apple to be renamed to/from the name of an head apple. **/
+            /* *** Prevent an apple to be renamed to/from the name of an head apple. *** */
 
             else if (inventory instanceof AnvilInventory)
             {
                 InventoryView view = ev.getView();
                 int rawSlot = ev.getRawSlot();
 
+                // ensure we are talking about the upper inventory
                 if (rawSlot == view.convertSlot(rawSlot))
-                { // ensure we are talking about the upper inventory
+                {
+                    // "result" slot
                     if (rawSlot == 2)
-                    { // "result" slot
+                    {
                         ItemStack item = ev.getCurrentItem();
+
+                        // result slot non empty
                         if (item != null)
-                        { // result slot non empty
-                            ItemMeta meta = item.getItemMeta();
+                        {
+                            final ItemMeta meta = item.getItemMeta();
 
-                            HashSet<String> prohibited = new HashSet<String>();
+                            final Set<String> prohibited = new HashSet<>();
 
+                            prohibited.add(I.t("Golden head"));
                             prohibited.add(ChatColor.RESET + I.t("{aqua}Golden head"));
                             prohibited.add(ChatColor.RESET + I.t("{lightpurple}Golden head"));
 
                             // It is possible that the client filters the name of the golden apple in the anvil UI,
                             // removing all §.
-                            for (String prohibition : new HashSet<>(prohibited))
-                            {
-                                prohibited.add(prohibition.replace("§", ""));
-                            }
+                            new HashSet<>(prohibited).stream()
+                                    .map(prohibition -> prohibition.replace("§", ""))
+                                    .forEach(prohibited::add);
 
 
                             // An item can't be renamed to the name of a golden head
@@ -303,8 +286,8 @@ public class CraftingListener implements Listener
                             }
 
                             // A golden head can't be renamed to any other name
-                            if (view.getItem(0) != null)
-                            { // slot 0 = first slot
+                            if (view.getItem(0) != null) // slot 0 = first slot
+                            {
                                 ItemMeta metaOriginal = view.getItem(0).getItemMeta();
 
                                 if (metaOriginal != null && metaOriginal.hasDisplayName())
@@ -331,16 +314,12 @@ public class CraftingListener implements Listener
     {
         if (ev.getInventory() instanceof CraftingInventory)
         {
-            Bukkit.getScheduler().runTaskLater(p, new Runnable()
+            RunTask.later(() ->
             {
-                @Override
-                public void run()
+                if (p.getRecipesManager().isValidCompassRecipe(((CraftingInventory) ev.getInventory()).getMatrix()))
                 {
-                    if (p.getRecipesManager().isValidCompassRecipe(((CraftingInventory) ev.getInventory()).getMatrix()))
-                    {
-                        ((CraftingInventory) ev.getInventory()).setResult(new ItemStack(Material.COMPASS));
-                        ((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
-                    }
+                    ((CraftingInventory) ev.getInventory()).setResult(new ItemStack(Material.COMPASS));
+                    ((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
                 }
             }, 1L);
         }

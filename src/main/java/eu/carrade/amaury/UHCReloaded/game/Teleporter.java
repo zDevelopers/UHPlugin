@@ -31,10 +31,10 @@
  */
 package eu.carrade.amaury.UHCReloaded.game;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.tools.Callback;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -277,8 +277,18 @@ public class Teleporter
         // Slow mode
         else
         {
-            new TeleportationRunnable(this, spawnPoints.keySet(), onTeleportation, onTeleportationSuccessful, onTeleportationFailed, onTeleportationProcessFinished)
-                    .runTaskTimer(UHCReloaded.get(), 1l, UHConfig.START.SLOW.DELAY_BETWEEN_TP.get() * 20l);
+            RunTask.timer(
+                new TeleportationRunnable(
+                        this,
+                        spawnPoints.keySet(),
+                        onTeleportation,
+                        onTeleportationSuccessful,
+                        onTeleportationFailed,
+                        onTeleportationProcessFinished
+                ),
+                1L,
+                UHConfig.START.SLOW.DELAY_BETWEEN_TP.get() * 20L
+            );
         }
     }
 

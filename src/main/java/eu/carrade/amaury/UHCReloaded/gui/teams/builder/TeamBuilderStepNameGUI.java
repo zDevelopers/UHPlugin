@@ -37,7 +37,6 @@ import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.gui.PromptGui;
 import fr.zcraft.zlib.components.i18n.I;
-import fr.zcraft.zlib.tools.Callback;
 import org.bukkit.Material;
 
 
@@ -71,15 +70,12 @@ public class TeamBuilderStepNameGUI extends TeamBuilderBaseGUI
     @GuiAction ("name")
     protected void name()
     {
-        Gui.open(getPlayer(), new PromptGui(new Callback<String>() {
-            @Override
-            public void call(String name)
-            {
-                if (name.trim().isEmpty())
-                    Gui.open(getPlayer(), new TeamBuilderStepNameGUI(getColor()));
-                else
-                    Gui.open(getPlayer(), new TeamBuilderStepPlayersGUI(getColor(), name));
-            }
+        Gui.open(getPlayer(), new PromptGui(name ->
+        {
+            if (name.trim().isEmpty())
+                Gui.open(getPlayer(), new TeamBuilderStepNameGUI(getColor()));
+            else
+                Gui.open(getPlayer(), new TeamBuilderStepPlayersGUI(getColor(), name));
         }));
     }
 

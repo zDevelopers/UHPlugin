@@ -34,7 +34,7 @@ package eu.carrade.amaury.UHCReloaded.scoreboard;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.events.UHPlayerDeathEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHPlayerResurrectedEvent;
-import org.bukkit.Bukkit;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -51,7 +51,7 @@ public class ScoreboardListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent ev)
     {
-        SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(ev.getPlayer().getUniqueId());
+        final SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(ev.getPlayer().getUniqueId());
 
         cache.updateName(ev.getPlayer().getName());
         cache.updateOnlineStatus(true);
@@ -72,14 +72,14 @@ public class ScoreboardListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerRegainHealth(EntityRegainHealthEvent ev)
     {
-        if(ev.getEntity() instanceof Player)
+        if (ev.getEntity() instanceof Player)
             onPlayerHealthChange((Player) ev.getEntity());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerLoseHealth(EntityDamageEvent ev)
     {
-        if(ev.getEntity() instanceof Player)
+        if (ev.getEntity() instanceof Player)
             onPlayerHealthChange((Player) ev.getEntity());
     }
 
@@ -89,9 +89,11 @@ public class ScoreboardListener implements Listener
         onPlayerHealthChange(ev.getPlayer());
 
         if (ev.getPlayerDeathEvent().getEntity().getKiller() != null)
+        {
             UHCReloaded.get().getScoreboardManager()
                     .getSidebarPlayerCache(ev.getPlayerDeathEvent().getEntity().getKiller().getUniqueId())
                     .getPlayersKilled().add(ev.getPlayer().getUniqueId());
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -101,7 +103,7 @@ public class ScoreboardListener implements Listener
 
         for (SidebarPlayerCache cache : UHCReloaded.get().getScoreboardManager().getAllSidebarPlayerCache().values())
         {
-            if(cache.getPlayersKilled().remove(ev.getPlayer().getUniqueId()))
+            if (cache.getPlayersKilled().remove(ev.getPlayer().getUniqueId()))
                 break;
         }
     }
@@ -114,18 +116,9 @@ public class ScoreboardListener implements Listener
     private void onPlayerHealthChange(final Player player)
     {
         // One tick later to use the updated health value.
-        Bukkit.getScheduler().runTaskLater(UHCReloaded.get(), new Runnable() {
-            @Override
-            public void run()
-            {
-                SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(player.getUniqueId());
-
-                if(UHCReloaded.get().getGameManager().isPlayerDead(player.getUniqueId()))
-                    cache.updateHealth(0d);
-
-                else
-                    cache.updateHealth(player.getHealth());
-            }
-        }, 1l);
+        RunTask.nextTick(() -> {
+            final SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(player.getUniqueId());
+            cache.updateHealth(UHCReloaded.get().getGameManager().isPlayerDead(player.getUniqueId()) ? 0d : player.getHealth());
+        });
     }
 }

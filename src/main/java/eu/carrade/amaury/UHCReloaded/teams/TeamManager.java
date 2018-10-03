@@ -67,9 +67,9 @@ public class TeamManager
     private final HashSet<UHTeam> teams = new HashSet<>();
 
 
-    public TeamManager(UHCReloaded plugin)
+    public TeamManager()
     {
-        p = plugin;
+        p = UHCReloaded.get();
 
         MAX_PLAYERS_PER_TEAM = UHConfig.TEAMS_OPTIONS.MAX_PLAYERS_PER_TEAM.get();
     }
@@ -114,7 +114,7 @@ public class TeamManager
             throw new IllegalArgumentException("There is already a team named " + name + " registered!");
         }
 
-        UHTeam team = new UHTeam(name, generateColor(color));
+        final UHTeam team = new UHTeam(name, generateColor(color));
         teams.add(team);
 
         updateGUIs();
@@ -133,7 +133,6 @@ public class TeamManager
      */
     public UHTeam addTeam(TeamColor color)
     {
-
         color = generateColor(color);
         String teamName = color.toString().toLowerCase();
 
@@ -146,7 +145,7 @@ public class TeamManager
             } while (isTeamRegistered(teamName));
         }
 
-        UHTeam team = new UHTeam(teamName, color);
+        final UHTeam team = new UHTeam(teamName, color);
         teams.add(team);
 
         updateGUIs();
@@ -162,7 +161,7 @@ public class TeamManager
      *
      * @throws IllegalArgumentException if a team with the same name already exists.
      */
-    public UHTeam addTeam(UHTeam team)
+    public UHTeam addTeam(final UHTeam team)
     {
         if (isTeamRegistered(team))
         {
@@ -189,10 +188,7 @@ public class TeamManager
         {
             if (dontNotify)
             {
-                for (OfflinePlayer player : team.getPlayers())
-                {
-                    this.removePlayerFromTeam(player, true);
-                }
+                team.getPlayers().forEach(player -> this.removePlayerFromTeam(player, true));
             }
 
             team.deleteTeam();
@@ -292,10 +288,7 @@ public class TeamManager
     public void reset(boolean dontNotify)
     {
         // 1: scoreboard reset
-        for (UHTeam team : new HashSet<>(teams))
-        {
-            this.removeTeam(team, dontNotify);
-        }
+        new HashSet<>(teams).forEach(team -> this.removeTeam(team, dontNotify));
 
         // 2: internal list reset
         teams.clear();
@@ -370,15 +363,7 @@ public class TeamManager
      */
     public UHTeam getTeam(String name)
     {
-        for (UHTeam t : teams)
-        {
-            if (t.getName().equalsIgnoreCase(name))
-            {
-                return t;
-            }
-        }
-
-        return null;
+        return teams.stream().filter(t -> t.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     /**
@@ -389,12 +374,7 @@ public class TeamManager
      */
     public UHTeam getTeamForPlayer(OfflinePlayer player)
     {
-        for (UHTeam t : teams)
-        {
-            if (t.containsPlayer(player.getUniqueId())) return t;
-        }
-
-        return null;
+        return teams.stream().filter(t -> t.containsPlayer(player.getUniqueId())).findFirst().orElse(null);
     }
 
     /**
@@ -414,8 +394,9 @@ public class TeamManager
      * <p>
      * If the color is neither {@link TeamColor#RANDOM} nor {@code null}, returns the given color.<br />
      * Else, generates a random unused (if possible) color.
-     * @param color
-     * @return
+     *
+     * @param color The color to be generated.
+     * @return A non-random color.
      */
     public TeamColor generateColor(TeamColor color)
     {
@@ -425,12 +406,10 @@ public class TeamManager
         }
 
         // A list of the currently used colors.
-        HashSet<TeamColor> availableColors = new HashSet<TeamColor>(Arrays.asList(TeamColor.values()));
+        final HashSet<TeamColor> availableColors = new HashSet<TeamColor>(Arrays.asList(TeamColor.values()));
         availableColors.remove(TeamColor.RANDOM);
-        for (UHTeam team : getTeams())
-        {
-            availableColors.remove(team.getColorOrWhite());
-        }
+
+        getTeams().stream().map(UHTeam::getColorOrWhite).forEach(availableColors::remove);
 
         if (availableColors.size() != 0)
         {
@@ -504,7 +483,7 @@ public class TeamManager
 
             for (UHTeam team : p.getTeamManager().getTeams())
             {
-                String players = "";
+                StringBuilder players = new StringBuilder();
                 if (displayPlayers)
                 {
                     String bullet = "\n - ";
@@ -512,19 +491,19 @@ public class TeamManager
                     {
                         if (!p.getGameManager().isGameRunning())
                         {
-                            players += bullet + opl.getName();
+                            players.append(bullet).append(opl.getName());
                         }
                         else
                         {
                             if (p.getGameManager().isPlayerDead(opl.getUniqueId()))
                             {
                                 /// Displayed in team tooltip of the chat team selector for a dead player
-                                players += bullet + I.t("{0} ({red}dead{reset})", opl.getName());
+                                players.append(bullet).append(I.t("{0} ({red}dead{reset})", opl.getName()));
                             }
                             else
                             {
                                 /// Displayed in team tooltip of the chat team selector for an alive player
-                                players += bullet + I.t("{0} ({green}alive{reset})", opl.getName());
+                                players.append(bullet).append(I.t("{0} ({green}alive{reset})", opl.getName()));
                             }
                         }
                     }
@@ -625,7 +604,7 @@ public class TeamManager
     static public TeamColor handleTeamColorValue(String value) throws ConfigurationParseException
     {
         TeamColor color = TeamColor.fromString(value);
-        if(color == null)
+        if (color == null)
             throw new ConfigurationParseException("Invalid team color name.", value);
         
         return color;
@@ -640,12 +619,12 @@ public class TeamManager
     @ConfigurationValueHandler
     static public UHTeam handleTeamValue(List list) throws ConfigurationParseException 
     {
-        if(list.size() < 1)
+        if (list.size() < 1)
             throw new ConfigurationParseException("Not enough values, at least 1 required.", list);
-        if(list.size() > 2)
+        if (list.size() > 2)
             throw new ConfigurationParseException("Too many values, at most 2 (color, name) can be used.", list);
         
-        if(list.size() == 1)
+        if (list.size() == 1)
         {
             return new UHTeam(list.get(0).toString().trim(), handleTeamColorValue(list.get(0).toString()));
         }
@@ -661,11 +640,9 @@ public class TeamManager
         TeamColor color = map.containsKey("color") ? handleTeamColorValue(map.get("color").toString()) : TeamColor.RANDOM;
         Object name = map.containsKey("name") ? map.get("name") : map.get("color");
         
-        if(name == null)
+        if (name == null)
             throw new ConfigurationParseException("Either color or name must be specified", map);
         
         return new UHTeam(name.toString(), color);
     }
-    
-    
 }

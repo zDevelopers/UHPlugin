@@ -44,7 +44,6 @@ import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.gui.PromptGui;
 import fr.zcraft.zlib.components.i18n.I;
-import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -244,16 +243,9 @@ public class TeamsSelectorGUI extends ExplorerGui<UHTeam>
     public void rename()
     {
         final UHTeam team = tm.getTeamForPlayer(getPlayer());
-        if (team == null)
-            return;
+        if (team == null) return;
 
-        Gui.open(getPlayer(), new PromptGui(new Callback<String>() {
-            @Override
-            public void call(String name)
-            {
-                team.setName(name);
-            }
-        }, team.getName()), this);
+        Gui.open(getPlayer(), new PromptGui(team::setName, team.getName()), this);
     }
 
     @GuiAction ("new")

@@ -37,7 +37,6 @@ import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +115,7 @@ public class RulesManager
     public void displayRulesTo(CommandSender receiver)
     {
         CommandUtils.displaySeparator(receiver);
+
         /// Title of the rules box.
         receiver.sendMessage(I.t("{red}{bold}Rules and informations"));
 
@@ -140,11 +140,7 @@ public class RulesManager
      */
     public void broadcastRules()
     {
-        for (Player player : Bukkit.getOnlinePlayers())
-        {
-            displayRulesTo(player);
-        }
-
+        Bukkit.getOnlinePlayers().forEach(this::displayRulesTo);
         displayRulesTo(Bukkit.getConsoleSender());
     }
 }

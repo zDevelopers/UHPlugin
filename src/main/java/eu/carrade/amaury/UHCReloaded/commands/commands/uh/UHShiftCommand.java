@@ -60,7 +60,7 @@ public class UHShiftCommand extends AbstractCommand
         {
             if (sender instanceof Player)
             {
-                p.getGameManager().shiftEpisode((sender.getName()));
+                p.getGameManager().shiftEpisode(sender.getName());
             }
             else
             {

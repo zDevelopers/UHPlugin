@@ -49,7 +49,7 @@ public class CircularMapShape implements MapShapeDescriptor
     @Override
     public boolean isInsideBorder(final Location location, final Double diameter, final Location center)
     {
-        Location centerRef = center.clone();
+        final Location centerRef = center.clone();
         centerRef.setY(location.getY());
 
         return (location.distance(centerRef) <= Math.floor(diameter / 2));
@@ -79,7 +79,7 @@ public class CircularMapShape implements MapShapeDescriptor
             return -1;
         }
 
-        Location centerRef = center.clone();
+        final Location centerRef = center.clone();
         centerRef.setY(location.getY());
 
         return (location.distance(centerRef) - Math.floor(diameter / 2));

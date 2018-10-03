@@ -42,7 +42,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import org.bukkit.Bukkit;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -52,7 +52,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class PacketsListener extends PacketAdapter implements Listener
 {
-    private UHCReloaded p = null;
+    private UHCReloaded p;
     private ProtocolManager pm = ProtocolLibrary.getProtocolManager();
 
     private final PacketContainer respawnPacket;
@@ -60,9 +60,9 @@ public class PacketsListener extends PacketAdapter implements Listener
     public PacketsListener(UHCReloaded p)
     {
         // This listener needs to listen on login packets only.
-        super(p, ListenerPriority.NORMAL, PacketType.Play.Server.LOGIN);
+        super(UHCReloaded.get(), ListenerPriority.NORMAL, PacketType.Play.Server.LOGIN);
 
-        this.p = p;
+        this.p = UHCReloaded.get();
 
         // The packet to send to automatically respawn the player.
         respawnPacket = pm.createPacket(PacketType.Play.Client.CLIENT_COMMAND);
@@ -90,19 +90,15 @@ public class PacketsListener extends PacketAdapter implements Listener
     {
         if (UHConfig.AUTO_RESPAWN.DO.get())
         {
-            Bukkit.getScheduler().runTaskLater(p, new Runnable()
+            RunTask.later(() ->
             {
-                @Override
-                public void run()
+                try
                 {
-                    try
-                    {
-                        pm.recieveClientPacket(ev.getEntity(), respawnPacket);
-                    }
-                    catch (IllegalAccessException | InvocationTargetException e)
-                    {
-                        e.printStackTrace();
-                    }
+                    pm.recieveClientPacket(ev.getEntity(), respawnPacket);
+                }
+                catch (IllegalAccessException | InvocationTargetException e)
+                {
+                    e.printStackTrace();
                 }
             }, UHConfig.AUTO_RESPAWN.DELAY.get() * 20L);
         }

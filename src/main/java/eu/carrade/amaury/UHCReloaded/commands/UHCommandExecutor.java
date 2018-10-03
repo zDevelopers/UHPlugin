@@ -44,11 +44,9 @@ import eu.carrade.amaury.UHCReloaded.commands.core.AbstractCommandExecutor;
 
 public class UHCommandExecutor extends AbstractCommandExecutor
 {
-
     public UHCommandExecutor(UHCReloaded p)
     {
         super(p);
-
 
         registerCommand(new UHRootCommand(p));          //  /uh
 

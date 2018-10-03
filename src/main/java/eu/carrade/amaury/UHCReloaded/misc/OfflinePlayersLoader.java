@@ -41,10 +41,10 @@ import fr.zcraft.zlib.tools.reflection.Reflection;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class OfflinePlayersLoader extends Worker
@@ -66,9 +67,7 @@ public class OfflinePlayersLoader extends Worker
      */
     public static Set<OfflinePlayer> getOfflinePlayers()
     {
-        Set<OfflinePlayer> players = new HashSet<>();
-
-        players.addAll(offlinePlayers.values());
+        final Set<OfflinePlayer> players = new HashSet<>(offlinePlayers.values());
         Collections.addAll(players, Bukkit.getOfflinePlayers());
 
         return Collections.unmodifiableSet(players);
@@ -105,39 +104,22 @@ public class OfflinePlayersLoader extends Worker
      */
     public static OfflinePlayer getOfflinePlayer(String name)
     {
-        OfflinePlayer player = null;
+        OfflinePlayer player = Bukkit.getOnlinePlayers().stream()
+                .filter(onlinePlayer -> onlinePlayer.getName().equalsIgnoreCase(name))
+                .findFirst().orElse(null);
 
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers())
+        if (player == null)
         {
-            if (onlinePlayer.getName().equalsIgnoreCase(name))
-            {
-                player = onlinePlayer;
-                break;
-            }
+            player = Arrays.stream(Bukkit.getOfflinePlayers())
+                    .filter(offlinePlayer -> offlinePlayer.getName().equalsIgnoreCase(name))
+                    .findFirst().orElse(null);
         }
 
         if (player == null)
         {
-            for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers())
-            {
-                if (offlinePlayer.getName().equalsIgnoreCase(name))
-                {
-                    player = offlinePlayer;
-                    break;
-                }
-            }
-        }
-
-        if (player == null)
-        {
-            for (OfflinePlayer offlinePlayer : offlinePlayers.values())
-            {
-                if (offlinePlayer.getName().equalsIgnoreCase(name))
-                {
-                    player = offlinePlayer;
-                    break;
-                }
-            }
+            player = offlinePlayers.values().stream()
+                    .filter(offlinePlayer -> offlinePlayer.getName().equalsIgnoreCase(name))
+                    .findFirst().orElse(null);
         }
 
         return player;
@@ -151,18 +133,14 @@ public class OfflinePlayersLoader extends Worker
      */
     public static void loadPlayer(final String pseudonym, final Callback<OfflinePlayer> successCallback)
     {
-        loadPlayers(Collections.singletonList(pseudonym), new Callback<Map<UUID, OfflinePlayer>>()
+        loadPlayers(Collections.singletonList(pseudonym), retrieved ->
         {
-            @Override
-            public void call(Map<UUID, OfflinePlayer> retrieved)
+            if (successCallback != null)
             {
-                if (successCallback != null)
-                {
-                    if (retrieved.size() == 1)
-                        successCallback.call(retrieved.values().iterator().next());
-                    else
-                        successCallback.call(null);
-                }
+                if (retrieved.size() == 1)
+                    successCallback.call(retrieved.values().iterator().next());
+                else
+                    successCallback.call(null);
             }
         });
     }
@@ -175,14 +153,11 @@ public class OfflinePlayersLoader extends Worker
      */
     public static void loadPlayers(final List<String> pseudonyms, final Callback<Map<UUID, OfflinePlayer>> callbackSuccess)
     {
-        loadPlayers(pseudonyms, callbackSuccess, new Callback<List<String>>()
-        {
-            @Override
-            public void call(List<String> errors)
-            {
-                PluginLogger.error("Unable to retrieve the following names: {0}", StringUtils.join(errors, ", "));
-            }
-        });
+        loadPlayers(
+                pseudonyms,
+                callbackSuccess,
+                errors -> PluginLogger.error("Unable to retrieve the following names: {0}", StringUtils.join(errors, ", "))
+        );
     }
 
     /**
@@ -232,7 +207,7 @@ public class OfflinePlayersLoader extends Worker
             @Override
             public Map<String, UUID> run() throws Throwable
             {
-                Map<String, UUID> uuids = UUIDFetcher.fetch(toRetrieve);
+                final Map<String, UUID> uuids = UUIDFetcher.fetch(toRetrieve);
                 UUIDFetcher.fetchRemaining(toRetrieve, uuids);
 
                 return uuids;
@@ -257,8 +232,8 @@ public class OfflinePlayersLoader extends Worker
 
                 for (Map.Entry<String, UUID> playerProfile : result.entrySet())
                 {
-                    String name = playerProfile.getKey();
-                    UUID uuid = playerProfile.getValue();
+                    final String name = playerProfile.getKey();
+                    final UUID uuid = playerProfile.getValue();
 
                     if (uuid == null)
                     {
@@ -268,8 +243,8 @@ public class OfflinePlayersLoader extends Worker
 
                     try
                     {
-                        Object profile = Reflection.instantiate(gameProfileClass, uuid, name);
-                        OfflinePlayer player = (OfflinePlayer) Reflection.call(Bukkit.getServer(), "getOfflinePlayer", profile);
+                        final Object profile = Reflection.instantiate(gameProfileClass, uuid, name);
+                        final OfflinePlayer player = (OfflinePlayer) Reflection.call(Bukkit.getServer(), "getOfflinePlayer", profile);
 
                         offlinePlayers.put(uuid, player);
                         added.put(uuid, player);
@@ -284,12 +259,9 @@ public class OfflinePlayersLoader extends Worker
 
                 if (callbackErrors != null)
                 {
-                    List<String> notRetrieved = new ArrayList<>();
-                    for (String pseudonym : toRetrieve)
-                    {
-                        if (!result.keySet().contains(pseudonym))
-                            notRetrieved.add(pseudonym);
-                    }
+                    final List<String> notRetrieved = toRetrieve.stream()
+                            .filter(pseudonym -> !result.keySet().contains(pseudonym))
+                            .collect(Collectors.toList());
 
                     if (notRetrieved.size() > 0) callbackErrors.call(notRetrieved);
                 }

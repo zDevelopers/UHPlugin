@@ -76,12 +76,13 @@ public class UHBorderWarningCommand extends AbstractCommand
         { // /uh border warning <?>
             try
             {
-                Integer warnDiameter = Integer.valueOf(args[0]);
+                int warnDiameter = Integer.parseInt(args[0]);
+                int warnTime = 0;
 
-                Integer warnTime = 0;
+                // /uh border warning <?> <?>
                 if (args.length >= 4)
-                { // /uh border warning <?> <?>
-                    warnTime = Integer.valueOf(args[1]);
+                {
+                    warnTime = Integer.parseInt(args[1]);
                 }
 
                 p.getBorderManager().setWarningSize(warnDiameter, warnTime, sender);

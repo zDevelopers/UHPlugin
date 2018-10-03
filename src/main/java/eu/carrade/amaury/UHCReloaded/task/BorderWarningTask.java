@@ -40,11 +40,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class BorderWarningTask extends BukkitRunnable
 {
-    private UHCReloaded p = null;
+    private final UHCReloaded p;
 
-    public BorderWarningTask(UHCReloaded p)
+    public BorderWarningTask()
     {
-        this.p = p;
+        this.p = UHCReloaded.get();
     }
 
     @Override

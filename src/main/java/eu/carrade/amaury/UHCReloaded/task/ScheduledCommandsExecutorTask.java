@@ -44,19 +44,19 @@ import java.util.HashSet;
  */
 public class ScheduledCommandsExecutorTask implements Runnable
 {
-    private UHCReloaded p = null;
-    private HashSet<String> commands = null;
+    private final UHCReloaded p;
+    private final HashSet<String> commands;
 
-    public ScheduledCommandsExecutorTask(UHCReloaded plugin, HashSet<String> commands)
+    public ScheduledCommandsExecutorTask(HashSet<String> commands)
     {
-        this.p = plugin;
+        this.p = UHCReloaded.get();
         this.commands = commands;
     }
 
     @Override
     public void run()
     {
-        for (String command : commands)
+        for (final String command : commands)
         {
             try
             {

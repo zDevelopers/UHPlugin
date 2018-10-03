@@ -91,8 +91,8 @@ public class TeamChatManager
             return;
         }
 
-        String rawMessage;
-        UHTeam recipient;
+        final String rawMessage;
+        final UHTeam recipient;
 
         if (team == null)
         {
@@ -127,32 +127,22 @@ public class TeamChatManager
     private void sendRawTeamMessage(final Player sender, String rawMessage, UHTeam team)
     {
         // The message is sent to the players of the team...
-        for (final Player player : team.getOnlinePlayers())
-        {
-            MessageSender.sendChatMessage(player, rawMessage);
-        }
+        team.getOnlinePlayers().forEach(player -> MessageSender.sendChatMessage(player, rawMessage));
 
         // ... to the spies ...
         if (otherTeamChatLocked.containsValue(team))
         {
-            for (UUID playerId : otherTeamChatLocked.keySet())
-            {
-                // The message is only sent to the spies not in the team, to avoid double messages
-                if (otherTeamChatLocked.get(playerId).equals(team) && !team.containsPlayer(playerId))
-                {
-                    MessageSender.sendChatMessage(p.getServer().getPlayer(playerId), rawMessage);
-                }
-            }
+            // The message is only sent to the spies not in the team, to avoid double messages
+            otherTeamChatLocked.keySet().stream()
+                    .filter(playerId -> otherTeamChatLocked.get(playerId).equals(team))
+                    .filter(playerId -> !team.containsPlayer(playerId))
+                    .forEach(playerId -> MessageSender.sendChatMessage(p.getServer().getPlayer(playerId), rawMessage));
         }
 
         // ... to the global spies ...
-        for (UUID playerId : globalSpies)
-        {
-            if (!team.containsPlayer(playerId))
-            {
-                p.getServer().getPlayer(playerId).sendMessage(rawMessage);
-            }
-        }
+        globalSpies.stream()
+                .filter(playerId -> !team.containsPlayer(playerId))
+                .forEach(playerId -> p.getServer().getPlayer(playerId).sendMessage(rawMessage));
 
         // ... and to the console.
         if (UHConfig.TEAMS_OPTIONS.TEAM_CHAT.LOG.get())
@@ -160,14 +150,7 @@ public class TeamChatManager
             p.getServer().getConsoleSender().sendMessage(rawMessage);
         }
 
-        RunTask.later(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                ProTips.LOCK_CHAT.sendTo(sender);
-            }
-        }, 30L);
+        RunTask.later(() -> ProTips.LOCK_CHAT.sendTo(sender), 30L);
     }
 
     /**
@@ -243,15 +226,7 @@ public class TeamChatManager
             else
             {
                 teamChatLocked.add(player.getUniqueId());
-
-                RunTask.later(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        ProTips.USE_G_COMMAND.sendTo(player);
-                    }
-                }, 10L);
+                RunTask.later(() -> ProTips.USE_G_COMMAND.sendTo(player), 10L);
 
                 return true;
             }
@@ -273,8 +248,9 @@ public class TeamChatManager
         }
         else
         {
-            UHTeam lockedTeam = this.otherTeamChatLocked.get(player.getUniqueId());
-            UHTeam playerTeam = p.getTeamManager().getTeamForPlayer(player);
+            final UHTeam lockedTeam = this.otherTeamChatLocked.get(player.getUniqueId());
+            final UHTeam playerTeam = p.getTeamManager().getTeamForPlayer(player);
+
             return (lockedTeam != null && lockedTeam.equals(team)) || (playerTeam != null && playerTeam.equals(team));
         }
     }

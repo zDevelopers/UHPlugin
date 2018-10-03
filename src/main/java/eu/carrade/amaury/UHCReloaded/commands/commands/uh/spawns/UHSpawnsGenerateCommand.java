@@ -46,10 +46,10 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Command (name = "generate")
@@ -82,14 +82,14 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
         String generationMethod = args[0];
 
         // Default values
-        Integer size = p.getBorderManager().getCurrentBorderDiameter() - 25; // Avoid spawn points being too close to the border
-        Integer distanceMinBetweenTwoPoints = 250;
+        int size = p.getBorderManager().getCurrentBorderDiameter() - 25; // Avoid spawn points being too close to the border
+        int distanceMinBetweenTwoPoints = 250;
         World world = p.getServer().getWorlds().get(0);
-        Double xCenter = world.getSpawnLocation().getX();
-        Double zCenter = world.getSpawnLocation().getZ();
+        double xCenter = world.getSpawnLocation().getX();
+        double zCenter = world.getSpawnLocation().getZ();
 
-        Integer spawnsCount = 0;
-        for (UHTeam team : p.getTeamManager().getTeams())
+        int spawnsCount = 0;
+        for (final UHTeam team : p.getTeamManager().getTeams())
         {
             if (!team.isEmpty()) spawnsCount++;
         }
@@ -143,15 +143,15 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
         {
             if (args.length >= 2)
             { // size included
-                size = Integer.valueOf(args[1]);
+                size = Integer.parseInt(args[1]);
 
                 if (args.length >= 3)
                 { // distance minimal included
-                    distanceMinBetweenTwoPoints = Integer.valueOf(args[2]);
+                    distanceMinBetweenTwoPoints = Integer.parseInt(args[2]);
 
                     if (args.length >= 4)
                     { // spawn count included
-                        spawnsCount = Integer.valueOf(args[3]);
+                        spawnsCount = Integer.parseInt(args[3]);
 
                         if (args.length >= 5)
                         { // xCenter included
@@ -228,28 +228,16 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
     {
         // Generation methods - /uh spawns generate <?>
         if (args.length == 1)
-        {
-            ArrayList<String> suggested = new ArrayList<String>();
-
-            for (Generator generator : Generator.values())
-            {
-                suggested.add(generator.name().toLowerCase());
-            }
-
-            return CommandUtils.getAutocompleteSuggestions(args[0], suggested);
-        }
+            return CommandUtils.getAutocompleteSuggestions(
+                    args[0],
+                    Arrays.stream(Generator.values())
+                            .map(generator -> generator.name().toLowerCase())
+                            .collect(Collectors.toList())
+            );
 
         // Worlds - /uh spawns generate - - - - - - <?>
         else if (args.length == 7)
-        {
-            ArrayList<String> suggested = new ArrayList<String>();
-            for (World world : p.getServer().getWorlds())
-            {
-                suggested.add(world.getName());
-            }
-
-            return CommandUtils.getAutocompleteSuggestions(args[6], suggested);
-        }
+            return CommandUtils.getAutocompleteSuggestions(args[6], p.getServer().getWorlds().stream().map(World::getName).collect(Collectors.toList()));
 
         else return null;
     }

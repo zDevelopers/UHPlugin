@@ -34,12 +34,14 @@ package eu.carrade.amaury.UHCReloaded.misc;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.task.ScheduledCommandsExecutorTask;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.tools.runners.RunTask;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 
 /**
@@ -48,7 +50,7 @@ import java.util.Map.Entry;
  */
 public class RuntimeCommandsExecutor
 {
-    private UHCReloaded p = null;
+    private final UHCReloaded p;
 
     /**
      * Stores the commands to be executed later.
@@ -58,7 +60,7 @@ public class RuntimeCommandsExecutor
      * executed this number of seconds after the call of the {@link #registerCommandsInScheduler(String)}
      * method.
      */
-    private Map<String, HashMap<Integer, HashSet<String>>> scheduled = new HashMap<>();
+    private final Map<String, HashMap<Integer, HashSet<String>>> scheduled = new HashMap<>();
 
 
     /**
@@ -77,9 +79,9 @@ public class RuntimeCommandsExecutor
     public final static String AFTER_GAME_END = "internal.game-end";
 
 
-    public RuntimeCommandsExecutor(UHCReloaded plugin)
+    public RuntimeCommandsExecutor()
     {
-        p = plugin;
+        p = UHCReloaded.get();
 
         importFromConfig("commands.execute-server-start", AFTER_SERVER_START);
         importFromConfig("commands.execute-start", AFTER_GAME_START);
@@ -110,10 +112,9 @@ public class RuntimeCommandsExecutor
         {
             for (Entry<Integer, HashSet<String>> scheduledCommandsStack : scheduledCommands.entrySet())
             {
-                p.getServer().getScheduler().runTaskLater(
-                        p,
-                        new ScheduledCommandsExecutorTask(p, scheduledCommandsStack.getValue()),
-                        scheduledCommandsStack.getKey() * 20l
+                RunTask.later(
+                        new ScheduledCommandsExecutorTask(scheduledCommandsStack.getValue()),
+                        scheduledCommandsStack.getKey() * 20L
                 );
             }
         }
@@ -134,12 +135,8 @@ public class RuntimeCommandsExecutor
      */
     public void scheduleCommand(String key, String command, Integer delay)
     {
-        if (!scheduled.containsKey(key))
-        {
-            scheduled.put(key, new HashMap<Integer, HashSet<String>>());
-        }
-
-        scheduleCommand(scheduled.get(key), command, delay);
+        final Map<Integer, HashSet<String>> commandsMap = scheduled.computeIfAbsent(key, k -> new HashMap<>());
+        scheduleCommand(commandsMap, command, delay);
     }
 
     /**
@@ -151,14 +148,7 @@ public class RuntimeCommandsExecutor
      */
     private void scheduleCommand(Map<Integer, HashSet<String>> scheduledCommands, String command, Integer delay)
     {
-        HashSet<String> list = scheduledCommands.get(delay);
-
-        if (list == null)
-        {
-            list = new HashSet<>();
-            scheduledCommands.put(delay, list);
-        }
-
+        final Set<String> list = scheduledCommands.computeIfAbsent(delay, k -> new HashSet<>());
         list.add(clearCommandName(command));
     }
 
@@ -185,7 +175,7 @@ public class RuntimeCommandsExecutor
     {
         for (HashSet<String> commands : scheduledCommands.values())
         {
-            for (String scheduledCommand : new HashSet<String>(commands))
+            for (String scheduledCommand : new HashSet<>(commands))
             {
                 if (scheduledCommand.equalsIgnoreCase(clearCommandName(command)))
                 {
@@ -220,13 +210,9 @@ public class RuntimeCommandsExecutor
 
         if (commands != null)
         {
-            for (String scheduledCommand : commands)
-            {
-                if (scheduledCommand.equalsIgnoreCase(clearCommandName(command)))
-                {
-                    commands.remove(scheduledCommand);
-                }
-            }
+            commands.stream()
+                    .filter(scheduledCommand -> scheduledCommand.equalsIgnoreCase(clearCommandName(command)))
+                    .forEach(commands::remove);
         }
     }
 

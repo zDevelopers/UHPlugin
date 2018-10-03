@@ -34,8 +34,10 @@ package eu.carrade.amaury.UHCReloaded.scoreboard;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Criterias;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -70,8 +72,7 @@ public class ScoreboardManager
         {
             sidebar = new GameSidebar();
 
-            for (Player player : Bukkit.getOnlinePlayers())
-                sidebar.addRecipient(player);
+            Bukkit.getOnlinePlayers().forEach(player -> sidebar.addRecipient(player));
 
             sidebar.runAutoRefresh(true);
         }
@@ -79,7 +80,7 @@ public class ScoreboardManager
         // Initialization of the scoreboard (health in players' list)
         if (UHConfig.SCOREBOARD.HEALTH.get())
         {
-            Objective healthObjective = sb.registerNewObjective("Health", Criterias.HEALTH);
+            final Objective healthObjective = sb.registerNewObjective("Health", Criterias.HEALTH);
             healthObjective.setDisplayName("Health");
             healthObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 
@@ -92,10 +93,8 @@ public class ScoreboardManager
         }
 
         // Initialization of the sidebar cache
-        for (Player player : Bukkit.getOnlinePlayers())
-        {
-            getSidebarPlayerCache(player.getUniqueId()); // Initializes the object.
-        }
+        // Initializes the object.
+        Bukkit.getOnlinePlayers().stream().map(Entity::getUniqueId).forEach(this::getSidebarPlayerCache);
     }
 
 
@@ -104,10 +103,7 @@ public class ScoreboardManager
      */
     public void updateHealthScore()
     {
-        for (final Player player : p.getServer().getOnlinePlayers())
-        {
-            updateHealthScore(player);
-        }
+        p.getServer().getOnlinePlayers().forEach(this::updateHealthScore);
     }
 
     /**
@@ -121,15 +117,11 @@ public class ScoreboardManager
         {
             player.setHealth(player.getHealth() - 1);
 
-            Bukkit.getScheduler().runTaskLater(p, new Runnable()
+            RunTask.later(() ->
             {
-                @Override
-                public void run()
+                if (player.getHealth() <= 19d) // Avoids an IllegalArgumentException
                 {
-                    if (player.getHealth() <= 19d) // Avoids an IllegalArgumentException
-                    {
-                        player.setHealth(player.getHealth() + 1);
-                    }
+                    player.setHealth(player.getHealth() + 1);
                 }
             }, 3L);
         }
@@ -175,15 +167,7 @@ public class ScoreboardManager
      */
     public SidebarPlayerCache getSidebarPlayerCache(UUID id)
     {
-        SidebarPlayerCache cache = sidebarCache.get(id);
-
-        if(cache != null)
-            return cache;
-
-        cache = new SidebarPlayerCache(id);
-
-        sidebarCache.put(id, cache);
-        return cache;
+        return sidebarCache.computeIfAbsent(id, SidebarPlayerCache::new);
     }
 
     public Map<UUID, SidebarPlayerCache> getAllSidebarPlayerCache()

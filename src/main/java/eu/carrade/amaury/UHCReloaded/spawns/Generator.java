@@ -103,7 +103,7 @@ public enum Generator
     {
         try
         {
-            return (SpawnPointsGenerator) Reflection.instantiate(generatorClass);
+            return Reflection.instantiate(generatorClass);
         }
         catch (NoSuchMethodException | InstantiationException | IllegalAccessException e)
         {

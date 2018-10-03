@@ -55,6 +55,7 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -65,10 +66,12 @@ public class UHTeam
     private static final boolean BANNER_SHAPE_WRITE_LETTER = UHConfig.TEAMS_OPTIONS.BANNER.SHAPE.WRITE_LETTER.get();
     private static final boolean BANNER_SHAPE_ADD_BORDER = UHConfig.TEAMS_OPTIONS.BANNER.SHAPE.ADD_BORDER.get();
 
+    private static final Random random = new Random();
+
     private UHCReloaded plugin = UHCReloaded.get();
 
     private String name = null;
-    private String internalName = null;
+    private String internalName;
     private String displayName = null;
     private TeamColor color = null;
     private ItemStack defaultBanner = null;
@@ -83,11 +86,10 @@ public class UHTeam
 
         // We use a random internal name because the name of a team, in Minecraft vanilla, is limited
         // (16 characters max).
-        Random rand = new Random();
-        this.internalName = String.valueOf(rand.nextInt(99999999)) + String.valueOf(rand.nextInt(99999999));
+        this.internalName = String.valueOf(random.nextInt(99999999)) + String.valueOf(random.nextInt(99999999));
 
-        Scoreboard sb = this.plugin.getScoreboardManager().getScoreboard();
-        Team t = sb.registerNewTeam(this.internalName);
+        final Scoreboard sb = this.plugin.getScoreboardManager().getScoreboard();
+        final Team t = sb.registerNewTeam(this.internalName);
 
         t.setSuffix(ChatColor.RESET.toString());
         t.setCanSeeFriendlyInvisibles(UHConfig.TEAMS_OPTIONS.CAN_SEE_FRIENDLY_INVISIBLES.get());
@@ -172,7 +174,7 @@ public class UHTeam
     {
         displayName = (color != null) ? color.toChatColor() + name + ChatColor.RESET : name;
 
-        Team t = plugin.getScoreboardManager().getScoreboard().getTeam(internalName);
+        final Team t = plugin.getScoreboardManager().getScoreboard().getTeam(internalName);
         if (t != null)
             t.setDisplayName(displayName.substring(0, Math.min(displayName.length(), 32)));
     }
@@ -184,11 +186,11 @@ public class UHTeam
      */
     public Set<OfflinePlayer> getPlayers()
     {
-        HashSet<OfflinePlayer> playersList = new HashSet<>();
+        final Set<OfflinePlayer> playersList = new HashSet<>();
 
         for (UUID id : players)
         {
-            Player player = plugin.getServer().getPlayer(id);
+            final Player player = plugin.getServer().getPlayer(id);
             if (player != null)
             {
                 playersList.add(player);
@@ -275,6 +277,11 @@ public class UHTeam
         return getSize() == 0;
     }
 
+    /**
+     * Returns true if the team is full.
+     *
+     * @return The fullness.
+     */
     public boolean isFull()
     {
         return plugin.getTeamManager().getMaxPlayersPerTeam() != 0 && getSize() >= plugin.getTeamManager().getMaxPlayersPerTeam();
@@ -386,8 +393,7 @@ public class UHTeam
     public void deleteTeam()
     {
         // We removes the players from the team (scoreboard team too)
-        for (UUID id : players)
-            unregisterPlayer(plugin.getServer().getOfflinePlayer(id), false);
+        players.forEach(id -> unregisterPlayer(plugin.getServer().getOfflinePlayer(id), false));
 
         players.clear();
 
@@ -430,14 +436,11 @@ public class UHTeam
     {
         Validate.notNull(location, "The location cannot be null.");
 
-        for (UUID id : players)
-        {
-            Player player = plugin.getServer().getPlayer(id);
-            if (player != null && player.isOnline())
-            {
-                player.teleport(location, TeleportCause.PLUGIN);
-            }
-        }
+        players.stream()
+                .map(id -> plugin.getServer().getPlayer(id))
+                .filter(Objects::nonNull)
+                .filter(Player::isOnline)
+                .forEach(player -> player.teleport(location, TeleportCause.PLUGIN));
     }
 
     /**
@@ -614,14 +617,8 @@ public class UHTeam
             return false;
         if (!(obj instanceof UHTeam))
             return false;
-        UHTeam other = (UHTeam) obj;
-        if (name == null)
-        {
-            if (other.name != null)
-                return false;
-        }
-        else if (!name.equals(other.name))
-            return false;
-        return true;
+
+        final UHTeam other = (UHTeam) obj;
+        return name == null ? other.name == null : name.equals(other.name);
     }
 }

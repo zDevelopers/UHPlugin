@@ -40,9 +40,7 @@ import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
-import fr.zcraft.zlib.tools.Callback;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -121,27 +119,22 @@ public class UHTeamJoinCommand extends AbstractCommand
                 || (!self && sender.hasPermission("uh.player.join.others")))
         {
             final UHTeam finalTeam = team;
-            OfflinePlayersLoader.loadPlayer(targetName, new Callback<OfflinePlayer>()
-            {
-                @Override
-                public void call(OfflinePlayer player)
+            OfflinePlayersLoader.loadPlayer(targetName, player -> {
+                if (player == null)
                 {
-                    if (player == null)
-                    {
-                        sender.sendMessage(I.t("{ce}Unable to retrieve the player {0}."));
+                    sender.sendMessage(I.t("{ce}Unable to retrieve the player {0}."));
 
-                        if (!Bukkit.getOnlineMode())
-                            sender.sendMessage(I.t("{ce}In offline mode, you cannot add players if they never came to this server."));
+                    if (!Bukkit.getOnlineMode())
+                        sender.sendMessage(I.t("{ce}In offline mode, you cannot add players if they never came to this server."));
 
-                        return;
-                    }
+                    return;
+                }
 
-                    finalTeam.addPlayer(player);
+                finalTeam.addPlayer(player);
 
-                    if (!sender.equals(player))
-                    {
-                        sender.sendMessage(I.t("{cs}The player {0} was successfully added to the team {1}", player.getName(), finalTeam.getName()));
-                    }
+                if (!sender.equals(player))
+                {
+                    sender.sendMessage(I.t("{cs}The player {0} was successfully added to the team {1}", player.getName(), finalTeam.getName()));
                 }
             });
         }

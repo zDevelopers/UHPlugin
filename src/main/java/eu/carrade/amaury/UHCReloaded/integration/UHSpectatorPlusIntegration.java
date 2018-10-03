@@ -42,19 +42,15 @@ import org.bukkit.plugin.Plugin;
 
 public class UHSpectatorPlusIntegration
 {
-
-    private UHCReloaded p = null;
     private SpectatorPlus sp = null;
     private SpectateAPI spAPI = null;
 
-    public UHSpectatorPlusIntegration(UHCReloaded p)
+    public UHSpectatorPlusIntegration()
     {
-        this.p = p;
-
         Plugin spTest = Bukkit.getServer().getPluginManager().getPlugin("SpectatorPlus");
         if (spTest == null || !spTest.isEnabled())
         {
-            this.p.getLogger().warning("SpectatorPlus is not present, so the integration was disabled.");
+            UHCReloaded.get().getLogger().warning("SpectatorPlus is not present, so the integration was disabled.");
             return;
         }
 

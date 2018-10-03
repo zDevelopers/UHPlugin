@@ -33,10 +33,8 @@ package eu.carrade.amaury.UHCReloaded.borders.exceptions;
 
 public class CannotGenerateWallsException extends Exception
 {
-
     public CannotGenerateWallsException(String message)
     {
         super(message);
     }
-
 }

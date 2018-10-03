@@ -48,10 +48,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.Random;
+import java.util.stream.IntStream;
 
 
 public class UHUtils
 {
+    private final static Random random = new Random();
+
     /**
      * Extracts a string from a list of arguments, starting at the given index.
      *
@@ -69,21 +72,21 @@ public class UHUtils
             throw new IllegalArgumentException("The index of the first element is out of the bounds of the arguments' list.");
         }
 
-        String text = "";
+        final StringBuilder text = new StringBuilder();
 
         for (int index = startIndex; index < args.length; index++)
         {
             if (index < args.length - 1)
             {
-                text += args[index] + " ";
+                text.append(args[index]).append(" ");
             }
             else
             {
-                text += args[index];
+                text.append(args[index]);
             }
         }
 
-        return text;
+        return text.toString();
     }
 
     /**
@@ -207,7 +210,7 @@ public class UHUtils
             return true;
         }
 
-        Location safeSpot = searchSafeSpot(location);
+        final Location safeSpot = searchSafeSpot(location);
 
         // A spot was found, let's teleport.
         if (safeSpot != null)
@@ -328,22 +331,15 @@ public class UHUtils
      */
     public static Firework generateRandomFirework(Location location, int heightMin, int heightMax)
     {
-        Random rand = new Random();
+        final Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+        final FireworkMeta meta = firework.getFireworkMeta();
 
-        Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
-        FireworkMeta meta = firework.getFireworkMeta();
-
-        int effectsCount = rand.nextInt(3) + 1;
-
-        for (int i = 0; i < effectsCount; i++)
-        {
-            meta.addEffect(generateRandomFireworkEffect());
-        }
+        IntStream.range(0, random.nextInt(3) + 1).mapToObj(i -> generateRandomFireworkEffect()).forEach(meta::addEffect);
 
         // One level of power is half a second of flight time.
         // In half a second, a firework fly ~5 blocks.
         // So, one level of power = ~5 blocks.
-        meta.setPower((int) Math.min(Math.floor((heightMin / 5) + rand.nextInt(heightMax / 5)), 128D));
+        meta.setPower((int) Math.min(Math.floor((heightMin / 5) + random.nextInt(heightMax / 5)), 128D));
 
         firework.setFireworkMeta(meta);
 
@@ -357,28 +353,17 @@ public class UHUtils
      */
     private static FireworkEffect generateRandomFireworkEffect()
     {
-        Random rand = new Random();
         Builder fireworkBuilder = FireworkEffect.builder();
 
-        int colorCount = rand.nextInt(3) + 1;
-        int trailCount = rand.nextInt(3) + 1;
+        fireworkBuilder.flicker(random.nextInt(3) == 1);
+        fireworkBuilder.trail(random.nextInt(3) == 1);
 
-        fireworkBuilder.flicker(rand.nextInt(3) == 1);
-        fireworkBuilder.trail(rand.nextInt(3) == 1);
-
-        for (int i = 0; i < colorCount; i++)
-        {
-            fireworkBuilder.withColor(generateRandomColor());
-        }
-
-        for (int i = 0; i < trailCount; i++)
-        {
-            fireworkBuilder.withFade(generateRandomColor());
-        }
+        IntStream.range(0, random.nextInt(3) + 1).mapToObj(i -> generateRandomColor()).forEach(fireworkBuilder::withColor);
+        IntStream.range(0, random.nextInt(3) + 1).mapToObj(i -> generateRandomColor()).forEach(fireworkBuilder::withFade);
 
         // Random shape
         FireworkEffect.Type[] types = FireworkEffect.Type.values();
-        fireworkBuilder.with(types[rand.nextInt(types.length)]);
+        fireworkBuilder.with(types[random.nextInt(types.length)]);
 
         return fireworkBuilder.build();
     }
@@ -390,8 +375,7 @@ public class UHUtils
      */
     private static Color generateRandomColor()
     {
-        Random rand = new Random();
-        return Color.fromBGR(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
+        return Color.fromBGR(random.nextInt(256), random.nextInt(256), random.nextInt(256));
     }
 
     /**
@@ -413,13 +397,8 @@ public class UHUtils
      */
     public static World getOverworld()
     {
-        for (World world : Bukkit.getServer().getWorlds())
-        {
-            if (world.getEnvironment() != World.Environment.NETHER && world.getEnvironment() != World.Environment.THE_END)
-            {
-                return world;
-            }
-        }
-        return null;
+        return Bukkit.getServer().getWorlds().stream()
+                .filter(world -> world.getEnvironment() != World.Environment.NETHER && world.getEnvironment() != World.Environment.THE_END)
+                .findFirst().orElse(null);
     }
 }

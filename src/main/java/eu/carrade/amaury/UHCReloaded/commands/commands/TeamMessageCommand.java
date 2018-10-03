@@ -78,13 +78,13 @@ public class TeamMessageCommand extends AbstractCommand
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
         }
 
-        String message = "";
-        for (String arg : args)
+        StringBuilder message = new StringBuilder();
+        for (final String arg : args)
         {
-            message += arg + " ";
+            message.append(arg).append(" ");
         }
 
-        p.getTeamChatManager().sendTeamMessage((Player) sender, message);
+        p.getTeamChatManager().sendTeamMessage((Player) sender, message.toString());
     }
 
     /**

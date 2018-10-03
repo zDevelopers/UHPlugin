@@ -53,13 +53,13 @@ public class UHTimer
 {
     private static final NumberFormat formatter = new DecimalFormat("00");
 
-    private UUID id = null;
-    private String name = null;
+    private UUID id;
+    private String name;
     private Boolean registered = false;
     private Boolean running = false;
     private Boolean displayed = false;
 
-    private Long startTime = 0l;
+    private Long startTime = 0L;
     private Integer duration = 0; // seconds
 
     // Cached values
@@ -74,7 +74,7 @@ public class UHTimer
 
     // Pause
     private Boolean paused = false;
-    private Long pauseTime = 0l;
+    private Long pauseTime = 0L;
 
     // Display this timer following the format "hh:mm:ss"?
     private Boolean displayHoursInTimer = false;
@@ -132,7 +132,7 @@ public class UHTimer
      */
     private void stop(boolean wasUp)
     {
-        TimerEndsEvent event = new TimerEndsEvent(this, wasUp);
+        final TimerEndsEvent event = new TimerEndsEvent(this, wasUp);
         Bukkit.getServer().getPluginManager().callEvent(event);
 
         if (isRegistered())
@@ -144,7 +144,7 @@ public class UHTimer
             else
             {
                 this.running = false;
-                this.startTime = 0l;
+                this.startTime = 0L;
 
                 this.hoursLeft = 0;
                 this.minutesLeft = 0;
@@ -176,7 +176,7 @@ public class UHTimer
             }
             else
             {
-                Integer countSecondsLeft = (int) (getDuration() - Math.floor(timeSinceStart / 1000));
+                int countSecondsLeft = (int) (getDuration() - Math.floor(timeSinceStart / 1000));
 
                 secondsLeft = countSecondsLeft % 60;
                 minutesLeft = (countSecondsLeft % 3600) / 60;

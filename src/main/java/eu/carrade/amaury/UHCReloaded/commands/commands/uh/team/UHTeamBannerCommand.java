@@ -57,7 +57,7 @@ public class UHTeamBannerCommand extends AbstractCommand
         if (!(sender instanceof Player))
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER, this);
 
-        UHTeam team;
+        final UHTeam team;
 
         if (args.length >= 1)
         {

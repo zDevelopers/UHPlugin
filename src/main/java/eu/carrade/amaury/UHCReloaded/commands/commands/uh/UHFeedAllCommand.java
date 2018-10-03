@@ -60,7 +60,6 @@ public class UHFeedAllCommand extends AbstractCommand
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-
         int foodLevel = 20;
         float saturation = 20f;
 

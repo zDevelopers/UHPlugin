@@ -46,6 +46,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.SkullType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -85,7 +86,7 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
 
         // Players
 
-        Set<OfflinePlayer> players = new TreeSet<>(new OfflinePlayersComparator());
+        final Set<OfflinePlayer> players = new TreeSet<>(new OfflinePlayersComparator());
         players.addAll(OfflinePlayersLoader.getOfflinePlayers());
 
         int slot = 9;
@@ -100,17 +101,22 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
 
         // Done button
 
-        List<String> lore = new ArrayList<>();
+        final List<String> lore = new ArrayList<>();
         lore.add("");
+
         /// The summary title in the final « create the team » button of the create team GUIs
         lore.add(I.t("{blue}{bold}Summary"));
+
         /// The team name in the final « create the team » button of the create team GUIs
         lore.add(I.t("{gray}Team name: {white}{0}", getName()));
+
         /// The team color in the final « create the team » button of the create team GUIs
         lore.add(I.t("{gray}Color: {0}", getColor() == TeamColor.RANDOM ? ChatColor.MAGIC + "Random" : getColor().toChatColor() + TextUtils.friendlyEnumName(getColor())));
+
         /// The team members count in the final « create the team » button of the create team GUIs
         lore.add(I.t("{gray}Members: {white}{0}", teamMembers.size()));
         lore.add("");
+
         for (UUID teamMember : teamMembers)
         {
             OfflinePlayer player = Bukkit.getOfflinePlayer(teamMember);
@@ -124,7 +130,7 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
 
     private ItemStack generatePlayerButton(OfflinePlayer player)
     {
-        ItemStack button = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        ItemStack button = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
         SkullMeta meta = (SkullMeta) button.getItemMeta();
 
         String displayName = player instanceof Player ? ((Player) player).getDisplayName() : player.getName();
@@ -169,7 +175,7 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
             UHCReloaded.get().getTeamManager().addTeam(team);
             getPlayer().sendMessage(I.t("{cs}Team created."));
 
-            for (UUID member : teamMembers) team.addPlayer(OfflinePlayersLoader.getOfflinePlayer(member));
+            teamMembers.stream().map(OfflinePlayersLoader::getOfflinePlayer).forEach(team::addPlayer);
         }
         catch (IllegalArgumentException e)
         {
@@ -185,5 +191,4 @@ public class TeamBuilderStepPlayersGUI extends TeamBuilderBaseGUI
 
     @Override
     protected String getName() { return name; }
-
 }

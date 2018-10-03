@@ -67,16 +67,19 @@ public class UHBorderSetCommand extends AbstractCommand
         {
             try
             {
-                Integer newDiameter = Integer.valueOf(args[0]);
+                final int newDiameter = Integer.valueOf(args[0]);
 
+                // Some players are outside
                 if (p.getBorderManager().getPlayersOutside(newDiameter).size() != 0)
-                { // Some players are outside
+                {
                     sender.sendMessage(I.t("{ce}Some players are outside the future border, so this operation was cancelled."));
                     sender.sendMessage(I.t("{ci}Use {cc}/uh border set {0} force{ci} to resize the border regardless to this point.", args[0]));
+
                     if (!p.getWorldBorderIntegration().isWBIntegrationEnabled())
                     {
                         sender.sendMessage(I.t("{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will not be teleported!"));
                     }
+
                     p.getBorderManager().sendCheckMessage(sender, newDiameter);
                 }
                 else

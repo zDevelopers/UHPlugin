@@ -102,12 +102,12 @@ public class RecipeUtil
                 return false; // if other recipe is not the same type then they're not equal.
             }
 
-            ShapedRecipe r1 = (ShapedRecipe) recipe1;
-            ShapedRecipe r2 = (ShapedRecipe) recipe2;
+            final ShapedRecipe r1 = (ShapedRecipe) recipe1;
+            final ShapedRecipe r2 = (ShapedRecipe) recipe2;
 
             // convert both shapes and ingredient maps to common ItemStack array.
-            ItemStack[] matrix1 = shapeToMatrix(r1.getShape(), r1.getIngredientMap());
-            ItemStack[] matrix2 = shapeToMatrix(r2.getShape(), r2.getIngredientMap());
+            final ItemStack[] matrix1 = shapeToMatrix(r1.getShape(), r1.getIngredientMap());
+            final ItemStack[] matrix2 = shapeToMatrix(r2.getShape(), r2.getIngredientMap());
 
             if (!Arrays.equals(matrix1, matrix2)) // compare arrays and if they don't match run another check with one shape mirrored.
             {
@@ -125,12 +125,12 @@ public class RecipeUtil
                 return false; // if other recipe is not the same type then they're not equal.
             }
 
-            ShapelessRecipe r1 = (ShapelessRecipe) recipe1;
-            ShapelessRecipe r2 = (ShapelessRecipe) recipe2;
+            final ShapelessRecipe r1 = (ShapelessRecipe) recipe1;
+            final ShapelessRecipe r2 = (ShapelessRecipe) recipe2;
 
             // get copies of the ingredient lists
-            List<ItemStack> find = r1.getIngredientList();
-            List<ItemStack> compare = r2.getIngredientList();
+            final List<ItemStack> find = r1.getIngredientList();
+            final List<ItemStack> compare = r2.getIngredientList();
 
             if (find.size() != compare.size())
             {
@@ -154,10 +154,9 @@ public class RecipeUtil
                 return false; // if other recipe is not the same type then they're not equal.
             }
 
-            FurnaceRecipe r1 = (FurnaceRecipe) recipe1;
-            FurnaceRecipe r2 = (FurnaceRecipe) recipe2;
+            final FurnaceRecipe r1 = (FurnaceRecipe) recipe1;
+            final FurnaceRecipe r2 = (FurnaceRecipe) recipe2;
 
-            //return (r1.getInput().equals(r2.getInput()));
             return r1.getInput().getType() == r2.getInput().getType();
         }
         else
@@ -168,7 +167,7 @@ public class RecipeUtil
 
     private static ItemStack[] shapeToMatrix(String[] shape, Map<Character, ItemStack> map)
     {
-        ItemStack[] matrix = new ItemStack[9];
+        final ItemStack[] matrix = new ItemStack[9];
         int slot = 0;
 
         for (int r = 0; r < shape.length; r++)

@@ -48,7 +48,6 @@ import org.bukkit.entity.Player;
  */
 public class UHSound
 {
-
     private Sound sound  = null;
     private Float volume = 1f;
     private Float pitch  = 1f;
@@ -58,12 +57,12 @@ public class UHSound
      *
      * @param sound The sound.
      */
-    public UHSound(Sound sound)
+    public UHSound(final Sound sound)
     {
         this.sound = sound;
     }
 
-    public UHSound(Sound sound, Float volume, Float pitch)
+    public UHSound(final Sound sound, final Float volume, final Float pitch)
     {
         this.sound  = sound;
         this.volume = volume;
@@ -208,46 +207,20 @@ public class UHSound
     @Override
     public boolean equals(Object obj)
     {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
-            return false;
-        }
-        if (!(obj instanceof UHSound))
-        {
-            return false;
-        }
-        UHSound other = (UHSound) obj;
+        if (this == obj) return true;
+        if (!(obj instanceof UHSound)) return false;
+
+        final UHSound other = (UHSound) obj;
         if (pitch == null)
         {
             if (other.pitch != null)
-            {
                 return false;
-            }
         }
         else if (!pitch.equals(other.pitch))
         {
             return false;
         }
-        if (sound != other.sound)
-        {
-            return false;
-        }
-        if (volume == null)
-        {
-            if (other.volume != null)
-            {
-                return false;
-            }
-        }
-        else if (!volume.equals(other.volume))
-        {
-            return false;
-        }
-        return true;
+        return sound == other.sound && (volume == null ? other.volume == null : volume.equals(other.volume));
     }
 
 

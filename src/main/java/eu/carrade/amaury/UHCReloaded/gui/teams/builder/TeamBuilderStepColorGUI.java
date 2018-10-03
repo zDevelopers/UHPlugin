@@ -38,6 +38,7 @@ import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -92,21 +93,24 @@ public class TeamBuilderStepColorGUI extends TeamBuilderBaseGUI
         insertColor(offset + 29, ChatColor.GRAY);
         insertColor(offset + 33, ChatColor.DARK_GRAY);
 
-        randomUpdate = RunTask.timer(new Runnable()
+        randomUpdate = RunTask.timer(() ->
         {
-            @Override
-            public void run()
-            {
-                ItemStack random = getInventory().getItem(offset + 4);
-                if (random != null)
-                    random.setDurability((short) randomSource.nextInt(16));
-            }
-        }, 15l, 15l);
+            ItemStack random = getInventory().getItem(offset + 4);
+            if (random != null)
+                random.setDurability((short) randomSource.nextInt(16));
+        }, 15L, 15L);
     }
 
     private void insertColor(int slot, ChatColor color)
     {
-        action("", slot, GuiUtils.makeItem(new ItemStack(Material.WOOL, 1, ColorsUtils.chat2Dye(color).getWoolData()), color + TextUtils.friendlyEnumName(color), null));
+        action(
+            "",
+            slot,
+            new ItemStackBuilder(Material.WOOL)
+                .data(ColorsUtils.chat2Dye(color).getWoolData())
+                .title(color, TextUtils.friendlyEnumName(color))
+            .item()
+        );
     }
 
 

@@ -87,7 +87,6 @@ public class TimerManager
      */
     public void registerTimer(UHTimer timer)
     {
-
         if (timers.get(timer.getName()) != null)
         {
             throw new IllegalArgumentException("A timer with the name " + timer.getName() + " is already registered.");
@@ -125,13 +124,9 @@ public class TimerManager
             runningTimers.put(getMainTimer().getName(), getMainTimer());
         }
 
-        for (UHTimer timer : timers.values())
-        {
-            if (timer.isRunning())
-            {
-                runningTimers.put(timer.getName(), timer);
-            }
-        }
+        timers.values().stream()
+                .filter(UHTimer::isRunning)
+                .forEach(timer -> runningTimers.put(timer.getName(), timer));
     }
 
     /**
@@ -173,10 +168,7 @@ public class TimerManager
      */
     public void pauseAll(boolean paused)
     {
-        for (UHTimer timer : getRunningTimers())
-        {
-            timer.setPaused(paused);
-        }
+        getRunningTimers().forEach(timer -> timer.setPaused(paused));
 
         if (!paused)
         {
@@ -197,22 +189,14 @@ public class TimerManager
     {
         if (paused)
         {
-            for (UHTimer timer : getRunningTimers())
-            {
-                if (!timer.isPaused())
-                {
-                    timer.setPaused(true);
-                    timersToResume.add(timer);
-                }
-            }
+            getRunningTimers().stream().filter(timer -> !timer.isPaused()).forEach(timer -> {
+                timer.setPaused(true);
+                timersToResume.add(timer);
+            });
         }
         else
         {
-            for (UHTimer timer : timersToResume)
-            {
-                timer.setPaused(false);
-            }
-
+            timersToResume.forEach(timer -> timer.setPaused(false));
             timersToResume.clear();
         }
     }

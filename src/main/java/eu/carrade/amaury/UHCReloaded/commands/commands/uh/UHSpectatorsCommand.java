@@ -39,7 +39,6 @@ import eu.carrade.amaury.UHCReloaded.commands.core.exceptions.CannotExecuteComma
 import eu.carrade.amaury.UHCReloaded.commands.core.utils.CommandUtils;
 import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.i18n.I;
-import fr.zcraft.zlib.tools.Callback;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -90,24 +89,19 @@ public class UHSpectatorsCommand extends AbstractCommand
                 // /uh spec add <player>
                 else
                 {
-                    OfflinePlayersLoader.loadPlayer(args[1], new Callback<OfflinePlayer>()
-                    {
-                        @Override
-                        public void call(OfflinePlayer player)
+                    OfflinePlayersLoader.loadPlayer(args[1], player -> {
+                        if (player == null)
                         {
-                            if (player == null)
-                            {
-                                sender.sendMessage(I.t("{ce}Unable to retrieve the player {0}."));
+                            sender.sendMessage(I.t("{ce}Unable to retrieve the player {0}."));
 
-                                if (!Bukkit.getOnlineMode())
-                                    sender.sendMessage(I.t("{ce}In offline mode, you cannot add players if they never came to this server."));
+                            if (!Bukkit.getOnlineMode())
+                                sender.sendMessage(I.t("{ce}In offline mode, you cannot add players if they never came to this server."));
 
-                                return;
-                            }
-
-                            p.getGameManager().addStartupSpectator(player);
-                            sender.sendMessage(I.t("{cs}The player {0} is now a spectator.", player.getName()));
+                            return;
                         }
+
+                        p.getGameManager().addStartupSpectator(player);
+                        sender.sendMessage(I.t("{cs}The player {0} is now a spectator.", player.getName()));
                     });
                 }
             }

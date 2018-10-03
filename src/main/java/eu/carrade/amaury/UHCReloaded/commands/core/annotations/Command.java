@@ -54,7 +54,7 @@ public @interface Command
      * The name of the command, needed to type in the console/chat to execute
      * the (sub-)command.
      */
-    public String name();
+    String name();
 
     /**
      * The permission needed to execute this command.
@@ -76,7 +76,7 @@ public @interface Command
      *     if {@link #useParentPermission} is set to true.
      * </p>
      */
-    public String permission() default "";
+    String permission() default "";
 
     /**
      * If this is set to {@code false}, the permission will be interpreted <em>as-is</em>,
@@ -87,7 +87,7 @@ public @interface Command
      *     set to {@code true}, or weired behavior may happens.
      * </p>
      */
-    public boolean inheritPermission() default true;
+    boolean inheritPermission() default true;
 
     /**
      * If this is set to {@code true}, the permission of the parent command will be used.
@@ -97,11 +97,11 @@ public @interface Command
      *     accessible to everyone.
      * </p>
      */
-    public boolean useParentPermission() default false;
+    boolean useParentPermission() default false;
 
     /**
      * If this is set to true, no permissions check will be done when someone
      * executes this command.
      */
-    public boolean noPermission() default false;
+    boolean noPermission() default false;
 }

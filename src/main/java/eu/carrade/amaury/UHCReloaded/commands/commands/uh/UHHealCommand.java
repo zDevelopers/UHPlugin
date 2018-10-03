@@ -74,7 +74,7 @@ public class UHHealCommand extends AbstractCommand
             return;
         }
 
-        double health = 0D;
+        double health;
         boolean add = false; // "add" (±, true) or "raw" (exact health, false) mode
 
         if (args.length == 1)

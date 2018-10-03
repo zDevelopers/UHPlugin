@@ -101,21 +101,27 @@ public class UHSpawnsListCommand extends AbstractCommand
 
 
                 // Displaying this number of spawn points per line
-                final Integer spawnsPerLine = 5;
+                final int spawnsPerLine = 5;
 
                 for (int j = 0; j < Math.ceil((double) spanwsInWorld.getValue().size() / spawnsPerLine); j++)
                 {
-                    String line = "";
+                    StringBuilder line = new StringBuilder();
 
                     for (int k = 0; k < spawnsPerLine; k++)
                     {
                         if (spawnPoints.size() > j * spawnsPerLine + k)
                         {
-                            line += getSpawnItem(spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockX(), spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockZ(), spanwsInWorld.getKey().getEnvironment()) + "  ";
+                            line.append(
+                                    getSpawnItem(
+                                            spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockX(),
+                                            spanwsInWorld.getValue().get(j * spawnsPerLine + k).getBlockZ(),
+                                            spanwsInWorld.getKey().getEnvironment()
+                                    )
+                            ).append("  ");
                         }
                     }
 
-                    sender.sendMessage(line);
+                    sender.sendMessage(line.toString());
                 }
             }
         }

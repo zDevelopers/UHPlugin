@@ -52,9 +52,9 @@ public class FreezerListener implements Listener
 
     private UHCReloaded p = null;
 
-    public FreezerListener(UHCReloaded p)
+    public FreezerListener()
     {
-        this.p = p;
+        this.p = UHCReloaded.get();
     }
 
 

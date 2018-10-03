@@ -79,13 +79,13 @@ public class GlobalMessageCommand extends AbstractCommand
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
         }
 
-        String message = "";
+        StringBuilder message = new StringBuilder();
         for (String arg : args)
         {
-            message += arg + " ";
+            message.append(arg).append(" ");
         }
 
-        p.getTeamChatManager().sendGlobalMessage((Player) sender, message);
+        p.getTeamChatManager().sendGlobalMessage((Player) sender, message.toString());
     }
 
     /**

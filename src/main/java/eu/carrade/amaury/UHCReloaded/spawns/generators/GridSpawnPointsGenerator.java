@@ -115,7 +115,7 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
 
         final int halfDiameter = (int) Math.floor(usedRegionDiameter / 2);
 
-        Integer currentSquareSize = usedRegionDiameter;
+        int currentSquareSize = usedRegionDiameter;
         Location currentSquareStartPoint = new Location(world, xCenter + halfDiameter, 0, zCenter - halfDiameter);
         Location currentPoint;
 

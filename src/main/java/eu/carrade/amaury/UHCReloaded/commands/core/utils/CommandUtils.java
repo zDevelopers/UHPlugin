@@ -42,7 +42,6 @@ import org.bukkit.entity.Player;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,8 +65,9 @@ public class CommandUtils
      */
     public static boolean isAllowed(CommandSender sender, AbstractCommand command)
     {
+        // root command
         if (command.getParent() == null)
-        { // root command
+        {
             Command commandAnnotation = command.getClass().getAnnotation(Command.class);
             if (commandAnnotation != null)
             {
@@ -196,7 +196,7 @@ public class CommandUtils
             }
         }
 
-        Collections.sort(list, Collator.getInstance());
+        list.sort(Collator.getInstance());
 
         return list;
     }

@@ -64,7 +64,7 @@ public class BorderManager
     private final long BORDER_SHRINKING_DURATION;
     private final double BORDER_SHRINKING_FINAL_SIZE;
 
-    private UHCReloaded p = null;
+    private final UHCReloaded p;
 
     private WorldBorder border = null;
 
@@ -273,8 +273,11 @@ public class BorderManager
             this.warningSender = sender;
         }
 
-        warningTask = new BorderWarningTask(p);
-        warningTask.runTaskTimer(p, 20L, 20L * p.getConfig().getInt("map.border.warningInterval", 90));
+        RunTask.timer(
+                warningTask = new BorderWarningTask(),
+                20L,
+                20L * p.getConfig().getInt("map.border.warningInterval", 90)
+        );
     }
 
     /**
@@ -418,19 +421,15 @@ public class BorderManager
     {
         if (BORDER_SHRINKING)
         {
-            RunTask.later(new Runnable() {
-                @Override
-                public void run()
-                {
-                    Integer secondsPerBlock = (int) Math.rint(BORDER_SHRINKING_DURATION / (border.getDiameter() - BORDER_SHRINKING_FINAL_SIZE)) * 2;
+            RunTask.later(() -> {
+                Integer secondsPerBlock = (int) Math.rint(BORDER_SHRINKING_DURATION / (border.getDiameter() - BORDER_SHRINKING_FINAL_SIZE)) * 2;
 
-                    border.setDiameter(BORDER_SHRINKING_FINAL_SIZE, BORDER_SHRINKING_DURATION);
+                border.setDiameter(BORDER_SHRINKING_FINAL_SIZE, BORDER_SHRINKING_DURATION);
 
-                    Titles.broadcastTitle(5, 30, 8, I.t("{red}Warning!"), I.t("{white}The border begins to shrink..."));
+                Titles.broadcastTitle(5, 30, 8, I.t("{red}Warning!"), I.t("{white}The border begins to shrink..."));
 
-                    Bukkit.broadcastMessage(I.t("{red}{bold}The border begins to shrink..."));
-                    Bukkit.broadcastMessage(I.t("{gray}It will shrink by one block every {0} second(s) until {1} blocks in diameter.", secondsPerBlock, BORDER_SHRINKING_FINAL_SIZE));
-                }
+                Bukkit.broadcastMessage(I.t("{red}{bold}The border begins to shrink..."));
+                Bukkit.broadcastMessage(I.t("{gray}It will shrink by one block every {0} second(s) until {1} blocks in diameter.", secondsPerBlock, BORDER_SHRINKING_FINAL_SIZE));
             }, BORDER_SHRINKING_STARTS_AFTER * 20l);
         }
     }

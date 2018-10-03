@@ -52,15 +52,12 @@ import org.dynmap.markers.MarkerSet;
 
 public class UHDynmapIntegration
 {
-    private UHCReloaded p = null;
     private DynmapAPI api = null;
     private MarkerAPI markerAPI = null;
     private MarkerSet markerSet = null;
 
-    public UHDynmapIntegration(UHCReloaded plugin)
+    public UHDynmapIntegration()
     {
-        this.p = plugin;
-
         Plugin apiTest = Bukkit.getServer().getPluginManager().getPlugin("dynmap");
         if (apiTest == null || !apiTest.isEnabled())
         {
@@ -141,12 +138,12 @@ public class UHDynmapIntegration
             return;
         }
 
-        if (!p.getGameManager().hasDeathLocation(player))
+        if (!UHCReloaded.get().getGameManager().hasDeathLocation(player))
         {
             return;
         }
 
-        Location deathPoint = p.getGameManager().getDeathLocation(player);
+        Location deathPoint = UHCReloaded.get().getGameManager().getDeathLocation(player);
 
         String markerID = getDeathMarkerName(player);
         /// Dynmap marker label of a death point
@@ -156,7 +153,7 @@ public class UHDynmapIntegration
         Marker marker = markerSet.createMarker(markerID, markerLabel, true, deathPoint.getWorld().getName(), deathPoint.getX(), deathPoint.getY(), deathPoint.getZ(), icon, false);
         if (marker == null)
         {
-            p.getLogger().warning("Unable to create marker " + markerID);
+            UHCReloaded.get().getLogger().warning("Unable to create marker " + markerID);
         }
     }
 
@@ -172,7 +169,7 @@ public class UHDynmapIntegration
             return;
         }
 
-        if (!p.getConfig().getBoolean("dynmap.showDeathLocations"))
+        if (!UHCReloaded.get().getConfig().getBoolean("dynmap.showDeathLocations"))
         {
             return;
         }
@@ -226,7 +223,7 @@ public class UHDynmapIntegration
         String markerID = getSpawnMarkerName(team);
 
         String markerLabel;
-        if (p.getGameManager().isGameWithTeams())
+        if (UHCReloaded.get().getGameManager().isGameWithTeams())
         {
             /// Dynmap marker label of a spawn point of a team.
             markerLabel = I.t("Spawn point of the team {0}", team.getName());
@@ -254,7 +251,7 @@ public class UHDynmapIntegration
     {
         if (player == null) return;
 
-        UHTeam team = p.getTeamManager().getTeamForPlayer(player);
+        UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
 
         showSpawnLocation(player, team != null && team.getColor() != null ? team.getColor() : null, spawnPoint);
     }
@@ -306,7 +303,6 @@ public class UHDynmapIntegration
      */
     private void showSpawnLocation(Location spawnPoint, TeamColor color, String label, String markerID)
     {
-
 		/* ***  Icon  *** */
 
         MarkerIcon icon;
@@ -366,7 +362,15 @@ public class UHDynmapIntegration
 
 		/* ***  Registration  *** */
 
-        Marker marker = markerSet.createMarker(markerID, label, true, spawnPoint.getWorld().getName(), spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), icon, false);
+        Marker marker = markerSet.createMarker(
+                markerID,
+                label,
+                true,
+                spawnPoint.getWorld().getName(),
+                spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(),
+                icon,
+                false
+        );
 
         if (marker == null)
         {

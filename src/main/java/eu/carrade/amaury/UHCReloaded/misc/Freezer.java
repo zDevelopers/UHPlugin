@@ -34,9 +34,7 @@ package eu.carrade.amaury.UHCReloaded.misc;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.listeners.FreezerListener;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Creature;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -46,6 +44,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class Freezer
@@ -67,7 +66,7 @@ public class Freezer
     {
         this.p = plugin;
 
-        this.freezerListener = new FreezerListener(p);
+        this.freezerListener = new FreezerListener();
     }
 
 
@@ -108,22 +107,15 @@ public class Freezer
 
         if (frozen)
         {
-            for (Player player : p.getGameManager().getOnlineAlivePlayers())
-            {
-                this.setPlayerFreezeState(player, true);
-            }
+            p.getGameManager()
+                    .getOnlineAlivePlayers()
+                    .forEach(player -> this.setPlayerFreezeState(player, true));
 
             // Freezes the mobs by applying a Slowness effect. There isn't any EntityMoveEvent, so...
-            for (World world : p.getServer().getWorlds())
-            {
-                for (Entity entity : world.getLivingEntities())
-                {
-                    if (entity instanceof Creature)
-                    {
-                        freezeCreature((Creature) entity, true);
-                    }
-                }
-            }
+            p.getServer().getWorlds().stream()
+                    .flatMap(world -> world.getLivingEntities().stream())
+                    .filter(entity -> entity instanceof Creature)
+                    .forEach(entity -> freezeCreature((Creature) entity, true));
 
             // Freezes the timers.
             p.getTimerManager().pauseAllRunning(true);
@@ -133,25 +125,15 @@ public class Freezer
         {
             // All the online players are listed, not the internal list of frozen players,
             // to avoid a ConcurrentModificationException if the iterated list is being emptied.
-            for (Player player : p.getServer().getOnlinePlayers())
-            {
-                if (this.isPlayerFrozen(player))
-                {
-                    this.setPlayerFreezeState(player, false);
-                }
-            }
+            p.getServer().getOnlinePlayers().stream()
+                    .filter(this::isPlayerFrozen)
+                    .forEach(player -> this.setPlayerFreezeState(player, false));
 
             // Removes the slowness effect
-            for (World world : p.getServer().getWorlds())
-            {
-                for (Entity entity : world.getLivingEntities())
-                {
-                    if (entity instanceof Creature)
-                    {
-                        freezeCreature((Creature) entity, false);
-                    }
-                }
-            }
+            p.getServer().getWorlds().stream()
+                    .flatMap(world -> world.getLivingEntities().stream())
+                    .filter(entity -> entity instanceof Creature)
+                    .forEach(entity -> freezeCreature((Creature) entity, false));
 
             // Unfreezes the timers.
             p.getTimerManager().pauseAllRunning(false);
@@ -293,13 +275,9 @@ public class Freezer
      */
     public ArrayList<Player> getFrozenPlayers()
     {
-        ArrayList<Player> frozenPlayersList = new ArrayList<>();
 
-        for (UUID id : frozenPlayers)
-        {
-            frozenPlayersList.add(p.getServer().getPlayer(id));
-        }
-
-        return frozenPlayersList;
+        return frozenPlayers.stream()
+                .map(id -> p.getServer().getPlayer(id))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

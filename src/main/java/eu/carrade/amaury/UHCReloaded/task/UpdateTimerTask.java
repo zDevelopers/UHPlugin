@@ -38,17 +38,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class UpdateTimerTask extends BukkitRunnable
 {
-    private UHCReloaded p = null;
-
-    public UpdateTimerTask(UHCReloaded p)
-    {
-        this.p = p;
-    }
-
     @Override
     public void run()
     {
-        for (UHTimer timer : p.getTimerManager().getRunningTimers())
+        for (UHTimer timer : UHCReloaded.get().getTimerManager().getRunningTimers())
         {
             timer.update();
         }

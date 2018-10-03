@@ -54,16 +54,17 @@ public class UHBorderCheckCommand extends AbstractCommand
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
+        // /uh border check
         if (args.length == 0)
-        { // /uh border check
+        {
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
         }
+        // /uh border check <?>
         else
-        { // /uh border check <?>
+        {
             try
             {
-                Integer checkDiameter = Integer.valueOf(args[0]);
-                p.getBorderManager().sendCheckMessage(sender, checkDiameter);
+                p.getBorderManager().sendCheckMessage(sender, Integer.valueOf(args[0]));
 
             }
             catch (NumberFormatException e)

@@ -129,7 +129,7 @@ public class BrettflanWorldBorder extends WorldBorder
         // The behavior of the vanilla reduction is emulated.
         final double currentDiameter = getDiameter();
 
-        final long ticksPerBlockRemoved = (int) Math.rint(time / (currentDiameter - diameter)) * 20l;
+        final long ticksPerBlockRemoved = (int) Math.rint(time / (currentDiameter - diameter)) * 20L;
         final long movement = (diameter >= currentDiameter) ? 1 : -1;
 
         if (slowReductionTask != null)
@@ -138,22 +138,18 @@ public class BrettflanWorldBorder extends WorldBorder
             slowReductionTask = null;
         }
 
-        slowReductionTask = RunTask.timer(new Runnable() {
-            @Override
-            public void run()
-            {
-                Double newDiameter = getDiameter() + movement;
+        slowReductionTask = RunTask.timer(() -> {
+            double newDiameter = getDiameter() + movement;
 
-                // If the final size is achieved, we set the exact requested size and we stop here.
-                // Calling setDiameter cancels this task.
-                if ((movement < 0 && newDiameter <= diameter) || (movement > 0 && newDiameter >= diameter))
-                {
-                    setDiameter(diameter);
-                }
-                else
-                {
-                    setDiameterInternal(newDiameter);
-                }
+            // If the final size is achieved, we set the exact requested size and we stop here.
+            // Calling setDiameter cancels this task.
+            if ((movement < 0 && newDiameter <= diameter) || (movement > 0 && newDiameter >= diameter))
+            {
+                setDiameter(diameter);
+            }
+            else
+            {
+                setDiameterInternal(newDiameter);
             }
         }, ticksPerBlockRemoved, ticksPerBlockRemoved);
     }

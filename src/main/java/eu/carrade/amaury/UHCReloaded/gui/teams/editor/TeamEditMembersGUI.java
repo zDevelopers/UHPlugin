@@ -39,13 +39,14 @@ import fr.zcraft.zlib.components.gui.ExplorerGui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.SkullType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -67,9 +68,9 @@ public class TeamEditMembersGUI extends ExplorerGui<OfflinePlayer>
         setTitle(I.t("{0} » {black}Members", team.getName()));
         setKeepHorizontalScrollingSpace(true);
 
-        Set<OfflinePlayer> players = new TreeSet<>(new OfflinePlayersComparator());
+        final Set<OfflinePlayer> players = new TreeSet<>(new OfflinePlayersComparator());
         players.addAll(OfflinePlayersLoader.getOfflinePlayers());
-        setData(players.toArray(new OfflinePlayer[players.size()]));
+        setData(players.toArray(new OfflinePlayer[0]));
 
         action("back", getSize() - 5, GuiUtils.makeItem(
                 Material.EMERALD,
@@ -80,25 +81,24 @@ public class TeamEditMembersGUI extends ExplorerGui<OfflinePlayer>
     @Override
     protected ItemStack getViewItem(OfflinePlayer player)
     {
-        ItemStack button = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        final String displayName = player instanceof Player ? ((Player) player).getDisplayName() : player.getName();
+        final UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
+
+        final boolean inThisTeam = this.team.equals(team);
+
+        final ItemStack button = new ItemStackBuilder(Material.SKULL_ITEM)
+                .data((short) SkullType.PLAYER.ordinal())
+                .title(I.t("{reset}{0}", displayName))
+                    .lore(player.isOnline() ? I.t("{gray}Online") : I.t("{gray}Offline"))
+                    .lore(team != null ? I.t("{gray}Current team: {0}", team.getDisplayName()) : I.t("{gray}Current team: none"))
+                    .loreLine()
+                    .lore(inThisTeam ? I.t("{darkgray}» {white}Click {gray}to remove this player") : I.t("{darkgray}» {white}Click {gray}to add this player"))
+                .item();
+
         SkullMeta meta = (SkullMeta) button.getItemMeta();
-
-        String displayName = player instanceof Player ? ((Player) player).getDisplayName() : player.getName();
-        UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
-
-        Boolean inThisTeam = this.team.equals(team);
-
         meta.setOwner(player.getName());
-        /// The title of a button to select a player (a skull button). {0} = player's display name.
-        meta.setDisplayName(I.t("{reset}{0}", displayName));
-        meta.setLore(Arrays.asList(
-                player.isOnline() ? I.t("{gray}Online") : I.t("{gray}Offline"),
-                team != null ? I.t("{gray}Current team: {0}", team.getDisplayName()) : I.t("{gray}Current team: none"),
-                "",
-                inThisTeam ? I.t("{darkgray}» {white}Click {gray}to remove this player") : I.t("{darkgray}» {white}Click {gray}to add this player")
-        ));
-
         button.setItemMeta(meta);
+
         return button;
     }
 

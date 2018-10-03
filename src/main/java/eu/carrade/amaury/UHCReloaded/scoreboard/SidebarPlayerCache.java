@@ -66,7 +66,7 @@ public class SidebarPlayerCache
 
         Player player = Sidebar.getPlayerAsync(id);
 
-        if(player != null)
+        if (player != null)
         {
             playerName = player.getName();
             isOnline = true;

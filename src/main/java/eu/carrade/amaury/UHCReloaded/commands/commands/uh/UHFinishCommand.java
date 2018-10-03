@@ -70,18 +70,18 @@ public class UHFinishCommand extends AbstractCommand
         }
         catch (IllegalStateException e)
         {
+            switch (e.getMessage())
+            {
+                case UHGameManager.FINISH_ERROR_NOT_STARTED:
+                    sender.sendMessage(I.t("{ce}The game is not started!"));
+                    break;
 
-            if (e.getMessage().equals(UHGameManager.FINISH_ERROR_NOT_STARTED))
-            {
-                sender.sendMessage(I.t("{ce}The game is not started!"));
-            }
-            else if (e.getMessage().equals(UHGameManager.FINISH_ERROR_NOT_FINISHED))
-            {
-                sender.sendMessage(I.t("{ce}There's not one team alive!"));
-            }
-            else
-            {
-                throw e;
+                case UHGameManager.FINISH_ERROR_NOT_FINISHED:
+                    sender.sendMessage(I.t("{ce}There's not one team alive!"));
+                    break;
+
+                default:
+                    throw e;
             }
         }
     }

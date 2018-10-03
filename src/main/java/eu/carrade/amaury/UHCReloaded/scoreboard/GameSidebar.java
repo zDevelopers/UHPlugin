@@ -190,9 +190,8 @@ public class GameSidebar extends Sidebar
     @Override
     public List<String> getContent(Player player)
     {
-        List<String> sidebar = new ArrayList<>();
 
-        sidebar.addAll(sidebarTop);
+        List<String> sidebar = new ArrayList<>(sidebarTop);
         sidebar.add("");
 
         if (OWN_TEAM_IN_SIDEBAR && gameManager.isGameStarted() && gameManager.isGameWithTeams())
@@ -358,15 +357,11 @@ public class GameSidebar extends Sidebar
      */
     private void insertTimers(List<String> sidebar)
     {
-        for (UHTimer timer : UHCReloaded.get().getTimerManager().getTimers())
-        {
-            if (timer.isDisplayed())
-            {
-                sidebar.add(timer.getDisplayName());
-                sidebar.add(timer.toString());
-                sidebar.add("");
-            }
-        }
+        UHCReloaded.get().getTimerManager().getTimers().stream().filter(UHTimer::isDisplayed).forEach(timer -> {
+            sidebar.add(timer.getDisplayName());
+            sidebar.add(timer.toString());
+            sidebar.add("");
+        });
     }
 
     /**

@@ -126,12 +126,11 @@ public class RecipesManager
     /**
      * Checks if a recipe is allowed.
      *
-     * @param recipe
+     * @param recipe The recipe to be checked.
      * @return True if the recipe is allowed, false else.
      */
     public boolean isRecipeAllowed(Recipe recipe)
     {
-
         // Vanilla compass recipe is disabled if the special compass is used.
         if (UHConfig.GAMEPLAY_CHANGES.COMPASS.ENABLED.get() && RecipeUtil.areSimilar(recipe, getVanillaCompassRecipe()))
         {
@@ -259,11 +258,12 @@ public class RecipesManager
 
             for (ItemStack item : inventory.getContents())
             {
+                // An human head
                 if (item.getType() == Material.SKULL_ITEM && item.getDurability() == (short) SkullType.PLAYER.ordinal())
-                { // An human head
+                {
                     SkullMeta sm = (SkullMeta) item.getItemMeta();
-                    if (sm.hasOwner())
-                    { // An human head
+                    if (sm.hasOwner()) // An human head
+                    {
                         name = sm.getOwner();
                         wither = false;
                     }
@@ -394,12 +394,12 @@ public class RecipesManager
             name = I.tc("player_head", "{lightpurple}Golden head");
         }
 
-        ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.NUMBER_CRAFTED.get(), damage);
-        ItemMeta goldenAppleMeta = goldenAppleStack.getItemMeta();
+        final ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.NUMBER_CRAFTED.get(), damage);
+        final ItemMeta goldenAppleMeta = goldenAppleStack.getItemMeta();
         goldenAppleMeta.setDisplayName(ChatColor.RESET + name);
         goldenAppleStack.setItemMeta(goldenAppleMeta);
 
-        ShapedRecipe goldenAppleFromHeadRecipe = new ShapedRecipe(goldenAppleStack);
+        final ShapedRecipe goldenAppleFromHeadRecipe = new ShapedRecipe(goldenAppleStack);
 
         goldenAppleFromHeadRecipe.shape("GGG", "GHG", "GGG");
         goldenAppleFromHeadRecipe.setIngredient('G', Material.GOLD_INGOT);
@@ -427,12 +427,12 @@ public class RecipesManager
             name = I.tc("monster_head", "{lightpurple}Golden head");
         }
 
-        ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.NUMBER_CRAFTED.get(), damage);
-        ItemMeta goldenAppleMeta = goldenAppleStack.getItemMeta();
+        final ItemStack goldenAppleStack = new ItemStack(Material.GOLDEN_APPLE, UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.NUMBER_CRAFTED.get(), damage);
+        final ItemMeta goldenAppleMeta = goldenAppleStack.getItemMeta();
         goldenAppleMeta.setDisplayName(ChatColor.RESET + name);
         goldenAppleStack.setItemMeta(goldenAppleMeta);
 
-        ShapedRecipe goldenAppleFromWitherHeadRecipe = new ShapedRecipe(goldenAppleStack);
+        final ShapedRecipe goldenAppleFromWitherHeadRecipe = new ShapedRecipe(goldenAppleStack);
 
         goldenAppleFromWitherHeadRecipe.shape("GGG", "GHG", "GGG");
         goldenAppleFromWitherHeadRecipe.setIngredient('G', Material.GOLD_INGOT);
@@ -449,7 +449,7 @@ public class RecipesManager
      */
     public ShapelessRecipe getLoreRemoverNormalRecipe()
     {
-        ShapelessRecipe goldenAppleLoreRemoverRecipe = new ShapelessRecipe(new ItemStack(Material.GOLDEN_APPLE, 1, (short) 0));
+        final ShapelessRecipe goldenAppleLoreRemoverRecipe = new ShapelessRecipe(new ItemStack(Material.GOLDEN_APPLE, 1, (short) 0));
         goldenAppleLoreRemoverRecipe.addIngredient(Material.GOLDEN_APPLE);
 
         return goldenAppleLoreRemoverRecipe;
@@ -464,7 +464,7 @@ public class RecipesManager
      */
     public ShapelessRecipe getLoreRemoverNotchRecipe()
     {
-        ShapelessRecipe goldenAppleLoreRemoverNotchRecipe = new ShapelessRecipe(new ItemStack(Material.GOLDEN_APPLE, 1, (short) 1));
+        final ShapelessRecipe goldenAppleLoreRemoverNotchRecipe = new ShapelessRecipe(new ItemStack(Material.GOLDEN_APPLE, 1, (short) 1));
         goldenAppleLoreRemoverNotchRecipe.addIngredient(Material.GOLDEN_APPLE, 1);
 
         return goldenAppleLoreRemoverNotchRecipe;
@@ -477,7 +477,7 @@ public class RecipesManager
      */
     public ShapelessRecipe getGoldenMelonRecipe()
     {
-        ShapelessRecipe goldenMelonRecipe = new ShapelessRecipe(new ItemStack(Material.SPECKLED_MELON));
+        final ShapelessRecipe goldenMelonRecipe = new ShapelessRecipe(new ItemStack(Material.SPECKLED_MELON));
         goldenMelonRecipe.addIngredient(1, Material.GOLD_BLOCK);
         goldenMelonRecipe.addIngredient(1, Material.MELON);
 
@@ -491,7 +491,7 @@ public class RecipesManager
      */
     public ShapedRecipe getVanillaCompassRecipe()
     {
-        ShapedRecipe vanillaCompassRecipe = new ShapedRecipe(new ItemStack(Material.COMPASS));
+        final ShapedRecipe vanillaCompassRecipe = new ShapedRecipe(new ItemStack(Material.COMPASS));
         vanillaCompassRecipe.shape(" I ", "IRI", " I ");
 
         vanillaCompassRecipe.setIngredient('I', Material.IRON_INGOT);

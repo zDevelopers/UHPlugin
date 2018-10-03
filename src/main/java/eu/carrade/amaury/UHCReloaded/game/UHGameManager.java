@@ -44,7 +44,6 @@ import eu.carrade.amaury.UHCReloaded.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
-import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
@@ -60,7 +59,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -74,10 +72,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class UHGameManager
@@ -93,20 +93,20 @@ public class UHGameManager
     private final Long SURFACE_MOBS_FREE_PERIOD;
     private final UHSound DEATH_SOUND;
 
-    private UHCReloaded p = null;
-    private TeamManager tm = null;
-    private Random random = null;
+    private UHCReloaded p;
+    private TeamManager tm;
+    private Random random;
 
     private Boolean damagesEnabled = false;
     private Boolean mobsOnSurface = false;
 
-    private HashSet<String> players = new HashSet<>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available
-    private HashSet<UUID> alivePlayers = new HashSet<>();
-    private HashSet<UHTeam> aliveTeams = new HashSet<>();
-    private HashSet<UUID> spectators = new HashSet<>();
+    private Set<String> players = new HashSet<>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available
+    private Set<UUID> alivePlayers = new HashSet<>();
+    private Set<UHTeam> aliveTeams = new HashSet<>();
+    private Set<UUID> spectators = new HashSet<>();
     private Map<UUID, Location> deathLocations = new HashMap<>();
 
-    private HashSet<String> deadPlayersToBeResurrected = new HashSet<>(); // Same
+    private Set<String> deadPlayersToBeResurrected = new HashSet<>(); // Same
 
     private Integer alivePlayersCount = 0;
     private Integer aliveTeamsCount = 0;
@@ -175,7 +175,7 @@ public class UHGameManager
      * - Spectate mode disabled.
      * - Gamemode: creative (if permission "uh.build" granted) or adventure (else).
      *
-     * @param player
+     * @param player The player to initialize.
      */
     public void initPlayer(final Player player)
     {
@@ -197,14 +197,7 @@ public class UHGameManager
         // Used to update the "health" objective, to avoid a null one.
         // Launched later because else, the health is constantly set to 20,
         // and this prevents the health score to be updated.
-        Bukkit.getScheduler().runTaskLater(p, new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                p.getScoreboardManager().updateHealthScore(player);
-            }
-        }, 20L);
+        Bukkit.getScheduler().runTaskLater(p, () -> p.getScoreboardManager().updateHealthScore(player), 20L);
 
         // Disable the spectator mode if the game is not started.
         p.getSpectatorsManager().setSpectating(player, false);
@@ -252,7 +245,7 @@ public class UHGameManager
         }
 
 
-        /** Initialization of the teams **/
+        /* ** Initialization of the teams ** */
 
         alivePlayers.clear();
         aliveTeams.clear();
@@ -260,25 +253,21 @@ public class UHGameManager
         aliveTeamsCount = 0;
 
         // Stores the teams created on-the-fly, to unregister them if something bad happens.
-        Set<UHTeam> onTheFlyTeams = new HashSet<>();
+        final Set<UHTeam> onTheFlyTeams = new HashSet<>();
 
         // If there isn't any team, we add all players (startup spectators excluded) to a new solo team.
         if (tm.getTeams().isEmpty())
         {
             gameWithTeams = false;
 
-            for (Player player : Bukkit.getOnlinePlayers())
+            Bukkit.getOnlinePlayers().stream().filter(player -> !spectators.contains(player.getUniqueId())).forEach(player ->
             {
-                if (!spectators.contains(player.getUniqueId()))
-                {
-                    UHTeam team = new UHTeam(player.getName(), RANDOM_COLORS_IN_SOLO ? TeamColor.RANDOM : null);
+                final UHTeam team = new UHTeam(player.getName(), RANDOM_COLORS_IN_SOLO ? TeamColor.RANDOM : null);
+                team.addPlayer(player, true);
 
-                    team.addPlayer(player, true);
-
-                    tm.addTeam(team);
-                    onTheFlyTeams.add(team);
-                }
-            }
+                tm.addTeam(team);
+                onTheFlyTeams.add(team);
+            });
         }
 
         // Else, every non-startup-spectator out of any team player is added to a solo team.
@@ -286,45 +275,41 @@ public class UHGameManager
         {
             gameWithTeams = true;
 
-            for (Player player : Bukkit.getOnlinePlayers())
-            {
-                if (!spectators.contains(player.getUniqueId()) && tm.getTeamForPlayer(player) == null)
-                {
-                    // We need an unique name for the team.
-                    String teamName = player.getName();
-                    while (tm.isTeamRegistered(teamName))
+            Bukkit.getOnlinePlayers().stream()
+                    .filter(player -> !spectators.contains(player.getUniqueId()))
+                    .filter(player -> tm.getTeamForPlayer(player) == null)
+                    .forEach(player ->
                     {
-                        teamName = player.getName() + " " + random.nextInt(1000000);
-                    }
+                        // We need an unique name for the team.
+                        String teamName = player.getName();
+                        while (tm.isTeamRegistered(teamName))
+                        {
+                            teamName = player.getName() + " " + random.nextInt(1000000);
+                        }
 
-                    UHTeam team = new UHTeam(teamName, RANDOM_COLORS_IN_SOLO ? TeamColor.RANDOM : null);
+                        final UHTeam team = new UHTeam(teamName, RANDOM_COLORS_IN_SOLO ? TeamColor.RANDOM : null);
 
-                    team.addPlayer(player, true);
+                        team.addPlayer(player, true);
 
-                    tm.addTeam(team);
-                    onTheFlyTeams.add(team);
-                }
-            }
+                        tm.addTeam(team);
+                        onTheFlyTeams.add(team);
+                    });
         }
 
 
-        /** Initialization of the players **/
+        /* ** Initialization of the players ** */
 
-        for (UHTeam team : tm.getTeams())
-        {
-            for (OfflinePlayer player : team.getPlayers())
-            {
-                if (!spectators.contains(player.getUniqueId()))
-                {
-                    alivePlayers.add(player.getUniqueId());
-                }
-            }
-        }
+        tm.getTeams().forEach(
+                team -> team.getPlayers().stream()
+                            .map(OfflinePlayer::getUniqueId)
+                            .filter(player -> !spectators.contains(player))
+                            .forEach(player -> alivePlayers.add(player))
+        );
 
         updateAliveCache();
 
 
-        /** Spawns check **/
+        /* ** Spawns check ** */
 
         Integer spawnsNeeded = ignoreTeams ? alivePlayersCount : aliveTeamsCount;
 
@@ -349,10 +334,7 @@ public class UHGameManager
             );
 
             // We clears the teams created on-the-fly
-            for (UHTeam team : onTheFlyTeams)
-            {
-                tm.removeTeam(team, true);
-            }
+            onTheFlyTeams.forEach(team -> tm.removeTeam(team, true));
 
             aliveTeamsCount = 0;
             alivePlayersCount = 0;
@@ -361,32 +343,28 @@ public class UHGameManager
         }
 
 
-        /** MOTD (now the game WILL start) **/
+        /* ** MOTD (now the game WILL start) ** */
 
         p.getMOTDManager().updateMOTDDuringStart();
 
 
-        /** Removes the teams action bar (if any) **/
+        /* ** Removes the teams action bar (if any) ** */
         if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
         {
-            for (UHTeam team : tm.getTeams())
-            {
-                for (OfflinePlayer player : team.getPlayers())
-                {
-                    ActionBar.removeMessage(player.getUniqueId(), true);
-                }
-            }
-        }
-
-        /** Initialization of the spectator mode **/
-
-        for (Player player : Bukkit.getOnlinePlayers())
-        {
-            p.getSpectatorsManager().setSpectating(player, spectators.contains(player.getUniqueId()));
+            tm.getTeams().stream()
+                .flatMap(team -> team.getPlayers().stream())
+                .forEach(player -> ActionBar.removeMessage(player.getUniqueId(), true));
         }
 
 
-        /** Teleportation **/
+        /* ** Initialization of the spectator mode ** */
+
+        Bukkit
+            .getOnlinePlayers()
+            .forEach(player -> p.getSpectatorsManager().setSpectating(player, spectators.contains(player.getUniqueId())));
+
+
+        /* ** Teleportation ** */
 
         teleporter = new Teleporter();
 
@@ -395,76 +373,35 @@ public class UHGameManager
 
         Queue<Location> unusedTP = new ArrayDeque<>(spawnPoints);
 
-        for (final UHTeam team : tm.getTeams())
+        tm.getTeams().stream().filter(team -> !team.isEmpty()).forEach(team ->
         {
-            if (team.isEmpty()) continue;
-
-            Material cageMaterial = null;
-            Byte cageData = null;
-
-            if (UHConfig.START.SLOW.CAGES.ENABLED.get())
-            {
-                switch (UHConfig.START.SLOW.CAGES.TYPE.get())
-                {
-                    case TEAM_COLOR_TRANSPARENT:
-                        cageMaterial = Material.STAINED_GLASS;
-                        cageData = ColorsUtils.chat2Dye(team.getColorOrWhite().toChatColor()).getWoolData();
-                        break;
-
-                    case TEAM_COLOR_SOLID:
-                        cageMaterial = Material.STAINED_CLAY;
-                        cageData = ColorsUtils.chat2Dye(team.getColorOrWhite().toChatColor()).getWoolData();
-                        break;
-
-                    case CUSTOM:
-                        cageMaterial = UHConfig.START.SLOW.CAGES.CUSTOM_BLOCK.get();
-                        break;
-                }
-            }
-
             if (!ignoreTeams && gameWithTeams)
             {
                 final Location teamSpawn = unusedTP.poll();
-
-                Cage cage = null;
-                if (cageMaterial != null)
-                {
-                    cage = new Cage(teamSpawn, UHConfig.START.SLOW.CAGES.BUILD_CEILING.get(), UHConfig.START.SLOW.CAGES.VISIBLE_WALLS.get());
-                    cage.setCustomMaterial(cageMaterial, cageData != null ? cageData : 0);
-                    cage.setInternalHeight(UHConfig.START.SLOW.CAGES.HEIGHT.get());
-                    cage.setRadius(UHConfig.START.SLOW.CAGES.RADIUS.get());
-                }
+                final Cage cage = Cage.createInstanceForTeamIfEnabled(team, teamSpawn);
 
                 p.getDynmapIntegration().showSpawnLocation(team, teamSpawn);
 
-                for (final UUID player : team.getPlayersUUID())
+                team.getPlayersUUID().forEach(player ->
                 {
                     teleporter.setSpawnForPlayer(player, teamSpawn);
                     if (cage != null) teleporter.setCageForPlayer(player, cage);
-                }
+                });
             }
             else
             {
-                for (final UUID player : team.getPlayersUUID())
+                team.getPlayersUUID().forEach(player ->
                 {
                     final Location playerSpawn = unusedTP.poll();
-
-                    Cage cage = null;
-                    if (cageMaterial != null)
-                    {
-                        cage = new Cage(playerSpawn, UHConfig.START.SLOW.CAGES.BUILD_CEILING.get(), UHConfig.START.SLOW.CAGES.VISIBLE_WALLS.get());
-                        cage.setCustomMaterial(cageMaterial, cageData != null ? cageData : 0);
-                        cage.setInternalHeight(UHConfig.START.SLOW.CAGES.HEIGHT.get());
-                        cage.setRadius(UHConfig.START.SLOW.CAGES.RADIUS.get());
-                    }
+                    final Cage cage = Cage.createInstanceForTeamIfEnabled(team, playerSpawn);
 
                     teleporter.setSpawnForPlayer(player, playerSpawn);
                     if (cage != null) teleporter.setCageForPlayer(player, cage);
 
                     p.getDynmapIntegration().showSpawnLocation(Bukkit.getOfflinePlayer(player), playerSpawn);
-                }
+                });
             }
-        }
+        });
 
         if (slow)
         {
@@ -502,93 +439,67 @@ public class UHGameManager
         }
 
         teleporter
-                .whenTeleportationSuccesses(new Callback<UUID>()
+                .whenTeleportationSuccesses(uuid ->
                 {
-                    @Override
-                    public void call(UUID uuid)
+                    final Player player = Bukkit.getPlayer(uuid);
+
+                    if (slow)
                     {
-                        final Player player = Bukkit.getPlayer(uuid);
+                        sender.sendMessage(I.t("{gray}Player {0}{gray} teleported.", player.getName()));
 
-                        if (slow)
+                        if (!UHConfig.START.SLOW.CAGES.ENABLED.get())
                         {
-                            sender.sendMessage(I.t("{gray}Player {0}{gray} teleported.", player.getName()));
-
-                            if (!UHConfig.START.SLOW.CAGES.ENABLED.get())
+                            RunTask.nextTick(() ->
                             {
-                                RunTask.nextTick(new Runnable()
-                                {
-                                    @Override
-                                    public void run()
-                                    {
-                                        player.setAllowFlight(true);
-                                        player.setFlying(true);
-                                    }
-                                });
-                            }
+                                player.setAllowFlight(true);
+                                player.setFlying(true);
+                            });
                         }
-
-                        if (UHConfig.START.SLOW.CAGES.ENABLED.get())
-                            player.setGameMode(GameMode.ADVENTURE);
-                        else
-                            player.setGameMode(GameMode.SURVIVAL);
-
-                        resetPlayer(player);
-
-                        for (PotionEffect effect : player.getActivePotionEffects())
-                        {
-                            player.removePotionEffect(effect.getType());
-                        }
-
-                        player.setCompassTarget(player.getWorld().getSpawnLocation());
                     }
+
+                    if (UHConfig.START.SLOW.CAGES.ENABLED.get())
+                        player.setGameMode(GameMode.ADVENTURE);
+                    else
+                        player.setGameMode(GameMode.SURVIVAL);
+
+                    resetPlayer(player);
+
+                    player.getActivePotionEffects().stream().map(PotionEffect::getType).forEach(player::removePotionEffect);
+                    player.setCompassTarget(player.getWorld().getSpawnLocation());
                 })
 
-                .whenTeleportationFails(new Callback<UUID>()
-                {
-                    @Override
-                    public void call(UUID uuid)
-                    {
+                .whenTeleportationFails(uuid -> sender.sendMessage(I.t("{ce}Cannot teleport player {0}!", Bukkit.getPlayer(uuid).getName())))
 
+                .whenTeleportationEnds(uuids ->
+                {
+                    if (slow)
+                    {
+                        slowStartTPFinished = true;
+
+                        try
+                        {
+                            sender.sendMessage(I.t("{cs}All teams are teleported."));
+                            RawMessage.send(sender, new RawText(I.t("{gray}Use {cc}/uh start{gray} or click here to start the game."))
+                                    .hover(new RawText(I.t("Click here to start the game")))
+                                    .command("/uh start")
+                            );
+                        }
+                        catch (NullPointerException ignored) {}
+
+                        if (BROADCAST_SLOW_START_PROGRESS)
+                        {
+                            /// Displayed in the action bar when the slow teleportation is finished but the game not started.
+                            String message = I.t("{lightpurple}Teleportation complete. {gray}The game will start soon...");
+                            Bukkit.getOnlinePlayers().forEach(player -> ActionBar.sendPermanentMessage(player, message));
+                        }
                     }
-                })
-
-                .whenTeleportationEnds(new Callback<Set<UUID>>()
-                {
-                    @Override
-                    public void call(Set<UUID> uuids)
+                    else
                     {
-                        if (slow)
-                        {
-                            slowStartTPFinished = true;
-
-                            try
-                            {
-                                sender.sendMessage(I.t("{cs}All teams are teleported."));
-                                RawMessage.send(sender, new RawText(I.t("{gray}Use {cc}/uh start{gray} or click here to start the game."))
-                                        .hover(new RawText(I.t("Click here to start the game")))
-                                        .command("/uh start")
-                                );
-                            }
-                            catch (NullPointerException ignored) {}
-
-                            if (BROADCAST_SLOW_START_PROGRESS)
-                            {
-                                /// Displayed in the action bar when the slow teleportation is finished but the game not started.
-                                String message = I.t("{lightpurple}Teleportation complete. {gray}The game will start soon...");
-                                for (Player player : Bukkit.getOnlinePlayers())
-                                {
-                                    ActionBar.sendPermanentMessage(player, message);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            startEnvironment();
-                            startTimer();
-                            scheduleDamages();
-                            sendStartupProTips();
-                            finalizeStart();
-                        }
+                        startEnvironment();
+                        startTimer();
+                        scheduleDamages();
+                        sendStartupProTips();
+                        finalizeStart();
                     }
                 })
 
@@ -621,23 +532,20 @@ public class UHGameManager
             p.getFreezer().setGlobalFreezeState(false, false);
 
             // The fly is removed to everyone
-            for (Player player : p.getServer().getOnlinePlayers())
-            {
-                if (alivePlayers.contains(player.getUniqueId()))
+            p.getServer().getOnlinePlayers().stream()
+             .filter(player -> alivePlayers.contains(player.getUniqueId()))
+             .forEach(player ->
                 {
                     player.setFlying(false);
                     player.setAllowFlight(false);
                 }
-            }
+            );
         }
 
         // The action bar is cleared
         if (BROADCAST_SLOW_START_PROGRESS)
         {
-            for (Player player : Bukkit.getOnlinePlayers())
-            {
-                ActionBar.removeMessage(player);
-            }
+            Bukkit.getOnlinePlayers().forEach(ActionBar::removeMessage);
         }
 
         // The environment is initialized, the game is started.
@@ -698,48 +606,29 @@ public class UHGameManager
     private void scheduleDamages()
     {
         // When the grace period is over, damages are enabled.
-        RunTask.later(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                damagesEnabled = true;
+        RunTask.later(() -> {
+            damagesEnabled = true;
 
-                if (UHConfig.START.BROADCAST_GRACE_END.get())
-                {
-                    Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} The grace period ended, you are now vulnerable."));
-                }
+            if (UHConfig.START.BROADCAST_GRACE_END.get())
+            {
+                Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} The grace period ended, you are now vulnerable."));
             }
         }, GRACE_PERIOD);
 
         // When the peace period is over, PVP is enabled
         if (PEACE_PERIOD > 0)
         {
-            for (World world : Bukkit.getWorlds())
-                world.setPVP(false);
+            Bukkit.getWorlds().forEach(world -> world.setPVP(false));
 
-            RunTask.later(new Runnable()
+            RunTask.later(() ->
             {
-                @Override
-                public void run()
-                {
-                    for (World world : Bukkit.getWorlds())
-                        world.setPVP(true);
-
-                    Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} PvP is now enabled."));
-                }
+                Bukkit.getWorlds().forEach(world -> world.setPVP(true));
+                Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} PvP is now enabled."));
             }, PEACE_PERIOD);
         }
 
         // Allows mobs to spawn on the surface after the mobs-free period
-        RunTask.later(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                mobsOnSurface = true;
-            }
-        }, SURFACE_MOBS_FREE_PERIOD);
+        RunTask.later(() -> mobsOnSurface = true, SURFACE_MOBS_FREE_PERIOD);
     }
 
     /**
@@ -750,33 +639,13 @@ public class UHGameManager
     private void sendStartupProTips()
     {
         // Team chat - 20 seconds after
-        if (this.isGameWithTeams())
+        if (isGameWithTeams())
         {
-            Bukkit.getScheduler().runTaskLater(p, new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    for (Player player : getOnlineAlivePlayers())
-                    {
-                        ProTips.USE_T_COMMAND.sendTo(player);
-                    }
-                }
-            }, 400L);
+            Bukkit.getScheduler().runTaskLater(p, () -> getOnlineAlivePlayers().forEach(ProTips.USE_T_COMMAND::sendTo), 400L);
         }
 
         // Invincibility - 5 seconds after
-        Bukkit.getScheduler().runTaskLater(p, new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                for (Player player : getOnlineAlivePlayers())
-                {
-                    ProTips.STARTUP_INVINCIBILITY.sendTo(player);
-                }
-            }
-        }, 100L);
+        Bukkit.getScheduler().runTaskLater(p, () -> getOnlineAlivePlayers().forEach(ProTips.STARTUP_INVINCIBILITY::sendTo), 100L);
     }
 
     /**
@@ -795,14 +664,14 @@ public class UHGameManager
         updateAliveCache();
 
         // Survival gamemode for everyone
-        for (Player player : p.getServer().getOnlinePlayers())
-        {
-            if (alivePlayers.contains(player.getUniqueId()))
+        p.getServer().getOnlinePlayers().stream()
+         .filter(player -> alivePlayers.contains(player.getUniqueId()))
+         .forEach(player ->
             {
                 player.setGameMode(GameMode.SURVIVAL);
                 resetPlayer(player);
             }
-        }
+        );
 
         // Fires the event
         p.getServer().getPluginManager().callEvent(new UHGameStartsEvent());
@@ -877,8 +746,8 @@ public class UHGameManager
         {
             this.episode++;
 
-            EpisodeChangedCause cause;
-            if (shifter.equals("")) cause = EpisodeChangedCause.FINISHED;
+            final EpisodeChangedCause cause;
+            if (shifter == null || shifter.equals("")) cause = EpisodeChangedCause.FINISHED;
             else cause = EpisodeChangedCause.SHIFTED;
 
             // Restarts the timer.
@@ -953,10 +822,7 @@ public class UHGameManager
         updateAliveCache();
 
         // This method can be used to add a player after the game start.
-        if (!players.contains(player.getName()))
-        {
-            players.add(player.getName());
-        }
+        players.add(player.getName());
 
         // Event
         p.getServer().getPluginManager().callEvent(new UHPlayerResurrectedEvent(player));
@@ -1217,7 +1083,7 @@ public class UHGameManager
         {
             if (isGameWithTeams())
             {
-                String winners = "";
+                StringBuilder winners = new StringBuilder();
                 int j = 0;
 
                 for (OfflinePlayer winner : listWinners)
@@ -1227,19 +1093,19 @@ public class UHGameManager
                         if (j == listWinners.size() - 1)
                         {
                             /// The "and" in the winners players list (like "player1, player2 and player3").
-                            winners += " " + I.tc("winners_list", "and") + " ";
+                            winners.append(" ").append(I.tc("winners_list", "and")).append(" ");
                         }
                         else
                         {
-                            winners += ", ";
+                            winners.append(", ");
                         }
                     }
 
-                    winners += winner.getName();
+                    winners.append(winner.getName());
                     j++;
                 }
 
-                p.getServer().broadcastMessage(I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} (team {1}{green}) for their victory! {darkgreen}{obfuscated}--", winners, winnerTeam.getDisplayName()));
+                p.getServer().broadcastMessage(I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} (team {1}{green}) for their victory! {darkgreen}{obfuscated}--", winners.toString(), winnerTeam.getDisplayName()));
             }
             else
             {
@@ -1272,7 +1138,7 @@ public class UHGameManager
 
         if (UHConfig.FINISH.FIREWORKS.ENABLED.get())
         {
-            new FireworksOnWinnersTask(listWinners).runTaskTimer(p, 0l, 10l);
+            new FireworksOnWinnersTask(listWinners).runTaskTimer(p, 0L, 15L);
         }
     }
 
@@ -1281,7 +1147,7 @@ public class UHGameManager
      *
      * @return The set.
      */
-    public HashSet<String> getPlayers()
+    public Set<String> getPlayers()
     {
         return players;
     }
@@ -1303,15 +1169,9 @@ public class UHGameManager
      */
     public Set<OfflinePlayer> getAlivePlayers()
     {
-
-        HashSet<OfflinePlayer> alivePlayersList = new HashSet<>();
-
-        for (UUID id : alivePlayers)
-        {
-            alivePlayersList.add(p.getServer().getOfflinePlayer(id));
-        }
-
-        return alivePlayersList;
+        return alivePlayers.stream()
+                .map(id -> p.getServer().getOfflinePlayer(id))
+                .collect(Collectors.toCollection(HashSet::new));
     }
 
     /**
@@ -1321,19 +1181,11 @@ public class UHGameManager
      */
     public HashSet<Player> getOnlineAlivePlayers()
     {
-
-        HashSet<Player> alivePlayersList = new HashSet<>();
-
-        for (UUID id : alivePlayers)
-        {
-            Player player = p.getServer().getPlayer(id);
-            if (player != null)
-            {
-                alivePlayersList.add(player);
-            }
-        }
-
-        return alivePlayersList;
+        return alivePlayers.stream()
+                .map(id -> p.getServer().getPlayer(id))
+                .filter(Objects::nonNull)
+                .filter(Player::isOnline)
+                .collect(Collectors.toCollection(HashSet::new));
     }
 
     /**
@@ -1396,7 +1248,7 @@ public class UHGameManager
      *
      * @param player The player to register as a spectator.
      *
-     * @deprecated Use {@link #addStartupSpectator(Player)} instead.
+     * @deprecated Use {@link #addStartupSpectator(OfflinePlayer)} instead.
      */
     @Deprecated
     public void addSpectator(Player player)
@@ -1407,9 +1259,9 @@ public class UHGameManager
     /**
      * Removes a spectator.
      *
-     * @param player
+     * @param player The player to remove.
      *
-     * @deprecated Use {@link #removeStartupSpectator(Player)} instead.
+     * @deprecated Use {@link #removeStartupSpectator(OfflinePlayer)} instead.
      */
     @Deprecated
     public void removeSpectator(Player player)

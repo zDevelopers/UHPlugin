@@ -72,7 +72,7 @@ public final class TextUtils
         Integer bestScore = Integer.MIN_VALUE;
         String  bestWord  = " ";
 
-        Integer averageWordLength = 0;
+        int averageWordLength = 0;
         for (String word : words)
             averageWordLength += word.length();
 
@@ -112,10 +112,9 @@ public final class TextUtils
      */
     public static String toAlphanumeric(String text)
     {
-        if (text == null)
-            return null;
+        if (text == null) return null;
 
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         for (Character character : text.toCharArray())
         {
             // Convert all kind of spaces (unbreakable...) and apostrophes to basic spaces
