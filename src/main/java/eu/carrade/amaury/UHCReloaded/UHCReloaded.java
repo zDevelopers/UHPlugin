@@ -31,46 +31,82 @@
  */
 package eu.carrade.amaury.UHCReloaded;
 
-import eu.carrade.amaury.UHCReloaded.borders.BorderManager;
-import eu.carrade.amaury.UHCReloaded.commands.UHCommandExecutor;
+import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
+import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import eu.carrade.amaury.UHCReloaded.events.modules.AllModulesLoadedEvent;
 import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
-import eu.carrade.amaury.UHCReloaded.integration.UHDynmapIntegration;
-import eu.carrade.amaury.UHCReloaded.integration.UHProtocolLibIntegrationWrapper;
-import eu.carrade.amaury.UHCReloaded.integration.UHSpectatorPlusIntegration;
-import eu.carrade.amaury.UHCReloaded.integration.UHWorldBorderIntegration;
-import eu.carrade.amaury.UHCReloaded.listeners.BeforeGameListener;
-import eu.carrade.amaury.UHCReloaded.listeners.CraftingListener;
-import eu.carrade.amaury.UHCReloaded.listeners.GameListener;
-import eu.carrade.amaury.UHCReloaded.listeners.GameplayListener;
-import eu.carrade.amaury.UHCReloaded.listeners.SpawnsListener;
-import eu.carrade.amaury.UHCReloaded.misc.Freezer;
-import eu.carrade.amaury.UHCReloaded.misc.MOTDManager;
-import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
-import eu.carrade.amaury.UHCReloaded.misc.PlayerListHeaderFooterManager;
-import eu.carrade.amaury.UHCReloaded.misc.RulesManager;
-import eu.carrade.amaury.UHCReloaded.misc.RuntimeCommandsExecutor;
-import eu.carrade.amaury.UHCReloaded.recipes.RecipesManager;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.GamePhaseChangedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.modules.ModulesManagerModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.teams.TeamsModule;
+import eu.carrade.amaury.UHCReloaded.old.borders.BorderManager;
+import eu.carrade.amaury.UHCReloaded.old.integration.UHDynmapIntegration;
+import eu.carrade.amaury.UHCReloaded.old.integration.UHProtocolLibIntegrationWrapper;
+import eu.carrade.amaury.UHCReloaded.old.integration.UHSpectatorPlusIntegration;
+import eu.carrade.amaury.UHCReloaded.old.integration.UHWorldBorderIntegration;
+import eu.carrade.amaury.UHCReloaded.old.misc.Freezer;
+import eu.carrade.amaury.UHCReloaded.old.misc.MOTDManager;
+import eu.carrade.amaury.UHCReloaded.old.misc.OfflinePlayersLoader;
+import eu.carrade.amaury.UHCReloaded.old.misc.PlayerListHeaderFooterManager;
+import eu.carrade.amaury.UHCReloaded.old.misc.RulesManager;
+import eu.carrade.amaury.UHCReloaded.old.misc.RuntimeCommandsExecutor;
+import eu.carrade.amaury.UHCReloaded.old.recipes.RecipesManager;
+import eu.carrade.amaury.UHCReloaded.old.spectators.SpectatorsManager;
+import eu.carrade.amaury.UHCReloaded.old.teams.TeamChatManager;
+import eu.carrade.amaury.UHCReloaded.old.teams.TeamManager;
+import eu.carrade.amaury.UHCReloaded.old.timers.TimerManager;
 import eu.carrade.amaury.UHCReloaded.scoreboard.ScoreboardManager;
 import eu.carrade.amaury.UHCReloaded.spawns.SpawnsManager;
-import eu.carrade.amaury.UHCReloaded.spectators.SpectatorsManager;
-import eu.carrade.amaury.UHCReloaded.task.UpdateTimerTask;
-import eu.carrade.amaury.UHCReloaded.teams.TeamChatManager;
-import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
-import eu.carrade.amaury.UHCReloaded.timers.TimerManager;
+import eu.carrade.amaury.UHCReloaded.utils.ModulesUtils;
+import fr.zcraft.zlib.components.commands.Command;
+import fr.zcraft.zlib.components.commands.Commands;
+import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.i18n.I18n;
 import fr.zcraft.zlib.components.scoreboard.SidebarScoreboard;
 import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.core.ZPlugin;
-import org.bukkit.entity.Player;
+import fr.zcraft.zlib.tools.PluginLogger;
+import fr.zcraft.zlib.tools.reflection.Reflection;
+import fr.zcraft.zlib.tools.runners.RunTask;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scoreboard.Scoreboard;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 
-public class UHCReloaded extends ZPlugin
+public class UHCReloaded extends ZPlugin implements Listener
 {
     private static UHCReloaded instance;
+
+    private Map<Class<? extends UHModule>, ModuleWrapper> modules = new HashMap<>();
+    private Set<ModuleInfo.ModuleLoadTime> loadedPriorities = new HashSet<>();
+
+    private Scoreboard scoreboard = null;
 
     private TeamManager teamManager = null;
     private SpawnsManager spawnsManager = null;
@@ -94,6 +130,8 @@ public class UHCReloaded extends ZPlugin
     private UHDynmapIntegration dynmapintegration = null;
     private UHProtocolLibIntegrationWrapper protocollibintegrationwrapper = null;
 
+    private boolean worldsLoaded = false;
+
 
     @Override
     public void onEnable()
@@ -102,92 +140,384 @@ public class UHCReloaded extends ZPlugin
 
         this.saveDefaultConfig();
 
-        loadComponents(SidebarScoreboard.class, Gui.class, I18n.class, UHConfig.class, OfflinePlayersLoader.class);
 
-        final String langInConfig = UHConfig.LANG.get();
-        if (langInConfig == null || langInConfig.isEmpty())
-        {
-            //i18n = new eu.carrade.amaury.UHCReloaded.i18n.I18n(this);
-            I18n.useDefaultPrimaryLocale();
-        }
-        else
-        {
-            //i18n = new eu.carrade.amaury.UHCReloaded.i18n.I18n(this, langInConfig);
-            I18n.setPrimaryLocale(Locale.forLanguageTag(langInConfig));
-        }
+        /* *** Required zLib base components *** */
+
+        loadComponents(UHConfig.class, I18n.class, Commands.class, SidebarScoreboard.class, Gui.class, OfflinePlayersLoader.class);
+
+
+        /* *** Internationalization *** */
+
+        if (UHConfig.LANG.get() == null) I18n.useDefaultPrimaryLocale();
+        else I18n.setPrimaryLocale(UHConfig.LANG.get());
 
         I18n.setFallbackLocale(Locale.US);
 
 
-        wbintegration = new UHWorldBorderIntegration();
-        spintegration = new UHSpectatorPlusIntegration();
-        dynmapintegration = new UHDynmapIntegration();
+        /* *** Core events *** */
 
-        // Needed to avoid a NoClassDefFoundError.
-        // I don't like this way of doing this, but else, the plugin will not load without ProtocolLib.
-        protocollibintegrationwrapper = new UHProtocolLibIntegrationWrapper(this);
+        ZLib.registerEvents(this);
 
 
-        spectatorsManager = SpectatorsManager.getInstance();
-        teamManager = new TeamManager();
-        gameManager = new UHGameManager(this);
-        spawnsManager = new SpawnsManager(this);
-        borderManager = new BorderManager(this);
-        recipesManager = new RecipesManager(this);
-        teamChatManager = new TeamChatManager(this);
-        timerManager = new TimerManager();
+        /* *** Core modules *** */
 
-        runtimeCommandsExecutor = new RuntimeCommandsExecutor();
+        registerModules(
+                ModulesManagerModule.class,     // Manages the modules from the game/commands
+                SidebarModule.class,            // Manages the sidebar and provides hooks for other modules.
+                                                // Must be loaded before the game-related modules.
+                TeamsModule.class,              // Manages the teams (for both team & solo games).
+                                                // Must be loaded before the game-related modules.
+                GameModule.class                // Manages the game progression
+        );
 
-        freezer = new Freezer(this);
 
-        scoreboardManager = new ScoreboardManager(this);
-        motdManager = new MOTDManager(this);
-        rulesManager = new RulesManager();
-        playerListHeaderFooterManager = new PlayerListHeaderFooterManager();
+        /* *** Config modules *** */
 
-        UHCommandExecutor executor = new UHCommandExecutor(this);
-        for (String commandName : getDescription().getCommands().keySet())
+        UHConfig.MODULES.forEach((BiConsumer<String, Boolean>) this::registerModule);
+
+
+        /* *** Loads modules from startup time *** */
+
+        loadModules(ModuleInfo.ModuleLoadTime.STARTUP);
+
+
+        /* *** Loads modules from post-world time if worlds are loaded (server reloaded) *** */
+
+        if (!getServer().getWorlds().isEmpty())
         {
-            getCommand(commandName).setExecutor(executor);
-            getCommand(commandName).setTabCompleter(executor);
+            scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+
+            loadModules(ModuleInfo.ModuleLoadTime.POST_WORLD);
+            collectCommandsFromModules();
+
+            worldsLoaded = true;
         }
 
-        ZLib.registerEvents(new GameListener());
-        ZLib.registerEvents(new GameplayListener());
-        ZLib.registerEvents(new CraftingListener(this));
-        ZLib.registerEvents(new SpawnsListener());
-        ZLib.registerEvents(new BeforeGameListener());
 
-        // The freezer listener is registered by the freezer when it is needed.
+        /* *** Ready *** */
 
-        recipesManager.registerRecipes();
-        gameManager.initEnvironment();
-
-        motdManager.updateMOTDBeforeStart();
-
-        // In case of reload
-        for (Player player : getServer().getOnlinePlayers())
-        {
-            gameManager.initPlayer(player);
-        }
-
-        // Imports spawnpoints from the config.
-        this.spawnsManager.importSpawnPointsFromConfig();
-
-        // Imports teams from the config.
-        this.teamManager.importTeamsFromConfig();
-
-        // Starts the task that updates the timers.
-        // Started here, so a timer can be displayed before the start of the game
-        // (example: countdown before the start).
-        new UpdateTimerTask().runTaskTimer(this, 20L, 20L);
-
-        // Schedule commands
-        runtimeCommandsExecutor.registerCommandsInScheduler(RuntimeCommandsExecutor.AFTER_SERVER_START);
-
-        getLogger().info(I.t("Ultra Hardcore plugin loaded."));
+        PluginLogger.info(I.t("Ultra Hardcore plugin loaded."));
     }
+
+
+
+    /**
+     * Registers an UHCReloaded module (or many). It is not enabled by this method.
+     *
+     * @param modules the module's class, that must accept a zero-arguments constructor.
+     */
+    @SafeVarargs
+    public final void registerModules(final Class<? extends UHModule>... modules)
+    {
+        Arrays.stream(modules).forEach(module -> registerModule(module, true));
+    }
+
+    /**
+     * Registers an UHCReloaded module (or many). It is not enabled by this method.
+     *
+     * @param module the module's class, that must accept a zero-arguments constructor.
+     * @param enableAtStartup {@code true} if this module, according to the configuration file, should be loaded at startup.
+     */
+    private void registerModule(final Class<? extends UHModule> module, final boolean enableAtStartup)
+    {
+        final String name, description;
+        final ModuleInfo.ModuleLoadTime priority;
+        final boolean internal;
+
+        final Class<? extends ConfigurationInstance> moduleConfiguration;
+        final String settingsFileName;
+
+        final ModuleInfo info = module.getAnnotation(ModuleInfo.class);
+
+        if (info == null)
+        {
+            name = "";
+            description = "";
+            internal = false;
+            priority = ModuleInfo.ModuleLoadTime.POST_WORLD;
+            moduleConfiguration = null;
+            settingsFileName = null;
+        }
+        else
+        {
+            name = info.name();
+            description = info.description();
+            internal = info.internal();
+            priority = info.when();
+            moduleConfiguration = info.settings().equals(ConfigurationInstance.class) ? null : info.settings();
+            settingsFileName = info.settings_filename().isEmpty() ? null : info.settings_filename();
+        }
+
+        this.modules.put(module, new ModuleWrapper(
+                name, description, internal, enableAtStartup, priority, module, moduleConfiguration, settingsFileName));
+    }
+
+    /**
+     * Registers an UHCReloaded module. It is not enabled by this method.
+     *
+     * It tries to load the following classes (in this order, taking the first existing):
+     *
+     * - eu.carrade.amaury.UHCReloaded.modules.[name]
+     * - eu.carrade.amaury.UHCReloaded.modules.[name]Module
+     * - eu.carrade.amaury.UHCReloaded.modules.[capitalizedName]
+     * - eu.carrade.amaury.UHCReloaded.modules.[capitalizedName]Module
+     * - eu.carrade.amaury.UHCReloaded.modules.[firstLowercasedName].[name]
+     * - eu.carrade.amaury.UHCReloaded.modules.[firstLowercasedName].[name]Module
+     * - eu.carrade.amaury.UHCReloaded.modules.[firstLowercasedName].[capitalizedName]
+     * - eu.carrade.amaury.UHCReloaded.modules.[firstLowercasedName].[capitalizedName]Module
+     * - eu.carrade.amaury.UHCReloaded.modules.[firstLowercasedName].Module
+     * - [name]
+     *
+     * @param module the module's class name; the class must accept a zero-arguments constructor.
+     */
+    public void registerModule(final String module)
+    {
+        registerModule(module, true);
+    }
+
+    /**
+     * Registers an UHCReloaded module. It is not enabled by this method.
+     *
+     * It tries to load the following classes (in this order, taking the first existing):
+     *
+     * - eu.carrade.amaury.UHCReloaded.modules.[name]
+     * - eu.carrade.amaury.UHCReloaded.modules.[name]Module
+     * - eu.carrade.amaury.UHCReloaded.modules.[capitalizedName]
+     * - eu.carrade.amaury.UHCReloaded.modules.[capitalizedName]Module
+     * - eu.carrade.amaury.UHCReloaded.modules.[firstLowercasedName].[name]
+     * - eu.carrade.amaury.UHCReloaded.modules.[firstLowercasedName].[name]Module
+     * - eu.carrade.amaury.UHCReloaded.modules.[firstLowercasedName].[capitalizedName]
+     * - eu.carrade.amaury.UHCReloaded.modules.[firstLowercasedName].[capitalizedName]Module
+     * - eu.carrade.amaury.UHCReloaded.modules.[firstLowercasedName].Module
+     * - [name]
+     *
+     * @param module the module's class name; the class must accept a zero-arguments constructor.
+     * @param enabledAtStartup {@code true} if this module, according to the configuration file, should be loaded at startup.
+     */
+    private void registerModule(final String module, boolean enabledAtStartup)
+    {
+        final Class<? extends UHModule> moduleClass = ModulesUtils.getClassFromName(
+                module,
+                "eu.carrade.amaury.UHCReloaded.modules",
+                "Module",
+                UHModule.class
+        );
+
+        if (moduleClass != null)
+        {
+            registerModules(moduleClass);
+        }
+        else
+        {
+            PluginLogger.error("Error registering a module: unable to find a module named {0} in the class path. Maybe you spelled it wrong?", module);
+        }
+    }
+
+
+
+    /**
+     * Loads registered modules. Internal modules will always be loaded first.
+     *
+     * @param loadTime Loads the modules registered to be loaded at that given time.
+     */
+    private void loadModules(final ModuleInfo.ModuleLoadTime loadTime)
+    {
+        if (loadedPriorities.contains(loadTime)) return;
+
+        // Loads all internal modules first
+        modules.values().stream()
+                .filter(module -> module.getWhen() == loadTime)
+                .filter(module -> module.get() == null || !module.get().isEnabled())
+                .filter(ModuleWrapper::isInternal)
+                .forEach(ModuleWrapper::enable);
+
+        // Then loads other modules
+        modules.values().stream()
+                .filter(module -> module.getWhen() == loadTime)
+                .filter(module -> module.get() == null || !module.get().isEnabled())
+                .filter(module -> !module.isInternal())
+                .forEach(ModuleWrapper::enable);
+
+        loadedPriorities.add(loadTime);
+
+        getServer().getPluginManager().callEvent(new AllModulesLoadedEvent(loadTime));
+    }
+
+    /**
+     * Loads a module from its class.
+     *
+     * @param moduleClass The module's class.
+     * @throws IllegalArgumentException if the module was not registered using {@link #registerModules(Class[])} or
+     * {@link #registerModule(String)} before.
+     */
+    public void loadModule(Class<? extends UHModule> moduleClass)
+    {
+        final ModuleWrapper module = modules.get(moduleClass);
+
+        if (module == null)
+            throw new IllegalArgumentException("The module " + moduleClass.getName() + " was not registered.");
+
+        module.enable();
+    }
+
+    /**
+     * Unloads a module from its class.
+     *
+     * @param moduleClass The module's class.
+     * @throws IllegalArgumentException if the module was not registered using {@link #registerModules(Class[])} or
+     * {@link #registerModule(String)} before.
+     */
+    public void unloadModule(Class<? extends UHModule> moduleClass)
+    {
+        final ModuleWrapper module = modules.get(moduleClass);
+
+        if (module == null)
+            throw new IllegalArgumentException("The module " + moduleClass.getName() + " was not registered.");
+
+        module.disable();
+    }
+
+    /**
+     * Gets a module's instance. This may return null if the module is not currently
+     * enabled.
+     *
+     * @param moduleClass The module's class.
+     * @param <M> The module's type.
+     *
+     * @return The module's instance.
+     */
+    public static <M extends UHModule> M getModule(Class<M> moduleClass)
+    {
+        final ModuleWrapper module = get().modules.get(moduleClass);
+
+        if (module == null) return null;
+        else return (M) module.get();
+    }
+
+
+
+    /**
+     * @return The Bukkit scoreboard to use for everything.
+     */
+    public Scoreboard getScoreboard()
+    {
+        return scoreboard;
+    }
+
+
+
+    @EventHandler (priority = EventPriority.LOWEST)
+    public final void onWorldsLoaded(WorldLoadEvent e)
+    {
+        if (!worldsLoaded)
+        {
+            RunTask.nextTick(() -> {
+                loadModules(ModuleInfo.ModuleLoadTime.POST_WORLD);
+                collectCommandsFromModules();
+            });
+
+            worldsLoaded = true;
+            scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+        }
+    }
+
+    @EventHandler
+    public void onGamePhaseChanged(final GamePhaseChangedEvent ev)
+    {
+        switch (ev.getNewPhase())
+        {
+            case IN_GAME:
+                loadModules(ModuleInfo.ModuleLoadTime.ON_GAME_START);
+                break;
+
+            case END:
+                loadModules(ModuleInfo.ModuleLoadTime.ON_GAME_END);
+                break;
+        }
+    }
+
+    @EventHandler (priority = EventPriority.LOWEST)
+    public final void onPlayerJoin(final PlayerJoinEvent ev)
+    {
+        ev.getPlayer().setScoreboard(scoreboard);
+    }
+
+
+
+    @SuppressWarnings ("unchecked")
+    private void collectCommandsFromModules()
+    {
+        Commands.register("uh", modules.values().stream()
+                .filter(ModuleWrapper::isEnabled)
+                .map(module -> module.get().getCommands())
+                .filter(Objects::nonNull)
+                .flatMap(Collection::stream)
+                .toArray(Class[]::new));
+
+        final Map<String, Class<? extends Command>> commandAliases = modules.values().stream()
+                .filter(ModuleWrapper::isEnabled)
+                .map(module -> module.get().getCommandsAliases())
+                .filter(Objects::nonNull)
+                .flatMap(commandsAliases -> commandsAliases.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a));
+
+        // As they are not registered in the plugin.yml, for each command, we have to force-register
+        // the name manually.
+
+        final List<org.bukkit.command.Command> pluginCommands = new ArrayList<>();
+        final Set<String> registered = new HashSet<>();
+
+        try
+        {
+            final Constructor<PluginCommand> pluginCommandConstructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+            pluginCommandConstructor.setAccessible(true);
+
+            for (final String commandName : commandAliases.keySet())
+            {
+                try
+                {
+                    pluginCommands.add(pluginCommandConstructor.newInstance(commandName, this));
+                    registered.add(commandName);
+                }
+                catch (InstantiationException | InvocationTargetException | IllegalAccessException e)
+                {
+                    PluginLogger.error("Unable to register plugin command for {0}, is this version supported by UHCReloaded?", e, commandName);
+                }
+            }
+
+            try
+            {
+                final CommandMap commandMap = (CommandMap) Reflection.getFieldValue(Bukkit.getServer(), "commandMap");
+
+                String prefix = getDescription().getPrefix();
+                if (prefix == null) prefix = getDescription().getName().toLowerCase();
+
+                commandMap.registerAll(prefix, pluginCommands);
+            }
+            catch (NoSuchFieldException | IllegalAccessException e)
+            {
+                PluginLogger.error("Unable to retrieve Bukkit's command map, is this version supported by UHCReloaded?", e);
+            }
+        }
+        catch (NoSuchMethodException | SecurityException e)
+        {
+            PluginLogger.error("Unable to register plugin commands: unable to retrieve PluginCommand's constructor. Is this version supported by UHCReloaded?", e);
+        }
+
+        // Now that all commands are registered into Bukkit, we can register them into zLib.
+
+        commandAliases.forEach((name, klass) ->
+        {
+            // Bukkit registration failed?
+            if (!registered.contains(name)) return;
+
+            Commands.registerShortcut("uh", klass, name);
+        });
+    }
+
+
+
+
 
     /**
      * Returns the team manager.
@@ -340,5 +670,13 @@ public class UHCReloaded extends ZPlugin
     public static UHCReloaded get()
     {
         return instance;
+    }
+
+    /**
+     * @return A view on all registered modules.
+     */
+    public Collection<ModuleWrapper> getModules()
+    {
+        return modules.values();
     }
 }

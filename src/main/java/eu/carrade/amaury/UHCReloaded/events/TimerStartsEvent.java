@@ -32,7 +32,7 @@
 
 package eu.carrade.amaury.UHCReloaded.events;
 
-import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
+import eu.carrade.amaury.UHCReloaded.old.timers.UHTimer;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

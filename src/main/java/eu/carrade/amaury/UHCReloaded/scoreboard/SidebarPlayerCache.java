@@ -31,7 +31,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.scoreboard;
 
-import eu.carrade.amaury.UHCReloaded.misc.OfflinePlayersLoader;
+import eu.carrade.amaury.UHCReloaded.old.misc.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
 import org.bukkit.ChatColor;

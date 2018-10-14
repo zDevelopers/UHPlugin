@@ -1,7 +1,8 @@
 name: UHPlugin
 description: UltraHardcore Reloaded
 main: eu.carrade.amaury.UHCReloaded.UHCReloaded
-version: 1.5
+load: STARTUP
+version: 2.0-alpha
 author: "Amaury Carrade"
 authors: [azenet, "João Roda"]
 
@@ -18,29 +19,29 @@ commands:
    uh:
       description: UltraHardcore Reloaded base command
       usage: /<command> <subcommand> - see /<command> for available subcommands.
-   t:
-      description: Allows an user to send a message to his team.
-      usage: /<command> <message>
-
-   g:
-      description: Allows an user to send a message to everyone.
-      usage: /<command> <message>
-
-   togglechat:
-       description: Allows an user to toggle the chat between the global chat and a team chat.
-       usage: /<command>
-
-   join:
-       description: Use this to join an UltraHardcore team.
-       usage: /<command> [player] <team>
-
-   leave:
-       description: Use this to quit your current UltraHardcore team.
-       usage: /<command> [player]
-
-   teams:
-       description: Displays a GUI to manage the UHCReloaded teams
-       usage: /<command>
+#   t:
+#      description: Allows an user to send a message to his team.
+#      usage: /<command> <message>
+#
+#   g:
+#      description: Allows an user to send a message to everyone.
+#      usage: /<command> <message>
+#
+#   togglechat:
+#       description: Allows an user to toggle the chat between the global chat and a team chat.
+#       usage: /<command>
+#
+#   join:
+#       description: Use this to join an UltraHardcore team.
+#       usage: /<command> [player] <team>
+#
+#   leave:
+#       description: Use this to quit your current UltraHardcore team.
+#       usage: /<command> [player]
+#
+#   teams:
+#       description: Displays a GUI to manage the UHCReloaded teams
+#       usage: /<command>
 
 permissions:
 

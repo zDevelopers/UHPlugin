@@ -32,7 +32,7 @@
 
 package eu.carrade.amaury.UHCReloaded.events;
 
-import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

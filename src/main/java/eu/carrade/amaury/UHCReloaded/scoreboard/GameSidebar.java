@@ -33,12 +33,12 @@ package eu.carrade.amaury.UHCReloaded.scoreboard;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.borders.MapShape;
-import eu.carrade.amaury.UHCReloaded.borders.worldborders.WorldBorder;
+import eu.carrade.amaury.UHCReloaded.old.borders.MapShape;
+import eu.carrade.amaury.UHCReloaded.old.borders.worldborders.WorldBorder;
 import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
-import eu.carrade.amaury.UHCReloaded.misc.Freezer;
-import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
-import eu.carrade.amaury.UHCReloaded.timers.UHTimer;
+import eu.carrade.amaury.UHCReloaded.old.misc.Freezer;
+import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
+import eu.carrade.amaury.UHCReloaded.old.timers.UHTimer;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;

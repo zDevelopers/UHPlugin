@@ -1,8 +1,8 @@
 package eu.carrade.amaury.UHCReloaded;
 
-import eu.carrade.amaury.UHCReloaded.borders.MapShape;
 import eu.carrade.amaury.UHCReloaded.game.Cage;
-import eu.carrade.amaury.UHCReloaded.teams.TeamManager;
+import eu.carrade.amaury.UHCReloaded.old.borders.MapShape;
+import eu.carrade.amaury.UHCReloaded.old.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import fr.zcraft.zlib.components.configuration.Configuration;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;
@@ -15,12 +15,16 @@ import org.bukkit.Sound;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.util.Vector;
 
+import java.util.Locale;
+
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.*;
 
 
 public class UHConfig extends Configuration
 {
-    static public final ConfigurationItem<String> LANG = item("lang", "");
+    static public final ConfigurationItem<Locale> LANG = item("lang", Locale.class);
+
+    static public final ConfigurationMap<String, Boolean> MODULES = map("modules", String.class, Boolean.class);
 
     static public final EpisodesSection EPISODES = section("episodes", EpisodesSection.class);
 

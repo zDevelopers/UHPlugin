@@ -32,7 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.spawns.generators;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.borders.MapShape;
+import eu.carrade.amaury.UHCReloaded.old.borders.MapShape;
 import eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import org.bukkit.Location;

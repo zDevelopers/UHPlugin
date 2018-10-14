@@ -33,7 +33,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.carrade.amaury</groupId>
     <artifactId>UHCReloaded</artifactId>
-    <version>1.5</version>
+    <version>2.0-SNAPSHOT</version>
     <name>UHCReloaded</name>
     <description>Ultra Hardcore plugin</description>
     <url>https://github.com/zDevelopers/UHPlugin/</url>
@@ -99,12 +99,17 @@
                     <artifactSet>
                         <includes>
                             <include>fr.zcraft:zlib</include>
+                            <include>fr.zcraft:zteams</include>
                         </includes>
                     </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>fr.zcraft.zlib</pattern>
                             <shadedPattern>eu.carrade.amaury.UHCReloaded.zlib</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>fr.zcraft.zteams</pattern>
+                            <shadedPattern>eu.carrade.amaury.UHCReloaded.zteams</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -158,6 +163,11 @@
             <groupId>fr.zcraft</groupId>
             <artifactId>zlib</artifactId>
             <version>0.99-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.zcraft</groupId>
+            <artifactId>zteams</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.wimbli.WorldBorder</groupId>

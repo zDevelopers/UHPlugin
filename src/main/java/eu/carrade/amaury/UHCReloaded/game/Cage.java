@@ -32,7 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.game;
 
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.teams.UHTeam;
+import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
