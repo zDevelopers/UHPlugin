@@ -32,7 +32,6 @@
 package eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.border;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.borders.MapShape;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
@@ -56,75 +55,75 @@ public class UHBorderSetCommand extends AbstractCommand
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-        // /uh border set
-        if (args.length == 0)
-        {
-            throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
-        }
-
-        // /uh border set <?>
-        else if (args.length == 1)
-        {
-            try
-            {
-                final int newDiameter = Integer.valueOf(args[0]);
-
-                // Some players are outside
-                if (p.getBorderManager().getPlayersOutside(newDiameter).size() != 0)
-                {
-                    sender.sendMessage(I.t("{ce}Some players are outside the future border, so this operation was cancelled."));
-                    sender.sendMessage(I.t("{ci}Use {cc}/uh border set {0} force{ci} to resize the border regardless to this point.", args[0]));
-
-                    if (!p.getWorldBorderIntegration().isWBIntegrationEnabled())
-                    {
-                        sender.sendMessage(I.t("{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will not be teleported!"));
-                    }
-
-                    p.getBorderManager().sendCheckMessage(sender, newDiameter);
-                }
-                else
-                {
-                    p.getBorderManager().setCurrentBorderDiameter(newDiameter);
-
-                    if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
-                    {
-                        p.getServer().broadcastMessage(I.tn("{lightpurple}The diameter of the map is now {0} block.", "{lightpurple}The diameter of the map is now {0} blocks.", newDiameter));
-                    }
-                    else
-                    {
-                        p.getServer().broadcastMessage(I.t("{lightpurple}The size of the map is now {0}×{0}.", newDiameter));
-                    }
-                }
-            }
-            catch (NumberFormatException e)
-            {
-                sender.sendMessage(I.t("{ce}“{0}” is not a number...", args[0]));
-            }
-        }
-
-        // /uh border set <?> force
-        else if (args.length == 2 && args[1].equalsIgnoreCase("force"))
-        {
-            try
-            {
-                Integer newDiameter = Integer.valueOf(args[0]);
-
-                p.getBorderManager().setCurrentBorderDiameter(newDiameter);
-
-                if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
-                {
-                    p.getServer().broadcastMessage(I.tn("{lightpurple}The diameter of the map is now {0} block.", "{lightpurple}The diameter of the map is now {0} blocks.", newDiameter));
-                }
-                else
-                {
-                    p.getServer().broadcastMessage(I.t("{lightpurple}The size of the map is now {0}×{0}.", newDiameter));
-                }
-            }
-            catch (NumberFormatException e)
-            {
-                sender.sendMessage(I.t("{ce}“{0}” is not a number...", args[0]));
-            }
-        }
+//        // /uh border set
+//        if (args.length == 0)
+//        {
+//            throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
+//        }
+//
+//        // /uh border set <?>
+//        else if (args.length == 1)
+//        {
+//            try
+//            {
+//                final int newDiameter = Integer.valueOf(args[0]);
+//
+//                // Some players are outside
+//                if (p.getBorderManager().getPlayersOutside(newDiameter).size() != 0)
+//                {
+//                    sender.sendMessage(I.t("{ce}Some players are outside the future border, so this operation was cancelled."));
+//                    sender.sendMessage(I.t("{ci}Use {cc}/uh border set {0} force{ci} to resize the border regardless to this point.", args[0]));
+//
+//                    if (!p.getWorldBorderIntegration().isWBIntegrationEnabled())
+//                    {
+//                        sender.sendMessage(I.t("{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will not be teleported!"));
+//                    }
+//
+//                    p.getBorderManager().sendCheckMessage(sender, newDiameter);
+//                }
+//                else
+//                {
+//                    p.getBorderManager().setCurrentBorderDiameter(newDiameter);
+//
+//                    if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
+//                    {
+//                        p.getServer().broadcastMessage(I.tn("{lightpurple}The diameter of the map is now {0} block.", "{lightpurple}The diameter of the map is now {0} blocks.", newDiameter));
+//                    }
+//                    else
+//                    {
+//                        p.getServer().broadcastMessage(I.t("{lightpurple}The size of the map is now {0}×{0}.", newDiameter));
+//                    }
+//                }
+//            }
+//            catch (NumberFormatException e)
+//            {
+//                sender.sendMessage(I.t("{ce}“{0}” is not a number...", args[0]));
+//            }
+//        }
+//
+//        // /uh border set <?> force
+//        else if (args.length == 2 && args[1].equalsIgnoreCase("force"))
+//        {
+//            try
+//            {
+//                Integer newDiameter = Integer.valueOf(args[0]);
+//
+//                p.getBorderManager().setCurrentBorderDiameter(newDiameter);
+//
+//                if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
+//                {
+//                    p.getServer().broadcastMessage(I.tn("{lightpurple}The diameter of the map is now {0} block.", "{lightpurple}The diameter of the map is now {0} blocks.", newDiameter));
+//                }
+//                else
+//                {
+//                    p.getServer().broadcastMessage(I.t("{lightpurple}The size of the map is now {0}×{0}.", newDiameter));
+//                }
+//            }
+//            catch (NumberFormatException e)
+//            {
+//                sender.sendMessage(I.t("{ce}“{0}” is not a number...", args[0]));
+//            }
+//        }
     }
 
     @Override

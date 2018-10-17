@@ -75,10 +75,10 @@ public class UHSpawnsDumpCommand extends AbstractCommand
             spanwsInWorlds.put(world, new LinkedList<>());
         }
 
-        for (Location spawn : p.getSpawnsManager().getSpawnPoints())
-        {
-            spanwsInWorlds.get(spawn.getWorld()).add(spawn);
-        }
+//        for (Location spawn : p.getSpawnsManager().getSpawnPoints())
+//        {
+//            spanwsInWorlds.get(spawn.getWorld()).add(spawn);
+//        }
 
         StringBuilder dump = new StringBuilder();
 

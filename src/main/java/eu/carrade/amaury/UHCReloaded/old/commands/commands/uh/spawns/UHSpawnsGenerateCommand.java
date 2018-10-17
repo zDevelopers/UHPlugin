@@ -32,13 +32,11 @@
 package eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.spawns;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.modules.core.spawns.Generator;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.spawns.Generator;
-import eu.carrade.amaury.UHCReloaded.spawns.exceptions.CannotGenerateSpawnPointsException;
-import eu.carrade.amaury.UHCReloaded.spawns.exceptions.UnknownGeneratorException;
 import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.World;
@@ -73,7 +71,6 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-
         if (args.length == 0)
         { // Help
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
@@ -82,7 +79,7 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
         String generationMethod = args[0];
 
         // Default values
-        int size = p.getBorderManager().getCurrentBorderDiameter() - 25; // Avoid spawn points being too close to the border
+        int size = 0; //p.getBorderManager().getCurrentBorderDiameter() - 25; // Avoid spawn points being too close to the border
         int distanceMinBetweenTwoPoints = 250;
         World world = p.getServer().getWorlds().get(0);
         double xCenter = world.getSpawnLocation().getX();
@@ -195,22 +192,21 @@ public class UHSpawnsGenerateCommand extends AbstractCommand
         }
 
 
-        try
-        {
-            p.getSpawnsManager().generateSpawnPoints(generationMethod, world, spawnsCount, size, distanceMinBetweenTwoPoints, xCenter, zCenter);
-
-        }
-        catch (UnknownGeneratorException e)
-        {
-            sender.sendMessage(I.t("{ce}The generation method “{0}” is not (yet?) supported.", generationMethod));
-            return;
-
-        }
-        catch (CannotGenerateSpawnPointsException e)
-        {
-            sender.sendMessage(I.t("{ce}You asked for the impossible: there are too many spawn points on a too small surface. Decrease the spawn count or the minimal distance between two points."));
-            return;
-        }
+//        try
+//        {
+//            p.getSpawnsManager().generateSpawnPoints(generationMethod, world, spawnsCount, size, distanceMinBetweenTwoPoints, xCenter, zCenter);
+//        }
+//        catch (UnknownGeneratorException e)
+//        {
+//            sender.sendMessage(I.t("{ce}The generation method “{0}” is not (yet?) supported.", generationMethod));
+//            return;
+//
+//        }
+//        catch (CannotGenerateSpawnPointsException e)
+//        {
+//            sender.sendMessage(I.t("{ce}You asked for the impossible: there are too many spawn points on a too small surface. Decrease the spawn count or the minimal distance between two points."));
+//            return;
+//        }
 
         sender.sendMessage(I.t("{cs}Successfully generated the asked spawn points."));
     }

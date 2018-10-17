@@ -29,56 +29,85 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.border;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
-import fr.zcraft.zlib.components.i18n.I;
-import org.bukkit.command.CommandSender;
+package eu.carrade.amaury.UHCReloaded.modules.core.timers.events;
 
-import java.util.Collections;
-import java.util.List;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
-@Command (name = "get")
-public class UHBorderGetCommand extends AbstractCommand
+
+/**
+ * This event is fired when a timer ends.
+ * <p>
+ * It is fired before all the values of the timer are reset.
+ */
+public final class TimerEndsEvent extends Event
 {
-    private UHCReloaded p;
+    private Timer timer;
+    private Boolean timerWasUp = false;
+    private Boolean restart = false;
 
-    public UHBorderGetCommand(UHCReloaded p)
+
+    public TimerEndsEvent(Timer timer, Boolean timerUp)
     {
-        this.p = p;
+        this.timer = timer;
+
+        this.timerWasUp = timerUp;
     }
 
-    @Override
-    public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
+    /**
+     * Returns the timer.
+     *
+     * @return the timer.
+     */
+    public Timer getTimer()
     {
-//        if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
-//        {
-//            sender.sendMessage(I.tn("{ci}The current diameter of the map is {0} block.", "{ci}The current diameter of the map is {0} blocks.", p.getBorderManager().getCurrentBorderDiameter()));
-//        }
-//        else
-//        {
-//            sender.sendMessage(I.t("{ci}The current map size is {0}×{0}.", p.getBorderManager().getCurrentBorderDiameter()));
-//        }
+        return timer;
     }
 
-    @Override
-    public List<String> tabComplete(CommandSender sender, String[] args)
+    /**
+     * Returns true if the timer was stopped because it was up.
+     *
+     * @return true if the timer was stopped because it was up.
+     */
+    public boolean wasTimerUp()
     {
-        return null;
+        return timerWasUp;
     }
 
-    @Override
-    public List<String> help(CommandSender sender)
+    /**
+     * If true, the timer will be restarted.
+     *
+     * @param restart true if the timer needs to be restarted.
+     */
+    public void setRestart(boolean restart)
     {
-        return null;
+        this.restart = restart;
     }
 
-    @Override
-    public List<String> onListHelp(CommandSender sender)
+    /**
+     * Return true if the timer will be restarted.
+     *
+     * @return {@code true} if the timer needs to be restarted.
+     */
+    public boolean getRestart()
     {
-        return Collections.singletonList(I.t("{cc}/uh border get{ci}: returns the current size of the map."));
+        return this.restart;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

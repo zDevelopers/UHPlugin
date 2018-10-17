@@ -40,6 +40,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -68,7 +69,7 @@ public class UHSpawnsListCommand extends AbstractCommand
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-        List<Location> spawnPoints = p.getSpawnsManager().getSpawnPoints();
+        List<Location> spawnPoints = new ArrayList<>(); // p.getSpawnsManager().getSpawnPoints();
 
         if (spawnPoints.size() == 0)
         {

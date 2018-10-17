@@ -118,7 +118,7 @@ public class Freezer
                     .forEach(entity -> freezeCreature((Creature) entity, true));
 
             // Freezes the timers.
-            p.getTimerManager().pauseAllRunning(true);
+            // TODO p.getTimerManager().pauseAllRunning(true);
         }
 
         else
@@ -136,7 +136,7 @@ public class Freezer
                     .forEach(entity -> freezeCreature((Creature) entity, false));
 
             // Unfreezes the timers.
-            p.getTimerManager().pauseAllRunning(false);
+            // TODO p.getTimerManager().pauseAllRunning(false);
         }
 
         updateListenerRegistration();

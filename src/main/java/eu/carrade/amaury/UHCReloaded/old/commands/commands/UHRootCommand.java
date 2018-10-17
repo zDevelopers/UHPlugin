@@ -54,7 +54,6 @@ import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHTPBackCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHTPCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHTPSpawnCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHTeamCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHTimersCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
@@ -94,7 +93,6 @@ public class UHRootCommand extends AbstractCommand
         // Misc
         registerSubCommand(new UHFinishCommand(p));
         registerSubCommand(new UHFreezeCommand(p));
-        registerSubCommand(new UHTimersCommand(p));
         registerSubCommand(new UHTPCommand(p));
         registerSubCommand(new UHInfosCommand(p));
         registerSubCommand(new UHRulesCommand(p));

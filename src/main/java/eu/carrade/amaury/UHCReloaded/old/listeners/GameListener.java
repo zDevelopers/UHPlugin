@@ -35,8 +35,8 @@ package eu.carrade.amaury.UHCReloaded.old.listeners;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.events.EpisodeChangedCause;
-import eu.carrade.amaury.UHCReloaded.events.TimerEndsEvent;
-import eu.carrade.amaury.UHCReloaded.events.TimerStartsEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.events.TimerEndsEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.events.TimerStartsEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHEpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHGameEndsEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHGameStartsEvent;
@@ -560,24 +560,24 @@ public class GameListener implements Listener
     @EventHandler
     public void onTimerEnds(final TimerEndsEvent ev)
     {
-        p.getTimerManager().updateStartedTimersList();
-
-        if (ev.getTimer().equals(p.getTimerManager().getMainTimer()))
-        {
-            // If this timer is the main one, we shifts an episode.
-            p.getGameManager().shiftEpisode();
-            ev.setRestart(true);
-        }
-        else
-        {
-            ev.getTimer().setDisplayed(false);
-        }
-
-        if (ev.getTimer().equals(p.getBorderManager().getWarningTimer()) && ev.wasTimerUp())
-        {
-            p.getBorderManager().getWarningSender().sendMessage(I.t("{cs}The timer before the new border is up!"));
-            p.getBorderManager().sendCheckMessage(p.getBorderManager().getWarningSender(), p.getBorderManager().getWarningSize());
-        }
+//        p.getTimerManager().updateStartedTimersList();
+//
+//        if (ev.getTimer().equals(p.getTimerManager().getMainTimer()))
+//        {
+//            // If this timer is the main one, we shifts an episode.
+//            p.getGameManager().shiftEpisode();
+//            ev.setRestart(true);
+//        }
+//        else
+//        {
+//            ev.getTimer().setDisplayed(false);
+//        }
+//
+//        if (ev.getTimer().equals(p.getBorderManager().getWarningTimer()) && ev.wasTimerUp())
+//        {
+//            p.getBorderManager().getWarningSender().sendMessage(I.t("{cs}The timer before the new border is up!"));
+//            p.getBorderManager().sendCheckMessage(p.getBorderManager().getWarningSender(), p.getBorderManager().getWarningSize());
+//        }
     }
 
     /**
@@ -588,12 +588,12 @@ public class GameListener implements Listener
     @EventHandler
     public void onTimerStarts(final TimerStartsEvent ev)
     {
-        p.getTimerManager().updateStartedTimersList();
-
-        if (!ev.getTimer().equals(p.getTimerManager().getMainTimer()))
-        {
-            ev.getTimer().setDisplayed(true);
-        }
+//        p.getTimerManager().updateStartedTimersList();
+//
+//        if (!ev.getTimer().equals(p.getTimerManager().getMainTimer()))
+//        {
+//            ev.getTimer().setDisplayed(true);
+//        }
     }
 
 
@@ -665,7 +665,7 @@ public class GameListener implements Listener
         p.getRuntimeCommandsExecutor().registerCommandsInScheduler(RuntimeCommandsExecutor.AFTER_GAME_START);
 
         // Border shrinking
-        p.getBorderManager().scheduleBorderReduction();
+//        p.getBorderManager().scheduleBorderReduction();
 
         // MOTD
         p.getMOTDManager().updateMOTDDuringGame();

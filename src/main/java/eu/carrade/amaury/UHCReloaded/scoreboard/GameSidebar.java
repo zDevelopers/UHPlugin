@@ -33,12 +33,12 @@ package eu.carrade.amaury.UHCReloaded.scoreboard;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.old.borders.MapShape;
-import eu.carrade.amaury.UHCReloaded.old.borders.worldborders.WorldBorder;
+import eu.carrade.amaury.UHCReloaded.modules.core.border.MapShape;
+import eu.carrade.amaury.UHCReloaded.modules.core.border.worldborders.WorldBorder;
 import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.old.misc.Freezer;
 import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
-import eu.carrade.amaury.UHCReloaded.old.timers.UHTimer;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
@@ -56,7 +56,7 @@ import java.util.UUID;
 public class GameSidebar extends Sidebar
 {
     private final UHGameManager gameManager;
-    private final WorldBorder border;
+    private final WorldBorder border = null;
 
     private final boolean EPISODES_ENABLED;
     private final boolean EPISODES_IN_SIDEBAR;
@@ -92,7 +92,7 @@ public class GameSidebar extends Sidebar
     public GameSidebar()
     {
         gameManager = UHCReloaded.get().getGameManager();
-        border = UHCReloaded.get().getBorderManager().getBorderProxy();
+        // border = UHCReloaded.get().getBorderManager().getBorderProxy();
 
         EPISODES_ENABLED = UHConfig.EPISODES.ENABLED.get();
         EPISODES_IN_SIDEBAR = UHConfig.SCOREBOARD.EPISODE.get();
@@ -116,7 +116,7 @@ public class GameSidebar extends Sidebar
 
         BORDER_DISPLAY_DIAMETER = UHConfig.SCOREBOARD.BORDER.DISPLAY_DIAMETER.get();
 
-        FROOZEN_NULL_TIMER_TEXT = new UHTimer("").toString();
+        FROOZEN_NULL_TIMER_TEXT = new Timer("").toString();
 
         setAsync(true);
         setAutoRefreshDelay(20);
@@ -181,8 +181,8 @@ public class GameSidebar extends Sidebar
                 sidebarTimers.add(FROOZEN_NULL_TIMER_TEXT);
             else
             {
-                final UHTimer mainTimer = UHCReloaded.get().getTimerManager().getMainTimer();
-                if (mainTimer != null) sidebarTimers.add(mainTimer.toString());
+                //final Timer mainTimer = UHCReloaded.get().getTimerManager().getMainTimer();
+                //if (mainTimer != null) sidebarTimers.add(mainTimer.toString());
             }
         }
     }
@@ -357,11 +357,11 @@ public class GameSidebar extends Sidebar
      */
     private void insertTimers(List<String> sidebar)
     {
-        UHCReloaded.get().getTimerManager().getTimers().stream().filter(UHTimer::isDisplayed).forEach(timer -> {
-            sidebar.add(timer.getDisplayName());
-            sidebar.add(timer.toString());
-            sidebar.add("");
-        });
+//        UHCReloaded.get().getTimerManager().getTimers().stream().filter(Timer::isDisplayed).forEach(timer -> {
+//            sidebar.add(timer.getDisplayName());
+//            sidebar.add(timer.toString());
+//            sidebar.add("");
+//        });
     }
 
     /**

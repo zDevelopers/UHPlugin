@@ -37,13 +37,13 @@ import eu.carrade.amaury.UHCReloaded.events.EpisodeChangedCause;
 import eu.carrade.amaury.UHCReloaded.events.UHEpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHGameStartsEvent;
 import eu.carrade.amaury.UHCReloaded.events.UHPlayerResurrectedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
 import eu.carrade.amaury.UHCReloaded.old.misc.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.old.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.old.task.FireworksOnWinnersTask;
 import eu.carrade.amaury.UHCReloaded.old.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.old.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
-import eu.carrade.amaury.UHCReloaded.old.timers.UHTimer;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
@@ -55,7 +55,6 @@ import fr.zcraft.zlib.tools.text.RawMessage;
 import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -313,34 +312,34 @@ public class UHGameManager
 
         Integer spawnsNeeded = ignoreTeams ? alivePlayersCount : aliveTeamsCount;
 
-        if (p.getSpawnsManager().getSpawnPoints().size() < spawnsNeeded)
-        {
-            if (sender instanceof Player) sender.sendMessage("");
-            sender.sendMessage(I.t("{ce}Unable to start the game: not enough teleportation spots."));
-            sender.sendMessage(I.t("{ci}You can use {cc}/uh spawns generate <random|circular|grid>{ci} to generate the missing spawns automatically."));
-
-            /// In the sentence: "Or click here to generate the spawns randomly."
-            RawMessage.send(sender, new RawText(I.t("Or"))
-                    .then(" ")
-                    /// In the sentence: "Or click here to generate the spawns randomly."
-                    .then(I.t("click here"))
-                        .color(ChatColor.GREEN).style(ChatColor.BOLD)
-                        .command("/uh spawns generate random")
-                        .hover(new RawText("/uh spawns generate random"))
-                    .then(" ")
-                    /// In the sentence: "Or click here to generate the spawns randomly."
-                    .then(I.t("to generate the spawns randomly.")).color(ChatColor.WHITE)
-                    .build()
-            );
-
-            // We clears the teams created on-the-fly
-            onTheFlyTeams.forEach(team -> tm.removeTeam(team, true));
-
-            aliveTeamsCount = 0;
-            alivePlayersCount = 0;
-
-            return;
-        }
+//        if (p.getSpawnsManager().getSpawnPoints().size() < spawnsNeeded)
+//        {
+//            if (sender instanceof Player) sender.sendMessage("");
+//            sender.sendMessage(I.t("{ce}Unable to start the game: not enough teleportation spots."));
+//            sender.sendMessage(I.t("{ci}You can use {cc}/uh spawns generate <random|circular|grid>{ci} to generate the missing spawns automatically."));
+//
+//            /// In the sentence: "Or click here to generate the spawns randomly."
+//            RawMessage.send(sender, new RawText(I.t("Or"))
+//                    .then(" ")
+//                    /// In the sentence: "Or click here to generate the spawns randomly."
+//                    .then(I.t("click here"))
+//                        .color(ChatColor.GREEN).style(ChatColor.BOLD)
+//                        .command("/uh spawns generate random")
+//                        .hover(new RawText("/uh spawns generate random"))
+//                    .then(" ")
+//                    /// In the sentence: "Or click here to generate the spawns randomly."
+//                    .then(I.t("to generate the spawns randomly.")).color(ChatColor.WHITE)
+//                    .build()
+//            );
+//
+//            // We clears the teams created on-the-fly
+//            onTheFlyTeams.forEach(team -> tm.removeTeam(team, true));
+//
+//            aliveTeamsCount = 0;
+//            alivePlayersCount = 0;
+//
+//            return;
+//        }
 
 
         /* ** MOTD (now the game WILL start) ** */
@@ -368,7 +367,7 @@ public class UHGameManager
 
         teleporter = new Teleporter();
 
-        List<Location> spawnPoints = new ArrayList<>(p.getSpawnsManager().getSpawnPoints());
+        List<Location> spawnPoints = new ArrayList<>(); // (p.getSpawnsManager().getSpawnPoints());
         Collections.shuffle(spawnPoints);
 
         Queue<Location> unusedTP = new ArrayDeque<>(spawnPoints);
@@ -591,10 +590,10 @@ public class UHGameManager
 
             // An empty string is used for the name of the main timer, because
             // such a name can't be used by players.
-            UHTimer mainTimer = new UHTimer("");
+            Timer mainTimer = new Timer("");
             mainTimer.setDuration(this.getEpisodeLength());
 
-            p.getTimerManager().registerMainTimer(mainTimer);
+//            p.getTimerManager().registerMainTimer(mainTimer);
 
             mainTimer.start();
         }
@@ -754,7 +753,7 @@ public class UHGameManager
             // Useless for a normal start (restarted in the event), but needed if the episode was shifted.
             if (cause == EpisodeChangedCause.SHIFTED)
             {
-                p.getTimerManager().getMainTimer().start();
+//                p.getTimerManager().getMainTimer().start();
             }
 
             p.getServer().getPluginManager().callEvent(new UHEpisodeChangedEvent(episode, cause, shifter));

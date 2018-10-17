@@ -29,65 +29,42 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.border;
+package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
 import fr.zcraft.zlib.components.i18n.I;
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Collections;
-import java.util.List;
 
-@Command (name = "check")
-public class UHBorderCheckCommand extends AbstractCommand
+public class BorderWarningTask extends BukkitRunnable
 {
-    private UHCReloaded p;
-
-    public UHBorderCheckCommand(UHCReloaded p)
-    {
-        this.p = p;
-    }
+    private final BorderModule module = UHCReloaded.getModule(BorderModule.class);
 
     @Override
-    public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
+    public void run()
     {
-        // /uh border check
-        if (args.length == 0)
+//        final FreezerModule freezer = UHCReloaded.getModule(FreezerModule.class);
+//        if (freezer != null && freezer.getGlobalFreezeState())
+//        {
+//            return; // No messages are sent if the game is frozen.
+//        }
+
+        // Message sent to all players outside the border
+        for (Player player : module.getPlayersOutside(module.getWarningSize()))
         {
-            throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.BAD_USE, this);
-        }
-        // /uh border check <?>
-        else
-        {
-            try
+            double distance = module.getDistanceToBorder(player.getLocation(), module.getWarningSize());
+
+            if (module.getMapShape() == MapShape.CIRCULAR)
             {
-//                p.getBorderManager().sendCheckMessage(sender, Integer.valueOf(args[0]));
+                player.sendMessage(I.tn("{ce}You are currently out of the future border (diameter of {0} block).", "{ce}You are currently out of the future border (diameter of {0} blocks).", module.getWarningSize()));
             }
-            catch (NumberFormatException e)
+            else
             {
-                sender.sendMessage(I.t("{ce}“{0}” is not a number...", args[0]));
+                player.sendMessage(I.t("{ce}You are currently out of the future border of {0}×{0} blocks.", module.getWarningSize()));
             }
+
+            player.sendMessage(I.tn("{ci}You have {0} block to go before being inside.", "{ci}You have {0} blocks to go before being inside.", (int) distance));
         }
-    }
-
-    @Override
-    public List<String> tabComplete(CommandSender sender, String[] args)
-    {
-        return null;
-    }
-
-    @Override
-    public List<String> help(CommandSender sender)
-    {
-        return null;
-    }
-
-    @Override
-    public List<String> onListHelp(CommandSender sender)
-    {
-        return Collections.singletonList(I.t("{cc}/uh border check <diameter>{ci}: returns a list of the players outside the given border size."));
     }
 }

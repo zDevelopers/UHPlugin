@@ -93,7 +93,7 @@ public class UHSpawnsAddCommand extends AbstractCommand
                 Player pl = (Player) sender; // Just a way to avoid casts everywhere.
                 try
                 {
-                    p.getSpawnsManager().addSpawnPoint(pl.getLocation());
+                    // p.getSpawnsManager().addSpawnPoint(pl.getLocation());
                     sender.sendMessage(I.t("{cs}Spawn added in the world {0}: {1};{2}", world.getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
                 }
                 catch (IllegalArgumentException e)
@@ -118,7 +118,7 @@ public class UHSpawnsAddCommand extends AbstractCommand
         {
             try
             {
-                p.getSpawnsManager().addSpawnPoint(world, Double.parseDouble(args[0]), Double.parseDouble(args[1]));
+                // p.getSpawnsManager().addSpawnPoint(world, Double.parseDouble(args[0]), Double.parseDouble(args[1]));
                 sender.sendMessage(I.t("{cs}Spawn added in the world {0}: {1};{2}", world.getName(), args[0], args[1]));
             }
             catch (NumberFormatException e)

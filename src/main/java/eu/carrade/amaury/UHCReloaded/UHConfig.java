@@ -1,7 +1,7 @@
 package eu.carrade.amaury.UHCReloaded;
 
 import eu.carrade.amaury.UHCReloaded.game.Cage;
-import eu.carrade.amaury.UHCReloaded.old.borders.MapShape;
+import eu.carrade.amaury.UHCReloaded.modules.core.border.MapShape;
 import eu.carrade.amaury.UHCReloaded.old.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import fr.zcraft.zlib.components.configuration.Configuration;
@@ -25,6 +25,18 @@ public class UHConfig extends Configuration
     static public final ConfigurationItem<Locale> LANG = item("lang", Locale.class);
 
     static public final ConfigurationMap<String, Boolean> MODULES = map("modules", String.class, Boolean.class);
+
+    static public final WorldsSection WORLDS = section("worlds", WorldsSection.class);
+
+    static public class WorldsSection extends ConfigurationSection
+    {
+        public final ConfigurationItem<String> OVERWORLD = item("overworld", "world");
+        public final ConfigurationItem<String> NETHER = item("nether", "world_nether");
+        public final ConfigurationItem<String> THE_END = item("the-end", "world_the_end");
+    }
+
+
+
 
     static public final EpisodesSection EPISODES = section("episodes", EpisodesSection.class);
 

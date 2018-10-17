@@ -69,7 +69,7 @@ public class UHBorderWarningCommand extends AbstractCommand
         }
         else if (args[0].equalsIgnoreCase("cancel"))
         { // /uh border warning cancel
-            p.getBorderManager().cancelWarning();
+            // p.getBorderManager().cancelWarning();
             sender.sendMessage(I.t("{cs}Warning canceled."));
         }
         else
@@ -85,7 +85,7 @@ public class UHBorderWarningCommand extends AbstractCommand
                     warnTime = Integer.parseInt(args[1]);
                 }
 
-                p.getBorderManager().setWarningSize(warnDiameter, warnTime, sender);
+                // p.getBorderManager().setWarningSize(warnDiameter, warnTime, sender);
                 sender.sendMessage(I.tn("{cs}Future size saved. All players outside this future border will be warned every {0} second.", "{cs}Future size saved. All players outside this future border will be warned every {0} seconds.", WARNING_INTERVAL));
 
             }

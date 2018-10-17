@@ -36,12 +36,15 @@ import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.events.modules.AllModulesLoadedEvent;
 import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
+import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderManager;
+import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.GamePhaseChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.modules.ModulesManagerModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.spawns.SpawnsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.teams.TeamsModule;
-import eu.carrade.amaury.UHCReloaded.old.borders.BorderManager;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHDynmapIntegration;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHProtocolLibIntegrationWrapper;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHSpectatorPlusIntegration;
@@ -56,9 +59,7 @@ import eu.carrade.amaury.UHCReloaded.old.recipes.RecipesManager;
 import eu.carrade.amaury.UHCReloaded.old.spectators.SpectatorsManager;
 import eu.carrade.amaury.UHCReloaded.old.teams.TeamChatManager;
 import eu.carrade.amaury.UHCReloaded.old.teams.TeamManager;
-import eu.carrade.amaury.UHCReloaded.old.timers.TimerManager;
 import eu.carrade.amaury.UHCReloaded.scoreboard.ScoreboardManager;
-import eu.carrade.amaury.UHCReloaded.spawns.SpawnsManager;
 import eu.carrade.amaury.UHCReloaded.utils.ModulesUtils;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.Commands;
@@ -73,6 +74,7 @@ import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.reflection.Reflection;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.EventHandler;
@@ -108,8 +110,13 @@ public class UHCReloaded extends ZPlugin implements Listener
 
     private Scoreboard scoreboard = null;
 
+    private World worldNormal = null;
+    private World worldNether = null;
+    private World worldTheEnd = null;
+
+    private boolean worldsLoaded = false;
+
     private TeamManager teamManager = null;
-    private SpawnsManager spawnsManager = null;
     private UHGameManager gameManager = null;
     private SpectatorsManager spectatorsManager = null;
     private ScoreboardManager scoreboardManager = null;
@@ -119,7 +126,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     private BorderManager borderManager = null;
     private RecipesManager recipesManager = null;
     private TeamChatManager teamChatManager = null;
-    private TimerManager timerManager = null;
 
     private RuntimeCommandsExecutor runtimeCommandsExecutor = null;
 
@@ -129,8 +135,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     private UHSpectatorPlusIntegration spintegration = null;
     private UHDynmapIntegration dynmapintegration = null;
     private UHProtocolLibIntegrationWrapper protocollibintegrationwrapper = null;
-
-    private boolean worldsLoaded = false;
 
 
     @Override
@@ -162,12 +166,23 @@ public class UHCReloaded extends ZPlugin implements Listener
         /* *** Core modules *** */
 
         registerModules(
-                ModulesManagerModule.class,     // Manages the modules from the game/commands
+                ModulesManagerModule.class,     // Manages the modules from the game/commands.
+
                 SidebarModule.class,            // Manages the sidebar and provides hooks for other modules.
                                                 // Must be loaded before the game-related modules.
+
                 TeamsModule.class,              // Manages the teams (for both team & solo games).
                                                 // Must be loaded before the game-related modules.
-                GameModule.class                // Manages the game progression
+
+                TimersModule.class,             // Manages the time in everything.
+
+                BorderModule.class,             // Manages the border of the map.
+                                                // Must be loaded before the spawns module.
+
+                SpawnsModule.class,             // Manages the spawn points and teleportation.
+                                                // Must be loaded before the game-related modules.
+
+                GameModule.class                // Manages the game progression.
         );
 
 
@@ -185,18 +200,32 @@ public class UHCReloaded extends ZPlugin implements Listener
 
         if (!getServer().getWorlds().isEmpty())
         {
-            scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-
-            loadModules(ModuleInfo.ModuleLoadTime.POST_WORLD);
-            collectCommandsFromModules();
-
-            worldsLoaded = true;
+            onEnableWhenWorldsAvailable();
         }
 
 
         /* *** Ready *** */
 
         PluginLogger.info(I.t("Ultra Hardcore plugin loaded."));
+    }
+
+    /**
+     * Run when the worlds are available (on plugin enabled if reloaded, on worlds ready else).
+     */
+    private void onEnableWhenWorldsAvailable()
+    {
+        scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+
+        RunTask.nextTick(() -> {
+            worldNormal = setDefaultWorld(World.Environment.NORMAL, UHConfig.WORLDS.OVERWORLD.get());
+            worldNether = setDefaultWorld(World.Environment.NETHER, UHConfig.WORLDS.NETHER.get());
+            worldTheEnd = setDefaultWorld(World.Environment.THE_END, UHConfig.WORLDS.THE_END.get());
+
+            loadModules(ModuleInfo.ModuleLoadTime.POST_WORLD);
+            collectCommandsFromModules();
+        });
+
+        worldsLoaded = true;
     }
 
 
@@ -404,21 +433,34 @@ public class UHCReloaded extends ZPlugin implements Listener
         return scoreboard;
     }
 
+    /**
+     * @param environment An environment.
+     * @return The world to use for this environment in the game.
+     */
+    public World getWorld(final World.Environment environment)
+    {
+        if (environment == null) return worldNormal;
+
+        switch (environment)
+        {
+            case NORMAL:
+                return worldNormal;
+
+            case NETHER:
+                return worldNether;
+
+            case THE_END:
+            default:
+                return worldTheEnd;
+        }
+    }
+
 
 
     @EventHandler (priority = EventPriority.LOWEST)
     public final void onWorldsLoaded(WorldLoadEvent e)
     {
-        if (!worldsLoaded)
-        {
-            RunTask.nextTick(() -> {
-                loadModules(ModuleInfo.ModuleLoadTime.POST_WORLD);
-                collectCommandsFromModules();
-            });
-
-            worldsLoaded = true;
-            scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-        }
+        if (!worldsLoaded) onEnableWhenWorldsAvailable();
     }
 
     @EventHandler
@@ -515,6 +557,23 @@ public class UHCReloaded extends ZPlugin implements Listener
         });
     }
 
+    private World setDefaultWorld(final World.Environment environment, final String worldName)
+    {
+        final World userWorld = Bukkit.getWorld(worldName);
+
+        // If the world is valid, it is used as-is.
+        if (userWorld != null && userWorld.getEnvironment() == environment) return userWorld;
+
+        // Else we use the first world we found with the right type.
+        for (final World world : Bukkit.getWorlds())
+        {
+            if (world.getEnvironment() == environment) return world;
+        }
+
+        // We finally fallback on the first world regardless of its type to have at least something.
+        return Bukkit.getWorlds().get(0);
+    }
+
 
 
 
@@ -576,14 +635,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     }
 
     /**
-     * Returns the spawns points manager.
-     */
-    public SpawnsManager getSpawnsManager()
-    {
-        return spawnsManager;
-    }
-
-    /**
      * Returns the border manager.
      */
     public BorderManager getBorderManager()
@@ -605,14 +656,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     public TeamChatManager getTeamChatManager()
     {
         return teamChatManager;
-    }
-
-    /**
-     * Returns the timer manager.
-     */
-    public TimerManager getTimerManager()
-    {
-        return timerManager;
     }
 
     /**

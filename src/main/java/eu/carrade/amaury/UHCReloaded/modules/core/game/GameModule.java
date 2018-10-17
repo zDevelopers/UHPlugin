@@ -33,14 +33,18 @@ package eu.carrade.amaury.UHCReloaded.modules.core.game;
 
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.commands.StartCommand;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.GamePhaseChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
+import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -66,6 +70,12 @@ public class GameModule extends UHModule implements Listener
     }
 
     @Override
+    public List<Class<? extends Command>> getCommands()
+    {
+        return Collections.singletonList(StartCommand.class);
+    }
+
+    @Override
     public void injectIntoSidebar(Player player, SidebarInjector injector)
     {
         injector.injectLines(
@@ -74,9 +84,22 @@ public class GameModule extends UHModule implements Listener
         );
     }
 
+    /**
+     * @return the current phase of the game.
+     */
+    public GamePhase getPhase()
+    {
+        return phase;
+    }
+
+    /**
+     * Changes the phase of the game.
+     *
+     * @param phase The new phase (must be after the current one, else nothing is done).
+     */
     public void setPhase(GamePhase phase)
     {
-        if (this.phase != phase)
+        if (this.phase != phase && phase.ordinal() > this.phase.ordinal())
         {
             final GamePhase oldPhase = this.phase;
 

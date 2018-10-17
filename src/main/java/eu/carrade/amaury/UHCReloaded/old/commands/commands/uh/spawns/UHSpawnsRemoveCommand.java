@@ -36,7 +36,6 @@ import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
 import fr.zcraft.zlib.components.i18n.I;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -76,7 +75,7 @@ public class UHSpawnsRemoveCommand extends AbstractCommand
             else
             {
                 Player pl = (Player) sender; // Just a way to avoid casts everywhere.
-                p.getSpawnsManager().removeSpawnPoint(pl.getLocation(), false);
+                // p.getSpawnsManager().removeSpawnPoint(pl.getLocation(), false);
                 sender.sendMessage(I.t("{cs}The spawn point {1};{2} in the world {0} was removed.", pl.getWorld().getName(), String.valueOf(pl.getLocation().getBlockX()), String.valueOf(pl.getLocation().getBlockZ())));
             }
         }
@@ -98,7 +97,7 @@ public class UHSpawnsRemoveCommand extends AbstractCommand
                     world = p.getServer().getWorlds().get(0);
                 }
 
-                p.getSpawnsManager().removeSpawnPoint(new Location(world, Double.parseDouble(args[2]), 0, Double.parseDouble(args[3])), true);
+                // p.getSpawnsManager().removeSpawnPoint(new Location(world, Double.parseDouble(args[2]), 0, Double.parseDouble(args[3])), true);
                 sender.sendMessage(I.t("{cs}The spawn point {1};{2} in the world {0} was removed.", p.getServer().getWorlds().get(0).getName(), args[2], args[3]));
             }
             catch (NumberFormatException e)

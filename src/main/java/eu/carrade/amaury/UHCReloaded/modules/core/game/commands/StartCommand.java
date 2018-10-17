@@ -29,56 +29,24 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.border;
+package eu.carrade.amaury.UHCReloaded.modules.core.game.commands;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
-import fr.zcraft.zlib.components.i18n.I;
-import org.bukkit.command.CommandSender;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
+import fr.zcraft.zlib.components.commands.Command;
+import fr.zcraft.zlib.components.commands.CommandException;
+import fr.zcraft.zlib.components.commands.CommandInfo;
+import fr.zcraft.zlib.components.commands.WithFlags;
 
-import java.util.Collections;
-import java.util.List;
 
-@Command (name = "get")
-public class UHBorderGetCommand extends AbstractCommand
+@CommandInfo (name = "start", usageParameters = "[--slow]")
+@WithFlags ({"slow"})
+public class StartCommand extends Command
 {
-    private UHCReloaded p;
-
-    public UHBorderGetCommand(UHCReloaded p)
-    {
-        this.p = p;
-    }
-
     @Override
-    public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
+    protected void run() throws CommandException
     {
-//        if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
-//        {
-//            sender.sendMessage(I.tn("{ci}The current diameter of the map is {0} block.", "{ci}The current diameter of the map is {0} blocks.", p.getBorderManager().getCurrentBorderDiameter()));
-//        }
-//        else
-//        {
-//            sender.sendMessage(I.t("{ci}The current map size is {0}×{0}.", p.getBorderManager().getCurrentBorderDiameter()));
-//        }
-    }
-
-    @Override
-    public List<String> tabComplete(CommandSender sender, String[] args)
-    {
-        return null;
-    }
-
-    @Override
-    public List<String> help(CommandSender sender)
-    {
-        return null;
-    }
-
-    @Override
-    public List<String> onListHelp(CommandSender sender)
-    {
-        return Collections.singletonList(I.t("{cc}/uh border get{ci}: returns the current size of the map."));
+        UHCReloaded.getModule(GameModule.class).setPhase(GamePhase.STARTING);
     }
 }

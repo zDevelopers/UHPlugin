@@ -63,7 +63,7 @@ public class UHSpawnsResetCommand extends AbstractCommand
     @Override
     public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
     {
-        p.getSpawnsManager().reset();
+        // p.getSpawnsManager().reset();
         sender.sendMessage(I.t("{cs}All the spawn points were removed."));
     }
 

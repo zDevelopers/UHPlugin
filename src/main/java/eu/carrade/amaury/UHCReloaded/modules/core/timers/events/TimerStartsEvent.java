@@ -29,56 +29,49 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.border;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
-import fr.zcraft.zlib.components.i18n.I;
-import org.bukkit.command.CommandSender;
+package eu.carrade.amaury.UHCReloaded.modules.core.timers.events;
 
-import java.util.Collections;
-import java.util.List;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
-@Command (name = "get")
-public class UHBorderGetCommand extends AbstractCommand
+
+/**
+ * This event is fired when a timer ends.
+ *
+ * @author Amaury Carrade
+ */
+public final class TimerStartsEvent extends Event
 {
-    private UHCReloaded p;
+    private Timer timer;
 
-    public UHBorderGetCommand(UHCReloaded p)
+    public TimerStartsEvent(Timer timer)
     {
-        this.p = p;
+        this.timer = timer;
     }
 
-    @Override
-    public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
+    /**
+     * Returns the timer.
+     *
+     * @return
+     */
+    public Timer getTimer()
     {
-//        if (p.getBorderManager().getMapShape() == MapShape.CIRCULAR)
-//        {
-//            sender.sendMessage(I.tn("{ci}The current diameter of the map is {0} block.", "{ci}The current diameter of the map is {0} blocks.", p.getBorderManager().getCurrentBorderDiameter()));
-//        }
-//        else
-//        {
-//            sender.sendMessage(I.t("{ci}The current map size is {0}×{0}.", p.getBorderManager().getCurrentBorderDiameter()));
-//        }
+        return timer;
     }
 
-    @Override
-    public List<String> tabComplete(CommandSender sender, String[] args)
-    {
-        return null;
-    }
+
+    private static final HandlerList handlers = new HandlerList();
 
     @Override
-    public List<String> help(CommandSender sender)
+    public HandlerList getHandlers()
     {
-        return null;
+        return handlers;
     }
 
-    @Override
-    public List<String> onListHelp(CommandSender sender)
+    public static HandlerList getHandlerList()
     {
-        return Collections.singletonList(I.t("{cc}/uh border get{ci}: returns the current size of the map."));
+        return handlers;
     }
 }

@@ -32,7 +32,6 @@
 package eu.carrade.amaury.UHCReloaded.old.commands.commands.uh;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.borders.exceptions.CannotGenerateWallsException;
 import eu.carrade.amaury.UHCReloaded.old.commands.commands.categories.Category;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
@@ -90,23 +89,22 @@ public class UHGenerateWallsCommand extends AbstractCommand
             sender.sendMessage(I.t("{ci}From the console, generating the walls of the default world, {0}", world.getName()));
         }
 
-        try
-        {
-            p.getBorderManager().generateWalls(world);
-
-        }
-        catch (CannotGenerateWallsException e)
-        {
-            sender.sendMessage(I.t("{ce}Unable to generate the wall: see logs for details. The blocks set in the config are probably invalid."));
-            return;
-
-        }
-        catch (Exception e)
-        {
-            sender.sendMessage(I.t("{ce}An error occurred, see console for details."));
-            e.printStackTrace();
-            return;
-        }
+//        try
+//        {
+//            p.getBorderManager().generateWalls(world);
+//        }
+//        catch (CannotGenerateWallsException e)
+//        {
+//            sender.sendMessage(I.t("{ce}Unable to generate the wall: see logs for details. The blocks set in the config are probably invalid."));
+//            return;
+//
+//        }
+//        catch (Exception e)
+//        {
+//            sender.sendMessage(I.t("{ce}An error occurred, see console for details."));
+//            e.printStackTrace();
+//            return;
+//        }
 
         sender.sendMessage(I.t("{cst}Generation done."));
     }
