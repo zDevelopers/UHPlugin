@@ -29,38 +29,21 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.CircularMapShape;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.MapShapeDescriptor;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.SquaredMapShape;
+package eu.carrade.amaury.UHCReloaded.modules.border.walls.generators;
 
-
-public enum MapShape
+/**
+ * Used to determine in witch wall we are, to get the "inner" block.
+ *
+ * North: small Z
+ * South: big Z
+ * East:  big X
+ * West:  small X
+ */
+public enum WallPosition
 {
-    CIRCULAR(new CircularMapShape()),
-    SQUARED(new SquaredMapShape()),
-
-    ;
-
-
-    private MapShapeDescriptor shape;
-
-    /**
-     * @param shape The shape descriptor to use for border-checks.
-     */
-    MapShape(MapShapeDescriptor shape)
-    {
-        this.shape = shape;
-    }
-
-    /**
-     * Returns the shape descriptor.
-     *
-     * @return The shape.
-     */
-    public MapShapeDescriptor getShape()
-    {
-        return shape;
-    }
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
 }

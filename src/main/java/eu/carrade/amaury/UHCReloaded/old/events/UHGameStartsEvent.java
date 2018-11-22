@@ -29,38 +29,28 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.CircularMapShape;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.MapShapeDescriptor;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.SquaredMapShape;
+package eu.carrade.amaury.UHCReloaded.old.events;
+
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
-public enum MapShape
+/**
+ * This event is fired when the UHC game is started.
+ */
+public class UHGameStartsEvent extends Event
 {
-    CIRCULAR(new CircularMapShape()),
-    SQUARED(new SquaredMapShape()),
+    private static final HandlerList handlers = new HandlerList();
 
-    ;
-
-
-    private MapShapeDescriptor shape;
-
-    /**
-     * @param shape The shape descriptor to use for border-checks.
-     */
-    MapShape(MapShapeDescriptor shape)
+    @Override
+    public HandlerList getHandlers()
     {
-        this.shape = shape;
+        return handlers;
     }
 
-    /**
-     * Returns the shape descriptor.
-     *
-     * @return The shape.
-     */
-    public MapShapeDescriptor getShape()
+    public static HandlerList getHandlerList()
     {
-        return shape;
+        return handlers;
     }
 }

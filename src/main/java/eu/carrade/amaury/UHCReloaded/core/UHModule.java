@@ -44,6 +44,13 @@ import java.util.Map;
 
 public abstract class UHModule extends ZLibComponent implements Listener
 {
+    protected ModuleLogger logger;
+
+    public UHModule()
+    {
+        logger = new ModuleLogger(getClass());
+    }
+
     /**
      * Called when the configuration is loaded.
      */
@@ -81,4 +88,9 @@ public abstract class UHModule extends ZLibComponent implements Listener
      * @param injector The injector will allows you to inject content in specific parts of the sidebar.
      */
     public void injectIntoSidebar(final Player player, final SidebarInjector injector) {}
+
+    public ModuleLogger log()
+    {
+        return logger;
+    }
 }

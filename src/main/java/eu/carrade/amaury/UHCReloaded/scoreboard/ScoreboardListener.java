@@ -32,8 +32,8 @@
 package eu.carrade.amaury.UHCReloaded.scoreboard;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.events.UHPlayerDeathEvent;
-import eu.carrade.amaury.UHCReloaded.events.UHPlayerResurrectedEvent;
+import eu.carrade.amaury.UHCReloaded.old.events.UHPlayerDeathEvent;
+import eu.carrade.amaury.UHCReloaded.old.events.UHPlayerResurrectedEvent;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

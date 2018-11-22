@@ -95,7 +95,7 @@ public @interface ModuleInfo
         /**
          * Loads the module at startup, before the worlds are loaded.
          *
-         * Please note that most core modules (an localization) are not loaded at this point. Use that
+         * Please note that most core modules (and localization) are not loaded at this point. Use that
          * for modules altering the world generation.
          */
         STARTUP,

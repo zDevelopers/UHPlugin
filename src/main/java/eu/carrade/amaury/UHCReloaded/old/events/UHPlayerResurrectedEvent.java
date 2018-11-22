@@ -29,38 +29,55 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.CircularMapShape;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.MapShapeDescriptor;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.SquaredMapShape;
+package eu.carrade.amaury.UHCReloaded.old.events;
+
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
-public enum MapShape
+/**
+ * Called when a player is resurrected.
+ * <p>
+ * This event is called when:
+ * <ul>
+ *   <li>the command {@code /uh resurrect <player>} is executed, if the target is online;</li>
+ *   <li>the resurrected player logins, else</li>
+ * </ul>
+ * (i.e. when the message “the player is resurrected” is broadcasted).
+ */
+public class UHPlayerResurrectedEvent extends Event
 {
-    CIRCULAR(new CircularMapShape()),
-    SQUARED(new SquaredMapShape()),
+    private Player resurrectedPlayer;
 
-    ;
-
-
-    private MapShapeDescriptor shape;
-
-    /**
-     * @param shape The shape descriptor to use for border-checks.
-     */
-    MapShape(MapShapeDescriptor shape)
+    public UHPlayerResurrectedEvent(Player player)
     {
-        this.shape = shape;
+        this.resurrectedPlayer = player;
     }
 
     /**
-     * Returns the shape descriptor.
+     * Returns the resurrected player.
      *
-     * @return The shape.
+     * @return The player.
      */
-    public MapShapeDescriptor getShape()
+    public Player getPlayer()
     {
-        return shape;
+        return resurrectedPlayer;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

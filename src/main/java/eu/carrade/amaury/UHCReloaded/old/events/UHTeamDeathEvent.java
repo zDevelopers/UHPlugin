@@ -29,38 +29,48 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.CircularMapShape;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.MapShapeDescriptor;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.SquaredMapShape;
+package eu.carrade.amaury.UHCReloaded.old.events;
+
+import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
-public enum MapShape
+/**
+ * Event fired when the last member of a team die.
+ */
+public class UHTeamDeathEvent extends Event
 {
-    CIRCULAR(new CircularMapShape()),
-    SQUARED(new SquaredMapShape()),
+    private UHTeam team;
 
-    ;
-
-
-    private MapShapeDescriptor shape;
-
-    /**
-     * @param shape The shape descriptor to use for border-checks.
-     */
-    MapShape(MapShapeDescriptor shape)
+    public UHTeamDeathEvent(UHTeam team)
     {
-        this.shape = shape;
+        this.team = team;
     }
 
     /**
-     * Returns the shape descriptor.
+     * Returns the now-dead team.
      *
-     * @return The shape.
+     * @return The team.
      */
-    public MapShapeDescriptor getShape()
+    public UHTeam getTeam()
     {
-        return shape;
+        return team;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

@@ -29,38 +29,61 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.CircularMapShape;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.MapShapeDescriptor;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.SquaredMapShape;
+package eu.carrade.amaury.UHCReloaded.old.events;
+
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 
-public enum MapShape
+/**
+ * Fired when a player playing an UHC match is dead.
+ * <p>
+ * This event is called before all the action executed on player death (sound, scoreboard updates, etc.).
+ */
+public class UHPlayerDeathEvent extends Event
 {
-    CIRCULAR(new CircularMapShape()),
-    SQUARED(new SquaredMapShape()),
+    private Player player;
+    private PlayerDeathEvent ev;
 
-    ;
-
-
-    private MapShapeDescriptor shape;
-
-    /**
-     * @param shape The shape descriptor to use for border-checks.
-     */
-    MapShape(MapShapeDescriptor shape)
+    public UHPlayerDeathEvent(Player player, PlayerDeathEvent ev)
     {
-        this.shape = shape;
+        this.player = player;
+        this.ev = ev;
     }
 
     /**
-     * Returns the shape descriptor.
-     *
-     * @return The shape.
+     * Returns the dead player.
+     * @return The player.
      */
-    public MapShapeDescriptor getShape()
+    public Player getPlayer()
     {
-        return shape;
+        return player;
+    }
+
+    /**
+     * Returns the PlayerDeathEvent under this event.
+     * @return The PlayerDeathEvent.
+     */
+    public PlayerDeathEvent getPlayerDeathEvent()
+    {
+        return ev;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

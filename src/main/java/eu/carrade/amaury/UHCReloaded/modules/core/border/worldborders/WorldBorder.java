@@ -145,6 +145,11 @@ public abstract class WorldBorder
      */
     public abstract void setShape(MapShape shape);
 
+    /**
+     * @return {@code true} if this border supports progressive resizes using {@link #setDiameter(double, long)}.
+     */
+    public abstract boolean supportsProgressiveResize();
+
 
     /**
      * Returns a new instance of a WorldBorder proxy using the requested types.

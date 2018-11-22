@@ -58,7 +58,7 @@ import java.util.UUID;
 )
 public class GameModule extends UHModule implements Listener
 {
-    private GamePhase phase = GamePhase.WAIT;
+    private GamePhase phase = null;
 
     private final Set<UUID> players = new HashSet<>();
     private final Set<UUID> spectators = new HashSet<>();
@@ -66,7 +66,7 @@ public class GameModule extends UHModule implements Listener
     @Override
     protected void onEnable()
     {
-
+        setPhase(GamePhase.WAIT);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class GameModule extends UHModule implements Listener
      */
     public void setPhase(GamePhase phase)
     {
-        if (this.phase != phase && phase.ordinal() > this.phase.ordinal())
+        if (this.phase == null || (this.phase != phase && phase.ordinal() > this.phase.ordinal()))
         {
             final GamePhase oldPhase = this.phase;
 

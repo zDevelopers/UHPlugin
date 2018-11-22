@@ -33,10 +33,10 @@ package eu.carrade.amaury.UHCReloaded.game;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.events.EpisodeChangedCause;
-import eu.carrade.amaury.UHCReloaded.events.UHEpisodeChangedEvent;
-import eu.carrade.amaury.UHCReloaded.events.UHGameStartsEvent;
-import eu.carrade.amaury.UHCReloaded.events.UHPlayerResurrectedEvent;
+import eu.carrade.amaury.UHCReloaded.old.events.EpisodeChangedCause;
+import eu.carrade.amaury.UHCReloaded.old.events.UHEpisodeChangedEvent;
+import eu.carrade.amaury.UHCReloaded.old.events.UHGameStartsEvent;
+import eu.carrade.amaury.UHCReloaded.old.events.UHPlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
 import eu.carrade.amaury.UHCReloaded.old.misc.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.old.protips.ProTips;

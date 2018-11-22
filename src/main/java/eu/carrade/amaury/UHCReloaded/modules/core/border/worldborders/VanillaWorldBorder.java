@@ -163,4 +163,10 @@ public class VanillaWorldBorder extends WorldBorder
 
     @Override
     public void setShape(MapShape shape) {}
+
+    @Override
+    public boolean supportsProgressiveResize()
+    {
+        return true;
+    }
 }

@@ -17,7 +17,12 @@ lang:
 
 # The modules to load & enable. You can add modules provided by other plugins.
 # Each module's configuration is in plugins/UHPlugin/modules/<modulename>.yml .
+# You can put internal modules or refer to modules classes from other plugins. In all
+# cases, replace all dots in class paths by dashes.
 modules:
+    "border-walls": true
+    "border-warning": true
+    "border-check": true
 
 # The worlds to use as main worlds.
 # If not found, fallbacks on the first world found with the right type.

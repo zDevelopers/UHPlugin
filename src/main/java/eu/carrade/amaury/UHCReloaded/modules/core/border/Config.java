@@ -32,10 +32,10 @@
 package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
 import eu.carrade.amaury.UHCReloaded.modules.core.border.worldborders.WorldBorder;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;
 import fr.zcraft.zlib.components.configuration.ConfigurationSection;
-import org.bukkit.Material;
 
 import java.io.File;
 
@@ -63,25 +63,8 @@ public class Config extends ConfigurationInstance
     static public class ShrinkingSection extends ConfigurationSection
     {
         public final ConfigurationItem<Boolean> ENABLED = item("enabled", false);
-        public final ConfigurationItem<String> STARTS_AFTER = item("startsAfter", "30:00");
-        public final ConfigurationItem<String> SHRINKS_DURING = item("shrinksDuring", "2:00:00");
+        public final ConfigurationItem<TimeDelta> STARTS_AFTER = item("startsAfter", new TimeDelta(0, 30, 0));
+        public final ConfigurationItem<TimeDelta> SHRINKS_DURING = item("shrinksDuring", new TimeDelta(2, 0, 0));
         public final ConfigurationItem<Integer> DIAMETER_AFTER_SHRINK = item("diameterAfterShrink", 200);
-    }
-
-    public static final ConfigurationItem<Integer> WARNING_INTERVAL = item("warningInterval", 90);
-
-    public static final WallSection WALL = section("wall", WallSection.class);
-
-    static public class WallSection extends ConfigurationSection
-    {
-        public final ConfigurationItem<Integer> HEIGHT = item("height", 128);
-
-        public final BlockSection BLOCK = section("block", BlockSection.class);
-
-        static public class BlockSection extends ConfigurationSection
-        {
-            public final ConfigurationItem<Material> REPLACE_AIR = item("replaceAir", Material.GLASS);
-            public final ConfigurationItem<Material> REPLACE_SOLID = item("replaceSolid", Material.BEDROCK);
-        }
     }
 }

@@ -32,28 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.old.commands.commands;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHAboutCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHBorderCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHFeedAllCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHFeedCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHFinishCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHFreezeCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHGenerateWallsCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHHealAllCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHHealCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHInfosCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHKillCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHLoadPlayersCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHResurrectCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHRulesCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHShiftCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHSpawnsCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHSpectatorsCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHStartCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHTPBackCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHTPCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHTPSpawnCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.UHTeamCommand;
+import eu.carrade.amaury.UHCReloaded.old.commands.commands.uh.*;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
@@ -75,10 +54,7 @@ public class UHRootCommand extends AbstractCommand
         registerSubCommand(new UHStartCommand(p));
         registerSubCommand(new UHShiftCommand(p));
         registerSubCommand(new UHSpawnsCommand(p));
-        registerSubCommand(new UHTeamCommand(p));
-        registerSubCommand(new UHBorderCommand(p));
         registerSubCommand(new UHSpectatorsCommand(p));
-        registerSubCommand(new UHGenerateWallsCommand(p));
 
         // Bugs
         registerSubCommand(new UHHealCommand(p));

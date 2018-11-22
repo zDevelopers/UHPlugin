@@ -29,38 +29,65 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.CircularMapShape;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.MapShapeDescriptor;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.SquaredMapShape;
+package eu.carrade.amaury.UHCReloaded.old.events;
+
+import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
-public enum MapShape
+public class UHGameEndsEvent extends Event implements Cancellable
 {
-    CIRCULAR(new CircularMapShape()),
-    SQUARED(new SquaredMapShape()),
+    private UHTeam winner;
+    private boolean cancelled = false;
 
-    ;
-
-
-    private MapShapeDescriptor shape;
-
-    /**
-     * @param shape The shape descriptor to use for border-checks.
-     */
-    MapShape(MapShapeDescriptor shape)
+    public UHGameEndsEvent(UHTeam winner)
     {
-        this.shape = shape;
+        this.winner = winner;
     }
 
     /**
-     * Returns the shape descriptor.
+     * Returns the last team alive.
      *
-     * @return The shape.
+     * @return The team.
      */
-    public MapShapeDescriptor getShape()
+    public UHTeam getWinnerTeam()
     {
-        return shape;
+        return winner;
+    }
+
+
+    @Override
+    public boolean isCancelled()
+    {
+        return cancelled;
+    }
+
+    /**
+     * Cancels the game ends. If cancelled, the end message / effects will not be broadcasted.
+     *
+     * @param cancelled {@code true} to cancel.
+     */
+    @Override
+    public void setCancelled(boolean cancelled)
+    {
+        this.cancelled = cancelled;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

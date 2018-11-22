@@ -38,7 +38,8 @@ import fr.zcraft.zlib.components.commands.CommandException;
 import fr.zcraft.zlib.components.commands.CommandInfo;
 import fr.zcraft.zlib.components.i18n.I;
 
-import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 @CommandInfo (name = "modules", usageParameters = "[list|enable|disable]", aliases = {"module"})
@@ -47,9 +48,39 @@ public class ModulesCommand extends Command
     @Override
     protected void run() throws CommandException
     {
-        final Collection<ModuleWrapper> modules = UHCReloaded.get().getModules();
+        final Set<ModuleWrapper> modules = new TreeSet<>((module1, module2) -> {
+            if (module1.equals(module2)) return 0;
+
+            if (module1.isEnabled() != module2.isEnabled()) return module1.isEnabled() ? -1 : 1;
+
+            if (module1.getWhen() != module2.getWhen())
+                return Integer.compare(module1.getWhen().ordinal(), module2.getWhen().ordinal());
+
+            if (module1.isInternal() != module2.isInternal()) return module1.isInternal() ? -1 : 1;
+
+            return module1.getName().compareTo(module2.getName());
+        });
+
+        modules.addAll(UHCReloaded.get().getModules());
 
         success(I.tn("{0} module registered", "{0} modules registered", modules.size()));
-        modules.forEach(module -> info(I.t("- {0} ({1} - {2})", module.getName(), module.isEnabled() ? "enabled" : "disabled", module.getWhen())));
+        modules.forEach(module -> {
+            if (module.isEnabled())
+            {
+                info(I.t(
+                        "{green} • {white}{0} (enabled - {1})",
+                        module.getName(),
+                        module.getWhen()
+                ));
+            }
+            else
+            {
+                info(I.t(
+                        "{red} • {white}{0} (disabled - {1})",
+                        module.getName(),
+                        module.getWhen()
+                ));
+            }
+        });
     }
 }

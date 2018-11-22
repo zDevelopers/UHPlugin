@@ -29,38 +29,19 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.CircularMapShape;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.MapShapeDescriptor;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.SquaredMapShape;
+package eu.carrade.amaury.UHCReloaded.old.events;
 
-
-public enum MapShape
+public enum EpisodeChangedCause
 {
-    CIRCULAR(new CircularMapShape()),
-    SQUARED(new SquaredMapShape()),
-
-    ;
-
-
-    private MapShapeDescriptor shape;
+    /**
+     * The episode changed because the previous episode was finished.
+     */
+    FINISHED,
 
     /**
-     * @param shape The shape descriptor to use for border-checks.
+     * The episode changed because the previous episode was shifted by someone using
+     * the {@code /uh shift} command.
      */
-    MapShape(MapShapeDescriptor shape)
-    {
-        this.shape = shape;
-    }
-
-    /**
-     * Returns the shape descriptor.
-     *
-     * @return The shape.
-     */
-    public MapShapeDescriptor getShape()
-    {
-        return shape;
-    }
+    SHIFTED
 }

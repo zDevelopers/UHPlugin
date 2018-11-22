@@ -29,38 +29,74 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.CircularMapShape;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.MapShapeDescriptor;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.SquaredMapShape;
+package eu.carrade.amaury.UHCReloaded.old.events;
+
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
-public enum MapShape
+/**
+ * Called when an episode changes.
+ */
+public class UHEpisodeChangedEvent extends Event
 {
-    CIRCULAR(new CircularMapShape()),
-    SQUARED(new SquaredMapShape()),
+    private int newEpisode;
+    private EpisodeChangedCause cause;
+    private String shifter;
 
-    ;
-
-
-    private MapShapeDescriptor shape;
-
-    /**
-     * @param shape The shape descriptor to use for border-checks.
-     */
-    MapShape(MapShapeDescriptor shape)
+    public UHEpisodeChangedEvent(int newEpisode, EpisodeChangedCause cause, String shifter)
     {
-        this.shape = shape;
+        this.newEpisode = newEpisode;
+        this.cause = cause;
+        this.shifter = shifter;
     }
 
     /**
-     * Returns the shape descriptor.
+     * Returns the new episode.
      *
-     * @return The shape.
+     * @return The new episode.
      */
-    public MapShapeDescriptor getShape()
+    public int getNewEpisode()
     {
-        return shape;
+        return newEpisode;
+    }
+
+    /**
+     * Why the episode changed?
+     *
+     * @return The cause.
+     *
+     * @see EpisodeChangedCause
+     */
+    public EpisodeChangedCause getCause()
+    {
+        return cause;
+    }
+
+    /**
+     * Returns the name of the shifter (the one that executed the /uh shift command, or "" if
+     * the episode was shifted because the previous one was finished).
+     *
+     * @return The shifter.
+     */
+    public String getShifter()
+    {
+        return shifter;
+    }
+
+
+
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

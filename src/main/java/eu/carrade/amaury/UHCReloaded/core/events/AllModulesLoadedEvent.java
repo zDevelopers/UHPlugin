@@ -29,38 +29,45 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.border;
+package eu.carrade.amaury.UHCReloaded.core.events;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.CircularMapShape;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.MapShapeDescriptor;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.SquaredMapShape;
+import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
-public enum MapShape
+/**
+ * Fired when all modules registered in the config are loaded (both at startup and post-world).
+ */
+public class AllModulesLoadedEvent extends Event
 {
-    CIRCULAR(new CircularMapShape()),
-    SQUARED(new SquaredMapShape()),
+    private static final HandlerList handlers = new HandlerList();
 
-    ;
+    private final ModuleInfo.ModuleLoadTime loadTime;
 
-
-    private MapShapeDescriptor shape;
-
-    /**
-     * @param shape The shape descriptor to use for border-checks.
-     */
-    MapShape(MapShapeDescriptor shape)
+    public AllModulesLoadedEvent(ModuleInfo.ModuleLoadTime loadTime)
     {
-        this.shape = shape;
+        this.loadTime = loadTime;
     }
 
     /**
-     * Returns the shape descriptor.
+     * This event is launched for each batch of modules load. This represents the batch.
      *
-     * @return The shape.
+     * @return the moment when these modules were all loaded.
      */
-    public MapShapeDescriptor getShape()
+    public ModuleInfo.ModuleLoadTime getLoadTime()
     {
-        return shape;
+        return loadTime;
+    }
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

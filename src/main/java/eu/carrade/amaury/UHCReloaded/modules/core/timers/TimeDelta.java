@@ -35,11 +35,15 @@ import fr.zcraft.zlib.components.configuration.ConfigurationParseException;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandler;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Objects;
 
 
 public class TimeDelta
 {
+    private static final NumberFormat formatter = new DecimalFormat("00");
+
     private final long seconds;
 
     static
@@ -111,6 +115,23 @@ public class TimeDelta
     public long getSeconds()
     {
         return seconds;
+    }
+
+    @Override
+    public String toString()
+    {
+        final long secondsLeft = seconds % 60;
+        final long minutesLeft = (seconds % 3600) / 60;
+        final long hoursLeft = (long) Math.floor(seconds / 3600.0);
+
+        if (hoursLeft != 0)
+        {
+            return formatter.format(hoursLeft) + ":" + formatter.format(minutesLeft) + ":" + formatter.format(secondsLeft);
+        }
+        else
+        {
+            return formatter.format(minutesLeft) + ":" + formatter.format(secondsLeft);
+        }
     }
 
     @Override

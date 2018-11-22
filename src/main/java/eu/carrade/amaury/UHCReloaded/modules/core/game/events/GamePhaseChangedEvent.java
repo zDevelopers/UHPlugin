@@ -37,7 +37,7 @@ import org.bukkit.event.HandlerList;
 
 
 /**
- * Fired after a module was loaded.
+ * Fired when the game phase changes.
  */
 public class GamePhaseChangedEvent extends Event
 {
@@ -52,11 +52,19 @@ public class GamePhaseChangedEvent extends Event
         this.newPhase = newPhase;
     }
 
+    /**
+     * The old phase. May be {@code null} if this is the first phase ever (i.e. {@link GamePhase#WAIT}).
+     *
+     * @return The old phase.
+     */
     public GamePhase getOldPhase()
     {
         return oldPhase;
     }
 
+    /**
+     * @return The new phase.
+     */
     public GamePhase getNewPhase()
     {
         return newPhase;

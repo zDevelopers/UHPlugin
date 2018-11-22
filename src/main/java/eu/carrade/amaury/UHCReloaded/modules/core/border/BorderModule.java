@@ -35,22 +35,21 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.exceptions.CannotGenerateWallsException;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.generators.WallGenerator;
+import eu.carrade.amaury.UHCReloaded.modules.core.border.commands.BorderCommand;
+import eu.carrade.amaury.UHCReloaded.modules.core.border.events.BorderChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.worldborders.WorldBorder;
-import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
-import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
+import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.i18n.I;
-import fr.zcraft.zlib.tools.PluginLogger;
-import fr.zcraft.zlib.tools.runners.RunTask;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -63,24 +62,12 @@ import java.util.Set;
 )
 public class BorderModule extends UHModule
 {
-    private WorldBorder border = null;
-
-    private Integer warningSize = 0;
-    private BukkitRunnable warningTask = null;
-
-    private Boolean warningFinalTimeEnabled = false;
-    private Timer warningTimer = null;
-    private String warningTimerName = null;
-    private CommandSender warningSender = null;
-
     private MapShape mapShape = null;
+    private WorldBorder border = null;
 
     @Override
     public void onEnable()
     {
-        /// The name of the warning timer displaying the time left before the next border
-        warningTimerName = I.t("Border shrinking");
-
         mapShape = Config.SHAPE.get();
 
         final World world = UHCReloaded.get().getWorld(World.Environment.NORMAL);
@@ -93,10 +80,13 @@ public class BorderModule extends UHModule
 
         border.init();
 
-        PluginLogger.info("Using {0} to set the world border.", border.getClass().getSimpleName());
+        log().info("Using {0} to set the world border.", border.getClass().getSimpleName());
+    }
 
-//        BORDER_SHRINKING_STARTS_AFTER = UHUtils.string2Time(UHConfig.MAP.BORDER.SHRINKING.STARTS_AFTER.get(), 30*60);  // Seconds
-//        BORDER_SHRINKING_DURATION = UHUtils.string2Time(UHConfig.MAP.BORDER.SHRINKING.SHRINKS_DURING.get(), 60*60*2);  // Same
+    @Override
+    public List<Class<? extends Command>> getCommands()
+    {
+        return Collections.singletonList(BorderCommand.class);
     }
 
     /**
@@ -182,7 +172,7 @@ public class BorderModule extends UHModule
         final Set<Player> playersOutside = new HashSet<>();
 
         // TODO
-//        for (final Player player : UHCReloaded.getModule(GameModule.class).getOnlineAlivePlayers())
+//        for (final Player player : UR.module(GameModule.class).getOnlineAlivePlayers())
 //        {
 //            if (!isInsideBorder(player.getLocation(), diameter))
 //            {
@@ -191,110 +181,6 @@ public class BorderModule extends UHModule
 //        }
 
         return playersOutside;
-    }
-
-    /**
-     * Returns the size of the future border, used in the warning messages sent to the
-     * players out of this future border.
-     *
-     * @return the future border diameter.
-     */
-    public int getWarningSize()
-    {
-        return this.warningSize;
-    }
-
-    /**
-     * @return true if there is currently a warning with a time left displayed.
-     */
-    public boolean getWarningFinalTimeEnabled()
-    {
-        return this.warningFinalTimeEnabled;
-    }
-
-    /**
-     * @return the sender of the last warning configured.
-     */
-    public CommandSender getWarningSender()
-    {
-        return this.warningSender;
-    }
-
-    /**
-     * Sets the size of the future border, used in the warning messages sent to the
-     * players out of this future border.
-     *
-     * This also starts the display of the warning messages, every 90 seconds by default
-     * (configurable, see config.yml, map.border.warningInterval).
-     *
-     * If timeLeft is not null, the time available for the players to go inside the future
-     * border is displayed in the warning message.
-     *
-     * @param diameter The future diameter.
-     * @param timeLeft The time available for the players to go inside the future border (minutes).
-     * @param sender The user who requested this change.
-     */
-    public void setWarningSize(int diameter, int timeLeft, CommandSender sender)
-    {
-        cancelWarning();
-
-        this.warningSize = diameter;
-
-        if (timeLeft != 0)
-        {
-            warningTimer = new Timer(this.warningTimerName);
-            warningTimer.setDuration(timeLeft * 60);
-
-            UHCReloaded.getModule(TimersModule.class).registerTimer(warningTimer);
-
-            warningTimer.start();
-        }
-
-        if (sender != null)
-        {
-            this.warningSender = sender;
-        }
-
-        RunTask.timer(
-                warningTask = new BorderWarningTask(),
-                20L,
-                20L * Config.WARNING_INTERVAL.get()
-        );
-    }
-
-    /**
-     * Sets the size of the future border, used in the warning messages sent to the
-     * players out of this future border.
-     *
-     * This also starts the display of the warning messages, every 90 seconds by default
-     * (configurable, see config.yml, map.border.warningInterval).
-     *
-     * @param diameter The diameter of the future border.
-     */
-    public void setWarningSize(int diameter)
-    {
-        setWarningSize(diameter, 0, null);
-    }
-
-    /**
-     * Stops the display of the warning messages.
-     */
-    public void cancelWarning()
-    {
-        if (warningTask != null)
-        {
-            try
-            {
-                warningTask.cancel();
-            }
-            catch (IllegalStateException ignored) {}
-        }
-
-        if (warningTimer != null)
-        {
-            warningTimer.stop();
-            UHCReloaded.getModule(TimersModule.class).unregisterTimer(warningTimer);
-        }
     }
 
     /**
@@ -316,11 +202,9 @@ public class BorderModule extends UHModule
      */
     public void setCurrentBorderDiameter(int diameter)
     {
-        cancelWarning();
-
         border.setDiameter(diameter);
+        Bukkit.getPluginManager().callEvent(new BorderChangedEvent(diameter));
     }
-
 
     /**
      * Sends a list of the players outside the given border to the specified sender.
@@ -328,9 +212,10 @@ public class BorderModule extends UHModule
      * @param to The player/console to send the check.
      * @param diameter The diameter of the border to be checked.
      */
-    public void sendCheckMessage(CommandSender to, int diameter)
+    public void sendCheckMessage(final CommandSender to, final int diameter)
     {
-        Set<Player> playersOutside = getPlayersOutside(diameter);
+        final BorderModule borderModule = UR.module(BorderModule.class);
+        final Set<Player> playersOutside = borderModule.getPlayersOutside(diameter);
 
         if (playersOutside.size() == 0)
         {
@@ -339,9 +224,9 @@ public class BorderModule extends UHModule
         else
         {
             to.sendMessage(I.t("{ci}There are {0} players outside the given border.", String.valueOf(playersOutside.size())));
-            for (Player player : getPlayersOutside(diameter))
+            for (Player player : borderModule.getPlayersOutside(diameter))
             {
-                double distance = getDistanceToBorder(player.getLocation(), diameter);
+                double distance = borderModule.getDistanceToBorder(player.getLocation(), diameter);
                 if (distance > 150)
                 {
                     to.sendMessage(I.t("{lightpurple} - {red}{0}{ci} (far away from the border)", player.getName()));
@@ -356,31 +241,6 @@ public class BorderModule extends UHModule
                 }
             }
         }
-    }
-
-    /**
-     * Generates the walls in the given world, following the current border configuration.
-     *
-     * @param world The world were the walls will be built in.
-     * @throws CannotGenerateWallsException If an error occurred while generating the wall.
-     */
-    public void generateWalls(World world) throws CannotGenerateWallsException
-    {
-        Integer wallHeight = Config.WALL.HEIGHT.get();
-
-        Material wallBlockAir = Config.WALL.BLOCK.REPLACE_AIR.get();
-        Material wallBlockSolid = Config.WALL.BLOCK.REPLACE_SOLID.get();
-
-        if (wallBlockAir == null || !wallBlockAir.isSolid() || wallBlockSolid == null || !wallBlockSolid.isSolid())
-        {
-            throw new CannotGenerateWallsException("Cannot generate the walls: invalid blocks set in the config");
-        }
-
-        final WallGenerator generator = mapShape.getWallGeneratorInstance(wallBlockAir, wallBlockSolid);
-        if (generator != null)
-            generator.build(world, getCurrentBorderDiameter(), wallHeight);
-        else
-            throw new CannotGenerateWallsException("Unable to load walls generator.");
     }
 
     /**

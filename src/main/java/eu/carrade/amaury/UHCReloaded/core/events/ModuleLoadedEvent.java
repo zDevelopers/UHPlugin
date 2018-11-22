@@ -29,38 +29,45 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.border;
+package eu.carrade.amaury.UHCReloaded.core.events;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.CircularMapShape;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.MapShapeDescriptor;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.shapes.SquaredMapShape;
+import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
-public enum MapShape
+/**
+ * Fired after a module was loaded.
+ */
+public class ModuleLoadedEvent extends Event
 {
-    CIRCULAR(new CircularMapShape()),
-    SQUARED(new SquaredMapShape()),
+    private static final HandlerList handlers = new HandlerList();
 
-    ;
+    private final ModuleWrapper module;
 
 
-    private MapShapeDescriptor shape;
-
-    /**
-     * @param shape The shape descriptor to use for border-checks.
-     */
-    MapShape(MapShapeDescriptor shape)
+    public ModuleLoadedEvent(final ModuleWrapper module)
     {
-        this.shape = shape;
+        this.module = module;
     }
 
     /**
-     * Returns the shape descriptor.
-     *
-     * @return The shape.
+     * @return the loaded module.
      */
-    public MapShapeDescriptor getShape()
+    public ModuleWrapper getModule()
     {
-        return shape;
+        return module;
+    }
+
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

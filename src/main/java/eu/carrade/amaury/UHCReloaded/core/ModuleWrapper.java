@@ -32,8 +32,8 @@
 package eu.carrade.amaury.UHCReloaded.core;
 
 import com.google.common.base.CaseFormat;
-import eu.carrade.amaury.UHCReloaded.events.modules.ModuleLoadedEvent;
-import eu.carrade.amaury.UHCReloaded.events.modules.ModuleUnloadedEvent;
+import eu.carrade.amaury.UHCReloaded.core.events.ModuleLoadedEvent;
+import eu.carrade.amaury.UHCReloaded.core.events.ModuleUnloadedEvent;
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.tools.PluginLogger;
@@ -73,7 +73,7 @@ public class ModuleWrapper
             final Class<? extends ConfigurationInstance> moduleConfiguration,
             final String settingsFileName)
     {
-        this.name = name;
+        this.name = computeModuleName(moduleClass);
         this.description = description;
         this.internal = internal;
         this.enabledAtStartup = enabledAtStartup;
@@ -91,7 +91,8 @@ public class ModuleWrapper
     public void enable()
     {
         instance = ZLib.loadComponent(moduleClass);
-        Bukkit.getPluginManager().callEvent(new ModuleLoadedEvent(instance));
+
+        Bukkit.getPluginManager().callEvent(new ModuleLoadedEvent(this));
     }
 
     /**
@@ -127,9 +128,7 @@ public class ModuleWrapper
      */
     public String getName()
     {
-        return name != null && !name.isEmpty()
-                ? name
-                : StringUtils.capitalize(String.join(" ", StringUtils.splitByCharacterTypeCamelCase(moduleClass.getSimpleName())));
+        return name;
     }
 
     /**
@@ -239,5 +238,15 @@ public class ModuleWrapper
     public UHModule get()
     {
         return instance;
+    }
+
+    static String computeModuleName(Class<? extends UHModule> moduleClass)
+    {
+        final ModuleInfo info = moduleClass.getAnnotation(ModuleInfo.class);
+
+        if (info == null || info.name().isEmpty())
+            return StringUtils.capitalize(String.join(" ", StringUtils.splitByCharacterTypeCamelCase(moduleClass.getSimpleName())));
+
+        else return info.name();
     }
 }

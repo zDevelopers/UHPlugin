@@ -133,4 +133,10 @@ public class FakeWorldBorder extends WorldBorder
     {
         this.shape = shape;
     }
+
+    @Override
+    public boolean supportsProgressiveResize()
+    {
+        return false;
+    }
 }

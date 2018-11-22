@@ -31,6 +31,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.utils;
 
+import fr.zcraft.zlib.tools.PluginLogger;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Arrays;
@@ -52,6 +53,20 @@ public class ModulesUtils
      */
     public static <T> Class<? extends T> getClassFromName(final String name, final String optionalPackage, final String optionalSuffix, final Class<T> superClass)
     {
+        final String alternateName;
+
+        if (name.contains("."))
+        {
+            final String[] lastClassPathParts = name.split("\\.");
+            PluginLogger.info(Arrays.toString(lastClassPathParts));
+
+            alternateName = lastClassPathParts[lastClassPathParts.length - 1];
+        }
+        else
+        {
+            alternateName = name;
+        }
+
         final List<String> possibilities = Arrays.asList(
                 optionalPackage + "." + name,
                 optionalPackage + "." + name + optionalSuffix,
@@ -63,11 +78,15 @@ public class ModulesUtils
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + name + optionalSuffix,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(name),
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(name) + optionalSuffix,
+                optionalPackage + "." + StringUtils.uncapitalize(name) + "." + alternateName,
+                optionalPackage + "." + StringUtils.uncapitalize(name) + "." + alternateName + optionalSuffix,
+                optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(alternateName),
+                optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(alternateName) + optionalSuffix,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + optionalSuffix,
                 name
         );
 
-        for (String clazzName : possibilities)
+        for (final String clazzName : possibilities)
         {
             try
             {

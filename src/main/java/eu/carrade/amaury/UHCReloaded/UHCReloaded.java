@@ -34,9 +34,9 @@ package eu.carrade.amaury.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
-import eu.carrade.amaury.UHCReloaded.events.modules.AllModulesLoadedEvent;
+import eu.carrade.amaury.UHCReloaded.core.events.AllModulesLoadedEvent;
+import eu.carrade.amaury.UHCReloaded.core.events.ModuleLoadedEvent;
 import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderManager;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.GamePhaseChangedEvent;
@@ -49,12 +49,7 @@ import eu.carrade.amaury.UHCReloaded.old.integration.UHDynmapIntegration;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHProtocolLibIntegrationWrapper;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHSpectatorPlusIntegration;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHWorldBorderIntegration;
-import eu.carrade.amaury.UHCReloaded.old.misc.Freezer;
-import eu.carrade.amaury.UHCReloaded.old.misc.MOTDManager;
-import eu.carrade.amaury.UHCReloaded.old.misc.OfflinePlayersLoader;
-import eu.carrade.amaury.UHCReloaded.old.misc.PlayerListHeaderFooterManager;
-import eu.carrade.amaury.UHCReloaded.old.misc.RulesManager;
-import eu.carrade.amaury.UHCReloaded.old.misc.RuntimeCommandsExecutor;
+import eu.carrade.amaury.UHCReloaded.old.misc.*;
 import eu.carrade.amaury.UHCReloaded.old.recipes.RecipesManager;
 import eu.carrade.amaury.UHCReloaded.old.spectators.SpectatorsManager;
 import eu.carrade.amaury.UHCReloaded.old.teams.TeamChatManager;
@@ -87,16 +82,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -123,7 +109,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     private MOTDManager motdManager = null;
     private RulesManager rulesManager = null;
     private PlayerListHeaderFooterManager playerListHeaderFooterManager = null;
-    private BorderManager borderManager = null;
     private RecipesManager recipesManager = null;
     private TeamChatManager teamChatManager = null;
 
@@ -222,7 +207,6 @@ public class UHCReloaded extends ZPlugin implements Listener
             worldTheEnd = setDefaultWorld(World.Environment.THE_END, UHConfig.WORLDS.THE_END.get());
 
             loadModules(ModuleInfo.ModuleLoadTime.POST_WORLD);
-            collectCommandsFromModules();
         });
 
         worldsLoaded = true;
@@ -326,7 +310,7 @@ public class UHCReloaded extends ZPlugin implements Listener
     private void registerModule(final String module, boolean enabledAtStartup)
     {
         final Class<? extends UHModule> moduleClass = ModulesUtils.getClassFromName(
-                module,
+                module.replace('-', '.'),
                 "eu.carrade.amaury.UHCReloaded.modules",
                 "Module",
                 UHModule.class
@@ -369,6 +353,8 @@ public class UHCReloaded extends ZPlugin implements Listener
 
         loadedPriorities.add(loadTime);
 
+        collectCommandsFromModules();
+
         getServer().getPluginManager().callEvent(new AllModulesLoadedEvent(loadTime));
     }
 
@@ -379,7 +365,7 @@ public class UHCReloaded extends ZPlugin implements Listener
      * @throws IllegalArgumentException if the module was not registered using {@link #registerModules(Class[])} or
      * {@link #registerModule(String)} before.
      */
-    public void loadModule(Class<? extends UHModule> moduleClass)
+    public void loadModule(final Class<? extends UHModule> moduleClass)
     {
         final ModuleWrapper module = modules.get(moduleClass);
 
@@ -396,7 +382,7 @@ public class UHCReloaded extends ZPlugin implements Listener
      * @throws IllegalArgumentException if the module was not registered using {@link #registerModules(Class[])} or
      * {@link #registerModule(String)} before.
      */
-    public void unloadModule(Class<? extends UHModule> moduleClass)
+    public void unloadModule(final Class<? extends UHModule> moduleClass)
     {
         final ModuleWrapper module = modules.get(moduleClass);
 
@@ -415,7 +401,7 @@ public class UHCReloaded extends ZPlugin implements Listener
      *
      * @return The module's instance.
      */
-    public static <M extends UHModule> M getModule(Class<M> moduleClass)
+    public static <M extends UHModule> M getModule(final Class<M> moduleClass)
     {
         final ModuleWrapper module = get().modules.get(moduleClass);
 
@@ -458,7 +444,7 @@ public class UHCReloaded extends ZPlugin implements Listener
 
 
     @EventHandler (priority = EventPriority.LOWEST)
-    public final void onWorldsLoaded(WorldLoadEvent e)
+    public final void onWorldsLoaded(final WorldLoadEvent e)
     {
         if (!worldsLoaded) onEnableWhenWorldsAvailable();
     }
@@ -466,6 +452,8 @@ public class UHCReloaded extends ZPlugin implements Listener
     @EventHandler
     public void onGamePhaseChanged(final GamePhaseChangedEvent ev)
     {
+        PluginLogger.info("Game phase changed to {0}.", ev.getNewPhase());
+
         switch (ev.getNewPhase())
         {
             case IN_GAME:
@@ -476,6 +464,12 @@ public class UHCReloaded extends ZPlugin implements Listener
                 loadModules(ModuleInfo.ModuleLoadTime.ON_GAME_END);
                 break;
         }
+    }
+
+    @EventHandler
+    public void onModuleLoaded(final ModuleLoadedEvent e)
+    {
+        PluginLogger.info("Module {0} loaded.", e.getModule().getName());
     }
 
     @EventHandler (priority = EventPriority.LOWEST)
@@ -506,7 +500,7 @@ public class UHCReloaded extends ZPlugin implements Listener
         // As they are not registered in the plugin.yml, for each command, we have to force-register
         // the name manually.
 
-        final List<org.bukkit.command.Command> pluginCommands = new ArrayList<>();
+        final Map<org.bukkit.command.Command, Class<? extends Command>> pluginCommands = new HashMap<>();
         final Set<String> registered = new HashSet<>();
 
         try
@@ -514,16 +508,16 @@ public class UHCReloaded extends ZPlugin implements Listener
             final Constructor<PluginCommand> pluginCommandConstructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
             pluginCommandConstructor.setAccessible(true);
 
-            for (final String commandName : commandAliases.keySet())
+            for (final Map.Entry<String, Class<? extends Command>> commandAlias : commandAliases.entrySet())
             {
                 try
                 {
-                    pluginCommands.add(pluginCommandConstructor.newInstance(commandName, this));
-                    registered.add(commandName);
+                    pluginCommands.put(pluginCommandConstructor.newInstance(commandAlias.getKey(), this), commandAlias.getValue());
+                    registered.add(commandAlias.getKey());
                 }
                 catch (InstantiationException | InvocationTargetException | IllegalAccessException e)
                 {
-                    PluginLogger.error("Unable to register plugin command for {0}, is this version supported by UHCReloaded?", e, commandName);
+                    PluginLogger.error("Unable to register plugin command for {0}, is this version supported by UHCReloaded?", e, commandAlias);
                 }
             }
 
@@ -531,10 +525,22 @@ public class UHCReloaded extends ZPlugin implements Listener
             {
                 final CommandMap commandMap = (CommandMap) Reflection.getFieldValue(Bukkit.getServer(), "commandMap");
 
-                String prefix = getDescription().getPrefix();
-                if (prefix == null) prefix = getDescription().getName().toLowerCase();
+                String mutPrefix = getDescription().getPrefix();
+                if (mutPrefix == null) mutPrefix = getDescription().getName().toLowerCase();
 
-                commandMap.registerAll(prefix, pluginCommands);
+                final String prefix = mutPrefix;
+
+                pluginCommands.forEach((pluginCommand, commandClass) ->
+                {
+                    if (commandMap.register(prefix, pluginCommand))
+                    {
+                        PluginLogger.info(
+                                "Hot-registered new command /{0} for class “{1}”.",
+                                pluginCommand.getName(),
+                                commandClass.getName().replace("eu.carrade.amaury.UHCReloaded.", "...")
+                        );
+                    }
+                });
             }
             catch (NoSuchFieldException | IllegalAccessException e)
             {
@@ -632,14 +638,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     public PlayerListHeaderFooterManager getPlayerListHeaderFooterManager()
     {
         return playerListHeaderFooterManager;
-    }
-
-    /**
-     * Returns the border manager.
-     */
-    public BorderManager getBorderManager()
-    {
-        return borderManager;
     }
 
     /**

@@ -222,4 +222,10 @@ public class BrettflanWorldBorder extends WorldBorder
     {
         border.setShape(shape == MapShape.CIRCULAR);
     }
+
+    @Override
+    public boolean supportsProgressiveResize()
+    {
+        return true;
+    }
 }
