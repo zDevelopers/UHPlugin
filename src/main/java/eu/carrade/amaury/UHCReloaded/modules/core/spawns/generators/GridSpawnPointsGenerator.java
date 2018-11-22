@@ -166,7 +166,8 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
                     final Block surfaceBlock = surfaceAirBlock.getRelative(BlockFace.DOWN);
 
                     // Safe spot available?
-                    if (!UHUtils.isSafeSpot(surfaceAirBlock.getLocation()))
+                    if ((world.getEnvironment() == World.Environment.NORMAL || world.getEnvironment() == World.Environment.THE_END) && !UHUtils.isSafeSpot(surfaceAirBlock.getLocation())
+                            || UHUtils.searchSafeSpot(currentPoint) == null)
                     {
                         continue; // not safe: nope
                     }

@@ -31,7 +31,6 @@
  */
 package eu.carrade.amaury.UHCReloaded.utils;
 
-import fr.zcraft.zlib.tools.PluginLogger;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Arrays;
@@ -58,8 +57,6 @@ public class ModulesUtils
         if (name.contains("."))
         {
             final String[] lastClassPathParts = name.split("\\.");
-            PluginLogger.info(Arrays.toString(lastClassPathParts));
-
             alternateName = lastClassPathParts[lastClassPathParts.length - 1];
         }
         else

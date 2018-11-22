@@ -53,7 +53,6 @@ public class UHRootCommand extends AbstractCommand
         // Game
         registerSubCommand(new UHStartCommand(p));
         registerSubCommand(new UHShiftCommand(p));
-        registerSubCommand(new UHSpawnsCommand(p));
         registerSubCommand(new UHSpectatorsCommand(p));
 
         // Bugs

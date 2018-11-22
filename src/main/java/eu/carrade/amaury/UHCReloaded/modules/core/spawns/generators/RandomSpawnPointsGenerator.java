@@ -99,7 +99,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
 
         final double packingDensity = surfacePrivatePartsAroundSpawnPoints / surfaceRegion;
 
-        // According to Lagrange and Thue's works on circle packagings, the highest density possible is
+        // According to Lagrange and Thue's works on circles packaging, the highest density possible is
         // approximately 0.9069 (with an hexagonal arrangement of the circles).
         // Even with a packaging density very close to this limit, the generation time is correct.
         // So we uses this as a limit.
@@ -119,7 +119,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
         // of other ones, we restarts all the generation.
         int currentErrorCount = 0;
 
-        // With the "avoid above water" option, if there's a lot of water, the genaration may
+        // With the "avoid above water" option, if there's a lot of water, the generation may
         // fail even if the surface seems to be ok to host the requested spawn points.
         // So, after 2*{points requested} points above the water, we cancels the generation.
         int pointsAboveWater = 0;
@@ -161,7 +161,8 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
             final Block surfaceBlock = surfaceAirBlock.getRelative(BlockFace.DOWN);
 
             // Safe spot available?
-            if (!UHUtils.isSafeSpot(surfaceAirBlock.getLocation()))
+            if ((world.getEnvironment() == World.Environment.NORMAL || world.getEnvironment() == World.Environment.THE_END) && !UHUtils.isSafeSpot(surfaceAirBlock.getLocation())
+                    || UHUtils.searchSafeSpot(randomPoint) == null)
             {
                 continue; // not safe: nope
             }

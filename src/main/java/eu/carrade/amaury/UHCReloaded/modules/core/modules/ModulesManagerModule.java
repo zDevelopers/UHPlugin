@@ -34,7 +34,13 @@ package eu.carrade.amaury.UHCReloaded.modules.core.modules;
 import com.google.common.collect.ImmutableMap;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
+import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
+import fr.zcraft.zlib.components.i18n.I;
+import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
@@ -61,5 +67,18 @@ public class ModulesManagerModule extends UHModule
         return ImmutableMap.of(
                 "modules", ModulesCommand.class
         );
+    }
+
+    @Override
+    public void injectIntoSidebar(Player player, SidebarInjector injector)
+    {
+        if (player.isOp() && UR.module(GameModule.class).getPhase() == GamePhase.WAIT) // TODO Permissions
+        {
+            injector.injectLines(
+                    true,
+                    I.t("{gold}To configure the game,"),
+                    I.t("{gold}use {bold}/config")
+            );
+        }
     }
 }

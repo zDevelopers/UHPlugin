@@ -33,10 +33,7 @@ package eu.carrade.amaury.UHCReloaded.old.commands;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.old.commands.commands.GlobalMessageCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.JoinCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.LeaveCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.commands.TeamMessageCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.TeamsCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.commands.ToggleChatCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.commands.UHRootCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommandExecutor;
@@ -49,10 +46,6 @@ public class UHCommandExecutor extends AbstractCommandExecutor
         super(p);
 
         registerCommand(new UHRootCommand(p));          //  /uh
-
-        registerCommand(new JoinCommand(p));            //  /join
-        registerCommand(new LeaveCommand(p));           //  /leave
-        registerCommand(new TeamsCommand(p));           //  /teams
 
         registerCommand(new TeamMessageCommand(p));     //  /t
         registerCommand(new GlobalMessageCommand(p));   //  /g

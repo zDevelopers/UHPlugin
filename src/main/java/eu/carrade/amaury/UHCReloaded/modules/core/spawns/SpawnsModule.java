@@ -36,20 +36,24 @@ import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.spawns.commands.SpawnsCommand;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.exceptions.CannotGenerateSpawnPointsException;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.exceptions.UnknownGeneratorException;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.generators.SpawnPointsGenerator;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.commands.Command;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Spawns",
         description = "Manages the spawns point and allow users to generate them randomly",
         settings = Config.class,
@@ -59,15 +63,18 @@ import java.util.stream.Collectors;
 public class SpawnsModule extends UHModule
 {
     private List<Location> spawnPoints = new LinkedList<>();
-    private BorderModule borderModule;
 
     @Override
     protected void onEnable()
     {
-        borderModule = UHCReloaded.getModule(BorderModule.class);
         spawnPoints.addAll(Config.SPAWN_POINTS);
     }
 
+    @Override
+    public List<Class<? extends Command>> getCommands()
+    {
+        return Collections.singletonList(SpawnsCommand.class);
+    }
 
     /**
      * Adds a spawn point at (x;z) in the default world.
@@ -107,7 +114,6 @@ public class SpawnsModule extends UHModule
      *
      * @param location The location. Cloned, so you can use the same location object with
      *                 modifications between two calls.
-     *
      * @throws RuntimeException         If the spawn point is in the Nether and no safe spot was
      *                                  found.
      * @throws IllegalArgumentException If the spawn point is out of the current border.
@@ -132,7 +138,7 @@ public class SpawnsModule extends UHModule
             spawnPoint.setY(safeSpot.getY());
         }
 
-        if (!borderModule.isInsideBorder(spawnPoint))
+        if (!UR.module(BorderModule.class).isInsideBorder(spawnPoint))
         {
             throw new IllegalArgumentException("The given spawn location is outside the current border");
         }
@@ -157,10 +163,9 @@ public class SpawnsModule extends UHModule
      * @param location The location to be removed.
      * @param precise  If true, only the spawn points at the exact same location will be removed.
      *                 Else, the points in the same block.
-     *
      * @return true if something were removed.
      */
-    public boolean removeSpawnPoint(Location location, boolean precise)
+    public boolean removeSpawnPoint(final Location location, final boolean precise)
     {
         final List<Location> toRemove = getSpawnPoints().stream()
                 .filter(spawn -> location.getWorld().equals(spawn.getWorld()))
@@ -183,7 +188,7 @@ public class SpawnsModule extends UHModule
 
     /**
      * Removes all registered spawn points.
-     *
+     * <p>
      * CANNOT BE CANCELLED.
      */
     public void reset()
@@ -201,7 +206,7 @@ public class SpawnsModule extends UHModule
     {
         int spawnCount = 0;
 
-        for (Vector position: UHConfig.SPAWN_POINTS)
+        for (Vector position : UHConfig.SPAWN_POINTS)
         {
             addSpawnPoint(position);
             ++spawnCount;
@@ -227,11 +232,10 @@ public class SpawnsModule extends UHModule
      *                                        region where the points will be generated.
      * @param zCenter                         The z coordinate of the point in the center of the
      *                                        region where the points will be generated.
-     *
      * @throws CannotGenerateSpawnPointsException In case of fail.
      * @throws UnknownGeneratorException          If no generator was found by the given name.
      */
-    public void generateSpawnPoints(String generatorName, World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter) throws CannotGenerateSpawnPointsException, UnknownGeneratorException
+    public void generateSpawnPoints(final String generatorName, final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter) throws CannotGenerateSpawnPointsException, UnknownGeneratorException
     {
         Generator generator = Generator.fromString(generatorName);
         if (generator != null)
@@ -260,10 +264,9 @@ public class SpawnsModule extends UHModule
      *                                        region where the points will be generated.
      * @param zCenter                         The z coordinate of the point in the center of the
      *                                        region where the points will be generated.
-     *
      * @throws CannotGenerateSpawnPointsException In case of fail.
      */
-    public void generateSpawnPoints(Generator generator, World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter) throws CannotGenerateSpawnPointsException
+    public void generateSpawnPoints(final Generator generator, final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter) throws CannotGenerateSpawnPointsException
     {
         generateSpawnPoints(generator.getInstance(), world, spawnCount, regionDiameter, minimalDistanceBetweenTwoPoints, xCenter, zCenter);
     }
@@ -284,10 +287,9 @@ public class SpawnsModule extends UHModule
      *                                        region where the points will be generated.
      * @param zCenter                         The z coordinate of the point in the center of the
      *                                        region where the points will be generated.
-     *
      * @throws CannotGenerateSpawnPointsException In case of fail.
      */
-    public void generateSpawnPoints(SpawnPointsGenerator generator, World world, int spawnCount, int regionDiameter, int minimalDistanceBetweenTwoPoints, double xCenter, double zCenter) throws CannotGenerateSpawnPointsException
+    public void generateSpawnPoints(final SpawnPointsGenerator generator, final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter) throws CannotGenerateSpawnPointsException
     {
         generator.generate(
                 world, spawnCount,
