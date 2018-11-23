@@ -45,6 +45,7 @@ import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.SpawnsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.teams.TeamsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
+import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHDynmapIntegration;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHProtocolLibIntegrationWrapper;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHSpectatorPlusIntegration;

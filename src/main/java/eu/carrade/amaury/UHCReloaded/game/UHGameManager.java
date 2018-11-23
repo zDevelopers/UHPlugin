@@ -38,7 +38,7 @@ import eu.carrade.amaury.UHCReloaded.old.events.UHEpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.old.events.UHGameStartsEvent;
 import eu.carrade.amaury.UHCReloaded.old.events.UHPlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
-import eu.carrade.amaury.UHCReloaded.old.misc.OfflinePlayersLoader;
+import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.old.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.old.task.FireworksOnWinnersTask;
 import eu.carrade.amaury.UHCReloaded.old.teams.TeamColor;

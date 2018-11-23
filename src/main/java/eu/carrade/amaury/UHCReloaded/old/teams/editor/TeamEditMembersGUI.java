@@ -32,7 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.old.teams.editor;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.misc.OfflinePlayersLoader;
+import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersComparator;
 import fr.zcraft.zlib.components.gui.ExplorerGui;

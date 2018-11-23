@@ -37,7 +37,7 @@ import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.old.misc.OfflinePlayersLoader;
+import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

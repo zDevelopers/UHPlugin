@@ -29,7 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.misc;
+package eu.carrade.amaury.UHCReloaded.utils;
 
 import fr.zcraft.zlib.components.worker.Worker;
 import fr.zcraft.zlib.components.worker.WorkerCallback;

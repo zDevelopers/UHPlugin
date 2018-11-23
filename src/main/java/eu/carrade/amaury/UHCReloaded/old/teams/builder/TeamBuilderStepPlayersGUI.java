@@ -33,7 +33,7 @@ package eu.carrade.amaury.UHCReloaded.old.teams.builder;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.old.teams.TeamsSelectorGUI;
-import eu.carrade.amaury.UHCReloaded.old.misc.OfflinePlayersLoader;
+import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.old.teams.TeamColor;
 import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersComparator;

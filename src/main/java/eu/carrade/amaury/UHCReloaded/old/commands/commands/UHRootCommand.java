@@ -71,8 +71,6 @@ public class UHRootCommand extends AbstractCommand
         registerSubCommand(new UHTPCommand(p));
         registerSubCommand(new UHInfosCommand(p));
         registerSubCommand(new UHRulesCommand(p));
-        registerSubCommand(new UHLoadPlayersCommand());
-        registerSubCommand(new UHAboutCommand(p));
     }
 
     @Override
