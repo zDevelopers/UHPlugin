@@ -34,8 +34,8 @@ package eu.carrade.amaury.UHCReloaded.old.misc;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zteams.ZTeam;
 import org.bukkit.ChatColor;
 
 
@@ -128,7 +128,7 @@ public class MOTDManager
      *
      * @param winner The winner.
      */
-    public void updateMOTDAfterGame(UHTeam winner)
+    public void updateMOTDAfterGame(ZTeam winner)
     {
         if (enabled)
         {

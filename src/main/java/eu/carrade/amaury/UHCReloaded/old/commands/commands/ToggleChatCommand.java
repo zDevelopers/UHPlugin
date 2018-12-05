@@ -37,9 +37,7 @@ import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
-import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -69,37 +67,37 @@ public class ToggleChatCommand extends AbstractCommand
             throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
         }
 
-        // /togglechat
-        if (args.length == 0)
-        {
-            if (p.getTeamChatManager().toggleChatForPlayer((Player) sender))
-            {
-                sender.sendMessage(I.t("{cs}You are now chatting with your team only."));
-            }
-            else
-            {
-                sender.sendMessage(I.t("{cs}You are now chatting with everyone."));
-            }
-        }
-
-        // /togglechat <another team>
-        else
-        {
-            String teamName = UHUtils.getStringFromCommandArguments(args, 0);
-            UHTeam team = p.getTeamManager().getTeam(teamName);
-
-            if (team != null)
-            {
-                if (p.getTeamChatManager().toggleChatForPlayer((Player) sender, team))
-                {
-                    sender.sendMessage(I.t("{cs}You are now chatting with the team {0}{cs}.", team.getDisplayName()));
-                }
-            }
-            else
-            {
-                sender.sendMessage(I.t("{ce}This team does not exists."));
-            }
-        }
+//        // /togglechat
+//        if (args.length == 0)
+//        {
+//            if (p.getTeamChatManager().toggleChatForPlayer((Player) sender))
+//            {
+//                sender.sendMessage(I.t("{cs}You are now chatting with your team only."));
+//            }
+//            else
+//            {
+//                sender.sendMessage(I.t("{cs}You are now chatting with everyone."));
+//            }
+//        }
+//
+//        // /togglechat <another team>
+//        else
+//        {
+//            String teamName = UHUtils.getStringFromCommandArguments(args, 0);
+//            UHTeam team = p.getTeamManager().getTeam(teamName);
+//
+//            if (team != null)
+//            {
+//                if (p.getTeamChatManager().toggleChatForPlayer((Player) sender, team))
+//                {
+//                    sender.sendMessage(I.t("{cs}You are now chatting with the team {0}{cs}.", team.getDisplayName()));
+//                }
+//            }
+//            else
+//            {
+//                sender.sendMessage(I.t("{ce}This team does not exists."));
+//            }
+//        }
     }
 
     @Override
@@ -109,10 +107,10 @@ public class ToggleChatCommand extends AbstractCommand
         {
             ArrayList<String> teamNames = new ArrayList<>();
 
-            for (UHTeam team : p.getTeamManager().getTeams())
-            {
-                teamNames.add(team.getName());
-            }
+//            for (UHTeam team : p.getTeamManager().getTeams())
+//            {
+//                teamNames.add(team.getName());
+//            }
 
             return CommandUtils.getAutocompleteSuggestions(UHUtils.getStringFromCommandArguments(args, 0), teamNames, args.length - 1);
         }

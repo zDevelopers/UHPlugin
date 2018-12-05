@@ -84,7 +84,7 @@ public class TeamMessageCommand extends AbstractCommand
             message.append(arg).append(" ");
         }
 
-        p.getTeamChatManager().sendTeamMessage((Player) sender, message.toString());
+//        p.getTeamChatManager().sendTeamMessage((Player) sender, message.toString());
     }
 
     /**

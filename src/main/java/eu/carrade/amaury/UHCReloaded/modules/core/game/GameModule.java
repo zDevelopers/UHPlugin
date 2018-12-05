@@ -423,7 +423,7 @@ public class GameModule extends UHModule implements Listener
         {
             if (teleportationMode == TeleportationMode.NORMAL && teamsGame)
             {
-                // TODO re-add cages + dynmap integration in dedicated module using events.
+                // TODO re-add dynmap integration in dedicated module using events.
 
                 final Location teamSpawn = unusedSpawnPoints.poll();
 
@@ -452,7 +452,7 @@ public class GameModule extends UHModule implements Listener
             {
                 team.getPlayersUUID().forEach(player ->
                 {
-                    // TODO re-add cages + dynmap integration in dedicated module using events.
+                    // TODO re-add dynmap integration in dedicated module using events.
 
                     final Location playerSpawn = unusedSpawnPoints.poll();
                     final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -531,10 +531,18 @@ public class GameModule extends UHModule implements Listener
     public void onTeleportationProcessComplete(AfterTeleportationPhaseEvent ev)
     {
         log().broadcastAdministrative(I.t("{cs}All teams are teleported."));
-        log().broadcastAdministrative(new RawText(I.t("{gray}Use {cc}/uh start{gray} or click here to start the game."))
-                .hover(new RawText(I.t("Click here to start the game")))
-                .command(StartCommand.class)
-        );
+
+        if (slowMode)
+        {
+            log().broadcastAdministrative(new RawText(I.t("{gray}Use {cc}/uh start{gray} or click here to start the game."))
+                    .hover(new RawText(I.t("Click here to start the game")))
+                    .command(StartCommand.class)
+            );
+        }
+        else
+        {
+            start();
+        }
 
         if (Config.BROADCAST_PROGRESS.get())
         {

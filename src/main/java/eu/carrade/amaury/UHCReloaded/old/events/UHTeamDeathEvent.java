@@ -32,7 +32,7 @@
 
 package eu.carrade.amaury.UHCReloaded.old.events;
 
-import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
+import fr.zcraft.zteams.ZTeam;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -42,9 +42,9 @@ import org.bukkit.event.HandlerList;
  */
 public class UHTeamDeathEvent extends Event
 {
-    private UHTeam team;
+    private ZTeam team;
 
-    public UHTeamDeathEvent(UHTeam team)
+    public UHTeamDeathEvent(ZTeam team)
     {
         this.team = team;
     }
@@ -54,7 +54,7 @@ public class UHTeamDeathEvent extends Event
      *
      * @return The team.
      */
-    public UHTeam getTeam()
+    public ZTeam getTeam()
     {
         return team;
     }

@@ -34,10 +34,11 @@ package eu.carrade.amaury.UHCReloaded.old.integration;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.old.teams.TeamColor;
-import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.PluginLogger;
+import fr.zcraft.zteams.ZTeam;
+import fr.zcraft.zteams.ZTeams;
+import fr.zcraft.zteams.colors.TeamColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -201,7 +202,7 @@ public class UHDynmapIntegration
      * @param team The team.
      * @param spawnPoint The location of the spawn point.
      */
-    public void showSpawnLocation(UHTeam team, Location spawnPoint)
+    public void showSpawnLocation(ZTeam team, Location spawnPoint)
     {
         if (!isDynmapIntegrationEnabled())
         {
@@ -251,7 +252,7 @@ public class UHDynmapIntegration
     {
         if (player == null) return;
 
-        UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
+        ZTeam team = ZTeams.get().getTeamForPlayer(player);
 
         showSpawnLocation(player, team != null && team.getColor() != null ? team.getColor() : null, spawnPoint);
     }
@@ -384,7 +385,7 @@ public class UHDynmapIntegration
      * @param team The team.
      * @return The ID.
      */
-    private String getSpawnMarkerName(UHTeam team)
+    private String getSpawnMarkerName(ZTeam team)
     {
         return "uhplugin.spawn." + team.getName();
     }

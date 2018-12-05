@@ -53,8 +53,6 @@ import eu.carrade.amaury.UHCReloaded.old.integration.UHSpectatorPlusIntegration;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHWorldBorderIntegration;
 import eu.carrade.amaury.UHCReloaded.old.misc.*;
 import eu.carrade.amaury.UHCReloaded.old.recipes.RecipesManager;
-import eu.carrade.amaury.UHCReloaded.old.teams.TeamChatManager;
-import eu.carrade.amaury.UHCReloaded.old.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.scoreboard.ScoreboardManager;
 import eu.carrade.amaury.UHCReloaded.utils.ModulesUtils;
 import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
@@ -104,7 +102,6 @@ public class UHCReloaded extends ZPlugin implements Listener
 
     private boolean worldsLoaded = false;
 
-    private TeamManager teamManager = null;
     private UHGameManager gameManager = null;
     private SpectatorsManager spectatorsManager = null;
     private ScoreboardManager scoreboardManager = null;
@@ -112,7 +109,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     private RulesManager rulesManager = null;
     private PlayerListHeaderFooterManager playerListHeaderFooterManager = null;
     private RecipesManager recipesManager = null;
-    private TeamChatManager teamChatManager = null;
 
     private RuntimeCommandsExecutor runtimeCommandsExecutor = null;
 
@@ -191,6 +187,11 @@ public class UHCReloaded extends ZPlugin implements Listener
         {
             onEnableWhenWorldsAvailable();
         }
+
+
+        /* *** Sets scoreboard for already-logged-in players (server reloaded) *** */
+
+        RunTask.nextTick(() -> Bukkit.getOnlinePlayers().forEach(player -> player.setScoreboard(scoreboard)));
 
 
         /* *** Ready *** */
@@ -589,14 +590,6 @@ public class UHCReloaded extends ZPlugin implements Listener
 
 
     /**
-     * Returns the team manager.
-     */
-    public TeamManager getTeamManager()
-    {
-        return teamManager;
-    }
-
-    /**
      * Returns the game manager.
      */
     public UHGameManager getGameManager()
@@ -650,14 +643,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     public RecipesManager getRecipesManager()
     {
         return recipesManager;
-    }
-
-    /**
-     * Returns the team-chat manager.
-     */
-    public TeamChatManager getTeamChatManager()
-    {
-        return teamChatManager;
     }
 
     /**

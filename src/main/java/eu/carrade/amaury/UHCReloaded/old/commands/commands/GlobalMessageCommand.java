@@ -85,7 +85,7 @@ public class GlobalMessageCommand extends AbstractCommand
             message.append(arg).append(" ");
         }
 
-        p.getTeamChatManager().sendGlobalMessage((Player) sender, message.toString());
+//        p.getTeamChatManager().sendGlobalMessage((Player) sender, message.toString());
     }
 
     /**

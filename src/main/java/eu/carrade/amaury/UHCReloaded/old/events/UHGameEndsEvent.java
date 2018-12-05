@@ -32,7 +32,7 @@
 
 package eu.carrade.amaury.UHCReloaded.old.events;
 
-import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
+import fr.zcraft.zteams.ZTeam;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -40,10 +40,10 @@ import org.bukkit.event.HandlerList;
 
 public class UHGameEndsEvent extends Event implements Cancellable
 {
-    private UHTeam winner;
+    private ZTeam winner;
     private boolean cancelled = false;
 
-    public UHGameEndsEvent(UHTeam winner)
+    public UHGameEndsEvent(ZTeam winner)
     {
         this.winner = winner;
     }
@@ -53,7 +53,7 @@ public class UHGameEndsEvent extends Event implements Cancellable
      *
      * @return The team.
      */
-    public UHTeam getWinnerTeam()
+    public ZTeam getWinnerTeam()
     {
         return winner;
     }

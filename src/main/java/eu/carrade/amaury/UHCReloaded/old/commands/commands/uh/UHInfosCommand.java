@@ -37,9 +37,10 @@ import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.text.RawMessage;
+import fr.zcraft.zteams.ZTeam;
+import fr.zcraft.zteams.ZTeams;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -73,7 +74,7 @@ public class UHInfosCommand extends AbstractCommand
             sender.sendMessage(I.t("{ci}The game is not started."));
         }
 
-        for (UHTeam team : p.getTeamManager().getTeams())
+        for (ZTeam team : ZTeams.get().getTeams())
         {
             for (OfflinePlayer player : team.getPlayers())
             {

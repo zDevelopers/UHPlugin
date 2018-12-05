@@ -38,9 +38,10 @@ import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
 import eu.carrade.amaury.UHCReloaded.old.commands.core.utils.CommandUtils;
-import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zteams.ZTeam;
+import fr.zcraft.zteams.ZTeams;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
@@ -105,8 +106,7 @@ public class UHTPCommand extends AbstractCommand
                 // possibly /uh tp team <x> <y> <z> <team ...>
                 if (args.length >= 6)
                 {
-                    String teamName = UHUtils.getStringFromCommandArguments(args, 4);
-                    UHTeam team = p.getTeamManager().getTeam(teamName);
+                    final ZTeam team = ZTeams.get().getTeamByName(UHUtils.getStringFromCommandArguments(args, 4));
 
                     // ok, the team exists.
                     if (team != null)
@@ -134,8 +134,7 @@ public class UHTPCommand extends AbstractCommand
                 // /uh tp team <target> <team ...>
                 if (args.length >= 3)
                 {
-                    String teamName = UHUtils.getStringFromCommandArguments(args, 2);
-                    UHTeam team = p.getTeamManager().getTeam(teamName);
+                    final ZTeam team = ZTeams.get().getTeamByName(UHUtils.getStringFromCommandArguments(args, 2));
 
                     if (team == null)
                     {
@@ -228,7 +227,7 @@ public class UHTPCommand extends AbstractCommand
         else if (args.length > 1 && args[0].equalsIgnoreCase("team"))
         {
             ArrayList<String> teamNames = new ArrayList<>();
-            for (UHTeam team : this.p.getTeamManager().getTeams())
+            for (ZTeam team : ZTeams.get().getTeams())
             {
                 teamNames.add(team.getName());
             }
