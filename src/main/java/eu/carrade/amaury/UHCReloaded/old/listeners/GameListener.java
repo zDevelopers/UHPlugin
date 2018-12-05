@@ -34,32 +34,18 @@ package eu.carrade.amaury.UHCReloaded.old.listeners;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.old.events.EpisodeChangedCause;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.events.TimerEndsEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.events.TimerStartsEvent;
-import eu.carrade.amaury.UHCReloaded.old.events.UHEpisodeChangedEvent;
-import eu.carrade.amaury.UHCReloaded.old.events.UHGameEndsEvent;
-import eu.carrade.amaury.UHCReloaded.old.events.UHGameStartsEvent;
-import eu.carrade.amaury.UHCReloaded.old.events.UHPlayerDeathEvent;
-import eu.carrade.amaury.UHCReloaded.old.events.UHPlayerResurrectedEvent;
-import eu.carrade.amaury.UHCReloaded.old.events.UHTeamDeathEvent;
+import eu.carrade.amaury.UHCReloaded.old.events.*;
 import eu.carrade.amaury.UHCReloaded.old.misc.RuntimeCommandsExecutor;
 import eu.carrade.amaury.UHCReloaded.old.protips.ProTips;
-import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.RawMessage;
 import fr.zcraft.zlib.tools.text.Titles;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.SkullType;
-import org.bukkit.block.Banner;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -69,16 +55,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerAchievementAwardedEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.net.URISyntaxException;
@@ -185,7 +165,7 @@ public class GameListener implements Listener
             Player killer = ev.getEntity().getKiller();
             if (killer != null)
             {
-                boolean inSameTeam = p.getTeamManager().inSameTeam(ev.getEntity(), killer);
+                boolean inSameTeam = true; // TODO p.getTeamManager().inSameTeam(ev.getEntity(), killer);
                 boolean onlyOtherTeam = UHConfig.DEATH.GIVE_XP_TO_KILLER.ONLY_OTHER_TEAM.get();
 
                 if (!onlyOtherTeam || !inSameTeam)
@@ -196,34 +176,34 @@ public class GameListener implements Listener
         }
 
         // Sends a team-death message & event if needed.
-        final UHTeam team = p.getTeamManager().getTeamForPlayer(ev.getEntity());
-        if (team != null)
-        {
-            boolean isAliveTeam = false;
-
-            for (UUID playerID : team.getPlayersUUID())
-            {
-                if (!p.getGameManager().isPlayerDead(playerID))
-                {
-                    isAliveTeam = true;
-                    break;
-                }
-            }
-
-            if (!isAliveTeam)
-            {
-                p.getServer().getPluginManager().callEvent(new UHTeamDeathEvent(team));
-
-                if (UHConfig.DEATH.MESSAGES.NOTIFY_IF_TEAM_HAS_FALLEN.get())
-                {
-                    // Used to display this message after the death message.
-                    RunTask.later(() -> {
-                        String format = ChatColor.translateAlternateColorCodes('&', UHConfig.DEATH.MESSAGES.TEAM_DEATH_MESSAGES_FORMAT.get());
-                        p.getServer().broadcastMessage(I.t("{0}The team {1} has fallen!", format, team.getDisplayName() + format));
-                    }, 1L);
-                }
-            }
-        }
+//        final UHTeam team = p.getTeamManager().getTeamForPlayer(ev.getEntity());
+//        if (team != null)
+//        {
+//            boolean isAliveTeam = false;
+//
+//            for (UUID playerID : team.getPlayersUUID())
+//            {
+//                if (!p.getGameManager().isPlayerDead(playerID))
+//                {
+//                    isAliveTeam = true;
+//                    break;
+//                }
+//            }
+//
+//            if (!isAliveTeam)
+//            {
+//                p.getServer().getPluginManager().callEvent(new UHTeamDeathEvent(team));
+//
+//                if (UHConfig.DEATH.MESSAGES.NOTIFY_IF_TEAM_HAS_FALLEN.get())
+//                {
+//                    // Used to display this message after the death message.
+//                    RunTask.later(() -> {
+//                        String format = ChatColor.translateAlternateColorCodes('&', UHConfig.DEATH.MESSAGES.TEAM_DEATH_MESSAGES_FORMAT.get());
+//                        p.getServer().broadcastMessage(I.t("{0}The team {1} has fallen!", format, team.getDisplayName() + format));
+//                    }, 1L);
+//                }
+//            }
+//        }
 
         // Highlights the death message in the console
         p.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "-- Death of " + ev.getEntity().getDisplayName() + ChatColor.GOLD + " (" + ev.getDeathMessage() + ") --");
@@ -250,7 +230,7 @@ public class GameListener implements Listener
             p.getGameManager().setGameFinished(true);
 
             // There's only one team alive, so the winner team is the first one.
-            p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().iterator().next()));
+//            p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().iterator().next()));
         }
 
         // Notifies the player about the possibility of respawn if hardcore hearts are enabled
@@ -263,13 +243,13 @@ public class GameListener implements Listener
         }
 
         // Disables the team-chat-lock if needed
-        if (UHConfig.TEAMS_OPTIONS.TEAM_CHAT.DISABLE_LOCK_ON_DEATH.get())
-        {
-            if (p.getTeamChatManager().isTeamChatEnabled(ev.getEntity()))
-            {
-                p.getTeamChatManager().toggleChatForPlayer(ev.getEntity());
-            }
-        }
+//        if (UHConfig.TEAMS_OPTIONS.TEAM_CHAT.DISABLE_LOCK_ON_DEATH.get())
+//        {
+//            if (p.getTeamChatManager().isTeamChatEnabled(ev.getEntity()))
+//            {
+//                p.getTeamChatManager().toggleChatForPlayer(ev.getEntity());
+//            }
+//        }
 
         // Updates the list headers & footers.
         p.getPlayerListHeaderFooterManager().updateHeadersFooters();
@@ -380,15 +360,15 @@ public class GameListener implements Listener
                 p.getGameManager().initPlayer(ev.getPlayer());
 
                 // Teams selector.
-                if (UHConfig.TEAMS_OPTIONS.GUI.AUTO_DISPLAY.get() && p.getTeamManager().getTeams().size() != 0)
-                {
-                    RunTask.later(() -> {
-                        if (p.getTeamManager().getTeamForPlayer(ev.getPlayer()) == null)
-                        {
-                            p.getTeamManager().displayTeamChooserChatGUI(ev.getPlayer());
-                        }
-                    }, 20L * UHConfig.TEAMS_OPTIONS.GUI.DELAY.get());
-                }
+//                if (UHConfig.TEAMS_OPTIONS.GUI.AUTO_DISPLAY.get() && p.getTeamManager().getTeams().size() != 0)
+//                {
+//                    RunTask.later(() -> {
+//                        if (p.getTeamManager().getTeamForPlayer(ev.getPlayer()) == null)
+//                        {
+//                            p.getTeamManager().displayTeamChooserChatGUI(ev.getPlayer());
+//                        }
+//                    }, 20L * UHConfig.TEAMS_OPTIONS.GUI.DELAY.get());
+//                }
 
                 // Rules
                 if (p.getRulesManager().displayOnJoin())
@@ -411,7 +391,7 @@ public class GameListener implements Listener
         p.getPlayerListHeaderFooterManager().sendTo(ev.getPlayer());
 
         // The display name is reset when the player logs off.
-        p.getTeamManager().colorizePlayer(ev.getPlayer());
+//        p.getTeamManager().colorizePlayer(ev.getPlayer());
 
         if (!p.getGameManager().isGameStarted() && ev.getPlayer().hasPermission("uh.*"))
         {
@@ -538,16 +518,16 @@ public class GameListener implements Listener
         // the event is ignored.
         if (ev.isAsynchronous())
         {
-            if (p.getTeamChatManager().isTeamChatEnabled(ev.getPlayer()))
-            {
-                ev.setCancelled(true);
-                p.getTeamChatManager().sendTeamMessage(ev.getPlayer(), ev.getMessage());
-            }
-            else if (p.getTeamChatManager().isOtherTeamChatEnabled(ev.getPlayer()))
-            {
-                ev.setCancelled(true);
-                p.getTeamChatManager().sendTeamMessage(ev.getPlayer(), ev.getMessage(), p.getTeamChatManager().getOtherTeamEnabled(ev.getPlayer()));
-            }
+//            if (p.getTeamChatManager().isTeamChatEnabled(ev.getPlayer()))
+//            {
+//                ev.setCancelled(true);
+//                p.getTeamChatManager().sendTeamMessage(ev.getPlayer(), ev.getMessage());
+//            }
+//            else if (p.getTeamChatManager().isOtherTeamChatEnabled(ev.getPlayer()))
+//            {
+//                ev.setCancelled(true);
+//                p.getTeamChatManager().sendTeamMessage(ev.getPlayer(), ev.getMessage(), p.getTeamChatManager().getOtherTeamEnabled(ev.getPlayer()));
+//            }
         }
     }
 
@@ -682,47 +662,47 @@ public class GameListener implements Listener
         // Banners
         if (p.getGameManager().START_GIVE_BANNER || p.getGameManager().START_PLACE_BANNER_HEAD || p.getGameManager().START_PLACE_BANNER_SPAWN)
         {
-            RunTask.later(() ->
-            {
-                for (UHTeam team : p.getTeamManager().getTeams())
-                {
-                    if (!team.isEmpty())
-                    {
-                        final ItemStack banner = team.getBanner();
-                        for (Player player : team.getOnlinePlayers())
-                        {
-                            if (p.getGameManager().START_GIVE_BANNER)
-                                player.getInventory().setItem(8, banner);
-
-                            if (p.getGameManager().START_PLACE_BANNER_HEAD)
-                                player.getInventory().setHelmet(banner);
-
-                            if (p.getGameManager().START_PLACE_BANNER_SPAWN)
-                            {
-                                final Block place = player.getWorld().getHighestBlockAt(player.getLocation());
-                                final Block under = place.getRelative(BlockFace.DOWN);
-
-                                // We don't want a stack of banners
-                                if (under.getType() != Material.STANDING_BANNER)
-                                {
-                                    if (!under.getType().isSolid())
-                                        under.setType(Material.WOOD);
-
-                                    place.setType(Material.STANDING_BANNER);
-
-                                    Banner bannerBlock = (Banner) place.getState();
-                                    BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
-
-                                    bannerBlock.setBaseColor(bannerMeta.getBaseColor());
-                                    bannerBlock.setPatterns(bannerMeta.getPatterns());
-
-                                    bannerBlock.update();
-                                }
-                            }
-                        }
-                    }
-                }
-            }, 5L);
+//            RunTask.later(() ->
+//            {
+//                for (UHTeam team : p.getTeamManager().getTeams())
+//                {
+//                    if (!team.isEmpty())
+//                    {
+//                        final ItemStack banner = team.getBanner();
+//                        for (Player player : team.getOnlinePlayers())
+//                        {
+//                            if (p.getGameManager().START_GIVE_BANNER)
+//                                player.getInventory().setItem(8, banner);
+//
+//                            if (p.getGameManager().START_PLACE_BANNER_HEAD)
+//                                player.getInventory().setHelmet(banner);
+//
+//                            if (p.getGameManager().START_PLACE_BANNER_SPAWN)
+//                            {
+//                                final Block place = player.getWorld().getHighestBlockAt(player.getLocation());
+//                                final Block under = place.getRelative(BlockFace.DOWN);
+//
+//                                // We don't want a stack of banners
+//                                if (under.getType() != Material.STANDING_BANNER)
+//                                {
+//                                    if (!under.getType().isSolid())
+//                                        under.setType(Material.WOOD);
+//
+//                                    place.setType(Material.STANDING_BANNER);
+//
+//                                    Banner bannerBlock = (Banner) place.getState();
+//                                    BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
+//
+//                                    bannerBlock.setBaseColor(bannerMeta.getBaseColor());
+//                                    bannerBlock.setPatterns(bannerMeta.getPatterns());
+//
+//                                    bannerBlock.update();
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }, 5L);
         }
     }
 

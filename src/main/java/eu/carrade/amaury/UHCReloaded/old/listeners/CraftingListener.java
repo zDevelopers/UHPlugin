@@ -33,15 +33,12 @@
 package eu.carrade.amaury.UHCReloaded.old.listeners;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.old.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.old.recipes.RecipesManager;
-import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.Banner;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
@@ -50,14 +47,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashSet;
@@ -335,41 +325,41 @@ public class CraftingListener implements Listener
     @EventHandler (ignoreCancelled = true)
     public void onShieldPreCraft(PrepareItemCraftEvent ev)
     {
-        if (!UHConfig.TEAMS_OPTIONS.BANNER.SHIELDS.ADD_ON_SHIELDS.get()) return;
-
-        final Player player = (Player) ev.getViewers().get(0);
-        final UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
-
-        if (team == null || team.getBanner() == null) return;
-
-        final ItemStack result = ev.getRecipe().getResult();
-
-        final Material MATERIAL_SHIELD = Material.getMaterial("SHIELD");
-        if (MATERIAL_SHIELD == null) return; // MC 1.8
-
-        if (result != null && result.getType() == MATERIAL_SHIELD)
-        {
-            try
-            {
-                final BannerMeta banner = (BannerMeta) team.getBanner().getItemMeta();
-
-                final BlockStateMeta bsMeta = (BlockStateMeta) result.getItemMeta();
-                final Banner shieldBanner   = (Banner) bsMeta.getBlockState();
-                
-                shieldBanner.setBaseColor(banner.getBaseColor());
-                shieldBanner.setPatterns(banner.getPatterns());
-
-                shieldBanner.update();
-
-                bsMeta.setBlockState(shieldBanner);
-                result.setItemMeta(bsMeta);
-
-                ev.getInventory().setResult(result);
-            }
-            catch (ClassCastException | NullPointerException ignored)
-            {
-                // Bad Minecraft version (1.8)
-            }
-        }
+//        if (!UHConfig.TEAMS_OPTIONS.BANNER.SHIELDS.ADD_ON_SHIELDS.get()) return;
+//
+//        final Player player = (Player) ev.getViewers().get(0);
+//        final UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
+//
+//        if (team == null || team.getBanner() == null) return;
+//
+//        final ItemStack result = ev.getRecipe().getResult();
+//
+//        final Material MATERIAL_SHIELD = Material.getMaterial("SHIELD");
+//        if (MATERIAL_SHIELD == null) return; // MC 1.8
+//
+//        if (result != null && result.getType() == MATERIAL_SHIELD)
+//        {
+//            try
+//            {
+//                final BannerMeta banner = (BannerMeta) team.getBanner().getItemMeta();
+//
+//                final BlockStateMeta bsMeta = (BlockStateMeta) result.getItemMeta();
+//                final Banner shieldBanner   = (Banner) bsMeta.getBlockState();
+//
+//                shieldBanner.setBaseColor(banner.getBaseColor());
+//                shieldBanner.setPatterns(banner.getPatterns());
+//
+//                shieldBanner.update();
+//
+//                bsMeta.setBlockState(shieldBanner);
+//                result.setItemMeta(bsMeta);
+//
+//                ev.getInventory().setResult(result);
+//            }
+//            catch (ClassCastException | NullPointerException ignored)
+//            {
+//                // Bad Minecraft version (1.8)
+//            }
+//        }
     }
 }

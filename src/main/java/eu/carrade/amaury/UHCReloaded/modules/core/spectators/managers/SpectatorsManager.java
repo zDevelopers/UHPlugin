@@ -29,7 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.spectators;
+package eu.carrade.amaury.UHCReloaded.modules.core.spectators.managers;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import org.bukkit.Bukkit;
@@ -90,7 +90,8 @@ public abstract class SpectatorsManager
      */
     public static SpectatorsManager getInstance()
     {
-        if (UHCReloaded.get().getSpectatorPlusIntegration().isSPIntegrationEnabled())
+        // TODO re-add SP integration
+        if (false && UHCReloaded.get().getSpectatorPlusIntegration().isSPIntegrationEnabled())
             return new SPlusSpectatorsManager();
         else
             return new VanillaSpectatorsManager();

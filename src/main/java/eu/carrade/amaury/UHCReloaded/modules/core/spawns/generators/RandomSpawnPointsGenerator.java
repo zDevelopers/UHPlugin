@@ -105,7 +105,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
         // So we uses this as a limit.
         if (packingDensity >= 0.9069)
         {
-            throw new CannotGenerateSpawnPointsException("Unable to generate spawn points randomly: packing density too high");
+            throw new CannotGenerateSpawnPointsException("Unable to generate spawn points randomly: packing density of " + packingDensity + " too high");
         }
 
         /* *** Generation *** */

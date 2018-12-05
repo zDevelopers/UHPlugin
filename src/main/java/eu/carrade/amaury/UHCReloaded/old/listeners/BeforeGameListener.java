@@ -34,8 +34,6 @@ package eu.carrade.amaury.UHCReloaded.old.listeners;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.old.events.UHGameStartsEvent;
-import eu.carrade.amaury.UHCReloaded.old.teams.TeamsSelectorGUI;
-import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.core.ZLib;
@@ -48,11 +46,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permissible;
 
@@ -84,7 +78,7 @@ public class BeforeGameListener implements Listener
                 && item != null
                 && item.getType() == UHConfig.BEFORE_START.TEAM_SELECTOR.ITEM.get())
         {
-            Gui.open(player, new TeamsSelectorGUI());
+//            Gui.open(player, new TeamsSelectorGUI());
         }
     }
 
@@ -120,7 +114,7 @@ public class BeforeGameListener implements Listener
 
         if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
         {
-            UHCReloaded.get().getTeamManager().displayTeamInActionBar(ev.getPlayer());
+//            UHCReloaded.get().getTeamManager().displayTeamInActionBar(ev.getPlayer());
         }
     }
 

@@ -29,10 +29,9 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.game;
+package eu.carrade.amaury.UHCReloaded.modules.core.game.teleporter;
 
-import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.Config;
 import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
@@ -40,7 +39,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -55,11 +53,6 @@ public class Teleporter
      * The spawn point designed for each player.
      */
     private final Map<UUID, Location> spawnPoints = new HashMap<>();
-
-    /**
-     * The cages generated for each team
-     */
-    private final Map<UUID, Cage> cages = new HashMap<>();
 
 
     /**
@@ -121,37 +114,6 @@ public class Teleporter
 
 
     /**
-     * Registers a cage for a player.
-     *
-     * @param player The player
-     * @param cage The cage
-     */
-    public void setCageForPlayer(final UUID player, final Cage cage)
-    {
-        cages.put(player, cage);
-    }
-
-    /**
-     * Checks if a cage is registered for the given player.
-     * @param player The player.
-     * @return {@code true} if a cage is registered.
-     */
-    public boolean hasCageForPlayer(final UUID player)
-    {
-        return cages.containsKey(player);
-    }
-
-    /**
-     * @param player A player
-     * @return The registered {@link Cage} for this player, or {@code null} if no one is registered.
-     */
-    public Cage getCageForPlayer(final UUID player)
-    {
-        return cages.get(player);
-    }
-
-
-    /**
      * Teleports the given player to the spawn point.
      *
      * @param playerUUID       The player's UUID.
@@ -175,19 +137,13 @@ public class Teleporter
         else if (teleportOnGround)
             spawn = spawn.getWorld().getHighestBlockAt(spawn).getLocation().add(0, 2, 0);
 
-        if (!teleportOnGround)
-        {
-            final Cage cage = cages.get(playerUUID);
-            if (cage != null) cage.build();
-        }
-
         player.teleport(spawn);
         return true;
     }
 
 
     /**
-     * Registers a callback called while trying to teleport a player.
+     * Registers a callback called just before trying to teleport a player.
      *
      * @param callback The callback. Argument: the teleported player's UUID.
      *
@@ -251,53 +207,17 @@ public class Teleporter
      */
     public void startTeleportationProcess(Boolean slowMode)
     {
-        // Fast mode: we loop on the spawn points and teleport everyone. Bim.
-        if (!slowMode)
-        {
-            Set<UUID> fails = new HashSet<>();
-
-            for (UUID playerUUID : spawnPoints.keySet())
-            {
-                UHUtils.callIfDefined(onTeleportation, playerUUID);
-
-                if (teleportPlayer(playerUUID, false))
-                {
-                    UHUtils.callIfDefined(onTeleportationSuccessful, playerUUID);
-                }
-                else
-                {
-                    UHUtils.callIfDefined(onTeleportationFailed, playerUUID);
-                    fails.add(playerUUID);
-                }
-            }
-
-            UHUtils.callIfDefined(onTeleportationProcessFinished, fails);
-        }
-
-        // Slow mode
-        else
-        {
-            RunTask.timer(
-                new TeleportationRunnable(
-                        this,
-                        spawnPoints.keySet(),
-                        onTeleportation,
-                        onTeleportationSuccessful,
-                        onTeleportationFailed,
-                        onTeleportationProcessFinished
-                ),
-                1L,
-                UHConfig.START.SLOW.DELAY_BETWEEN_TP.get() * 20L
-            );
-        }
-    }
-
-    /**
-     * Cleanups the cages left by the teleportation process, to be executed when the game really starts.
-     */
-    public void cleanup()
-    {
-        for (final Cage nicolas : cages.values()) // sorry
-            nicolas.destroy();
+        RunTask.timer(
+            new TeleportationRunnable(
+                this,
+                spawnPoints.keySet(),
+                onTeleportation,
+                onTeleportationSuccessful,
+                onTeleportationFailed,
+                onTeleportationProcessFinished
+            ),
+            1L,
+            slowMode ? 1L : Config.SLOW.DELAY_BETWEEN_TP.get() * 20L
+        );
     }
 }

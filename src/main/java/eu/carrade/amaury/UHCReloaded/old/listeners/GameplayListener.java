@@ -323,11 +323,11 @@ public class GameplayListener implements Listener
 
                     if (calc > 1 && calc < distance)
                     {
-                        distance = calc;
-                        if (!player2.getUniqueId().equals(player1.getUniqueId()) && !p.getTeamManager().inSameTeam(player1, player2))
-                        {
-                            nearest = player2.getPlayer();
-                        }
+//                        distance = calc;
+//                        if (!player2.getUniqueId().equals(player1.getUniqueId()) && !p.getTeamManager().inSameTeam(player1, player2))
+//                        {
+//                            nearest = player2.getPlayer();
+//                        }
                     }
                 }
                 catch (Exception ignored)

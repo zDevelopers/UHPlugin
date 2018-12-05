@@ -32,10 +32,11 @@
 package eu.carrade.amaury.UHCReloaded.modules.core.spawns;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.start.BeforeTeleportationPhaseEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.commands.SpawnsCommand;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.exceptions.CannotGenerateSpawnPointsException;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.exceptions.UnknownGeneratorException;
@@ -43,8 +44,11 @@ import eu.carrade.amaury.UHCReloaded.modules.core.spawns.generators.SpawnPointsG
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.commands.Command;
+import fr.zcraft.zteams.ZTeams;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.event.EventHandler;
 import org.bukkit.util.Vector;
 
 import java.util.Collections;
@@ -197,24 +201,6 @@ public class SpawnsModule extends UHModule
     }
 
 
-    /**
-     * Imports spawn points from the configuration.
-     *
-     * @return The number of spawn points imported.
-     */
-    public int importSpawnPointsFromConfig()
-    {
-        int spawnCount = 0;
-
-        for (Vector position : UHConfig.SPAWN_POINTS)
-        {
-            addSpawnPoint(position);
-            ++spawnCount;
-        }
-
-        return spawnCount;
-    }
-
 
     /**
      * Generates spawn points with the given generator.
@@ -296,5 +282,76 @@ public class SpawnsModule extends UHModule
                 regionDiameter, minimalDistanceBetweenTwoPoints,
                 xCenter, zCenter, Config.AVOID_WATER.get()
         ).forEach(this::addSpawnPoint);
+    }
+
+
+    /**
+     * Generates on the fly missing spawn points when the game starts.
+     */
+    @EventHandler
+    public void beforeTeleportationPhase(final BeforeTeleportationPhaseEvent ev)
+    {
+        final GameModule game = UR.module(GameModule.class);
+
+        final World normalWorld = UR.get().getWorld(World.Environment.NORMAL);
+
+        final int regionDiameter = UR.module(BorderModule.class).getCurrentBorderDiameter();
+        final int playersWithoutTeam = (int) Bukkit.getOnlinePlayers().stream()
+                .filter(player -> ZTeams.get().getTeamForPlayer(player) == null)
+                .count();
+
+        int spawnsNeeded = 0;
+
+        switch (game.getTeleportationMode())
+        {
+            case NORMAL:
+                spawnsNeeded = ZTeams.get().countTeams() + playersWithoutTeam;
+                break;
+
+            case IGNORE_TEAMS:
+                spawnsNeeded = ZTeams.get().getTeams().stream().mapToInt(team -> team.getPlayers().size()).sum()
+                        + playersWithoutTeam;
+                break;
+        }
+
+        spawnsNeeded -= spawnPoints.size(); // We don't need what we already have.
+
+        if (spawnsNeeded <= 0) return;
+
+        Exception error = null;
+
+        for (int i = 0; i < 6; i++)
+        {
+            try
+            {
+                generateSpawnPoints(
+                        Generator.RANDOM,
+                        normalWorld,
+                        spawnsNeeded,
+                        regionDiameter - 25,
+                        (int) Math.floor(regionDiameter / Math.max(spawnsNeeded * 1.4, 10)),
+                        normalWorld.getSpawnLocation().getX(),
+                        normalWorld.getSpawnLocation().getZ()
+                );
+
+                error = null;
+            }
+            catch (final CannotGenerateSpawnPointsException e)
+            {
+                error = e;
+                continue;
+            }
+
+            break;
+        }
+
+        if (error == null)
+        {
+            log().info("Randomly generated {0} missing spawn points on the fly. See /uh spawn for details.", spawnsNeeded);
+        }
+        else
+        {
+            log().error("There where {0} missing spawn points but we weren''t able to generate them automatically, even after 6 tries. Try to generate them yourself using /uh spawns generate, or to add them manually with /uh spawns add.", error, spawnsNeeded);
+        }
     }
 }

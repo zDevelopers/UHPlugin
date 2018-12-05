@@ -33,7 +33,11 @@
  */
 package eu.carrade.amaury.UHCReloaded.core;
 
+import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.core.ZLib;
+import fr.zcraft.zlib.tools.text.RawMessage;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -104,5 +108,27 @@ public class ModuleLogger extends Logger
     public void error(String message, Object... args)
     {
         log(Level.SEVERE, message, args);
+    }
+
+    public void broadcastAdministrative(String message)
+    {
+        // TODO use permissions
+        Bukkit.getOnlinePlayers().stream().filter(Player::isOp).forEach(player -> {
+            player.sendMessage("");
+            player.sendMessage(message);
+        });
+
+        info(message);
+    }
+
+    public void broadcastAdministrative(RawText message)
+    {
+        // TODO use permissions
+        Bukkit.getOnlinePlayers().stream().filter(Player::isOp).forEach(player -> {
+            player.sendMessage("");
+            RawMessage.send(player, message);
+        });
+
+        info(message.toPlainText());
     }
 }

@@ -1,15 +1,9 @@
 package eu.carrade.amaury.UHCReloaded;
 
-import eu.carrade.amaury.UHCReloaded.game.Cage;
+import eu.carrade.amaury.UHCReloaded.modules.beginning.cages.Cage;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.MapShape;
-import eu.carrade.amaury.UHCReloaded.old.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
-import fr.zcraft.zlib.components.configuration.Configuration;
-import fr.zcraft.zlib.components.configuration.ConfigurationItem;
-import fr.zcraft.zlib.components.configuration.ConfigurationList;
-import fr.zcraft.zlib.components.configuration.ConfigurationMap;
-import fr.zcraft.zlib.components.configuration.ConfigurationSection;
-import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
+import fr.zcraft.zlib.components.configuration.*;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.meta.BannerMeta;
@@ -604,7 +598,7 @@ public class UHConfig extends Configuration
     
     static
     {
-        ConfigurationValueHandlers.registerHandlers(TeamManager.class);
+//        ConfigurationValueHandlers.registerHandlers(TeamManager.class);
         ConfigurationValueHandlers.registerHandlers(UHSound.class);
     }
 }

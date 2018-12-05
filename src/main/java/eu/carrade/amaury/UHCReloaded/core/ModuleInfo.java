@@ -107,18 +107,18 @@ public @interface ModuleInfo
         POST_WORLD,
 
         /**
+         * Loads the module when the game phase is set to STARTING, i.e. when the /uh start command
+         * is used.
+         */
+        ON_GAME_STARTING,
+
+        /**
          * Loads the module when the game starts.
-         *
-         * Modules loaded this late cannot register new commands. You must use a load time before
-         * {@link #POST_WORLD} (included) to do so.
          */
         ON_GAME_START,
 
         /**
          * Loads the module when the game ends.
-         *
-         * Modules loaded this late cannot register new commands. You must use a load time before
-         * {@link #POST_WORLD} (included) to do so.
          */
         ON_GAME_END
     }

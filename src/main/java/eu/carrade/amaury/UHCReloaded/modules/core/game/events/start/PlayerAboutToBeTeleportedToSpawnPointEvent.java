@@ -29,36 +29,52 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.spectators;
+package eu.carrade.amaury.UHCReloaded.modules.core.game.events.start;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
 /**
- * Spectators managed through the SpectatorsPlus Bukkit plugin by PGMann and AmauryPi.
+ * Fired just before a player's teleportation to its spawn point.
+ *
+ * The spawn point cannot be modified here.
+ *
+ * @see PlayerSpawnPointSelectedEvent
  */
-public class SPlusSpectatorsManager extends SpectatorsManager
+public class PlayerAboutToBeTeleportedToSpawnPointEvent extends Event
 {
-    private UHCReloaded p;
+    private static final HandlerList handlers = new HandlerList();
 
-    public SPlusSpectatorsManager()
+    private final Player player;
+    private final Location spawnPoint;
+
+    public PlayerAboutToBeTeleportedToSpawnPointEvent(final Player player, final Location spawnPoint)
     {
-        p = UHCReloaded.get();
+        this.player = player;
+        this.spawnPoint = spawnPoint;
+    }
+
+    public Player getPlayer()
+    {
+        return player;
+    }
+
+    public Location getSpawnPoint()
+    {
+        return spawnPoint;
     }
 
     @Override
-    public void setSpectating(final Player player, final boolean spectating)
+    public HandlerList getHandlers()
     {
-        if (player != null && p.getSpectatorPlusIntegration().isSPIntegrationEnabled())
-            p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, spectating);
+        return handlers;
     }
 
-    @Override
-    public boolean isSpectating(Player player)
+    public static HandlerList getHandlerList()
     {
-        return player != null
-                && p.getSpectatorPlusIntegration().isSPIntegrationEnabled()
-                && p.getSpectatorPlusIntegration().getSPAPI().isSpectator(player);
+        return handlers;
     }
 }

@@ -33,17 +33,14 @@ package eu.carrade.amaury.UHCReloaded.game;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.teleporter.Teleporter;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
 import eu.carrade.amaury.UHCReloaded.old.events.EpisodeChangedCause;
 import eu.carrade.amaury.UHCReloaded.old.events.UHEpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.old.events.UHGameStartsEvent;
 import eu.carrade.amaury.UHCReloaded.old.events.UHPlayerResurrectedEvent;
-import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
-import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.old.protips.ProTips;
-import eu.carrade.amaury.UHCReloaded.old.task.FireworksOnWinnersTask;
-import eu.carrade.amaury.UHCReloaded.old.teams.TeamColor;
-import eu.carrade.amaury.UHCReloaded.old.teams.TeamManager;
-import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
+import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
@@ -52,30 +49,12 @@ import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.ActionBar;
 import fr.zcraft.zlib.tools.text.RawMessage;
-import fr.zcraft.zlib.tools.text.Titles;
-import org.bukkit.Achievement;
-import org.bukkit.Bukkit;
-import org.bukkit.Difficulty;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Queue;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -93,7 +72,7 @@ public class UHGameManager
     private final UHSound DEATH_SOUND;
 
     private UHCReloaded p;
-    private TeamManager tm;
+//    private TeamManager tm;
     private Random random;
 
     private Boolean damagesEnabled = false;
@@ -101,7 +80,7 @@ public class UHGameManager
 
     private Set<String> players = new HashSet<>(); // Will be converted to UUID when a built-in API for name->UUID conversion will be available
     private Set<UUID> alivePlayers = new HashSet<>();
-    private Set<UHTeam> aliveTeams = new HashSet<>();
+//    private Set<UHTeam> aliveTeams = new HashSet<>();
     private Set<UUID> spectators = new HashSet<>();
     private Map<UUID, Location> deathLocations = new HashMap<>();
 
@@ -131,7 +110,7 @@ public class UHGameManager
     public UHGameManager(UHCReloaded plugin)
     {
         this.p = plugin;
-        this.tm = p.getTeamManager();
+//        this.tm = p.getTeamManager();
 
         this.random = new Random();
 
@@ -247,63 +226,63 @@ public class UHGameManager
         /* ** Initialization of the teams ** */
 
         alivePlayers.clear();
-        aliveTeams.clear();
+//        aliveTeams.clear();
         alivePlayersCount = 0;
         aliveTeamsCount = 0;
 
-        // Stores the teams created on-the-fly, to unregister them if something bad happens.
-        final Set<UHTeam> onTheFlyTeams = new HashSet<>();
-
-        // If there isn't any team, we add all players (startup spectators excluded) to a new solo team.
-        if (tm.getTeams().isEmpty())
-        {
-            gameWithTeams = false;
-
-            Bukkit.getOnlinePlayers().stream().filter(player -> !spectators.contains(player.getUniqueId())).forEach(player ->
-            {
-                final UHTeam team = new UHTeam(player.getName(), RANDOM_COLORS_IN_SOLO ? TeamColor.RANDOM : null);
-                team.addPlayer(player, true);
-
-                tm.addTeam(team);
-                onTheFlyTeams.add(team);
-            });
-        }
-
-        // Else, every non-startup-spectator out of any team player is added to a solo team.
-        else
-        {
-            gameWithTeams = true;
-
-            Bukkit.getOnlinePlayers().stream()
-                    .filter(player -> !spectators.contains(player.getUniqueId()))
-                    .filter(player -> tm.getTeamForPlayer(player) == null)
-                    .forEach(player ->
-                    {
-                        // We need an unique name for the team.
-                        String teamName = player.getName();
-                        while (tm.isTeamRegistered(teamName))
-                        {
-                            teamName = player.getName() + " " + random.nextInt(1000000);
-                        }
-
-                        final UHTeam team = new UHTeam(teamName, RANDOM_COLORS_IN_SOLO ? TeamColor.RANDOM : null);
-
-                        team.addPlayer(player, true);
-
-                        tm.addTeam(team);
-                        onTheFlyTeams.add(team);
-                    });
-        }
-
-
-        /* ** Initialization of the players ** */
-
-        tm.getTeams().forEach(
-                team -> team.getPlayers().stream()
-                            .map(OfflinePlayer::getUniqueId)
-                            .filter(player -> !spectators.contains(player))
-                            .forEach(player -> alivePlayers.add(player))
-        );
+//        // Stores the teams created on-the-fly, to unregister them if something bad happens.
+//        final Set<UHTeam> onTheFlyTeams = new HashSet<>();
+//
+//        // If there isn't any team, we add all players (startup spectators excluded) to a new solo team.
+//        if (tm.getTeams().isEmpty())
+//        {
+//            gameWithTeams = false;
+//
+//            Bukkit.getOnlinePlayers().stream().filter(player -> !spectators.contains(player.getUniqueId())).forEach(player ->
+//            {
+//                final UHTeam team = new UHTeam(player.getName(), RANDOM_COLORS_IN_SOLO ? TeamColor.RANDOM : null);
+//                team.addPlayer(player, true);
+//
+//                tm.addTeam(team);
+//                onTheFlyTeams.add(team);
+//            });
+//        }
+//
+//        // Else, every non-startup-spectator out of any team player is added to a solo team.
+//        else
+//        {
+//            gameWithTeams = true;
+//
+//            Bukkit.getOnlinePlayers().stream()
+//                    .filter(player -> !spectators.contains(player.getUniqueId()))
+//                    .filter(player -> tm.getTeamForPlayer(player) == null)
+//                    .forEach(player ->
+//                    {
+//                        // We need an unique name for the team.
+//                        String teamName = player.getName();
+//                        while (tm.isTeamRegistered(teamName))
+//                        {
+//                            teamName = player.getName() + " " + random.nextInt(1000000);
+//                        }
+//
+//                        final UHTeam team = new UHTeam(teamName, RANDOM_COLORS_IN_SOLO ? TeamColor.RANDOM : null);
+//
+//                        team.addPlayer(player, true);
+//
+//                        tm.addTeam(team);
+//                        onTheFlyTeams.add(team);
+//                    });
+//        }
+//
+//
+//        /* ** Initialization of the players ** */
+//
+//        tm.getTeams().forEach(
+//                team -> team.getPlayers().stream()
+//                            .map(OfflinePlayer::getUniqueId)
+//                            .filter(player -> !spectators.contains(player))
+//                            .forEach(player -> alivePlayers.add(player))
+//        );
 
         updateAliveCache();
 
@@ -347,13 +326,13 @@ public class UHGameManager
         p.getMOTDManager().updateMOTDDuringStart();
 
 
-        /* ** Removes the teams action bar (if any) ** */
-        if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
-        {
-            tm.getTeams().stream()
-                .flatMap(team -> team.getPlayers().stream())
-                .forEach(player -> ActionBar.removeMessage(player.getUniqueId(), true));
-        }
+//        /* ** Removes the teams action bar (if any) ** */
+//        if (UHConfig.BEFORE_START.TEAM_IN_ACTION_BAR.get())
+//        {
+//            tm.getTeams().stream()
+//                .flatMap(team -> team.getPlayers().stream())
+//                .forEach(player -> ActionBar.removeMessage(player.getUniqueId(), true));
+//        }
 
 
         /* ** Initialization of the spectator mode ** */
@@ -370,37 +349,37 @@ public class UHGameManager
         List<Location> spawnPoints = new ArrayList<>(); // (p.getSpawnsManager().getSpawnPoints());
         Collections.shuffle(spawnPoints);
 
-        Queue<Location> unusedTP = new ArrayDeque<>(spawnPoints);
-
-        tm.getTeams().stream().filter(team -> !team.isEmpty()).forEach(team ->
-        {
-            if (!ignoreTeams && gameWithTeams)
-            {
-                final Location teamSpawn = unusedTP.poll();
-                final Cage cage = Cage.createInstanceForTeamIfEnabled(team, teamSpawn);
-
-                p.getDynmapIntegration().showSpawnLocation(team, teamSpawn);
-
-                team.getPlayersUUID().forEach(player ->
-                {
-                    teleporter.setSpawnForPlayer(player, teamSpawn);
-                    if (cage != null) teleporter.setCageForPlayer(player, cage);
-                });
-            }
-            else
-            {
-                team.getPlayersUUID().forEach(player ->
-                {
-                    final Location playerSpawn = unusedTP.poll();
-                    final Cage cage = Cage.createInstanceForTeamIfEnabled(team, playerSpawn);
-
-                    teleporter.setSpawnForPlayer(player, playerSpawn);
-                    if (cage != null) teleporter.setCageForPlayer(player, cage);
-
-                    p.getDynmapIntegration().showSpawnLocation(Bukkit.getOfflinePlayer(player), playerSpawn);
-                });
-            }
-        });
+//        Queue<Location> unusedTP = new ArrayDeque<>(spawnPoints);
+//
+//        tm.getTeams().stream().filter(team -> !team.isEmpty()).forEach(team ->
+//        {
+//            if (!ignoreTeams && gameWithTeams)
+//            {
+//                final Location teamSpawn = unusedTP.poll();
+//                final Cage cage = Cage.createInstanceForTeamIfEnabled(team, teamSpawn);
+//
+//                p.getDynmapIntegration().showSpawnLocation(team, teamSpawn);
+//
+//                team.getPlayersUUID().forEach(player ->
+//                {
+//                    teleporter.setSpawnForPlayer(player, teamSpawn);
+//                    if (cage != null) teleporter.setCageForPlayer(player, cage);
+//                });
+//            }
+//            else
+//            {
+//                team.getPlayersUUID().forEach(player ->
+//                {
+//                    final Location playerSpawn = unusedTP.poll();
+//                    final Cage cage = Cage.createInstanceForTeamIfEnabled(team, playerSpawn);
+//
+//                    teleporter.setSpawnForPlayer(player, playerSpawn);
+//                    if (cage != null) teleporter.setCageForPlayer(player, cage);
+//
+//                    p.getDynmapIntegration().showSpawnLocation(Bukkit.getOfflinePlayer(player), playerSpawn);
+//                });
+//            }
+//        });
 
         if (slow)
         {
@@ -655,7 +634,7 @@ public class UHGameManager
     {
         p.getFreezer().setGlobalFreezeState(false);
 
-        teleporter.cleanup();
+//        teleporter.cleanup();
 
         gameStarted = true;
         gameFinished = false;
@@ -706,22 +685,22 @@ public class UHGameManager
      */
     public void updateAliveCache()
     {
-        // Alive teams
-        aliveTeams.clear();
-        for (UHTeam t : tm.getTeams())
-        {
-            for (UUID pid : t.getPlayersUUID())
-            {
-                if (!this.isPlayerDead(pid)) aliveTeams.add(t);
-            }
-        }
-
-        // Counters
-        this.alivePlayersCount = alivePlayers.size();
-        this.aliveTeamsCount = aliveTeams.size();
-
-        if (isGameRunning())
-            p.getMOTDManager().updateMOTDDuringGame();
+//        // Alive teams
+//        aliveTeams.clear();
+//        for (UHTeam t : tm.getTeams())
+//        {
+//            for (UUID pid : t.getPlayersUUID())
+//            {
+//                if (!this.isPlayerDead(pid)) aliveTeams.add(t);
+//            }
+//        }
+//
+//        // Counters
+//        this.alivePlayersCount = alivePlayers.size();
+//        this.aliveTeamsCount = aliveTeams.size();
+//
+//        if (isGameRunning())
+//            p.getMOTDManager().updateMOTDDuringGame();
     }
 
     /**
@@ -911,7 +890,7 @@ public class UHGameManager
     public void addStartupSpectator(OfflinePlayer player)
     {
         spectators.add(player.getUniqueId());
-        tm.removePlayerFromTeam(player);
+//        tm.removePlayerFromTeam(player);
     }
 
     /**
@@ -1075,70 +1054,70 @@ public class UHGameManager
         }
 
         // There's only one team.
-        UHTeam winnerTeam = p.getGameManager().getAliveTeams().iterator().next();
-        Set<OfflinePlayer> listWinners = winnerTeam.getPlayers();
-
-        if (UHConfig.FINISH.MESSAGE.get())
-        {
-            if (isGameWithTeams())
-            {
-                StringBuilder winners = new StringBuilder();
-                int j = 0;
-
-                for (OfflinePlayer winner : listWinners)
-                {
-                    if (j != 0)
-                    {
-                        if (j == listWinners.size() - 1)
-                        {
-                            /// The "and" in the winners players list (like "player1, player2 and player3").
-                            winners.append(" ").append(I.tc("winners_list", "and")).append(" ");
-                        }
-                        else
-                        {
-                            winners.append(", ");
-                        }
-                    }
-
-                    winners.append(winner.getName());
-                    j++;
-                }
-
-                p.getServer().broadcastMessage(I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} (team {1}{green}) for their victory! {darkgreen}{obfuscated}--", winners.toString(), winnerTeam.getDisplayName()));
-            }
-            else
-            {
-                p.getServer().broadcastMessage(I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} for his victory! {darkgreen}{obfuscated}--", winnerTeam.getName()));
-            }
-        }
-
-        if (UHConfig.FINISH.TITLE.get())
-        {
-            final String title;
-            final String subtitle;
-
-            if (isGameWithTeams())
-            {
-                /// The main title of the /title displayed when a team wins the game. {0} becomes the team display name (with colors).
-                title = I.t("{darkgreen}{0}", winnerTeam.getDisplayName());
-                /// The subtitle of the /title displayed when a team wins the game. {0} becomes the team display name (with colors).
-                subtitle = I.t("{green}This team wins the game!", winnerTeam.getDisplayName());
-            }
-            else
-            {
-                /// The main title of the /title displayed when a player wins the game (in solo). {0} becomes the player display name (with colors).
-                title = I.t("{darkgreen}{0}", winnerTeam.getDisplayName());
-                /// The subtitle of the /title displayed when a player wins the game (in solo). {0} becomes the player display name (with colors).
-                subtitle = I.t("{green}wins the game!", winnerTeam.getDisplayName());
-            }
-
-            Titles.broadcastTitle(5, 142, 21, title, subtitle);
-        }
-
-        if (UHConfig.FINISH.FIREWORKS.ENABLED.get())
-        {
-            new FireworksOnWinnersTask(listWinners).runTaskTimer(p, 0L, 15L);
-        }
+//        UHTeam winnerTeam = p.getGameManager().getAliveTeams().iterator().next();
+//        Set<OfflinePlayer> listWinners = winnerTeam.getPlayers();
+//
+//        if (UHConfig.FINISH.MESSAGE.get())
+//        {
+//            if (isGameWithTeams())
+//            {
+//                StringBuilder winners = new StringBuilder();
+//                int j = 0;
+//
+//                for (OfflinePlayer winner : listWinners)
+//                {
+//                    if (j != 0)
+//                    {
+//                        if (j == listWinners.size() - 1)
+//                        {
+//                            /// The "and" in the winners players list (like "player1, player2 and player3").
+//                            winners.append(" ").append(I.tc("winners_list", "and")).append(" ");
+//                        }
+//                        else
+//                        {
+//                            winners.append(", ");
+//                        }
+//                    }
+//
+//                    winners.append(winner.getName());
+//                    j++;
+//                }
+//
+//                p.getServer().broadcastMessage(I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} (team {1}{green}) for their victory! {darkgreen}{obfuscated}--", winners.toString(), winnerTeam.getDisplayName()));
+//            }
+//            else
+//            {
+//                p.getServer().broadcastMessage(I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} for his victory! {darkgreen}{obfuscated}--", winnerTeam.getName()));
+//            }
+//        }
+//
+//        if (UHConfig.FINISH.TITLE.get())
+//        {
+//            final String title;
+//            final String subtitle;
+//
+//            if (isGameWithTeams())
+//            {
+//                /// The main title of the /title displayed when a team wins the game. {0} becomes the team display name (with colors).
+//                title = I.t("{darkgreen}{0}", winnerTeam.getDisplayName());
+//                /// The subtitle of the /title displayed when a team wins the game. {0} becomes the team display name (with colors).
+//                subtitle = I.t("{green}This team wins the game!", winnerTeam.getDisplayName());
+//            }
+//            else
+//            {
+//                /// The main title of the /title displayed when a player wins the game (in solo). {0} becomes the player display name (with colors).
+//                title = I.t("{darkgreen}{0}", winnerTeam.getDisplayName());
+//                /// The subtitle of the /title displayed when a player wins the game (in solo). {0} becomes the player display name (with colors).
+//                subtitle = I.t("{green}wins the game!", winnerTeam.getDisplayName());
+//            }
+//
+//            Titles.broadcastTitle(5, 142, 21, title, subtitle);
+//        }
+//
+//        if (UHConfig.FINISH.FIREWORKS.ENABLED.get())
+//        {
+//            new FireworksOnWinnersTask(listWinners).runTaskTimer(p, 0L, 15L);
+//        }
     }
 
     /**
@@ -1156,10 +1135,10 @@ public class UHGameManager
      *
      * @return The set.
      */
-    public Set<UHTeam> getAliveTeams()
-    {
-        return aliveTeams;
-    }
+//    public Set<UHTeam> getAliveTeams()
+//    {
+//        return aliveTeams;
+//    }
 
     /**
      * Returns a list of the currently alive players.

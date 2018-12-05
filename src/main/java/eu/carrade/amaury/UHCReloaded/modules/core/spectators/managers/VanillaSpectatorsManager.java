@@ -29,55 +29,53 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.game.events;
+package eu.carrade.amaury.UHCReloaded.modules.core.spectators.managers;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 
 /**
- * Fired when the game phase changes.
+ * Vanilla spectator mode
  */
-public class GamePhaseChangedEvent extends Event
+public class VanillaSpectatorsManager extends SpectatorsManager
 {
-    private static final HandlerList handlers = new HandlerList();
-
-    private final GamePhase oldPhase;
-    private final GamePhase newPhase;
-
-    public GamePhaseChangedEvent(final GamePhase oldPhase, final GamePhase newPhase)
-    {
-        this.oldPhase = oldPhase;
-        this.newPhase = newPhase;
-    }
-
     /**
-     * The old phase. May be {@code null} if this is the first phase ever (i.e. {@link GamePhase#WAIT}).
-     *
-     * @return The old phase.
+     * Stores the previous gamemodes of the players.
      */
-    public GamePhase getOldPhase()
-    {
-        return oldPhase;
-    }
+    private Map<UUID, GameMode> oldGameModes = new HashMap<>();
 
-    /**
-     * @return The new phase.
-     */
-    public GamePhase getNewPhase()
+
+    @Override
+    public void setSpectating(final Player player, final boolean spectating)
     {
-        return newPhase;
+        if (player == null)
+            return;
+
+        if (spectating)
+        {
+            if (player.getGameMode() != GameMode.SPECTATOR)
+            {
+                oldGameModes.put(player.getUniqueId(), player.getGameMode());
+                player.setGameMode(GameMode.SPECTATOR);
+            }
+        }
+        else
+        {
+            player.setGameMode(oldGameModes.getOrDefault(player.getUniqueId(), Bukkit.getDefaultGameMode()));
+            oldGameModes.remove(player.getUniqueId());
+        }
     }
 
     @Override
-    public HandlerList getHandlers()
+    public boolean isSpectating(Player player)
     {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
-        return handlers;
+        return player != null && player.getGameMode() == GameMode.SPECTATOR;
     }
 }

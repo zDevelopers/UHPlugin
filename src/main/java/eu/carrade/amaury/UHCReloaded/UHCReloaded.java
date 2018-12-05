@@ -39,24 +39,25 @@ import eu.carrade.amaury.UHCReloaded.core.events.ModuleLoadedEvent;
 import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
-import eu.carrade.amaury.UHCReloaded.modules.core.game.events.GamePhaseChangedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.modules.ModulesManagerModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.SpawnsModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.spectators.SpectatorsModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.spectators.managers.SpectatorsManager;
 import eu.carrade.amaury.UHCReloaded.modules.core.teams.TeamsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
-import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHDynmapIntegration;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHProtocolLibIntegrationWrapper;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHSpectatorPlusIntegration;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHWorldBorderIntegration;
 import eu.carrade.amaury.UHCReloaded.old.misc.*;
 import eu.carrade.amaury.UHCReloaded.old.recipes.RecipesManager;
-import eu.carrade.amaury.UHCReloaded.old.spectators.SpectatorsManager;
 import eu.carrade.amaury.UHCReloaded.old.teams.TeamChatManager;
 import eu.carrade.amaury.UHCReloaded.old.teams.TeamManager;
 import eu.carrade.amaury.UHCReloaded.scoreboard.ScoreboardManager;
 import eu.carrade.amaury.UHCReloaded.utils.ModulesUtils;
+import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.Commands;
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
@@ -168,7 +169,9 @@ public class UHCReloaded extends ZPlugin implements Listener
                 SpawnsModule.class,             // Manages the spawn points and teleportation.
                                                 // Must be loaded before the game-related modules.
 
-                GameModule.class                // Manages the game progression.
+                GameModule.class,               // Manages the game progression.
+
+                SpectatorsModule.class          // Manages the spectators.
         );
 
 
@@ -450,13 +453,15 @@ public class UHCReloaded extends ZPlugin implements Listener
         if (!worldsLoaded) onEnableWhenWorldsAvailable();
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.LOWEST)
     public void onGamePhaseChanged(final GamePhaseChangedEvent ev)
     {
-        PluginLogger.info("Game phase changed to {0}.", ev.getNewPhase());
-
         switch (ev.getNewPhase())
         {
+            case STARTING:
+                loadModules(ModuleInfo.ModuleLoadTime.ON_GAME_STARTING);
+                break;
+
             case IN_GAME:
                 loadModules(ModuleInfo.ModuleLoadTime.ON_GAME_START);
                 break;
@@ -580,8 +585,6 @@ public class UHCReloaded extends ZPlugin implements Listener
         // We finally fallback on the first world regardless of its type to have at least something.
         return Bukkit.getWorlds().get(0);
     }
-
-
 
 
 

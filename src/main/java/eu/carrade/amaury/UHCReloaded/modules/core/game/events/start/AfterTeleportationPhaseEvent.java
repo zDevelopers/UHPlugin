@@ -29,55 +29,27 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.spectators;
+package eu.carrade.amaury.UHCReloaded.modules.core.game.events.start;
 
-
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.entity.Player;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
 /**
- * Vanilla spectator mode
+ * Fired while starting the game, when the teleportation phase is finished.
  */
-public class VanillaSpectatorsManager extends SpectatorsManager
+public class AfterTeleportationPhaseEvent extends Event
 {
-    /**
-     * Stores the previous gamemodes of the players.
-     */
-    private Map<UUID, GameMode> oldGameModes = new HashMap<>();
-
+    private static final HandlerList handlers = new HandlerList();
 
     @Override
-    public void setSpectating(final Player player, final boolean spectating)
+    public HandlerList getHandlers()
     {
-        if (player == null)
-            return;
-
-        if (spectating)
-        {
-            if (player.getGameMode() != GameMode.SPECTATOR)
-            {
-                oldGameModes.put(player.getUniqueId(), player.getGameMode());
-                player.setGameMode(GameMode.SPECTATOR);
-            }
-        }
-        else
-        {
-            GameMode previousMode = oldGameModes.get(player.getUniqueId());
-            player.setGameMode(previousMode != null ? previousMode : Bukkit.getDefaultGameMode());
-
-            oldGameModes.remove(player.getUniqueId());
-        }
+        return handlers;
     }
 
-    @Override
-    public boolean isSpectating(Player player)
+    public static HandlerList getHandlerList()
     {
-        return player != null && player.getGameMode() == GameMode.SPECTATOR;
+        return handlers;
     }
 }

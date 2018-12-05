@@ -31,22 +31,66 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.game.commands;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.teleporter.TeleportationMode;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.CommandException;
 import fr.zcraft.zlib.components.commands.CommandInfo;
 import fr.zcraft.zlib.components.commands.WithFlags;
+import fr.zcraft.zlib.components.i18n.I;
+import org.bukkit.entity.Player;
+
+import java.util.List;
 
 
-@CommandInfo (name = "start", usageParameters = "[--slow]")
-@WithFlags ({"slow"})
+@CommandInfo (name = "start", usageParameters = "[--slow] [--ignore-teams]")
+@WithFlags ({"slow", "ignore-teams"})
 public class StartCommand extends Command
 {
     @Override
     protected void run() throws CommandException
     {
-        UHCReloaded.getModule(GameModule.class).setPhase(GamePhase.STARTING);
+        final GameModule game = UR.module(GameModule.class);
+
+        switch (game.getPhase())
+        {
+            case WAIT:
+                game.setSlowMode(hasFlag("slow"));
+                game.setTeleportationMode(hasFlag("ignore-teams") ? TeleportationMode.IGNORE_TEAMS : TeleportationMode.NORMAL);
+
+                if (hasFlag("slow"))
+                {
+                    if (sender instanceof Player) info("");
+                    info(I.t("{green}{bold}The game is now starting."));
+                    info(I.t("{green}Wait for the teleportation to finish; you'll then be prompted to start the game."));
+                }
+
+                game.setPhase(GamePhase.STARTING);
+
+                break;
+
+            case STARTING:
+                try
+                {
+                    game.start();
+                }
+                catch (final IllegalStateException e)
+                {
+                    error(I.t("The starting process is not finished yet. Please be patient."));
+                }
+
+                break;
+
+            default:
+                error(I.t("{ce}The game is already started! Reload or restart the server to restart the game."));
+        }
+    }
+
+    @Override
+    protected List<String> complete()
+    {
+        return getMatchingSubset(args[args.length - 1], "--slow", "--ignore-teams");
     }
 }

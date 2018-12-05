@@ -33,12 +33,11 @@ package eu.carrade.amaury.UHCReloaded.scoreboard;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
+import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.MapShape;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.worldborders.WorldBorder;
-import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
-import eu.carrade.amaury.UHCReloaded.old.misc.Freezer;
-import eu.carrade.amaury.UHCReloaded.old.teams.UHTeam;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
+import eu.carrade.amaury.UHCReloaded.old.misc.Freezer;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
@@ -50,7 +49,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
 public class GameSidebar extends Sidebar
@@ -191,103 +189,104 @@ public class GameSidebar extends Sidebar
     public List<String> getContent(Player player)
     {
 
-        List<String> sidebar = new ArrayList<>(sidebarTop);
-        sidebar.add("");
-
-        if (OWN_TEAM_IN_SIDEBAR && gameManager.isGameStarted() && gameManager.isGameWithTeams())
-        {
-            UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
-
-            if (team != null)
-            {
-                sidebar.add(
-                          (OWN_TEAM_TITLE_COLOR.isEmpty() ? team.getColorOrWhite().toChatColor() : OWN_TEAM_TITLE_COLOR)
-                          /// Title of the team section in the sidebar
-                        + (OWN_TEAM_TITLE_IS_NAME ? ChatColor.BOLD + team.getName() : I.t("{bold}Your team"))
-                );
-
-                Location playerLocation = player.getLocation();
-
-                for (UUID teamMember : team.getPlayersUUID())
-                {
-                    SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(teamMember);
-
-                    // If enabled, we check if the player was already met or is close to this player.
-                    // Only if the damages are on (= 30 seconds after the game start) to avoid false close while
-                    // teleporting.
-                    if(OWN_TEAM_DISPLAY_MET_PLAYERS_ONLY)
-                    {
-                        if(!(teamMember.equals(player.getUniqueId()) || cache.getTeammatesDisplayed().contains(teamMember)))
-                        {
-                            if (gameManager.isGameStarted() && gameManager.isTakingDamage())
-                            {
-                                if (gameManager.isPlayerDead(teamMember))
-                                    continue; // dead (spectators don't have to be displayed in the sidebar).
-
-                                Player teammate = Sidebar.getPlayerAsync(teamMember);
-                                if (teammate == null)
-                                    continue; // offline
-
-
-                                Location teammateLocation = teammate.getLocation();
-
-                                // Check if the players are close
-                                if (teammateLocation.getWorld().equals(playerLocation.getWorld()))
-                                {
-                                    final double distanceSquared = teammateLocation.distanceSquared(playerLocation);
-                                    if (distanceSquared <= OWN_TEAM_DISPLAY_MET_PLAYERS_MIN_DISTANCE_SQUARED)
-                                        cache.getTeammatesDisplayed().add(teamMember);
-                                    else
-                                        continue; // Too far, skipped
-                                }
-                                else
-                                {
-                                    continue; // Too far, skipped
-                                }
-                            }
-                            else
-                            {
-                                continue;
-                            }
-                        }
-                    }
-
-                    final String strike = OWN_TEAM_STRIKE_DEAD_PLAYERS && !cache.isAlive() ? ChatColor.STRIKETHROUGH.toString() : "";
-                    final ChatColor aliveColor = cache.isAlive() ? ChatColor.WHITE : ChatColor.GRAY;
-
-                    final String heart = OWN_TEAM_DISPLAY_HEARTS ? cache.getHealthColor() + strike + HEART + " " : "";
-                    final String name = (OWN_TEAM_COLOR_WHOLE_NAME ? cache.getHealthColor() : aliveColor)
-                            + strike
-                            + (OWN_TEAM_DISPLAY_LOGIN_STATE_ITALIC && !cache.isOnline() ? ChatColor.ITALIC : "")
-                            + cache.getPlayerName()
-                            + (!cache.isOnline() ? ChatColor.RESET + "" + (OWN_TEAM_COLOR_WHOLE_NAME ? cache.getHealthColor() : aliveColor) + " " + OWN_TEAM_DISPLAY_LOGIN_STATE_SUFFIX : "");
-
-                    sidebar.add(heart + name);
-                }
-
-                sidebar.add("");
-            }
-        }
-
-        sidebar.addAll(sidebarBorder);
-
-        if (KILLS_IN_SIDEBAR && gameManager.isGameStarted())
-        {
-            SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(player.getUniqueId());
-
-            /// Kills count in the sidebar
-            sidebar.add(I.tn("{white}{0}{gray} player killed", "{white}{0}{gray} players killed", cache.getPlayersKilled().size(), cache.getPlayersKilled().size()));
-            sidebar.add("");
-        }
-
-        sidebar.addAll(sidebarTimers);
-
-        if (FREEZE_STATUS_IN_SIDEBAR)
-        {
-            insertFreezeStatus(sidebar, player);
-        }
-
-        return sidebar;
+//        List<String> sidebar = new ArrayList<>(sidebarTop);
+//        sidebar.add("");
+//
+//        if (OWN_TEAM_IN_SIDEBAR && gameManager.isGameStarted() && gameManager.isGameWithTeams())
+//        {
+//            UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
+//
+//            if (team != null)
+//            {
+//                sidebar.add(
+//                          (OWN_TEAM_TITLE_COLOR.isEmpty() ? team.getColorOrWhite().toChatColor() : OWN_TEAM_TITLE_COLOR)
+//                          /// Title of the team section in the sidebar
+//                        + (OWN_TEAM_TITLE_IS_NAME ? ChatColor.BOLD + team.getName() : I.t("{bold}Your team"))
+//                );
+//
+//                Location playerLocation = player.getLocation();
+//
+//                for (UUID teamMember : team.getPlayersUUID())
+//                {
+//                    SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(teamMember);
+//
+//                    // If enabled, we check if the player was already met or is close to this player.
+//                    // Only if the damages are on (= 30 seconds after the game start) to avoid false close while
+//                    // teleporting.
+//                    if(OWN_TEAM_DISPLAY_MET_PLAYERS_ONLY)
+//                    {
+//                        if(!(teamMember.equals(player.getUniqueId()) || cache.getTeammatesDisplayed().contains(teamMember)))
+//                        {
+//                            if (gameManager.isGameStarted() && gameManager.isTakingDamage())
+//                            {
+//                                if (gameManager.isPlayerDead(teamMember))
+//                                    continue; // dead (spectators don't have to be displayed in the sidebar).
+//
+//                                Player teammate = Sidebar.getPlayerAsync(teamMember);
+//                                if (teammate == null)
+//                                    continue; // offline
+//
+//
+//                                Location teammateLocation = teammate.getLocation();
+//
+//                                // Check if the players are close
+//                                if (teammateLocation.getWorld().equals(playerLocation.getWorld()))
+//                                {
+//                                    final double distanceSquared = teammateLocation.distanceSquared(playerLocation);
+//                                    if (distanceSquared <= OWN_TEAM_DISPLAY_MET_PLAYERS_MIN_DISTANCE_SQUARED)
+//                                        cache.getTeammatesDisplayed().add(teamMember);
+//                                    else
+//                                        continue; // Too far, skipped
+//                                }
+//                                else
+//                                {
+//                                    continue; // Too far, skipped
+//                                }
+//                            }
+//                            else
+//                            {
+//                                continue;
+//                            }
+//                        }
+//                    }
+//
+//                    final String strike = OWN_TEAM_STRIKE_DEAD_PLAYERS && !cache.isAlive() ? ChatColor.STRIKETHROUGH.toString() : "";
+//                    final ChatColor aliveColor = cache.isAlive() ? ChatColor.WHITE : ChatColor.GRAY;
+//
+//                    final String heart = OWN_TEAM_DISPLAY_HEARTS ? cache.getHealthColor() + strike + HEART + " " : "";
+//                    final String name = (OWN_TEAM_COLOR_WHOLE_NAME ? cache.getHealthColor() : aliveColor)
+//                            + strike
+//                            + (OWN_TEAM_DISPLAY_LOGIN_STATE_ITALIC && !cache.isOnline() ? ChatColor.ITALIC : "")
+//                            + cache.getPlayerName()
+//                            + (!cache.isOnline() ? ChatColor.RESET + "" + (OWN_TEAM_COLOR_WHOLE_NAME ? cache.getHealthColor() : aliveColor) + " " + OWN_TEAM_DISPLAY_LOGIN_STATE_SUFFIX : "");
+//
+//                    sidebar.add(heart + name);
+//                }
+//
+//                sidebar.add("");
+//            }
+//        }
+//
+//        sidebar.addAll(sidebarBorder);
+//
+//        if (KILLS_IN_SIDEBAR && gameManager.isGameStarted())
+//        {
+//            SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(player.getUniqueId());
+//
+//            /// Kills count in the sidebar
+//            sidebar.add(I.tn("{white}{0}{gray} player killed", "{white}{0}{gray} players killed", cache.getPlayersKilled().size(), cache.getPlayersKilled().size()));
+//            sidebar.add("");
+//        }
+//
+//        sidebar.addAll(sidebarTimers);
+//
+//        if (FREEZE_STATUS_IN_SIDEBAR)
+//        {
+//            insertFreezeStatus(sidebar, player);
+//        }
+//
+//        return sidebar;
+        return null;
     }
 
     @Override

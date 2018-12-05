@@ -42,6 +42,7 @@ import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.CommandException;
 import fr.zcraft.zlib.components.commands.CommandInfo;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zteams.ZTeam;
 import fr.zcraft.zteams.ZTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -373,11 +374,10 @@ public class SpawnsCommand extends Command
         double zCenter = world.getSpawnLocation().getZ();
 
         int spawnsCount = 0;
-//        TODO Default to either teams (if any) or players count.
-//        for (final ZTeam team : ZTeams.get().getTeams())
-//        {
-//            if (!team.isEmpty()) spawnsCount++;
-//        }
+        for (final ZTeam team : ZTeams.get().getTeams())
+        {
+            if (!team.isEmpty()) spawnsCount++;
+        }
 
         if (args.length < 8)
         {

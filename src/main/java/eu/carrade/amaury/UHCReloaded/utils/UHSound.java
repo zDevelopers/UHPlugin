@@ -34,11 +34,14 @@ package eu.carrade.amaury.UHCReloaded.utils;
 
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandler;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
 
 
 /**
@@ -59,12 +62,103 @@ public class UHSound
      */
     public UHSound(final Sound sound)
     {
+        Validate.notNull(sound, "The sound cannot be null.");
         this.sound = sound;
     }
 
     public UHSound(final Sound sound, final Float volume, final Float pitch)
     {
+        Validate.notNull(sound, "The sound cannot be null.");
+
         this.sound  = sound;
+        this.volume = volume;
+        this.pitch  = pitch;
+    }
+
+    /**
+     * Constructs a sound from a string name with volume = 1f and pitch = 1f.
+     *
+     * This allows to support automatically all Minecraft versions as sounds names changed in enum
+     * after version 1.10.
+     *
+     * @param sound The sound name to be looked up.
+     */
+    public UHSound(final String sound)
+    {
+        final Sound bukkitSound = string2Sound(sound);
+
+        if (bukkitSound == null) throw new IllegalArgumentException("Cannot find a sound matching " + sound);
+
+        this.sound = bukkitSound;
+    }
+
+    /**
+     * Constructs a sound from a string name.
+     *
+     * This allows to support automatically all Minecraft versions as sounds names changed in enum
+     * after version 1.10.
+     *
+     * @param sound The sound name to be looked up.
+     * @param volume The sound volume.
+     * @param pitch The sound pitch.
+     */
+    public UHSound(final String sound, final Float volume, final Float pitch)
+    {
+        final Sound bukkitSound = string2Sound(sound);
+
+        if (bukkitSound == null) throw new IllegalArgumentException("Cannot find a sound matching " + sound);
+
+        this.sound  = bukkitSound;
+        this.volume = volume;
+        this.pitch  = pitch;
+    }
+
+    /**
+     * Constructs a sound from string names with volume = 1f and pitch = 1f.
+     *
+     * This allows to support automatically all Minecraft versions as sounds names changed in enum
+     * after version 1.10.
+     *
+     * @param sound A list of sounds to be looked up. The first one found will be used.
+     */
+    public UHSound(final String... sound)
+    {
+        Sound bukkitSound = null;
+
+        for (String soundCandidate : sound)
+        {
+            bukkitSound = string2Sound(soundCandidate);
+            if (bukkitSound != null) break;
+        }
+
+        if (bukkitSound == null) throw new IllegalArgumentException("Cannot find a sound matching one of these: " + Arrays.toString(sound));
+
+        this.sound = bukkitSound;
+    }
+
+    /**
+     * Constructs a sound from a string name.
+     *
+     * This allows to support automatically all Minecraft versions as sounds names changed in enum
+     * after version 1.10.
+     *
+     * @param volume The sound volume.
+     * @param pitch The sound pitch.
+     * @param sound A list of sounds to be looked up. The first one found will be used.
+     */
+    public UHSound(final Float volume, final Float pitch, final String... sound)
+    {
+        Sound bukkitSound = null;
+
+        for (String soundCandidate : sound)
+        {
+            bukkitSound = string2Sound(soundCandidate);
+            if (bukkitSound != null) break;
+        }
+
+        if (bukkitSound == null) throw new IllegalArgumentException("Cannot find a sound matching one of these: " + Arrays.toString(sound));
+
+        this.sound  = bukkitSound;
         this.volume = volume;
         this.pitch  = pitch;
     }
@@ -229,6 +323,9 @@ public class UHSound
      * <p>
      * "<code>ANVIL_LAND</code>", "<code>Anvil Land</code>" and "<code>ANVIL Land</code>" are recognized as
      * <code>Sound.ANVIL_LAND</code>, as example.
+     *
+     * <p>
+     * If no sound match, common prefixes in the sounds name are tested.
      *
      * @param soundName The text to be converted.
      * @return The corresponding Sound, or null if there isn't any match.
