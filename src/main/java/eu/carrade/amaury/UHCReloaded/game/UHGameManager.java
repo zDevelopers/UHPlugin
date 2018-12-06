@@ -38,7 +38,7 @@ import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
 import eu.carrade.amaury.UHCReloaded.old.events.EpisodeChangedCause;
 import eu.carrade.amaury.UHCReloaded.old.events.UHEpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.old.events.UHGameStartsEvent;
-import eu.carrade.amaury.UHCReloaded.old.events.UHPlayerResurrectedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.old.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
@@ -803,7 +803,7 @@ public class UHGameManager
         players.add(player.getName());
 
         // Event
-        p.getServer().getPluginManager().callEvent(new UHPlayerResurrectedEvent(player));
+        p.getServer().getPluginManager().callEvent(new PlayerResurrectedEvent(player));
 
         return true;
     }

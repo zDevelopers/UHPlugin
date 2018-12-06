@@ -34,6 +34,8 @@ package eu.carrade.amaury.UHCReloaded.old.listeners;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.events.TimerEndsEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.events.TimerStartsEvent;
 import eu.carrade.amaury.UHCReloaded.old.events.*;
@@ -108,7 +110,7 @@ public class GameListener implements Listener
             return;
         }
 
-        p.getServer().getPluginManager().callEvent(new UHPlayerDeathEvent(ev.getEntity(), ev));
+        p.getServer().getPluginManager().callEvent(new AlivePlayerDeathEvent(ev));
 
         // Plays sound.
         p.getGameManager().getDeathSound().broadcast();
@@ -705,7 +707,7 @@ public class GameListener implements Listener
      *  - update the MOTD.
      */
     @EventHandler
-    public void onPlayerResurrected(final UHPlayerResurrectedEvent ev)
+    public void onPlayerResurrected(final PlayerResurrectedEvent ev)
     {
         // Spectator mode disabled
         p.getSpectatorsManager().setSpectating(ev.getPlayer(), false);

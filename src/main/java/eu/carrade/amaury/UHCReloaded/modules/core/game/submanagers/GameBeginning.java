@@ -31,8 +31,11 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.game;
+package eu.carrade.amaury.UHCReloaded.modules.core.game.submanagers;
 
+import eu.carrade.amaury.UHCReloaded.modules.core.game.Config;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;

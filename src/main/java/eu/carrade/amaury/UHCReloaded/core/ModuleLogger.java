@@ -37,6 +37,7 @@ import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.tools.text.RawMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
@@ -118,7 +119,7 @@ public class ModuleLogger extends Logger
             player.sendMessage(message);
         });
 
-        info(message);
+        info(ChatColor.stripColor(message));
     }
 
     public void broadcastAdministrative(RawText message)
@@ -129,6 +130,6 @@ public class ModuleLogger extends Logger
             RawMessage.send(player, message);
         });
 
-        info(message.toPlainText());
+        info(ChatColor.stripColor(message.toPlainText()));
     }
 }

@@ -35,23 +35,50 @@ package eu.carrade.amaury.UHCReloaded.modules.core.spectators;
 
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.spectators.commands.SpectatorsCommand;
 import eu.carrade.amaury.UHCReloaded.modules.core.spectators.managers.SpectatorsManager;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
+import fr.zcraft.zlib.components.commands.Command;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.util.*;
 
 
 @ModuleInfo (
         name = "Spectators manager",
         description = "Handles non-playing players",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_STARTING,
+        when = ModuleInfo.ModuleLoadTime.POST_WORLD,
         can_be_disabled = false
 )
 public class SpectatorsModule extends UHModule
 {
     private SpectatorsManager manager;
 
+    /**
+     * Lists players allowed to spectate. Also used for initial spectators: players who will
+     * never play, only spectate.
+     */
+    private final Set<UUID> spectators = new HashSet<>();
+
     @Override
     protected void onEnable()
     {
         manager = SpectatorsManager.getInstance();
+    }
+
+    @Override
+    public List<Class<? extends Command>> getCommands()
+    {
+        return Collections.singletonList(SpectatorsCommand.class);
     }
 
     /**
@@ -60,5 +87,117 @@ public class SpectatorsModule extends UHModule
     public SpectatorsManager getManager()
     {
         return manager;
+    }
+
+    /**
+     * @return The allowed spectators.
+     */
+    public Set<UUID> getSpectators()
+    {
+        return spectators;
+    }
+
+    public boolean isSpectator(final UUID playerID)
+    {
+        return spectators.contains(playerID);
+    }
+
+    public boolean isSpectator(final OfflinePlayer player)
+    {
+        return spectators.contains(player.getUniqueId());
+    }
+
+    /**
+     * Adds a spectator.
+     *
+     * @param playerID The spectator's ID.
+     */
+    public void addSpectator(UUID playerID)
+    {
+        spectators.add(playerID);
+
+        if (UR.module(GameModule.class).getPhase() != GamePhase.WAIT)
+            manager.setSpectating(playerID, true);
+    }
+
+    /**
+     * Adds a spectator.
+     *
+     * @param player The spectator.
+     */
+    public void addSpectator(OfflinePlayer player)
+    {
+        addSpectator(player.getUniqueId());
+    }
+
+    /**
+     * Removes a spectator.
+     *
+     * @param playerID The spectator's ID.
+     */
+    public void removeSpectator(UUID playerID)
+    {
+        spectators.add(playerID);
+
+        if (UR.module(GameModule.class).getPhase() != GamePhase.WAIT)
+            manager.setSpectating(playerID, false);
+    }
+
+    /**
+     * Removes a spectator.
+     *
+     * @param player The spectator.
+     */
+    public void removeSpectator(OfflinePlayer player)
+    {
+        removeSpectator(player.getUniqueId());
+    }
+
+    /**
+     * Ensures all players are in specator mode.
+     *
+     * @param strict If true, all spectating players not in our list are removed from the spectator mode.
+     *               Else, only players in our list are placed into spectator mode.
+     */
+    private void ensureSpectatorMode(final boolean strict)
+    {
+        if (strict)
+        {
+            Bukkit.getOnlinePlayers().forEach(player -> manager.setSpectating(player, isSpectator(player)));
+        }
+        else
+        {
+            spectators.forEach(spectator -> manager.setSpectating(spectator, true));
+        }
+    }
+
+    @EventHandler
+    public void onGameStart(final GamePhaseChangedEvent ev)
+    {
+        if (ev.getNewPhase() != GamePhase.IN_GAME) return;
+
+        ensureSpectatorMode(true);
+    }
+
+    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
+    {
+        addSpectator(ev.getPlayer());
+    }
+
+
+    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerResurrects(final PlayerResurrectedEvent ev)
+    {
+        removeSpectator(ev.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerJoin(final PlayerJoinEvent ev)
+    {
+        if (UR.module(GameModule.class).getPhase().ordinal() >= GamePhase.IN_GAME.ordinal())
+        {
+            manager.setSpectating(ev.getPlayer(), isSpectator(ev.getPlayer()));
+        }
     }
 }

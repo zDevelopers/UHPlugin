@@ -30,9 +30,10 @@
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
 
-package eu.carrade.amaury.UHCReloaded.old.events;
+package eu.carrade.amaury.UHCReloaded.modules.core.game.events.players;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -40,19 +41,27 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 /**
  * Fired when a player playing an UHC match is dead.
- * <p>
- * This event is called before all the action executed on player death (sound, scoreboard updates, etc.).
+ *
+ * When this event is called, the player is not yet removed from the alive
+ * players (i.e. {@code UR.module(GameModule.class).isAlive(ev.getPlayer())}
+ * will return {@code true}).
+ *
+ * If the event is cancelled, the player will die but will not be removed
+ * from the alive players.
  */
-public class UHPlayerDeathEvent extends Event
+public class AlivePlayerDeathEvent extends Event implements Cancellable
 {
-    private Player player;
-    private PlayerDeathEvent ev;
+    private final Player player;
+    private final PlayerDeathEvent playerDeathEvent;
 
-    public UHPlayerDeathEvent(Player player, PlayerDeathEvent ev)
+    private boolean cancelled = false;
+
+    public AlivePlayerDeathEvent(final PlayerDeathEvent playerDeathEvent)
     {
-        this.player = player;
-        this.ev = ev;
+        this.player = playerDeathEvent.getEntity();
+        this.playerDeathEvent = playerDeathEvent;
     }
+
 
     /**
      * Returns the dead player.
@@ -64,14 +73,26 @@ public class UHPlayerDeathEvent extends Event
     }
 
     /**
-     * Returns the PlayerDeathEvent under this event.
-     * @return The PlayerDeathEvent.
+     * Returns the underlying {@link PlayerDeathEvent}.
+     * @return The {@link PlayerDeathEvent}.
      */
     public PlayerDeathEvent getPlayerDeathEvent()
     {
-        return ev;
+        return playerDeathEvent;
     }
 
+
+    @Override
+    public boolean isCancelled()
+    {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled)
+    {
+        this.cancelled = cancelled;
+    }
 
 
     private static final HandlerList handlers = new HandlerList();

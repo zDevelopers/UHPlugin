@@ -32,8 +32,8 @@
 package eu.carrade.amaury.UHCReloaded.scoreboard;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.events.UHPlayerDeathEvent;
-import eu.carrade.amaury.UHCReloaded.old.events.UHPlayerResurrectedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -84,7 +84,7 @@ public class ScoreboardListener implements Listener
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerDeath(UHPlayerDeathEvent ev)
+    public void onPlayerDeath(AlivePlayerDeathEvent ev)
     {
         onPlayerHealthChange(ev.getPlayer());
 
@@ -97,7 +97,7 @@ public class ScoreboardListener implements Listener
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerResurrect(UHPlayerResurrectedEvent ev)
+    public void onPlayerResurrect(PlayerResurrectedEvent ev)
     {
         onPlayerHealthChange(ev.getPlayer());
 

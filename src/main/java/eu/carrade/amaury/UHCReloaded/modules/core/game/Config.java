@@ -74,4 +74,12 @@ public class Config extends ConfigurationInstance
         public final ConfigurationItem<TimeDelta> PEACE_PERIOD = item("peace-period", new TimeDelta(0));
         public final ConfigurationItem<TimeDelta> SURFACE_MOBS_FREE_PERIOD = item("surface-mobs-free-period", new TimeDelta(0, 15, 0));
     }
+
+    public static final SidebarSection SIDEBAR = section("sidebar", SidebarSection.class);
+
+    public static final class SidebarSection extends ConfigurationSection
+    {
+        public final ConfigurationItem<Boolean> PLAYERS = item("players", true);
+        public final ConfigurationItem<Boolean> TEAMS = item("teams", true);
+    }
 }

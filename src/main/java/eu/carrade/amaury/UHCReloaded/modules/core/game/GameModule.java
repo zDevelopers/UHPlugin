@@ -35,7 +35,10 @@ import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.commands.StartCommand;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.TeamDeathEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.start.*;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.submanagers.GameBeginning;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.teleporter.TeleportationMode;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.teleporter.Teleporter;
 import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
@@ -58,6 +61,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -91,12 +95,6 @@ public class GameModule extends UHModule implements Listener
      * Refreshed using the {@link #updateAliveTeams()} method.
      */
     private final Set<ZTeam> aliveTeams = new HashSet<>();
-
-    /**
-     * List of players connected when the game starts but who will not
-     * play at all, only spectate.
-     */
-    private final Set<UUID> initialSpectators = new HashSet<>();
 
     /**
      * {@code true} if there is teams in this game.
@@ -154,23 +152,35 @@ public class GameModule extends UHModule implements Listener
     @Override
     public void injectIntoSidebar(Player player, SidebarInjector injector)
     {
-        injector.injectLines(
-                SidebarInjector.SidebarPriority.VERY_TOP, true,
-                I.tn("{white}{0}{gray} player", "{white}{0}{gray} players", Bukkit.getOnlinePlayers().size(), Bukkit.getOnlinePlayers().size())
-        );
+        final List<String> topSidebar = new ArrayList<>();
+
+        if (Config.SIDEBAR.PLAYERS.get())
+        {
+            topSidebar.add(I.tn(
+                    "{white}{0}{gray} player", "{white}{0}{gray} players",
+                    phase == GamePhase.WAIT ? Bukkit.getOnlinePlayers().size() : alivePlayers.size()
+            ));
+        }
+
+        if (Config.SIDEBAR.TEAMS.get() && teamsGame && phase != GamePhase.WAIT)
+        {
+            topSidebar.add(I.tn("{white}{0}{gray} team", "{white}{0}{gray} teams", aliveTeams.size()));
+        }
+
+        injector.injectLines(SidebarInjector.SidebarPriority.VERY_TOP, true, topSidebar);
 
         switch (phase)
         {
             case WAIT:
                 injector.injectLines(
-                        SidebarInjector.SidebarPriority.TOP, true,
+                        SidebarInjector.SidebarPriority.VERY_TOP, true,
                         I.t("{gray}Waiting for players...")
                 );
                 break;
 
             case STARTING:
                 injector.injectLines(
-                        SidebarInjector.SidebarPriority.TOP, true,
+                        SidebarInjector.SidebarPriority.VERY_TOP, true,
                         I.t("{gray}The game is starting..."),
                         I.t("{gray}Please wait.")
                 );
@@ -198,6 +208,21 @@ public class GameModule extends UHModule implements Listener
         return Collections.unmodifiableSet(aliveTeams);
     }
 
+    public boolean isAlive(final OfflinePlayer player)
+    {
+        return alivePlayers.contains(player.getUniqueId());
+    }
+
+    public boolean isAlive(final UUID playerID)
+    {
+        return alivePlayers.contains(playerID);
+    }
+
+    public boolean isAlive(final ZTeam team)
+    {
+        return team.getPlayersUUID().stream().anyMatch(alivePlayers::contains);
+    }
+
     /**
      * @return the current phase of the game.
      */
@@ -209,11 +234,18 @@ public class GameModule extends UHModule implements Listener
     /**
      * Changes the phase of the game.
      *
-     * @param phase The new phase (must be after the current one, else nothing is done).
+     * The phase must be a phase after the current one, with two exceptions:
+     * the phase order can be STARTING → WAIT or END → IN_GAME.
+     *
+     * @param phase The new phase.
      */
     public void setPhase(GamePhase phase)
     {
-        if (this.phase == null || (this.phase != phase && phase.ordinal() > this.phase.ordinal()))
+        if (this.phase == null
+                || (this.phase != phase && phase.ordinal() > this.phase.ordinal())
+                || (this.phase == GamePhase.STARTING && phase == GamePhase.WAIT)
+                || (this.phase == GamePhase.END && phase == GamePhase.IN_GAME)
+        )
         {
             final GamePhase oldPhase = this.phase;
 
@@ -317,7 +349,11 @@ public class GameModule extends UHModule implements Listener
     }
 
 
-    @EventHandler (priority = EventPriority.LOW)
+
+    /* *** GAME STARTUP + TELEPORTATION *** */
+
+
+    @EventHandler(priority = EventPriority.LOW)
     public void onGameStarting(final GamePhaseChangedEvent ev)
     {
         if (ev.getNewPhase() != GamePhase.STARTING) return;
@@ -343,6 +379,7 @@ public class GameModule extends UHModule implements Listener
 
         Bukkit.getOnlinePlayers().stream()
                 .filter(player -> ZTeams.get().getTeamForPlayer(player) == null)
+                .filter(player -> !UR.module(SpectatorsModule.class).isSpectator(player))
                 .forEach(player ->
                 {
                     // We need an unique name for the team.
@@ -367,17 +404,10 @@ public class GameModule extends UHModule implements Listener
         ZTeams.get().getTeams().stream()
                 .flatMap(team -> team.getPlayers().stream())
                 .map(OfflinePlayer::getUniqueId)
-                .filter(player -> !initialSpectators.contains(player))
+                .filter(player -> !UR.module(SpectatorsModule.class).isSpectator(player))
                 .forEach(alivePlayers::add);
 
         updateAliveTeams();
-
-
-        // Enabling spectator mode for those who will not play.
-
-        Bukkit.getOnlinePlayers()
-                .forEach(player -> UR.module(SpectatorsModule.class)
-                        .getManager().setSpectating(player, initialSpectators.contains(player.getUniqueId())));
 
 
         // We have to check if there is enough spawn points.
@@ -405,6 +435,9 @@ public class GameModule extends UHModule implements Listener
 
             // We clears the teams created on-the-fly
             onTheFlyTeams.forEach(ZTeam::deleteTeam);
+
+            // We set the phase back to WAIT.
+            setPhase(GamePhase.WAIT);
 
             return;
         }
@@ -505,7 +538,7 @@ public class GameModule extends UHModule implements Listener
     }
 
     @EventHandler (priority = EventPriority.LOWEST)
-    public void onPlayerTeleportedToSpawnPoint(PlayerTeleportedToSpawnPointEvent ev)
+    public void onPlayerTeleportedToSpawnPoint(final PlayerTeleportedToSpawnPointEvent ev)
     {
         Player player = Bukkit.getPlayer(ev.getPlayer().getUniqueId());
 
@@ -528,7 +561,7 @@ public class GameModule extends UHModule implements Listener
     }
 
     @EventHandler (priority = EventPriority.LOWEST)
-    public void onTeleportationProcessComplete(AfterTeleportationPhaseEvent ev)
+    public void onTeleportationProcessComplete(final AfterTeleportationPhaseEvent ev)
     {
         log().broadcastAdministrative(I.t("{cs}All teams are teleported."));
 
@@ -553,7 +586,7 @@ public class GameModule extends UHModule implements Listener
     }
 
     @EventHandler (priority = EventPriority.LOWEST)
-    public void onGameStarts(GamePhaseChangedEvent ev)
+    public void onGameStarts(final GamePhaseChangedEvent ev)
     {
         if (ev.getNewPhase() != GamePhase.IN_GAME) return;
 
@@ -582,8 +615,49 @@ public class GameModule extends UHModule implements Listener
         });
     }
 
+
+
+    /* *** PLAYER OR TEAM DEATH & GAME END *** */
+
+
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent ev)
+    public void onPlayerDeath(final PlayerDeathEvent ev)
+    {
+        if (phase != GamePhase.IN_GAME) return;
+        if (!isAlive(ev.getEntity())) return;
+
+        final AlivePlayerDeathEvent event = new AlivePlayerDeathEvent(ev);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (!event.isCancelled())
+        {
+            alivePlayers.remove(ev.getEntity().getUniqueId());
+
+            updateAliveTeams();
+
+            // We check the player's team to see if there is players left inside.
+            if (teamsGame)
+            {
+                final ZTeam team = ZTeams.get().getTeamForPlayer(ev.getEntity());
+                if (team != null && !aliveTeams.contains(team))
+                {
+                    Bukkit.getPluginManager().callEvent(new TeamDeathEvent(team));
+                }
+            }
+
+            if (aliveTeams.size() <= 1)
+            {
+                setPhase(GamePhase.END);
+            }
+        }
+    }
+
+
+
+    /* *** OTHER PLAYERS MANAGEMENT *** */
+
+    @EventHandler
+    public void onPlayerJoin(final PlayerJoinEvent ev)
     {
         updatePlayerFlightOptions(ev.getPlayer());
     }

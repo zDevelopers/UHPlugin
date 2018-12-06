@@ -30,33 +30,39 @@
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
 
-package eu.carrade.amaury.UHCReloaded.old.events;
+package eu.carrade.amaury.UHCReloaded.modules.core.game.events.players;
 
-import fr.zcraft.zteams.ZTeam;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 
 /**
- * Event fired when the last member of a team die.
+ * Called when a player is resurrected.
+ * <p>
+ * This event is called when:
+ * <ul>
+ *   <li>the command {@code /uh resurrect <player>} is executed, if the target is online;</li>
+ *   <li>the resurrected player logins, else.</li>
+ * </ul>
  */
-public class UHTeamDeathEvent extends Event
+public class PlayerResurrectedEvent extends Event
 {
-    private ZTeam team;
+    private final Player resurrectedPlayer;
 
-    public UHTeamDeathEvent(ZTeam team)
+    public PlayerResurrectedEvent(final Player player)
     {
-        this.team = team;
+        this.resurrectedPlayer = player;
     }
 
     /**
-     * Returns the now-dead team.
+     * Returns the resurrected player.
      *
-     * @return The team.
+     * @return The player.
      */
-    public ZTeam getTeam()
+    public Player getPlayer()
     {
-        return team;
+        return resurrectedPlayer;
     }
 
 
