@@ -52,8 +52,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
@@ -265,45 +263,6 @@ public class GameListener implements Listener
         if (enableSpectatorModeOnRespawn.remove(ev.getPlayer().getUniqueId()))
         {
             RunTask.nextTick(() -> p.getSpectatorsManager().setSpectating(ev.getPlayer(), true));
-        }
-    }
-
-
-    /**
-     * Used to disable all damages if the game is not started.
-     *
-     * @param ev
-     */
-    @EventHandler
-    public void onEntityDamage(final EntityDamageEvent ev)
-    {
-        if (ev.getEntity() instanceof Player)
-        {
-            if (p.getGameManager().isSlowStartInProgress() || (!p.getGameManager().isGameRunning() && !UHConfig.BEFORE_START.ENABLE_PVP.get()) || (p.getGameManager().isGameRunning() && !p.getGameManager().isTakingDamage()))
-            {
-                ev.setCancelled(true);
-            }
-        }
-    }
-
-
-    /**
-     * Used to prevent the food level from dropping if the game has not started.
-     *
-     * @param ev
-     */
-    @EventHandler
-    public void onFoodUpdate(final FoodLevelChangeEvent ev)
-    {
-        if (!p.getGameManager().isGameRunning())
-        {
-            if (ev.getEntity() instanceof Player)
-            {
-                ((Player) ev.getEntity()).setFoodLevel(20);
-                ((Player) ev.getEntity()).setSaturation(20f);
-            }
-
-            ev.setCancelled(true);
         }
     }
 

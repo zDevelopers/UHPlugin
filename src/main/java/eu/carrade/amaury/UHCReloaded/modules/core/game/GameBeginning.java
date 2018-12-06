@@ -91,7 +91,7 @@ public class GameBeginning extends ZLibComponent implements Listener
             inGracePeriod = false;
             UR.module(GameModule.class).getAliveConnectedPlayers().forEach(ActionBar::removeMessage);
             Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} The grace period ended, you are now vulnerable."));
-        }, Config.BEGINNING.GRACE_PERIOD.get().getSeconds() * 20L);
+        }, grace.getSeconds() * 20L);
 
 
         /* *** Peace period (PVP disabled) *** */
@@ -135,7 +135,7 @@ public class GameBeginning extends ZLibComponent implements Listener
      * Used to cancel the spawn of hostile entities on the surface only, at the beginning of the game.
      */
     @EventHandler
-    public void onSurfaceCreatureSpawn(CreatureSpawnEvent ev)
+    public void onSurfaceCreatureSpawn(final CreatureSpawnEvent ev)
     {
         if (inMobsFreePeriod && EntitiesUtils.isNaturalSpawn(ev.getSpawnReason()) && EntitiesUtils.isHostile(ev.getEntityType()))
         {

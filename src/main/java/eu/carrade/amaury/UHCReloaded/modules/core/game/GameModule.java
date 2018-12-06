@@ -561,10 +561,24 @@ public class GameModule extends UHModule implements Listener
 
         getAliveConnectedPlayers().forEach(player -> {
             updatePlayerFlightOptions(player);
+
             player.setFlying(false);
             player.setAllowFlight(false);
+
             player.setGameMode(GameMode.SURVIVAL);
+
             player.setHealth(player.getMaxHealth());
+
+            player.setFoodLevel(20);
+            player.setSaturation(20);
+
+            player.getInventory().clear();
+            player.getInventory().setArmorContents(null);
+
+            player.closeInventory();
+
+            player.setExp(0L);
+            player.setLevel(0);
         });
     }
 

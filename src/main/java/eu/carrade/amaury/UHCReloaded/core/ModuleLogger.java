@@ -54,7 +54,7 @@ public class ModuleLogger extends Logger
         setParent(ZLib.getPlugin().getLogger());
         setLevel(Level.ALL);
 
-        loggerName = "[" + ZLib.getPlugin().getName() + "] [" + ModuleWrapper.computeModuleName(module) + " Module] ";
+        loggerName = "[" + ZLib.getPlugin().getName() + "] [" + ModuleWrapper.computeModuleName(module) + "] ";
     }
 
     @Override

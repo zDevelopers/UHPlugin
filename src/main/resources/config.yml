@@ -20,6 +20,7 @@ lang:
 # You can put internal modules or refer to modules classes from other plugins. In all
 # cases, replace all dots in class paths by dashes.
 modules:
+    "beginning-wait": true
     "beginning-cages": true
     "border-walls": true
     "border-warning": true
