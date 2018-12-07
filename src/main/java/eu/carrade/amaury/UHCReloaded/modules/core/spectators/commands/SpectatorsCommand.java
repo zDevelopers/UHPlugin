@@ -43,12 +43,13 @@ import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 
-@CommandInfo (name = "spectators", usageParameters = "[add <player>] [remove <player>]")
+@CommandInfo (name = "spectators", usageParameters = "[add <player>] [remove <player>]", aliases = {"spec", "sp"})
 public class SpectatorsCommand extends Command
 {
     @Override
@@ -141,7 +142,34 @@ public class SpectatorsCommand extends Command
     protected List<String> complete()
     {
         if (args.length == 1) return getMatchingSubset(args[0], "add", "remove");
-        else if (args.length == 2) return getMatchingPlayerNames(args[1]);
+        else if (args.length == 2)
+        {
+            switch (args[0].toLowerCase())
+            {
+                case "add":
+                case "a":
+                    return getMatchingSubset(
+                            Arrays.stream(Bukkit.getOfflinePlayers())
+                                    .filter(player -> !UR.module(SpectatorsModule.class).isSpectator(player))
+                                    .map(OfflinePlayer::getName)
+                                    .collect(Collectors.toList()),
+                            args[1]
+                    );
+
+                case "remove":
+                case "r":
+                    return getMatchingSubset(
+                            Arrays.stream(Bukkit.getOfflinePlayers())
+                                    .filter(player -> UR.module(SpectatorsModule.class).isSpectator(player))
+                                    .map(OfflinePlayer::getName)
+                                    .collect(Collectors.toList()),
+                            args[1]
+                    );
+
+                default:
+                    return null;
+            }
+        }
         else return null;
     }
 }

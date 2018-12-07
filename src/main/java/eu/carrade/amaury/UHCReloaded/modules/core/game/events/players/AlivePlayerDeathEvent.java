@@ -32,7 +32,7 @@
 
 package eu.carrade.amaury.UHCReloaded.modules.core.game.events.players;
 
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -51,29 +51,30 @@ import org.bukkit.event.entity.PlayerDeathEvent;
  */
 public class AlivePlayerDeathEvent extends Event implements Cancellable
 {
-    private final Player player;
+    private final OfflinePlayer player;
     private final PlayerDeathEvent playerDeathEvent;
 
     private boolean cancelled = false;
 
-    public AlivePlayerDeathEvent(final PlayerDeathEvent playerDeathEvent)
+    public AlivePlayerDeathEvent(final OfflinePlayer player, final PlayerDeathEvent playerDeathEvent)
     {
-        this.player = playerDeathEvent.getEntity();
+        this.player = player;
         this.playerDeathEvent = playerDeathEvent;
     }
-
 
     /**
      * Returns the dead player.
      * @return The player.
      */
-    public Player getPlayer()
+    public OfflinePlayer getPlayer()
     {
         return player;
     }
 
     /**
-     * Returns the underlying {@link PlayerDeathEvent}.
+     * Returns the underlying {@link PlayerDeathEvent}. Can be {@code null} if the player
+     * was killed using {@code /uh kill} or programmatically.
+     *
      * @return The {@link PlayerDeathEvent}.
      */
     public PlayerDeathEvent getPlayerDeathEvent()

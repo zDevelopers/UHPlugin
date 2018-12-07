@@ -33,9 +33,12 @@ package eu.carrade.amaury.UHCReloaded.modules.core.game;
 
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.commands.KillCommand;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.commands.ResurrectCommand;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.commands.StartCommand;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.TeamDeathEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.start.*;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.submanagers.GameBeginning;
@@ -146,7 +149,11 @@ public class GameModule extends UHModule implements Listener
     @Override
     public List<Class<? extends Command>> getCommands()
     {
-        return Collections.singletonList(StartCommand.class);
+        return Arrays.asList(
+                StartCommand.class,
+                KillCommand.class,
+                ResurrectCommand.class
+        );
     }
 
     @Override
@@ -224,6 +231,87 @@ public class GameModule extends UHModule implements Listener
     }
 
     /**
+     * Kills a player.
+     *
+     * This method calls an event. If the event is cancelled, the player is not
+     * killed.
+     *
+     * @param player The player to kill.
+     * @return {@code true} if the player was effectively killed (event not cancelled).
+     */
+    public boolean kill(final OfflinePlayer player)
+    {
+        return kill(player, null);
+    }
+
+    /**
+     * Kills a player. Internal use for natural deaths.
+     *
+     * This method calls an event. If the event is cancelled, the player is not
+     * killed.
+     *
+     * @param player The player to kill.
+     * @param ev The underlying death event.
+     *
+     * @return {@code true} if the player was effectively killed (event not cancelled).
+     */
+    private boolean kill(final OfflinePlayer player, final PlayerDeathEvent ev)
+    {
+        final AlivePlayerDeathEvent event = new AlivePlayerDeathEvent(player, ev);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (!event.isCancelled())
+        {
+            alivePlayers.remove(player.getUniqueId());
+
+            updateAliveTeams();
+
+            // We check the player's team to see if there is players left inside.
+            if (teamsGame)
+            {
+                final ZTeam team = ZTeams.get().getTeamForPlayer(player);
+                if (team != null && !aliveTeams.contains(team))
+                {
+                    Bukkit.getPluginManager().callEvent(new TeamDeathEvent(team));
+                }
+            }
+
+            if (aliveTeams.size() <= 1)
+            {
+                setPhase(GamePhase.END);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Resurrects a player and puts it into the game (even if he/she never played
+     * before).
+     *
+     * @param player The player to resurrect.
+     * @return {@code true} if the player was effectively resurrected (i.e. not already alive).
+     */
+    public boolean resurrect(final OfflinePlayer player)
+    {
+        if (isAlive(player)) return false;
+
+        alivePlayers.add(player.getUniqueId());
+        updateAliveTeams();
+
+        if (aliveTeams.size() > 1 && phase == GamePhase.END)
+        {
+            setPhase(GamePhase.IN_GAME);
+        }
+
+        Bukkit.getPluginManager().callEvent(new PlayerResurrectedEvent(player));
+
+        return true;
+    }
+
+    /**
      * @return the current phase of the game.
      */
     public GamePhase getPhase()
@@ -239,7 +327,7 @@ public class GameModule extends UHModule implements Listener
      *
      * @param phase The new phase.
      */
-    public void setPhase(GamePhase phase)
+    public void setPhase(final GamePhase phase)
     {
         if (this.phase == null
                 || (this.phase != phase && phase.ordinal() > this.phase.ordinal())
@@ -626,30 +714,22 @@ public class GameModule extends UHModule implements Listener
         if (phase != GamePhase.IN_GAME) return;
         if (!isAlive(ev.getEntity())) return;
 
-        final AlivePlayerDeathEvent event = new AlivePlayerDeathEvent(ev);
-        Bukkit.getPluginManager().callEvent(event);
+        kill(ev.getEntity(), ev);
+    }
 
-        if (!event.isCancelled())
-        {
-            alivePlayers.remove(ev.getEntity().getUniqueId());
+    @EventHandler
+    public void onPlayerKilled(final AlivePlayerDeathEvent ev)
+    {
+        log().info("{0} killed", ev.getPlayer().getName());
+    }
 
-            updateAliveTeams();
+    @EventHandler
+    public void onPlayerResurrected(final PlayerResurrectedEvent ev)
+    {
+        log().info("{0} resurrected", ev.getPlayer().getName());
 
-            // We check the player's team to see if there is players left inside.
-            if (teamsGame)
-            {
-                final ZTeam team = ZTeams.get().getTeamForPlayer(ev.getEntity());
-                if (team != null && !aliveTeams.contains(team))
-                {
-                    Bukkit.getPluginManager().callEvent(new TeamDeathEvent(team));
-                }
-            }
-
-            if (aliveTeams.size() <= 1)
-            {
-                setPhase(GamePhase.END);
-            }
-        }
+        /// Resurrection notification. {0} = raw resurrected player name.
+        Bukkit.broadcastMessage(I.t("{gold}{0} returned from the dead!", ev.getPlayer().getName()));
     }
 
 

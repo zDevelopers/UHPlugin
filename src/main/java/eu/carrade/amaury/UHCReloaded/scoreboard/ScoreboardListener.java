@@ -86,7 +86,7 @@ public class ScoreboardListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(AlivePlayerDeathEvent ev)
     {
-        onPlayerHealthChange(ev.getPlayer());
+        // TODO onPlayerHealthChange(ev.getPlayer());
 
         if (ev.getPlayerDeathEvent().getEntity().getKiller() != null)
         {
@@ -99,7 +99,7 @@ public class ScoreboardListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerResurrect(PlayerResurrectedEvent ev)
     {
-        onPlayerHealthChange(ev.getPlayer());
+        // TODO onPlayerHealthChange(ev.getPlayer());
 
         for (SidebarPlayerCache cache : UHCReloaded.get().getScoreboardManager().getAllSidebarPlayerCache().values())
         {

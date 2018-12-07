@@ -34,11 +34,13 @@ package eu.carrade.amaury.UHCReloaded.old.listeners;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.events.TimerEndsEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.events.TimerStartsEvent;
-import eu.carrade.amaury.UHCReloaded.old.events.*;
+import eu.carrade.amaury.UHCReloaded.old.events.EpisodeChangedCause;
+import eu.carrade.amaury.UHCReloaded.old.events.UHEpisodeChangedEvent;
+import eu.carrade.amaury.UHCReloaded.old.events.UHGameEndsEvent;
+import eu.carrade.amaury.UHCReloaded.old.events.UHGameStartsEvent;
 import eu.carrade.amaury.UHCReloaded.old.misc.RuntimeCommandsExecutor;
 import eu.carrade.amaury.UHCReloaded.old.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
@@ -110,7 +112,7 @@ public class GameListener implements Listener
             return;
         }
 
-        p.getServer().getPluginManager().callEvent(new AlivePlayerDeathEvent(ev));
+        // p.getServer().getPluginManager().callEvent(new AlivePlayerDeathEvent(ev));
 
         // Plays sound.
         p.getGameManager().getDeathSound().broadcast();
@@ -710,14 +712,12 @@ public class GameListener implements Listener
     public void onPlayerResurrected(final PlayerResurrectedEvent ev)
     {
         // Spectator mode disabled
-        p.getSpectatorsManager().setSpectating(ev.getPlayer(), false);
+        // p.getSpectatorsManager().setSpectating(ev.getPlayer(), false);
 
-        // Death point removed on the dynmap
-        p.getDynmapIntegration().hideDeathLocation(ev.getPlayer());
+        // TODO Death point removed on the dynmap
+        // p.getDynmapIntegration().hideDeathLocation(ev.getPlayer());
 
         // All players are notified
-        /// Resurrection notification. {0} = raw resurrected player name.
-        p.getServer().broadcastMessage(I.t("{gold}{0} returned from the dead!", ev.getPlayer().getName()));
 
         // Updates the MOTD.
         p.getMOTDManager().updateMOTDDuringGame();

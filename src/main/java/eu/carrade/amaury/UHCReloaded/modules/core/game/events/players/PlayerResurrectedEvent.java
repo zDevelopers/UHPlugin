@@ -32,25 +32,19 @@
 
 package eu.carrade.amaury.UHCReloaded.modules.core.game.events.players;
 
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 
 /**
  * Called when a player is resurrected.
- * <p>
- * This event is called when:
- * <ul>
- *   <li>the command {@code /uh resurrect <player>} is executed, if the target is online;</li>
- *   <li>the resurrected player logins, else.</li>
- * </ul>
  */
 public class PlayerResurrectedEvent extends Event
 {
-    private final Player resurrectedPlayer;
+    private final OfflinePlayer resurrectedPlayer;
 
-    public PlayerResurrectedEvent(final Player player)
+    public PlayerResurrectedEvent(final OfflinePlayer player)
     {
         this.resurrectedPlayer = player;
     }
@@ -60,7 +54,7 @@ public class PlayerResurrectedEvent extends Event
      *
      * @return The player.
      */
-    public Player getPlayer()
+    public OfflinePlayer getPlayer()
     {
         return resurrectedPlayer;
     }
