@@ -43,7 +43,7 @@ public enum GamePhase
     WAIT,
 
     /**
-     * While the game is starting (can last a tick, or a long time with slow start).
+     * While the game is starting (can last the time of the start countdown, or longer with the slow start).
      */
     STARTING,
 

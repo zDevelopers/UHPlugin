@@ -25,6 +25,7 @@ modules:
     "border-walls": true
     "border-warning": true
     "border-check": true
+    "informations-listHealth": true
     "other-playersLoader": true
     "other-about": true
 

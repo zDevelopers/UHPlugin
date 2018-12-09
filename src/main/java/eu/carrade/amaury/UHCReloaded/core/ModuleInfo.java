@@ -113,7 +113,8 @@ public @interface ModuleInfo
         ON_GAME_STARTING,
 
         /**
-         * Loads the module when the game starts.
+         * Loads the module when the game starts, i.e. when all players falls from their spawn into
+         * the world.
          */
         ON_GAME_START,
 
