@@ -32,8 +32,12 @@
 package eu.carrade.amaury.UHCReloaded.modules.core.teams;
 
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.zlib.components.configuration.ConfigurationItem;
+import fr.zcraft.zlib.components.configuration.ConfigurationSection;
 
 import java.io.File;
+
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.section;
 
 
 public class Config extends ConfigurationInstance
@@ -43,5 +47,43 @@ public class Config extends ConfigurationInstance
         super(file);
     }
 
+    public static final SidebarSection SIDEBAR = section("sidebar", SidebarSection.class);
 
+    static public class SidebarSection extends ConfigurationSection
+    {
+        public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
+
+        public final TitleSection TITLE = section("title", TitleSection.class);
+
+        static public class TitleSection extends ConfigurationSection
+        {
+            public final ConfigurationItem<String> COLOR = item("color", "");
+            public final ConfigurationItem<Boolean> USE_TEAM_NAME = item("use-team-name", false);
+        }
+
+        public final ContentSection CONTENT = section("content", ContentSection.class);
+
+        static public class ContentSection extends ConfigurationSection
+        {
+            public final ConfigurationItem<Boolean> DISPLAY_HEARTS = item("display-hearts", true);
+            public final ConfigurationItem<Boolean> COLOR_NAME = item("color-name", false);
+            public final ConfigurationItem<Boolean> STRIKE_DEAD_PLAYERS = item("strike-dead-players", false);
+
+            public final LoginStateSection LOGIN_STATE = section("login-state", LoginStateSection.class);
+
+            static public class LoginStateSection extends ConfigurationSection
+            {
+                public final ConfigurationItem<Boolean> ITALIC = item("italic", true);
+                public final ConfigurationItem<String> SUFFIX = item("suffix", "➥");
+            }
+
+            public final DisplayMetPlayersOnlySection DISPLAY_MET_PLAYERS_ONLY = section("display-met-players-only", DisplayMetPlayersOnlySection.class);
+
+            static public class DisplayMetPlayersOnlySection extends ConfigurationSection
+            {
+                public final ConfigurationItem<Boolean> ENABLED = item("enabled", false);
+                public final ConfigurationItem<Double> DISPLAYED_WHEN_CLOSER_THAN = item("displayed-when-closer-than", 10d);
+            }
+        }
+    }
 }

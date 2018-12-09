@@ -29,11 +29,13 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.scoreboard;
+package eu.carrade.amaury.UHCReloaded.modules.core.teams.sidebar;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.teams.TeamsModule;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,15 +48,21 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 
-public class ScoreboardListener implements Listener
+public class SidebarCacheListener implements Listener
 {
+    private final static GameModule game = UR.module(GameModule.class);
+    private final static TeamsModule teams = UR.module(TeamsModule.class);
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent ev)
     {
-        final SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(ev.getPlayer().getUniqueId());
+        final SidebarPlayerCache cache = teams.getSidebarPlayerCache(ev.getPlayer().getUniqueId());
 
         cache.updateName(ev.getPlayer().getName());
         cache.updateOnlineStatus(true);
+
+        // To be sure (and if the player was killed/resurrected while offline)
+        onPlayerHealthChange(ev.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -86,39 +94,28 @@ public class ScoreboardListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(AlivePlayerDeathEvent ev)
     {
-        // TODO onPlayerHealthChange(ev.getPlayer());
-
-        if (ev.getPlayerDeathEvent().getEntity().getKiller() != null)
-        {
-            UHCReloaded.get().getScoreboardManager()
-                    .getSidebarPlayerCache(ev.getPlayerDeathEvent().getEntity().getKiller().getUniqueId())
-                    .getPlayersKilled().add(ev.getPlayer().getUniqueId());
-        }
+        if (ev.getPlayer().isOnline())
+            onPlayerHealthChange(ev.getPlayer().getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerResurrect(PlayerResurrectedEvent ev)
     {
-        // TODO onPlayerHealthChange(ev.getPlayer());
-
-        for (SidebarPlayerCache cache : UHCReloaded.get().getScoreboardManager().getAllSidebarPlayerCache().values())
-        {
-            if (cache.getPlayersKilled().remove(ev.getPlayer().getUniqueId()))
-                break;
-        }
+        if (ev.getPlayer().isOnline())
+            onPlayerHealthChange(ev.getPlayer().getPlayer());
     }
 
     private void onPlayerQuit(Player player)
     {
-        UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(player.getUniqueId()).updateOnlineStatus(false);
+        teams.getSidebarPlayerCache(player.getUniqueId()).updateOnlineStatus(false);
     }
 
     private void onPlayerHealthChange(final Player player)
     {
         // One tick later to use the updated health value.
         RunTask.nextTick(() -> {
-            final SidebarPlayerCache cache = UHCReloaded.get().getScoreboardManager().getSidebarPlayerCache(player.getUniqueId());
-            cache.updateHealth(UHCReloaded.get().getGameManager().isPlayerDead(player.getUniqueId()) ? 0d : player.getHealth());
+            final SidebarPlayerCache cache = teams.getSidebarPlayerCache(player.getUniqueId());
+            cache.updateHealth(game.isAlive(player.getUniqueId()) ? player.getHealth() : 0d);
         });
     }
 }

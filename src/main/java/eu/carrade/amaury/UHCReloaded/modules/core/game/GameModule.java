@@ -195,6 +195,11 @@ public class GameModule extends UHModule implements Listener
         }
     }
 
+    public boolean isTeamsGame()
+    {
+        return teamsGame;
+    }
+
     public Set<UUID> getAlivePlayersUUIDs()
     {
         return Collections.unmodifiableSet(alivePlayers);

@@ -33,6 +33,8 @@ package eu.carrade.amaury.UHCReloaded.scoreboard;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
+import eu.carrade.amaury.UHCReloaded.modules.core.teams.sidebar.SidebarCacheListener;
+import eu.carrade.amaury.UHCReloaded.modules.core.teams.sidebar.SidebarPlayerCache;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
@@ -64,7 +66,7 @@ public class ScoreboardManager
         this.p = p;
         this.sb = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
 
-        UHCReloaded.get().getServer().getPluginManager().registerEvents(new ScoreboardListener(), UHCReloaded.get());
+        UHCReloaded.get().getServer().getPluginManager().registerEvents(new SidebarCacheListener(), UHCReloaded.get());
 
 
         // Initialization of the scoreboard (match info in the sidebar)

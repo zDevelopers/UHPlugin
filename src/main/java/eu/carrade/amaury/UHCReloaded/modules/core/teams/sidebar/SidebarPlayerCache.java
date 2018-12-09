@@ -29,18 +29,25 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.scoreboard;
+package eu.carrade.amaury.UHCReloaded.modules.core.teams.sidebar;
 
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.i18n.I;
-import fr.zcraft.zlib.components.scoreboard.Sidebar;
+import fr.zcraft.zteams.ZTeam;
+import fr.zcraft.zteams.ZTeams;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
 
 
 /**
@@ -48,29 +55,29 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class SidebarPlayerCache
 {
-    private UUID playerId;
+    private UUID playerID;
 
     private String playerName;
     private ChatColor healthColor = ChatColor.WHITE;
 
     private boolean isOnline;
-    private boolean isAlive;
 
-    private Set<UUID> playersKilled      = new CopyOnWriteArraySet<>();
-    private Set<UUID> teammatesDisplayed = new CopyOnWriteArraySet<>();
+    private final Set<UUID> metTeammates = new HashSet<>();
 
 
-    public SidebarPlayerCache(UUID id)
+    public SidebarPlayerCache(final UUID id)
     {
-        playerId = id;
+        playerID = id;
 
-        Player player = Sidebar.getPlayerAsync(id);
+        final OfflinePlayer player = Bukkit.getOfflinePlayer(id);
 
         if (player != null)
         {
             playerName = player.getName();
-            isOnline = true;
-            updateHealth(player.getHealth());
+            isOnline = player.isOnline();
+
+            if (isOnline)
+                updateHealth(player.getPlayer().getHealth());
         }
         else
         {
@@ -98,8 +105,6 @@ public class SidebarPlayerCache
             healthColor = ChatColor.GREEN;
         else
             healthColor = ChatColor.DARK_GREEN;
-
-        isAlive = (health > 0);
     }
 
     public void updateOnlineStatus(boolean isOnline)
@@ -107,14 +112,9 @@ public class SidebarPlayerCache
         this.isOnline = isOnline;
     }
 
-    public void addKill(UUID id)
+    public UUID getPlayerID()
     {
-        playersKilled.add(id);
-    }
-
-    public UUID getPlayerId()
-    {
-        return playerId;
+        return playerID;
     }
 
     public String getPlayerName()
@@ -122,7 +122,7 @@ public class SidebarPlayerCache
         if (playerName != null && !playerName.isEmpty())
             return playerName;
 
-        OfflinePlayer player = OfflinePlayersLoader.getOfflinePlayer(playerId);
+        final OfflinePlayer player = OfflinePlayersLoader.getOfflinePlayer(playerID);
         if (player != null && player.getName() != null && !player.getName().isEmpty())
         {
             playerName = player.getName();
@@ -143,18 +143,42 @@ public class SidebarPlayerCache
         return isOnline;
     }
 
-    public boolean isAlive()
+    public Set<OfflinePlayer> getMetTeammates()
     {
-        return isAlive;
+        return metTeammates.stream()
+                .map(Bukkit::getOfflinePlayer)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 
-    public Set<UUID> getTeammatesDisplayed()
+    public void updateTeammatesDisplayed(final double distanceThreshold)
     {
-        return teammatesDisplayed;
+        final Player player = Bukkit.getPlayer(playerID);
+        if (player != null)
+        {
+            updateTeammatesDisplayed(
+                    distanceThreshold * distanceThreshold,
+                    player.getLocation(),
+                    ZTeams.get().getTeamForPlayer(playerID)
+            );
+        }
     }
 
-    public Set<UUID> getPlayersKilled()
+    public void updateTeammatesDisplayed(final double distanceThresholdSquared, final Location reference, final ZTeam team)
     {
-        return playersKilled;
+        final GameModule game = UR.module(GameModule.class);
+
+        // For each non-encountered online teammate, we check if they are close
+        team.getOnlinePlayers().stream()
+            .filter(p -> !metTeammates.contains(p.getUniqueId()))
+            .filter(game::isAlive)
+            .forEach(p -> {
+                if (p.getWorld() == null) return;
+                if (!p.getWorld().equals(reference.getWorld())) return;
+                if (p.getLocation().distanceSquared(reference) > distanceThresholdSquared) return;
+
+                // Close enough
+                metTeammates.add(p.getUniqueId());
+            });
     }
 }
