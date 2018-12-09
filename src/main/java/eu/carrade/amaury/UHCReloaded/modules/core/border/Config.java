@@ -54,17 +54,25 @@ public class Config extends ConfigurationInstance
     public static final ConfigurationItem<MapShape> SHAPE = item("shape", MapShape.SQUARED);
 
     public static final ConfigurationItem<WorldBorder.WorldBorderMotor> MOTOR = item("motor", WorldBorder.WorldBorderMotor.VANILLA);
-    public static final ConfigurationItem<Double> DAMAGES_BUFFER = item("damagesBuffer", 5d);
-    public static final ConfigurationItem<Double> DAMAGES_AMOUNT = item("damagesAmount", 0.2);
-    public static final ConfigurationItem<Integer> WARNING_DISTANCE = item("warningDistance", 5);
+    public static final ConfigurationItem<Double> DAMAGES_BUFFER = item("damages-buffer", 5d);
+    public static final ConfigurationItem<Double> DAMAGES_AMOUNT = item("damages-amount", 0.2);
+    public static final ConfigurationItem<Integer> WARNING_DISTANCE = item("warning-distance", 5);
 
     public static final ShrinkingSection SHRINKING = section("shrinking", ShrinkingSection.class);
 
     static public class ShrinkingSection extends ConfigurationSection
     {
         public final ConfigurationItem<Boolean> ENABLED = item("enabled", false);
-        public final ConfigurationItem<TimeDelta> STARTS_AFTER = item("startsAfter", new TimeDelta(0, 30, 0));
-        public final ConfigurationItem<TimeDelta> SHRINKS_DURING = item("shrinksDuring", new TimeDelta(2, 0, 0));
-        public final ConfigurationItem<Integer> DIAMETER_AFTER_SHRINK = item("diameterAfterShrink", 200);
+        public final ConfigurationItem<TimeDelta> STARTS_AFTER = item("starts-after", new TimeDelta(1, 30, 0));
+        public final ConfigurationItem<TimeDelta> SHRINKS_DURING = item("shrinks-during", new TimeDelta(2, 0, 0));
+        public final ConfigurationItem<Integer> DIAMETER_AFTER_SHRINK = item("diameter-after-shrink", 200);
+    }
+
+    static public final BorderSection SIDEBAR = section("sidebar", BorderSection.class);
+
+    static public class BorderSection extends ConfigurationSection
+    {
+        public final ConfigurationItem<Boolean> DISPLAYED = item("displayed", true);
+        public final ConfigurationItem<Boolean> DISPLAY_DIAMETER = item("display-diameter", false);
     }
 }

@@ -163,7 +163,7 @@ public class BorderCommand extends Command
                     return;
                 }
 
-                border.getBorderProxy().setDiameter(newDiameter, delta.getSeconds() * 20L);
+                border.getBorderProxy().setDiameter(newDiameter, delta);
 
                 if (border.getMapShape() == MapShape.CIRCULAR)
                 {

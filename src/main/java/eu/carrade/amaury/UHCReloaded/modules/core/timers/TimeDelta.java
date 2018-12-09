@@ -87,7 +87,8 @@ public class TimeDelta
      * @param rawTime The raw time text.
      *
      * @throws IllegalArgumentException if the text is not formatted as above.
-     * @throws NumberFormatException if the text between the colons cannot be converted in integers.
+     * @throws NumberFormatException if the text between the colons cannot be
+     * converted in integers.
      */
     public TimeDelta(final String rawTime) throws IllegalArgumentException, NumberFormatException
     {
@@ -112,11 +113,78 @@ public class TimeDelta
         }
     }
 
+    /**
+     * @return The total number of seconds in this time delta.
+     */
     public long getSeconds()
     {
         return seconds;
     }
 
+    /**
+     * @param other Another {@link TimeDelta}.
+     * @return {@code true} if the duration in this {@link TimeDelta} is less than
+     * (or equal to) the duration in the other one.
+     */
+    public boolean lessThan(final TimeDelta other)
+    {
+        return this.getSeconds() <= other.getSeconds();
+    }
+
+    /**
+     * @param other Another {@link TimeDelta}.
+     * @return {@code true} if the duration in this {@link TimeDelta} is greater
+     * than (or equal to) the duration in the other one.
+     */
+    public boolean greaterThan(final TimeDelta other)
+    {
+        return this.getSeconds() >= other.getSeconds();
+    }
+
+    /**
+     * @param other Another {@link TimeDelta}
+     * @return A new {@link TimeDelta} instance representing the sum of the two
+     * {@link TimeDelta deltas}.
+     */
+    public TimeDelta add(final TimeDelta other)
+    {
+        return new TimeDelta(this.getSeconds() + other.getSeconds());
+    }
+
+    /**
+     * @param other Another {@link TimeDelta}
+     * @return A new {@link TimeDelta} instance representing the subtraction of
+     * the two {@link TimeDelta deltas}.
+     */
+    public TimeDelta subtract(final TimeDelta other)
+    {
+        return new TimeDelta(this.getSeconds() - other.getSeconds());
+    }
+
+    /**
+     * @param factor A factor.
+     * @return A new {@link TimeDelta} instance representing the duration of this
+     * {@link TimeDelta delta} multiplied by the given factor.
+     */
+    public TimeDelta multiply(final long factor)
+    {
+        return new TimeDelta(this.getSeconds() * factor);
+    }
+
+    /**
+     * @param factor A factor.
+     * @return A new {@link TimeDelta} instance representing the duration of this
+     * {@link TimeDelta delta} divided by the given factor.
+     */
+    public TimeDelta divide(final long factor)
+    {
+        return new TimeDelta(this.getSeconds() / factor);
+    }
+
+    /**
+     * @return A string representation using the format “mm:ss” or “hh:mm:ss” if
+     * longer than one hour.
+     */
     @Override
     public String toString()
     {

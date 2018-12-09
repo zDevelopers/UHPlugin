@@ -325,6 +325,28 @@ public class GameModule extends UHModule implements Listener
     }
 
     /**
+     * Compares the current phase with the given one.
+     *
+     * @param phase The compared phase.
+     * @return {@code true} if the current phase is strictly before this one.
+     */
+    public boolean currentPhaseBefore(final GamePhase phase)
+    {
+        return this.phase.ordinal() < phase.ordinal();
+    }
+
+    /**
+     * Compares the current phase with the given one.
+     *
+     * @param phase The compared phase.
+     * @return {@code true} if the current phase is strictly after this one.
+     */
+    public boolean currentPhaseAfter(final GamePhase phase)
+    {
+        return this.phase.ordinal() > phase.ordinal();
+    }
+
+    /**
      * Changes the phase of the game.
      *
      * The phase must be a phase after the current one, with two exceptions:

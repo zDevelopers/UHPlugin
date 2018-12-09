@@ -31,7 +31,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.border.worldborders;
 
-import eu.carrade.amaury.UHCReloaded.UHConfig;
+import eu.carrade.amaury.UHCReloaded.modules.core.border.Config;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.MapShape;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -48,7 +48,7 @@ public class VanillaWorldBorder extends WorldBorder
     private final World world;
     private final org.bukkit.WorldBorder border;
 
-    public VanillaWorldBorder(World world)
+    public VanillaWorldBorder(final World world)
     {
         this.world = world;
         this.border = world.getWorldBorder();
@@ -57,12 +57,9 @@ public class VanillaWorldBorder extends WorldBorder
     @Override
     public void init()
     {
-        if (UHConfig.MAP.BORDER.isDefined())
-        {
-            setDamageBuffer(UHConfig.MAP.BORDER.DAMAGES_BUFFER.get());
-            setDamageAmount(UHConfig.MAP.BORDER.DAMAGES_AMOUNT.get());
-            setWarningDistance(UHConfig.MAP.BORDER.WARNING_DISTANCE.get());
-        }
+        setDamageBuffer(Config.DAMAGES_BUFFER.get());
+        setDamageAmount(Config.DAMAGES_AMOUNT.get());
+        setWarningDistance(Config.WARNING_DISTANCE.get());
     }
 
     @Override
@@ -78,13 +75,13 @@ public class VanillaWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setDiameter(double diameter)
+    public void setDiameter(final double diameter)
     {
         border.setSize(diameter);
     }
 
     @Override
-    public void setDiameter(double diameter, long time)
+    public void setDiameter(final double diameter, final long time)
     {
         border.setSize(diameter, time);
     }
@@ -96,13 +93,13 @@ public class VanillaWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setCenter(double x, double z)
+    public void setCenter(final double x, final double z)
     {
         border.setCenter(x, z);
     }
 
     @Override
-    public void setCenter(Location center)
+    public void setCenter(final Location center)
     {
         border.setCenter(center);
     }
@@ -114,7 +111,7 @@ public class VanillaWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setDamageBuffer(double distance)
+    public void setDamageBuffer(final double distance)
     {
         border.setDamageBuffer(distance);
     }
@@ -126,7 +123,7 @@ public class VanillaWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setDamageAmount(double damageAmount)
+    public void setDamageAmount(final double damageAmount)
     {
         border.setDamageAmount(damageAmount);
     }
@@ -138,7 +135,7 @@ public class VanillaWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setWarningTime(int seconds)
+    public void setWarningTime(final int seconds)
     {
         border.setWarningTime(seconds);
     }
@@ -150,7 +147,7 @@ public class VanillaWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setWarningDistance(int blocks)
+    public void setWarningDistance(final int blocks)
     {
         border.setWarningDistance(blocks);
     }
@@ -162,7 +159,7 @@ public class VanillaWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setShape(MapShape shape) {}
+    public void setShape(final MapShape shape) {}
 
     @Override
     public boolean supportsProgressiveResize()

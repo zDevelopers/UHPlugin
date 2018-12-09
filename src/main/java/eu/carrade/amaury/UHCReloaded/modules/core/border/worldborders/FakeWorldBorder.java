@@ -49,11 +49,9 @@ public class FakeWorldBorder extends WorldBorder
     private Double diameter;
     private MapShape shape;
 
-    public FakeWorldBorder(World world)
+    public FakeWorldBorder(final World world)
     {
         this.world = world;
-
-        init();
     }
 
     @Override
@@ -69,13 +67,13 @@ public class FakeWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setDiameter(double diameter)
+    public void setDiameter(final double diameter)
     {
         this.diameter = diameter;
     }
 
     @Override
-    public void setDiameter(double diameter, long time)
+    public void setDiameter(final double diameter, final long time)
     {
         this.diameter = diameter;
     }
@@ -87,13 +85,13 @@ public class FakeWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setCenter(double x, double z)
+    public void setCenter(final double x, final double z)
     {
         this.center = new Location(world, x, 0, z);
     }
 
     @Override
-    public void setCenter(Location center)
+    public void setCenter(final Location center)
     {
         setCenter(center.getX(), center.getZ());
     }
@@ -102,25 +100,25 @@ public class FakeWorldBorder extends WorldBorder
     public double getDamageBuffer() { return 0; }
 
     @Override
-    public void setDamageBuffer(double distance) {}
+    public void setDamageBuffer(final double distance) {}
 
     @Override
     public double getDamageAmount() { return 0; }
 
     @Override
-    public void setDamageAmount(double damageAmount) {}
+    public void setDamageAmount(final double damageAmount) {}
 
     @Override
     public int getWarningTime() { return 0; }
 
     @Override
-    public void setWarningTime(int seconds) {}
+    public void setWarningTime(final int seconds) {}
 
     @Override
     public int getWarningDistance() { return 0; }
 
     @Override
-    public void setWarningDistance(int blocks) {}
+    public void setWarningDistance(final int blocks) {}
 
     @Override
     public MapShape getShape()
@@ -129,7 +127,7 @@ public class FakeWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setShape(MapShape shape)
+    public void setShape(final MapShape shape)
     {
         this.shape = shape;
     }

@@ -63,7 +63,7 @@ public class BrettflanWorldBorder extends WorldBorder
     private BukkitTask slowReductionTask = null;
 
 
-    public BrettflanWorldBorder(World world)
+    public BrettflanWorldBorder(final World world)
     {
         this.world = world;
 
@@ -112,7 +112,7 @@ public class BrettflanWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setDiameter(double diameter)
+    public void setDiameter(final double diameter)
     {
         setDiameterInternal(diameter);
 
@@ -154,7 +154,7 @@ public class BrettflanWorldBorder extends WorldBorder
         }, ticksPerBlockRemoved, ticksPerBlockRemoved);
     }
 
-    private void setDiameterInternal(double diameter)
+    private void setDiameterInternal(final double diameter)
     {
         this.diameter = diameter;
 
@@ -175,14 +175,14 @@ public class BrettflanWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setCenter(double x, double z)
+    public void setCenter(final double x, final double z)
     {
         border.setX(x);
         border.setZ(z);
     }
 
     @Override
-    public void setCenter(Location center)
+    public void setCenter(final Location center)
     {
         setCenter(center.getX(), center.getZ());
     }
@@ -191,25 +191,25 @@ public class BrettflanWorldBorder extends WorldBorder
     public double getDamageBuffer() { return 0; }
 
     @Override
-    public void setDamageBuffer(double distance) {}
+    public void setDamageBuffer(final double distance) {}
 
     @Override
     public double getDamageAmount() { return 0; }
 
     @Override
-    public void setDamageAmount(double damageAmount) {}
+    public void setDamageAmount(final double damageAmount) {}
 
     @Override
     public int getWarningTime() { return 0; }
 
     @Override
-    public void setWarningTime(int seconds) {}
+    public void setWarningTime(final int seconds) {}
 
     @Override
     public int getWarningDistance() { return 0; }
 
     @Override
-    public void setWarningDistance(int blocks) {}
+    public void setWarningDistance(final int blocks) {}
 
     @Override
     public MapShape getShape()
@@ -218,7 +218,7 @@ public class BrettflanWorldBorder extends WorldBorder
     }
 
     @Override
-    public void setShape(MapShape shape)
+    public void setShape(final MapShape shape)
     {
         border.setShape(shape == MapShape.CIRCULAR);
     }

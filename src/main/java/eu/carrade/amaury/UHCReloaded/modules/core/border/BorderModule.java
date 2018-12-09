@@ -32,25 +32,34 @@
 package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.commands.BorderCommand;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.events.BorderChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.worldborders.WorldBorder;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
+import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.runners.RunTask;
+import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @ModuleInfo (
@@ -65,6 +74,11 @@ public class BorderModule extends UHModule
     private MapShape mapShape = null;
     private WorldBorder border = null;
 
+    /**
+     * The lines in the sidebar, calculated once for every player. Caching purposes.
+     */
+    private final List<String> sidebar = new ArrayList<>();
+
     @Override
     public void onEnable()
     {
@@ -76,7 +90,7 @@ public class BorderModule extends UHModule
 
         border.setShape(mapShape);
         border.setCenter(world.getSpawnLocation());
-        border.setDiameter(UHConfig.MAP.SIZE.get());
+        border.setDiameter(Config.SIZE.get());
 
         border.init();
 
@@ -87,6 +101,63 @@ public class BorderModule extends UHModule
     public List<Class<? extends Command>> getCommands()
     {
         return Collections.singletonList(BorderCommand.class);
+    }
+
+    @Override
+    public void prepareInjectionIntoSidebar()
+    {
+        if (UR.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME)) return;
+
+        sidebar.clear();
+
+        if (Config.SIDEBAR.DISPLAYED.get())
+        {
+            /// Title of the border section in the sidebar
+            sidebar.add(I.t("{blue}{bold}Border"));
+
+            int diameter = (int) Math.ceil(border.getDiameter());
+
+            if (Config.SIDEBAR.DISPLAY_DIAMETER.get() || border.getShape() == MapShape.CIRCULAR)
+            {
+                if (border.getShape() == MapShape.SQUARED)
+                    /// Border diameter for a squared map in the sidebar
+                    sidebar.add(I.tn("{white}{0} block wide", "{white}{0} blocks wide", diameter, diameter));
+                else
+                    /// Border diameter for a circular map in the sidebar
+                    sidebar.add(I.tn("{gray}Diameter: {white}{0} block", "{gray}Diameter: {white}{0} blocks", diameter, diameter));
+            }
+            else
+            {
+                Location center = border.getCenter();
+                int radius = (int) Math.ceil(diameter / 2d);
+
+                int minX = center.getBlockX() - radius;
+                int maxX = center.getBlockX() + radius;
+                int minZ = center.getBlockZ() - radius;
+                int maxZ = center.getBlockZ() + radius;
+
+                // Same min & max, we can display both at once
+                if (minX == minZ && maxX == maxZ)
+                {
+                    /// Min & max coordinates in the sidebar, to locate the border. Ex: "-500 +500". {0} = minimal coord, {1} = maximal coord.
+                    sidebar.add(I.t("{white}{0} {1}", UHUtils.integerToStringWithSign(minX), UHUtils.integerToStringWithSign(maxZ)));
+                }
+                else
+                {
+                    /// Min & max X coordinates in the sidebar, to locate the border. Ex: "X: -500 +500". {0} = minimal coord, {1} = maximal coord.
+                    sidebar.add(I.t("{gray}X: {white}{0} {1}", UHUtils.integerToStringWithSign(minX), UHUtils.integerToStringWithSign(maxX)));
+                    /// Min & max Z coordinates in the sidebar, to locate the border. Ex: "Z: -500 +500". {0} = minimal coord, {1} = maximal coord.
+                    sidebar.add(I.t("{gray}Z: {white}{0} {1}", UHUtils.integerToStringWithSign(minZ), UHUtils.integerToStringWithSign(maxZ)));
+                }
+            }
+        }
+    }
+
+    @Override
+    public void injectIntoSidebar(Player player, SidebarInjector injector)
+    {
+        if (UR.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME) || sidebar.isEmpty()) return;
+        injector.injectLines(SidebarInjector.SidebarPriority.BOTTOM, true, sidebar);
     }
 
     /**
@@ -169,18 +240,10 @@ public class BorderModule extends UHModule
      */
     public Set<Player> getPlayersOutside(int diameter)
     {
-        final Set<Player> playersOutside = new HashSet<>();
-
-        // TODO
-//        for (final Player player : UR.module(GameModule.class).getOnlineAlivePlayers())
-//        {
-//            if (!isInsideBorder(player.getLocation(), diameter))
-//            {
-//                playersOutside.add(player);
-//            }
-//        }
-
-        return playersOutside;
+        return UR.module(GameModule.class)
+                .getAliveConnectedPlayers().stream()
+                .filter(player -> !isInsideBorder(player.getLocation(), diameter))
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -246,20 +309,47 @@ public class BorderModule extends UHModule
     /**
      * Schedules the automatic border reduction, if enabled in the configuration.
      */
-    public void scheduleBorderReduction()
+    private void scheduleBorderReduction()
     {
-//        if (BORDER_SHRINKING)
-//        {
-//            RunTask.later(() -> {
-//                Integer secondsPerBlock = (int) Math.rint(BORDER_SHRINKING_DURATION / (border.getDiameter() - BORDER_SHRINKING_FINAL_SIZE)) * 2;
-//
-//                border.setDiameter(BORDER_SHRINKING_FINAL_SIZE, BORDER_SHRINKING_DURATION);
-//
-//                Titles.broadcastTitle(5, 30, 8, I.t("{red}Warning!"), I.t("{white}The border begins to shrink..."));
-//
-//                Bukkit.broadcastMessage(I.t("{red}{bold}The border begins to shrink..."));
-//                Bukkit.broadcastMessage(I.t("{gray}It will shrink by one block every {0} second(s) until {1} blocks in diameter.", secondsPerBlock, BORDER_SHRINKING_FINAL_SIZE));
-//            }, BORDER_SHRINKING_STARTS_AFTER * 20l);
-//        }
+        if (Config.SHRINKING.ENABLED.get())
+        {
+            RunTask.later(() -> {
+                if (UR.module(GameModule.class).getPhase() != GamePhase.IN_GAME) return;
+
+                final int secondsPerBlock = (int) Math.rint(Config.SHRINKING.SHRINKS_DURING.get().getSeconds() / (border.getDiameter() - Config.SHRINKING.DIAMETER_AFTER_SHRINK.get())) * 2;
+
+                border.setDiameter(Config.SHRINKING.DIAMETER_AFTER_SHRINK.get(), Config.SHRINKING.SHRINKS_DURING.get());
+
+                Titles.broadcastTitle(5, 30, 8, I.t("{red}Warning!"), I.t("{white}The border begins to shrink..."));
+
+                Bukkit.broadcastMessage(I.t("{red}{bold}The border begins to shrink..."));
+                Bukkit.broadcastMessage(I.t("{gray}It will shrink by one block every {0} second(s) until {1} blocks in diameter.", secondsPerBlock, Config.SHRINKING.DIAMETER_AFTER_SHRINK.get()));
+            }, Config.SHRINKING.STARTS_AFTER.get().getSeconds() * 20L);
+
+            scheduleBorderReductionWarning(new TimeDelta(1, 0, 0));
+            scheduleBorderReductionWarning(new TimeDelta(0, 30, 0));
+            scheduleBorderReductionWarning(new TimeDelta(0, 10, 0));
+        }
+    }
+
+    private void scheduleBorderReductionWarning(final TimeDelta warnBefore)
+    {
+        if (Config.SHRINKING.STARTS_AFTER.get().greaterThan(warnBefore.add(new TimeDelta(0, 5, 0))))
+        {
+            RunTask.later(() -> {
+                if (UR.module(GameModule.class).getPhase() != GamePhase.IN_GAME) return;
+
+                Bukkit.broadcastMessage("");
+                Bukkit.broadcastMessage(I.tn("{red}The border will start to shrink in {0} minute...", "{red}The border will start to shrink in {0} minutes...", (int) (warnBefore.getSeconds() / 60)));
+                Bukkit.broadcastMessage("");
+            }, Config.SHRINKING.STARTS_AFTER.get().subtract(warnBefore).getSeconds() * 20L);
+        }
+    }
+
+    @EventHandler
+    public void onGameStarts(final GamePhaseChangedEvent ev)
+    {
+        if (ev.getNewPhase() != GamePhase.IN_GAME) return;
+        scheduleBorderReduction();
     }
 }

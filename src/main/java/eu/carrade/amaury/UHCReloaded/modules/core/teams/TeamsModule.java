@@ -44,13 +44,23 @@ import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.core.ZLib;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zteams.ZTeam;
 import fr.zcraft.zteams.ZTeams;
 import fr.zcraft.zteams.commands.TeamsCommand;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Banner;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.BlockStateMeta;
 
 import java.util.*;
 
@@ -78,7 +88,22 @@ public class TeamsModule extends UHModule
         ZLib.loadComponent(ZTeams.class);
 
         ZTeams.settings()
-                .setScoreboard(UHCReloaded.get().getScoreboard());
+                .setScoreboard(UHCReloaded.get().getScoreboard())
+                .setTeamsOptions(
+                        Config.CAN_SEE_FRIENDLY_INVISIBLES.get(),
+                        Config.ALLOW_FRIENDLY_FIRE.get(),
+                        Config.COLORIZE_CHAT.get(),
+                        false
+                )
+                .setBannerOptions(
+                        Config.BANNER.SHAPE.WRITE_LETTER.get(),
+                        Config.BANNER.SHAPE.ADD_BORDER.get()
+                )
+                .setGUIOptions(
+                        Config.GUI.DISPLAY.TEAM_ITEM.get(),
+                        Config.GUI.DISPLAY.GLOW_ON_SELECTED_TEAM.get()
+                )
+                .setMaxPlayersPerTeam(Config.MAX_PLAYERS_PER_TEAM.get());
 
         TEAMMATES_DISTANCE_SQUARED = Math.pow(Config.SIDEBAR.CONTENT.DISPLAY_MET_PLAYERS_ONLY.DISPLAYED_WHEN_CLOSER_THAN.get(), 2d);
     }
@@ -168,8 +193,111 @@ public class TeamsModule extends UHModule
      * @param id The player's UUID.
      * @return The cached data, created on the fly if needed.
      */
-    public SidebarPlayerCache getSidebarPlayerCache(UUID id)
+    public SidebarPlayerCache getSidebarPlayerCache(final UUID id)
     {
         return sidebarCache.computeIfAbsent(id, SidebarPlayerCache::new);
+    }
+
+    @EventHandler
+    public void onGameStart(final GamePhaseChangedEvent ev)
+    {
+        if (ev.getNewPhase() != GamePhase.IN_GAME) return;
+
+        // Banners
+        if (Config.BANNER.GIVE.GIVE_IN_HOTBAR.get() || Config.BANNER.GIVE.GIVE_ON_HEAD.get() || Config.BANNER.GIVE.PLACE_ON_SPAWN.get())
+        {
+            RunTask.later(() ->
+                ZTeams.get().getTeams().stream().filter(team -> !team.isEmpty()).forEach(team ->
+                {
+                    final ItemStack banner = team.getBanner();
+
+                    team.getOnlinePlayers().forEach(player ->
+                    {
+                        if (Config.BANNER.GIVE.GIVE_IN_HOTBAR.get())
+                        {
+                            player.getInventory().setItem(8, banner.clone());
+                        }
+
+                        if (Config.BANNER.GIVE.GIVE_ON_HEAD.get())
+                        {
+                            player.getInventory().setHelmet(banner.clone());
+                        }
+
+                        if (Config.BANNER.GIVE.PLACE_ON_SPAWN.get())
+                        {
+                            final Block place = player.getWorld().getHighestBlockAt(player.getLocation());
+                            final Block under = place.getRelative(BlockFace.DOWN);
+
+                            // We don't want a stack of banners
+                            if (under.getType() != Material.STANDING_BANNER)
+                            {
+                                if (!under.getType().isSolid())
+                                    under.setType(Material.WOOD);
+
+                                place.setType(Material.STANDING_BANNER);
+
+                                Banner bannerBlock = (Banner) place.getState();
+                                BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
+
+                                bannerBlock.setBaseColor(bannerMeta.getBaseColor());
+                                bannerBlock.setPatterns(bannerMeta.getPatterns());
+
+                                bannerBlock.update();
+                            }
+                        }
+                    });
+                }), 5L);
+        }
+    }
+
+    /**
+     * Adds the team banner on crafted shields.
+     *
+     * Done indirectly because the plugin must be able to run
+     * on Minecraft 1.8.
+     */
+    @EventHandler (ignoreCancelled = true)
+    public void onShieldPreCraft(final PrepareItemCraftEvent ev)
+    {
+        if (!Config.BANNER.SHIELDS.ADD_ON_SHIELDS.get()) return;
+
+        final Player player = (Player) ev.getViewers().get(0);
+        final ZTeam team = ZTeams.get().getTeamForPlayer(player);
+
+        if (team == null || team.getBanner() == null) return;
+
+        final Recipe recipe = ev.getRecipe();
+        if (recipe == null) return;
+
+        final ItemStack result = recipe.getResult();
+        if (result == null) return;
+
+        final Material MATERIAL_SHIELD = Material.getMaterial("SHIELD");
+        if (MATERIAL_SHIELD == null) return; // MC 1.8
+
+        if (result.getType() == MATERIAL_SHIELD)
+        {
+            try
+            {
+                final BannerMeta banner = (BannerMeta) team.getBanner().getItemMeta();
+
+                final BlockStateMeta bsMeta = (BlockStateMeta) result.getItemMeta();
+                final Banner shieldBanner   = (Banner) bsMeta.getBlockState();
+
+                shieldBanner.setBaseColor(banner.getBaseColor());
+                shieldBanner.setPatterns(banner.getPatterns());
+
+                shieldBanner.update();
+
+                bsMeta.setBlockState(shieldBanner);
+                result.setItemMeta(bsMeta);
+
+                ev.getInventory().setResult(result);
+            }
+            catch (ClassCastException | NullPointerException ignored)
+            {
+                // Bad Minecraft version (1.8)
+            }
+        }
     }
 }

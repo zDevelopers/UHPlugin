@@ -31,12 +31,15 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.teams;
 
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;
 import fr.zcraft.zlib.components.configuration.ConfigurationSection;
+import fr.zcraft.zteams.guis.TeamsGUIItemType;
 
 import java.io.File;
 
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
 import static fr.zcraft.zlib.components.configuration.ConfigurationItem.section;
 
 
@@ -47,7 +50,64 @@ public class Config extends ConfigurationInstance
         super(file);
     }
 
-    public static final SidebarSection SIDEBAR = section("sidebar", SidebarSection.class);
+    static public final ConfigurationItem<Boolean> CAN_SEE_FRIENDLY_INVISIBLES = item("can-see-friendly-invisibles", true);
+    static public final ConfigurationItem<Boolean> ALLOW_FRIENDLY_FIRE = item("allow-friendly-fire", true);
+    static public final ConfigurationItem<Integer> MAX_PLAYERS_PER_TEAM = item("max-players-per-team", 0);
+    static public final ConfigurationItem<Boolean> RANDOM_COLORS = item("random-colors", true);
+
+    static public final ConfigurationItem<Boolean> COLORIZE_CHAT = item("colorize-chat", true);
+
+    static public final BannerSection BANNER = section("banner", BannerSection.class);
+
+    static public class BannerSection extends ConfigurationSection
+    {
+        public final ShapeSection SHAPE = section("shape", ShapeSection.class);
+
+        static public class ShapeSection extends ConfigurationSection
+        {
+            public final ConfigurationItem<Boolean> WRITE_LETTER = item("write-letter", true);
+            public final ConfigurationItem<Boolean> ADD_BORDER = item("add-border", true);
+        }
+
+        public final GiveSection GIVE = section("give", GiveSection.class);
+
+        static public class GiveSection extends ConfigurationSection
+        {
+            public final ConfigurationItem<Boolean> PLACE_ON_SPAWN = item("place-on-spawn", true);
+            public final ConfigurationItem<Boolean> GIVE_IN_HOTBAR = item("give-in-hotbar", false);
+            public final ConfigurationItem<Boolean> GIVE_ON_HEAD = item("give-on-head", false);
+        }
+
+        public final UHConfig.TeamsOptionsSection.BannerSection.ShieldSection SHIELDS = section("shields", UHConfig.TeamsOptionsSection.BannerSection.ShieldSection.class);
+
+        static public class ShieldSection extends ConfigurationSection
+        {
+            public final ConfigurationItem<Boolean> ADD_ON_SHIELDS = item("add-on-shields", true);
+        }
+    }
+
+    static public final ChestGuiSection GUI = section("gui", ChestGuiSection.class);
+
+    static public class ChestGuiSection extends ConfigurationSection
+    {
+        public final DisplaySection DISPLAY = section("display", DisplaySection.class);
+
+        static public class DisplaySection extends ConfigurationSection
+        {
+            public final ConfigurationItem<TeamsGUIItemType> TEAM_ITEM = item("team-item", TeamsGUIItemType.BANNER);
+            public final ConfigurationItem<Boolean> GLOW_ON_SELECTED_TEAM = item("glow-on-selected-team", true);
+        }
+    }
+
+    static public final TeamChatSection TEAM_CHAT = section("team-chat", TeamChatSection.class);
+
+    static public class TeamChatSection extends ConfigurationSection
+    {
+        public final ConfigurationItem<Boolean> DISABLE_LOCK_ON_DEATH = item("disable-lock-on-death", true);
+        public final ConfigurationItem<Boolean> LOG = item("log", false);
+    }
+
+    static public final SidebarSection SIDEBAR = section("sidebar", SidebarSection.class);
 
     static public class SidebarSection extends ConfigurationSection
     {

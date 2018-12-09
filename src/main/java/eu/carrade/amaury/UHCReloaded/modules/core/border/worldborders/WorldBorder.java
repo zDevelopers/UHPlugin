@@ -33,6 +33,7 @@ package eu.carrade.amaury.UHCReloaded.modules.core.border.worldborders;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.MapShape;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -63,13 +64,22 @@ public abstract class WorldBorder
     /**
      * @param diameter The new diameter of the border.
      */
-    public abstract void setDiameter(double diameter);
+    public abstract void setDiameter(final double diameter);
 
     /**
      * @param diameter The new diameter of the border.
-     * @param time     The ticks used to change the size from the old size to the new one.
+     * @param time     The seconds used to change the size from the old size to the new one.
      */
-    public abstract void setDiameter(double diameter, long time);
+    public abstract void setDiameter(final double diameter, final long time);
+
+    /**
+     * @param diameter The new diameter of the border.
+     * @param time     The seconds used to change the size from the old size to the new one.
+     */
+    public void setDiameter(final double diameter, final TimeDelta time)
+    {
+        setDiameter(diameter, time.getSeconds());
+    }
 
     /**
      * @return The center of the border.
@@ -82,12 +92,12 @@ public abstract class WorldBorder
      * @param x The x coordinate of the new center.
      * @param z The z coordinate of the new center.
      */
-    public abstract void setCenter(double x, double z);
+    public abstract void setCenter(final double x, final double z);
 
     /**
      * @param center The new center of the border.
      */
-    public abstract void setCenter(Location center);
+    public abstract void setCenter(final Location center);
 
     /**
      * @return the amount of blocks a player may safely be outside the border before taking damage.
@@ -98,7 +108,7 @@ public abstract class WorldBorder
      * @param distance the amount of blocks a player may safely be outside the border before taking
      *                 damage.
      */
-    public abstract void setDamageBuffer(double distance);
+    public abstract void setDamageBuffer(final double distance);
 
     /**
      * @return the amount of damage a player takes when outside the border plus the border buffer.
@@ -109,7 +119,7 @@ public abstract class WorldBorder
      * @param damageAmount the amount of damage a player takes when outside the border plus the
      *                     border buffer.
      */
-    public abstract void setDamageAmount(double damageAmount);
+    public abstract void setDamageAmount(final double damageAmount);
 
     /**
      * @return the warning time that causes the screen to be tinted red when a contracting border
@@ -121,7 +131,7 @@ public abstract class WorldBorder
      * @param seconds the warning time that causes the screen to be tinted red when a contracting
      *                border will reach the player within the specified time.
      */
-    public abstract void setWarningTime(int seconds);
+    public abstract void setWarningTime(final int seconds);
 
     /**
      * @return the warning distance that causes the screen to be tinted red when the player is
@@ -133,7 +143,7 @@ public abstract class WorldBorder
      * @param blocks the warning distance that causes the screen to be tinted red when the player is
      *               within the specified number of blocks from the border.
      */
-    public abstract void setWarningDistance(int blocks);
+    public abstract void setWarningDistance(final int blocks);
 
     /**
      * @return The current border shape.
@@ -143,7 +153,7 @@ public abstract class WorldBorder
     /**
      * @param shape the new border shape.
      */
-    public abstract void setShape(MapShape shape);
+    public abstract void setShape(final MapShape shape);
 
     /**
      * @return {@code true} if this border supports progressive resizes using {@link #setDiameter(double, long)}.
@@ -159,7 +169,7 @@ public abstract class WorldBorder
      *
      * @return An instance of a WorldBorder proxy.
      */
-    public static WorldBorder getInstance(World world, WorldBorderMotor motor, MapShape shape)
+    public static WorldBorder getInstance(final World world, final WorldBorderMotor motor, final MapShape shape)
     {
         // For circular shapes, the vanilla motor cannot be used.
         // Without the WorldBorder plugin, a fake world border is used (i.e., no border control).
