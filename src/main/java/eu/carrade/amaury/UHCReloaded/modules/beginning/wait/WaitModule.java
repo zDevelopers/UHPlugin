@@ -127,6 +127,8 @@ public class WaitModule extends UHModule
         player.setFoodLevel(20);
         player.setSaturation(20f);
 
+        player.setGameMode(builder ? GameMode.CREATIVE : GameMode.ADVENTURE);
+
         if (!builder && Config.INVENTORY.CLEAR.get())
         {
             player.getInventory().clear();
