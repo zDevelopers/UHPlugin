@@ -72,6 +72,11 @@ public @interface ModuleInfo
     String settings_filename() default "";
 
     /**
+     * @return A list of external Bukkit/Spigot plugin this module depends on.
+     */
+    String[] depends() default {};
+
+    /**
      * @return {@code true} if this module is an internal core module
      * that should always be loaded first.
      */

@@ -238,36 +238,38 @@ public class UHCReloaded extends ZPlugin implements Listener
      */
     private void registerModule(final Class<? extends UHModule> module, final boolean enableAtStartup)
     {
-        final String name, description;
+        final String description;
         final ModuleInfo.ModuleLoadTime priority;
         final boolean internal;
 
         final Class<? extends ConfigurationInstance> moduleConfiguration;
         final String settingsFileName;
 
+        final String[] dependencies;
+
         final ModuleInfo info = module.getAnnotation(ModuleInfo.class);
 
         if (info == null)
         {
-            name = "";
             description = "";
             internal = false;
             priority = ModuleInfo.ModuleLoadTime.POST_WORLD;
             moduleConfiguration = null;
             settingsFileName = null;
+            dependencies = new String[] {};
         }
         else
         {
-            name = info.name();
             description = info.description();
             internal = info.internal();
             priority = info.when();
             moduleConfiguration = info.settings().equals(ConfigurationInstance.class) ? null : info.settings();
             settingsFileName = info.settings_filename().isEmpty() ? null : info.settings_filename();
+            dependencies = info.depends();
         }
 
         this.modules.put(module, new ModuleWrapper(
-                name, description, internal, enableAtStartup, priority, module, moduleConfiguration, settingsFileName));
+                description, internal, enableAtStartup, priority, module, moduleConfiguration, settingsFileName, dependencies));
     }
 
     /**

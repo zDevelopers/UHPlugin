@@ -30,7 +30,7 @@
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
 
-package eu.carrade.amaury.UHCReloaded.old.listeners;
+package eu.carrade.amaury.UHCReloaded.modules.cosmetics.hardcoreHearts;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -40,8 +40,8 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -52,17 +52,13 @@ import java.lang.reflect.InvocationTargetException;
 
 public class PacketsListener extends PacketAdapter implements Listener
 {
-    private UHCReloaded p;
-    private ProtocolManager pm = ProtocolLibrary.getProtocolManager();
-
+    private final ProtocolManager pm = ProtocolLibrary.getProtocolManager();
     private final PacketContainer respawnPacket;
 
-    public PacketsListener(UHCReloaded p)
+    public PacketsListener()
     {
         // This listener needs to listen on login packets only.
-        super(UHCReloaded.get(), ListenerPriority.NORMAL, PacketType.Play.Server.LOGIN);
-
-        this.p = UHCReloaded.get();
+        super(UR.get(), ListenerPriority.NORMAL, PacketType.Play.Server.LOGIN);
 
         // The packet to send to automatically respawn the player.
         respawnPacket = pm.createPacket(PacketType.Play.Client.CLIENT_COMMAND);
@@ -73,7 +69,7 @@ public class PacketsListener extends PacketAdapter implements Listener
      * Used to present the server as an hardcore server, for the clients to display hardcore hearts.
      */
     @Override
-    public void onPacketSending(PacketEvent ev)
+    public void onPacketSending(final PacketEvent ev)
     {
         // If its a login packet, write the hardcore flag (first boolean) to true.
         if (ev.getPacketType().equals(PacketType.Play.Server.LOGIN))
@@ -88,7 +84,7 @@ public class PacketsListener extends PacketAdapter implements Listener
     @EventHandler
     public void onPlayerDeath(final PlayerDeathEvent ev)
     {
-        if (UHConfig.AUTO_RESPAWN.DO.get())
+        if (Config.AUTO_RESPAWN.DO.get())
         {
             RunTask.later(() ->
             {
@@ -96,11 +92,11 @@ public class PacketsListener extends PacketAdapter implements Listener
                 {
                     pm.recieveClientPacket(ev.getEntity(), respawnPacket);
                 }
-                catch (IllegalAccessException | InvocationTargetException e)
+                catch (final IllegalAccessException | InvocationTargetException e)
                 {
-                    e.printStackTrace();
+                    UR.log(HardcoreHeartsModule.class).error("Unable to respawn player {0}", e, ev.getEntity().getName());
                 }
-            }, UHConfig.AUTO_RESPAWN.DELAY.get() * 20L);
+            }, Config.AUTO_RESPAWN.DELAY.get() * 20L);
         }
     }
 }

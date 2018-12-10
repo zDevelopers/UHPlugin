@@ -29,6 +29,7 @@ modules:
     "ingame-health": true
     "ingame-listHealth": true
     "ingame-episodes": true
+    "cosmetics-hardcoreHearts": true
     "other-playersLoader": true
     "other-about": true
 

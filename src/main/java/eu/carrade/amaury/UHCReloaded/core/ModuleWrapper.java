@@ -40,6 +40,7 @@ import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.reflection.Reflection;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,6 +57,7 @@ public class ModuleWrapper
 
     private final Class<? extends ConfigurationInstance> moduleConfiguration;
     private final String settingsFileName;
+    private String[] dependencies;
 
     private final boolean internal;
 
@@ -64,14 +66,14 @@ public class ModuleWrapper
     private UHModule instance = null;
 
     public ModuleWrapper(
-            final String name,
             final String description,
             final boolean internal,
             final boolean enabledAtStartup,
             final ModuleInfo.ModuleLoadTime when,
             final Class<? extends UHModule> moduleClass,
             final Class<? extends ConfigurationInstance> moduleConfiguration,
-            final String settingsFileName)
+            final String settingsFileName,
+            final String[] dependencies)
     {
         this.name = computeModuleName(moduleClass);
         this.description = description;
@@ -81,6 +83,7 @@ public class ModuleWrapper
         this.moduleClass = moduleClass;
         this.moduleConfiguration = moduleConfiguration;
         this.settingsFileName = settingsFileName;
+        this.dependencies = dependencies;
 
         loadConfiguration();
     }
@@ -90,6 +93,29 @@ public class ModuleWrapper
      */
     public void enable()
     {
+        // Check dependencies
+
+        for (String dependency : dependencies)
+        {
+            final Plugin plugin = Bukkit.getPluginManager().getPlugin(dependency);
+            if (plugin == null)
+            {
+                if (dependencies.length >= 2)
+                {
+                    PluginLogger.warning("Cannot enable module {0}: missing dependency {1} (depends on {2}).", name, dependency, String.join(", ", dependencies));
+                }
+                else
+                {
+                    PluginLogger.warning("Cannot enable module {0}: missing dependency {1}.", name, dependency);
+                }
+            }
+            else if (!plugin.isEnabled())
+            {
+                // Ensures every dependency is available when a module is loaded.
+                Bukkit.getPluginManager().enablePlugin(plugin);
+            }
+        }
+
         instance = ZLib.loadComponent(moduleClass);
 
         Bukkit.getPluginManager().callEvent(new ModuleLoadedEvent(this));

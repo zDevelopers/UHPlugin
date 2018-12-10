@@ -35,7 +35,7 @@ package eu.carrade.amaury.UHCReloaded.old.integration;
 import com.comphenix.protocol.ProtocolLibrary;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.old.listeners.PacketsListener;
+import eu.carrade.amaury.UHCReloaded.modules.cosmetics.hardcoreHearts.PacketsListener;
 import fr.zcraft.zlib.tools.PluginLogger;
 
 
@@ -43,7 +43,7 @@ public class UHProtocolLibIntegration
 {
     public UHProtocolLibIntegration(UHCReloaded p)
     {
-        PacketsListener packetsListener = new PacketsListener(p);
+        PacketsListener packetsListener = new PacketsListener();
 
         if (UHConfig.HARDCORE_HEARTS.DISPLAY.get())
         {
