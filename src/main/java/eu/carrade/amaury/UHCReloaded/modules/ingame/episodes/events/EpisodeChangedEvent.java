@@ -30,8 +30,9 @@
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
 
-package eu.carrade.amaury.UHCReloaded.old.events;
+package eu.carrade.amaury.UHCReloaded.modules.ingame.episodes.events;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -39,15 +40,18 @@ import org.bukkit.event.HandlerList;
 /**
  * Called when an episode changes.
  */
-public class UHEpisodeChangedEvent extends Event
+public class EpisodeChangedEvent extends Event
 {
     private int newEpisode;
+    private int oldEpisode;
     private EpisodeChangedCause cause;
-    private String shifter;
+    private CommandSender shifter;
 
-    public UHEpisodeChangedEvent(int newEpisode, EpisodeChangedCause cause, String shifter)
+    public EpisodeChangedEvent(int newEpisode, int oldEpisode, EpisodeChangedCause cause, CommandSender shifter)
     {
         this.newEpisode = newEpisode;
+        this.oldEpisode = oldEpisode;
+
         this.cause = cause;
         this.shifter = shifter;
     }
@@ -63,6 +67,16 @@ public class UHEpisodeChangedEvent extends Event
     }
 
     /**
+     * Returns the old episode.
+     *
+     * @return The old episode.
+     */
+    public int getOldEpisode()
+    {
+        return oldEpisode;
+    }
+
+    /**
      * Why the episode changed?
      *
      * @return The cause.
@@ -75,12 +89,12 @@ public class UHEpisodeChangedEvent extends Event
     }
 
     /**
-     * Returns the name of the shifter (the one that executed the /uh shift command, or "" if
+     * Returns the shifter (the one that executed the /uh shift command, or {@code null} if
      * the episode was shifted because the previous one was finished).
      *
      * @return The shifter.
      */
-    public String getShifter()
+    public CommandSender getShifter()
     {
         return shifter;
     }
@@ -98,5 +112,20 @@ public class UHEpisodeChangedEvent extends Event
     public static HandlerList getHandlerList()
     {
         return handlers;
+    }
+
+
+    public enum EpisodeChangedCause
+    {
+        /**
+         * The episode changed because the previous episode was finished.
+         */
+        FINISHED,
+
+        /**
+         * The episode changed because the previous episode was shifted by someone using
+         * the {@code /uh shift} command.
+         */
+        SHIFTED
     }
 }

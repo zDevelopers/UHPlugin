@@ -35,8 +35,7 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.teleporter.Teleporter;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
-import eu.carrade.amaury.UHCReloaded.old.events.EpisodeChangedCause;
-import eu.carrade.amaury.UHCReloaded.old.events.UHEpisodeChangedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.ingame.episodes.events.EpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.old.events.UHGameStartsEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.old.protips.ProTips;
@@ -724,18 +723,18 @@ public class UHGameManager
         {
             this.episode++;
 
-            final EpisodeChangedCause cause;
-            if (shifter == null || shifter.equals("")) cause = EpisodeChangedCause.FINISHED;
-            else cause = EpisodeChangedCause.SHIFTED;
+            final EpisodeChangedEvent.EpisodeChangedCause cause;
+            if (shifter == null || shifter.equals("")) cause = EpisodeChangedEvent.EpisodeChangedCause.FINISHED;
+            else cause = EpisodeChangedEvent.EpisodeChangedCause.SHIFTED;
 
             // Restarts the timer.
             // Useless for a normal start (restarted in the event), but needed if the episode was shifted.
-            if (cause == EpisodeChangedCause.SHIFTED)
+            if (cause == EpisodeChangedEvent.EpisodeChangedCause.SHIFTED)
             {
 //                p.getTimerManager().getMainTimer().start();
             }
 
-            p.getServer().getPluginManager().callEvent(new UHEpisodeChangedEvent(episode, cause, shifter));
+//            p.getServer().getPluginManager().callEvent(new EpisodeChangedEvent(episode, cause, shifter));
         }
     }
 

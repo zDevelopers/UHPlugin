@@ -37,8 +37,7 @@ import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.events.TimerEndsEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.events.TimerStartsEvent;
-import eu.carrade.amaury.UHCReloaded.old.events.EpisodeChangedCause;
-import eu.carrade.amaury.UHCReloaded.old.events.UHEpisodeChangedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.ingame.episodes.events.EpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.old.events.UHGameEndsEvent;
 import eu.carrade.amaury.UHCReloaded.old.events.UHGameStartsEvent;
 import eu.carrade.amaury.UHCReloaded.old.misc.RuntimeCommandsExecutor;
@@ -544,11 +543,11 @@ public class GameListener implements Listener
      * Used to broadcast the episode change.
      */
     @EventHandler
-    public void onEpisodeChange(final UHEpisodeChangedEvent ev)
+    public void onEpisodeChange(final EpisodeChangedEvent ev)
     {
         String message;
 
-        if (ev.getCause() == EpisodeChangedCause.SHIFTED)
+        if (ev.getCause() == EpisodeChangedEvent.EpisodeChangedCause.SHIFTED)
         {
             message = I.t("{aqua}-------- End of episode {0} [forced by {1}] --------", String.valueOf(ev.getNewEpisode() - 1), ev.getShifter());
         }

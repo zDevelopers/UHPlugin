@@ -174,20 +174,20 @@ public class GameModule extends UHModule implements Listener
             topSidebar.add(I.tn("{white}{0}{gray} team", "{white}{0}{gray} teams", aliveTeams.size()));
         }
 
-        injector.injectLines(SidebarInjector.SidebarPriority.VERY_TOP, true, topSidebar);
+        injector.injectLines(SidebarInjector.SidebarPriority.TOP, true, topSidebar);
 
         switch (phase)
         {
             case WAIT:
                 injector.injectLines(
-                        SidebarInjector.SidebarPriority.VERY_TOP, true,
+                        SidebarInjector.SidebarPriority.TOP, true,
                         I.t("{gray}Waiting for players...")
                 );
                 break;
 
             case STARTING:
                 injector.injectLines(
-                        SidebarInjector.SidebarPriority.VERY_TOP, true,
+                        SidebarInjector.SidebarPriority.TOP, true,
                         I.t("{gray}The game is starting..."),
                         I.t("{gray}Please wait.")
                 );
