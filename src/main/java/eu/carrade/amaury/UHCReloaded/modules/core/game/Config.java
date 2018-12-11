@@ -49,7 +49,7 @@ public class Config extends ConfigurationInstance
         super(file);
     }
 
-    public static final ConfigurationItem<Integer> COUNTDOWN = item("countdown", 12);  // Recommended: 7 or 12
+    public static final ConfigurationItem<Integer> COUNTDOWN = item("countdown", 1);  // TODO 12 Recommended: 7 or 12
     public static final ConfigurationItem<Boolean> STARTUP_TITLE = item("startup-title", true);
 
     public static final ConfigurationItem<Boolean> RANDOM_COLORS_IN_SOLO_GAMES = item("random-color-in-solo-games", true);
@@ -67,7 +67,7 @@ public class Config extends ConfigurationInstance
 
     public static final class BeginningSection extends ConfigurationSection
     {
-        public final ConfigurationItem<TimeDelta> GRACE_PERIOD = item("grace-period", new TimeDelta(0, 0, 30));
+        public final ConfigurationItem<TimeDelta> GRACE_PERIOD = item("grace-period", new TimeDelta(0, 0, 2)); // TODO 30s
         public final ConfigurationItem<Boolean> DISPLAY_GRACE_PERIOD = item("display-grace-period", true);
         public final ConfigurationItem<Boolean> BROADCAST_GRACE_END = item("broadcast-grace-end", true);
 

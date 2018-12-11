@@ -71,6 +71,7 @@ public class GameBeginning extends ZLibComponent implements Listener
     public void onGameStarts(GamePhaseChangedEvent ev)
     {
         if (ev.getNewPhase() != GamePhase.IN_GAME) return;
+        if (ev.getOldPhase() != GamePhase.STARTING) return; // Only the first start
 
 
         /* *** Grace period (damages disabled) *** */

@@ -112,7 +112,7 @@ public class SpectatorsModule extends UHModule
      *
      * @param playerID The spectator's ID.
      */
-    public void addSpectator(UUID playerID)
+    public void addSpectator(final UUID playerID)
     {
         spectators.add(playerID);
 
@@ -125,7 +125,7 @@ public class SpectatorsModule extends UHModule
      *
      * @param player The spectator.
      */
-    public void addSpectator(OfflinePlayer player)
+    public void addSpectator(final OfflinePlayer player)
     {
         addSpectator(player.getUniqueId());
     }
@@ -135,9 +135,9 @@ public class SpectatorsModule extends UHModule
      *
      * @param playerID The spectator's ID.
      */
-    public void removeSpectator(UUID playerID)
+    public void removeSpectator(final UUID playerID)
     {
-        spectators.add(playerID);
+        spectators.remove(playerID);
 
         if (UR.module(GameModule.class).getPhase() != GamePhase.WAIT)
             manager.setSpectating(playerID, false);
@@ -148,7 +148,7 @@ public class SpectatorsModule extends UHModule
      *
      * @param player The spectator.
      */
-    public void removeSpectator(OfflinePlayer player)
+    public void removeSpectator(final OfflinePlayer player)
     {
         removeSpectator(player.getUniqueId());
     }

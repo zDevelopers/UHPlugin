@@ -29,6 +29,7 @@ modules:
     "ingame-health": true
     "ingame-listHealth": true
     "ingame-episodes": true
+    "ingame-deathAnnouncement": true
     "cosmetics-hardcoreHearts": true
     "cosmetics-motd": true
     "other-playersLoader": true

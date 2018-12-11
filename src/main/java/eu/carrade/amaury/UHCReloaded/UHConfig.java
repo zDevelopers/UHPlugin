@@ -2,7 +2,6 @@ package eu.carrade.amaury.UHCReloaded;
 
 import eu.carrade.amaury.UHCReloaded.modules.beginning.cages.Cage;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.MapShape;
-import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import fr.zcraft.zlib.components.configuration.*;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -599,6 +598,6 @@ public class UHConfig extends Configuration
     static
     {
 //        ConfigurationValueHandlers.registerHandlers(TeamManager.class);
-        ConfigurationValueHandlers.registerHandlers(UHSound.class);
+//        ConfigurationValueHandlers.registerHandlers(UHSound.class);
     }
 }

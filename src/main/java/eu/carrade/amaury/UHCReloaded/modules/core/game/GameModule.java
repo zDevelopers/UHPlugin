@@ -326,12 +326,17 @@ public class GameModule extends UHModule implements Listener
     {
         if (isAlive(player)) return false;
 
+        log().info("Resurrecting player {0}", player.getName());
+
         alivePlayers.add(player.getUniqueId());
         updateAliveTeams();
+
+        log().info("Resurrected. Alive players: {0}. Teams: {1}. Phase: {2}.", alivePlayers.size(), aliveTeams.size(), phase);
 
         if (aliveTeams.size() > 1 && phase == GamePhase.END)
         {
             setPhase(GamePhase.IN_GAME);
+            log().info("Going back to IN_GAME phase. Phase is now {0}.", phase);
         }
 
         Bukkit.getPluginManager().callEvent(new PlayerResurrectedEvent(player));
@@ -727,6 +732,7 @@ public class GameModule extends UHModule implements Listener
     public void onGameStarts(final GamePhaseChangedEvent ev)
     {
         if (ev.getNewPhase() != GamePhase.IN_GAME) return;
+        if (ev.getOldPhase() != GamePhase.STARTING) return;
 
         Bukkit.getOnlinePlayers().forEach(ActionBar::removeMessage);
 

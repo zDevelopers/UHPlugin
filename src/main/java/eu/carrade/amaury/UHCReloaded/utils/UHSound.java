@@ -34,6 +34,7 @@ package eu.carrade.amaury.UHCReloaded.utils;
 
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandler;
+import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -360,5 +361,9 @@ public class UHSound
     public static Sound handleSoundValue(Object object)
     {
         return string2Sound(object.toString());
+    }
+
+    static {
+        ConfigurationValueHandlers.registerHandlers(UHSound.class);
     }
 }

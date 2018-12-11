@@ -31,64 +31,28 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.game.commands;
+package eu.carrade.amaury.UHCReloaded.modules.ingame.deathAnnouncement;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
-import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
-import fr.zcraft.zlib.components.commands.Command;
-import fr.zcraft.zlib.components.commands.CommandException;
-import fr.zcraft.zlib.components.commands.CommandInfo;
-import fr.zcraft.zlib.components.i18n.I;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
+import eu.carrade.amaury.UHCReloaded.utils.UHSound;
+import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.zlib.components.configuration.ConfigurationItem;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.File;
 
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
 
-@CommandInfo (name = "resurrect", usageParameters = "<player>", aliases = {"revive", "undead"})
-public class ResurrectCommand extends Command
+public class Config extends ConfigurationInstance
 {
-    @Override
-    protected void run() throws CommandException
+    public Config(File file)
     {
-        if (args.length != 1)
-        {
-            throwInvalidArgument(I.t("You must specify the player to resurrect."));
-        }
-
-        final OfflinePlayer player = Arrays.stream(Bukkit.getOfflinePlayers())
-            .filter(pl -> pl.getName().equalsIgnoreCase(args[0]))
-            .findAny().orElse(null);
-
-        if (player == null)
-        {
-            error(I.t("{ce}This player was never seen on this server."));
-        }
-        else if (UR.module(GameModule.class).resurrect(player))
-        {
-            success(I.t("{0} was resurrected.", player.getName()));
-        }
-        else
-        {
-            error(I.t("{ce}This player is not playing or dead!"));
-        }
+        super(file);
     }
 
-    @Override
-    protected List<String> complete()
-    {
-        final GameModule game = UR.module(GameModule.class);
+    public static final ConfigurationItem<Boolean> NOTIFY_IF_TEAM_HAS_FALLEN = item("notify-if-team-has-fallen", true);
+    public static final ConfigurationItem<String> DEATH_MESSAGES_FORMAT = item("death-messages-format", "§6");
+    public static final ConfigurationItem<String> TEAM_DEATH_MESSAGES_FORMAT = item("team-death-messages-format", "§6");
 
-        if (args.length == 1)
-        {
-            return getMatchingPlayerNames(
-                    Bukkit.getOnlinePlayers().stream().filter(player -> !game.isAlive(player)).collect(Collectors.toList()),
-                    args[0]
-            );
-        }
-
-        else return null;
-    }
+    public static final ConfigurationItem<Boolean> LIGHTNING_STRIKE = item("lightning-strike", false);
+    public static final ConfigurationItem<Boolean> PLAY_SOUND = item("play-sound", true);
+    public static final ConfigurationItem<UHSound> SOUND = item("sound", new UHSound("WITHER_SPAWN"));
 }

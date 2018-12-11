@@ -69,7 +69,18 @@ public class KillCommand extends Command
 
         if (UR.module(GameModule.class).isAlive(player))
         {
-            UR.module(GameModule.class).kill(player);
+            if (player.isOnline())
+            {
+                // If the player is online, we kill it.
+                // It will be cached by normal alive players's death listeners,
+                // plus the inventory will drop, effects will be complete, etc.
+                player.getPlayer().setHealth(0d);
+            }
+            else
+            {
+                // We only kill the player this way if he is offline.
+                UR.module(GameModule.class).kill(player);
+            }
 
             success(I.t("{cs}The player {0} is now marked as dead.", player.getName()));
         }

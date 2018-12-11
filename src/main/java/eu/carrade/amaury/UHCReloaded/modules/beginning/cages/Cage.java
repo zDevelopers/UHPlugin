@@ -257,6 +257,8 @@ public class Cage
      */
     public void destroy()
     {
+        if (!built) return;
+
         for (final Map.Entry<Location, SimpleBlock> entry : blocksBuilt.entrySet())
         {
             final Block block = entry.getKey().getBlock();
