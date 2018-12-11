@@ -201,8 +201,7 @@ public class TeamsModule extends UHModule
     @EventHandler
     public void onGameStart(final GamePhaseChangedEvent ev)
     {
-        if (ev.getNewPhase() != GamePhase.IN_GAME) return;
-        if (ev.getOldPhase() != GamePhase.STARTING) return;
+        if (ev.getNewPhase() != GamePhase.IN_GAME || !ev.isRunningForward()) return;
 
         if (Config.BANNER.GIVE.GIVE_IN_HOTBAR.get() || Config.BANNER.GIVE.GIVE_ON_HEAD.get() || Config.BANNER.GIVE.PLACE_ON_SPAWN.get())
         {

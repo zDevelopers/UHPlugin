@@ -731,8 +731,7 @@ public class GameModule extends UHModule implements Listener
     @EventHandler (priority = EventPriority.LOWEST)
     public void onGameStarts(final GamePhaseChangedEvent ev)
     {
-        if (ev.getNewPhase() != GamePhase.IN_GAME) return;
-        if (ev.getOldPhase() != GamePhase.STARTING) return;
+        if (ev.getNewPhase() != GamePhase.IN_GAME || !ev.isRunningForward()) return;
 
         Bukkit.getOnlinePlayers().forEach(ActionBar::removeMessage);
 
@@ -795,7 +794,7 @@ public class GameModule extends UHModule implements Listener
         {
             winner = aliveTeams.stream().findAny().orElse(null); // There will be one alive team left here.
         }
-        else if (ev.getNewPhase() == GamePhase.IN_GAME && ev.getOldPhase() == GamePhase.END)
+        else if (ev.getNewPhase() == GamePhase.IN_GAME && !ev.isRunningForward())
         {
             winner = null; // Win cancelled because a team was resurrected.
         }

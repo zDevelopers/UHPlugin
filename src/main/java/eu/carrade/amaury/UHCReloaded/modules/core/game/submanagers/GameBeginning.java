@@ -70,8 +70,7 @@ public class GameBeginning extends ZLibComponent implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onGameStarts(GamePhaseChangedEvent ev)
     {
-        if (ev.getNewPhase() != GamePhase.IN_GAME) return;
-        if (ev.getOldPhase() != GamePhase.STARTING) return; // Only the first start
+        if (ev.getNewPhase() != GamePhase.IN_GAME || !ev.isRunningForward()) return;
 
 
         /* *** Grace period (damages disabled) *** */

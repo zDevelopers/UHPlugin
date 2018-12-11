@@ -38,6 +38,13 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Fired when the game phase changes.
+ *
+ * <p><strong>Warning:</strong> if the new phase is {@link GamePhase#IN_GAME IN_GAME}
+ * or {@link GamePhase#WAIT WAIT}, the game may be going backwards, if the game start
+ * was cancelled because of an error, or if a player was resurrected at the end of the
+ * game. To check if you are in this case, and e.g. avoid running game-start-code when
+ * a player is resurrected, check the old phase with {@link #getOldPhase()}, or simpler,
+ * use the {@link #isRunningForward()} method.</p>
  */
 public class GamePhaseChangedEvent extends Event
 {
@@ -68,6 +75,24 @@ public class GamePhaseChangedEvent extends Event
     public GamePhase getNewPhase()
     {
         return newPhase;
+    }
+
+    /**
+     * Checks if this phase change is running forward regarding the normal phases progression.
+     *
+     * <h3>Example</h3>
+     * <ul>
+     * <li>If we have the cycle {@link GamePhase#STARTING STARTING} → {@link GamePhase#IN_GAME IN_GAME},
+     * this will return {@code true}.</li>
+     * <li>If we have the cycle {@link GamePhase#END END} → {@link GamePhase#IN_GAME IN_GAME},
+     * this will return {@code false}.</li>
+     * </ul>
+     *
+     * @return {@code true} if the game is running forward.
+     */
+    public boolean isRunningForward()
+    {
+        return newPhase.ordinal() > oldPhase.ordinal();
     }
 
     @Override
