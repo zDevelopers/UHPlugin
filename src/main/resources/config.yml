@@ -31,6 +31,7 @@ modules:
     "ingame-teleportation": true
     "ingame-episodes": true
     "ingame-deathAnnouncement": true
+#   "ingame-kick": false
     "cosmetics-hardcoreHearts": true
     "cosmetics-motd": true
     "other-playersLoader": true
