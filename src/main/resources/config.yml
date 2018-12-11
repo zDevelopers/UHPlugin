@@ -25,6 +25,7 @@ modules:
     "border-walls": true
     "border-warning": true
     "border-check": true
+    "ingame-hardcore": true
     "ingame-food": true
     "ingame-health": true
     "ingame-listHealth": true

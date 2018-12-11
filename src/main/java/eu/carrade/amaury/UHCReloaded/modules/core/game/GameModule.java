@@ -756,6 +756,9 @@ public class GameModule extends UHModule implements Listener
             player.setExp(0L);
             player.setLevel(0);
         });
+
+        // Just in case...
+        UR.get().getWorlds().forEach(world -> world.setGameRuleValue("keepInventory", Boolean.FALSE.toString()));
     }
 
 

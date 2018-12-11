@@ -220,8 +220,6 @@ public class GameBeginning extends ZLibComponent implements Listener
 
     private void setPVP(final boolean pvp)
     {
-        UR.get().getWorld(World.Environment.NORMAL).setPVP(pvp);
-        UR.get().getWorld(World.Environment.NETHER).setPVP(pvp);
-        UR.get().getWorld(World.Environment.THE_END).setPVP(pvp);
+        UR.get().getWorlds().forEach(world -> world.setPVP(pvp));
     }
 }

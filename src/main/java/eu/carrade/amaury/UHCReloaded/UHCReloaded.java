@@ -414,6 +414,13 @@ public class UHCReloaded extends ZPlugin implements Listener
         }
     }
 
+    /**
+     * @return A stream containing all three playing worlds.
+     */
+    public List<World> getWorlds()
+    {
+        return Arrays.asList(worldNormal, worldNether, worldTheEnd);
+    }
 
 
     @EventHandler (priority = EventPriority.LOWEST)
