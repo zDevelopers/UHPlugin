@@ -57,7 +57,6 @@ import eu.carrade.amaury.UHCReloaded.utils.ModulesUtils;
 import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.Commands;
-import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.i18n.I18n;
@@ -236,38 +235,7 @@ public class UHCReloaded extends ZPlugin implements Listener
      */
     private void registerModule(final Class<? extends UHModule> module, final boolean enableAtStartup)
     {
-        final String description;
-        final ModuleInfo.ModuleLoadTime priority;
-        final boolean internal;
-
-        final Class<? extends ConfigurationInstance> moduleConfiguration;
-        final String settingsFileName;
-
-        final String[] dependencies;
-
-        final ModuleInfo info = module.getAnnotation(ModuleInfo.class);
-
-        if (info == null)
-        {
-            description = "";
-            internal = false;
-            priority = ModuleInfo.ModuleLoadTime.POST_WORLD;
-            moduleConfiguration = null;
-            settingsFileName = null;
-            dependencies = new String[] {};
-        }
-        else
-        {
-            description = info.description();
-            internal = info.internal();
-            priority = info.when();
-            moduleConfiguration = info.settings().equals(ConfigurationInstance.class) ? null : info.settings();
-            settingsFileName = info.settings_filename().isEmpty() ? null : info.settings_filename();
-            dependencies = info.depends();
-        }
-
-        this.modules.put(module, new ModuleWrapper(
-                description, internal, enableAtStartup, priority, module, moduleConfiguration, settingsFileName, dependencies));
+        this.modules.put(module, new ModuleWrapper(module));
     }
 
     /**

@@ -50,14 +50,9 @@ public class UHRootCommand extends AbstractCommand
     {
         p = plugin;
 
-        // Bugs
-        registerSubCommand(new UHTPBackCommand(p));
-        registerSubCommand(new UHTPSpawnCommand(p));
-
         // Misc
         registerSubCommand(new UHFinishCommand(p));
         registerSubCommand(new UHFreezeCommand(p));
-        registerSubCommand(new UHTPCommand(p));
         registerSubCommand(new UHInfosCommand(p));
         registerSubCommand(new UHRulesCommand(p));
     }

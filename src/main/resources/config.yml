@@ -28,6 +28,7 @@ modules:
     "ingame-food": true
     "ingame-health": true
     "ingame-listHealth": true
+    "ingame-teleportation": true
     "ingame-episodes": true
     "ingame-deathAnnouncement": true
     "cosmetics-hardcoreHearts": true

@@ -60,30 +60,43 @@ public class ModuleWrapper
     private String[] dependencies;
 
     private final boolean internal;
+    private final boolean canBeDisabled;
 
+    /**
+     * TODO reimplement properly activated modules
+     */
+    @Deprecated
     private boolean enabledAtStartup;
 
     private UHModule instance = null;
 
-    public ModuleWrapper(
-            final String description,
-            final boolean internal,
-            final boolean enabledAtStartup,
-            final ModuleInfo.ModuleLoadTime when,
-            final Class<? extends UHModule> moduleClass,
-            final Class<? extends ConfigurationInstance> moduleConfiguration,
-            final String settingsFileName,
-            final String[] dependencies)
+    public ModuleWrapper(final Class<? extends UHModule> moduleClass)
     {
         this.name = computeModuleName(moduleClass);
-        this.description = description;
-        this.internal = internal;
-        this.enabledAtStartup = enabledAtStartup;
-        this.when = when;
         this.moduleClass = moduleClass;
-        this.moduleConfiguration = moduleConfiguration;
-        this.settingsFileName = settingsFileName;
-        this.dependencies = dependencies;
+
+        final ModuleInfo info = moduleClass.getAnnotation(ModuleInfo.class);
+
+        if (info == null)
+        {
+            description = "";
+            internal = false;
+            canBeDisabled = true;
+            when = ModuleInfo.ModuleLoadTime.POST_WORLD;
+            moduleConfiguration = null;
+            settingsFileName = null;
+            dependencies = new String[] {};
+        }
+        else
+        {
+            description = info.description();
+            internal = info.internal();
+            canBeDisabled = info.can_be_disabled();
+            when = info.when();
+            moduleConfiguration = info.settings().equals(ConfigurationInstance.class) ? null : info.settings();
+            settingsFileName = info.settings_filename().isEmpty() ? null : info.settings_filename();
+            dependencies = info.depends();
+        }
 
         loadConfiguration();
     }
@@ -166,6 +179,14 @@ public class ModuleWrapper
     }
 
     /**
+     * @return A list of external plugins this module depends on.
+     */
+    public String[] getDependencies()
+    {
+        return dependencies;
+    }
+
+    /**
      * @return When this module should be loaded.
      */
     public ModuleInfo.ModuleLoadTime getWhen()
@@ -240,6 +261,14 @@ public class ModuleWrapper
     public boolean isInternal()
     {
         return internal;
+    }
+
+    /**
+     * @return {@code true} if this module can be disabled at runtime.
+     */
+    public boolean canBeDisabled()
+    {
+        return canBeDisabled;
     }
 
     /**

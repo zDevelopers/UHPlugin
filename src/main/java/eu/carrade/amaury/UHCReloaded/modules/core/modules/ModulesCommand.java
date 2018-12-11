@@ -36,10 +36,17 @@ import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.CommandException;
 import fr.zcraft.zlib.components.commands.CommandInfo;
+import fr.zcraft.zlib.components.commands.Commands;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.components.rawtext.RawText;
+import fr.zcraft.zlib.components.rawtext.RawTextPart;
+import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 
 @CommandInfo (name = "modules", usageParameters = "[list|enable|disable]", aliases = {"module"})
@@ -63,24 +70,55 @@ public class ModulesCommand extends Command
 
         modules.addAll(UHCReloaded.get().getModules());
 
-        success(I.tn("{0} module registered", "{0} modules registered", modules.size()));
+        success(I.tn("{0} module registered {gray}(hover for details)", "{0} modules registered {gray}(hover for details)", modules.size()));
         modules.forEach(module -> {
+            final List<String> commands = new ArrayList<>();
+
             if (module.isEnabled())
             {
-                info(I.t(
-                        "{green} • {white}{0} (enabled - {1})",
-                        module.getName(),
-                        module.getWhen()
-                ));
+                final List<Class<? extends Command>> commandsClasses = module.get().getCommands();
+                if (commandsClasses != null)
+                {
+                    commandsClasses.forEach(clazz -> {
+                        final Command cmd = Commands.getCommandInfo(clazz);
+                        if (cmd != null) commands.add(cmd.getUsageString());
+                    });
+                }
             }
-            else
+
+            final RawTextPart<?> tooltip = new RawText();
+
+            tooltip.then(module.getName()).style(ChatColor.BOLD).style(module.isEnabled() ? ChatColor.GREEN : ChatColor.RED).then("\n");
+            tooltip.then(module.isEnabled() ? I.t("Enabled") : I.t("Disabled")).color(ChatColor.GRAY).then("\n\n");
+            tooltip.then(module.getDescription()).style(ChatColor.WHITE).then("\n\n");
+            tooltip.then(I.t("Load time")).style(ChatColor.BLUE).then("\n").then(module.getWhen().toString()).style(ChatColor.WHITE);
+
+            if (!commands.isEmpty())
             {
-                info(I.t(
-                        "{red} • {white}{0} (disabled - {1})",
-                        module.getName(),
-                        module.getWhen()
-                ));
+                tooltip.then("\n\n").then(I.t("Provided commands")).style(ChatColor.BLUE);
+                commands.forEach(command -> tooltip.then("\n- ").style(ChatColor.GRAY).then(command).color(ChatColor.WHITE));
             }
+
+            if (module.getDependencies().length != 0)
+            {
+                tooltip.then("\n\n").then(I.t("External dependencies")).style(ChatColor.BLUE);
+                Stream.of(module.getDependencies()).forEach(dep -> tooltip.then("\n- ").style(ChatColor.GRAY).then(dep).color(ChatColor.WHITE));
+            }
+
+            if (module.isInternal())
+            {
+                tooltip.then("\n\n").then(I.t("Internal module")).style(ChatColor.DARK_GRAY);
+            }
+            if (!module.canBeDisabled())
+            {
+                tooltip.then(module.isInternal() ? " - " : "\n\n").color(ChatColor.DARK_GRAY).then(I.t("Cannot be disabled")).color(ChatColor.DARK_GRAY);
+            }
+
+            send(new RawText().hover(tooltip)
+                    .then("• ").color(module.isEnabled() ? ChatColor.GREEN : ChatColor.RED)
+                    .then(module.getName()).color(ChatColor.WHITE)
+                    .build()
+            );
         });
     }
 }
