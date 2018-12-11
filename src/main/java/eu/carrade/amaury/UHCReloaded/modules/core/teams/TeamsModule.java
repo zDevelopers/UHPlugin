@@ -203,7 +203,6 @@ public class TeamsModule extends UHModule
     {
         if (ev.getNewPhase() != GamePhase.IN_GAME) return;
 
-        // Banners
         if (Config.BANNER.GIVE.GIVE_IN_HOTBAR.get() || Config.BANNER.GIVE.GIVE_ON_HEAD.get() || Config.BANNER.GIVE.PLACE_ON_SPAWN.get())
         {
             RunTask.later(() ->
@@ -261,9 +260,12 @@ public class TeamsModule extends UHModule
     {
         if (!Config.BANNER.SHIELDS.ADD_ON_SHIELDS.get()) return;
 
-        final Player player = (Player) ev.getViewers().get(0);
-        final ZTeam team = ZTeams.get().getTeamForPlayer(player);
+        // The viewers list is empty for crafts from the small crafting
+        // grid in the inventory. In this case we use another data source.
+        final Player player = !ev.getViewers().isEmpty() ? (Player) ev.getViewers().get(0) : (Player) ev.getView().getPlayer();
+        if (player == null) return;
 
+        final ZTeam team = ZTeams.get().getTeamForPlayer(player);
         if (team == null || team.getBanner() == null) return;
 
         final Recipe recipe = ev.getRecipe();
