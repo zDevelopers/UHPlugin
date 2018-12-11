@@ -100,6 +100,11 @@ public class GameModule extends UHModule implements Listener
     private final Set<ZTeam> aliveTeams = new HashSet<>();
 
     /**
+     * When the game ends, stores the last standing team.
+     */
+    private ZTeam winner = null;
+
+    /**
      * {@code true} if there is teams in this game.
      */
     private boolean teamsGame = false;
@@ -210,6 +215,11 @@ public class GameModule extends UHModule implements Listener
         return alivePlayers.stream().map(Bukkit::getOfflinePlayer).collect(Collectors.toSet());
     }
 
+    public int countAlivePlayers()
+    {
+        return alivePlayers.size();
+    }
+
     public Set<Player> getAliveConnectedPlayers()
     {
         return alivePlayers.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).filter(Player::isOnline).collect(Collectors.toSet());
@@ -218,6 +228,19 @@ public class GameModule extends UHModule implements Listener
     public Set<ZTeam> getAliveTeams()
     {
         return Collections.unmodifiableSet(aliveTeams);
+    }
+
+    public int countAliveTeams()
+    {
+        return aliveTeams.size();
+    }
+
+    /**
+     * @return The game's winner, if any; null else.
+     */
+    public ZTeam getWinner()
+    {
+        return winner;
     }
 
     public boolean isAlive(final OfflinePlayer player)
@@ -757,6 +780,19 @@ public class GameModule extends UHModule implements Listener
 
         /// Resurrection notification. {0} = raw resurrected player name.
         Bukkit.broadcastMessage(I.t("{gold}{0} returned from the dead!", ev.getPlayer().getName()));
+    }
+
+    @EventHandler
+    public void onGameEndsOrEndsCancelled(final GamePhaseChangedEvent ev)
+    {
+        if (ev.getNewPhase() == GamePhase.END)
+        {
+            winner = aliveTeams.stream().findAny().orElse(null); // There will be one alive team left here.
+        }
+        else if (ev.getNewPhase() == GamePhase.IN_GAME && ev.getOldPhase() == GamePhase.END)
+        {
+            winner = null; // Win cancelled because a team was resurrected.
+        }
     }
 
 
