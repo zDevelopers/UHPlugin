@@ -44,9 +44,7 @@ import eu.carrade.amaury.UHCReloaded.old.misc.RuntimeCommandsExecutor;
 import eu.carrade.amaury.UHCReloaded.old.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import fr.zcraft.zlib.components.i18n.I;
-import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.tools.runners.RunTask;
-import fr.zcraft.zlib.tools.text.RawMessage;
 import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -62,9 +60,7 @@ import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.net.URISyntaxException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -234,15 +230,6 @@ public class GameListener implements Listener
 //            p.getServer().getPluginManager().callEvent(new UHGameEndsEvent(p.getGameManager().getAliveTeams().iterator().next()));
         }
 
-        // Notifies the player about the possibility of respawn if hardcore hearts are enabled
-        if (UHConfig.HARDCORE_HEARTS.DISPLAY.get() && p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled() && UHConfig.HARDCORE_HEARTS.RESPAWN_MESSAGE.get())
-        {
-            RunTask.later(() -> {
-                /// A message displayed to the players under the death screen, about the respawn possibility even if the death screen says the opposite (in hardcore mode)
-                ev.getEntity().sendMessage(I.t("{darkpurple}{obfuscated}----{lightpurple}{italic} YOU CAN RESPAWN{lightpurple}, just click {italic}Respawn {lightpurple}on the next screen."));
-            }, 2L);
-        }
-
         // Disables the team-chat-lock if needed
 //        if (UHConfig.TEAMS_OPTIONS.TEAM_CHAT.DISABLE_LOCK_ON_DEATH.get())
 //        {
@@ -354,54 +341,6 @@ public class GameListener implements Listener
 
         // The display name is reset when the player logs off.
 //        p.getTeamManager().colorizePlayer(ev.getPlayer());
-
-        if (!p.getGameManager().isGameStarted() && ev.getPlayer().hasPermission("uh.*"))
-        {
-            // A warning to the administrators if ProtocolLib is not present.
-            if (!p.getProtocolLibIntegrationWrapper().isProtocolLibIntegrationEnabled())
-            {
-                final List<String> enabledOptionsWithProtocolLibNeeded = p.getProtocolLibIntegrationWrapper().isProtocolLibNeeded();
-
-                if (enabledOptionsWithProtocolLibNeeded != null)
-                {
-                    ev.getPlayer().sendMessage(I.t("{darkred}[UHC] {ce}ProtocolLib is needed but not installed!"));
-                    ev.getPlayer().sendMessage(I.t("{gray}The following options require the presence of ProtocolLib:"));
-
-                    for (String option : enabledOptionsWithProtocolLibNeeded)
-                    {
-                        /// An option requiring ProtocolLib, in the “missing PLib” message. {0} = option path.
-                        ev.getPlayer().sendMessage(I.tc("protocollib_option", "{darkgray} - {gray}{0}", option));
-                    }
-
-                    String pLibDownloadURL;
-                    if (p.getServer().getBukkitVersion().contains("1.7"))  // 1.7.9 or 1.7.10
-                    {
-                        pLibDownloadURL = "http://dev.bukkit.org/bukkit-plugins/protocollib/";
-                    }
-                    else  // 1.8+
-                    {
-                        pLibDownloadURL = "http://www.spigotmc.org/resources/protocollib.1997/";
-                    }
-
-                    try
-                    {
-                        RawMessage.send(ev.getPlayer(),
-                            new RawText(I.t("{gray}You can download ProtocolLib by clicking here."))
-                                .uri(pLibDownloadURL)
-                                .hover(ChatColor.GRAY + pLibDownloadURL)
-                            .build()
-                        );
-                    }
-                    catch (URISyntaxException e)
-                    {
-                        e.printStackTrace();
-
-                        /// {0} = ProtocolLib download URL for the current Minecraft version.
-                        ev.getPlayer().sendMessage(I.t("{gray}ProtocolLib is available here: {0}", pLibDownloadURL));
-                    }
-                }
-            }
-        }
 
         // If the player needs to be resurrected...
         if (p.getGameManager().isDeadPlayersToBeResurrected(ev.getPlayer()))

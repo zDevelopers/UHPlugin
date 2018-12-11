@@ -50,17 +50,7 @@ public class UHRootCommand extends AbstractCommand
     {
         p = plugin;
 
-        // Game
-        registerSubCommand(new UHStartCommand(p));
-        registerSubCommand(new UHShiftCommand(p));
-
         // Bugs
-        registerSubCommand(new UHHealCommand(p));
-        registerSubCommand(new UHHealAllCommand(p));
-        registerSubCommand(new UHFeedCommand(p));
-        registerSubCommand(new UHFeedAllCommand(p));
-        registerSubCommand(new UHKillCommand(p));
-        registerSubCommand(new UHResurrectCommand(p));
         registerSubCommand(new UHTPBackCommand(p));
         registerSubCommand(new UHTPSpawnCommand(p));
 

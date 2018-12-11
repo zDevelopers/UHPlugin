@@ -48,7 +48,6 @@ import eu.carrade.amaury.UHCReloaded.modules.core.spectators.managers.Spectators
 import eu.carrade.amaury.UHCReloaded.modules.core.teams.TeamsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHDynmapIntegration;
-import eu.carrade.amaury.UHCReloaded.old.integration.UHProtocolLibIntegrationWrapper;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHSpectatorPlusIntegration;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHWorldBorderIntegration;
 import eu.carrade.amaury.UHCReloaded.old.misc.*;
@@ -117,7 +116,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     private UHWorldBorderIntegration wbintegration = null;
     private UHSpectatorPlusIntegration spintegration = null;
     private UHDynmapIntegration dynmapintegration = null;
-    private UHProtocolLibIntegrationWrapper protocollibintegrationwrapper = null;
 
 
     @Override
@@ -686,14 +684,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     public UHDynmapIntegration getDynmapIntegration()
     {
         return dynmapintegration;
-    }
-
-    /**
-     * Returns a wrapper of the representation of the ProtocolLib integration in the plugin.
-     */
-    public UHProtocolLibIntegrationWrapper getProtocolLibIntegrationWrapper()
-    {
-        return protocollibintegrationwrapper;
     }
 
     /**
