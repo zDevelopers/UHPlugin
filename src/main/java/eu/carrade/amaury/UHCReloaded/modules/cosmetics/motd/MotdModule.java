@@ -36,7 +36,6 @@ package eu.carrade.amaury.UHCReloaded.modules.cosmetics.motd;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
-import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zteams.ZTeam;
@@ -54,103 +53,61 @@ public class MotdModule extends UHModule
 {
     private final GameModule game = UR.module(GameModule.class);
 
-    private String matchName = "";
-    private String currentMOTD;
-
-    public void onEnable()
+    private String getMOTD()
     {
+        final String matchName;
+
         if (Config.DISPLAY_MATCH_NAME.get())
         {
             matchName = ChatColor.translateAlternateColorCodes('&', Config.MATCH_NAME_PREFIX.get())
-                    + eu.carrade.amaury.UHCReloaded.modules.core.sidebar.Config.TITLE.get()
-                    + ChatColor.RESET + "\n";
+                + eu.carrade.amaury.UHCReloaded.modules.core.sidebar.Config.TITLE.get()
+                + ChatColor.RESET + "\n";
         }
-    }
+        else
+        {
+            matchName = "";
+        }
 
-
-    @EventHandler
-    public void onGamePhaseChange(final GamePhaseChangedEvent ev)
-    {
-        switch (ev.getNewPhase())
+        switch (game.getPhase())
         {
             case WAIT:
-                updateMOTDBeforeStart();
-                break;
+                return matchName + I.t("Waiting for players...");
 
             case STARTING:
-                updateMOTDDuringStart();
-                break;
+                return matchName + I.t("Starting in progress...");
 
             case IN_GAME:
-                updateMOTDDuringGame();
-                break;
+                if (game.isTeamsGame())
+                {
+                    /// Teams game running MOTD. {0} = players alive count. {1} = teams alive count. Plural based on players count.
+                    return matchName + I.tn("Game running! {0} player alive in {1} team.", "Game running! {0} players alive in {1} teams.", game.countAlivePlayers(), game.countAlivePlayers(), game.countAliveTeams());
+                }
+                else
+                {
+                    /// Solo game running MOTD. {0} = players alive count.
+                    return matchName + I.tn("Game running! {0} player alive.", "Game running! {0} players alive.", game.countAlivePlayers());
+                }
 
             case END:
-                updateMOTDAfterGame(game.getWinner());
-                break;
+            default:
+                final ZTeam winner = game.getWinner();
+
+                if (game.isTeamsGame())
+                {
+                    /// Game finished MOTD with team winner ({0} = team display name).
+                    return matchName + I.t("Game finished; the team {0} wins this match!", winner != null ? winner.getDisplayName() : "??");
+                }
+                else
+                {
+                    /// Game finished MOTD with solo winner ({0} = winner raw name).
+                    return matchName + I.t("Game finished; congratulation to {0} for his victory!", winner != null ? winner.getName() : "??");
+                }
         }
     }
 
     @EventHandler
     public void onServerListPing(final ServerListPingEvent ev)
     {
-        ev.setMotd(currentMOTD);
-    }
-
-
-    /**
-     * Updates the MOTD to the one displayed before the game start.
-     */
-    private void updateMOTDBeforeStart()
-    {
-        /// MOTD when the game is not started.
-        currentMOTD = matchName + I.t("Waiting for players...");
-    }
-
-    /**
-     * Updates the MOTD to the one displayed during the start.
-     */
-    private void updateMOTDDuringStart()
-    {
-        /// MOTD when the game is starting (slow TP in progress).
-        currentMOTD = matchName + I.t("Starting in progress...");
-    }
-
-    /**
-     * Updates the MOTD to the one displayed during the game (includes alive counts).
-     * <p>
-     * This need to be called on each death, to update alive counts.
-     */
-    private void updateMOTDDuringGame()
-    {
-        if (game.isTeamsGame())
-        {
-            /// Teams game running MOTD. {0} = players alive count. {1} = teams alive count. Plural based on players count.
-            currentMOTD = matchName + I.tn("Game running! {0} player alive in {1} team.", "Game running! {0} players alive in {1} teams.", game.countAlivePlayers(), game.countAlivePlayers(), game.countAliveTeams());
-        }
-        else
-        {
-            /// Solo game running MOTD. {0} = players alive count.
-            currentMOTD = matchName + I.tn("Game running! {0} player alive.", "Game running! {0} players alive.", game.countAlivePlayers());
-        }
-    }
-
-    /**
-     * Updates the MOTD after the game.
-     *
-     * @param winner The winner.
-     */
-    private void updateMOTDAfterGame(final ZTeam winner)
-    {
-        if (game.isTeamsGame())
-        {
-            /// Game finished MOTD with team winner ({0} = team display name).
-            currentMOTD = matchName + I.t("Game finished; the team {0} wins this match!", winner != null ? winner.getDisplayName() : "??");
-        }
-        else
-        {
-            /// Game finished MOTD with solo winner ({0} = winner raw name).
-            currentMOTD = matchName + I.t("Game finished; congratulation to {0} for his victory!", winner != null ? winner.getName() : "??");
-        }
+        ev.setMotd(getMOTD());
     }
 }
