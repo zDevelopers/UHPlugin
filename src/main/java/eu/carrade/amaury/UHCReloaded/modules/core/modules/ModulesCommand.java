@@ -42,10 +42,7 @@ import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.components.rawtext.RawTextPart;
 import org.bukkit.ChatColor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Stream;
 
 
@@ -82,6 +79,15 @@ public class ModulesCommand extends Command
                     commandsClasses.forEach(clazz -> {
                         final Command cmd = Commands.getCommandInfo(clazz);
                         if (cmd != null) commands.add(cmd.getUsageString());
+                    });
+                }
+
+                final Map<String, Class<? extends Command>> commandsAliases = module.get().getCommandsAliases();
+                if (commandsAliases != null)
+                {
+                    commandsAliases.forEach((alias, clazz) -> {
+                        final Command cmd = Commands.getCommandInfo(clazz);
+                        if (cmd != null) commands.add("/" + alias + " " + cmd.getUsageParameters() + ChatColor.DARK_GRAY + " (alias)");
                     });
                 }
             }
