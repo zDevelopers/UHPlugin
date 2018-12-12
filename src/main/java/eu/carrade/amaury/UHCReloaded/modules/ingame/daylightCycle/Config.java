@@ -31,11 +31,11 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.ingame.weather;
+package eu.carrade.amaury.UHCReloaded.modules.ingame.daylightCycle;
 
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;
-import org.bukkit.WeatherType;
 
 import java.io.File;
 
@@ -48,7 +48,9 @@ public class Config extends ConfigurationInstance
         super(file);
     }
 
-    static public final ConfigurationItem<Boolean> WEATHER_CYCLE = item("enable-weather-cycle", true);
-    static public final ConfigurationItem<WeatherType> INITIAL_WEATHER = item("initial-weather", WeatherType.CLEAR);
-    static public final ConfigurationItem<WeatherType> WAITING_PHASE_WEATHER = item("waiting-phase-weather", WeatherType.CLEAR);
+    static public final ConfigurationItem<Boolean> ENABLE_DAYLIGHT_CYCLE = item("enable-daylight-cycle", true);
+    static public final ConfigurationItem<TimeDelta> DAYLIGHT_CYCLE_DURATION = item("daylight-cycle-duration", new TimeDelta(0, 20, 0));
+
+    static public final ConfigurationItem<Long> WAITING_PHASE_HOUR = item("waiting-phase-hour", 6000L);
+    static public final ConfigurationItem<Long> INITIAL_GAME_HOUR = item("initial-game-hour", 0L);
 }
