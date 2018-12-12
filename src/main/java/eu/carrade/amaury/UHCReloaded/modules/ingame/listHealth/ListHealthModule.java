@@ -45,8 +45,8 @@ import org.bukkit.scoreboard.Objective;
 
 
 @ModuleInfo (
-        name = "Health in players list",
-        description = "Displays the health of players in the overlay list displayed with <TAB>",
+        name = "Health in Players List",
+        description = "Displays the health of players in the overlay list displayed with <TAB>.",
         when = ModuleInfo.ModuleLoadTime.ON_GAME_STARTING
 )
 public class ListHealthModule extends UHModule

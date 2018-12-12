@@ -35,7 +35,6 @@ package eu.carrade.amaury.UHCReloaded.modules.border.warning;
 
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
-import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.events.BorderChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
@@ -53,13 +52,12 @@ import java.util.List;
 
 @ModuleInfo (
         name = "Border Warning",
-        description = "Warns players about the future border size",
+        description = "Warns players about the future border size.",
         when = ModuleInfo.ModuleLoadTime.ON_GAME_START,
         settings = Config.class
 )
 public class WarningModule extends UHModule
 {
-    private BorderModule borderModule;
 
     private Integer warningSize = 0;
     private BukkitRunnable warningTask = null;
@@ -75,8 +73,6 @@ public class WarningModule extends UHModule
     {
         /// The name of the warning timer displaying the time left before the next border
         warningTimerName = I.t("Border shrinking");
-
-        borderModule = UR.module(BorderModule.class);
     }
 
     @Override

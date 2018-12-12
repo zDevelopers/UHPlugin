@@ -49,8 +49,8 @@ import java.util.List;
 
 
 @ModuleInfo (
-        name = "Walls generator",
-        description = "Generates a solid wall around the arena",
+        name = "Walls Generator",
+        description = "Generates a solid wall around the arena.",
         when = ModuleInfo.ModuleLoadTime.POST_WORLD,
         settings = Config.class
 )

@@ -46,7 +46,7 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 @ModuleInfo (
         name = "MOTD",
-        description = "Updates the MOTD according to the current game state",
+        description = "Updates the MOTD according to the current game state.",
         settings = Config.class
 )
 public class MotdModule extends UHModule

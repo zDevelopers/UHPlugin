@@ -53,7 +53,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 @ModuleInfo (
         name = "Death Announcements",
-        description = "Adds announcements for players & teams deaths",
+        description = "Adds announcements for players & teams deaths.",
         when = ModuleInfo.ModuleLoadTime.ON_GAME_START,
         settings = Config.class
 )

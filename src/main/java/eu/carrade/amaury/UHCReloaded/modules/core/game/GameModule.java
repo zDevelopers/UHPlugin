@@ -75,7 +75,7 @@ import java.util.stream.Collectors;
 
 @ModuleInfo (
         name = "Game",
-        description = "Manages the game execution and phases",
+        description = "Manages the game execution and phases.",
         settings = Config.class,
         internal = true,
         can_be_disabled = false

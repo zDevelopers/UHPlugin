@@ -59,7 +59,7 @@ import java.util.stream.Collectors;
 
 @ModuleInfo(
         name = "Spawns",
-        description = "Manages the spawns point and allow users to generate them randomly",
+        description = "Manages the spawn points and allow users to generate them randomly.",
         settings = Config.class,
         internal = true,
         can_be_disabled = false

@@ -51,7 +51,7 @@ import java.util.Map;
 
 @ModuleInfo (
         name = "Cages",
-        description = "Puts players in cages instead of floating in the air, during the startup process",
+        description = "Puts players in cages (or platforms) instead of letting them float in the air, during the startup process.",
         when = ModuleInfo.ModuleLoadTime.ON_GAME_STARTING,
         settings = Config.class
 )

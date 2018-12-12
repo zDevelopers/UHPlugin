@@ -41,7 +41,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 @ModuleInfo (
         name = "Sidebar",
-        description = "Manages the sidebar and allows hooks for all modules into it",
+        description = "Manages the sidebar and allows hooks for all modules into it.",
         settings = Config.class,
         internal = true,
         can_be_disabled = false

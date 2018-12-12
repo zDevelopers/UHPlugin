@@ -58,8 +58,8 @@ import java.util.*;
 
 
 @ModuleInfo (
-        name = "Spectators manager",
-        description = "Handles non-playing players",
+        name = "Spectators Manager",
+        description = "Handles non-playing players.",
         when = ModuleInfo.ModuleLoadTime.POST_WORLD,
         settings = Config.class,
         can_be_disabled = false

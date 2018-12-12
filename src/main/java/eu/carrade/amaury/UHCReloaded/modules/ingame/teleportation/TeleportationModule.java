@@ -50,7 +50,7 @@ import java.util.*;
 
 @ModuleInfo (
         name = "Teleportation Commands",
-        description = "Provides commands to teleport to spawn, death location, or groups of players"
+        description = "Provides commands to teleport to spawn, death location, or groups of players."
 )
 public class TeleportationModule extends UHModule
 {

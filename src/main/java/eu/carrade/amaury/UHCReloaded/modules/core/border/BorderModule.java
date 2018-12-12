@@ -64,7 +64,7 @@ import java.util.stream.Collectors;
 
 @ModuleInfo (
         name = "Border",
-        description = "Manages the border size and reduction",
+        description = "Manages the border size and reduction.",
         settings = Config.class,
         can_be_disabled = false,
         internal = true

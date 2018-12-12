@@ -43,7 +43,7 @@ import org.bukkit.event.EventHandler;
 
 @ModuleInfo(
         name = "Pomf",
-        description = "Pomf au milieu des épisodes #parceque",
+        description = "Pomf au milieu d'un épisode. #parceque",
         when = ModuleInfo.ModuleLoadTime.ON_GAME_START
 )
 public class PomfModule extends UHModule

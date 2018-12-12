@@ -40,8 +40,8 @@ import fr.zcraft.zlib.core.ZLib;
 
 
 @ModuleInfo (
-        name = "Hardcore hearts",
-        description = "Replaces hearts with hardcore hearts. Depends on ProtocolLib.",
+        name = "Hardcore Hearts",
+        description = "Replaces hearts with hardcore hearts.",
         depends = "ProtocolLib",
         settings = Config.class
 )

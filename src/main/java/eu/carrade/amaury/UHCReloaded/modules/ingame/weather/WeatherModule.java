@@ -50,7 +50,7 @@ import java.util.Set;
 
 @ModuleInfo (
         name = "Weather",
-        description = "Manages the in-game weather",
+        description = "Manages the in-game weather.",
         settings = Config.class
 )
 public class WeatherModule extends UHModule

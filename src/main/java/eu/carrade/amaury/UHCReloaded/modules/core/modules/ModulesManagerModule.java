@@ -48,8 +48,8 @@ import java.util.Map;
 
 
 @ModuleInfo (
-        name = "Modules manager",
-        description = "Offers to the users a way to manage modules",
+        name = "Modules Manager",
+        description = "Offers to the users a way to manage modules.",
         when = ModuleInfo.ModuleLoadTime.STARTUP,
         can_be_disabled = false
 )

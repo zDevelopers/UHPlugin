@@ -44,8 +44,8 @@ import java.util.List;
 
 
 @ModuleInfo (
-        name = "Food commands",
-        description = "Provides commands to update food level & saturation of some or all players",
+        name = "Food Commands",
+        description = "Provides commands to update food level & saturation of some or all players.",
         when = ModuleInfo.ModuleLoadTime.ON_GAME_START
 )
 public class FoodModule extends UHModule

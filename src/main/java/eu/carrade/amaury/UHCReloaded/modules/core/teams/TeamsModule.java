@@ -69,7 +69,7 @@ import java.util.*;
 
 @ModuleInfo (
         name = "Teams",
-        description = "Manages the teams and related commands",
+        description = "Manages the teams and related commands.",
         settings = Config.class,
         internal = true,
         can_be_disabled = false

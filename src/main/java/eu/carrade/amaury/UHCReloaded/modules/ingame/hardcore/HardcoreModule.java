@@ -39,7 +39,7 @@ import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 
 
 @ModuleInfo (
-        name = "Hardcore mode",
+        name = "Hardcore Mode",
         description = "Disables health natural regeneration and sets correct difficulty in the game's worlds.",
         when = ModuleInfo.ModuleLoadTime.ON_GAME_START,
         settings = Config.class

@@ -44,8 +44,8 @@ import java.util.List;
 
 
 @ModuleInfo (
-        name = "Health commands",
-        description = "Provides commands to update health of some or all players",
+        name = "Health Commands",
+        description = "Provides commands to update health of some or all players.",
         when = ModuleInfo.ModuleLoadTime.ON_GAME_START
 )
 public class HealthModule extends UHModule

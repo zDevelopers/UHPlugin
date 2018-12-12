@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
 
 @ModuleInfo (
         name = "Timers",
-        description = "The timekeeper of the whole UHCReloaded plugin & companions",
+        description = "The timekeeper of the whole UHCReloaded plugin & companions.",
         internal = true,
         can_be_disabled = false
 )
