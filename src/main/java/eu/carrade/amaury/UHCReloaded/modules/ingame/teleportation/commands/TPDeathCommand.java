@@ -47,13 +47,13 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CommandInfo (name = "tp-back", usageParameters = "<player> [force]",aliases = {"tpback", "tpb"})
-public class TPBackCommand extends Command
+@CommandInfo (name = "tp-death", usageParameters = "[player] [force]",aliases = {"tpback", "tpdeath", "tpd"})
+public class TPDeathCommand extends Command
 {
     @Override
     protected void run() throws CommandException
     {
-        final Player player = getPlayerParameter(0);
+        final Player player = args.length > 0 ? getPlayerParameter(0) : playerSender();
         final boolean force = args.length > 1 && args[1].equalsIgnoreCase("force");
 
         if (!UR.module(TeleportationModule.class).hasDeathLocation(player))

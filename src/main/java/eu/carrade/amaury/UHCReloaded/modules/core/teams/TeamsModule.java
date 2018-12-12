@@ -31,12 +31,14 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.teams;
 
+import com.google.common.collect.ImmutableMap;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
 import eu.carrade.amaury.UHCReloaded.modules.core.teams.sidebar.SidebarCacheListener;
 import eu.carrade.amaury.UHCReloaded.modules.core.teams.sidebar.SidebarPlayerCache;
@@ -47,7 +49,7 @@ import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zteams.ZTeam;
 import fr.zcraft.zteams.ZTeams;
-import fr.zcraft.zteams.commands.TeamsCommand;
+import fr.zcraft.zteams.commands.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -95,6 +97,9 @@ public class TeamsModule extends UHModule
                         Config.COLORIZE_CHAT.get(),
                         false
                 )
+                .setTeamsChatOptions(
+                        Config.TEAM_CHAT.LOG.get()
+                )
                 .setBannerOptions(
                         Config.BANNER.SHAPE.WRITE_LETTER.get(),
                         Config.BANNER.SHAPE.ADD_BORDER.get()
@@ -118,7 +123,26 @@ public class TeamsModule extends UHModule
     @Override
     public List<Class<? extends Command>> getCommands()
     {
-        return Collections.singletonList(TeamsCommand.class);
+        return Arrays.asList(
+                TeamsCommand.class,
+                TeamChatCommand.class,
+                GlobalChatCommand.class,
+                ToggleChatCommand.class,
+                TeamsGuiCommand.class,
+                MyTeamCommand.class
+        );
+    }
+
+    @Override
+    public Map<String, Class<? extends Command>> getCommandsAliases()
+    {
+        return ImmutableMap.of(
+                "t", TeamChatCommand.class,
+                "g", GlobalChatCommand.class,
+                "togglechat", ToggleChatCommand.class,
+                "teams", TeamsGuiCommand.class,
+                "team", MyTeamCommand.class
+        );
     }
 
     @Override
@@ -299,6 +323,19 @@ public class TeamsModule extends UHModule
             catch (ClassCastException | NullPointerException ignored)
             {
                 // Bad Minecraft version (1.8)
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
+    {
+        // Disables the team-chat-lock if needed
+        if (Config.TEAM_CHAT.DISABLE_LOCK_ON_DEATH.get())
+        {
+            if (ZTeams.chatManager().isTeamChatEnabled(ev.getPlayer().getUniqueId()))
+            {
+                ZTeams.chatManager().toggleChatForPlayer(ev.getPlayer().getUniqueId());
             }
         }
     }

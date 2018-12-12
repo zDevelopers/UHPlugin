@@ -62,7 +62,7 @@ public class TPSpawnCommand extends Command
             return;
         }
 
-        final Player player = getPlayerParameter(0);
+        final Player player = args.length > 0 ? getPlayerParameter(0) : playerSender();
         final boolean force = args.length > 1 && args[1].equalsIgnoreCase("force");
         final Location spawnLocation = teleporter.getSpawnForPlayer(player.getUniqueId());
 

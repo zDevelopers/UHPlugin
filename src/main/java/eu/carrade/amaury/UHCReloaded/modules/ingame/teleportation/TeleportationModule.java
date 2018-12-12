@@ -36,7 +36,7 @@ package eu.carrade.amaury.UHCReloaded.modules.ingame.teleportation;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
-import eu.carrade.amaury.UHCReloaded.modules.ingame.teleportation.commands.TPBackCommand;
+import eu.carrade.amaury.UHCReloaded.modules.ingame.teleportation.commands.TPDeathCommand;
 import eu.carrade.amaury.UHCReloaded.modules.ingame.teleportation.commands.TPSpawnCommand;
 import eu.carrade.amaury.UHCReloaded.modules.ingame.teleportation.commands.TPSpectatorsCommand;
 import eu.carrade.amaury.UHCReloaded.modules.ingame.teleportation.commands.TPTeamCommand;
@@ -60,7 +60,7 @@ public class TeleportationModule extends UHModule
     public List<Class<? extends Command>> getCommands()
     {
         return Arrays.asList(
-                TPBackCommand.class,
+                TPDeathCommand.class,
                 TPSpawnCommand.class,
                 TPTeamCommand.class,
                 TPSpectatorsCommand.class

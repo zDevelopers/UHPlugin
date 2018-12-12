@@ -670,7 +670,7 @@ public class GameModule extends UHModule implements Listener
                         new PlayerTeleportedToSpawnPointEvent(player, teleporter.getSpawnForPlayer(uuid)));
             })
 
-            .whenTeleportationFails(uuid -> log().error("Unable to teleport player {0} - {1}", uuid, Bukkit.getPlayer(uuid).getName()))
+            .whenTeleportationFails(uuid -> log().error("Unable to teleport player {0} - {1}", uuid, Bukkit.getOfflinePlayer(uuid).getName()))
 
             .whenTeleportationEnds(uuids -> {
                 teleportationProcessLock = false;
