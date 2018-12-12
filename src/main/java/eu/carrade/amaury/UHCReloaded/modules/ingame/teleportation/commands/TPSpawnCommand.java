@@ -75,16 +75,16 @@ public class TPSpawnCommand extends Command
         if (force)
         {
             teleporter.teleportPlayer(player.getUniqueId(), true);
-            success(I.t("{cs}The player {0} was teleported to his spawn location.", args[0]));
+            success(I.t("{cs}The player {0} was teleported to his spawn location.", player.getName()));
         }
         else if (UHUtils.safeTP(player, spawnLocation))
         {
-            success(I.t("{cs}The player {0} was teleported to his spawn location.", args[0]));
+            success(I.t("{cs}The player {0} was teleported to his spawn location.", player.getName()));
         }
         else
         {
-            warning(I.t("{ce}The player {0} was NOT teleported to his spawn because no safe spot was found.", args[0]));
-            warning(I.t("{ci}Use {cc}/uh tpspawn {0} force{ci} to teleport the player regardless this point.", args[0]));
+            warning(I.t("{ce}The player {0} was NOT teleported to his spawn because no safe spot was found.", player.getName()));
+            warning(I.t("{ci}Use {cc}/uh tpspawn {0} force{ci} to teleport the player regardless this point.", player.getName()));
         }
     }
 
