@@ -37,6 +37,7 @@ import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.SpawnsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.exceptions.CannotGenerateSpawnPointsException;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.exceptions.UnknownGeneratorException;
+import eu.carrade.amaury.UHCReloaded.modules.core.spectators.SpectatorsModule;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.CommandException;
@@ -402,7 +403,7 @@ public class SpawnsCommand extends Command
             // Solo mode?
             if (spawnsCount == 0)
             {
-                spawnsCount = Bukkit.getServer().getOnlinePlayers().size() - 0/* TODO UR.module(GameModule.class).getStartupSpectators().size()*/;
+                spawnsCount = Bukkit.getServer().getOnlinePlayers().size() - UR.module(SpectatorsModule.class).getSpectators().size();
                 info(I.t("{ci}No team found: assuming the game is a solo game."));
             }
             else

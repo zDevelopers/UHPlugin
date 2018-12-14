@@ -80,7 +80,10 @@ public final class UR
         }
         catch (final NullPointerException e)
         {
-            return null;
+            // Ensures no NPE so IDEs are happy.
+            return new ModuleLogger(UnknownModule.class);
         }
     }
+
+    private class UnknownModule extends UHModule {}
 }

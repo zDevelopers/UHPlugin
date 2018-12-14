@@ -48,7 +48,7 @@ public class ModuleLogger extends Logger
 {
     private final String loggerName;
 
-    ModuleLogger(Class<?extends UHModule> module)
+    public ModuleLogger(Class<?extends UHModule> module)
     {
         super(ZLib.getPlugin().getClass().getCanonicalName(), null);
 

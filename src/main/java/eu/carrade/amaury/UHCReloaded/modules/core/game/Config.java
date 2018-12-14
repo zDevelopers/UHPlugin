@@ -67,12 +67,12 @@ public class Config extends ConfigurationInstance
 
     public static final class BeginningSection extends ConfigurationSection
     {
-        public final ConfigurationItem<TimeDelta> GRACE_PERIOD = item("grace-period", new TimeDelta(0, 0, 2)); // TODO 30s
+        public final ConfigurationItem<TimeDelta> GRACE_PERIOD = item("grace-period", new TimeDelta(0, 0, 30));
         public final ConfigurationItem<Boolean> DISPLAY_GRACE_PERIOD = item("display-grace-period", true);
         public final ConfigurationItem<Boolean> BROADCAST_GRACE_END = item("broadcast-grace-end", true);
 
         public final ConfigurationItem<TimeDelta> PEACE_PERIOD = item("peace-period", new TimeDelta(0));
-        public final ConfigurationItem<TimeDelta> SURFACE_MOBS_FREE_PERIOD = item("surface-mobs-free-period", new TimeDelta(0, 15, 0));
+        public final ConfigurationItem<TimeDelta> SURFACE_MOBS_FREE_PERIOD = item("surface-mobs-free-period", new TimeDelta(0, 20, 0));
     }
 
     public static final SidebarSection SIDEBAR = section("sidebar", SidebarSection.class);

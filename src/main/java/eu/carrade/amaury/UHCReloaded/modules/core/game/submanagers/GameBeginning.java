@@ -92,8 +92,13 @@ public class GameBeginning extends ZLibComponent implements Listener
 
         RunTask.later(() -> {
             inGracePeriod = false;
+
             UR.module(GameModule.class).getAliveConnectedPlayers().forEach(ActionBar::removeMessage);
-            Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} The grace period ended, you are now vulnerable."));
+
+            if (Config.BEGINNING.BROADCAST_GRACE_END.get())
+            {
+                Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} The grace period ended, you are now vulnerable."));
+            }
         }, grace.getSeconds() * 20L);
 
 

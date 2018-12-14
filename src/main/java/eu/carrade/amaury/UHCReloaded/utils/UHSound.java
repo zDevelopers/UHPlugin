@@ -43,6 +43,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 
 /**
@@ -315,7 +316,7 @@ public class UHSound
         {
             return false;
         }
-        return sound == other.sound && (volume == null ? other.volume == null : volume.equals(other.volume));
+        return sound == other.sound && (Objects.equals(volume, other.volume));
     }
 
 
@@ -335,7 +336,7 @@ public class UHSound
     {
         if (soundName != null)
         {
-            soundName = soundName.trim().toUpperCase().replace(" ", "_");
+            soundName = soundName.trim().toUpperCase().replace(' ', '_').replace('.', '_');
             try
             {
                 return Sound.valueOf(soundName);
