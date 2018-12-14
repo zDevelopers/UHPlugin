@@ -15,6 +15,7 @@
 # Empty value: system language.
 lang:
 
+
 # The modules to load & enable. You can add modules provided by other plugins.
 # Each module's configuration is in plugins/UHPlugin/modules/<modulename>.yml .
 # You can put internal modules or refer to modules classes from other plugins. In all
@@ -22,9 +23,11 @@ lang:
 modules:
     "beginning-wait": true
     "beginning-cages": true
+
     "border-walls": true
     "border-warning": true
     "border-check": true
+
     "ingame-hardcore": true
     "ingame-weather": true
     "ingame-daylightCycle": true
@@ -35,10 +38,15 @@ modules:
     "ingame-episodes": true
     "ingame-deathAnnouncement": true
 #   "ingame-kick": false
+
     "cosmetics-hardcoreHearts": true
     "cosmetics-motd": true
+
     "other-playersLoader": true
     "other-about": true
+
+    "scenarii-alliances": true
+
 
 # The worlds to use as main worlds.
 # If not found, fallbacks on the first world found with the right type.
