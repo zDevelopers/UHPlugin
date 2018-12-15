@@ -41,11 +41,12 @@ modules:
 
     "cosmetics-hardcoreHearts": true
     "cosmetics-motd": true
+    "cosmetics-dynmap": true
 
     "other-playersLoader": true
     "other-about": true
 
-    "scenarii-alliances": true
+#    "scenarii-alliances": true
 
 
 # The worlds to use as main worlds.

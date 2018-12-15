@@ -40,6 +40,7 @@ import fr.zcraft.zlib.components.commands.Commands;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.components.rawtext.RawTextPart;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.util.*;
@@ -108,7 +109,7 @@ public class ModulesCommand extends Command
             if (module.getDependencies().length != 0)
             {
                 tooltip.then("\n\n").then(I.t("External dependencies")).style(ChatColor.BLUE);
-                Stream.of(module.getDependencies()).forEach(dep -> tooltip.then("\n- ").style(ChatColor.GRAY).then(dep).color(ChatColor.WHITE));
+                Stream.of(module.getDependencies()).forEach(dep -> tooltip.then("\n- ").style(ChatColor.GRAY).then(dep).color(Bukkit.getPluginManager().getPlugin(dep) != null ? ChatColor.WHITE : ChatColor.RED));
             }
 
             if (module.isInternal())

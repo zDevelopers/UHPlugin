@@ -47,7 +47,6 @@ import eu.carrade.amaury.UHCReloaded.modules.core.spectators.SpectatorsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.spectators.managers.SpectatorsManager;
 import eu.carrade.amaury.UHCReloaded.modules.core.teams.TeamsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
-import eu.carrade.amaury.UHCReloaded.old.integration.UHDynmapIntegration;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHSpectatorPlusIntegration;
 import eu.carrade.amaury.UHCReloaded.old.integration.UHWorldBorderIntegration;
 import eu.carrade.amaury.UHCReloaded.old.misc.*;
@@ -114,7 +113,6 @@ public class UHCReloaded extends ZPlugin implements Listener
 
     private UHWorldBorderIntegration wbintegration = null;
     private UHSpectatorPlusIntegration spintegration = null;
-    private UHDynmapIntegration dynmapintegration = null;
 
 
     @Override
@@ -651,14 +649,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     public UHSpectatorPlusIntegration getSpectatorPlusIntegration()
     {
         return spintegration;
-    }
-
-    /**
-     * Returns the representation of the dynmap integration in the plugin.
-     */
-    public UHDynmapIntegration getDynmapIntegration()
-    {
-        return dynmapintegration;
     }
 
     /**
