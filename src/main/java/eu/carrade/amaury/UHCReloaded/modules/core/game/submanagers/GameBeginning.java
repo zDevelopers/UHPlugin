@@ -40,10 +40,10 @@ import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChan
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.EntitiesUtils;
+import eu.carrade.amaury.UHCReloaded.utils.Run;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.core.ZLibComponent;
 import fr.zcraft.zlib.tools.runners.RunTask;
-import fr.zcraft.zlib.tools.text.ActionBar;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -82,24 +82,24 @@ public class GameBeginning extends ZLibComponent implements Listener
             grace = new TimeDelta(15);
         }
 
-        if (Config.BEGINNING.DISPLAY_GRACE_PERIOD.get())
-        {
-            UR.module(GameModule.class).getAliveConnectedPlayers().forEach(player ->
-                    ActionBar.sendPermanentMessage(player, I.t("{green}Grace period {gray}-{green} All damages are disabled")));
-        }
-
         inGracePeriod = true;
 
-        RunTask.later(() -> {
-            inGracePeriod = false;
+        Run.withCountdown(
+            I.t("{green}{bold}Grace period"),
+            I.t("{green}All damages are disabled"),
+            second -> I.tn("{yellow}{bold}Ends in {gold}{bold}{0}{yellow}{bold} second", "{yellow}{bold}Ends in {gold}{bold}{0}{yellow}{bold} second", (int) second),
+            I.t("{yellow}{bold}Ended! {yellow}You are now vulnerable..."),
+            () -> UR.module(GameModule.class).getAliveConnectedPlayers(),
+            () -> {
+                inGracePeriod = false;
 
-            UR.module(GameModule.class).getAliveConnectedPlayers().forEach(ActionBar::removeMessage);
-
-            if (Config.BEGINNING.BROADCAST_GRACE_END.get())
-            {
-                Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} The grace period ended, you are now vulnerable."));
-            }
-        }, grace.getSeconds() * 20L);
+                if (Config.BEGINNING.BROADCAST_GRACE_END.get())
+                {
+                    Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} The grace period ended, you are now vulnerable."));
+                }
+            },
+            grace
+        );
 
 
         /* *** Peace period (PVP disabled) *** */
@@ -108,10 +108,19 @@ public class GameBeginning extends ZLibComponent implements Listener
         {
             setPVP(false);
 
-            RunTask.later(() -> {
-                setPVP(true);
-                Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} PvP is now enabled."));
-            }, Config.BEGINNING.PEACE_PERIOD.get().getSeconds() * 20L);
+            Run.withCountdown(
+                I.t("{red}{bold}Combats between players"),
+                null,
+                second -> I.tn("{yellow}{bold}Allowed in {gold}{bold}{0}{yellow}{bold} second", "{yellow}{bold}Allowed in {gold}{bold}{0}{yellow}{bold} second", (int) second),
+                I.t("{yellow}{bold}Now allowed! {yellow}Beware..."),
+                (short) 10,
+                () -> UR.module(GameModule.class).getAliveConnectedPlayers(),
+                () -> {
+                    setPVP(true);
+                    Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} PvP is now enabled."));
+                },
+                Config.BEGINNING.PEACE_PERIOD.get()
+            );
         }
 
         else setPVP(true);
