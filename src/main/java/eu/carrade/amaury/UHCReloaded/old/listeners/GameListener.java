@@ -219,7 +219,7 @@ public class GameListener implements Listener
         p.getGameManager().addDeathLocation(ev.getEntity(), ev.getEntity().getLocation());
 
         // Shows the death location on the dynmap
-        p.getDynmapIntegration().showDeathLocation(ev.getEntity());
+        // p.getDynmapIntegration().showDeathLocation(ev.getEntity());
 
         // Is the game ended? If so, we need to call an event.
         if (p.getGameManager().isGameRunning() && p.getGameManager().getAliveTeamsCount() == 1)

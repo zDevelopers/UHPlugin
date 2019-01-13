@@ -100,6 +100,7 @@
                         <includes>
                             <include>fr.zcraft:zlib</include>
                             <include>fr.zcraft:zteams</include>
+                            <include>me.cassayre.florian:DamagesLogger</include>
                         </includes>
                     </artifactSet>
                     <relocations>
@@ -110,6 +111,10 @@
                         <relocation>
                             <pattern>fr.zcraft.zteams</pattern>
                             <shadedPattern>eu.carrade.amaury.UHCReloaded.zteams</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.cassayre.florian.damageslogger</pattern>
+                            <shadedPattern>eu.carrade.amaury.UHCReloaded.damageslogger</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -167,6 +172,11 @@
         <dependency>
             <groupId>fr.zcraft</groupId>
             <artifactId>zteams</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>me.cassayre.florian</groupId>
+            <artifactId>DamagesLogger</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.utils;
 
 import fr.zcraft.zlib.components.worker.Worker;
+import fr.zcraft.zlib.components.worker.WorkerAttributes;
 import fr.zcraft.zlib.components.worker.WorkerCallback;
 import fr.zcraft.zlib.components.worker.WorkerRunnable;
 import fr.zcraft.zlib.tools.Callback;
@@ -55,6 +56,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 
+@WorkerAttributes (name = "Offline Players Loader")
 public class OfflinePlayersLoader extends Worker
 {
     private static Map<UUID, OfflinePlayer> offlinePlayers = new HashMap<>();

@@ -13,7 +13,7 @@
 
 # Available languages: en_US, fr_FR, pt_PT, pt_BR, cs_CZ, zh_CN.
 # Empty value: system language.
-lang:
+lang: fr
 
 
 # The modules to load & enable. You can add modules provided by other plugins.
@@ -43,10 +43,11 @@ modules:
     "cosmetics-motd": true
     "cosmetics-dynmap": true
 
+    "other-reports": true
     "other-playersLoader": true
     "other-about": true
 
-#    "scenarii-alliances": true
+#   "scenarii-alliances": true
 
 
 # The worlds to use as main worlds.

@@ -14,6 +14,7 @@ softdepend:
   - SpectatorPlus
   - dynmap
   - ProtocolLib
+  - DamagesLogger
 
 commands:
    uh:
