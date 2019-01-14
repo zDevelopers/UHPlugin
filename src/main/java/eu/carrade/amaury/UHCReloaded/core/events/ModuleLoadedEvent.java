@@ -44,11 +44,18 @@ public class ModuleLoadedEvent extends Event
     private static final HandlerList handlers = new HandlerList();
 
     private final ModuleWrapper module;
+    private final boolean loadedLate;
 
 
     public ModuleLoadedEvent(final ModuleWrapper module)
     {
+        this(module, false);
+    }
+
+    public ModuleLoadedEvent(final ModuleWrapper module, boolean loadedLate)
+    {
         this.module = module;
+        this.loadedLate = loadedLate;
     }
 
     /**
@@ -59,6 +66,14 @@ public class ModuleLoadedEvent extends Event
         return module;
     }
 
+    /**
+     * @return {@code true} if the module is not loaded when specified in its
+     * {@link eu.carrade.amaury.UHCReloaded.core.ModuleInfo properties}.
+     */
+    public boolean isLoadedLate()
+    {
+        return loadedLate;
+    }
 
     @Override
     public HandlerList getHandlers()

@@ -65,9 +65,12 @@ public class AboutCommand extends Command
 
         // Translation
 
+        info("");
         info(I.t("{aqua}------ Translations ------"));
         info(I.t("Current language: {0} (translated by {1}).", I18n.getPrimaryLocale(), I18n.getTranslationTeam(I18n.getPrimaryLocale())));
         info(I.t("Fallback language: {0} (translated by {1}).", I18n.getFallbackLocale(), I18n.getTranslationTeam(I18n.getFallbackLocale())));
+
+        info("");
         info(I.t("{aqua}------ License ------"));
         info(I.t("Published under the CeCILL-B License."));
 

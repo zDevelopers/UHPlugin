@@ -33,6 +33,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.ingame.teleportation;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
@@ -42,6 +43,7 @@ import eu.carrade.amaury.UHCReloaded.modules.ingame.teleportation.commands.TPSpe
 import eu.carrade.amaury.UHCReloaded.modules.ingame.teleportation.commands.TPTeamCommand;
 import fr.zcraft.zlib.components.commands.Command;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 
@@ -50,7 +52,9 @@ import java.util.*;
 
 @ModuleInfo (
         name = "Teleportation Commands",
-        description = "Provides commands to teleport to spawn, death location, or groups of players."
+        description = "Provides commands to teleport to spawn, death location, or groups of players.",
+        category = ModuleCategory.UTILITIES,
+        icon = Material.COMMAND_MINECART
 )
 public class TeleportationModule extends UHModule
 {

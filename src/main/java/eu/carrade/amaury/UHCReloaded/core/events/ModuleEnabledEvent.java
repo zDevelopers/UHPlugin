@@ -31,34 +31,35 @@
  */
 package eu.carrade.amaury.UHCReloaded.core.events;
 
-import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
+import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 
 /**
- * Fired when all modules registered in the config are loaded (both at startup and post-world).
+ * Fired after a module was enabled.
+ * This does not implies that the module is loaded.
  */
-public class AllModulesLoadedEvent extends Event
+public class ModuleEnabledEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
 
-    private final ModuleLoadTime loadTime;
+    private final ModuleWrapper module;
 
-    public AllModulesLoadedEvent(ModuleLoadTime loadTime)
+
+    public ModuleEnabledEvent(final ModuleWrapper module)
     {
-        this.loadTime = loadTime;
+        this.module = module;
     }
 
     /**
-     * This event is launched for each batch of modules load. This represents the batch.
-     *
-     * @return the moment when these modules were all loaded.
+     * @return the enabled module.
      */
-    public ModuleLoadTime getLoadTime()
+    public ModuleWrapper getModule()
     {
-        return loadTime;
+        return module;
     }
+
 
     @Override
     public HandlerList getHandlers()

@@ -33,23 +33,50 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.ingame.hardcore;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
+import org.bukkit.Difficulty;
+import org.bukkit.Material;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @ModuleInfo (
         name = "Hardcore Mode",
         description = "Disables health natural regeneration and sets correct difficulty in the game's worlds.",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_START,
+        when = ModuleLoadTime.ON_GAME_START,
+        category = ModuleCategory.GAMEPLAY,
+        icon = Material.GOLDEN_APPLE,
         settings = Config.class
 )
 public class HardcoreModule extends UHModule
 {
+    private Map<String, Difficulty> oldDifficulties = new HashMap<>();
+    private Map<String, String> oldNaturalRegenerations = new HashMap<>();
+
     @Override
     protected void onEnable()
     {
-        UR.get().getWorlds().forEach(world -> world.setDifficulty(Config.DIFFICULTY.get()));
-        UR.get().getWorlds().forEach(world -> world.setGameRuleValue("naturalRegeneration", Config.NATURAL_REGENERATION.get().toString()));
+        UR.get().getWorlds().forEach(world ->
+        {
+            oldDifficulties.put(world.getName(), world.getDifficulty());
+            oldNaturalRegenerations.put(world.getName(), world.getGameRuleValue("naturalRegeneration"));
+
+            world.setDifficulty(Config.DIFFICULTY.get());
+            world.setGameRuleValue("naturalRegeneration", Config.NATURAL_REGENERATION.get().toString());
+        });
+    }
+
+    @Override
+    protected void onDisable()
+    {
+        UR.get().getWorlds().forEach(world -> {
+            world.setDifficulty(oldDifficulties.getOrDefault(world.getName(), Difficulty.NORMAL));
+            world.setGameRuleValue("naturalRegeneration", oldNaturalRegenerations.getOrDefault(world.getName(), "true"));
+        });
     }
 }

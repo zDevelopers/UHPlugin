@@ -54,7 +54,7 @@ public class Config extends ConfigurationInstance
 
     public static final ConfigurationItem<Boolean> RANDOM_COLORS_IN_SOLO_GAMES = item("random-color-in-solo-games", true);
 
-    public static final ConfigurationItem<Boolean> BROADCAST_PROGRESS = item("broadcastP-progress", true);
+    public static final ConfigurationItem<Boolean> BROADCAST_PROGRESS = item("broadcast-progress", true);
 
     public static final SlowSection SLOW = section("slow", SlowSection.class);
 

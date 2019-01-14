@@ -31,11 +31,12 @@
  */
 package eu.carrade.amaury.UHCReloaded;
 
-import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.core.events.AllModulesLoadedEvent;
 import eu.carrade.amaury.UHCReloaded.core.events.ModuleLoadedEvent;
+import eu.carrade.amaury.UHCReloaded.core.events.ModuleUnloadedEvent;
 import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
@@ -89,7 +90,7 @@ public class UHCReloaded extends ZPlugin implements Listener
     private static UHCReloaded instance;
 
     private Map<Class<? extends UHModule>, ModuleWrapper> modules = new HashMap<>();
-    private Set<ModuleInfo.ModuleLoadTime> loadedPriorities = new HashSet<>();
+    private Set<ModuleLoadTime> loadedPriorities = new HashSet<>();
 
     private Scoreboard scoreboard = null;
 
@@ -173,7 +174,7 @@ public class UHCReloaded extends ZPlugin implements Listener
 
         /* *** Loads modules from startup time *** */
 
-        loadModules(ModuleInfo.ModuleLoadTime.STARTUP);
+        loadModules(ModuleLoadTime.STARTUP);
 
 
         /* *** Loads modules from post-world time if worlds are loaded (server reloaded) *** */
@@ -206,7 +207,7 @@ public class UHCReloaded extends ZPlugin implements Listener
             worldNether = setDefaultWorld(World.Environment.NETHER, UHConfig.WORLDS.NETHER.get());
             worldTheEnd = setDefaultWorld(World.Environment.THE_END, UHConfig.WORLDS.THE_END.get());
 
-            loadModules(ModuleInfo.ModuleLoadTime.POST_WORLD);
+            loadModules(ModuleLoadTime.POST_WORLD);
         });
 
         worldsLoaded = true;
@@ -233,7 +234,7 @@ public class UHCReloaded extends ZPlugin implements Listener
      */
     private void registerModule(final Class<? extends UHModule> module, final boolean enableAtStartup)
     {
-        this.modules.put(module, new ModuleWrapper(module));
+        this.modules.put(module, new ModuleWrapper(module, enableAtStartup));
     }
 
     /**
@@ -276,9 +277,10 @@ public class UHCReloaded extends ZPlugin implements Listener
      * - [name]
      *
      * @param module the module's class name; the class must accept a zero-arguments constructor.
-     * @param enabledAtStartup {@code true} if this module, according to the configuration file, should be loaded at startup.
+     * @param initiallyEnabled {@code true} if this module, according to the configuration file,
+     *                         should be enabled at startup.
      */
-    private void registerModule(final String module, boolean enabledAtStartup)
+    private void registerModule(final String module, boolean initiallyEnabled)
     {
         final Class<? extends UHModule> moduleClass = ModulesUtils.getClassFromName(
                 module.replace('-', '.'),
@@ -289,7 +291,7 @@ public class UHCReloaded extends ZPlugin implements Listener
 
         if (moduleClass != null)
         {
-            registerModules(moduleClass);
+            registerModule(moduleClass, initiallyEnabled);
         }
         else
         {
@@ -304,23 +306,25 @@ public class UHCReloaded extends ZPlugin implements Listener
      *
      * @param loadTime Loads the modules registered to be loaded at that given time.
      */
-    private void loadModules(final ModuleInfo.ModuleLoadTime loadTime)
+    private void loadModules(final ModuleLoadTime loadTime)
     {
         if (loadedPriorities.contains(loadTime)) return;
 
         // Loads all internal modules first
         modules.values().stream()
                 .filter(module -> module.getWhen() == loadTime)
-                .filter(module -> module.get() == null || !module.get().isEnabled())
+                .filter(ModuleWrapper::isEnabled)
+                .filter(module -> !module.isLoaded())
                 .filter(ModuleWrapper::isInternal)
-                .forEach(ModuleWrapper::enable);
+                .forEach(module -> module.load(false));
 
         // Then loads other modules
         modules.values().stream()
                 .filter(module -> module.getWhen() == loadTime)
-                .filter(module -> module.get() == null || !module.get().isEnabled())
+                .filter(ModuleWrapper::isEnabled)
+                .filter(module -> !module.isLoaded())
                 .filter(module -> !module.isInternal())
-                .forEach(ModuleWrapper::enable);
+                .forEach(module -> module.load(false));
 
         loadedPriorities.add(loadTime);
 
@@ -330,37 +334,14 @@ public class UHCReloaded extends ZPlugin implements Listener
     }
 
     /**
-     * Loads a module from its class.
+     * Checks if the given load time was already loaded.
      *
-     * @param moduleClass The module's class.
-     * @throws IllegalArgumentException if the module was not registered using {@link #registerModules(Class[])} or
-     * {@link #registerModule(String)} before.
+     * @param loadTime The load time.
+     * @return {@code true} if loaded.
      */
-    public void loadModule(final Class<? extends UHModule> moduleClass)
+    public boolean isLoaded(final ModuleLoadTime loadTime)
     {
-        final ModuleWrapper module = modules.get(moduleClass);
-
-        if (module == null)
-            throw new IllegalArgumentException("The module " + moduleClass.getName() + " was not registered.");
-
-        module.enable();
-    }
-
-    /**
-     * Unloads a module from its class.
-     *
-     * @param moduleClass The module's class.
-     * @throws IllegalArgumentException if the module was not registered using {@link #registerModules(Class[])} or
-     * {@link #registerModule(String)} before.
-     */
-    public void unloadModule(final Class<? extends UHModule> moduleClass)
-    {
-        final ModuleWrapper module = modules.get(moduleClass);
-
-        if (module == null)
-            throw new IllegalArgumentException("The module " + moduleClass.getName() + " was not registered.");
-
-        module.disable();
+        return loadedPriorities.contains(loadTime);
     }
 
     /**
@@ -433,15 +414,15 @@ public class UHCReloaded extends ZPlugin implements Listener
         switch (ev.getNewPhase())
         {
             case STARTING:
-                loadModules(ModuleInfo.ModuleLoadTime.ON_GAME_STARTING);
+                loadModules(ModuleLoadTime.ON_GAME_STARTING);
                 break;
 
             case IN_GAME:
-                loadModules(ModuleInfo.ModuleLoadTime.ON_GAME_START);
+                loadModules(ModuleLoadTime.ON_GAME_START);
                 break;
 
             case END:
-                loadModules(ModuleInfo.ModuleLoadTime.ON_GAME_END);
+                loadModules(ModuleLoadTime.ON_GAME_END);
                 break;
         }
     }
@@ -450,6 +431,21 @@ public class UHCReloaded extends ZPlugin implements Listener
     public void onModuleLoaded(final ModuleLoadedEvent e)
     {
         PluginLogger.info("Module {0} loaded.", e.getModule().getName());
+
+        if (e.isLoadedLate())
+        {
+            // If loaded late, we may have to re-register the module's commands.
+            collectCommandsFromModules();
+        }
+    }
+
+    @EventHandler
+    public void onModuleUnloaded(final ModuleUnloadedEvent ev)
+    {
+        // We remove commands if needed when a module is unloaded,
+        // as it will be unable to handle them properly (the module
+        // instance being null).
+        collectCommandsFromModules();
     }
 
     @EventHandler (priority = EventPriority.LOWEST)
@@ -464,14 +460,14 @@ public class UHCReloaded extends ZPlugin implements Listener
     private void collectCommandsFromModules()
     {
         Commands.register("uh", modules.values().stream()
-                .filter(ModuleWrapper::isEnabled)
+                .filter(ModuleWrapper::isLoaded)
                 .map(module -> module.get().getCommands())
                 .filter(Objects::nonNull)
                 .flatMap(Collection::stream)
                 .toArray(Class[]::new));
 
         final Map<String, Class<? extends Command>> commandAliases = modules.values().stream()
-                .filter(ModuleWrapper::isEnabled)
+                .filter(ModuleWrapper::isLoaded)
                 .map(module -> module.get().getCommandsAliases())
                 .filter(Objects::nonNull)
                 .flatMap(commandsAliases -> commandsAliases.entrySet().stream())

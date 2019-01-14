@@ -33,29 +33,38 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.ingame.listHealth;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Criterias;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 
+import java.util.UUID;
+
 
 @ModuleInfo (
         name = "Health in Players List",
         description = "Displays the health of players in the overlay list displayed with <TAB>.",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_STARTING
+        when = ModuleLoadTime.ON_GAME_STARTING,
+        category = ModuleCategory.COSMETICS,
+        icon = Material.DETECTOR_RAIL
 )
 public class ListHealthModule extends UHModule
 {
+    private String objectiveID = UUID.randomUUID().toString().substring(0, 16);
+
     @Override
     protected void onEnable()
     {
         // Initialization of the scoreboard (health in players' list)
-        final Objective healthObjective = UR.get().getScoreboard().registerNewObjective("Health", Criterias.HEALTH);
+        final Objective healthObjective = UR.get().getScoreboard().registerNewObjective(objectiveID, Criterias.HEALTH);
         healthObjective.setDisplayName("Health");
         healthObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 
@@ -67,6 +76,7 @@ public class ListHealthModule extends UHModule
     protected void onDisable()
     {
         UR.get().getScoreboard().clearSlot(DisplaySlot.PLAYER_LIST);
+        UR.get().getScoreboard().getObjective(objectiveID).unregister();
     }
 
     /**

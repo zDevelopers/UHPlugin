@@ -16,7 +16,7 @@
 lang: fr
 
 
-# The modules to load & enable. You can add modules provided by other plugins.
+# The modules to load & load. You can add modules provided by other plugins.
 # Each module's configuration is in plugins/UHPlugin/modules/<modulename>.yml .
 # You can put internal modules or refer to modules classes from other plugins. In all
 # cases, replace all dots in class paths by dashes.
@@ -36,8 +36,9 @@ modules:
     "ingame-listHealth": true
     "ingame-teleportation": true
     "ingame-episodes": true
+    "ingame-killsCount": true
     "ingame-deathAnnouncement": true
-#   "ingame-kick": false
+    "ingame-kick": false
 
     "cosmetics-hardcoreHearts": true
     "cosmetics-motd": true
@@ -47,7 +48,7 @@ modules:
     "other-playersLoader": true
     "other-about": true
 
-#   "scenarii-alliances": true
+    "scenarii-alliances": false
 
 
 # The worlds to use as main worlds.

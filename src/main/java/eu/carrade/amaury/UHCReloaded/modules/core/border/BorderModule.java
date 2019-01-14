@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.commands.BorderCommand;
@@ -50,6 +51,7 @@ import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -65,8 +67,10 @@ import java.util.stream.Collectors;
 @ModuleInfo (
         name = "Border",
         description = "Manages the border size and reduction.",
+        category = ModuleCategory.CORE,
+        icon = Material.FENCE,
         settings = Config.class,
-        can_be_disabled = false,
+        can_be_unloaded = false,
         internal = true
 )
 public class BorderModule extends UHModule

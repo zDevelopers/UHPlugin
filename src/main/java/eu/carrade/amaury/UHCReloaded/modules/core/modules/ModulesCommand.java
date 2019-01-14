@@ -47,7 +47,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 
-@CommandInfo (name = "modules", usageParameters = "[list|enable|disable]", aliases = {"module"})
+@CommandInfo (name = "modules")
 public class ModulesCommand extends Command
 {
     @Override
@@ -56,6 +56,7 @@ public class ModulesCommand extends Command
         final Set<ModuleWrapper> modules = new TreeSet<>((module1, module2) -> {
             if (module1.equals(module2)) return 0;
 
+            if (module1.isLoaded() != module2.isLoaded()) return module1.isLoaded() ? -1 : 1;
             if (module1.isEnabled() != module2.isEnabled()) return module1.isEnabled() ? -1 : 1;
 
             if (module1.getWhen() != module2.getWhen())
@@ -72,7 +73,7 @@ public class ModulesCommand extends Command
         modules.forEach(module -> {
             final List<String> commands = new ArrayList<>();
 
-            if (module.isEnabled())
+            if (module.isLoaded())
             {
                 final List<Class<? extends Command>> commandsClasses = module.get().getCommands();
                 if (commandsClasses != null)
@@ -95,10 +96,25 @@ public class ModulesCommand extends Command
 
             final RawTextPart<?> tooltip = new RawText();
 
-            tooltip.then(module.getName()).style(ChatColor.BOLD).style(module.isEnabled() ? ChatColor.GREEN : ChatColor.RED).then("\n");
-            tooltip.then(module.isEnabled() ? I.t("Enabled") : I.t("Disabled")).color(ChatColor.GRAY).then("\n\n");
-            tooltip.then(module.getDescription()).style(ChatColor.WHITE).then("\n\n");
-            tooltip.then(I.t("Load time")).style(ChatColor.BLUE).then("\n").then(module.getWhen().toString()).style(ChatColor.WHITE);
+            tooltip
+                .then(module.getName())
+                    .style(ChatColor.BOLD, module.isLoaded() ? ChatColor.GREEN : (module.isEnabled() ? ChatColor.GOLD : ChatColor.RED))
+                .then("\n")
+                .then(module.isLoaded() ? I.t("Loaded") : I.t("Unloaded"))
+                    .color(ChatColor.GRAY)
+                .then(" - ")
+                    .color(ChatColor.DARK_GRAY)
+                .then(module.isEnabled() ? I.t("Enabled") : I.t("Disabled"))
+                    .color(ChatColor.GRAY)
+                .then("\n\n")
+                .then(module.getDescription())
+                    .color(ChatColor.WHITE)
+                .then("\n\n")
+                .then(I.t("Load time"))
+                    .color(ChatColor.BLUE)
+                .then("\n")
+                .then(module.getWhen().toString())
+                    .color(ChatColor.WHITE);
 
             if (!commands.isEmpty())
             {
@@ -116,13 +132,13 @@ public class ModulesCommand extends Command
             {
                 tooltip.then("\n\n").then(I.t("Internal module")).style(ChatColor.DARK_GRAY);
             }
-            if (!module.canBeDisabled())
+            if (!module.canBeUnloaded())
             {
                 tooltip.then(module.isInternal() ? " - " : "\n\n").color(ChatColor.DARK_GRAY).then(I.t("Cannot be disabled")).color(ChatColor.DARK_GRAY);
             }
 
             send(new RawText().hover(tooltip)
-                    .then("• ").color(module.isEnabled() ? ChatColor.GREEN : ChatColor.RED)
+                    .then("• ").color(module.isLoaded() ? ChatColor.GREEN : (module.isEnabled() ? ChatColor.GOLD : ChatColor.RED))
                     .then(module.getName()).color(ChatColor.WHITE)
                     .build()
             );

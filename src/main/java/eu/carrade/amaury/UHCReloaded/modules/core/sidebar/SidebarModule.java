@@ -31,9 +31,11 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.sidebar;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -42,9 +44,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 @ModuleInfo (
         name = "Sidebar",
         description = "Manages the sidebar and allows hooks for all modules into it.",
+        category = ModuleCategory.CORE,
+        icon = Material.BOOK_AND_QUILL,
         settings = Config.class,
         internal = true,
-        can_be_disabled = false
+        can_be_unloaded = false
 )
 public class SidebarModule extends UHModule
 {

@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.core;
 
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
+import org.bukkit.Material;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -59,6 +60,17 @@ public @interface ModuleInfo
     ModuleLoadTime when() default ModuleLoadTime.POST_WORLD;
 
     /**
+     * @return The category under which this module should be classed.
+     */
+    ModuleCategory category() default ModuleCategory.OTHER;
+
+    /**
+     * @return The icon we should use for this module. If not provide (or {@link Material#AIR air}),
+     * we'll use the category's icon.
+     */
+    Material icon() default Material.AIR;
+
+    /**
      * @return The configuration class to initialize (if any).
      * ConfigurationInstance.class is used as a default value to represent no settings as null values are
      * not allowed and classes will always be subclasses of this one.
@@ -83,49 +95,22 @@ public @interface ModuleInfo
     boolean internal() default false;
 
     /**
-     * @return {@code true} if the module can be disabled and re-enabled. This reflects the status change
+     * @return {@code true} if the module can be unloaded and re-loaded. This reflects the status change
      * from inside the game, as all modules can always be disabled on the configuration file (or not loaded
      * at all).
      *
-     * If this is {@code true}, when disabled, a module will have its {@link UHModule#onDisable() onDisable()}
+     * If this is {@code true}, when disabled, a module will have its {@link UHModule#onDisable()} onDisable()}
      * method called, and after that, its listener will be unregistered and the module instance removed from the system.
      *
-     * When re-enabled, a whole new instance will be created.
+     * When re-loaded, a whole new instance will be created.
      */
-    boolean can_be_disabled() default true;
+    boolean can_be_unloaded() default true;
 
-
-    enum ModuleLoadTime
-    {
-        /**
-         * Loads the module at startup, before the worlds are loaded.
-         *
-         * Please note that most core modules (and localization) are not loaded at this point. Use that
-         * for modules altering the world generation.
-         */
-        STARTUP,
-
-        /**
-         * Loads the module after the world(s), or immediately if the plugin is reloaded.
-         * The thing is, all worlds will be loaded when the module is.
-         */
-        POST_WORLD,
-
-        /**
-         * Loads the module when the game phase is set to STARTING, i.e. when the /uh start command
-         * is used.
-         */
-        ON_GAME_STARTING,
-
-        /**
-         * Loads the module when the game starts, i.e. when all players falls from their spawn into
-         * the world.
-         */
-        ON_GAME_START,
-
-        /**
-         * Loads the module when the game ends.
-         */
-        ON_GAME_END
-    }
+    /**
+     * @return {@code true} if the module can be loaded after the moment it was declared to be loaded. If {@code false},
+     * and an user tries to enable/load it during the game and the module is configured to be loaded, let's say, on
+     * {@link ModuleLoadTime#ON_GAME_STARTING game starting}, the operation will fail. Use this if you depends on the
+     * fact that the {@link UHModule#onEnable()} method is called at a specific time.
+     */
+    boolean can_be_loaded_late() default true;
 }

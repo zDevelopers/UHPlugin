@@ -33,7 +33,9 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.ingame.deathAnnouncement;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.TeamDeathEvent;
@@ -47,6 +49,7 @@ import fr.zcraft.zteams.ZTeam;
 import fr.zcraft.zteams.ZTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -54,7 +57,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 @ModuleInfo (
         name = "Death Announcements",
         description = "Adds announcements for players & teams deaths.",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_START,
+        when = ModuleLoadTime.ON_GAME_START,
+        category = ModuleCategory.END,
+        icon = Material.BLAZE_ROD,
         settings = Config.class
 )
 public class DeathAnnouncementModule extends UHModule

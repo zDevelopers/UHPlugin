@@ -34,7 +34,9 @@
 package eu.carrade.amaury.UHCReloaded.modules.scenarii.alliances;
 
 import com.google.common.collect.ImmutableMap;
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.start.BeforeTeleportationPhaseEvent;
@@ -48,6 +50,7 @@ import fr.zcraft.zteams.ZTeam;
 import fr.zcraft.zteams.ZTeams;
 import fr.zcraft.zteams.colors.TeamColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
@@ -72,7 +75,11 @@ import java.util.stream.Collectors;
                 "one alliance. If you form a three-players alliance, you lose two alliances. If you " +
                 "run out of alliances, you can no longer form new alliances, and requests sent to you " +
                 "will be silently declined.",
-        settings = Config.class
+        when = ModuleLoadTime.ON_GAME_STARTING,
+        category = ModuleCategory.SCENARII,
+        icon = Material.PAPER,
+        settings = Config.class,
+        can_be_loaded_late = false
 )
 public class AlliancesModule extends UHModule
 {

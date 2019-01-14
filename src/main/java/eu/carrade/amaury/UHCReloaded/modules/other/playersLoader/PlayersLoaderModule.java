@@ -33,9 +33,11 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.other.playersLoader;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import fr.zcraft.zlib.components.commands.Command;
+import org.bukkit.Material;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +45,9 @@ import java.util.List;
 @ModuleInfo (
         name = "Players Loader",
         description = "Loads player into the server even if they never came before, so you can add them to teams and such. " +
-                "An interface to the built-in players loader."
+                "An interface to the built-in players loader.",
+        category = ModuleCategory.UTILITIES,
+        icon = Material.SKULL_ITEM  // FIXME 1.13
 )
 public class PlayersLoaderModule extends UHModule
 {

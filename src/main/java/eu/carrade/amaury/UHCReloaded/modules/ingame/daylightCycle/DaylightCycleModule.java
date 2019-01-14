@@ -33,15 +33,19 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.ingame.daylightCycle;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.tools.runners.RunTask;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -49,6 +53,8 @@ import java.util.concurrent.atomic.AtomicLong;
 @ModuleInfo (
         name = "Daylight Cycle",
         description = "Configures the daylight cycle (disabled, slowed down, normal, accelerated) and the initial time.",
+        category = ModuleCategory.GAMEPLAY,
+        icon = Material.WATCH,
         settings = Config.class
 )
 public class DaylightCycleModule extends UHModule
@@ -56,6 +62,8 @@ public class DaylightCycleModule extends UHModule
     // Here are the Magic Values™.
     private final static long TICKS_IN_ONE_DAYLIGHT_CYCLE = 24000L;
     private final static TimeDelta NORMAL_DAYLIGHT_CYCLE_DURATION = new TimeDelta(0, 20, 0);
+
+    private BukkitTask daylightCycleTask = null;
 
 
     @Override
@@ -67,11 +75,36 @@ public class DaylightCycleModule extends UHModule
         });
     }
 
+    @Override
+    public void onEnableLate()
+    {
+        if (UR.module(GameModule.class).currentPhaseAfter(GamePhase.STARTING))
+        {
+            initDayLightCycle(UR.get().getWorld(World.Environment.NORMAL).getFullTime());
+        }
+    }
+
+    @Override
+    protected void onDisable()
+    {
+        if (daylightCycleTask != null)
+        {
+            daylightCycleTask.cancel();
+            daylightCycleTask = null;
+        }
+    }
+
     @EventHandler
     public void onGameStart(final GamePhaseChangedEvent ev)
     {
-        if (ev.getNewPhase() != GamePhase.IN_GAME || !ev.isRunningForward()) return;
+        if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward())
+        {
+            initDayLightCycle(Config.INITIAL_GAME_HOUR.get());
+        }
+    }
 
+    private void initDayLightCycle(final long initialTime)
+    {
         final World world = UR.get().getWorld(World.Environment.NORMAL);
 
         world.setFullTime(Config.INITIAL_GAME_HOUR.get());
@@ -89,10 +122,10 @@ public class DaylightCycleModule extends UHModule
             // will be the same for multiple updates.
             final long updateInterval = (long) Math.max(1L, (ticksPerDay * 1.0f) / TICKS_IN_ONE_DAYLIGHT_CYCLE);
 
-            final AtomicLong tick = new AtomicLong((Config.INITIAL_GAME_HOUR.get() * 20L) % TICKS_IN_ONE_DAYLIGHT_CYCLE);
+            final AtomicLong tick = new AtomicLong(initialTime % TICKS_IN_ONE_DAYLIGHT_CYCLE);
             if (tick.get() < 0L) tick.addAndGet(TICKS_IN_ONE_DAYLIGHT_CYCLE);
 
-            RunTask.timer(() -> {
+            daylightCycleTask = RunTask.timer(() -> {
                 // We keep the current tick in one daylight cycle.
                 if (tick.addAndGet(updateInterval) >= ticksPerDay) tick.set(0L);
 

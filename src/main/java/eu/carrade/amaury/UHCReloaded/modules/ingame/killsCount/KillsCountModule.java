@@ -33,12 +33,15 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.ingame.killsCount;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
 import fr.zcraft.zlib.components.i18n.I;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
@@ -48,7 +51,9 @@ import java.util.*;
 @ModuleInfo (
         name = "Kills Count",
         description = "Displays the player's kills count in the sidebar.",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_START
+        when = ModuleLoadTime.ON_GAME_START,
+        category = ModuleCategory.COSMETICS,
+        icon = Material.DIAMOND_SWORD
 )
 public class KillsCountModule extends UHModule
 {

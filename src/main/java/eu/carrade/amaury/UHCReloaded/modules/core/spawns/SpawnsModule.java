@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.modules.core.spawns;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
@@ -47,6 +48,7 @@ import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zteams.ZTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.util.Vector;
@@ -60,9 +62,11 @@ import java.util.stream.Collectors;
 @ModuleInfo(
         name = "Spawns",
         description = "Manages the spawn points and allow users to generate them randomly.",
+        category = ModuleCategory.CORE,
+        icon = Material.MAP,
         settings = Config.class,
         internal = true,
-        can_be_disabled = false
+        can_be_unloaded = false
 )
 public class SpawnsModule extends UHModule
 {

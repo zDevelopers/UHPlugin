@@ -31,7 +31,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.core.events;
 
-import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -40,16 +40,18 @@ import org.bukkit.event.HandlerList;
  * Fired after a module was unloaded.
  *
  * When this event is called, the embed instance is dying, unregistered from all
- * events managers and soon-to-be-deleted.
+ * events managers and soon-to-be-deleted. At the time the event is called, you
+ * can still get the instance using {@link ModuleWrapper#get()}, but don't try
+ * that on a delayed task as the instance will no longer be available.
  */
 public class ModuleUnloadedEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
 
-    private final UHModule module;
+    private final ModuleWrapper module;
 
 
-    public ModuleUnloadedEvent(final UHModule module)
+    public ModuleUnloadedEvent(final ModuleWrapper module)
     {
         this.module = module;
     }
@@ -57,7 +59,7 @@ public class ModuleUnloadedEvent extends Event
     /**
      * @return the unloaded module.
      */
-    public UHModule getModule()
+    public ModuleWrapper getModule()
     {
         return module;
     }

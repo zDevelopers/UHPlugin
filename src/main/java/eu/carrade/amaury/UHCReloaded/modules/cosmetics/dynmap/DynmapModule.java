@@ -33,7 +33,9 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.cosmetics.dynmap;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
@@ -47,6 +49,7 @@ import fr.zcraft.zteams.ZTeams;
 import fr.zcraft.zteams.colors.TeamColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -61,7 +64,9 @@ import org.dynmap.markers.MarkerSet;
 @ModuleInfo (
         name = "Dynmap",
         description = "Displays the spawn & death points on the dynmap.",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_STARTING,
+        when = ModuleLoadTime.ON_GAME_STARTING,
+        category = ModuleCategory.EXTERNAL,
+        icon = Material.MAP,
         settings = Config.class,
         depends = "dynmap"
 )

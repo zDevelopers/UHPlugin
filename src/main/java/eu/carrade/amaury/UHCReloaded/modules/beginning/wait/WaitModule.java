@@ -33,6 +33,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.beginning.wait;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
@@ -70,6 +71,8 @@ import org.bukkit.permissions.Permissible;
 @ModuleInfo (
         name = "Waiting phase",
         description = "Manages the waiting phase: inventory, effects, modes, teleportation, etc.",
+        category = ModuleCategory.WAITING_PHASE,
+        icon = Material.WATCH,
         settings = Config.class
 )
 public class WaitModule extends UHModule

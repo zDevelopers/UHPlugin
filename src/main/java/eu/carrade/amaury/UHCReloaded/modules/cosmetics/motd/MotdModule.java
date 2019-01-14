@@ -33,6 +33,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.cosmetics.motd;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
@@ -40,6 +41,7 @@ import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zteams.ZTeam;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.server.ServerListPingEvent;
 
@@ -47,6 +49,8 @@ import org.bukkit.event.server.ServerListPingEvent;
 @ModuleInfo (
         name = "MOTD",
         description = "Updates the MOTD according to the current game state.",
+        category = ModuleCategory.EXTERNAL,
+        icon = Material.SIGN,
         settings = Config.class
 )
 public class MotdModule extends UHModule

@@ -33,7 +33,9 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.ingame.episodes;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
@@ -50,6 +52,7 @@ import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -62,8 +65,11 @@ import java.util.List;
 @ModuleInfo (
         name = "Episodes",
         description = "Displays time marks every 20 minutes (by default), e.g. to divide a recording for diffusion.",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_START,
-        settings = Config.class
+        when = ModuleLoadTime.ON_GAME_START,
+        category = ModuleCategory.COSMETICS,
+        icon = Material.SIGN,
+        settings = Config.class,
+        can_be_loaded_late = false
 )
 public class EpisodesModule extends UHModule
 {

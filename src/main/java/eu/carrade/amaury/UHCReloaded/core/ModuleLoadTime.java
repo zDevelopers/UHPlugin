@@ -31,33 +31,38 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.ingame.kick;
+package eu.carrade.amaury.UHCReloaded.core;
 
-import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
-import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
-import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
-import eu.carrade.amaury.UHCReloaded.core.UHModule;
-import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
-import fr.zcraft.zlib.tools.runners.RunTask;
-import org.bukkit.Material;
-import org.bukkit.event.EventHandler;
-
-@ModuleInfo (
-        name = "Kick On Death",
-        description = "Kicks players on death after a delay.",
-        when = ModuleLoadTime.ON_GAME_START,
-        category = ModuleCategory.END,
-        icon = Material.BARRIER,
-        settings = Config.class
-)
-public class KickModule extends UHModule
+public enum ModuleLoadTime
 {
-    @EventHandler
-    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
-    {
-        if (ev.getPlayer().isOnline())
-        {
-            RunTask.later(() -> ev.getPlayer().getPlayer().kickPlayer(Config.MESSAGE.get()), Config.DELAY.get().getSeconds() * 20L);
-        }
-    }
+    /**
+     * Loads the module at startup, before the worlds are loaded.
+     *
+     * Please note that most core modules (and localization) are not loaded at this point. Use that
+     * for modules altering the world generation.
+     */
+    STARTUP,
+
+    /**
+     * Loads the module after the world(s), or immediately if the plugin is reloaded.
+     * The thing is, all worlds will be loaded when the module is.
+     */
+    POST_WORLD,
+
+    /**
+     * Loads the module when the game phase is set to STARTING, i.e. when the /uh start command
+     * is used.
+     */
+    ON_GAME_STARTING,
+
+    /**
+     * Loads the module when the game starts, i.e. when all players falls from their spawn into
+     * the world.
+     */
+    ON_GAME_START,
+
+    /**
+     * Loads the module when the game ends.
+     */
+    ON_GAME_END
 }

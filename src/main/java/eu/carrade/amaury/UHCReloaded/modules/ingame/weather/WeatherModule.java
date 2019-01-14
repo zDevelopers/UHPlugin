@@ -33,12 +33,14 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.ingame.weather;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
+import org.bukkit.Material;
 import org.bukkit.WeatherType;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -51,7 +53,9 @@ import java.util.Set;
 @ModuleInfo (
         name = "Weather",
         description = "Manages the in-game weather.",
-        settings = Config.class
+        settings = Config.class,
+        category = ModuleCategory.GAMEPLAY,
+        icon = Material.DOUBLE_PLANT  // Sunflower  -  FIXME 1.13
 )
 public class WeatherModule extends UHModule
 {
@@ -63,12 +67,18 @@ public class WeatherModule extends UHModule
         UR.get().getWorlds().forEach(world -> world.setStorm(Config.WAITING_PHASE_WEATHER.get() == WeatherType.DOWNFALL));
     }
 
+    @Override
+    public void onEnableLate()
+    {
+        UR.get().getWorlds().forEach(world -> world.setStorm(Config.INITIAL_WEATHER.get() == WeatherType.DOWNFALL));
+    }
+
     @EventHandler
     public void onGameStarts(final GamePhaseChangedEvent ev)
     {
         if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward())
         {
-            UR.get().getWorlds().forEach(world -> world.setStorm(Config.INITIAL_WEATHER.get() == WeatherType.DOWNFALL));
+            onEnableLate();
         }
     }
 

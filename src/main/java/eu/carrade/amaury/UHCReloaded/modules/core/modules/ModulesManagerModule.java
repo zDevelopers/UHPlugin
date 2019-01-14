@@ -32,7 +32,9 @@
 package eu.carrade.amaury.UHCReloaded.modules.core.modules;
 
 import com.google.common.collect.ImmutableMap;
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
@@ -40,9 +42,10 @@ import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.i18n.I;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -50,15 +53,17 @@ import java.util.Map;
 @ModuleInfo (
         name = "Modules Manager",
         description = "Offers to the users a way to manage modules.",
-        when = ModuleInfo.ModuleLoadTime.STARTUP,
-        can_be_disabled = false
+        when = ModuleLoadTime.STARTUP,
+        category = ModuleCategory.CORE,
+        icon = Material.COMMAND,
+        can_be_unloaded = false
 )
 public class ModulesManagerModule extends UHModule
 {
     @Override
     public List<Class<? extends Command>> getCommands()
     {
-        return Collections.singletonList(ModulesCommand.class);
+        return Arrays.asList(ModulesCommand.class, ModuleCommand.class);
     }
 
     @Override

@@ -33,9 +33,12 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.border.check;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import fr.zcraft.zlib.components.commands.Command;
+import org.bukkit.Material;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +46,9 @@ import java.util.List;
 @ModuleInfo (
         name = "Border Check",
         description = "Offers a command to check how far players are from a given border size.",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_START
+        category = ModuleCategory.UTILITIES,
+        icon = Material.FENCE,
+        when = ModuleLoadTime.ON_GAME_START
 )
 public class CheckModule extends UHModule
 {

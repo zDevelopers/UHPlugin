@@ -33,18 +33,23 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.other.pomf;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.ingame.episodes.Config;
 import eu.carrade.amaury.UHCReloaded.modules.ingame.episodes.events.EpisodeChangedEvent;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 
 @ModuleInfo(
         name = "Pomf",
         description = "Pomf au milieu d'un épisode. #parceque",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_START
+        when = ModuleLoadTime.ON_GAME_START,
+        category = ModuleCategory.OTHER,
+        icon = Material.SLIME_BLOCK
 )
 public class PomfModule extends UHModule
 {

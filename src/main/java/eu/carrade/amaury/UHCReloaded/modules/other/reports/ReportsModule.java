@@ -33,7 +33,9 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.other.reports;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
@@ -87,8 +89,11 @@ import java.util.UUID;
                 "heals, statistics, etc., displayed on a web page, and gives the URL " +
                 "when the match ends.\n\n" +
                 "Using DamagesLogger by Florian Cassayre & Amaury Carrade.",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_START,
-        settings = Config.class
+        when = ModuleLoadTime.ON_GAME_START,
+        category = ModuleCategory.EXTERNAL,
+        icon = Material.BOOK_AND_QUILL,
+        settings = Config.class,
+        can_be_unloaded = false
 )
 public class ReportsModule extends UHModule
 {

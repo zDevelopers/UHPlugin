@@ -34,15 +34,19 @@
 package eu.carrade.amaury.UHCReloaded.modules.cosmetics.hardcoreHearts;
 
 import com.comphenix.protocol.ProtocolLibrary;
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import fr.zcraft.zlib.core.ZLib;
+import org.bukkit.Material;
 
 
 @ModuleInfo (
         name = "Hardcore Hearts",
         description = "Replaces hearts with hardcore hearts.",
         depends = "ProtocolLib",
+        category = ModuleCategory.COSMETICS,
+        icon = Material.RED_ROSE,  // FIXME 1.13
         settings = Config.class
 )
 public class HardcoreHeartsModule extends UHModule

@@ -31,6 +31,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.game;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.commands.KillCommand;
@@ -76,9 +77,11 @@ import java.util.stream.Collectors;
 @ModuleInfo (
         name = "Game",
         description = "Manages the game execution and phases.",
+        category = ModuleCategory.CORE,
+        icon = Material.REDSTONE_BLOCK,
         settings = Config.class,
         internal = true,
-        can_be_disabled = false
+        can_be_unloaded = false
 )
 public class GameModule extends UHModule implements Listener
 {

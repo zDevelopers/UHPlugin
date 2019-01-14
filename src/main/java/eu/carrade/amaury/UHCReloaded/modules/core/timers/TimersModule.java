@@ -32,6 +32,7 @@
 
 package eu.carrade.amaury.UHCReloaded.modules.core.timers;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
@@ -39,14 +40,10 @@ import eu.carrade.amaury.UHCReloaded.modules.core.timers.commands.TimersCommand;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.apache.commons.lang3.tuple.Pair;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
@@ -54,8 +51,10 @@ import java.util.stream.Collectors;
 @ModuleInfo (
         name = "Timers",
         description = "The timekeeper of the whole UHCReloaded plugin & companions.",
+        category = ModuleCategory.CORE,
+        icon = Material.WATCH,
         internal = true,
-        can_be_disabled = false
+        can_be_unloaded = false
 )
 public class TimersModule extends UHModule
 {

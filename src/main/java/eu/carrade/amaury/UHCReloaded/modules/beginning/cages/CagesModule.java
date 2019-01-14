@@ -33,7 +33,9 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.beginning.cages;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
@@ -42,6 +44,7 @@ import eu.carrade.amaury.UHCReloaded.modules.core.game.events.start.PlayerSpawnP
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.start.PlayerTeleportedToSpawnPointEvent;
 import fr.zcraft.zteams.ZTeams;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
@@ -52,8 +55,11 @@ import java.util.Map;
 @ModuleInfo (
         name = "Cages",
         description = "Puts players in cages (or platforms) instead of letting them float in the air, during the startup process.",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_STARTING,
-        settings = Config.class
+        when = ModuleLoadTime.ON_GAME_STARTING,
+        category = ModuleCategory.STARTING,
+        icon = Material.GLASS,
+        settings = Config.class,
+        can_be_loaded_late = false
 )
 public class CagesModule extends UHModule
 {

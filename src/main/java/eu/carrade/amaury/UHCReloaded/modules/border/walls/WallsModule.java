@@ -34,7 +34,9 @@
 package eu.carrade.amaury.UHCReloaded.modules.border.walls;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.border.walls.exceptions.CannotGenerateWallsException;
 import eu.carrade.amaury.UHCReloaded.modules.border.walls.exceptions.UnknownWallGenerator;
@@ -51,7 +53,9 @@ import java.util.List;
 @ModuleInfo (
         name = "Walls Generator",
         description = "Generates a solid wall around the arena.",
-        when = ModuleInfo.ModuleLoadTime.POST_WORLD,
+        when = ModuleLoadTime.POST_WORLD,
+        category = ModuleCategory.UTILITIES,
+        icon = Material.BARRIER,
         settings = Config.class
 )
 public class WallsModule extends UHModule

@@ -33,11 +33,14 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.ingame.health;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.ingame.health.commands.HealAllCommand;
 import eu.carrade.amaury.UHCReloaded.modules.ingame.health.commands.HealCommand;
 import fr.zcraft.zlib.components.commands.Command;
+import org.bukkit.Material;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +49,9 @@ import java.util.List;
 @ModuleInfo (
         name = "Health Commands",
         description = "Provides commands to update health of some or all players.",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_START
+        when = ModuleLoadTime.ON_GAME_START,
+        category = ModuleCategory.UTILITIES,
+        icon = Material.GOLDEN_APPLE
 )
 public class HealthModule extends UHModule
 {

@@ -34,6 +34,7 @@
 package eu.carrade.amaury.UHCReloaded.modules.other.about;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
@@ -43,6 +44,7 @@ import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -55,7 +57,9 @@ import java.util.jar.Manifest;
 
 @ModuleInfo (
         name = "About",
-        description = "Provides information about this plugin."
+        description = "Provides information about this plugin.",
+        category = ModuleCategory.OTHER,
+        icon = Material.BOOK
 )
 public class AboutModule extends UHModule
 {

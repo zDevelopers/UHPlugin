@@ -33,7 +33,9 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.spectators;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
@@ -48,6 +50,7 @@ import fr.zcraft.zlib.components.commands.Commands;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.rawtext.RawText;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -60,9 +63,11 @@ import java.util.*;
 @ModuleInfo (
         name = "Spectators Manager",
         description = "Handles non-playing players.",
-        when = ModuleInfo.ModuleLoadTime.POST_WORLD,
+        when = ModuleLoadTime.POST_WORLD,
+        category = ModuleCategory.CORE,
+        icon = Material.EYE_OF_ENDER,
         settings = Config.class,
-        can_be_disabled = false
+        can_be_unloaded = false
 )
 public class SpectatorsModule extends UHModule
 {

@@ -33,6 +33,7 @@ package eu.carrade.amaury.UHCReloaded.modules.core.teams;
 
 import com.google.common.collect.ImmutableMap;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
@@ -70,9 +71,11 @@ import java.util.*;
 @ModuleInfo (
         name = "Teams",
         description = "Manages the teams and related commands.",
+        category = ModuleCategory.CORE,
+        icon = Material.NETHER_STAR,
         settings = Config.class,
         internal = true,
-        can_be_disabled = false
+        can_be_unloaded = false
 )
 public class TeamsModule extends UHModule
 {

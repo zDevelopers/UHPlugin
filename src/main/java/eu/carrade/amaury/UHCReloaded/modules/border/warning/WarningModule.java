@@ -33,7 +33,9 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.border.warning;
 
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.events.BorderChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
@@ -43,6 +45,7 @@ import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.runners.RunTask;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -53,7 +56,9 @@ import java.util.List;
 @ModuleInfo (
         name = "Border Warning",
         description = "Warns players about the future border size.",
-        when = ModuleInfo.ModuleLoadTime.ON_GAME_START,
+        when = ModuleLoadTime.ON_GAME_START,
+        category = ModuleCategory.UTILITIES,
+        icon = Material.FENCE_GATE,
         settings = Config.class
 )
 public class WarningModule extends UHModule
@@ -73,6 +78,12 @@ public class WarningModule extends UHModule
     {
         /// The name of the warning timer displaying the time left before the next border
         warningTimerName = I.t("Border shrinking");
+    }
+
+    @Override
+    protected void onDisable()
+    {
+        cancelWarning();
     }
 
     @Override

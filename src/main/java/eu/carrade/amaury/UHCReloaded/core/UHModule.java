@@ -57,6 +57,17 @@ public abstract class UHModule extends ZLibComponent implements Listener
     public void onConfigLoaded() {}
 
     /**
+     * Called only when the module is enabled late, i.e. not when configured in
+     * the {@link ModuleInfo}. This happens for modules loaded manually by the
+     * players, if the module allows such late load.
+     *
+     * This method will not be called for normal loads following the module info.
+     *
+     * It will be called after {@link #onEnable()}.
+     */
+    public void onEnableLate() {}
+
+    /**
      * Use this method to register sub-commands into the /uh command.
      *
      * @return A list of command classes to register.

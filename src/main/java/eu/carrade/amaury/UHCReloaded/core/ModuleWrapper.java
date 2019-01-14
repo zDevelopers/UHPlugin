@@ -32,8 +32,11 @@
 package eu.carrade.amaury.UHCReloaded.core;
 
 import com.google.common.base.CaseFormat;
+import eu.carrade.amaury.UHCReloaded.core.events.ModuleDisabledEvent;
+import eu.carrade.amaury.UHCReloaded.core.events.ModuleEnabledEvent;
 import eu.carrade.amaury.UHCReloaded.core.events.ModuleLoadedEvent;
 import eu.carrade.amaury.UHCReloaded.core.events.ModuleUnloadedEvent;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.tools.PluginLogger;
@@ -51,7 +54,9 @@ public class ModuleWrapper
 {
     private final String name;
     private final String description;
-    private final ModuleInfo.ModuleLoadTime when;
+    private final ModuleLoadTime when;
+
+    private boolean enabled;
 
     private final Class<? extends UHModule> moduleClass;
 
@@ -60,20 +65,21 @@ public class ModuleWrapper
     private String[] dependencies;
 
     private final boolean internal;
-    private final boolean canBeDisabled;
-
-    /**
-     * TODO reimplement properly activated modules
-     */
-    @Deprecated
-    private boolean enabledAtStartup;
+    private final boolean canBeUnloaded;
+    private final boolean canBeLoadedLate;
 
     private UHModule instance = null;
 
     public ModuleWrapper(final Class<? extends UHModule> moduleClass)
     {
+        this(moduleClass, true);
+    }
+
+    public ModuleWrapper(final Class<? extends UHModule> moduleClass, boolean enabled)
+    {
         this.name = computeModuleName(moduleClass);
         this.moduleClass = moduleClass;
+        this.enabled = enabled;
 
         final ModuleInfo info = moduleClass.getAnnotation(ModuleInfo.class);
 
@@ -81,8 +87,9 @@ public class ModuleWrapper
         {
             description = "";
             internal = false;
-            canBeDisabled = true;
-            when = ModuleInfo.ModuleLoadTime.POST_WORLD;
+            canBeUnloaded = true;
+            canBeLoadedLate = true;
+            when = ModuleLoadTime.POST_WORLD;
             moduleConfiguration = null;
             settingsFileName = null;
             dependencies = new String[] {};
@@ -91,7 +98,8 @@ public class ModuleWrapper
         {
             description = info.description();
             internal = info.internal();
-            canBeDisabled = info.can_be_disabled();
+            canBeUnloaded = info.can_be_unloaded();
+            canBeLoadedLate = info.can_be_loaded_late();
             when = info.when();
             moduleConfiguration = info.settings().equals(ConfigurationInstance.class) ? null : info.settings();
             settingsFileName = info.settings_filename().isEmpty() ? null : info.settings_filename();
@@ -103,24 +111,31 @@ public class ModuleWrapper
 
     /**
      * Enables this module.
+     *
+     * @param late {@code true} if the module is not loaded when specified in
+     * its {@link ModuleInfo properties}.
      */
-    public void enable()
+    public boolean load(boolean late)
     {
+        if (isLoaded()) return true;
+
         // Check dependencies
 
-        for (String dependency : dependencies)
+        for (final String dependency : dependencies)
         {
             final Plugin plugin = Bukkit.getPluginManager().getPlugin(dependency);
             if (plugin == null)
             {
                 if (dependencies.length >= 2)
                 {
-                    PluginLogger.warning("Cannot enable module {0}: missing dependency {1} (depends on {2}).", name, dependency, String.join(", ", dependencies));
+                    PluginLogger.error("Cannot enable module {0}: missing dependency {1} (depends on {2}).", name, dependency, String.join(", ", dependencies));
                 }
                 else
                 {
-                    PluginLogger.warning("Cannot enable module {0}: missing dependency {1}.", name, dependency);
+                    PluginLogger.error("Cannot enable module {0}: missing dependency {1}.", name, dependency);
                 }
+
+                return false;
             }
             else if (!plugin.isEnabled())
             {
@@ -131,35 +146,85 @@ public class ModuleWrapper
 
         instance = ZLib.loadComponent(moduleClass);
 
-        Bukkit.getPluginManager().callEvent(new ModuleLoadedEvent(this));
+        Bukkit.getPluginManager().callEvent(new ModuleLoadedEvent(this, late));
+
+        if (late) instance.onEnableLate();
+
+        return true;
     }
 
     /**
      * Disable this module.
      */
-    public void disable()
+    public void unload()
     {
         if (instance == null) return;
 
         instance.setEnabled(false);
         ZLib.unregisterEvents(instance);
 
-        Bukkit.getPluginManager().callEvent(new ModuleUnloadedEvent(instance));
+        Bukkit.getPluginManager().callEvent(new ModuleUnloadedEvent(this));
 
         instance = null;
     }
 
     /**
-     * If this module was not yet loaded (e.g. if we're pre-game and the module loads
-     * when the game starts), sets the module to be loaded (or not) when the time comes.
+     * Enables or disables this module.
      *
-     * @param enabledAtStartup {@code true} to register this module to be enabled at the right time.
+     * @param enabled new status.
+     * @return {@code true} if the operation succeeded. It will be {@code false}
+     * if you try to disable the module and if the module is internal or the
+     * module is loaded and marked as un-loadable, or if you try to enable the
+     * module and it is marked as un-loadable after its auto-load moment.
      */
-    public void setEnabledAtStartup(boolean enabledAtStartup)
+    public boolean setEnabled(boolean enabled)
     {
-        if (instance != null) return;
+        if (this.enabled != enabled)
+        {
+            // Can we enabled this module?
+            if (enabled)
+            {
+                if (canBeReEnabled())
+                {
+                    return false;
+                }
+            }
 
-        this.enabledAtStartup = enabledAtStartup;
+            // Can we disable this module?
+            else if (internal || !canBeUnloaded)
+            {
+                return false;
+            }
+
+
+            this.enabled = enabled;
+
+            if (enabled)
+            {
+                Bukkit.getPluginManager().callEvent(new ModuleEnabledEvent(this));
+
+                if (UR.get().isLoaded(when))
+                {
+                    return load(true);
+                }
+            }
+            else
+            {
+                Bukkit.getPluginManager().callEvent(new ModuleDisabledEvent(this));
+                unload();
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return {@code true} if after being disabled, this module will be reloadable
+     * (can depends on the moment this method is called).
+     */
+    public boolean canBeReEnabled()
+    {
+        return !canBeLoadedLate && UR.get().isLoaded(when);
     }
 
     /**
@@ -189,7 +254,7 @@ public class ModuleWrapper
     /**
      * @return When this module should be loaded.
      */
-    public ModuleInfo.ModuleLoadTime getWhen()
+    public ModuleLoadTime getWhen()
     {
         return when;
     }
@@ -266,23 +331,24 @@ public class ModuleWrapper
     /**
      * @return {@code true} if this module can be disabled at runtime.
      */
-    public boolean canBeDisabled()
+    public boolean canBeUnloaded()
     {
-        return canBeDisabled;
+        return canBeUnloaded;
     }
 
     /**
-     * @return {@code true} if this module, according to the configuration file, should be loaded at startup.
+     * @return {@code true} if the module is enabled. Disabled modules will not be
+     * loaded when the time comes.
      */
-    public boolean isEnabledAtStartup()
+    public boolean isEnabled()
     {
-        return enabledAtStartup;
+        return enabled;
     }
 
     /**
      * @return {@code true} if the module was loaded and enabled.
      */
-    public boolean isEnabled()
+    public boolean isLoaded()
     {
         return instance != null && instance.isEnabled();
     }
