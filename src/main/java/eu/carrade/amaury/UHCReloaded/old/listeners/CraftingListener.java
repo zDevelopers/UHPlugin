@@ -40,12 +40,10 @@ import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -167,75 +165,10 @@ public class CraftingListener implements Listener
         {
             final Inventory inventory = ev.getInventory();
 
-            // Workaround to fix the crafting grid being not updated when the item is taken
-            // from the grid.
-            if (inventory instanceof CraftingInventory && ev.getSlotType() == SlotType.RESULT)
-            {
-                RunTask.later(
-                    () -> ev.getViewers().stream()
-                            .filter(viewer -> viewer instanceof Player)
-                            .forEach(viewer -> ((Player) viewer).updateInventory()),
-                    1L
-                );
-            }
-
-
-            /* *** Allows any shape for the loots in the compass recipe. *** */
-
-            if (inventory instanceof CraftingInventory)
-            {
-                // This is ran one tick after the click because when the event is fired, the inventory
-                // object is not updated, and so the result of the isValidCompassResult is invalid.
-
-                RunTask.later(() ->
-                {
-                    if (p.getRecipesManager().isValidCompassRecipe(((CraftingInventory) inventory).getMatrix()))
-                    {
-
-                        // Puts the compass in the result slot
-                        if (ev.getSlotType() == SlotType.CRAFTING)
-                        {
-                            ((CraftingInventory) inventory).setResult(new ItemStack(Material.COMPASS));
-                            ev.setResult(Result.ALLOW);
-
-                            ((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
-                        }
-
-                        // Consumes the materials in the crafting grid.
-                        // Because this is not an "official" recipe, we need to do that manually.
-                        else if (ev.getSlotType() == SlotType.RESULT)
-                        {
-                            int index = 1;
-                            for (ItemStack stack : ((CraftingInventory) inventory).getMatrix())
-                            {
-                                if (stack == null) continue;
-
-                                if (stack.getAmount() != 1)
-                                {
-                                    stack.setAmount(stack.getAmount() - 1);
-                                    inventory.setItem(index, stack);
-                                }
-                                else
-                                {
-                                    inventory.setItem(index, new ItemStack(Material.AIR));
-                                }
-
-                                index++;
-                            }
-
-                            ev.setCurrentItem(new ItemStack(Material.COMPASS));
-                            ev.setResult(Result.ALLOW);
-
-                            ((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
-                        }
-                    }
-                }, 1L);
-            }
-
 
             /* *** Prevent an apple to be renamed to/from the name of an head apple. *** */
 
-            else if (inventory instanceof AnvilInventory)
+            if (inventory instanceof AnvilInventory)
             {
                 InventoryView view = ev.getView();
                 int rawSlot = ev.getRawSlot();

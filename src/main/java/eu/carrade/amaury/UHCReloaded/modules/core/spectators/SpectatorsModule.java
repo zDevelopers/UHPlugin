@@ -49,6 +49,7 @@ import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.Commands;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.components.rawtext.RawText;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -133,7 +134,7 @@ public class SpectatorsModule extends UHModule
         spectators.add(playerID);
 
         if (UR.module(GameModule.class).getPhase() != GamePhase.WAIT)
-            manager.setSpectating(playerID, true);
+            RunTask.nextTick(() -> manager.setSpectating(playerID, true));
     }
 
     /**
@@ -156,7 +157,7 @@ public class SpectatorsModule extends UHModule
         spectators.remove(playerID);
 
         if (UR.module(GameModule.class).getPhase() != GamePhase.WAIT)
-            manager.setSpectating(playerID, false);
+            RunTask.nextTick(() -> manager.setSpectating(playerID, false));
     }
 
     /**

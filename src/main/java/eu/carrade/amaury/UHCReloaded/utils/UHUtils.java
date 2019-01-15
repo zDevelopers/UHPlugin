@@ -35,13 +35,8 @@ package eu.carrade.amaury.UHCReloaded.utils;
 import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.PluginLogger;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
+import org.bukkit.*;
 import org.bukkit.FireworkEffect.Builder;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -453,5 +448,18 @@ public class UHUtils
 
         if (shiftThroughNull && newOrd == values.length) return null;
         return values[newOrd];
+    }
+
+    /**
+     * Generates a message prefixed with a prefix and a separator, for chat.
+     *
+     * @param prefix The prefix.
+     * @param message The message.
+     *
+     * @return The formatted prefixed message.
+     */
+    public static String prefixedMessage(final String prefix, final String message)
+    {
+        return ChatColor.GREEN + prefix + ChatColor.GRAY + "  \u2758  " + ChatColor.RESET + message;
     }
 }

@@ -33,6 +33,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.core;
 
+import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.tools.text.RawMessage;
@@ -131,7 +132,7 @@ public class ModuleLogger extends Logger
 
     public void broadcastAdministrativePrefixed(final String message)
     {
-        broadcastAdministrative(ChatColor.GREEN + moduleName + ChatColor.GRAY + "  \u2758  " + ChatColor.RESET + message, ChatColor.stripColor(message));
+        broadcastAdministrative(UHUtils.prefixedMessage(moduleName, message), ChatColor.stripColor(message));
     }
 
     private void broadcastAdministrative(final String messagePlayers, final String messageConsole)

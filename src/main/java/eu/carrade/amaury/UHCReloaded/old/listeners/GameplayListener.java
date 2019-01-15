@@ -40,24 +40,19 @@ import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Ghast;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -267,103 +262,6 @@ public class GameplayListener implements Listener
                     new PotionEffect(PotionEffectType.REGENERATION, duration, realLevel).apply(ev.getPlayer());
                 }, 2L);
             }
-        }
-    }
-
-
-    /**
-     * Used to update the compass.
-     */
-    @SuppressWarnings ("deprecation")
-    @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent ev)
-    {
-        if ((ev.getAction() == Action.RIGHT_CLICK_AIR || ev.getAction() == Action.RIGHT_CLICK_BLOCK)
-                && ev.getPlayer().getItemInHand().getType() == Material.COMPASS
-                && p.getConfig().getBoolean("gameplay-changes.compass.enabled")
-                && !p.getGameManager().isPlayerDead(ev.getPlayer()))
-        {
-            Player player1 = ev.getPlayer();
-
-            boolean foundRottenFlesh = false;
-            for (ItemStack item : player1.getInventory().getContents())
-            {
-                if (item != null && item.getType() == Material.ROTTEN_FLESH)
-                {
-                    if (item.getAmount() != 1)
-                    {
-                        item.setAmount(item.getAmount() - 1);
-                    }
-                    else
-                    {
-                        player1.getInventory().removeItem(item);
-                    }
-
-                    player1.updateInventory();
-                    foundRottenFlesh = true;
-                    break;
-                }
-            }
-
-            if (!foundRottenFlesh)
-            {
-                /// Error message if a player tries to use his pointing compass without rotten flesh.
-                player1.sendMessage(I.t("{gray}{italic}You do not have rotten flesh."));
-                player1.playSound(player1.getLocation(), Sound.STEP_WOOD, 1F, 1F);
-                return;
-            }
-
-            Player nearest = null;
-            Double distance = 99999D;
-            for (Player player2 : p.getGameManager().getOnlineAlivePlayers())
-            {
-                try
-                {
-                    Double calc = player1.getLocation().distanceSquared(player2.getLocation());
-
-                    if (calc > 1 && calc < distance)
-                    {
-//                        distance = calc;
-//                        if (!player2.getUniqueId().equals(player1.getUniqueId()) && !p.getTeamManager().inSameTeam(player1, player2))
-//                        {
-//                            nearest = player2.getPlayer();
-//                        }
-                    }
-                }
-                catch (Exception ignored)
-                {
-
-                }
-            }
-
-            if (nearest == null)
-            {
-                /// Error message if a player tries to use his pointing compass without a player nearby.
-                player1.sendMessage(I.t("{gray}{italic}Only silence answers your request."));
-
-                player1.playSound(player1.getLocation(), Sound.STEP_WOOD, 1F, 1F);
-                return;
-            }
-
-            /// Success message when a player uses his pointing compass.
-            player1.sendMessage(I.t("{gray}The compass now points to the closest player."));
-            player1.setCompassTarget(nearest.getLocation());
-
-            player1.playSound(player1.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);
-        }
-    }
-
-
-    /**
-     * Used to disable the "bad" weather (aka non-clear weather).
-     * The weather is initially clear.
-     */
-    @EventHandler
-    public void onWeatherChange(WeatherChangeEvent ev)
-    {
-        if (!UHConfig.GAMEPLAY_CHANGES.WEATHER.get())
-        {
-            ev.setCancelled(true);
         }
     }
 }

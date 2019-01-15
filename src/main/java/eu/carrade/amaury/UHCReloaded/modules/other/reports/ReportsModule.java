@@ -108,6 +108,7 @@ public class ReportsModule extends UHModule
     /*
      * Switches for some timeline's events.
      */
+    private boolean firstApple = false;
     private boolean firstGold = false;
     private boolean firstDiamond = false;
     private boolean firstEnchant = false;

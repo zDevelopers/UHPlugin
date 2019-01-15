@@ -70,7 +70,7 @@ public class Config extends ConfigurationInstance
         public final ConfigurationItem<TimeDelta> GRACE_PERIOD = item("grace-period", new TimeDelta(0, 0, 30));
         public final ConfigurationItem<Boolean> BROADCAST_GRACE_END = item("broadcast-grace-end", true);
 
-        public final ConfigurationItem<TimeDelta> PEACE_PERIOD = item("peace-period", new TimeDelta(0, 15, 0));
+        public final ConfigurationItem<TimeDelta> PEACE_PERIOD = item("peace-period", new TimeDelta(0, 1, 0));
         public final ConfigurationItem<TimeDelta> SURFACE_MOBS_FREE_PERIOD = item("surface-mobs-free-period", new TimeDelta(0, 20, 0));
     }
 

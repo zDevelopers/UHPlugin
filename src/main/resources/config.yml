@@ -40,6 +40,8 @@ modules:
     "ingame-deathAnnouncement": true
     "ingame-kick": false
 
+    "gameplay-compass": true
+
     "cosmetics-hardcoreHearts": true
     "cosmetics-motd": true
     "cosmetics-dynmap": true

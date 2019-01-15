@@ -78,13 +78,13 @@ public final class UR
     }
 
     /**
-     * Returns the logger for the caller class' module.
+     * Returns the module for the caller class' module.
      *
      * This works by looking up for the module class in the caller class'
      * package or “parent” packages. Throws an exception if no module class can
      * be found.
      *
-     * @return The module's logger.
+     * @return The module's instance.
      * @throws IllegalArgumentException if no module can be found for the caller
      * class.
      */
