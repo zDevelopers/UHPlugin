@@ -73,7 +73,8 @@ import org.bukkit.permissions.Permissible;
         description = "Manages the waiting phase: inventory, effects, modes, teleportation, etc.",
         category = ModuleCategory.WAITING_PHASE,
         icon = Material.WATCH,
-        settings = Config.class
+        settings = Config.class,
+        can_be_loaded_late = false
 )
 public class WaitModule extends UHModule
 {

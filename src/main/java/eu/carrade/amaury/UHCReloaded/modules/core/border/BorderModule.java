@@ -161,7 +161,7 @@ public class BorderModule extends UHModule
     public void injectIntoSidebar(Player player, SidebarInjector injector)
     {
         if (UR.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME) || sidebar.isEmpty()) return;
-        injector.injectLines(SidebarInjector.SidebarPriority.BOTTOM, true, sidebar);
+        injector.injectLines(SidebarInjector.SidebarPriority.MIDDLE, true, sidebar);
     }
 
     /**

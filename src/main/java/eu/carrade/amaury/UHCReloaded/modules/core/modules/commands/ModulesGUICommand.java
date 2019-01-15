@@ -31,56 +31,20 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.core;
+package eu.carrade.amaury.UHCReloaded.modules.core.modules.commands;
 
-import fr.zcraft.zlib.components.i18n.I;
+import eu.carrade.amaury.UHCReloaded.modules.core.modules.gui.ModulesListGUI;
+import fr.zcraft.zlib.components.commands.Command;
+import fr.zcraft.zlib.components.commands.CommandException;
+import fr.zcraft.zlib.components.commands.CommandInfo;
+import fr.zcraft.zlib.components.gui.Gui;
 
-public enum ModuleLoadTime
+@CommandInfo (name = "modules-gui")
+public class ModulesGUICommand extends Command
 {
-    /**
-     * Loads the module at startup, before the worlds are loaded.
-     *
-     * Please note that most core modules (and localization) are not loaded at this point. Use that
-     * for modules altering the world generation.
-     */
-    STARTUP(I.t("When the server starts")),
-
-    /**
-     * Loads the module after the world(s), or immediately if the plugin is reloaded.
-     * The thing is, all worlds will be loaded when the module is.
-     */
-    POST_WORLD(I.t("When the worlds are loaded")),
-
-    /**
-     * Loads the module when the game phase is set to STARTING, i.e. when the /uh start command
-     * is used.
-     */
-    ON_GAME_STARTING(I.t("When the game start command is executed")),
-
-    /**
-     * Loads the module when the game starts, i.e. when all players falls from their spawn into
-     * the world.
-     */
-    ON_GAME_START(I.t("When the game starts for real (after teleportations)")),
-
-    /**
-     * Loads the module when the game ends.
-     */
-    ON_GAME_END(I.t("When the game ends"))
-
-    ;
-
-
-    private final String description;
-
-    ModuleLoadTime(String description)
+    @Override
+    protected void run() throws CommandException
     {
-
-        this.description = description;
-    }
-
-    public String getDescription()
-    {
-        return description;
+        Gui.open(playerSender(), new ModulesListGUI());
     }
 }

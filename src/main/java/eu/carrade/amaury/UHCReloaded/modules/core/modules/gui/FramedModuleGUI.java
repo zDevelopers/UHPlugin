@@ -31,56 +31,47 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.core;
+package eu.carrade.amaury.UHCReloaded.modules.core.modules.gui;
 
-import fr.zcraft.zlib.components.i18n.I;
+import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
+import fr.zcraft.zlib.components.gui.ActionGui;
+import fr.zcraft.zlib.tools.items.ItemStackBuilder;
+import fr.zcraft.zteams.colors.ColorsUtils;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
-public enum ModuleLoadTime
+public abstract class FramedModuleGUI extends ActionGui
 {
-    /**
-     * Loads the module at startup, before the worlds are loaded.
-     *
-     * Please note that most core modules (and localization) are not loaded at this point. Use that
-     * for modules altering the world generation.
-     */
-    STARTUP(I.t("When the server starts")),
+    protected final ModuleWrapper module;
 
-    /**
-     * Loads the module after the world(s), or immediately if the plugin is reloaded.
-     * The thing is, all worlds will be loaded when the module is.
-     */
-    POST_WORLD(I.t("When the worlds are loaded")),
-
-    /**
-     * Loads the module when the game phase is set to STARTING, i.e. when the /uh start command
-     * is used.
-     */
-    ON_GAME_STARTING(I.t("When the game start command is executed")),
-
-    /**
-     * Loads the module when the game starts, i.e. when all players falls from their spawn into
-     * the world.
-     */
-    ON_GAME_START(I.t("When the game starts for real (after teleportations)")),
-
-    /**
-     * Loads the module when the game ends.
-     */
-    ON_GAME_END(I.t("When the game ends"))
-
-    ;
-
-
-    private final String description;
-
-    ModuleLoadTime(String description)
+    public FramedModuleGUI(ModuleWrapper module)
     {
-
-        this.description = description;
+        this.module = module;
     }
 
-    public String getDescription()
+    @Override
+    protected void onAfterUpdate()
     {
-        return description;
+        final ItemStack framePart = new ItemStackBuilder(Material.STAINED_GLASS_PANE)
+                .title("")
+                .data(ColorsUtils.chat2Dye(module.getCategory().getColor()).getWoolData())  // FIXME 1.13
+                .item();
+
+        // Top and bottom
+        for (int slot = 0; slot < 9; slot++)
+        {
+            action("", slot, framePart);
+            action("", getSize() - (slot + 1), framePart);
+        }
+
+        // Sides
+        for (int line = 0; line < getSize() / 9; line++)
+        {
+            action("", line * 9, framePart);
+            action("", line * 9 + 8, framePart);
+        }
+
+        // Icon
+        action("__module_icon__", 4, module.getFullIcon(false));
     }
 }

@@ -38,6 +38,9 @@ import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
+import eu.carrade.amaury.UHCReloaded.modules.core.modules.commands.ModuleCommand;
+import eu.carrade.amaury.UHCReloaded.modules.core.modules.commands.ModulesCommand;
+import eu.carrade.amaury.UHCReloaded.modules.core.modules.commands.ModulesGUICommand;
 import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
@@ -51,7 +54,7 @@ import java.util.Map;
 
 
 @ModuleInfo (
-        name = "Modules Manager",
+        name = "Modules",
         description = "Offers to the users a way to manage modules.",
         when = ModuleLoadTime.STARTUP,
         category = ModuleCategory.CORE,
@@ -63,14 +66,19 @@ public class ModulesManagerModule extends UHModule
     @Override
     public List<Class<? extends Command>> getCommands()
     {
-        return Arrays.asList(ModulesCommand.class, ModuleCommand.class);
+        return Arrays.asList(
+                ModulesCommand.class,
+                ModuleCommand.class,
+                ModulesGUICommand.class
+        );
     }
 
     @Override
     public Map<String, Class<? extends Command>> getCommandsAliases()
     {
         return ImmutableMap.of(
-                "modules", ModulesCommand.class
+                "modules", ModulesCommand.class,
+                "config", ModulesGUICommand.class
         );
     }
 

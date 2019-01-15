@@ -38,23 +38,35 @@ import eu.carrade.amaury.UHCReloaded.core.events.ModuleLoadedEvent;
 import eu.carrade.amaury.UHCReloaded.core.events.ModuleUnloadedEvent;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.tools.PluginLogger;
+import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import fr.zcraft.zlib.tools.reflection.Reflection;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.stream.Stream;
 
 
 public class ModuleWrapper
 {
     private final String name;
+    private final String shortDescription;
     private final String description;
+    private final String authors;
+
     private final ModuleLoadTime when;
+
+    private final ModuleCategory category;
+    private final Material icon;
 
     private boolean enabled;
 
@@ -86,10 +98,14 @@ public class ModuleWrapper
         if (info == null)
         {
             description = "";
+            shortDescription = "";
+            authors = "";
             internal = false;
             canBeUnloaded = true;
             canBeLoadedLate = true;
             when = ModuleLoadTime.POST_WORLD;
+            category = ModuleCategory.OTHER;
+            icon = Material.AIR;
             moduleConfiguration = null;
             settingsFileName = null;
             dependencies = new String[] {};
@@ -97,10 +113,14 @@ public class ModuleWrapper
         else
         {
             description = info.description();
+            shortDescription = info.short_description();
+            authors = info.authors();
             internal = info.internal();
             canBeUnloaded = info.can_be_unloaded();
             canBeLoadedLate = info.can_be_loaded_late();
             when = info.when();
+            category = info.category();
+            icon = info.icon();
             moduleConfiguration = info.settings().equals(ConfigurationInstance.class) ? null : info.settings();
             settingsFileName = info.settings_filename().isEmpty() ? null : info.settings_filename();
             dependencies = info.depends();
@@ -184,14 +204,14 @@ public class ModuleWrapper
             // Can we enabled this module?
             if (enabled)
             {
-                if (canBeReEnabled())
+                if (!canBeEnabled())
                 {
                     return false;
                 }
             }
 
             // Can we disable this module?
-            else if (internal || !canBeUnloaded)
+            else if (!canBeDisabled())
             {
                 return false;
             }
@@ -222,9 +242,17 @@ public class ModuleWrapper
      * @return {@code true} if after being disabled, this module will be reloadable
      * (can depends on the moment this method is called).
      */
-    public boolean canBeReEnabled()
+    public boolean canBeEnabled()
     {
-        return !canBeLoadedLate && UR.get().isLoaded(when);
+        return canBeLoadedLate || !UR.get().isLoaded(when);
+    }
+
+    /**
+     * @return {@code true} if, at the moment this method is called, this module can be disabled.
+     */
+    public boolean canBeDisabled()
+    {
+        return !internal && !(isLoaded() && !canBeUnloaded);
     }
 
     /**
@@ -241,6 +269,83 @@ public class ModuleWrapper
     public String getDescription()
     {
         return description != null && !description.isEmpty() ? description : null;
+    }
+
+    /**
+     * @return A short description for the module, or {@code null} if none provided.
+     */
+    public String getShortDescription()
+    {
+        return shortDescription != null && !shortDescription.isEmpty() ? shortDescription : null;
+    }
+
+    /**
+     * @return The authors of the module, or {@code null} if not provided.
+     */
+    public String getAuthors()
+    {
+        return authors != null && !authors.isEmpty() ? authors : null;
+    }
+
+    /**
+     * @return This module's category.
+     */
+    public ModuleCategory getCategory()
+    {
+        return category;
+    }
+
+    /**
+     * @return This module's icon: either the declared one, or the category's.
+     */
+    public ItemStack getIcon()
+    {
+        return icon == Material.AIR ? category.getIcon() : new ItemStack(icon);
+    }
+
+    /**
+     * Generates and returns a full icon for the module, including its status and
+     * description in the tooltip.
+     *
+     * @param complete If {@code true}, will use the long complete description.
+     *                 Else, will use the short description if available, else
+     *                 the long one.
+     * @return The icon.
+     */
+    public ItemStackBuilder getFullIcon(final boolean complete)
+    {
+        final ItemStackBuilder icon = new ItemStackBuilder(getIcon())
+                .title(
+                    (isLoaded() ? ChatColor.GREEN : (isEnabled() ? ChatColor.GOLD : ChatColor.RED)) + "" + ChatColor.BOLD + "\u2758 ",
+                    category.getColor() + "" + ChatColor.BOLD + name
+                )
+                .loreLine(
+                    ChatColor.DARK_GRAY + category.getDisplayName(),
+                    ChatColor.DARK_GRAY + " - ",
+                    ChatColor.DARK_GRAY + (enabled ? (isLoaded() ? I.t("Enabled and loaded") : I.t("Enabled")) : I.t("Disabled"))
+                );
+
+        String description;
+        if (((description = getShortDescription()) != null && !complete) || (description = getDescription()) != null)
+        {
+            icon.loreSeparator().longLore(ChatColor.WHITE, description, complete ? 100 : 42);
+        }
+
+        icon.loreSeparator().longLore(ChatColor.BLUE, I.t("Load time")).longLore(ChatColor.WHITE, when.getDescription(), 42);
+
+        if (dependencies.length != 0)
+        {
+            icon.loreSeparator().longLore(ChatColor.BLUE, I.t("External dependencies"));
+            Stream.of(dependencies).forEach(dep -> icon.loreLine(ChatColor.GRAY + "- ", (Bukkit.getPluginManager().getPlugin(dep) != null ? ChatColor.WHITE : ChatColor.RED) + dep));
+        }
+
+        String authors;
+        if ((authors = getAuthors()) != null)
+        {
+            icon.loreSeparator().longLore(ChatColor.BLUE, I.t("Brought to you by")).longLore(ChatColor.WHITE, authors, 42);
+        }
+
+        return icon.hideAttributes();
     }
 
     /**

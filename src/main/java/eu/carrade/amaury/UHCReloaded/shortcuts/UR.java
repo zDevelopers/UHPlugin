@@ -33,9 +33,18 @@
  */
 package eu.carrade.amaury.UHCReloaded.shortcuts;
 
+import com.google.common.reflect.ClassPath;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.core.ModuleLogger;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import fr.zcraft.zlib.tools.PluginLogger;
+import fr.zcraft.zlib.tools.reflection.Reflection;
+import org.apache.commons.lang.ArrayUtils;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -43,6 +52,9 @@ import eu.carrade.amaury.UHCReloaded.core.UHModule;
  */
 public final class UR
 {
+    private static final Map<Class<?>, Class<? extends UHModule>> classesModules = new HashMap<>();
+    private static final Map<String, Class<? extends UHModule>> packagesModules = new HashMap<>();
+
     /**
      * Returns the plugin's instance.
      */
@@ -53,7 +65,7 @@ public final class UR
 
     /**
      * Gets a module's instance. This may return null if the module is not currently
-     * enabled.
+     * loaded.
      *
      * @param moduleClass The module's class.
      * @param <M> The module's type.
@@ -66,8 +78,31 @@ public final class UR
     }
 
     /**
+     * Returns the logger for the caller class' module.
+     *
+     * This works by looking up for the module class in the caller class'
+     * package or “parent” packages. Throws an exception if no module class can
+     * be found.
+     *
+     * @return The module's logger.
+     * @throws IllegalArgumentException if no module can be found for the caller
+     * class.
+     */
+    public static UHModule module()
+    {
+        final Class<?> caller = Reflection.getCallerClass();
+        if (caller == null) throw new IllegalArgumentException("Cannot extract caller class in module()");
+
+        final Class<? extends UHModule> moduleClass = getModuleFromClass(caller);
+
+        if (moduleClass != null) return module(moduleClass);
+
+        throw new IllegalArgumentException("The class " + caller.getCanonicalName() + " is not inside a module's package.");
+    }
+
+    /**
      * Returns the logger for a given module. This may return null if the module is not
-     * currently enabled.
+     * currently loaded.
      *
      * @param moduleClass The module's class.
      * @return The module's logger.
@@ -82,6 +117,104 @@ public final class UR
         {
             // Ensures no NPE so IDEs are happy.
             return new ModuleLogger(UnknownModule.class);
+        }
+    }
+
+    /**
+     * Returns the logger for the caller class' module.
+     *
+     * This works by looking up for the module class in the caller class'
+     * package or “parent” packages. Throws an exception if no module class can
+     * be found.
+     *
+     * @return The module's logger.
+     * @throws IllegalArgumentException if no module can be found for the caller
+     * class.
+     */
+    public static ModuleLogger log()
+    {
+        final Class<?> caller = Reflection.getCallerClass();
+        if (caller == null) throw new IllegalArgumentException("Cannot extract caller class in log()");
+
+        final Class<? extends UHModule> moduleClass = getModuleFromClass(caller);
+
+        if (moduleClass != null) return log(moduleClass);
+
+        throw new IllegalArgumentException("The class " + caller.getCanonicalName() + " is not inside a module's package.");
+    }
+
+    /**
+     * Tries to retrieve the module of a given class.
+     *
+     * It will lookup for a class extending {@link UHModule} in the class's
+     * package, then in the “parent” package, etc., until the “root” package is
+     * reached. {@code null} will be returned if no package can be found.
+     *
+     * The result of this method is cached at runtime.
+     *
+     * @param clazz The class to search the module of.
+     * @return The module class, or {@code null} if not found.
+     */
+    private static Class<? extends UHModule> getModuleFromClass(final Class<?> clazz)
+    {
+        if (classesModules.containsKey(clazz)) return classesModules.get(clazz);
+
+        try
+        {
+            final ClassPath classPath = ClassPath.from(clazz.getClassLoader());
+            final Set<String> analyzedPackages = new HashSet<>();
+
+            String packaj = clazz.getPackage().getName();
+            while (packaj != null)
+            {
+                // Cached?
+                if (packagesModules.containsKey(packaj)) return packagesModules.get(packaj);
+
+                analyzedPackages.add(packaj);
+
+                // We try to find a class in this package extending UHModule
+                for (final ClassPath.ClassInfo packajClazzInfo : classPath.getTopLevelClasses(packaj))
+                {
+                    final Class<?> packajClazz = packajClazzInfo.load();
+
+                    if (UHModule.class.isAssignableFrom(packajClazz))
+                    {
+                        // We found the One™.
+                        @SuppressWarnings("unchecked")
+                        final Class<? extends UHModule> moduleClazz = (Class<? extends UHModule>) packajClazz;
+
+                        // We cache as hard as we can as these operations can be heavy.
+                        analyzedPackages.forEach(analyzed -> packagesModules.put(analyzed, moduleClazz));
+                        classesModules.put(clazz, moduleClazz);
+
+                        return moduleClazz;
+                    }
+                }
+
+                // If we fail, we try with the “parent” package.
+                if (packaj.contains("."))
+                {
+                    final String[] packajParts = packaj.split("\\.");
+                    ArrayUtils.remove(packajParts, packajParts.length - 1);
+                    packaj = String.join(".", (String[]) ArrayUtils.remove(packajParts, packajParts.length - 1));
+                }
+                else
+                {
+                    packaj = null;
+                }
+            }
+
+            PluginLogger.error("Unable to find module for class {0}", clazz.getCanonicalName());
+            classesModules.put(clazz, null);
+            analyzedPackages.forEach(analyzed -> packagesModules.put(analyzed, null));
+
+            return null;
+        }
+        catch (final Throwable e)
+        {
+            PluginLogger.error("Unable to find module for class {0}", e, clazz.getCanonicalName());
+            classesModules.put(clazz, null);
+            return null;
         }
     }
 

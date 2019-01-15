@@ -428,11 +428,11 @@ public class UHCReloaded extends ZPlugin implements Listener
     }
 
     @EventHandler
-    public void onModuleLoaded(final ModuleLoadedEvent e)
+    public void onModuleLoaded(final ModuleLoadedEvent ev)
     {
-        PluginLogger.info("Module {0} loaded.", e.getModule().getName());
+        PluginLogger.info("Module {0} loaded.", ev.getModule().getName());
 
-        if (e.isLoadedLate())
+        if (ev.isLoadedLate())
         {
             // If loaded late, we may have to re-register the module's commands.
             collectCommandsFromModules();
@@ -442,6 +442,8 @@ public class UHCReloaded extends ZPlugin implements Listener
     @EventHandler
     public void onModuleUnloaded(final ModuleUnloadedEvent ev)
     {
+        PluginLogger.info("Module {0} unloaded.", ev.getModule().getName());
+
         // We remove commands if needed when a module is unloaded,
         // as it will be unable to handle them properly (the module
         // instance being null).

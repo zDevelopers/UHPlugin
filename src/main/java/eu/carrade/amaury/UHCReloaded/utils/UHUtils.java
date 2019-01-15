@@ -34,6 +34,7 @@ package eu.carrade.amaury.UHCReloaded.utils;
 
 import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.PluginLogger;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -400,5 +401,57 @@ public class UHUtils
         return Bukkit.getServer().getWorlds().stream()
                 .filter(world -> world.getEnvironment() != World.Environment.NETHER && world.getEnvironment() != World.Environment.THE_END)
                 .findFirst().orElse(null);
+    }
+
+    /**
+     * Returns the next (or other...) enum value, as declared in the source
+     * code.
+     *
+     * @param enumValue An enum value.
+     * @param shift     A shift. If this is positive, will return the (shift)th
+     *                  element after, else the |shift|th element before. The enum
+     *                  is visited as a cycle.
+     *
+     * @return The next/previous/other enum value, according to shift.
+     */
+    public static <T extends Enum> T getNextElement(final T enumValue, final int shift)
+    {
+        return getNextElement(enumValue, shift, false, null);
+    }
+
+    /**
+     * Returns the next (or other...) enum value, as declared in the source
+     * code.
+     *
+     * @param enumValue An enum value.
+     * @param shift     A shift. If this is positive, will return the (shift)th
+     *                  element after, else the |shift|th element before. The enum
+     *                  is visited as a cycle.
+     * @param shiftThroughNull If {@code true}, will return {@code null} after the
+     *                         last element, and the first element after {@code null}.
+     *                         Else, will throw an {@link IllegalArgumentException} if
+     *                         the given element is {@code null}.
+     * @param enumClass The (non-empty) enum class, required if
+     *                  {@code shiftThroughNull = true}. Else, can be {@code null}.
+     * @param <T> The enum type.
+     *
+     * @return The next/previous/other enum value, according to shift.
+     */
+    public static <T extends Enum> T getNextElement(final T enumValue, final int shift, final boolean shiftThroughNull, Class<T> enumClass)
+    {
+        Validate.isTrue(shiftThroughNull || enumValue != null, "The enum value cannot be null with shiftThroughNull = false.");
+
+        if (enumValue != null) enumClass = (Class<T>) enumValue.getClass();
+
+        final T[] values = enumClass.getEnumConstants();
+        final int ord = enumValue != null ? enumValue.ordinal() : values.length;
+
+        final int shiftLength = shiftThroughNull ? values.length + 1 : values.length;
+
+        int newOrd = (ord + shift) % shiftLength;
+        if (newOrd < 0) newOrd += shiftLength;
+
+        if (shiftThroughNull && newOrd == values.length) return null;
+        return values[newOrd];
     }
 }

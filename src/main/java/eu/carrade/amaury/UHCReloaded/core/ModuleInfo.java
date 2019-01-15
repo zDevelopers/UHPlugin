@@ -50,9 +50,20 @@ public @interface ModuleInfo
     String name() default "";
 
     /**
-     * @return A short description for this module.
+     * @return A description for this module.
      */
     String description() default "";
+
+    /**
+     * @return A short description for this module. Used instead of the long one in the modules
+     * list GUI, so you can write novels in the description if you want.
+     */
+    String short_description() default "";
+
+    /**
+     * @return The author(s) of this module.
+     */
+    String authors() default "";
 
     /**
      * @return When this module should load.

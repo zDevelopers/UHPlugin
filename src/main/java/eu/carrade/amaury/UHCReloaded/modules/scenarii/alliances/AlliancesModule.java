@@ -60,6 +60,8 @@ import java.util.stream.Collectors;
 
 @ModuleInfo (
         name = "Alliances Scenario",
+        short_description = "Provides an alliances-based game, where players form alliances only " +
+                "by meeting in the game, everyone being alone at the beginning.",
         description = "If enabled, the game will be alliances-based.\n\n" +
                 "To use this scenario, start without any team configured. All players " +
                 "will be alone at the beginning. If they meet someone, they can ask for " +

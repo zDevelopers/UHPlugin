@@ -95,6 +95,13 @@ public class EpisodesModule extends UHModule
     }
 
     @Override
+    protected void onDisable()
+    {
+        episodesTimer.setDisplayed(false);
+        timers.unregisterTimer(episodesTimer);
+    }
+
+    @Override
     public List<Class<? extends Command>> getCommands()
     {
         return Collections.singletonList(ShiftCommand.class);

@@ -35,7 +35,7 @@ package eu.carrade.amaury.UHCReloaded.core;
 
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.items.ItemStackBuilder;
-import org.bukkit.DyeColor;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -48,70 +48,70 @@ public enum ModuleCategory
             I.t("Core Modules"),
             I.t("These modules are the core of UHCReloaded, required by other modules."),
             Material.BEDROCK,
-            DyeColor.WHITE
+            ChatColor.DARK_RED
     ),
 
     WORLD_GENERATION (
             I.t("World Generation"),
             I.t("These modules alter the world generation. To use them, the server must be started without world."),
             Material.REDSTONE_COMPARATOR,
-            DyeColor.WHITE
+            ChatColor.DARK_GREEN
     ),
 
     WAITING_PHASE (
             I.t("Waiting Phase"),
             I.t("These modules manage the waiting phase, when the game is not yet started."),
             Material.WATCH,
-            DyeColor.WHITE
+            ChatColor.YELLOW
     ),
 
     STARTING (
             I.t("Game Beginning"),
             I.t("These modules enhance the starting phase of the game."),
             Material.FEATHER,
-            DyeColor.WHITE
+            ChatColor.GOLD
     ),
 
     END (
             I.t("Game End"),
             I.t("These modules alter the game end  (either player deaths or whole game end)."),
             Material.SKULL_ITEM,
-            DyeColor.WHITE
+            ChatColor.RED
     ),
 
     GAMEPLAY (
             I.t("Gameplay"),
             I.t("These modules alter the world or gameplay during the game, e.g. adding or nerfing creatures, effects... This category does not contains scenarii, which are in a dedicated one."),
             Material.SADDLE,
-            DyeColor.WHITE
+            ChatColor.DARK_AQUA
     ),
 
     SCENARII (
             I.t("Scenarii"),
             I.t("These modules adds scenarii to the game, i.e. global set of changes that changes the gameplay in a deeper way, and possibly the whole game experience."),
             Material.BEACON,
-            DyeColor.WHITE
+            ChatColor.AQUA
     ),
 
     UTILITIES (
             I.t("Utilities"),
             I.t("These modules provides tools and utilities to manage the game and offer useful commands."),
             Material.COMMAND,
-            DyeColor.WHITE
+            ChatColor.DARK_PURPLE
     ),
 
     COSMETICS (
             I.t("Cosmetics"),
             I.t("These modules adds cosmetics things to the game, like effects or visual enhancements that can be useful but does not change the gameplay."),
             new ItemStackBuilder(Material.RED_ROSE).data((short) 1),  // FIXME 1.13
-            DyeColor.WHITE
+            ChatColor.LIGHT_PURPLE
     ),
 
     EXTERNAL (
             I.t("External"),
             I.t("These modules adds features alongside the game, like web maps, external summaries..."),
             Material.ENDER_CHEST,
-            DyeColor.WHITE
+            ChatColor.DARK_GREEN
     ),
 
     OTHER (
@@ -124,7 +124,7 @@ public enum ModuleCategory
                 icon.setItemMeta(meta);
                 return icon;
             },
-            DyeColor.WHITE
+            ChatColor.WHITE
     )
 
     ;
@@ -133,9 +133,9 @@ public enum ModuleCategory
     private final String displayName;
     private final String description;
     private final ItemStack icon;
-    private final DyeColor color;
+    private final ChatColor color;
 
-    ModuleCategory(final String displayName, final String description, final ItemStack icon, DyeColor color)
+    ModuleCategory(final String displayName, final String description, final ItemStack icon, ChatColor color)
     {
 
         this.displayName = displayName;
@@ -144,17 +144,17 @@ public enum ModuleCategory
         this.color = color;
     }
 
-    ModuleCategory(final String displayName, final String description, final ItemStackBuilder icon, DyeColor color)
+    ModuleCategory(final String displayName, final String description, final ItemStackBuilder icon, ChatColor color)
     {
         this(displayName, description, icon.item(), color);
     }
 
-    ModuleCategory(final String displayName, final String description, final Supplier<ItemStack> icon, DyeColor color)
+    ModuleCategory(final String displayName, final String description, final Supplier<ItemStack> icon, ChatColor color)
     {
         this(displayName, description, icon.get(), color);
     }
 
-    ModuleCategory(final String displayName, final String description, final Material icon, DyeColor color)
+    ModuleCategory(final String displayName, final String description, final Material icon, ChatColor color)
     {
         this(displayName, description, new ItemStack(icon), color);
     }
@@ -174,7 +174,7 @@ public enum ModuleCategory
         return icon.clone();
     }
 
-    public DyeColor getColor()
+    public ChatColor getColor()
     {
         return color;
     }

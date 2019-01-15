@@ -46,6 +46,7 @@ import java.util.logging.Logger;
 
 public class ModuleLogger extends Logger
 {
+    private final String moduleName;
     private final String loggerName;
 
     public ModuleLogger(Class<?extends UHModule> module)
@@ -55,7 +56,8 @@ public class ModuleLogger extends Logger
         setParent(ZLib.getPlugin().getLogger());
         setLevel(Level.ALL);
 
-        loggerName = "[" + ZLib.getPlugin().getName() + "] [" + ModuleWrapper.computeModuleName(module) + "] ";
+        moduleName = ModuleWrapper.computeModuleName(module);
+        loggerName = "[" + ZLib.getPlugin().getName() + "] [" + moduleName + "] ";
     }
 
     @Override
@@ -111,18 +113,12 @@ public class ModuleLogger extends Logger
         log(Level.SEVERE, message, args);
     }
 
-    public void broadcastAdministrative(String message)
+    public void broadcastAdministrative(final String message)
     {
-        // TODO use permissions
-        Bukkit.getOnlinePlayers().stream().filter(Player::isOp).forEach(player -> {
-            player.sendMessage("");
-            player.sendMessage(message);
-        });
-
-        info(ChatColor.stripColor(message));
+        broadcastAdministrative(message, ChatColor.stripColor(message));
     }
 
-    public void broadcastAdministrative(RawText message)
+    public void broadcastAdministrative(final RawText message)
     {
         // TODO use permissions
         Bukkit.getOnlinePlayers().stream().filter(Player::isOp).forEach(player -> {
@@ -131,5 +127,17 @@ public class ModuleLogger extends Logger
         });
 
         info(ChatColor.stripColor(message.toPlainText()));
+    }
+
+    public void broadcastAdministrativePrefixed(final String message)
+    {
+        broadcastAdministrative(ChatColor.GREEN + moduleName + ChatColor.GRAY + "  \u2758  " + ChatColor.RESET + message, ChatColor.stripColor(message));
+    }
+
+    private void broadcastAdministrative(final String messagePlayers, final String messageConsole)
+    {
+        // TODO use permissions
+        Bukkit.getOnlinePlayers().stream().filter(Player::isOp).forEach(player -> player.sendMessage(messagePlayers));
+        info(messageConsole);
     }
 }

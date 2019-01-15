@@ -31,7 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.modules;
+package eu.carrade.amaury.UHCReloaded.modules.core.modules.commands;
 
 import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;

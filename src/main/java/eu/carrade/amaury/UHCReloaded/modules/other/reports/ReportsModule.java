@@ -85,10 +85,14 @@ import java.util.UUID;
 
 @ModuleInfo (
         name = "Reports",
+        short_description = "Generates reports of the game, including history, damages, " +
+                "heals, statistics, etc., displayed on a web page, and gives the URL " +
+                "when the match ends.",
         description = "Generates reports of the game, including history, damages, " +
                 "heals, statistics, etc., displayed on a web page, and gives the URL " +
                 "when the match ends.\n\n" +
                 "Using DamagesLogger by Florian Cassayre & Amaury Carrade.",
+        authors = "Florian Cassayre & Amaury Carrade",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.EXTERNAL,
         icon = Material.BOOK_AND_QUILL,
