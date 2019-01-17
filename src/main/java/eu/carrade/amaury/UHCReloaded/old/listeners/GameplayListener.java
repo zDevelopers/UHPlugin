@@ -36,11 +36,8 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.old.task.CancelBrewTask;
 import fr.zcraft.zlib.tools.runners.RunTask;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.BrewerInventory;
@@ -77,26 +74,6 @@ public class GameplayListener implements Listener
         if (UHConfig.GAMEPLAY_CHANGES.DISABLE_LEVEL_II_POTIONS.get() && ev.getInventory() instanceof BrewerInventory)
         {
            RunTask.later(new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()), 1L);
-        }
-    }
-
-
-    /**
-     * Used to disable witch spawn (if needed).
-     */
-    @EventHandler
-    public void onCreatureSpawn(CreatureSpawnEvent ev)
-    {
-        if (ev.getEntityType().equals(EntityType.WITCH))
-        {
-            if (UHConfig.GAMEPLAY_CHANGES.WITCH.DISABLE_NATURAL_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.NATURAL))
-            {
-                ev.setCancelled(true);
-            }
-            if (UHConfig.GAMEPLAY_CHANGES.WITCH.DISABLE_LIGHTNING_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.LIGHTNING))
-            {
-                ev.setCancelled(true);
-            }
         }
     }
 }

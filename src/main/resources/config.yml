@@ -43,6 +43,8 @@ modules:
     "gameplay-compass": true
     "gameplay-goldenHeads": true
     "gameplay-noGhastTears": true
+    "gameplay-noEnderPearlDamages": true
+    "gameplay-noWitches": true
 
     "cosmetics-hardcoreHearts": true
     "cosmetics-motd": true

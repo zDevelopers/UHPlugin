@@ -31,9 +31,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.old.listeners;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.utils.EntitiesUtils;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.event.EventHandler;
@@ -79,24 +77,6 @@ public class SpawnsListener implements Listener
         {
             rabbit.setCustomName(RABBIT_NAME);
             rabbit.setCustomNameVisible(true);
-        }
-    }
-
-
-    /**
-     * Used to cancel the spawn of the creatures if the game is not started.
-     * <p>
-     * We don't use the peaceful difficulty for that because it causes bugs with Minecraft 1.8
-     * (the difficulty is not correctly updated client-side when the game starts).
-     */
-    @EventHandler
-    public void onCreatureSpawn(CreatureSpawnEvent ev)
-    {
-        if (!UHCReloaded.get().getGameManager().isGameStarted()
-                && EntitiesUtils.isNaturalSpawn(ev.getSpawnReason())
-                && EntitiesUtils.isHostile(ev.getEntityType()))
-        {
-            ev.setCancelled(true);
         }
     }
 }
