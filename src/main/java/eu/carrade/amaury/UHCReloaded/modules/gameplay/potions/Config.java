@@ -31,42 +31,24 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.gameplay.noWitches;
+package eu.carrade.amaury.UHCReloaded.modules.gameplay.potions;
 
-import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
-import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
-import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
-import eu.carrade.amaury.UHCReloaded.core.UHModule;
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.zlib.components.configuration.ConfigurationItem;
 
-@ModuleInfo (
-        name = "No Witches",
-        description = "Prevents witches from spawning, either naturally, from lightning strike on a villager, or both.",
-        when = ModuleLoadTime.ON_GAME_START,
-        category = ModuleCategory.GAMEPLAY,
-        icon = Material.GLASS_BOTTLE,
-        settings = Config.class
-)
-public class NoWitchesModule extends UHModule
+import java.io.File;
+
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
+
+public class Config extends ConfigurationInstance
 {
-    @EventHandler
-    public void onCreatureSpawn(CreatureSpawnEvent ev)
+    public Config(File file)
     {
-        if (ev.getEntityType().equals(EntityType.WITCH))
-        {
-            if (Config.DISABLE_NATURAL_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.NATURAL))
-            {
-                ev.setCancelled(true);
-            }
-
-            if (Config.DISABLE_LIGHTNING_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.LIGHTNING))
-            {
-                ev.setCancelled(true);
-            }
-        }
+        super(file);
     }
+
+    final static public ConfigurationItem<Boolean> DISABLE_LEVEL_II = item("disable-level-II", true);
+    final static public ConfigurationItem<Boolean> DISABLE_EXTENDED = item("disable-extended", false);
+    final static public ConfigurationItem<Boolean> DISABLE_SPLASH = item("disable-splash", false);
+    final static public ConfigurationItem<Boolean> DISABLE_LINGERING = item("disable-lingering", false);
 }

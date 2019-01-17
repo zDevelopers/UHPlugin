@@ -31,42 +31,46 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.gameplay.noWitches;
+package eu.carrade.amaury.UHCReloaded.modules.gameplay.potions;
 
 import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.inventory.BrewerInventory;
+
 
 @ModuleInfo (
-        name = "No Witches",
-        description = "Prevents witches from spawning, either naturally, from lightning strike on a villager, or both.",
+        name = "Potions",
+        description = "Allows to tweak potions, by disabling level-II, enhanced, " +
+                "splash or lingering potions.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.GAMEPLAY,
-        icon = Material.GLASS_BOTTLE,
+        icon = Material.POTION,
         settings = Config.class
 )
-public class NoWitchesModule extends UHModule
+public class PotionsModule extends UHModule
 {
     @EventHandler
-    public void onCreatureSpawn(CreatureSpawnEvent ev)
+    public void onInventoryDrag(InventoryDragEvent ev)
     {
-        if (ev.getEntityType().equals(EntityType.WITCH))
+        if (ev.getInventory() instanceof BrewerInventory)
         {
-            if (Config.DISABLE_NATURAL_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.NATURAL))
-            {
-                ev.setCancelled(true);
-            }
+            RunTask.later(new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()), 1L);
+        }
+    }
 
-            if (Config.DISABLE_LIGHTNING_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.LIGHTNING))
-            {
-                ev.setCancelled(true);
-            }
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent ev)
+    {
+        if (ev.getInventory() instanceof BrewerInventory)
+        {
+            RunTask.later(new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()), 1L);
         }
     }
 }

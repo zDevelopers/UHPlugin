@@ -34,7 +34,7 @@ package eu.carrade.amaury.UHCReloaded.old.listeners;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.old.task.CancelBrewTask;
+import eu.carrade.amaury.UHCReloaded.modules.gameplay.potions.CancelBrewTask;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

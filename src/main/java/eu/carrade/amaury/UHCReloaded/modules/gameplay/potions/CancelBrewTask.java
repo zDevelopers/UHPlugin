@@ -30,14 +30,18 @@
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
 
-package eu.carrade.amaury.UHCReloaded.old.task;
+package eu.carrade.amaury.UHCReloaded.modules.gameplay.potions;
 
+import fr.zcraft.zlib.tools.items.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class CancelBrewTask extends BukkitRunnable
@@ -61,48 +65,29 @@ public class CancelBrewTask extends BukkitRunnable
 
         if (whoClicked instanceof Player)
         {
-            ItemStack ingredient = inventory.getIngredient();
+            final ItemStack ingredient = inventory.getIngredient();
 
-            if (ingredient.getType() != null && ingredient.getType().equals(Material.GLOWSTONE_DUST))
+            final Set<Material> forbiddenIngredients = new HashSet<>();
+
+            if (Config.DISABLE_EXTENDED.get()) forbiddenIngredients.add(Material.REDSTONE);
+            if (Config.DISABLE_LEVEL_II.get()) forbiddenIngredients.add(Material.GLOWSTONE_DUST);
+            if (Config.DISABLE_SPLASH.get()) forbiddenIngredients.add(Material.SULPHUR);
+            if (Config.DISABLE_LINGERING.get())
             {
-                inventory.setIngredient(new ItemStack(Material.AIR)); // The glowstone is removed.
+                // 1.9 - 1.12
+                try { forbiddenIngredients.add(Material.valueOf("DRAGONS_BREATH")); }
+                catch (IllegalArgumentException ignored) { }
 
-                // First try: try to add the glowstone to an existing stack
-                boolean added = false;
-                for (ItemStack item : whoClicked.getInventory().getContents())
-                {
-                    if (item != null && item.getType() != null && item.getType().equals(Material.GLOWSTONE_DUST))
-                    {
-                        if (item.getAmount() + ingredient.getAmount() <= item.getMaxStackSize())
-                        {
-                            // We can add the glowstone here.
-                            item.setAmount(item.getAmount() + ingredient.getAmount());
-                            added = true;
-                            break;
-                        }
-                    }
-                }
+                // 1.13+
+                try { forbiddenIngredients.add(Material.valueOf("DRAGON_BREATH")); }
+                catch (IllegalArgumentException ignored) { }
+            }
 
-                // Failed... We adds the glowstone to the first empty slot found.
-                if (!added)
-                {
-                    int slotEmpty = whoClicked.getInventory().firstEmpty();
-
-                    // -1 is returned if there isn't any empty slot
-                    if (slotEmpty != -1)
-                    {
-                        whoClicked.getInventory().setItem(slotEmpty, ingredient);
-                    }
-
-                    // Failed again (!). Maybe an item captured between the click and this execution.
-                    // The stack is dropped at the player's location.
-                    else
-                    {
-                        whoClicked.getWorld().dropItem(whoClicked.getLocation(), ingredient);
-                    }
-                }
-
-                ((Player) whoClicked).updateInventory();
+            if (ingredient.getType() != null && forbiddenIngredients.contains(ingredient.getType()))
+            {
+                // The element is removed and added back to the player's inventory.
+                inventory.setIngredient(new ItemStack(Material.AIR));
+                ItemUtils.give((Player) whoClicked, ingredient);
             }
         }
     }

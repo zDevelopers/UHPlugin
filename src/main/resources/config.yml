@@ -45,6 +45,7 @@ modules:
     "gameplay-noGhastTears": true
     "gameplay-noEnderPearlDamages": true
     "gameplay-noWitches": true
+    "gameplay-potions": true
 
     "cosmetics-hardcoreHearts": true
     "cosmetics-motd": true
