@@ -31,7 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.gameplay.noWitches;
+package eu.carrade.amaury.UHCReloaded.modules.gameplay.killerRabbit;
 
 import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
@@ -39,34 +39,42 @@ import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Rabbit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+
+import java.util.Random;
+
 
 @ModuleInfo (
-        name = "No Witches",
-        description = "Prevents witches from spawning, either naturally, from lightning strike on a villager, or both.",
+        name = "Killer Rabbit",
+        description = "Brings back the Killer Rabbit of Cærbannog into the game. Beware, it bites.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.GAMEPLAY,
-        icon = Material.POTION,
+        icon = Material.RABBIT_FOOT,
         settings = Config.class
 )
-public class NoWitchesModule extends UHModule
+public class KillerRabbitModule extends UHModule
 {
-    @EventHandler
-    public void onCreatureSpawn(CreatureSpawnEvent ev)
-    {
-        if (ev.getEntityType().equals(EntityType.WITCH))
-        {
-            if (Config.DISABLE_NATURAL_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.NATURAL))
-            {
-                ev.setCancelled(true);
-            }
+    private final Random random = new Random();
 
-            if (Config.DISABLE_LIGHTNING_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.LIGHTNING))
-            {
-                ev.setCancelled(true);
-            }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onRabbitSpawn(final CreatureSpawnEvent ev)
+    {
+        if (ev.getEntity().getType() != EntityType.RABBIT)
+            return;
+
+        if (random.nextDouble() >= Config.SPAWN_PROBABILITY.get())
+            return;
+
+        final Rabbit rabbit = (Rabbit) ev.getEntity();
+        rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
+
+        if (!Config.NAME.get().isEmpty())
+        {
+            rabbit.setCustomName(Config.NAME.get());
+            rabbit.setCustomNameVisible(true);
         }
     }
 }

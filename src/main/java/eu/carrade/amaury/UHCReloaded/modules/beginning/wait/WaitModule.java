@@ -40,6 +40,7 @@ import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
+import eu.carrade.amaury.UHCReloaded.utils.EntitiesUtils;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiUtils;
@@ -59,6 +60,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -268,6 +270,23 @@ public class WaitModule extends UHModule
             {
                 ev.setCancelled(true);
             }
+        }
+    }
+
+    /**
+     * Used to cancel the spawn of the creatures if the game is not started.
+     * <p>
+     * We don't use the peaceful difficulty for that because it causes bugs with Minecraft 1.8
+     * (the difficulty is not correctly updated client-side when the game starts).
+     */
+    @EventHandler
+    public void onCreatureSpawn(CreatureSpawnEvent ev)
+    {
+        if (!isGameStarted()
+                && EntitiesUtils.isNaturalSpawn(ev.getSpawnReason())
+                && EntitiesUtils.isHostile(ev.getEntityType()))
+        {
+            ev.setCancelled(true);
         }
     }
 
