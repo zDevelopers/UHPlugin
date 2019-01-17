@@ -35,6 +35,7 @@ package eu.carrade.amaury.UHCReloaded.modules.border.walls;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.modules.border.walls.exceptions.CannotGenerateWallsException;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.CommandException;
 import fr.zcraft.zlib.components.commands.CommandInfo;
@@ -69,7 +70,7 @@ public class WallsCommand extends Command
 
         try
         {
-            UHCReloaded.getModule(WallsModule.class).generateWalls(world);
+            UR.module(WallsModule.class).generateWalls(world);
         }
         catch (CannotGenerateWallsException e)
         {

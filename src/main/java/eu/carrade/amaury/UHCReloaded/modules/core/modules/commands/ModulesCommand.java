@@ -67,7 +67,7 @@ public class ModulesCommand extends Command
             return module1.getName().compareTo(module2.getName());
         });
 
-        modules.addAll(UHCReloaded.get().getModules());
+        modules.addAll(UHCReloaded.get().getModulesManager().getModules());
 
         success(I.tn("{0} module registered {gray}(hover for details)", "{0} modules registered {gray}(hover for details)", modules.size()));
         modules.forEach(module -> {

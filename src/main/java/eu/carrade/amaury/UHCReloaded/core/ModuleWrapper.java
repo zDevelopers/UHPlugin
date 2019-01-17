@@ -223,7 +223,7 @@ public class ModuleWrapper
             {
                 Bukkit.getPluginManager().callEvent(new ModuleEnabledEvent(this));
 
-                if (UR.get().isLoaded(when))
+                if (UR.get().getModulesManager().isLoaded(when))
                 {
                     return load(true);
                 }
@@ -244,7 +244,7 @@ public class ModuleWrapper
      */
     public boolean canBeEnabled()
     {
-        return canBeLoadedLate || !UR.get().isLoaded(when);
+        return canBeLoadedLate || !UR.get().getModulesManager().isLoaded(when);
     }
 
     /**

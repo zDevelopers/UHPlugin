@@ -33,7 +33,6 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.border.walls;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
@@ -42,6 +41,7 @@ import eu.carrade.amaury.UHCReloaded.modules.border.walls.exceptions.CannotGener
 import eu.carrade.amaury.UHCReloaded.modules.border.walls.exceptions.UnknownWallGenerator;
 import eu.carrade.amaury.UHCReloaded.modules.border.walls.generators.WallGenerator;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -65,7 +65,7 @@ public class WallsModule extends UHModule
     @Override
     protected void onEnable()
     {
-        borderModule = UHCReloaded.getModule(BorderModule.class);
+        borderModule = UR.module(BorderModule.class);
     }
 
     @Override

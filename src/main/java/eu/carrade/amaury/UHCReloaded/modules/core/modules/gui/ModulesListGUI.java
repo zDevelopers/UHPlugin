@@ -73,7 +73,7 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper>
         setMode(Mode.READONLY);
         setKeepHorizontalScrollingSpace(true);
 
-        final ModuleWrapper[] modules = UR.get().getModules().stream()
+        final ModuleWrapper[] modules = UR.get().getModulesManager().getModules().stream()
             .filter(module -> filterCategory == null || module.getCategory() == filterCategory)
             .sorted((module1, module2) -> {
                 if (module1.equals(module2)) return 0;
@@ -95,11 +95,11 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper>
         // Sets the title
         if (filterCategory == null)
         {
-            setTitle(I.t("{black}All modules {darkgray}({0})", UR.get().getModules().size()));
+            setTitle(I.t("{black}All modules {darkgray}({0})", UR.get().getModulesManager().getModules().size()));
         }
         else
         {
-            setTitle(ChatColor.BLACK + filterCategory.getDisplayName() + ChatColor.DARK_GRAY + String.format(" (%d / %d)", modules.length, UR.get().getModules().size()));
+            setTitle(ChatColor.BLACK + filterCategory.getDisplayName() + ChatColor.DARK_GRAY + String.format(" (%d / %d)", modules.length, UR.get().getModulesManager().getModules().size()));
         }
 
         // Displays the bottom bar of color

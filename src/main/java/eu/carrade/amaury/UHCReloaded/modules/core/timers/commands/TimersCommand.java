@@ -31,10 +31,10 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.timers.commands;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.CommandException;
@@ -54,7 +54,7 @@ import java.util.Collection;
 @WithFlags
 public class TimersCommand extends Command
 {
-    private final TimersModule timersModule = UHCReloaded.getModule(TimersModule.class);
+    private final TimersModule timersModule = UR.module(TimersModule.class);
 
     @Override
     protected void run() throws CommandException
@@ -354,7 +354,7 @@ public class TimersCommand extends Command
         try
         {
             final String timerName = UHUtils.getStringFromCommandArguments(args, index);
-            final Timer timer = UHCReloaded.getModule(TimersModule.class).getTimer(timerName);
+            final Timer timer = timersModule.getTimer(timerName);
 
             if (timer == null)
                 throwInvalidArgument(I.t("{ce}This timer is not registered.", timerName));

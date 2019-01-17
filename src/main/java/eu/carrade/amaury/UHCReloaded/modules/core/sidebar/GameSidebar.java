@@ -53,7 +53,7 @@ public class GameSidebar extends Sidebar
     @Override
     public void preRender()
     {
-        UHCReloaded.get().getModules().stream()
+        UHCReloaded.get().getModulesManager().getModules().stream()
                 .filter(ModuleWrapper::isLoaded)
                 .map(ModuleWrapper::get)
                 .forEach(UHModule::prepareInjectionIntoSidebar);
@@ -64,7 +64,7 @@ public class GameSidebar extends Sidebar
     {
         final SidebarInjector injector = new SidebarInjector();
 
-        UHCReloaded.get().getModules().stream()
+        UHCReloaded.get().getModulesManager().getModules().stream()
                 .filter(ModuleWrapper::isLoaded)
                 .map(ModuleWrapper::get)
                 .forEach(module -> module.injectIntoSidebar(player, injector));

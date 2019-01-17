@@ -64,7 +64,7 @@ public class ModuleCommand extends Command
 
         ModuleWrapper module = null;
 
-        for (final ModuleWrapper m : UR.get().getModules())
+        for (final ModuleWrapper m : UR.get().getModulesManager().getModules())
         {
             if (getModuleKey(m).equalsIgnoreCase(args[1]))
             {
@@ -124,7 +124,7 @@ public class ModuleCommand extends Command
     protected List<String> complete()
     {
         if (args.length == 1) return getMatchingSubset(args[0], "enable", "disable");
-        else if (args.length == 2) return getMatchingSubset(UR.get().getModules().stream().filter(module -> args[0].equalsIgnoreCase("enable") != module.isEnabled()).map(this::getModuleKey).collect(Collectors.toSet()), args[1]);
+        else if (args.length == 2) return getMatchingSubset(UR.get().getModulesManager().getModules().stream().filter(module -> args[0].equalsIgnoreCase("enable") != module.isEnabled()).map(this::getModuleKey).collect(Collectors.toSet()), args[1]);
         else return null;
     }
 

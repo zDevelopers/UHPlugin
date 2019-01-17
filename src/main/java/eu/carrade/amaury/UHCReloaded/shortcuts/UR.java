@@ -36,6 +36,7 @@ package eu.carrade.amaury.UHCReloaded.shortcuts;
 import com.google.common.reflect.ClassPath;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.core.ModuleLogger;
+import eu.carrade.amaury.UHCReloaded.core.ModulesManager;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.reflection.Reflection;
@@ -74,7 +75,7 @@ public final class UR
      */
     public static <M extends UHModule> M module(final Class<M> moduleClass)
     {
-        return UHCReloaded.getModule(moduleClass);
+        return ModulesManager.getModule(moduleClass);
     }
 
     /**

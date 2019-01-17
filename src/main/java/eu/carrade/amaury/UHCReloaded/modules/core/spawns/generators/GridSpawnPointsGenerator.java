@@ -31,10 +31,10 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.spawns.generators;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.MapShape;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.exceptions.CannotGenerateSpawnPointsException;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -48,7 +48,7 @@ import java.util.Set;
 
 public class GridSpawnPointsGenerator implements SpawnPointsGenerator
 {
-    private final BorderModule borderModule = UHCReloaded.getModule(BorderModule.class);
+    private final BorderModule borderModule = UR.module(BorderModule.class);
 
     /**
      * Generates spawn points in a grid.
