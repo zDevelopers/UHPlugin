@@ -70,6 +70,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -130,6 +131,7 @@ public class ReportsModule extends UHModule
      */
     private BukkitTask waitAfterEndTask = null;
     private TimeDelta waitAfterEndDelay = new TimeDelta(30);
+    private boolean waitingfterEnd = false;
 
 
     @Override
@@ -245,8 +247,12 @@ public class ReportsModule extends UHModule
             final ZTeam winner = game.getWinner();
             if (winner != null) report.setWinners(winner.getPlayers());
 
+            waitingfterEnd = true;
+
             waitAfterEndTask = RunTask.later(() ->
             {
+                waitingfterEnd = false;
+
                 report.autoTrack(false);
 
                 report.save(
@@ -335,6 +341,8 @@ public class ReportsModule extends UHModule
             report.resetWinners();
             report.autoTrack(true);
 
+            waitingfterEnd = false;
+
             if (waitAfterEndTask != null)
             {
                 waitAfterEndTask.cancel();
@@ -359,6 +367,25 @@ public class ReportsModule extends UHModule
                             : null,
                     ev.getPlayer()
             ));
+    }
+
+    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerDeath(final PlayerDeathEvent ev)
+    {
+        // Recording cross-kills and other deaths after the game end (i.e. from fire)
+        // during a 30-seconds period.
+
+        if (!waitingfterEnd) return;
+
+        report
+                .untrackPlayer(ev.getEntity())
+                .record(ReportEvent.withPlayer(
+                        ReportEvent.EventType.GOLD,
+                        /// Title of the death event on the game report's timeline.
+                        I.t("Death of {0}", ev.getEntity().getName()),
+                        !ev.getDeathMessage().isEmpty() ? ev.getDeathMessage() : null,
+                        ev.getEntity()
+                ));
     }
 
     @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -450,6 +477,16 @@ public class ReportsModule extends UHModule
             ));
 
             firstGold = true;
+        }
+
+        else if (!firstApple && item == Material.APPLE)
+        {
+            report.record(ReportEvent.withIcon(
+                    I.t("{0} harvested the first apple", player.getName()),
+                    ""
+            ));
+
+            firstApple = true;
         }
     }
 

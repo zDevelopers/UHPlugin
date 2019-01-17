@@ -68,7 +68,7 @@ public class WeatherModule extends UHModule
     }
 
     @Override
-    public void onEnableLate()
+    public void onLateEnable()
     {
         UR.get().getWorlds().forEach(world -> world.setStorm(Config.INITIAL_WEATHER.get() == WeatherType.DOWNFALL));
     }
@@ -78,7 +78,7 @@ public class WeatherModule extends UHModule
     {
         if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward())
         {
-            onEnableLate();
+            onLateEnable();
         }
     }
 

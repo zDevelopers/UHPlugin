@@ -35,9 +35,7 @@ package eu.carrade.amaury.UHCReloaded.old.listeners;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.old.task.CancelBrewTask;
-import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.runners.RunTask;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -49,15 +47,11 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,95 +166,6 @@ public class GameplayListener implements Listener
             if (UHConfig.GAMEPLAY_CHANGES.WITCH.DISABLE_LIGHTNING_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.LIGHTNING))
             {
                 ev.setCancelled(true);
-            }
-        }
-    }
-
-
-    /**
-     * Used to change the amount of regenerated hearts from a golden apple.
-     */
-    @EventHandler
-    public void onPlayerItemConsume(final PlayerItemConsumeEvent ev)
-    {
-        final int TICKS_BETWEEN_EACH_REGENERATION = 50;
-        final int DEFAULT_NUMBER_OF_HEARTS_REGEN = 4;
-        final int DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH = 180;
-        final int REGENERATION_LEVEL_GOLDEN_APPLE = 2;
-        final int REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE = 5;
-
-        if (ev.getItem().getType() == Material.GOLDEN_APPLE)
-        {
-            ItemMeta meta = ev.getItem().getItemMeta();
-            short dataValue = ev.getItem().getDurability();
-            int halfHearts;
-            int level;
-
-            if (meta.hasDisplayName()
-                    && (meta.getDisplayName().equals(ChatColor.RESET + I.t("{aqua}Golden head"))
-                    || meta.getDisplayName().equals(ChatColor.RESET + I.t("{lightpurple}Golden head"))))
-            {
-                // Normal golden apple from a head
-                if (dataValue == 0)
-                {
-                    halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.FROM_NORMAL_HEAD.get();
-                    level = REGENERATION_LEVEL_GOLDEN_APPLE;
-                }
-                // Notch golden apple from a head
-                else
-                {
-                    halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.FROM_NOTCH_HEAD.get();
-                    level = REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
-                }
-            }
-            // Normal golden apple from an apple
-            else if (dataValue == 0)
-            {
-                halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.NORMAL.get();
-                level = REGENERATION_LEVEL_GOLDEN_APPLE;
-            }
-            // Notch golden apple from an apple
-            else
-            {
-                halfHearts = UHConfig.GAMEPLAY_CHANGES.GOLDEN_APPLE.REGENERATION.NOTCH.get();
-                level = REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
-            }
-
-            // Technically, a level-I effect is « level 0 ».
-            final int realLevel = level - 1;
-
-
-            // What is needed to do?
-            if ((dataValue == 0 && halfHearts == DEFAULT_NUMBER_OF_HEARTS_REGEN)
-                    || (dataValue == 1 && halfHearts == DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH))
-            {
-                // Default behavior, nothing to do.
-            }
-            else if ((dataValue == 0 && halfHearts > DEFAULT_NUMBER_OF_HEARTS_REGEN)
-                    || (dataValue == 1 && halfHearts > DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH))
-            {
-                // If the heal needs to be increased, the effect can be applied immediately.
-
-                int duration = ((int) Math.floor(TICKS_BETWEEN_EACH_REGENERATION / (Math.pow(2, realLevel)))) * halfHearts;
-
-                new PotionEffect(PotionEffectType.REGENERATION, duration, realLevel).apply(ev.getPlayer());
-            }
-            else
-            {
-                // The heal needs to be decreased.
-                // We can't apply the effect immediately, because the server will just ignore it.
-                // So, we apply it two ticks later, with one half-heart less (because in two ticks,
-                // one half-heart is given to the player).
-                final int healthApplied = halfHearts - 1;
-
-                RunTask.later(() ->
-                {
-                    // The original, vanilla, effect is removed
-                    ev.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
-
-                    int duration = ((int) Math.floor(TICKS_BETWEEN_EACH_REGENERATION / (Math.pow(2, realLevel)))) * healthApplied;
-                    new PotionEffect(PotionEffectType.REGENERATION, duration, realLevel).apply(ev.getPlayer());
-                }, 2L);
             }
         }
     }

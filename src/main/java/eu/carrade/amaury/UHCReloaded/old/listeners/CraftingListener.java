@@ -35,21 +35,14 @@ package eu.carrade.amaury.UHCReloaded.old.listeners;
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.old.protips.ProTips;
 import eu.carrade.amaury.UHCReloaded.old.recipes.RecipesManager;
-import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.runners.RunTask;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 
 
 public class CraftingListener implements Listener
@@ -141,158 +134,5 @@ public class CraftingListener implements Listener
             ev.getInventory().setResult(keepNameResult);
             return;
         }
-    }
-
-
-    /**
-     *   - Workaround to fix the crafting grid being not updated when the item is taken
-     *     from the grid.
-     *     <p>
-     *   - Prevents an apple to be renamed to/from the name of an head apple.
-     *
-     *     (In vanilla clients, it is not possible to rename an apple to that name because of the
-     *     ChatColor.RESET before, but some modded clients allows the player to write §r.)
-     *
-     *     (Thanks to Zelnehlun on BukkitDev.)
-     *     <p>
-     *   - Crafts the special compass (“semi-shapeless” recipe).
-     */
-    @EventHandler (ignoreCancelled = true)
-    public void onInventoryClick(final InventoryClickEvent ev)
-    {
-        // Just in case
-        if (ev.getWhoClicked() instanceof Player)
-        {
-            final Inventory inventory = ev.getInventory();
-
-
-            /* *** Prevent an apple to be renamed to/from the name of an head apple. *** */
-
-            if (inventory instanceof AnvilInventory)
-            {
-                InventoryView view = ev.getView();
-                int rawSlot = ev.getRawSlot();
-
-                // ensure we are talking about the upper inventory
-                if (rawSlot == view.convertSlot(rawSlot))
-                {
-                    // "result" slot
-                    if (rawSlot == 2)
-                    {
-                        ItemStack item = ev.getCurrentItem();
-
-                        // result slot non empty
-                        if (item != null)
-                        {
-                            final ItemMeta meta = item.getItemMeta();
-
-                            final Set<String> prohibited = new HashSet<>();
-
-                            prohibited.add(I.t("Golden head"));
-                            prohibited.add(ChatColor.RESET + I.t("{aqua}Golden head"));
-                            prohibited.add(ChatColor.RESET + I.t("{lightpurple}Golden head"));
-
-                            // It is possible that the client filters the name of the golden apple in the anvil UI,
-                            // removing all §.
-                            new HashSet<>(prohibited).stream()
-                                    .map(prohibition -> prohibition.replace("§", ""))
-                                    .forEach(prohibited::add);
-
-
-                            // An item can't be renamed to the name of a golden head
-                            if (meta != null && meta.hasDisplayName())
-                            {
-                                if (prohibited.contains(meta.getDisplayName()))
-                                {
-                                    ev.setCancelled(true); // nope nope nope
-                                }
-                            }
-
-                            // A golden head can't be renamed to any other name
-                            if (view.getItem(0) != null) // slot 0 = first slot
-                            {
-                                ItemMeta metaOriginal = view.getItem(0).getItemMeta();
-
-                                if (metaOriginal != null && metaOriginal.hasDisplayName())
-                                {
-                                    if (prohibited.contains(metaOriginal.getDisplayName()))
-                                    {
-                                        ev.setCancelled(true);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Used to craft the special compass (“semi-shapeless” recipe).
-     */
-    @EventHandler (ignoreCancelled = true)
-    public void onInventoryDrag(final InventoryDragEvent ev)
-    {
-        if (ev.getInventory() instanceof CraftingInventory)
-        {
-            RunTask.later(() ->
-            {
-                if (p.getRecipesManager().isValidCompassRecipe(((CraftingInventory) ev.getInventory()).getMatrix()))
-                {
-                    ((CraftingInventory) ev.getInventory()).setResult(new ItemStack(Material.COMPASS));
-                    ((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
-                }
-            }, 1L);
-        }
-    }
-
-
-    /**
-     * Adds the team banner on crafted shields.
-     *
-     * Done indirectly because the plugin must be able to run
-     * on Minecraft 1.8.
-     */
-    @EventHandler (ignoreCancelled = true)
-    public void onShieldPreCraft(PrepareItemCraftEvent ev)
-    {
-//        if (!UHConfig.TEAMS_OPTIONS.BANNER.SHIELDS.ADD_ON_SHIELDS.get()) return;
-//
-//        final Player player = (Player) ev.getViewers().get(0);
-//        final UHTeam team = UHCReloaded.get().getTeamManager().getTeamForPlayer(player);
-//
-//        if (team == null || team.getBanner() == null) return;
-//
-//        final ItemStack result = ev.getRecipe().getResult();
-//
-//        final Material MATERIAL_SHIELD = Material.getMaterial("SHIELD");
-//        if (MATERIAL_SHIELD == null) return; // MC 1.8
-//
-//        if (result != null && result.getType() == MATERIAL_SHIELD)
-//        {
-//            try
-//            {
-//                final BannerMeta banner = (BannerMeta) team.getBanner().getItemMeta();
-//
-//                final BlockStateMeta bsMeta = (BlockStateMeta) result.getItemMeta();
-//                final Banner shieldBanner   = (Banner) bsMeta.getBlockState();
-//
-//                shieldBanner.setBaseColor(banner.getBaseColor());
-//                shieldBanner.setPatterns(banner.getPatterns());
-//
-//                shieldBanner.update();
-//
-//                bsMeta.setBlockState(shieldBanner);
-//                result.setItemMeta(bsMeta);
-//
-//                ev.getInventory().setResult(result);
-//            }
-//            catch (ClassCastException | NullPointerException ignored)
-//            {
-//                // Bad Minecraft version (1.8)
-//            }
-//        }
     }
 }

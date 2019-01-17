@@ -29,7 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.recipes;
+package eu.carrade.amaury.UHCReloaded.utils;
 
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -50,14 +50,8 @@ import java.util.Map;
  * @version R1.3
  * @author Digi
  */
-public class RecipeUtil
+public class RecipesUtils
 {
-    /**
-     * The wildcard data value for ingredients.<br>
-     * If this is used as data value on an ingredient it will accept any data value.
-     */
-    public static final short DATA_WILDCARD = Short.MAX_VALUE;
-
     /**
      * Checks if both recipes are equal.<br>
      * Compares both ingredients and results.<br>

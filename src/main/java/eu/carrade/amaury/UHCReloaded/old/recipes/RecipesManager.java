@@ -34,6 +34,7 @@ package eu.carrade.amaury.UHCReloaded.old.recipes;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
+import eu.carrade.amaury.UHCReloaded.utils.RecipesUtils;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.ChatColor;
@@ -132,14 +133,14 @@ public class RecipesManager
     public boolean isRecipeAllowed(Recipe recipe)
     {
         // Vanilla compass recipe is disabled if the special compass is used.
-        if (UHConfig.GAMEPLAY_CHANGES.COMPASS.ENABLED.get() && RecipeUtil.areSimilar(recipe, getVanillaCompassRecipe()))
+        if (UHConfig.GAMEPLAY_CHANGES.COMPASS.ENABLED.get() && RecipesUtils.areSimilar(recipe, getVanillaCompassRecipe()))
         {
             this.lastFailedRecipe = RECIPE_COMPASS;
             return false;
         }
 
         // Vanilla golden melon recipe is disabled if the craft with a gold block is enabled.
-        if (UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_MELON_WITH_GOLD_BLOCK.get() && RecipeUtil.areSimilar(recipe, getVanillaGoldenMelonRecipe()))
+        if (UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_MELON_WITH_GOLD_BLOCK.get() && RecipesUtils.areSimilar(recipe, getVanillaGoldenMelonRecipe()))
         {
             this.lastFailedRecipe = RECIPE_GLISTERING_MELON;
             return false;
@@ -151,7 +152,7 @@ public class RecipesManager
         {
             if (recipe.getResult().getType() == Material.GOLDEN_APPLE)
             {
-                for (ItemStack item : RecipeUtil.getListOfIngredients(recipe))
+                for (ItemStack item : RecipesUtils.getListOfIngredients(recipe))
                 {
                     if (item.getType() == Material.GOLD_BLOCK)
                     {
@@ -247,7 +248,7 @@ public class RecipesManager
     {
         if ((UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.DO.get() || UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.DO.get())
                 && (UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.ADD_LORE.get() || UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.ADD_LORE.get())
-                && (RecipeUtil.areSimilar(recipe, getGoldenHeadHumanRecipe()) || RecipeUtil.areSimilar(recipe, getGoldenHeadMonsterRecipe())))
+                && (RecipesUtils.areSimilar(recipe, getGoldenHeadHumanRecipe()) || RecipesUtils.areSimilar(recipe, getGoldenHeadMonsterRecipe())))
         {
             ItemStack result = recipe.getResult();
             ItemMeta meta = result.getItemMeta();
@@ -304,7 +305,7 @@ public class RecipesManager
     public ItemStack keepNameOnLoreRemover(Recipe recipe, CraftingInventory inventory)
     {
         if ((UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_HUMAN.ADD_LORE.get() || UHConfig.GAMEPLAY_CHANGES.CRAFT_GOLDEN_APPLE_FROM_HEAD.FROM_WITHER.ADD_LORE.get())
-                && (RecipeUtil.areSimilar(recipe, getLoreRemoverNormalRecipe()) || RecipeUtil.areSimilar(recipe, getLoreRemoverNotchRecipe())))
+                && (RecipesUtils.areSimilar(recipe, getLoreRemoverNormalRecipe()) || RecipesUtils.areSimilar(recipe, getLoreRemoverNotchRecipe())))
         {
 
             ItemStack original = null;

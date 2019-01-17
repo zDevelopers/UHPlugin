@@ -41,6 +41,7 @@ modules:
     "ingame-kick": false
 
     "gameplay-compass": true
+    "gameplay-goldenHeads": true
 
     "cosmetics-hardcoreHearts": true
     "cosmetics-motd": true

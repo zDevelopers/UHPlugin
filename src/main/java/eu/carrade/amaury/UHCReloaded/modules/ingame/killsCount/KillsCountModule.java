@@ -78,7 +78,7 @@ public class KillsCountModule extends UHModule
     {
         if (ev.getPlayer().isOnline() && ev.getPlayer().getPlayer().getKiller() != null)
         {
-            getKillsFor(ev.getPlayer().getUniqueId()).add(ev.getPlayer().getPlayer().getKiller().getUniqueId());
+            getKillsFor(ev.getPlayer().getPlayer().getKiller().getUniqueId()).add(ev.getPlayer().getUniqueId());
         }
     }
 

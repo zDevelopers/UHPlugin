@@ -168,7 +168,7 @@ public class ModuleWrapper
 
         Bukkit.getPluginManager().callEvent(new ModuleLoadedEvent(this, late));
 
-        if (late) instance.onEnableLate();
+        if (late) instance.onLateEnable();
 
         return true;
     }

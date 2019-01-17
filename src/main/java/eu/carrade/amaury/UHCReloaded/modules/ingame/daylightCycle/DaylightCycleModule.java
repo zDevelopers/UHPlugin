@@ -76,7 +76,7 @@ public class DaylightCycleModule extends UHModule
     }
 
     @Override
-    public void onEnableLate()
+    public void onLateEnable()
     {
         if (UR.module(GameModule.class).currentPhaseAfter(GamePhase.STARTING))
         {
