@@ -36,25 +36,14 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.old.task.CancelBrewTask;
 import fr.zcraft.zlib.tools.runners.RunTask;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Ghast;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.BrewerInventory;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class GameplayListener implements Listener
@@ -64,46 +53,6 @@ public class GameplayListener implements Listener
     public GameplayListener()
     {
         this.p = UHCReloaded.get();
-    }
-
-
-    /**
-     * Used to replace ghast tears with gold (if needed).
-     */
-    @EventHandler (ignoreCancelled = true)
-    public void onEntityDeath(EntityDeathEvent ev)
-    {
-        if (ev.getEntity() instanceof Ghast && UHConfig.GAMEPLAY_CHANGES.REPLACE_GHAST_TEARS_WITH_GOLD.get())
-        {
-            final List<ItemStack> drops = new ArrayList<ItemStack>(ev.getDrops());
-            ev.getDrops().clear();
-
-            for (final ItemStack i : drops)
-            {
-                if (i.getType() == Material.GHAST_TEAR)
-                {
-                    ev.getDrops().add(new ItemStack(Material.GOLD_INGOT, i.getAmount()));
-                }
-                else
-                {
-                    ev.getDrops().add(i);
-                }
-            }
-        }
-    }
-
-    /**
-     * Used to prevent the user to get a ghast tear, if forbidden by the config.
-     */
-    @EventHandler (ignoreCancelled = true)
-    public void onPlayerPickupItem(PlayerPickupItemEvent ev)
-    {
-        if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR
-                && ev.getPlayer().getGameMode().equals(GameMode.SURVIVAL)
-                && UHConfig.GAMEPLAY_CHANGES.REPLACE_GHAST_TEARS_WITH_GOLD.get())
-        {
-            ev.setCancelled(true);
-        }
     }
 
 
@@ -128,25 +77,6 @@ public class GameplayListener implements Listener
         if (UHConfig.GAMEPLAY_CHANGES.DISABLE_LEVEL_II_POTIONS.get() && ev.getInventory() instanceof BrewerInventory)
         {
            RunTask.later(new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()), 1L);
-        }
-    }
-
-
-    /**
-     * Used to disable ender pearl damages (if needed).
-     */
-    @EventHandler (ignoreCancelled = true)
-    public void onPlayerTeleport(final PlayerTeleportEvent ev)
-    {
-        if (UHConfig.GAMEPLAY_CHANGES.DISABLE_ENDERPEARLS_DAMAGES.get())
-        {
-            if (ev.getCause() == TeleportCause.ENDER_PEARL)
-            {
-                ev.setCancelled(true);
-                ev.getPlayer().teleport(ev.getTo(), TeleportCause.PLUGIN); // Technically its an ender pearl teleportation, but
-                                                                           // if we use that, an infinite loop will occur due to
-                                                                           // the event being re-captured and re-emitted.
-            }
         }
     }
 
