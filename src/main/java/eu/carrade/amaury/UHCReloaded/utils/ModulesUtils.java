@@ -31,6 +31,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.utils;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Arrays;
@@ -53,15 +54,18 @@ public class ModulesUtils
     public static <T> Class<? extends T> getClassFromName(final String name, final String optionalPackage, final String optionalSuffix, final Class<T> superClass)
     {
         final String alternateName;
+        final String alternativePackage;
 
         if (name.contains("."))
         {
             final String[] lastClassPathParts = name.split("\\.");
             alternateName = lastClassPathParts[lastClassPathParts.length - 1];
+            alternativePackage = String.join(".", (String[]) ArrayUtils.remove(lastClassPathParts, lastClassPathParts.length - 1));
         }
         else
         {
             alternateName = name;
+            alternativePackage = "";
         }
 
         final List<String> possibilities = Arrays.asList(
@@ -72,6 +76,7 @@ public class ModulesUtils
                 optionalPackage + "." + StringUtils.capitalize(name.toLowerCase()),
                 optionalPackage + "." + StringUtils.capitalize(name.toLowerCase()) + optionalSuffix,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + name,
+                optionalPackage + "." + StringUtils.uncapitalize(name) + "." + name,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + name + optionalSuffix,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(name),
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(name) + optionalSuffix,
@@ -80,6 +85,15 @@ public class ModulesUtils
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(alternateName),
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(alternateName) + optionalSuffix,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + optionalSuffix,
+                optionalPackage + "." + alternativePackage + "." + name,
+                optionalPackage + "." + alternativePackage + "." + name + optionalSuffix,
+                optionalPackage + "." + alternativePackage + "." + StringUtils.capitalize(name),
+                optionalPackage + "." + alternativePackage + "." + StringUtils.capitalize(name) + optionalSuffix,
+                optionalPackage + "." + alternativePackage + "." + alternateName,
+                optionalPackage + "." + alternativePackage + "." + alternateName + optionalSuffix,
+                optionalPackage + "." + alternativePackage + "." + StringUtils.capitalize(alternateName),
+                optionalPackage + "." + alternativePackage + "." + StringUtils.capitalize(alternateName) + optionalSuffix,
+                optionalPackage + "." + alternativePackage + "." + optionalSuffix,
                 name
         );
 
