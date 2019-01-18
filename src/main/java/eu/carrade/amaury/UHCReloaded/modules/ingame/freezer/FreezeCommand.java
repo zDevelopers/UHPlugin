@@ -29,18 +29,19 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.commands.commands.uh;
+package eu.carrade.amaury.UHCReloaded.modules.ingame.freezer;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
+import fr.zcraft.zlib.components.commands.Command;
+import fr.zcraft.zlib.components.commands.CommandException;
+import fr.zcraft.zlib.components.commands.CommandInfo;
 import fr.zcraft.zlib.components.i18n.I;
-import org.bukkit.command.CommandSender;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This command freezes the players.
@@ -52,23 +53,23 @@ import java.util.List;
  *  - none: unfreezes all the alive players (even if there where frozen before using
  *          /uh freeze all), the mobs and the timer.
  */
-public class UHFreezeCommand// extends AbstractCommand
+@CommandInfo (name = "freeze", usageParameters = "<on|off|all|none> [target]")
+public class FreezeCommand extends Command
 {
-    private UHCReloaded p;
-
-    public UHFreezeCommand(UHCReloaded plugin)
-    {
-        p = plugin;
-    }
-
-    public void run(CommandSender sender, String[] args)// throws CannotExecuteCommandException
+    @Override
+    public void run() throws CommandException
     {
         if (args.length == 0)
         {
-            //throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
+            info(I.t("{aqua}------ Freeze commands ------"));
+            info(I.t("{cc}/uh freeze on [player]{ci}: freezes a player, or the sender without a specified player."));
+            info(I.t("{cc}/uh freeze off [player]{ci}: unfreezes a player (or the sender), even if the entire game is frozen."));
+            info(I.t("{cc}/uh freeze all{ci}: freezes the entire game (players, mobs, timer)."));
+            info(I.t("{cc}/uh freeze none{ci}: unfreezes the entire game. You NEED to execute this in order to relaunch the timer."));
+            return;
         }
 
-        String subCommand = args[0];
+        final String subCommand = args[0];
 
         if (subCommand.equalsIgnoreCase("on") || subCommand.equalsIgnoreCase("off"))
         {
@@ -77,45 +78,40 @@ public class UHFreezeCommand// extends AbstractCommand
             // /uh freeze on: freezes the sender
             if (args.length == 1)
             {
-                if (sender instanceof Player)
-                {
-                    p.getFreezer().setPlayerFreezeState((Player) sender, on);
+                UR.module(FreezerModule.class).setPlayerFreezeState(playerSender(), on);
 
-                    if (on)
-                    {
-                        sender.sendMessage(I.t("{cst}You where frozen by {0}.", sender.getName()));
-                    }
-                    else
-                    {
-                        sender.sendMessage(I.t("{cst}You where unfrozen by {0}.", sender.getName()));
-                    }
+                if (on)
+                {
+                    info(I.t("{cst}You where frozen by {0}.", sender.getName()));
                 }
                 else
                 {
-                    //throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
+                    info(I.t("{cst}You where unfrozen by {0}.", sender.getName()));
                 }
             }
 
             // /uh freeze on <player>: freezes <player>.
             else if (args.length == 2)
             {
-                Player player = p.getServer().getPlayer(args[1]);
+                final Player player = getPlayerParameter(1);
+
                 if (player == null)
                 {
-                    sender.sendMessage(I.t("{ce}{0} is offline!", args[1]));
+                    error(I.t("{ce}{0} is offline!", args[1]));
                 }
                 else
                 {
-                    p.getFreezer().setPlayerFreezeState(player, on);
+                    UR.module(FreezerModule.class).setPlayerFreezeState(player, on);
+
                     if (on)
                     {
                         player.sendMessage(I.t("{cst}You where frozen by {0}.", sender.getName()));
-                        sender.sendMessage(I.t("{cs}{0} is now frozen.", player.getName()));
+                        success(I.t("{cs}{0} is now frozen.", player.getName()));
                     }
                     else
                     {
                         player.sendMessage(I.t("{cst}You where unfrozen by {0}.", sender.getName()));
-                        sender.sendMessage(I.t("{cs}{0} is now unfrozen.", player.getName()));
+                        success(I.t("{cs}{0} is now unfrozen.", player.getName()));
                     }
                 }
             }
@@ -125,62 +121,54 @@ public class UHFreezeCommand// extends AbstractCommand
         {
             final boolean on = subCommand.equalsIgnoreCase("all");
 
-            p.getFreezer().setGlobalFreezeState(on);
+            UR.module(FreezerModule.class).setGlobalFreezeState(on);
 
+            Bukkit.broadcastMessage("");
             if (on)
             {
-                p.getServer().broadcastMessage(I.t("{darkaqua}The entire game is now frozen."));
+                Bukkit.broadcastMessage(I.t("{darkaqua}The entire game is now frozen."));
             }
             else
             {
-                p.getServer().broadcastMessage(I.t("{darkaqua}The game is now unfrozen."));
+                Bukkit.broadcastMessage(I.t("{darkaqua}The game is now unfrozen."));
             }
-
+            Bukkit.broadcastMessage("");
         }
     }
 
-    public List<String> tabComplete(CommandSender sender, String[] args)
+    @Override
+    public List<String> complete()
     {
         if (args.length == 1)
         {
-            return CommandUtils.getAutocompleteSuggestions(
-                    args[0], Arrays.asList("on", "off", "all", "none")
-            );
+            return getMatchingSubset(args[0], "on", "off", "all", "none");
         }
 
         else if (args.length == 2)
         {
             if (args[0].equalsIgnoreCase("off"))
             {
-                List<String> suggestions = new ArrayList<>();
+                return getMatchingSubset(
+                        UR.module(FreezerModule.class).getFrozenPlayers().stream()
+                                .map(OfflinePlayer::getName)
+                                .collect(Collectors.toSet()),
+                        args[1]);
+            }
 
-                for (Player player : p.getFreezer().getFrozenPlayers())
-                {
-                    suggestions.add(player.getName());
-                }
-
-                return CommandUtils.getAutocompleteSuggestions(args[1], suggestions);
+            else if (args[0].equalsIgnoreCase("on"))
+            {
+                return getMatchingSubset(
+                        UR.game().getAlivePlayers().stream()
+                                .filter(player -> !UR.module(FreezerModule.class).isPlayerFrozen(player))
+                                .map(OfflinePlayer::getName)
+                                .collect(Collectors.toSet()),
+                        args[1]
+                );
             }
 
             else return null;
         }
 
         else return null;
-    }
-
-    public List<String> help(CommandSender sender)
-    {
-        return Arrays.asList(
-                I.t("{aqua}------ Freeze commands ------"),
-                I.t("{cc}/uh freeze on [player]{ci}: freezes a player, or the sender without a specified player."),
-                I.t("{cc}/uh freeze off [player]{ci}: unfreezes a player (or the sender), even if the entire game is frozen."),
-                I.t("{cc}/uh freeze all{ci}: freezes the entire game (players, mobs, timer)."),
-                I.t("{cc}/uh freeze none{ci}: unfreezes the entire game. You NEED to execute this in order to relaunch the timer.")
-        );
-    }
-
-    public List<String> onListHelp(CommandSender sender)
-    {
-        return Collections.singletonList(I.t("{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."));
     }
 }

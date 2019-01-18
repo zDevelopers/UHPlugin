@@ -38,6 +38,7 @@ import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.core.ModuleLogger;
 import eu.carrade.amaury.UHCReloaded.core.ModulesManager;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.reflection.Reflection;
 import org.apache.commons.lang.ArrayUtils;
@@ -99,6 +100,14 @@ public final class UR
         if (moduleClass != null) return module(moduleClass);
 
         throw new IllegalArgumentException("The class " + caller.getCanonicalName() + " is not inside a module's package.");
+    }
+
+    /**
+     * @return The game module, because it is heavily used through the codebase.
+     */
+    public static GameModule game()
+    {
+        return module(GameModule.class);
     }
 
     /**

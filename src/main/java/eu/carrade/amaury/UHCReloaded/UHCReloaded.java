@@ -42,7 +42,7 @@ import eu.carrade.amaury.UHCReloaded.modules.core.spawns.SpawnsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.spectators.SpectatorsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.teams.TeamsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
-import eu.carrade.amaury.UHCReloaded.old.misc.Freezer;
+import eu.carrade.amaury.UHCReloaded.modules.ingame.freezer.FreezerModule;
 import eu.carrade.amaury.UHCReloaded.old.misc.RulesManager;
 import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.commands.Commands;
@@ -85,7 +85,7 @@ public class UHCReloaded extends ZPlugin implements Listener
 
     private RulesManager rulesManager = null;
 
-    private Freezer freezer = null;
+    private FreezerModule freezer = null;
 
 
     @Override
@@ -294,7 +294,7 @@ public class UHCReloaded extends ZPlugin implements Listener
     /**
      * Returns the freezer.
      */
-    public Freezer getFreezer()
+    public FreezerModule getFreezer()
     {
         return freezer;
     }

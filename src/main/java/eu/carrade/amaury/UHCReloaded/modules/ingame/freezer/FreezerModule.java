@@ -29,46 +29,88 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.misc;
+package eu.carrade.amaury.UHCReloaded.modules.ingame.freezer;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.listeners.FreezerListener;
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
+import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
+import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
+import fr.zcraft.zlib.components.commands.Command;
+import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.core.ZLib;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class Freezer
+@ModuleInfo (
+        name = "Freezer",
+        description = "Provides a command to freeze some or all players, " +
+                "allowing to “pause” the game.",
+        when = ModuleLoadTime.ON_GAME_START,
+        category = ModuleCategory.UTILITIES,
+        icon = Material.PACKED_ICE
+)
+public class FreezerModule extends UHModule
 {
-    private UHCReloaded p = null;
-
     private boolean isListenerRegistered = false;
-    private FreezerListener freezerListener = null;
+    private FreezerListener freezerListener;
 
-    private Boolean globalFreeze = false;
-    private ArrayList<UUID> frozenPlayers = new ArrayList<>();
-    private HashMap<UUID, Boolean> oldAllowFly = new HashMap<>();
-    private HashMap<UUID, Boolean> oldFlyMode = new HashMap<>();
+    private boolean globalFreeze = false;
+    private final Set<UUID> frozenPlayers = new HashSet<>();
+    private final Map<UUID, Boolean> oldAllowFly = new HashMap<>();
+    private final Map<UUID, Boolean> oldFlyMode = new HashMap<>();
 
     private boolean hiddenFreeze = false;
 
 
-    public Freezer(UHCReloaded plugin)
+    @Override
+    public void onEnable()
     {
-        this.p = plugin;
-
         this.freezerListener = new FreezerListener();
     }
 
+    @Override
+    protected void onDisable()
+    {
+        ZLib.unregisterEvents(freezerListener);
+        freezerListener = null;
+    }
+
+    @Override
+    public List<Class<? extends Command>> getCommands()
+    {
+        return Collections.singletonList(FreezeCommand.class);
+    }
+
+    @Override
+    public void injectIntoSidebar(Player player, SidebarInjector injector)
+    {
+        if (!hiddenFreeze)
+        {
+            if (globalFreeze)
+            {
+                /// Notice displayed at the bottom of the sidebar if the game is paused (/uh freeze all).
+                injector.injectLines(SidebarInjector.SidebarPriority.BOTTOM, true, I.t("{darkaqua}Game frozen"));
+            }
+            else if (isPlayerFrozen(player))
+            {
+                injector.injectLines(SidebarInjector.SidebarPriority.BOTTOM, true, I.t("{darkaqua}You are frozen"));
+            }
+        }
+    }
 
     /**
      * Freezes a player, if needed.
@@ -107,36 +149,34 @@ public class Freezer
 
         if (frozen)
         {
-//            p.getGameManager()
-//                    .getOnlineAlivePlayers()
-//                    .forEach(player -> this.setPlayerFreezeState(player, true));
+            UR.game().getAlivePlayers().forEach(player -> setPlayerFreezeState(player, true));
 
             // Freezes the mobs by applying a Slowness effect. There isn't any EntityMoveEvent, so...
-            p.getServer().getWorlds().stream()
+            UR.get().getWorlds().stream()
                     .flatMap(world -> world.getLivingEntities().stream())
                     .filter(entity -> entity instanceof Creature)
                     .forEach(entity -> freezeCreature((Creature) entity, true));
 
             // Freezes the timers.
-            // TODO p.getTimerManager().pauseAllRunning(true);
+            UR.module(TimersModule.class).pauseAllRunning(true);
         }
 
         else
         {
             // All the online players are listed, not the internal list of frozen players,
             // to avoid a ConcurrentModificationException if the iterated list is being emptied.
-            p.getServer().getOnlinePlayers().stream()
+            UR.game().getAlivePlayers().stream()
                     .filter(this::isPlayerFrozen)
                     .forEach(player -> this.setPlayerFreezeState(player, false));
 
             // Removes the slowness effect
-            p.getServer().getWorlds().stream()
+            UR.get().getWorlds().stream()
                     .flatMap(world -> world.getLivingEntities().stream())
                     .filter(entity -> entity instanceof Creature)
                     .forEach(entity -> freezeCreature((Creature) entity, false));
 
             // Unfreezes the timers.
-            // TODO p.getTimerManager().pauseAllRunning(false);
+            UR.module(TimersModule.class).pauseAllRunning(false);
         }
 
         updateListenerRegistration();
@@ -169,25 +209,28 @@ public class Freezer
      * @param player The player to freeze.
      * @param frozen If true the player will be frozen. If false, unfrozen.
      */
-    public void setPlayerFreezeState(Player player, Boolean frozen)
+    public void setPlayerFreezeState(OfflinePlayer player, Boolean frozen)
     {
-        if (frozen && !this.frozenPlayers.contains(player.getUniqueId()))
+        if (frozen && !frozenPlayers.contains(player.getUniqueId()))
         {
             this.frozenPlayers.add(player.getUniqueId());
-            this.oldAllowFly.put(player.getUniqueId(), player.getAllowFlight());
-            this.oldFlyMode.put(player.getUniqueId(), player.isFlying());
+            this.oldAllowFly.put(player.getUniqueId(), player.isOnline() && player.getPlayer().getAllowFlight());
+            this.oldFlyMode.put(player.getUniqueId(), player.isOnline() && player.getPlayer().isFlying());
 
             // Used to prevent the player to be kicked for fly if he was frozen during a fall.
             // He is blocked inside his current block anyway.
-            player.setAllowFlight(true);
+            if (player.isOnline()) player.getPlayer().setAllowFlight(true);
         }
 
-        if (!frozen && this.frozenPlayers.contains(player.getUniqueId()))
+        if (!frozen && frozenPlayers.contains(player.getUniqueId()))
         {
             this.frozenPlayers.remove(player.getUniqueId());
 
-            player.setFlying(this.oldFlyMode.get(player.getUniqueId()));
-            player.setAllowFlight(this.oldAllowFly.get(player.getUniqueId()));
+            if (player.isOnline())
+            {
+                player.getPlayer().setFlying(oldFlyMode.get(player.getUniqueId()));
+                player.getPlayer().setAllowFlight(oldAllowFly.get(player.getUniqueId()));
+            }
 
             this.oldAllowFly.remove(player.getUniqueId());
             this.oldFlyMode.remove(player.getUniqueId());
@@ -202,19 +245,9 @@ public class Freezer
      * @param player The player to be checked.
      * @return true if the given player is frozen.
      */
-    public boolean isPlayerFrozen(Player player)
+    public boolean isPlayerFrozen(final OfflinePlayer player)
     {
         return frozenPlayers.contains(player.getUniqueId());
-    }
-
-    /**
-     * Returns {@code true} if the current freeze must be hidden in the sidebar.
-     *
-     * @return {@code true} to hide it.
-     */
-    public boolean isHiddenFreeze()
-    {
-        return hiddenFreeze;
     }
 
     /**
@@ -223,7 +256,7 @@ public class Freezer
      * @param creature The creature to freeze.
      * @param frozen If true the creature will be frozen. Else...
      */
-    public void freezeCreature(Creature creature, Boolean frozen)
+    public void freezeCreature(final Creature creature, final boolean frozen)
     {
         if (frozen)
         {
@@ -251,7 +284,7 @@ public class Freezer
         {
             if (!this.frozenPlayers.isEmpty() || this.getGlobalFreezeState())
             {
-                p.getServer().getPluginManager().registerEvents(freezerListener, p);
+                ZLib.registerEvents(freezerListener);
                 this.isListenerRegistered = true;
             }
         }
@@ -261,7 +294,7 @@ public class Freezer
         {
             if (this.frozenPlayers.isEmpty() && !this.getGlobalFreezeState())
             {
-                HandlerList.unregisterAll(freezerListener);
+                ZLib.unregisterEvents(freezerListener);
                 this.isListenerRegistered = false;
             }
         }
@@ -273,11 +306,8 @@ public class Freezer
      *
      * @return The list.
      */
-    public ArrayList<Player> getFrozenPlayers()
+    public Set<OfflinePlayer> getFrozenPlayers()
     {
-
-        return frozenPlayers.stream()
-                .map(id -> p.getServer().getPlayer(id))
-                .collect(Collectors.toCollection(ArrayList::new));
+        return frozenPlayers.stream().map(Bukkit::getOfflinePlayer).collect(Collectors.toSet());
     }
 }

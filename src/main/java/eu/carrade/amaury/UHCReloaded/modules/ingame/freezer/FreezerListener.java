@@ -30,88 +30,63 @@
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
 
-package eu.carrade.amaury.UHCReloaded.old.listeners;
+package eu.carrade.amaury.UHCReloaded.modules.ingame.freezer;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 
 public class FreezerListener implements Listener
 {
-
-    private UHCReloaded p = null;
-
-    public FreezerListener()
-    {
-        this.p = UHCReloaded.get();
-    }
-
-
     /**
      * Used to prevent frozen players to break blocks.
-     *
-     * @param ev
      */
     @EventHandler
     public void onBlockBreakEvent(final BlockBreakEvent ev)
     {
-        if (p.getFreezer().isPlayerFrozen(ev.getPlayer()))
+        if (UR.module(FreezerModule.class).isPlayerFrozen(ev.getPlayer()))
         {
             ev.setCancelled(true);
         }
     }
 
-
     /**
      * Used to prevent frozen players to place blocks.
-     *
-     * @param ev
      */
     @EventHandler
     public void onBlockPlaceEvent(final BlockPlaceEvent ev)
     {
-        if (p.getFreezer().isPlayerFrozen(ev.getPlayer()))
+        if (UR.module(FreezerModule.class).isPlayerFrozen(ev.getPlayer()))
         {
             ev.setCancelled(true);
         }
     }
 
-
     /**
      * Used to freeze the players.
-     *
-     * @param ev
      */
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent ev)
     {
-        p.getFreezer().freezePlayerIfNeeded(ev.getPlayer(), ev.getFrom(), ev.getTo());
+        UR.module(FreezerModule.class).freezePlayerIfNeeded(ev.getPlayer(), ev.getFrom(), ev.getTo());
     }
-
 
     /**
      * Used to prevent the bows to be used while in global freeze mode.
-     *
-     * @param ev
      */
     @EventHandler
     public void onEntityShoot(EntityShootBowEvent ev)
     {
-        if ((ev.getEntity() instanceof Player && p.getFreezer().isPlayerFrozen((Player) ev.getEntity()))
-                || p.getFreezer().getGlobalFreezeState())
+        if ((ev.getEntity() instanceof Player && UR.module(FreezerModule.class).isPlayerFrozen((Player) ev.getEntity()))
+                || UR.module(FreezerModule.class).getGlobalFreezeState())
         {
-
             ev.setCancelled(true);
 
             // If a shoot from a player is cancelled, the arrow seems to be
@@ -124,47 +99,39 @@ public class FreezerListener implements Listener
         }
     }
 
-
     /**
-     * Used to prevent items from despawning if the game is frozen.
-     *
-     * @param ev
+     * Used to prevent items from de-spawning if the game is frozen.
      */
     @EventHandler
     public void onItemDespawn(ItemDespawnEvent ev)
     {
-        if (p.getFreezer().getGlobalFreezeState())
+        if (UR.module(FreezerModule.class).getGlobalFreezeState())
         {
             ev.setCancelled(true);
         }
     }
 
-
     /**
      * Used to freeze the mobs spawning while the game is frozen.
-     * @param ev
      */
     @EventHandler
     public void onEntitySpawn(CreatureSpawnEvent ev)
     {
-        if (p.getFreezer().getGlobalFreezeState() && ev.getEntity() instanceof Creature)
+        if (UR.module(FreezerModule.class).getGlobalFreezeState() && ev.getEntity() instanceof Creature)
         {
-            p.getFreezer().freezeCreature((Creature) ev.getEntity(), true);
+            UR.module(FreezerModule.class).freezeCreature((Creature) ev.getEntity(), true);
         }
     }
 
-
     /**
      * Used to disable any damages if the player is frozen.
-     *
-     * @param ev
      */
     @EventHandler
     public void onEntityDamage(final EntityDamageEvent ev)
     {
         if (ev.getEntity() instanceof Player)
         {
-            if (p.getFreezer().isPlayerFrozen((Player) ev.getEntity()))
+            if (UR.module(FreezerModule.class).isPlayerFrozen((Player) ev.getEntity()))
             {
                 ev.setCancelled(true);
             }
@@ -173,13 +140,11 @@ public class FreezerListener implements Listener
 
     /**
      * Used to cancel any food loss (but the players can still eat).
-     *
-     * @param ev
      */
     @EventHandler
     public void onFoodUpdate(FoodLevelChangeEvent ev)
     {
-        if (p.getFreezer().isPlayerFrozen((Player) ev.getEntity()))
+        if (UR.module(FreezerModule.class).isPlayerFrozen((Player) ev.getEntity()))
         {
             if (ev.getFoodLevel() < ((Player) ev.getEntity()).getFoodLevel())
             {

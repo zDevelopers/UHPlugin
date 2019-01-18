@@ -39,6 +39,7 @@ modules:
     "ingame-killsCount": true
     "ingame-deathAnnouncement": true
     "ingame-kick": false
+    "ingame-freezer": true
 
     "gameplay-compass": true
     "gameplay-goldenHeads": true
