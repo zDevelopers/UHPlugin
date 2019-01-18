@@ -30,38 +30,31 @@
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
 
-package eu.carrade.amaury.UHCReloaded.old.integration;
+package eu.carrade.amaury.UHCReloaded.modules.core.spectators;
 
 import com.pgcraft.spectatorplus.SpectateAPI;
 import com.pgcraft.spectatorplus.SpectatorPlus;
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import fr.zcraft.zlib.external.ExternalPluginComponent;
 import fr.zcraft.zlib.tools.PluginLogger;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 
 
-public class UHSpectatorPlusIntegration
+public class SpectatorPlusDependency extends ExternalPluginComponent<SpectatorPlus>
 {
-    private SpectatorPlus sp = null;
     private SpectateAPI spAPI = null;
 
-    public UHSpectatorPlusIntegration()
+    public SpectatorPlusDependency()
     {
-        Plugin spTest = Bukkit.getServer().getPluginManager().getPlugin("SpectatorPlus");
-        if (spTest == null || !spTest.isEnabled())
-        {
-            UHCReloaded.get().getLogger().warning("SpectatorPlus is not present, so the integration was disabled.");
-            return;
-        }
+        super("SpectatorPlus");
+    }
 
-        this.sp = (SpectatorPlus) spTest;
-
-
+    @Override
+    public void onLoad()
+    {
         try
         {
             Class.forName("com.pgcraft.spectatorplus.SpectateAPI");
 
-            if (sp.getDescription().getVersion().equals("1.9.1"))
+            if (get().getDescription().getVersion().equals("1.9.1"))
             {
                 // The API of SpectatorPlus 1.9.1 was not working.
                 throw new ClassNotFoundException();
@@ -72,7 +65,7 @@ public class UHSpectatorPlusIntegration
             PluginLogger.warning("SpectatorPlus is available, but the version you are using is too old.");
             PluginLogger.warning("This plugin is tested and works with SpectatorPlus 1.9.2 or later. The SpectateAPI is needed.");
 
-            this.sp = null;
+            setEnabled(false);
             return;
         }
 
@@ -80,7 +73,7 @@ public class UHSpectatorPlusIntegration
         // All is OK, let's integrate.
         try
         {
-            spAPI = sp.getAPI();
+            spAPI = get().getAPI();
 
             PluginLogger.info("Successfully hooked into SpectatorPlus.");
         }
@@ -90,20 +83,13 @@ public class UHSpectatorPlusIntegration
         catch (Throwable e)
         {
             PluginLogger.error("Cannot hook into SpectatorPlus, is this version compatible?", e);
-
-            spAPI = null;
-            sp = null;
+            setEnabled(false);
         }
-    }
-
-    public boolean isSPIntegrationEnabled()
-    {
-        return !(this.sp == null);
     }
 
     public SpectatorPlus getSP()
     {
-        return this.sp;
+        return get();
     }
 
     public SpectateAPI getSPAPI()

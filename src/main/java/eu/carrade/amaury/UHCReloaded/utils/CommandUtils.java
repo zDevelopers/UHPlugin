@@ -29,133 +29,20 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.commands.core.utils;
+package eu.carrade.amaury.UHCReloaded.utils;
 
-import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
-import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class CommandUtils
 {
     public final static String CHAT_SEPARATOR = ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅";
-
-    /**
-     * Returns {@code true} if the sender is allowed to execute the given command.
-     *
-     * <p>
-     *     Use that only if you have an isolated UHCommand object. Not if you have a direct access to
-     *     the parent command, or if you know the command is a root command.
-     * </p>
-     *
-     * @param sender The sender.
-     * @param command The command.
-     *
-     * @return {@code true} if the sender is allowed to execute the command.
-     */
-    public static boolean isAllowed(CommandSender sender, AbstractCommand command)
-    {
-        // root command
-        if (command.getParent() == null)
-        {
-            Command commandAnnotation = command.getClass().getAnnotation(Command.class);
-            if (commandAnnotation != null)
-            {
-                if (commandAnnotation.permission() == null)
-                {
-                    return true;
-                }
-                else if (commandAnnotation.permission().isEmpty())
-                {
-                    return sender.hasPermission(commandAnnotation.name());
-                }
-                else
-                {
-                    return sender.hasPermission(commandAnnotation.permission());
-                }
-            }
-        }
-        else
-        {
-            return sender.hasPermission(command.getParent().getSubcommandsPermissions().get(command.getClass().getAnnotation(Command.class).name()));
-        }
-
-        return false; // should never happens.
-    }
-
-    /**
-     * Returns the args without the first item.
-     *
-     * @param args The arguments sent to the parent command.
-     * @return The arguments to send to the child command.
-     */
-    public static String[] getSubcommandArguments(String[] args)
-    {
-        if (args.length <= 1)
-        {
-            return new String[0];
-        }
-
-        return Arrays.copyOfRange(args, 1, args.length);
-    }
-
-
-    /**
-     * Returns the tags in the arguments, following the format "tagname:value".
-     *
-     * <p>
-     *     If a tag is defined multiple times, the value used is the last one.
-     * </p>
-     * <p>
-     *     Invalid tags (other format that « key:value ») are ignored.
-     * </p>
-     *
-     * @param args The args.
-     * @param defaults The defaults values. The values defined here will always be in the returned map,
-     *                 with the same value if the key is not in the arguments.
-     *                 {@code null} if no default values are needed.
-     *
-     * @return A map tagname -> value.
-     */
-    public static Map<String, String> getTagsInArgs(String[] args, Map<String, String> defaults)
-    {
-        Map<String, String> tagsCollected;
-
-        if (defaults != null)
-        {
-            tagsCollected = new HashMap<>(defaults);
-        }
-        else
-        {
-            tagsCollected = new HashMap<>();
-        }
-
-        for (String arg : args)
-        {
-            String[] argSpilt = arg.split(":");
-            if (argSpilt.length >= 2)  // valid
-            {
-                String key = argSpilt[0];
-                String value = StringUtils.join(Arrays.copyOfRange(argSpilt, 1, argSpilt.length), ":");
-
-                tagsCollected.put(key, value);
-            }
-        }
-
-        return tagsCollected;
-    }
-
 
     /**
      * Returns a list of autocompletion suggestions based on what the user typed and on a list of

@@ -31,8 +31,8 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.beginning.cages;
 
-import eu.carrade.amaury.UHCReloaded.utils.ColorsUtils;
 import fr.zcraft.zteams.ZTeam;
+import fr.zcraft.zteams.colors.ColorsUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;

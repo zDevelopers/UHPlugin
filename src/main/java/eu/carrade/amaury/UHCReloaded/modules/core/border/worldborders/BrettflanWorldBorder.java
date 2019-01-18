@@ -33,8 +33,9 @@ package eu.carrade.amaury.UHCReloaded.modules.core.border.worldborders;
 
 import com.wimbli.WorldBorder.BorderData;
 import com.wimbli.WorldBorder.Config;
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.MapShape;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -67,10 +68,9 @@ public class BrettflanWorldBorder extends WorldBorder
     {
         this.world = world;
 
-        com.wimbli.WorldBorder.WorldBorder wb = UHCReloaded.get().getWorldBorderIntegration().getWorldBorder();
-        if (wb != null)
+        if (UR.module(BorderModule.class).getWorldBorderDependency().isEnabled())
         {
-            border = wb.getWorldBorder(world.getName());
+            border = UR.module(BorderModule.class).getWorldBorderDependency().getWorldBorder().getWorldBorder(world.getName());
 
             if (border == null)
             {

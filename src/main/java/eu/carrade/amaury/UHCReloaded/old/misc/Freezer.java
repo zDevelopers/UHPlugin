@@ -107,9 +107,9 @@ public class Freezer
 
         if (frozen)
         {
-            p.getGameManager()
-                    .getOnlineAlivePlayers()
-                    .forEach(player -> this.setPlayerFreezeState(player, true));
+//            p.getGameManager()
+//                    .getOnlineAlivePlayers()
+//                    .forEach(player -> this.setPlayerFreezeState(player, true));
 
             // Freezes the mobs by applying a Slowness effect. There isn't any EntityMoveEvent, so...
             p.getServer().getWorlds().stream()

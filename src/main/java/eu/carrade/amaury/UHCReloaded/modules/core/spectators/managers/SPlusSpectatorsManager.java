@@ -31,36 +31,32 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.spectators.managers;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import com.pgcraft.spectatorplus.SpectateAPI;
 import org.bukkit.entity.Player;
 
 
 /**
  * Spectators managed through the SpectatorsPlus Bukkit plugin by PGMann and AmauryPi.
- *
- * TODO fix integration
  */
 public class SPlusSpectatorsManager extends SpectatorsManager
 {
-    private UHCReloaded p;
+    private final SpectateAPI api;
 
-    public SPlusSpectatorsManager()
+    public SPlusSpectatorsManager(final SpectateAPI api)
     {
-        p = UHCReloaded.get();
+
+        this.api = api;
     }
 
     @Override
     public void setSpectating(final Player player, final boolean spectating)
     {
-        if (player != null && p.getSpectatorPlusIntegration().isSPIntegrationEnabled())
-            p.getSpectatorPlusIntegration().getSPAPI().setSpectating(player, spectating);
+        if (player != null) api.setSpectating(player, spectating);
     }
 
     @Override
-    public boolean isSpectating(Player player)
+    public boolean isSpectating(final Player player)
     {
-        return player != null
-                && p.getSpectatorPlusIntegration().isSPIntegrationEnabled()
-                && p.getSpectatorPlusIntegration().getSPAPI().isSpectator(player);
+        return player != null && api.isSpectator(player);
     }
 }

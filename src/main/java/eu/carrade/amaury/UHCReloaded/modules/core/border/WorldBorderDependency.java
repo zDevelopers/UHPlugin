@@ -30,50 +30,42 @@
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
 
-package eu.carrade.amaury.UHCReloaded.old.listeners;
+package eu.carrade.amaury.UHCReloaded.modules.core.border;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.modules.gameplay.potions.CancelBrewTask;
-import fr.zcraft.zlib.tools.runners.RunTask;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.inventory.BrewerInventory;
+import com.wimbli.WorldBorder.WorldBorder;
+import fr.zcraft.zlib.external.ExternalPluginComponent;
+import fr.zcraft.zlib.tools.PluginLogger;
 
 
-public class GameplayListener implements Listener
+public class WorldBorderDependency extends ExternalPluginComponent<WorldBorder>
 {
-    private final UHCReloaded p;
-
-    public GameplayListener()
+    public WorldBorderDependency()
     {
-        this.p = UHCReloaded.get();
+        super("WorldBorder");
     }
 
-
-    /**
-     * Used to disable power-II potions.
-     */
-    @EventHandler
-    public void onInventoryDrag(InventoryDragEvent ev)
+    @Override
+    protected void onLoad()
     {
-        if (UHConfig.GAMEPLAY_CHANGES.DISABLE_LEVEL_II_POTIONS.get() && ev.getInventory() instanceof BrewerInventory)
+        try
         {
-            RunTask.later(new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()), 1L);
+            Class.forName("com.wimbli.WorldBorder.BorderData");
+            Class.forName("com.wimbli.WorldBorder.Config");
         }
+        catch (ClassNotFoundException e)
+        {
+            PluginLogger.warning("WorldBorder is available, but the version you are using is too old.");
+            PluginLogger.warning("This plugin is tested and works with WorldBorder 1.8.0 or later.");
+
+            setEnabled(false);
+            return;
+        }
+
+        PluginLogger.info("Successfully hooked into WorldBorder.");
     }
 
-    /**
-     * Used to disable power-II potions.
-     */
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent ev)
+    public WorldBorder getWorldBorder()
     {
-        if (UHConfig.GAMEPLAY_CHANGES.DISABLE_LEVEL_II_POTIONS.get() && ev.getInventory() instanceof BrewerInventory)
-        {
-           RunTask.later(new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()), 1L);
-        }
+        return get();
     }
 }

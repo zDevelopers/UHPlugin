@@ -33,7 +33,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.other.about;
 
-import eu.carrade.amaury.UHCReloaded.old.commands.core.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.utils.CommandUtils;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.CommandInfo;

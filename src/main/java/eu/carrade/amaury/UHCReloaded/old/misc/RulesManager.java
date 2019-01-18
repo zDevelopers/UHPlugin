@@ -32,7 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.old.misc;
 
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.utils.CommandUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

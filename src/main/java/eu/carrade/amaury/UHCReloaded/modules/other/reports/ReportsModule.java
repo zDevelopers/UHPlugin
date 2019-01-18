@@ -43,7 +43,7 @@ import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChan
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.utils.CommandUtils;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.events.FutureEventHandler;
 import fr.zcraft.zlib.components.events.WrappedEvent;

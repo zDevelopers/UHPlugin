@@ -31,9 +31,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.old.misc;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
-import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.text.ListHeaderFooter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -76,16 +74,16 @@ public class PlayerListHeaderFooterManager
 
     private void computeHeadersFooter()
     {
-        if (UHCReloaded.get().getGameManager().isGameStarted())
-        {
-            currentHeader = computeText(IN_GAME_HEADER_PATTERN);
-            currentFooter = computeText(IN_GAME_FOOTER_PATTERN);
-        }
-        else
-        {
-            currentHeader = computeText(WAITING_HEADER_PATTERN);
-            currentFooter = computeText(WAITING_FOOTER_PATTERN);
-        }
+//        if (UHCReloaded.get().getGameManager().isGameStarted())
+//        {
+//            currentHeader = computeText(IN_GAME_HEADER_PATTERN);
+//            currentFooter = computeText(IN_GAME_FOOTER_PATTERN);
+//        }
+//        else
+//        {
+//            currentHeader = computeText(WAITING_HEADER_PATTERN);
+//            currentFooter = computeText(WAITING_FOOTER_PATTERN);
+//        }
     }
 
     private String computeText(String pattern)
@@ -109,18 +107,18 @@ public class PlayerListHeaderFooterManager
     private String replaceTags(String raw)
     {
         return raw
-                .replace("{title}", UHConfig.SCOREBOARD.TITLE.get())
-
-                /// Episode in the player list ({episodeText} replacement). {0} = current episode number.
-                .replace("{episodeText}", I.t("Episode {0}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode())))
-                /// Players in the player list ({playersText} replacement). {0} = current alive players count.
-                .replace("{playersText}", I.tn("{0} player", "{0} players", UHCReloaded.get().getGameManager().getAlivePlayersCount(), UHCReloaded.get().getGameManager().getAlivePlayersCount()))
-                /// Teams in the player list ({teamsText} replacement). {0} = current alive teams count.
-                .replace("{teamsText}", I.tn("{0} team", "{0} teams", UHCReloaded.get().getGameManager().getAliveTeamsCount(), UHCReloaded.get().getGameManager().getAliveTeamsCount()))
-
-                .replace("{episodeNumber}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode()))
-                .replace("{playersCount}", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount()))
-                .replace("{teamsCount}", String.valueOf(UHCReloaded.get().getGameManager().getAliveTeamsCount()))
+//                .replace("{title}", UHConfig.SCOREBOARD.TITLE.get())
+//
+//                /// Episode in the player list ({episodeText} replacement). {0} = current episode number.
+//                .replace("{episodeText}", I.t("Episode {0}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode())))
+//                /// Players in the player list ({playersText} replacement). {0} = current alive players count.
+//                .replace("{playersText}", I.tn("{0} player", "{0} players", UHCReloaded.get().getGameManager().getAlivePlayersCount(), UHCReloaded.get().getGameManager().getAlivePlayersCount()))
+//                /// Teams in the player list ({teamsText} replacement). {0} = current alive teams count.
+//                .replace("{teamsText}", I.tn("{0} team", "{0} teams", UHCReloaded.get().getGameManager().getAliveTeamsCount(), UHCReloaded.get().getGameManager().getAliveTeamsCount()))
+//
+//                .replace("{episodeNumber}", String.valueOf(UHCReloaded.get().getGameManager().getEpisode()))
+//                .replace("{playersCount}", String.valueOf(UHCReloaded.get().getGameManager().getAlivePlayersCount()))
+//                .replace("{teamsCount}", String.valueOf(UHCReloaded.get().getGameManager().getAliveTeamsCount()))
                 ;
     }
 

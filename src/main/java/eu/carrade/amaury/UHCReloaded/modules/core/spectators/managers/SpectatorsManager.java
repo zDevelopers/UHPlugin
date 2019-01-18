@@ -31,7 +31,8 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.spectators.managers;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.modules.core.spectators.SpectatorPlusDependency;
+import fr.zcraft.zlib.core.ZLib;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -43,6 +44,13 @@ import java.util.UUID;
  */
 public abstract class SpectatorsManager
 {
+    private final static SpectatorPlusDependency spectatorPlusDependency;
+
+    static
+    {
+        spectatorPlusDependency = ZLib.loadComponent(SpectatorPlusDependency.class);
+    }
+
     /**
      * Changes the spectating mode of a player.
      *
@@ -90,9 +98,8 @@ public abstract class SpectatorsManager
      */
     public static SpectatorsManager getInstance()
     {
-        // TODO re-add SP integration
-        if (false && UHCReloaded.get().getSpectatorPlusIntegration().isSPIntegrationEnabled())
-            return new SPlusSpectatorsManager();
+        if (spectatorPlusDependency.isEnabled())
+            return new SPlusSpectatorsManager(spectatorPlusDependency.getSPAPI());
         else
             return new VanillaSpectatorsManager();
     }

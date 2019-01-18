@@ -32,10 +32,7 @@
 package eu.carrade.amaury.UHCReloaded;
 
 import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
-import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
 import eu.carrade.amaury.UHCReloaded.core.ModulesManager;
-import eu.carrade.amaury.UHCReloaded.core.UHModule;
-import eu.carrade.amaury.UHCReloaded.game.UHGameManager;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
@@ -43,14 +40,10 @@ import eu.carrade.amaury.UHCReloaded.modules.core.modules.ModulesManagerModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.SpawnsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.spectators.SpectatorsModule;
-import eu.carrade.amaury.UHCReloaded.modules.core.spectators.managers.SpectatorsManager;
 import eu.carrade.amaury.UHCReloaded.modules.core.teams.TeamsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
-import eu.carrade.amaury.UHCReloaded.old.integration.UHSpectatorPlusIntegration;
-import eu.carrade.amaury.UHCReloaded.old.integration.UHWorldBorderIntegration;
-import eu.carrade.amaury.UHCReloaded.old.misc.*;
-import eu.carrade.amaury.UHCReloaded.old.recipes.RecipesManager;
-import eu.carrade.amaury.UHCReloaded.scoreboard.ScoreboardManager;
+import eu.carrade.amaury.UHCReloaded.old.misc.Freezer;
+import eu.carrade.amaury.UHCReloaded.old.misc.RulesManager;
 import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.commands.Commands;
 import fr.zcraft.zlib.components.gui.Gui;
@@ -70,16 +63,15 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.function.BiConsumer;
 
 
 public class UHCReloaded extends ZPlugin implements Listener
 {
     private static UHCReloaded instance;
-
-    private Map<Class<? extends UHModule>, ModuleWrapper> modules = new HashMap<>();
-    private Set<ModuleLoadTime> loadedPriorities = new HashSet<>();
 
     private ModulesManager modulesManager = null;
 
@@ -91,20 +83,9 @@ public class UHCReloaded extends ZPlugin implements Listener
 
     private boolean worldsLoaded = false;
 
-    private UHGameManager gameManager = null;
-    private SpectatorsManager spectatorsManager = null;
-    private ScoreboardManager scoreboardManager = null;
-    private MOTDManager motdManager = null;
     private RulesManager rulesManager = null;
-    private PlayerListHeaderFooterManager playerListHeaderFooterManager = null;
-    private RecipesManager recipesManager = null;
-
-    private RuntimeCommandsExecutor runtimeCommandsExecutor = null;
 
     private Freezer freezer = null;
-
-    private UHWorldBorderIntegration wbintegration = null;
-    private UHSpectatorPlusIntegration spintegration = null;
 
 
     @Override
@@ -302,40 +283,6 @@ public class UHCReloaded extends ZPlugin implements Listener
         return Bukkit.getWorlds().get(0);
     }
 
-
-
-    /**
-     * Returns the game manager.
-     */
-    public UHGameManager getGameManager()
-    {
-        return gameManager;
-    }
-
-    /**
-     * @return the spectators manager.
-     */
-    public SpectatorsManager getSpectatorsManager()
-    {
-        return spectatorsManager;
-    }
-
-    /**
-     * Returns the scoreboard manager.
-     */
-    public ScoreboardManager getScoreboardManager()
-    {
-        return scoreboardManager;
-    }
-
-    /**
-     * Returns the MOTD manager.
-     */
-    public MOTDManager getMOTDManager()
-    {
-        return motdManager;
-    }
-
     /**
      * @return the rules manager.
      */
@@ -345,52 +292,11 @@ public class UHCReloaded extends ZPlugin implements Listener
     }
 
     /**
-     * Returns the players list's headers & footers manager.
-     */
-    public PlayerListHeaderFooterManager getPlayerListHeaderFooterManager()
-    {
-        return playerListHeaderFooterManager;
-    }
-
-    /**
-     * Returns the recipe manager.
-     */
-    public RecipesManager getRecipesManager()
-    {
-        return recipesManager;
-    }
-
-    /**
-     * Returns the manager used to manage the commands executed after the start/the end of the
-     * game (or any other moment using the generic API).
-     */
-    public RuntimeCommandsExecutor getRuntimeCommandsExecutor()
-    {
-        return runtimeCommandsExecutor;
-    }
-
-    /**
      * Returns the freezer.
      */
     public Freezer getFreezer()
     {
         return freezer;
-    }
-
-    /**
-     * Returns the representation of the WorldBorder integration in the plugin.
-     */
-    public UHWorldBorderIntegration getWorldBorderIntegration()
-    {
-        return wbintegration;
-    }
-
-    /**
-     * Returns the representation of the SpectatorPlus integration in the plugin.
-     */
-    public UHSpectatorPlusIntegration getSpectatorPlusIntegration()
-    {
-        return spintegration;
     }
 
     /**

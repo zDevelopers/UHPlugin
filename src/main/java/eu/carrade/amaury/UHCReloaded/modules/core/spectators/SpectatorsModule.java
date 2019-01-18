@@ -73,6 +73,7 @@ import java.util.*;
 public class SpectatorsModule extends UHModule
 {
     private SpectatorsManager manager;
+    private SpectatorPlusDependency spectatorPlusDependency;
 
     /**
      * Lists players allowed to spectate. Also used for initial spectators: players who will

@@ -32,11 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.old.commands.commands.uh;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.categories.Category;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.utils.CommandUtils;
+import eu.carrade.amaury.UHCReloaded.utils.CommandUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -56,8 +52,7 @@ import java.util.List;
  *  - none: unfreezes all the alive players (even if there where frozen before using
  *          /uh freeze all), the mobs and the timer.
  */
-@Command (name = "freeze")
-public class UHFreezeCommand extends AbstractCommand
+public class UHFreezeCommand// extends AbstractCommand
 {
     private UHCReloaded p;
 
@@ -66,12 +61,11 @@ public class UHFreezeCommand extends AbstractCommand
         p = plugin;
     }
 
-    @Override
-    public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
+    public void run(CommandSender sender, String[] args)// throws CannotExecuteCommandException
     {
         if (args.length == 0)
         {
-            throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
+            //throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.NEED_DOC, this);
         }
 
         String subCommand = args[0];
@@ -98,7 +92,7 @@ public class UHFreezeCommand extends AbstractCommand
                 }
                 else
                 {
-                    throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
+                    //throw new CannotExecuteCommandException(CannotExecuteCommandException.Reason.ONLY_AS_A_PLAYER);
                 }
             }
 
@@ -145,7 +139,6 @@ public class UHFreezeCommand extends AbstractCommand
         }
     }
 
-    @Override
     public List<String> tabComplete(CommandSender sender, String[] args)
     {
         if (args.length == 1)
@@ -175,7 +168,6 @@ public class UHFreezeCommand extends AbstractCommand
         else return null;
     }
 
-    @Override
     public List<String> help(CommandSender sender)
     {
         return Arrays.asList(
@@ -187,15 +179,8 @@ public class UHFreezeCommand extends AbstractCommand
         );
     }
 
-    @Override
     public List<String> onListHelp(CommandSender sender)
     {
         return Collections.singletonList(I.t("{cc}/uh freeze {ci}: (un)freezes the entire game, or a player. See /uh freeze for details."));
-    }
-
-    @Override
-    public String getCategory()
-    {
-        return Category.MISC.getTitle();
     }
 }

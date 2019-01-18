@@ -31,9 +31,10 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.border.worldborders;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.MapShape;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -175,7 +176,7 @@ public abstract class WorldBorder
         // Without the WorldBorder plugin, a fake world border is used (i.e., no border control).
         if (shape == MapShape.CIRCULAR)
         {
-            if (UHCReloaded.get().getWorldBorderIntegration().isWBIntegrationEnabled())
+            if (UR.module(BorderModule.class).getWorldBorderDependency().isEnabled())
             {
                 return new BrettflanWorldBorder(world);
             }
@@ -186,7 +187,7 @@ public abstract class WorldBorder
         }
         else
         {
-            if (motor == WorldBorderMotor.VANILLA || !UHCReloaded.get().getWorldBorderIntegration().isWBIntegrationEnabled())
+            if (motor == WorldBorderMotor.VANILLA || !UR.module(BorderModule.class).getWorldBorderDependency().isEnabled())
             {
                 return new VanillaWorldBorder(world);
             }

@@ -47,6 +47,7 @@ import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.Titles;
 import org.bukkit.Bukkit;
@@ -78,6 +79,8 @@ public class BorderModule extends UHModule
     private MapShape mapShape = null;
     private WorldBorder border = null;
 
+    private WorldBorderDependency worldBorderDependency = null;
+
     /**
      * The lines in the sidebar, calculated once for every player. Caching purposes.
      */
@@ -86,6 +89,8 @@ public class BorderModule extends UHModule
     @Override
     public void onEnable()
     {
+        worldBorderDependency = ZLib.loadComponent(WorldBorderDependency.class);
+
         mapShape = Config.SHAPE.get();
 
         final World world = UHCReloaded.get().getWorld(World.Environment.NORMAL);
@@ -191,6 +196,11 @@ public class BorderModule extends UHModule
     public WorldBorder getBorderProxy()
     {
         return border;
+    }
+
+    public WorldBorderDependency getWorldBorderDependency()
+    {
+        return worldBorderDependency;
     }
 
     /**

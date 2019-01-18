@@ -32,10 +32,6 @@
 package eu.carrade.amaury.UHCReloaded.old.commands.commands.uh;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
-import eu.carrade.amaury.UHCReloaded.old.commands.commands.categories.Category;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.AbstractCommand;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.annotations.Command;
-import eu.carrade.amaury.UHCReloaded.old.commands.core.exceptions.CannotExecuteCommandException;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -44,8 +40,7 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 
-@Command (name = "rules")
-public class UHRulesCommand extends AbstractCommand
+public class UHRulesCommand// extends AbstractCommand
 {
     private UHCReloaded p;
 
@@ -54,9 +49,7 @@ public class UHRulesCommand extends AbstractCommand
         p = plugin;
     }
 
-
-    @Override
-    public void run(CommandSender sender, String[] args) throws CannotExecuteCommandException
+    public void run(CommandSender sender, String[] args)// throws CannotExecuteCommandException
     {
         if (!p.getRulesManager().isEnabled())
         {
@@ -85,27 +78,18 @@ public class UHRulesCommand extends AbstractCommand
         }
     }
 
-    @Override
     public List<String> tabComplete(CommandSender sender, String[] args)
     {
         return null;
     }
 
-    @Override
     public List<String> help(CommandSender sender)
     {
         return null;
     }
 
-    @Override
     public List<String> onListHelp(CommandSender sender)
     {
         return Collections.singletonList(I.t("{cc}/uh rules [player] {ci}: sends the server rules to the server or the given player."));
-    }
-
-    @Override
-    public String getCategory()
-    {
-        return Category.MISC.getTitle();
     }
 }
