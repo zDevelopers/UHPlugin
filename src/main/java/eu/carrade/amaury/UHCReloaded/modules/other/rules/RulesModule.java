@@ -29,44 +29,56 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.misc;
+package eu.carrade.amaury.UHCReloaded.modules.other.rules;
 
-import eu.carrade.amaury.UHCReloaded.UHConfig;
+import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
+import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
+import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
+import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.CommandUtils;
+import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-
-public class RulesManager
+@ModuleInfo (
+        name = "Rules",
+        description = "Displays configured game rules when the game start or the " +
+                "players join",
+        when = ModuleLoadTime.POST_WORLD,
+        category = ModuleCategory.UTILITIES,
+        icon = Material.BOOKSHELF,
+        settings = Config.class
+)
+public class RulesModule extends UHModule
 {
-    private final boolean DISPLAY_ON_JOIN;
-    private final boolean DISPLAY_ON_START;
-
     private final List<String> rules = new ArrayList<>();
 
-
-    public RulesManager()
+    @Override
+    public void onEnable()
     {
-        if (UHConfig.RULES.isDefined() && !UHConfig.RULES.RULES.isEmpty() )
+        if (Config.RULES.isDefined() && !Config.RULES.isEmpty() )
         {
-            DISPLAY_ON_JOIN  = UHConfig.RULES.DISPLAY.ON_JOIN.get();
-            DISPLAY_ON_START = UHConfig.RULES.DISPLAY.ON_START.get();
-
-
             // We check if the list is non-empty, i.e. if there is at least a non-empty rule.
             boolean empty = true;
 
-            for (String rule : UHConfig.RULES.RULES)
+            for (final String rule : Config.RULES)
             {
                 if (rule == null) continue;
 
-                rule = rule.trim();
-                rules.add(ChatColor.translateAlternateColorCodes('&',rule));
+                rules.add(ChatColor.translateAlternateColorCodes('&',rule.trim()));
 
                 if (!rule.isEmpty())
                     empty = false;
@@ -75,35 +87,20 @@ public class RulesManager
             // If the list is empty, no rules are displayed. We reset the list.
             if (empty) rules.clear();
         }
-        else
-        {
-            DISPLAY_ON_JOIN  = false;
-            DISPLAY_ON_START = true;
-        }
+    }
+
+    @Override
+    public List<Class<? extends Command>> getCommands()
+    {
+        return Collections.singletonList(RulesCommand.class);
     }
 
     /**
      * @return {@code true} if the rules system is enabled
      */
-    public boolean isEnabled()
+    public boolean hasRules()
     {
         return rules.size() != 0;
-    }
-
-    /**
-     * @return {@code true} if the rules have to be displayed to every joining player.
-     */
-    public boolean displayOnJoin()
-    {
-        return isEnabled() && DISPLAY_ON_JOIN;
-    }
-
-    /**
-     * @return {@code true} if the rules have to be displayed when the game starts.
-     */
-    public boolean displayOnStart()
-    {
-        return isEnabled() && DISPLAY_ON_START;
     }
 
 
@@ -142,5 +139,23 @@ public class RulesManager
     {
         Bukkit.getOnlinePlayers().forEach(this::displayRulesTo);
         displayRulesTo(Bukkit.getConsoleSender());
+    }
+
+    @EventHandler
+    public void onPlayerJoin(final PlayerJoinEvent ev)
+    {
+        if (UR.game().getPhase() == GamePhase.WAIT && hasRules() && Config.DISPLAY.ON_JOIN.get())
+        {
+            RunTask.later(() -> { if (ev.getPlayer().isOnline()) displayRulesTo(ev.getPlayer()); }, 100L);
+        }
+    }
+
+    @EventHandler
+    public void onGameStart(final GamePhaseChangedEvent ev)
+    {
+        if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward() && hasRules() && Config.DISPLAY.ON_START.get())
+        {
+            RunTask.later(this::broadcastRules, 200L);
+        }
     }
 }

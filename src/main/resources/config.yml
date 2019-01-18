@@ -55,6 +55,7 @@ modules:
 
     "other-reports": true
     "other-playersLoader": true
+    "other-rules": true
     "other-about": true
 
     "scenarii-alliances": false

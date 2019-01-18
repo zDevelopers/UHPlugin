@@ -29,43 +29,41 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.UHCReloaded.old.commands.commands.uh;
+package eu.carrade.amaury.UHCReloaded.modules.other.rules;
 
-import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
+import fr.zcraft.zlib.components.commands.Command;
+import fr.zcraft.zlib.components.commands.CommandException;
+import fr.zcraft.zlib.components.commands.CommandInfo;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-public class UHRulesCommand// extends AbstractCommand
+@CommandInfo (name = "rules", usageParameters = "[player]")
+public class RulesCommand extends Command
 {
-    private UHCReloaded p;
-
-    public UHRulesCommand(UHCReloaded plugin)
+    public void run() throws CommandException
     {
-        p = plugin;
-    }
-
-    public void run(CommandSender sender, String[] args)// throws CannotExecuteCommandException
-    {
-        if (!p.getRulesManager().isEnabled())
+        if (!UR.module(RulesModule.class).hasRules())
         {
-            sender.sendMessage(I.t("{ce}No rules are set in the config file."));
-            return;
+            error(I.t("{ce}No rules are set in the config file."));
         }
 
         if (args.length >= 1)
         {
-            Player player = Bukkit.getPlayer(args[0]);
-            if (player != null)
-            {
-                p.getRulesManager().displayRulesTo(player);
+            final Optional<? extends Player> player = Bukkit.getOnlinePlayers().stream()
+                    .filter(onlinePlayer -> onlinePlayer.getName().equalsIgnoreCase(args[0].trim()))
+                    .findAny();
 
-                if (!sender.equals(player))
-                    sender.sendMessage(I.t("{cs}Rules sent to {0}.", player.getName()));
+            if (player.isPresent())
+            {
+                UR.module(RulesModule.class).displayRulesTo(player.get());
+
+                if (!sender.equals(player.get()))
+                    sender.sendMessage(I.t("{cs}Rules sent to {0}.", player.get().getName()));
             }
             else
             {
@@ -74,22 +72,14 @@ public class UHRulesCommand// extends AbstractCommand
         }
         else
         {
-            p.getRulesManager().broadcastRules();
+            UR.module(RulesModule.class).broadcastRules();
         }
     }
 
-    public List<String> tabComplete(CommandSender sender, String[] args)
+    @Override
+    public List<String> complete()
     {
-        return null;
-    }
-
-    public List<String> help(CommandSender sender)
-    {
-        return null;
-    }
-
-    public List<String> onListHelp(CommandSender sender)
-    {
-        return Collections.singletonList(I.t("{cc}/uh rules [player] {ci}: sends the server rules to the server or the given player."));
+        if (args.length == 1) return getMatchingPlayerNames(args[0]);
+        else return null;
     }
 }
