@@ -40,6 +40,7 @@ import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.ModulesUtils;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.Commands;
+import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.core.ZLibComponent;
 import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.reflection.Reflection;
@@ -248,7 +249,7 @@ public class ModulesManager extends ZLibComponent implements Listener
             {
                 try
                 {
-                    pluginCommands.put(pluginCommandConstructor.newInstance(commandAlias.getKey(), this), commandAlias.getValue());
+                    pluginCommands.put(pluginCommandConstructor.newInstance(commandAlias.getKey(), ZLib.getPlugin()), commandAlias.getValue());
                     registered.add(commandAlias.getKey());
                 }
                 catch (InstantiationException | InvocationTargetException | IllegalAccessException e)

@@ -40,6 +40,8 @@ modules:
     "ingame-deathAnnouncement": true
     "ingame-kick": false
     "ingame-freezer": true
+    "ingame-advancements": true
+    "ingame-statistics": true
 
     "gameplay-compass": true
     "gameplay-goldenHeads": true
