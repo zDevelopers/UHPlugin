@@ -726,8 +726,7 @@ public class GameModule extends UHModule implements Listener
         if (Config.BROADCAST_PROGRESS.get())
         {
             /// Displayed in the action bar when the slow teleportation is finished but the game not started.
-            String message = I.t("{lightpurple}Teleportation complete. {gray}The game will start soon...");
-            Bukkit.getOnlinePlayers().forEach(player -> ActionBar.sendPermanentMessage(player, message));
+            Bukkit.getOnlinePlayers().forEach(player -> ActionBar.sendPermanentMessage(player, I.tl(player, "{lightpurple}Teleportation complete. {gray}The game will start soon...")));
         }
     }
 

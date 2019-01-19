@@ -33,6 +33,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.other.reports;
 
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
@@ -159,7 +160,7 @@ public class ReportsModule extends UHModule
             .autoCollectPreviousStatistics(true)
             .registerPlayers(game.getAlivePlayers())
 
-            .title(eu.carrade.amaury.UHCReloaded.modules.core.sidebar.Config.TITLE.get())
+            .title(UHConfig.TITLE.get())
 
             .settings()
                 .displayDate(Config.DATE.get())

@@ -31,20 +31,47 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.modules.commands;
+package eu.carrade.amaury.UHCReloaded.modules.core.modules.gui.modules;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.modules.gui.ModulesListGUI;
-import fr.zcraft.zlib.components.commands.Command;
-import fr.zcraft.zlib.components.commands.CommandException;
-import fr.zcraft.zlib.components.commands.CommandInfo;
-import fr.zcraft.zlib.components.gui.Gui;
+import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
+import fr.zcraft.zlib.components.gui.ActionGui;
+import fr.zcraft.zlib.tools.items.ItemStackBuilder;
+import fr.zcraft.zteams.colors.ColorsUtils;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
-@CommandInfo (name = "modules-gui")
-public class ModulesGUICommand extends Command
+public abstract class FramedModuleGUI extends ActionGui
 {
-    @Override
-    protected void run() throws CommandException
+    protected final ModuleWrapper module;
+
+    public FramedModuleGUI(ModuleWrapper module)
     {
-        Gui.open(playerSender(), new ModulesListGUI());
+        this.module = module;
+    }
+
+    @Override
+    protected void onAfterUpdate()
+    {
+        final ItemStack framePart = new ItemStackBuilder(Material.STAINED_GLASS_PANE)
+                .title("")
+                .data(ColorsUtils.chat2Dye(module.getCategory().getColor()).getWoolData())  // FIXME 1.13
+                .item();
+
+        // Top and bottom
+        for (int slot = 0; slot < 9; slot++)
+        {
+            action("", slot, framePart);
+            action("", getSize() - (slot + 1), framePart);
+        }
+
+        // Sides
+        for (int line = 0; line < getSize() / 9; line++)
+        {
+            action("", line * 9, framePart);
+            action("", line * 9 + 8, framePart);
+        }
+
+        // Icon
+        action("__module_icon__", 4, module.getFullIcon(false));
     }
 }

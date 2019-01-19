@@ -31,7 +31,6 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.core.teams;
 
-import eu.carrade.amaury.UHCReloaded.UHConfig;
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;
 import fr.zcraft.zlib.components.configuration.ConfigurationSection;
@@ -78,7 +77,7 @@ public class Config extends ConfigurationInstance
             public final ConfigurationItem<Boolean> GIVE_ON_HEAD = item("give-on-head", false);
         }
 
-        public final UHConfig.TeamsOptionsSection.BannerSection.ShieldSection SHIELDS = section("shields", UHConfig.TeamsOptionsSection.BannerSection.ShieldSection.class);
+        public final ShieldSection SHIELDS = section("shields", ShieldSection.class);
 
         static public class ShieldSection extends ConfigurationSection
         {

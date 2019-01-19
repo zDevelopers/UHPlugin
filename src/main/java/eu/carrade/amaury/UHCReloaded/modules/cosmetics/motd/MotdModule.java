@@ -33,6 +33,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.cosmetics.motd;
 
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
@@ -64,7 +65,7 @@ public class MotdModule extends UHModule
         if (Config.DISPLAY_MATCH_NAME.get())
         {
             matchName = ChatColor.translateAlternateColorCodes('&', Config.MATCH_NAME_PREFIX.get())
-                + eu.carrade.amaury.UHCReloaded.modules.core.sidebar.Config.TITLE.get()
+                + UHConfig.TITLE.get()
                 + ChatColor.RESET + "\n";
         }
         else

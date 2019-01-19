@@ -40,7 +40,7 @@ import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.modules.commands.ModuleCommand;
 import eu.carrade.amaury.UHCReloaded.modules.core.modules.commands.ModulesCommand;
-import eu.carrade.amaury.UHCReloaded.modules.core.modules.commands.ModulesGUICommand;
+import eu.carrade.amaury.UHCReloaded.modules.core.modules.commands.ConfigurationCommand;
 import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
@@ -69,7 +69,7 @@ public class ModulesManagerModule extends UHModule
         return Arrays.asList(
                 ModulesCommand.class,
                 ModuleCommand.class,
-                ModulesGUICommand.class
+                ConfigurationCommand.class
         );
     }
 
@@ -78,7 +78,7 @@ public class ModulesManagerModule extends UHModule
     {
         return ImmutableMap.of(
                 "modules", ModulesCommand.class,
-                "config", ModulesGUICommand.class
+                "config", ConfigurationCommand.class
         );
     }
 

@@ -69,6 +69,14 @@ public class Config extends ConfigurationInstance
         public final ConfigurationItem<Material> ITEM = item("item", Material.NETHER_STAR);
     }
 
+    public static final ConfigAccessorSection CONFIG_ACCESSOR = section("config-accessor", ConfigAccessorSection.class);
+
+    static public class ConfigAccessorSection extends ConfigurationSection
+    {
+        public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
+        public final ConfigurationItem<Material> ITEM = item("item", Material.REDSTONE_COMPARATOR);
+    }
+
     public static final ConfigurationItem<Boolean> TEAM_IN_ACTION_BAR = item("team-in-action-bar", true);
 
     public static final ConfigurationItem<Boolean> ENABLE_PVP = item("enable-pvp", false);

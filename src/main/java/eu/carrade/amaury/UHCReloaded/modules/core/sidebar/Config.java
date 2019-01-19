@@ -47,5 +47,4 @@ public class Config extends ConfigurationInstance
         super(file);
     }
 
-    public final static ConfigurationItem<String> TITLE = item("title", ChatColor.GREEN + "" + ChatColor.BOLD + "UHC Reloaded");
 }

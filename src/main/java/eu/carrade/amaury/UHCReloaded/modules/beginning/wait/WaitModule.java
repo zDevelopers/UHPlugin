@@ -39,14 +39,19 @@ import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.modules.gui.MainConfigGUI;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.EntitiesUtils;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
+import fr.zcraft.zlib.components.attributes.Attribute;
+import fr.zcraft.zlib.components.attributes.Attributes;
 import fr.zcraft.zlib.components.gui.Gui;
-import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.core.ZLib;
+import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.items.ItemStackBuilder;
+import fr.zcraft.zlib.tools.reflection.NMSException;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.ActionBar;
 import fr.zcraft.zteams.ZTeam;
 import fr.zcraft.zteams.ZTeams;
@@ -68,6 +73,11 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permissible;
+import org.bukkit.scheduler.BukkitTask;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 
 @ModuleInfo (
@@ -80,30 +90,97 @@ import org.bukkit.permissions.Permissible;
 )
 public class WaitModule extends UHModule
 {
+    private final static UUID ACTIONABLE_ITEM_UUID = UUID.fromString("3f65c4a9-e1ae-437e-b8b4-57d80a831480");
+
+    private final Map<UUID, String> playerInventoriesStates = new HashMap<>();
+    private BukkitTask inventoriesUpdateTask = null;
+
     @Override
     protected void onEnable()
     {
         Bukkit.getOnlinePlayers().forEach(this::handleNewPlayer);
+
+        inventoriesUpdateTask = RunTask.timer(() -> Bukkit.getOnlinePlayers().forEach(this::updateInventory), 20L, 20L);
+    }
+
+    @Override
+    protected void onDisable()
+    {
+        if (inventoriesUpdateTask != null)
+        {
+            inventoriesUpdateTask.cancel();
+            inventoriesUpdateTask = null;
+        }
+    }
+
+    /**
+     * Writes an action into an Item Stack.
+     *
+     * @param item The item. This must be a CraftItemStack.
+     * @param action The action to store.
+     * @see #readAction(ItemStack) to read a previously stored action.
+     */
+    private void writeAction(final ItemStack item, final String action)
+    {
+        final Attribute attribute = new Attribute();
+
+        attribute.setUUID(ACTIONABLE_ITEM_UUID);
+        attribute.setCustomData(action);
+
+        try
+        {
+            Attributes.set(item, attribute);
+        }
+        catch (final NMSException e)
+        {
+            PluginLogger.error("Unable to store item action into attribute. Inventory tools won't work before the game.");
+        }
+    }
+
+    /**
+     * Reads an action previously written into this ItemStack.
+     * @param item The item.
+     * @return The action, or en empty string if nothing stored.
+     * @see #writeAction(ItemStack, String) to write an action.
+     */
+    private String readAction(final ItemStack item)
+    {
+        try
+        {
+            final Attribute attribute = Attributes.get(item, ACTIONABLE_ITEM_UUID);
+            return attribute != null && attribute.getCustomData() != null ? attribute.getCustomData() : "";
+        }
+        catch (NMSException ignored) {
+            return "";
+        }
     }
 
     /**
      * Opens the teams selector GUI, if needed (enabled, game not started, needed item).
      *
-     * TODO improve selector item detection.
-     *
      * @param player The player who right-clicked an item.
      * @param item The right-clicked item.
      */
-    private void openTeamsGUI(Player player, ItemStack item)
+    private boolean openGUI(Player player, ItemStack item)
     {
-        if (isGameStarted()) return;
+        if (isGameStarted() || item == null) return false;
 
-        if (Config.TEAM_SELECTOR.ENABLED.get()
-                && item != null
-                && item.getType() == Config.TEAM_SELECTOR.ITEM.get())
+        switch (readAction(item))
         {
-            Gui.open(player, new TeamsSelectorGUI());
+            case "teams":
+                Gui.open(player, new TeamsSelectorGUI());
+                return true;
+
+            case "config":
+                if (player.isOp()) // TODO add permissions
+                {
+                    Gui.open(player, new MainConfigGUI());
+                    return true;
+                }
+                else return false;
         }
+
+        return false;
     }
 
     /**
@@ -113,8 +190,6 @@ public class WaitModule extends UHModule
      */
     private void handleNewPlayer(final Player player)
     {
-        final boolean builder = isBuilder(player);
-
         if (Config.TELEPORT_TO_SPAWN_IF_NOT_STARTED.get())
         {
             final Location worldSpawn = UR.get().getWorld(World.Environment.NORMAL).getSpawnLocation().add(0.5, 0.5, 0.5);
@@ -133,6 +208,34 @@ public class WaitModule extends UHModule
         player.setFoodLevel(20);
         player.setSaturation(20f);
 
+        updateInventory(player);
+
+        player.getInventory().setHeldItemSlot(4);
+
+        displayTeamInActionBar(player);
+    }
+
+    /**
+     * Update the player inventory and game mode, if its state changed since last update.
+     *
+     * @param player The player to update.
+     */
+    private void updateInventory(final Player player)
+    {
+        final boolean builder = isBuilder(player);
+        final boolean teamsDisplayed = Config.TEAM_SELECTOR.ENABLED.get();
+        final boolean configDisplayed = Config.CONFIG_ACCESSOR.ENABLED.get() && player.isOp();
+
+        // Only updates the inventory when the access state change.
+        final String state = String.format("%b%b%b", builder, teamsDisplayed, configDisplayed);
+        if (playerInventoriesStates.containsKey(player.getUniqueId()) && playerInventoriesStates.get(player.getUniqueId()).equals(state))
+        {
+            return;
+        }
+
+        PluginLogger.info("New state: {0}", state);
+        playerInventoriesStates.put(player.getUniqueId(), state);
+
         player.setGameMode(builder ? GameMode.CREATIVE : GameMode.ADVENTURE);
 
         if (!builder && Config.INVENTORY.CLEAR.get())
@@ -141,24 +244,61 @@ public class WaitModule extends UHModule
             player.getInventory().setArmorContents(null);
         }
 
-        if (Config.TEAM_SELECTOR.ENABLED.get())
+        if (Config.TEAM_SELECTOR.ENABLED.get() || Config.CONFIG_ACCESSOR.ENABLED.get())
         {
-            Material itemType = Config.TEAM_SELECTOR.ITEM.get();
-
-            ItemStack item = new ItemStackBuilder(itemType)
+            final ItemStack teamsSelector = new ItemStackBuilder(Config.TEAM_SELECTOR.ITEM.get())
                     /// The title of the item given before the game to select a team
                     .title(I.t("{green}{bold}Select a team {gray}(Right-Click)"))
                     /// The lore of  the item given before the game to select a team
-                    .lore(GuiUtils.generateLore(I.t("{gray}Right-click to select your team for this game")))
+                    .longLore(I.t("{gray}Right-click to select your team for this game"))
                     .hideAttributes()
-                    .item();
+                    .craftItem();
 
-            final ItemStack centralItem = player.getInventory().getItem(4);
-            if (!builder || centralItem == null || centralItem.getType() == org.bukkit.Material.AIR)
-                player.getInventory().setItem(4, item);
+            final ItemStack configAccessor = new ItemStackBuilder(Config.CONFIG_ACCESSOR.ITEM.get())
+                    .title(I.t("{red}{bold}Configure the game {gray}(Right-Click)"))
+                    .longLore(I.t("{gray}Right-click to open the game configuration GUI"))
+                    .hideAttributes()
+                    .craftItem();
+
+            writeAction(teamsSelector, "teams");
+            writeAction(configAccessor, "config");
+
+            final int teamsSlot = configDisplayed ? 2 : 4;
+            final int configSlot = teamsDisplayed ? 6 : 4;
+
+            clearIfSimilar(player, teamsSelector, 2);
+            clearIfSimilar(player, teamsSelector, 4);
+            clearIfSimilar(player, configAccessor, 4);
+            clearIfSimilar(player, configAccessor, 6);
+
+            if (teamsDisplayed)
+            {
+                placeIfPossible(player, teamsSelector, teamsSlot);
+            }
+
+            if (configDisplayed)
+            {
+                placeIfPossible(player, configAccessor, configSlot);
+            }
         }
+    }
 
-        displayTeamInActionBar(player);
+    private void placeIfPossible(final Player player, final ItemStack item, final int slot)
+    {
+        final ItemStack previousItem = player.getInventory().getItem(slot);
+        if (!isBuilder(player) || previousItem == null || previousItem.getType() == org.bukkit.Material.AIR)
+        {
+            player.getInventory().setItem(slot, item);
+        }
+    }
+
+    private void clearIfSimilar(final Player player, final ItemStack ifSimilarTo, final int slot)
+    {
+        final ItemStack previousItem = player.getInventory().getItem(slot);
+        if (previousItem != null && previousItem.getType() == ifSimilarTo.getType())
+        {
+            player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+        }
     }
 
     /**
@@ -197,14 +337,19 @@ public class WaitModule extends UHModule
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent ev)
     {
-        if (ev.getAction() != Action.PHYSICAL)
-            openTeamsGUI(ev.getPlayer(), ev.getItem());
+        if (ev.getAction() != Action.PHYSICAL && openGUI(ev.getPlayer(), ev.getItem()))
+        {
+            ev.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent ev)
     {
-        openTeamsGUI(ev.getPlayer(), ev.getPlayer().getItemInHand());
+        if (openGUI(ev.getPlayer(), ev.getPlayer().getItemInHand()))
+        {
+            ev.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -367,6 +512,11 @@ public class WaitModule extends UHModule
 
             case IN_GAME:
                 ZLib.unregisterEvents(this);
+                if (inventoriesUpdateTask != null)
+                {
+                    inventoriesUpdateTask.cancel();
+                    inventoriesUpdateTask = null;
+                }
                 break;
         }
     }

@@ -31,7 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.modules.gui;
+package eu.carrade.amaury.UHCReloaded.modules.core.modules.gui.modules;
 
 import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
@@ -42,8 +42,10 @@ import fr.zcraft.zlib.components.gui.Gui;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.items.ItemStackBuilder;
+import fr.zcraft.zlib.tools.mojang.MojangHead;
 import fr.zcraft.zteams.colors.ColorsUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -55,6 +57,7 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper>
      * The category filtered. {@code null} means all.
      */
     private ModuleCategory filterCategory;
+    private StateFilter filterState = StateFilter.ALL;
 
     public ModulesListGUI()
     {
@@ -75,6 +78,23 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper>
 
         final ModuleWrapper[] modules = UR.get().getModulesManager().getModules().stream()
             .filter(module -> filterCategory == null || module.getCategory() == filterCategory)
+            .filter(module -> {
+                switch (filterState)
+                {
+                    case ALL:
+                        return true;
+
+                    case ENABLED:
+                        return module.isEnabled();
+
+                    case LOADED:
+                        return module.isLoaded();
+
+                    case DISABLED:
+                    default:
+                        return !module.isEnabled();
+                }
+            })
             .sorted((module1, module2) -> {
                 if (module1.equals(module2)) return 0;
 
@@ -92,7 +112,9 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper>
 
         setData(modules);
 
+
         // Sets the title
+
         if (filterCategory == null)
         {
             setTitle(I.t("{black}All modules {darkgray}({0})", UR.get().getModulesManager().getModules().size()));
@@ -102,7 +124,9 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper>
             setTitle(ChatColor.BLACK + filterCategory.getDisplayName() + ChatColor.DARK_GRAY + String.format(" (%d / %d)", modules.length, UR.get().getModulesManager().getModules().size()));
         }
 
+
         // Displays the bottom bar of color
+
         final ItemStackBuilder bottomColorStripe = new ItemStackBuilder(Material.STAINED_GLASS_PANE)
                 .data(ColorsUtils.chat2Dye(filterCategory != null ? filterCategory.getColor() : ChatColor.WHITE).getWoolData())  // FIXME 1.13
                 .title(filterCategory != null ? filterCategory.getColor() + "" + ChatColor.BOLD + filterCategory.getDisplayName() : "");
@@ -110,14 +134,17 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper>
 
         for (int slot = getSize() - 9; slot < getSize(); slot++) action("", slot, bottomColorStripe);
 
+
+        final String prefixActive = ChatColor.YELLOW + "» ";
+        final String prefixInactive = ChatColor.DARK_GRAY + "» " + ChatColor.GRAY;
+
+
         // Displays the category filter button
+
         final Material endCrystal = Material.getMaterial("END_CRYSTAL");
         final ItemStackBuilder catFilter = new ItemStackBuilder(filterCategory == null ? new ItemStack(endCrystal != null ? endCrystal : Material.HOPPER) : filterCategory.getIcon())
                 .title(ChatColor.YELLOW, ChatColor.BOLD + I.t("Filter modules category"))
                 .loreSeparator();
-
-        final String prefixActive = ChatColor.YELLOW + "» ";
-        final String prefixInactive = ChatColor.DARK_GRAY + "» " + ChatColor.GRAY;
 
         catFilter.loreLine((filterCategory == null ? prefixActive : prefixInactive) + I.t("All modules"));
 
@@ -130,6 +157,32 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper>
         catFilter.longLore(ChatColor.WHITE, filterCategory == null ? I.t("Click to filter the modules by category. A description will be displayed here.") : filterCategory.getDescription(), 38);
 
         action("switch_category", getSize() - 5, catFilter);
+
+
+        // Displays the state filter button
+
+        final ItemStackBuilder stateFilter = new ItemStackBuilder(Material.INK_SACK)  // FIXME 1.13
+                .data(filterState.color.getDyeData())
+                .title(ChatColor.YELLOW, ChatColor.BOLD + I.tl(getPlayerLocale(), "Filter modules state"))
+                .loreSeparator();
+
+        for (StateFilter filter : StateFilter.values())
+        {
+            stateFilter.loreLine(filterState == filter ? prefixActive : prefixInactive, filter.displayName);
+        }
+
+        stateFilter.loreSeparator();
+        stateFilter.longLore(ChatColor.WHITE, I.tl(getPlayerLocale(), "Click here to filter by state. Loaded modules are currently running. Enabled ones are running or will run when needed. Disabled modules will never run."), 48);
+
+        action("switch_status", getSize() - 7, stateFilter);
+
+
+        // Displays the back button
+
+        action("quit", getSize() - 3, MojangHead.ARROW_LEFT.asItemBuilder()
+                .title(ChatColor.GREEN, ChatColor.BOLD + (getParent() != null ? I.tl(getPlayerLocale(), "Go Back") : I.tl(getPlayerLocale(), "Close")))
+                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "Click here to close this GUI and go back. You can also press “Escape”."))
+        );
     }
 
     @Override
@@ -209,5 +262,37 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper>
     {
         filterCategory = UHUtils.getNextElement(filterCategory, ev.getClick() == ClickType.RIGHT ? -1 : 1, true, ModuleCategory.class);
         update();
+    }
+
+    @GuiAction
+    protected void switch_status(final InventoryClickEvent ev)
+    {
+        filterState = UHUtils.getNextElement(filterState, ev.getClick() == ClickType.RIGHT ? -1 : 1);
+        update();
+    }
+
+    @GuiAction
+    protected void quit()
+    {
+        close();
+    }
+
+    private enum StateFilter
+    {
+        ALL(DyeColor.PURPLE, I.t("All modules")),
+        ENABLED(DyeColor.PINK, I.t("Enabled modules")),
+        LOADED(DyeColor.LIME, I.t("Loaded modules")),
+        DISABLED(DyeColor.GRAY, I.t("Disabled modules"))
+
+        ;
+
+        private final DyeColor color;
+        private final String displayName;
+
+        StateFilter(DyeColor color, String displayName)
+        {
+            this.color = color;
+            this.displayName = displayName;
+        }
     }
 }

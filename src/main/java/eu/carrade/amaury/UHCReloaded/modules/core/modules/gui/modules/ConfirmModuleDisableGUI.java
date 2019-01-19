@@ -31,18 +31,17 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.core.modules.gui;
+package eu.carrade.amaury.UHCReloaded.modules.core.modules.gui.modules;
 
 import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
 import fr.zcraft.zlib.components.gui.GuiAction;
 import fr.zcraft.zlib.components.gui.GuiUtils;
 import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.tools.items.ItemStackBuilder;
+import fr.zcraft.zlib.tools.mojang.MojangHead;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,20 +64,13 @@ public class ConfirmModuleDisableGUI extends FramedModuleGUI
 
         title.remove(0);
 
-        final ItemStack confirm = new ItemStackBuilder(Material.SKULL_ITEM)
-                .data((short) 3)
+        action("", 22, MojangHead.QUESTION.asItemBuilder()
                 .title(ChatColor.RED, ChatColor.BOLD + firstTitleLine)
                 .lore(title.stream().map(line -> ChatColor.RED + "" + ChatColor.BOLD + line).collect(Collectors.toList()))
                 .loreSeparator()
                 .longLore(ChatColor.GRAY, I.t("This module cannot be re-loaded after its original load period. This means that if you disable this module, you won't be able to re-enable it during this game."), 38)
                 .longLore(ChatColor.WHITE, I.t("Are you sure you want to disable {0}?", module.getName()), 38)
-                .item();
-
-        final SkullMeta meta = (SkullMeta) confirm.getItemMeta();
-        meta.setOwner("MHF_Question");
-        confirm.setItemMeta(meta);
-
-        action("", 22, confirm);
+                .item());
 
         final ItemStackBuilder no = new ItemStackBuilder(Material.STAINED_GLASS_PANE)
                 .data(DyeColor.RED.getWoolData())  // FIXME 1.13

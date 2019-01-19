@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.modules.core.sidebar;
 
 import eu.carrade.amaury.UHCReloaded.UHCReloaded;
+import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import fr.zcraft.zlib.components.scoreboard.Sidebar;
@@ -75,6 +76,6 @@ public class GameSidebar extends Sidebar
     @Override
     public String getTitle(Player player)
     {
-        return Config.TITLE.get();
+        return UHConfig.TITLE.get();
     }
 }

@@ -32,7 +32,6 @@
 
 package eu.carrade.amaury.UHCReloaded.utils;
 
-import eu.carrade.amaury.UHCReloaded.UHConfig;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandler;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
 import org.apache.commons.lang3.Validate;
@@ -188,31 +187,6 @@ public class UHSound
         this.sound  = string2Sound(config.getString("name"));
         this.volume = (float) config.getDouble("volume");
         this.pitch  = (float) config.getDouble("pitch");
-    }
-
-    /**
-     * Constructs a sound from a zLib sound configuration section.
-     * <p>
-     * Format:
-     * <pre>
-     * key:
-     *     name: string parsable as a sound. If not parsable, null used (i.e. no sound played).
-     *     volume: decimal number
-     *     pitch: decimal number
-     * </pre>
-     *
-     * @param config The configuration section.
-     */
-    public UHSound(UHConfig.SoundSection config)
-    {
-        if (config == null)
-        {
-            return;
-        }
-
-        this.sound  = config.NAME.get();
-        this.volume = (float) config.VOLUME.get();
-        this.pitch  = (float) config.PITCH.get();
     }
 
     /**

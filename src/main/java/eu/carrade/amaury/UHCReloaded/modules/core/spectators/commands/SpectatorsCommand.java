@@ -42,6 +42,7 @@ import fr.zcraft.zlib.components.commands.CommandInfo;
 import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
 import java.util.List;
@@ -92,19 +93,21 @@ public class SpectatorsCommand extends Command
                     // /uh spec add <player>
                     else
                     {
+                        final CommandSender finalSender = sender;
+
                         OfflinePlayersLoader.loadPlayer(args[1], player -> {
                             if (player == null)
                             {
-                                sender.sendMessage(I.t("{ce}Unable to retrieve the player {0}."));
+                                finalSender.sendMessage(I.t("{ce}Unable to retrieve the player {0}."));
 
                                 if (!Bukkit.getOnlineMode())
-                                    sender.sendMessage(I.t("{ce}In offline mode, you cannot add players if they never came to this server."));
+                                    finalSender.sendMessage(I.t("{ce}In offline mode, you cannot add players if they never came to this server."));
 
                                 return;
                             }
 
                             UR.module(SpectatorsModule.class).addSpectator(player);
-                            sender.sendMessage(I.t("{cs}The player {0} is now a spectator.", player.getName()));
+                            finalSender.sendMessage(I.t("{cs}The player {0} is now a spectator.", player.getName()));
                         });
                     }
 
@@ -124,12 +127,12 @@ public class SpectatorsCommand extends Command
                         final OfflinePlayer oldSpectator = OfflinePlayersLoader.getOfflinePlayer(args[1]);
                         if (oldSpectator == null)
                         {
-                            sender.sendMessage(I.t("{ce}The player {0} was not found.", args[1]));
+                            error(I.t("{ce}The player {0} was not found.", args[1]));
                         }
                         else
                         {
                             UR.module(SpectatorsModule.class).removeSpectator(oldSpectator);
-                            sender.sendMessage(I.t("{cs}The player {0} is now a player.", args[1]));
+                            success(I.t("{cs}The player {0} is now a player.", args[1]));
                         }
                     }
 
