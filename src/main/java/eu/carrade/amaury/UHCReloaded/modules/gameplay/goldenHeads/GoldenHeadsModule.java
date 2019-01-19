@@ -46,6 +46,7 @@ import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import fr.zcraft.zlib.tools.items.ItemUtils;
 import fr.zcraft.zlib.tools.reflection.NMSException;
 import fr.zcraft.zlib.tools.runners.RunTask;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -76,6 +77,9 @@ import java.util.UUID;
 public class GoldenHeadsModule extends UHModule
 {
     private final static UUID HEADS_UUID = UUID.fromString("1a050e3b-6274-434e-b8c0-a720048142e7");
+
+    private final String HEART = "\u2764";
+    private final String HALF = "\u00bd";
 
     private final static int TICKS_BETWEEN_EACH_REGENERATION = 50;
     private final static int DEFAULT_NUMBER_OF_HEARTS_REGEN = 4;
@@ -178,8 +182,10 @@ public class GoldenHeadsModule extends UHModule
         final ItemStack result = ev.getInventory().getResult();
         if (result == null || (result.getType() != Material.GOLDEN_APPLE /* && result.getType() != Material.ENCHANTED_GOLDEN_APPLE FIXME 1.13 */)) return;
 
-        if ((!Config.GOLDEN_APPLE.ENABLE.get() && result.getType() == Material.GOLDEN_APPLE && result.getData().getData() == 0)
-                || (!Config.ENCHANTED_GOLDEN_APPLE.ENABLE.get() && result.getType() == Material.GOLDEN_APPLE && result.getData().getData() == 1))
+        final boolean isEnchanted = result.getData().getData() == 1;
+
+        if ((!Config.GOLDEN_APPLE.ENABLE.get() && result.getType() == Material.GOLDEN_APPLE && !isEnchanted)
+                || (!Config.ENCHANTED_GOLDEN_APPLE.ENABLE.get() && result.getType() == Material.GOLDEN_APPLE && isEnchanted))
         {
             result.setType(Material.AIR);
         }
@@ -193,13 +199,13 @@ public class GoldenHeadsModule extends UHModule
             final ItemStackBuilder revampedResult = new ItemStackBuilder(result);
 
             if (headType == SkullType.WITHER &&
-                    ((result.getData().getData() == 0 && Config.WITHER_GOLDEN_HEAD.ADD_LORE.get()) || (result.getData().getData() == 1 && Config.WITHER_ENCHANTED_GOLDEN_HEAD.ADD_LORE.get())))
+                    ((!isEnchanted && Config.WITHER_GOLDEN_HEAD.ADD_LORE.get()) || (isEnchanted && Config.WITHER_ENCHANTED_GOLDEN_HEAD.ADD_LORE.get())))
             {
                 revampedResult.longLore(ChatColor.GRAY, ChatColor.ITALIC + I.t("Made from the fallen head of a malignant monster"));
             }
 
             else if (headType == SkullType.PLAYER &&
-                    ((result.getData().getData() == 0 && Config.PLAYER_GOLDEN_HEAD.ADD_LORE.get()) || (result.getData().getData() == 1 && Config.PLAYER_ENCHANTED_GOLDEN_HEAD.ADD_LORE.get())))
+                    ((!isEnchanted && Config.PLAYER_GOLDEN_HEAD.ADD_LORE.get()) || (isEnchanted && Config.PLAYER_ENCHANTED_GOLDEN_HEAD.ADD_LORE.get())))
             {
                 // We retrieve the player name to write it into the lore
                 String name = null;
@@ -229,6 +235,35 @@ public class GoldenHeadsModule extends UHModule
             }
 
             revampedResult.hideAttributes().item();
+        }
+
+
+        /* *** We add the regeneration amount on all apples, if non-vanilla *** */
+
+        if (Config.DISPLAY_REGEN_AMOUNT_ON_APPLES.get())
+        {
+            final int halfHearts = getRegenerationFor(headType, isEnchanted);
+            if (halfHearts != 0 && ((!isEnchanted && halfHearts != DEFAULT_NUMBER_OF_HEARTS_REGEN) || (isEnchanted && halfHearts != DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH)))
+            {
+                final int hearts = halfHearts / 2;
+                final boolean plusHalf = halfHearts % 2 != 0;
+
+                final String heartsSymbol;
+
+                if (hearts <= 10)
+                {
+                    heartsSymbol = ChatColor.RED + StringUtils.repeat(HEART, hearts) + (plusHalf ? ChatColor.GRAY + " + " + HALF : "");
+                }
+                else
+                {
+                    heartsSymbol = ChatColor.RED + HEART + ChatColor.GRAY + " × " + hearts + (plusHalf ? " + " + HALF : "");
+                }
+
+                final ItemStackBuilder revampedResult = new ItemStackBuilder(result);
+                if (headType != null) revampedResult.loreSeparator();
+
+                revampedResult.loreLine(ChatColor.GRAY, I.t("Regenerates {0}", heartsSymbol)).item();
+            }
         }
     }
 
@@ -268,54 +303,8 @@ public class GoldenHeadsModule extends UHModule
             final SkullType headType = readHeadType(ev.getItem());
             final short dataValue = ev.getItem().getDurability();
 
-            final int halfHearts;
-            final int level;
-
-            // Standard golden apple
-            if (headType == null)
-            {
-                if (dataValue == 0)  // FIXME 1.13
-                {
-                    halfHearts = Config.GOLDEN_APPLE.REGENERATION.get();
-                    level = REGENERATION_LEVEL_GOLDEN_APPLE;
-                }
-                else
-                {
-                    halfHearts = Config.ENCHANTED_GOLDEN_APPLE.REGENERATION.get();
-                    level = REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
-                }
-            }
-
-            else if (headType == SkullType.PLAYER)
-            {
-                if (dataValue == 0)  // FIXME 1.13
-                {
-                    halfHearts = Config.PLAYER_GOLDEN_HEAD.REGENERATION.get();
-                    level = REGENERATION_LEVEL_GOLDEN_APPLE;
-                }
-                else
-                {
-                    halfHearts = Config.PLAYER_ENCHANTED_GOLDEN_HEAD.REGENERATION.get();
-                    level = REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
-                }
-            }
-
-            else if (headType == SkullType.WITHER)
-            {
-                if (dataValue == 0)  // FIXME 1.13
-                {
-                    halfHearts = Config.WITHER_GOLDEN_HEAD.REGENERATION.get();
-                    level = REGENERATION_LEVEL_GOLDEN_APPLE;
-                }
-                else
-                {
-                    halfHearts = Config.WITHER_ENCHANTED_GOLDEN_HEAD.REGENERATION.get();
-                    level = REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
-                }
-            }
-
-            // Invalid attribute. Should never happen.
-            else return;
+            final int halfHearts = getRegenerationFor(headType, dataValue == 1);
+            final int level = dataValue == 0 ? REGENERATION_LEVEL_GOLDEN_APPLE : REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
 
 
             // Technically, a level-I effect is « level 0 ».
@@ -357,5 +346,55 @@ public class GoldenHeadsModule extends UHModule
                 }, 2L);
             }
         }
+    }
+
+    /**
+     * Returns the amount of regeneration we should apply for a given apple.
+     *
+     * @param headType The apple type ({@code null} meaning standard apple; else, {@link SkullType#WITHER} or {@link SkullType#PLAYER}).
+     * @param isEnchanted True if this is an enchanted golden apple (aka Notch Apple).
+     * @return The amount of regeneration, or 0 if invalid (i.e. bad skull type).
+     */
+    private int getRegenerationFor(final SkullType headType, final boolean isEnchanted)
+    {
+        // Standard golden apple
+        if (headType == null)
+        {
+            if (!isEnchanted)  // FIXME 1.13
+            {
+                return Config.GOLDEN_APPLE.REGENERATION.get();
+            }
+            else
+            {
+                return Config.ENCHANTED_GOLDEN_APPLE.REGENERATION.get();
+            }
+        }
+
+        else if (headType == SkullType.PLAYER)
+        {
+            if (!isEnchanted)  // FIXME 1.13
+            {
+                return Config.PLAYER_GOLDEN_HEAD.REGENERATION.get();
+            }
+            else
+            {
+                return Config.PLAYER_ENCHANTED_GOLDEN_HEAD.REGENERATION.get();
+            }
+        }
+
+        else if (headType == SkullType.WITHER)
+        {
+            if (!isEnchanted)  // FIXME 1.13
+            {
+                return Config.WITHER_GOLDEN_HEAD.REGENERATION.get();
+            }
+            else
+            {
+                return Config.WITHER_ENCHANTED_GOLDEN_HEAD.REGENERATION.get();
+            }
+        }
+
+        // Invalid attribute. Should never happen.
+        else return 0;
     }
 }

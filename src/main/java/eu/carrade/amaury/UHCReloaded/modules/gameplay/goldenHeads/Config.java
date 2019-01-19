@@ -52,6 +52,8 @@ public class Config extends ConfigurationInstance
     public static final ConfigurationItem<Boolean> DROP_HEAD_ON_DEATH = item("drop-head-on-death", true);
     public static final ConfigurationItem<Boolean> DROP_HEAD_ON_DEATH_PVP_ONLY = item("drop-head-on-death-pvp-only", false);
 
+    public static final ConfigurationItem<Boolean> DISPLAY_REGEN_AMOUNT_ON_APPLES = item("display-regen-amount-on-apples", true);
+
     public static final GoldenAppleSection GOLDEN_APPLE = section("golden-apple", GoldenAppleSection.class);
     public static final EnchantedGoldenAppleSection ENCHANTED_GOLDEN_APPLE = section("golden-apple", EnchantedGoldenAppleSection.class);
 
@@ -69,7 +71,7 @@ public class Config extends ConfigurationInstance
 
     public static class EnchantedGoldenAppleSection extends ConfigurationSection
     {
-        public final ConfigurationItem<Boolean> ENABLE = item("enable", false);
+        public final ConfigurationItem<Boolean> ENABLE = item("enable", true);
         public final ConfigurationItem<Integer> REGENERATION = item("regeneration", 180);
     }
 
