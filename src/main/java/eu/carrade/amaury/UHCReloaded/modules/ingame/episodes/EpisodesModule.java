@@ -44,6 +44,7 @@ import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector.Sideba
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.Timer;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.events.TimerEndsEvent;
+import eu.carrade.amaury.UHCReloaded.modules.cosmetics.playerListHeaderFooter.PlayerListHeaderFooterModule;
 import eu.carrade.amaury.UHCReloaded.modules.ingame.episodes.commands.ShiftCommand;
 import eu.carrade.amaury.UHCReloaded.modules.ingame.episodes.events.EpisodeChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.ingame.episodes.events.EpisodeChangedEvent.EpisodeChangedCause;
@@ -73,8 +74,9 @@ import java.util.List;
 )
 public class EpisodesModule extends UHModule
 {
-    private final GameModule game = UR.module(GameModule.class);
+    private final GameModule game = UR.game();
     private final TimersModule timers = UR.module(TimersModule.class);
+    private final PlayerListHeaderFooterModule headFoot = UR.module(PlayerListHeaderFooterModule.class);
 
     private Timer episodesTimer;
     private int episode = 1;
@@ -92,6 +94,12 @@ public class EpisodesModule extends UHModule
         episodesTimer.setNameDisplayed(false);
 
         episodesTimer.start();
+
+        if (headFoot != null)
+        {
+            headFoot.registerPlaceholder("episodeText", () -> I.t("Episode {0}", episode));
+            headFoot.registerPlaceholder("episodeNumber", () -> String.valueOf(episode));
+        }
     }
 
     @Override
@@ -154,6 +162,13 @@ public class EpisodesModule extends UHModule
                     I.t("{darkaqua}Episode {aqua}{0}", ev.getNewEpisode(), ev.getOldEpisode()),
                     ""
             );
+        }
+
+
+        // Update headers & footers
+        if (headFoot != null)
+        {
+            headFoot.update();
         }
     }
 
