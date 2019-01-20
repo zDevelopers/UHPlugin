@@ -15,52 +15,19 @@
 # Empty value: system language.
 lang: fr
 
+# If set to false, no built-in modules (except core ones) will be loaded (except if
+# re-specified in the `modules` configuration below).
+built-in-modules: true
 
-# The modules to load & load. You can add modules provided by other plugins.
+# The modules to load. You can add modules provided by other plugins. Other plugins also may
+# self-register their modules for you.
 # Each module's configuration is in plugins/UHPlugin/modules/<modulename>.yml .
-# You can put internal modules or refer to modules classes from other plugins. In all
-# cases, replace all dots in class paths by dashes.
+# You can put built-in modules or refer to modules classes from other plugins. In all
+# cases, replace all dots in class paths by dashes. The value after “:” may be true to
+# enable the module by default, or false else.
 modules:
-    "beginning-wait": true
-    "beginning-cages": true
-
-    "border-walls": true
-    "border-warning": true
-    "border-check": true
-
-    "ingame-hardcore": true
-    "ingame-weather": true
-    "ingame-daylightCycle": true
-    "ingame-food": true
-    "ingame-health": true
-    "ingame-listHealth": true
-    "ingame-teleportation": true
-    "ingame-episodes": true
-    "ingame-killsCount": true
-    "ingame-deathAnnouncement": true
-    "ingame-kick": false
-    "ingame-freezer": true
-    "ingame-advancements": true
-    "ingame-statistics": true
-
-    "gameplay-compass": true
-    "gameplay-goldenHeads": true
-    "gameplay-noGhastTears": true
-    "gameplay-noEnderPearlDamages": true
-    "gameplay-noWitches": true
-    "gameplay-potions": true
-    "gameplay-xpToKillers": true
-
-    "cosmetics-hardcoreHearts": true
-    "cosmetics-motd": true
-    "cosmetics-dynmap": true
-
-    "other-reports": true
-    "other-playersLoader": true
-    "other-rules": true
-    "other-about": true
-
-    "scenarii-alliances": false
+    # "scenarii-alliances": true
+    # "eu-my-other-package-moduleName": true
 
 
 # The worlds to use as main worlds.

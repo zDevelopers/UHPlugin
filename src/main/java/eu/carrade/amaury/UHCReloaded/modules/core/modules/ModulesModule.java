@@ -61,7 +61,7 @@ import java.util.Map;
         icon = Material.COMMAND,
         can_be_unloaded = false
 )
-public class ModulesManagerModule extends UHModule
+public class ModulesModule extends UHModule
 {
     @Override
     public List<Class<? extends Command>> getCommands()

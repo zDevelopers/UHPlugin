@@ -33,9 +33,12 @@
  */
 package eu.carrade.amaury.UHCReloaded.core;
 
+import com.google.common.reflect.ClassPath;
 import eu.carrade.amaury.UHCReloaded.core.events.AllModulesLoadedEvent;
 import eu.carrade.amaury.UHCReloaded.core.events.ModuleLoadedEvent;
 import eu.carrade.amaury.UHCReloaded.core.events.ModuleUnloadedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.ingame.kick.KickModule;
+import eu.carrade.amaury.UHCReloaded.modules.scenarii.alliances.AlliancesModule;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.ModulesUtils;
 import fr.zcraft.zlib.components.commands.Command;
@@ -51,6 +54,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -58,8 +62,62 @@ import java.util.stream.Collectors;
 
 public class ModulesManager extends ZLibComponent implements Listener
 {
+    /**
+     * The package were all built-in modules are stored.
+     */
+    private final static String MODULES_PACKAGE = "eu.carrade.amaury.UHCReloaded.modules";
+
+    /**
+     * These built-in modules will not be enabled by default. It includes all scenarii, so the default game
+     * is a standard one, and the kick module, as spectators are better for most admins.
+     */
+    private final static List<Class<? extends UHModule>> DISABLED_BY_DEFAULT = Arrays.asList(
+            KickModule.class,
+            AlliancesModule.class
+    );
+
+    /**
+     * All the registered modules.
+     */
     private Map<Class<? extends UHModule>, ModuleWrapper> modules = new HashMap<>();
+
+    /**
+     * These loads times were loaded using {@link #loadModules(ModuleLoadTime)} and are stored to not
+     * be loaded again (e.g. in case of cancelled start, modules with {@link ModuleLoadTime#ON_GAME_STARTING}
+     * will not be loaded twice).
+     */
     private Set<ModuleLoadTime> loadedPriorities = new HashSet<>();
+
+
+    /**
+     * Lookup and loads all built-in modules. They will be enabled by default, except if in
+     * the {@link #DISABLED_BY_DEFAULT disabled-by-default list}.
+     */
+    public void registerBuiltInModules()
+    {
+        long t = System.currentTimeMillis();
+        int i = 0;
+
+        try
+        {
+            for (ClassPath.ClassInfo classInfo : ClassPath.from(getClass().getClassLoader()).getTopLevelClassesRecursive(MODULES_PACKAGE))
+            {
+                final Class<?> potentialModuleClass = classInfo.load();
+
+                if (UHModule.class.isAssignableFrom(potentialModuleClass))
+                {
+                    registerModule((Class<? extends UHModule>) potentialModuleClass, !DISABLED_BY_DEFAULT.contains(potentialModuleClass));
+                    i++;
+                }
+            }
+        }
+        catch (final IOException e)
+        {
+            PluginLogger.error("Unable to load built-in modules.", e);
+        }
+
+        PluginLogger.info("Registered {0} built-in modules in {1}ms", i, System.currentTimeMillis() - t);
+    }
 
 
     /**
@@ -71,7 +129,7 @@ public class ModulesManager extends ZLibComponent implements Listener
     }
 
     /**
-     * Registers an UHCReloaded module (or many). It is not enabled by this method.
+     * Registers an UHCReloaded module (or many). It is not loaded by this method.
      *
      * @param modules the module's class, that must accept a zero-arguments constructor.
      */
@@ -82,18 +140,21 @@ public class ModulesManager extends ZLibComponent implements Listener
     }
 
     /**
-     * Registers an UHCReloaded module (or many). It is not enabled by this method.
+     * Registers an UHCReloaded module. It is not loaded by this method.
      *
      * @param module the module's class, that must accept a zero-arguments constructor.
-     * @param initiallyEnabled {@code true} if this module, according to the configuration file, should be loaded at startup.
+     * @param initiallyEnabled {@code true} if this module, according to the configuration file, should be enabled at startup.
      */
     public void registerModule(final Class<? extends UHModule> module, final boolean initiallyEnabled)
     {
-        this.modules.put(module, new ModuleWrapper(module, initiallyEnabled));
+        if (!modules.containsKey(module))
+        {
+            this.modules.put(module, new ModuleWrapper(module, initiallyEnabled));
+        }
     }
 
     /**
-     * Registers an UHCReloaded module. It is not enabled by this method.
+     * Registers an UHCReloaded module. It is not loaded by this method.
      *
      * It tries to load the following classes (in this order, taking the first existing):
      *
@@ -116,7 +177,7 @@ public class ModulesManager extends ZLibComponent implements Listener
     }
 
     /**
-     * Registers an UHCReloaded module. It is not enabled by this method.
+     * Registers an UHCReloaded module. It is not loaded by this method.
      *
      * It tries to load the following classes (in this order, taking the first existing):
      *
@@ -139,7 +200,7 @@ public class ModulesManager extends ZLibComponent implements Listener
     {
         final Class<? extends UHModule> moduleClass = ModulesUtils.getClassFromName(
                 module.replace('-', '.'),
-                "eu.carrade.amaury.UHCReloaded.modules",
+                MODULES_PACKAGE,
                 "Module",
                 UHModule.class
         );

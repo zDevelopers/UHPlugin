@@ -14,6 +14,7 @@ public class UHConfig extends Configuration
 
     static public final ConfigurationItem<String> TITLE = item("title", ChatColor.GREEN + "" + ChatColor.BOLD + "UHC Reloaded");
 
+    static public final ConfigurationItem<Boolean> BULT_IN_MODULES = item("built-in-modules", true);
     static public final ConfigurationMap<String, Boolean> MODULES = map("modules", String.class, Boolean.class);
 
     static public final WorldsSection WORLDS = section("worlds", WorldsSection.class);

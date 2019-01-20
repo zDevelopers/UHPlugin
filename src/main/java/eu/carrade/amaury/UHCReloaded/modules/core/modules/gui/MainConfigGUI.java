@@ -36,6 +36,7 @@ package eu.carrade.amaury.UHCReloaded.modules.core.modules.gui;
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
 import eu.carrade.amaury.UHCReloaded.modules.beginning.wait.Config;
+import eu.carrade.amaury.UHCReloaded.modules.beginning.wait.WaitModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.modules.gui.modules.ModulesListGUI;
 import eu.carrade.amaury.UHCReloaded.modules.core.modules.gui.start.StartGameGUI;
@@ -103,7 +104,7 @@ public class MainConfigGUI extends ActionGui
                 .longLore(ChatColor.DARK_GRAY, I.tl(getPlayerLocale(), "Actions on players coming soon: in the mean time, use commands."), 38)
         );
 
-        action("teams", 12, new ItemStackBuilder(Config.TEAM_SELECTOR.ITEM.get())
+        action("teams", 12, new ItemStackBuilder(UR.module(WaitModule.class) != null ? Config.TEAM_SELECTOR.ITEM.get() : Material.NETHER_STAR)
                 .title(ChatColor.AQUA, ChatColor.BOLD + I.tl(getPlayerLocale(), "Teams"))
                 .amount(Math.max(ZTeams.get().countTeams(), 1))
                 .loreLine(ChatColor.DARK_GRAY, I.tln(getPlayerLocale(), "{0} team", "{0} teams", ZTeams.get().countTeams()))

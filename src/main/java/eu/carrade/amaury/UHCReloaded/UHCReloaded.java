@@ -36,14 +36,12 @@ import eu.carrade.amaury.UHCReloaded.core.ModulesManager;
 import eu.carrade.amaury.UHCReloaded.modules.core.border.BorderModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
-import eu.carrade.amaury.UHCReloaded.modules.core.modules.ModulesManagerModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.modules.ModulesModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.spawns.SpawnsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.spectators.SpectatorsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.teams.TeamsModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimersModule;
-import eu.carrade.amaury.UHCReloaded.modules.ingame.freezer.FreezerModule;
-import eu.carrade.amaury.UHCReloaded.modules.other.rules.RulesModule;
 import eu.carrade.amaury.UHCReloaded.utils.OfflinePlayersLoader;
 import fr.zcraft.zlib.components.commands.Commands;
 import fr.zcraft.zlib.components.gui.Gui;
@@ -74,7 +72,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     private static UHCReloaded instance;
 
     private ModulesManager modulesManager = null;
-
     private Scoreboard scoreboard = null;
 
     private World worldNormal = null;
@@ -82,10 +79,6 @@ public class UHCReloaded extends ZPlugin implements Listener
     private World worldTheEnd = null;
 
     private boolean worldsLoaded = false;
-
-    private RulesModule rulesManager = null;
-
-    private FreezerModule freezer = null;
 
 
     @Override
@@ -119,7 +112,7 @@ public class UHCReloaded extends ZPlugin implements Listener
         /* *** Core modules *** */
 
         modulesManager.registerModules(
-                ModulesManagerModule.class,     // Manages the modules from the game/commands.
+                ModulesModule.class,            // Manages the modules from the game/commands.
 
                 SidebarModule.class,            // Manages the sidebar and provides hooks for other modules.
                                                 // Must be loaded before the game-related modules.
@@ -139,6 +132,14 @@ public class UHCReloaded extends ZPlugin implements Listener
 
                 SpectatorsModule.class          // Manages the spectators.
         );
+
+
+        /* *** Built-in modules *** */
+
+        if (UHConfig.BULT_IN_MODULES.get())
+        {
+            modulesManager.registerBuiltInModules();
+        }
 
 
         /* *** Config modules *** */
@@ -281,22 +282,6 @@ public class UHCReloaded extends ZPlugin implements Listener
 
         // We finally fallback on the first world regardless of its type to have at least something.
         return Bukkit.getWorlds().get(0);
-    }
-
-    /**
-     * @return the rules manager.
-     */
-    public RulesModule getRulesManager()
-    {
-        return rulesManager;
-    }
-
-    /**
-     * Returns the freezer.
-     */
-    public FreezerModule getFreezer()
-    {
-        return freezer;
     }
 
     /**
