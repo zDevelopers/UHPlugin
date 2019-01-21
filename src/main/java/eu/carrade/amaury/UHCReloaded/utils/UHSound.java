@@ -32,6 +32,7 @@
 
 package eu.carrade.amaury.UHCReloaded.utils;
 
+import fr.zcraft.zlib.components.configuration.ConfigurationParseException;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandler;
 import fr.zcraft.zlib.components.configuration.ConfigurationValueHandlers;
 import org.apache.commons.lang3.Validate;
@@ -42,6 +43,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -333,9 +336,42 @@ public class UHSound
     }
 
     @ConfigurationValueHandler
-    public static Sound handleSoundValue(Object object)
+    public static Sound handleSoundValue(final Object object)
     {
         return string2Sound(object.toString());
+    }
+
+    @ConfigurationValueHandler
+    public static UHSound handleUHSoundValue(final Map<String, Object> section) throws ConfigurationParseException
+    {
+        if (!section.containsKey("name"))
+            throw new ConfigurationParseException("Missing key `name` in sound (either string or list)", section);
+
+        final float volume = ConfigurationValueHandlers.handleFloatValue(section.getOrDefault("volume", 1f));
+        final float pitch = ConfigurationValueHandlers.handleFloatValue(section.getOrDefault("pitch", 1f));
+
+        final Object names = section.get("name");
+
+        if (names == null)
+        {
+            throw new ConfigurationParseException("Missing key `name` in sound (either string or list)", section);
+        }
+        else if (names instanceof Collection)
+        {
+            final String[] soundNames = new String[((Collection) names).size()];
+
+            int i = 0;
+            for (final Object name : (Collection) names)
+            {
+                soundNames[i++] = name.toString();
+            }
+
+            return new UHSound(volume, pitch, soundNames);
+        }
+        else
+        {
+            return new UHSound(names.toString(), volume, pitch);
+        }
     }
 
     static {

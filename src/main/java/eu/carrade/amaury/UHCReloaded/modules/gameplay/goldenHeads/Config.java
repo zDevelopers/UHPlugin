@@ -55,7 +55,7 @@ public class Config extends ConfigurationInstance
     public static final ConfigurationItem<Boolean> DISPLAY_REGEN_AMOUNT_ON_APPLES = item("display-regen-amount-on-apples", true);
 
     public static final GoldenAppleSection GOLDEN_APPLE = section("golden-apple", GoldenAppleSection.class);
-    public static final EnchantedGoldenAppleSection ENCHANTED_GOLDEN_APPLE = section("golden-apple", EnchantedGoldenAppleSection.class);
+    public static final EnchantedGoldenAppleSection ENCHANTED_GOLDEN_APPLE = section("enchanted-golden-apple", EnchantedGoldenAppleSection.class);
 
     public static final GoldenHeadSection PLAYER_GOLDEN_HEAD = section("player-golden-head", GoldenHeadSection.class);
     public static final GoldenHeadSection WITHER_GOLDEN_HEAD = section("wither-golden-head", GoldenHeadSection.class);
@@ -71,7 +71,7 @@ public class Config extends ConfigurationInstance
 
     public static class EnchantedGoldenAppleSection extends ConfigurationSection
     {
-        public final ConfigurationItem<Boolean> ENABLE = item("enable", true);
+        public final ConfigurationItem<Boolean> ENABLE = item("enable", false);
         public final ConfigurationItem<Integer> REGENERATION = item("regeneration", 180);
     }
 

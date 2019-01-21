@@ -1,0 +1,12 @@
+# The number of alliances each player is allowed to enter.
+# To be allowed to enter an alliance, a player must have its
+# alliance counter strictly positive. If he/she enters the alliance,
+# the amount of players minus one will be subtracted from its counter.
+alliances-per-player: 2
+
+# The maximal size of an alliance. Similar to teams' max size.
+max-players-per-alliance: 3
+
+# Players will only be allowed to send an alliance request (using /a) if they
+# are at less than this amount of blocks from each other.
+max-distance-to-create-an-alliance: 60

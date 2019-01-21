@@ -36,23 +36,26 @@ import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.spectators.SpectatorsModule;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
+import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.ListHeaderFooter;
 import fr.zcraft.zteams.events.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -63,7 +66,7 @@ import java.util.stream.Stream;
                 "to the current game through placeholders. Other modules can add placeholders.",
         when = ModuleLoadTime.POST_WORLD,
         category = ModuleCategory.COSMETICS,
-        icon = Material.DETECTOR_RAIL,
+        icon = Material.ACTIVATOR_RAIL,
         settings = Config.class,
         can_be_loaded_late = false
 )
@@ -80,7 +83,13 @@ public class PlayerListHeaderFooterModule extends UHModule
         registerPlaceholder("teamsText", () -> I.tn("{0} team", "{0} teams", UR.game().countAliveTeams()));
         registerPlaceholder("teamsCount", () -> String.valueOf(UR.game().countAliveTeams()));
 
-        update();
+        RunTask.nextTick(this::update);
+    }
+
+    @Override
+    public List<Class<? extends Command>> getCommands()
+    {
+        return Collections.singletonList(ListPlaceholdersCommand.class);
     }
 
     /**
@@ -93,6 +102,11 @@ public class PlayerListHeaderFooterModule extends UHModule
     public void registerPlaceholder(final String placeholderName, final Supplier<String> supplier)
     {
         placeholderSuppliers.put(placeholderName, supplier);
+    }
+
+    public Map<String, Supplier<String>> getPlaceholderSuppliers()
+    {
+        return Collections.unmodifiableMap(placeholderSuppliers);
     }
 
     private String computeText(String pattern)
@@ -121,21 +135,33 @@ public class PlayerListHeaderFooterModule extends UHModule
         final String headerPattern = Config.HEADERS.get(UR.game().getPhase());
         final String footerPattern = Config.FOOTERS.get(UR.game().getPhase());
 
-        if (!headerPattern.isEmpty() || !footerPattern.isEmpty())
+        if ((headerPattern != null && !headerPattern.isEmpty()) || (footerPattern != null && !footerPattern.isEmpty()))
         {
-            final String header = computeText(headerPattern);
-            final String footer = computeText(footerPattern);
+            final String header = headerPattern != null ? computeText(headerPattern) : "";
+            final String footer = footerPattern != null ? computeText(footerPattern) : "";
 
-            Stream.concat(
-                    UR.game().getAliveConnectedPlayers().stream(),
-                    UR.module(SpectatorsModule.class).getSpectators().stream().map(Bukkit::getPlayer).filter(Objects::nonNull)
-            ).forEach(player -> ListHeaderFooter.sendListHeaderFooter(player, header, footer));
+            final Stream<? extends Player> receivers;
+
+            if (UR.game().currentPhaseAfter(GamePhase.STARTING))
+            {
+                receivers = Stream.concat(
+                        UR.game().getAliveConnectedPlayers().stream(),
+                        UR.module(SpectatorsModule.class).getSpectators().stream().map(Bukkit::getPlayer).filter(Objects::nonNull)
+                );
+            }
+            else
+            {
+                receivers = Bukkit.getOnlinePlayers().stream();
+            }
+
+            receivers.forEach(player -> ListHeaderFooter.sendListHeaderFooter(player, header, footer));
         }
     }
 
     @EventHandler (priority = EventPriority.MONITOR) protected void onGamePhaseChange(final GamePhaseChangedEvent ev)  { update(); }
     @EventHandler (priority = EventPriority.MONITOR) protected void onPlayerDeath(final AlivePlayerDeathEvent ev)      { update(); }
     @EventHandler (priority = EventPriority.MONITOR) protected void onPlayerResurrect(final PlayerResurrectedEvent ev) { update(); }
+    @EventHandler (priority = EventPriority.MONITOR) protected void onPlayerJoin(final PlayerJoinEvent ev)             { update(); }
 
     @EventHandler (priority = EventPriority.MONITOR) protected void onTeamsChange(final TeamUpdatedEvent ev)      { update(); }
     @EventHandler (priority = EventPriority.MONITOR) protected void onTeamsChange(final TeamRegisteredEvent ev)   { update(); }

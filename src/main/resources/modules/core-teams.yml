@@ -1,0 +1,82 @@
+can-see-friendly-invisibles: true
+allow-friendly-fire: true
+
+# 0 = unlimited.
+max-players-per-team: 0
+
+# True to have players name in the team's color in the chat.
+# No cat will be altered if this option is enabled.
+colorize-chat: true
+
+
+# These options are related to the auto-generated banner of each team.
+# This banner is used on the teams selector (if set to "banner"), and can be given to the
+# players when the game starts.
+banner:
+  shape:
+    write-letter: true
+    add-border: true
+
+  give:
+    place-on-spawn: true   # Places the team banner on the spawn point.
+    give-in-hotbar: false  # Gives a banner to each player.
+    give-on-head: false    # Places the banner on the head of each player.
+
+  shields:
+    add-on-shields: true   # Crafted shields will have the team banner on them. MC 1.9+ only.
+
+
+# Chest-based GUI to choose a team and manage the teams
+gui:
+  display:
+    team-item: "banner"          # Values: "banner", "glass", "glass_pane", "clay", "wool", "dye"
+    glow-on-selected-team: true  # Set to true to display an enchantment glow on the player team.
+                                 # Note that the glow effect will not be applied with banners.
+
+team-chat:
+  # Forces disable the team-chat when the player die.
+  # If you use SpectatorPlus with the block-commands option enabled, this will prevent spectators
+  # from using the team chat.
+  disable-lock-on-death: true
+
+  # Log the private team-chat in the console?
+  log: false
+
+
+# The sidebar can display the player's team.
+sidebar:
+  # Displays the player's team in the scoreboard
+  enabled: true
+
+  title:
+    # The color of the title. If empty, the team color is used.
+    color: ""
+
+    # If true, the title is the team's name. Else, a generic title (« Your team »).
+    use-team-name: false
+
+  content:
+    # Displays hearts colored following the player's life (low = red, high = green)
+    display-hearts: true
+
+    # Color the whole name, not only the heart, following the life. If disabled,
+    # the name is white (alive) or gray (dead).
+    color-name: false
+
+    # Strike the dead players lines.
+    strike-dead-players: false
+
+    login-state:
+      # Logged-out players are displayed in italic
+      italic: true
+
+      # This string is displayed after the name of logged-out players
+      suffix: "\u27A5"
+
+    display-met-players-only:
+      # If enabled, the sidebar will only contains players met at some time.
+      enabled: false
+
+      # If enabled, a teammate will be displayed to the reference player if he/she
+      # is closer that this amount of blocks to the player.
+      displayed-when-closer-than: 10

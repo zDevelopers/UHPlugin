@@ -50,9 +50,9 @@ public class Config extends ConfigurationInstance
     }
 
     public static final ConfigurationItem<Cage.CageType> TYPE = item("type", Cage.CageType.TEAM_COLOR_TRANSPARENT);
-    public static final ConfigurationItem<Material> CUSTOM_BLOCK = item("customBlock", Material.BARRIER);
-    public static final ConfigurationItem<Boolean> BUILD_CEILING = item("buildCeiling", false);
-    public static final ConfigurationItem<Boolean> VISIBLE_WALLS = item("visibleWalls", false);
+    public static final ConfigurationItem<Material> CUSTOM_BLOCK = item("custom-block", Material.BARRIER);
+    public static final ConfigurationItem<Boolean> BUILD_CEILING = item("build-ceiling", false);
+    public static final ConfigurationItem<Boolean> VISIBLE_WALLS = item("visible-walls", false);
     public static final ConfigurationItem<Integer> RADIUS = item("radius", 2);
     public static final ConfigurationItem<Integer> HEIGHT = item("height", 3);
 }

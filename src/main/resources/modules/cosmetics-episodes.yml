@@ -1,0 +1,9 @@
+# Format: "mm", "mm:ss" or "hh:mm:ss". If invalid, 20 minutes.
+# Don't remove the "quotes" (because of the commas)!
+length: "20:00"
+
+# A title is displayed when the episode changes.
+display-title: true
+
+# The current episode is displayed into the sidebar.
+display-in-sidebar: true

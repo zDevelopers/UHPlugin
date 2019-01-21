@@ -56,7 +56,7 @@ public class Config extends ConfigurationInstance
 
     static public class BlockSection extends ConfigurationSection
     {
-        public final ConfigurationItem<Material> REPLACE_AIR = item("replaceAir", Material.GLASS);
-        public final ConfigurationItem<Material> REPLACE_SOLID = item("replaceSolid", Material.BEDROCK);
+        public final ConfigurationItem<Material> REPLACE_AIR = item("replace-air", Material.GLASS);
+        public final ConfigurationItem<Material> REPLACE_SOLID = item("replace-solid", Material.BEDROCK);
     }
 }

@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.core;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Charsets;
 import eu.carrade.amaury.UHCReloaded.core.events.ModuleDisabledEvent;
 import eu.carrade.amaury.UHCReloaded.core.events.ModuleEnabledEvent;
 import eu.carrade.amaury.UHCReloaded.core.events.ModuleLoadedEvent;
@@ -43,6 +44,7 @@ import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.tools.PluginLogger;
 import fr.zcraft.zlib.tools.items.ItemStackBuilder;
 import fr.zcraft.zlib.tools.reflection.Reflection;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,8 +52,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.stream.Stream;
 
@@ -74,6 +75,7 @@ public class ModuleWrapper
 
     private final Class<? extends ConfigurationInstance> moduleConfiguration;
     private final String settingsFileName;
+    private final String settingsDefaultFileName;
     private String[] dependencies;
 
     private final boolean internal;
@@ -108,6 +110,7 @@ public class ModuleWrapper
             icon = Material.AIR;
             moduleConfiguration = null;
             settingsFileName = null;
+            settingsDefaultFileName = null;
             dependencies = new String[] {};
         }
         else
@@ -123,9 +126,11 @@ public class ModuleWrapper
             icon = info.icon();
             moduleConfiguration = info.settings().equals(ConfigurationInstance.class) ? null : info.settings();
             settingsFileName = info.settings_filename().isEmpty() ? null : info.settings_filename();
+            settingsDefaultFileName = info.settings_default_filename().isEmpty() ? null : info.settings_default_filename();
             dependencies = info.depends();
         }
 
+        saveDefaultConfig();
         loadConfiguration();
     }
 
@@ -372,23 +377,77 @@ public class ModuleWrapper
         return moduleClass;
     }
 
+    private String getDefaultSettingsFileName()
+    {
+        return String.format("%s-%s", category.name().toLowerCase().replace('_', '-'), StringUtils.removeEnd(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, moduleClass.getSimpleName()), "-module"));
+    }
+
     /**
      * @return A {@link File} representing the configuration file on the server's filesystem.
      */
     private File getConfigurationFile()
     {
-        final String settingsFileName;
+        final String settingsFileName = this.settingsFileName != null ? this.settingsFileName + ".yml" : getDefaultSettingsFileName() + ".yml";
+        return new File(ZLib.getPlugin().getDataFolder(), "modules" + File.separator + settingsFileName);
+    }
 
-        if (this.settingsFileName != null)
+    /**
+     * Saves the default configuration file into the plugin's directory, if it
+     * does not exists ad the default configuration file does exist.
+     */
+    public void saveDefaultConfig()
+    {
+        final File targetSettingsFile = getConfigurationFile();
+        if (targetSettingsFile.exists()) return;
+
+        final String settingsDefaultFileName = this.settingsDefaultFileName != null ? this.settingsDefaultFileName : getDefaultSettingsFileName();
+
+        final Plugin plugin;
+        final String settingsDefaultFilePath;
+
+        // If the default file is in another plugin
+        if (settingsDefaultFileName.contains(":"))
         {
-            settingsFileName = this.settingsFileName + ".yml";
+            final String[] parts = settingsDefaultFileName.split(":");
+            final Plugin pl = Bukkit.getPluginManager().getPlugin(parts[0]);
+            if (pl != null)
+            {
+                plugin = pl;
+                settingsDefaultFilePath = "modules" + File.separator + String.join(":", (String[]) ArrayUtils.remove(parts, 0)) + ".yml";
+            }
+            else return;
         }
         else
         {
-            settingsFileName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, moduleClass.getSimpleName()) + ".yml";
+            plugin = UR.get();
+            settingsDefaultFilePath = "modules" + File.separator + settingsDefaultFileName + ".yml";
         }
 
-        return new File(ZLib.getPlugin().getDataFolder(), "modules" + File.separator + settingsFileName);
+        final InputStream stream = plugin.getResource(settingsDefaultFilePath);
+        if (stream == null) return;
+
+        try (final InputStreamReader reader = new InputStreamReader(stream, Charsets.UTF_8))
+        {
+            final StringBuilder buffer = new StringBuilder();
+
+            int currentChar;
+            while((currentChar = reader.read()) != -1)
+            {
+                buffer.append((char) currentChar);
+            }
+
+            targetSettingsFile.getParentFile().mkdirs();
+            if (!targetSettingsFile.createNewFile()) return;
+
+            try (final PrintWriter writer = new PrintWriter(targetSettingsFile))
+            {
+                writer.write(buffer.toString());
+            }
+        }
+        catch (final IOException e)
+        {
+            PluginLogger.error("Cannot create {0}'s default configuration file.", e, getName());
+        }
     }
 
     /**
@@ -416,7 +475,6 @@ public class ModuleWrapper
 
                 final ConfigurationInstance settings = Reflection.instantiate(moduleConfiguration, settingsFile);
                 settings.setEnabled(true);
-                settings.save();
             }
             catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e)
             {

@@ -1,0 +1,15 @@
+# If false, the time will be frozen.
+enable-daylight-cycle: true
+
+# The duration of one Minecraft day, in real life minutes. The default duration is
+# 20 minutes, but you can change this to any value longer or shorter, down to the
+# second if you like to see the sun navigating the sky reaaaallly fast.
+daylight-cycle-duration: "00:20:00"
+
+# The hour of the waiting phase, in ticks.
+# For the record, 0 = sun rise, 6000 = midday, 12 000 = sun set, 18 000 = midnight.
+waiting-phase-hour: 6000
+
+# The hour when the game starts. If the daylight cycle is disabled, this will be the
+# hour of the whole game.
+initial-game-hour: 0

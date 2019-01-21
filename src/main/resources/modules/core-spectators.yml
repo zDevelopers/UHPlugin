@@ -1,0 +1,11 @@
+# Allows registered spectators to re-join the game.
+# This includes dead players and spectators manually registered with /uh spectators add.
+spectators-can-join: true
+
+# Allows unregistered spectators to join the game (as spectator only).
+unknown-spectators-can-join: true
+
+# If the previous option is set to false and this one to true, the first time
+# an unknown spectator try to join the server, all administrators will be notified
+# with a link to allow the spectator to join. The notification will only be sent once.
+notify-on-unknown-spectators-trying-to-join: true

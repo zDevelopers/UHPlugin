@@ -190,7 +190,7 @@ public class WaitModule extends UHModule
      */
     private void handleNewPlayer(final Player player)
     {
-        if (Config.TELEPORT_TO_SPAWN_IF_NOT_STARTED.get())
+        if (Config.TELEPORT_TO_SPAWN_IF_NOT_STARTED.get() && UR.game().getPhase() != GamePhase.STARTING)
         {
             final Location worldSpawn = UR.get().getWorld(World.Environment.NORMAL).getSpawnLocation().add(0.5, 0.5, 0.5);
             if (!UHUtils.safeTP(player, worldSpawn))
@@ -233,7 +233,6 @@ public class WaitModule extends UHModule
             return;
         }
 
-        PluginLogger.info("New state: {0}", state);
         playerInventoriesStates.put(player.getUniqueId(), state);
 
         player.setGameMode(builder ? GameMode.CREATIVE : GameMode.ADVENTURE);

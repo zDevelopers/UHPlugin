@@ -1,0 +1,12 @@
+# Display hardcore hearts instead of normal ones?
+hardcore-hearts: true
+
+# If a player die, with old Minecraft versions, his client will display an hardcore Game Over screen,
+# without a « Respawn » button. But the player CAN respawn, by clicking « Leave server » and then,
+# on the confirmation screen, « Respawn ».
+# This option can automatically respawn the player after its death.
+# Recent versions of Minecraft do have a « Spectate » button in the Game Over screen, but you can still
+# enable the auto-respawn for them.
+auto-respawn:
+  do: true
+  delay: 6  # seconds

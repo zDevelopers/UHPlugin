@@ -95,6 +95,24 @@ public @interface ModuleInfo
     String settings_filename() default "";
 
     /**
+     * @return The settings's default filename, containing the default configuration written
+     * to the server's plugins/UHPlugin/modules directory if the file does not exists.
+     *
+     * The format can either be a simple filename without extension, like “moduleName“, and
+     * the file will be copied from the UHCReloaded's JAR, from modules/moduleName.yml; or
+     * the filename prefixed by the plugin name like so: “OtherPlugin:moduleName”, and the
+     * file will be copied from the given plugin's JAR, from modules/moduleName.yml too.
+     *
+     * If left empty, it will be derived from the module name and category, by converting
+     * the module's class name into hyphened-snake-case, removing the “-module” suffix (if
+     * any) and prefixing by the category converted to hyphened-snake-case.
+     * Example: “external-reports”.
+     *
+     * In all cases, the file will be copied into UHPlugin's data directory, under module/.
+     */
+    String settings_default_filename() default "";
+
+    /**
      * @return A list of external Bukkit/Spigot plugin this module depends on.
      */
     String[] depends() default {};

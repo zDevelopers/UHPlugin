@@ -55,5 +55,5 @@ public class Config extends ConfigurationInstance
 
     public final static ConfigurationItem<Boolean> NEVER_TARGET_TEAMMATES = item("never-target-teammates", true);
 
-    public final static ConfigurationItem<CompassModule.CompassBehavior> COMPASS_BEHAVIOR = item("compass-behavior", CompassModule.CompassBehavior.GIVE_BOTH);
+    public final static ConfigurationItem<CompassModule.CompassBehavior> COMPASS_BEHAVIOR = item("compass-behavior", CompassModule.CompassBehavior.GIVE_DIRECTION);
 }

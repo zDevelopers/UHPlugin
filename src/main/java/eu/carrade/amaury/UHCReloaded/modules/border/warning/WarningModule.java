@@ -157,7 +157,7 @@ public class WarningModule extends UHModule
         RunTask.timer(
                 warningTask = new BorderWarningTask(),
                 20L,
-                20L * Config.WARNING_INTERVAL.get()
+                20L * Config.WARNING_INTERVAL.get().getSeconds()
         );
     }
 

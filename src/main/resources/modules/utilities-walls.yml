@@ -1,0 +1,8 @@
+# The height of the wall generated using /uh build-wall, in blocks, counted from the bottom of the world.
+height: 128
+
+block:
+  # The replace-air block will be placed where there where some transparent blocks or trees before.
+  # The replace-solid one, where there was another kind of block.
+  replace-air: GLASS
+  replace-solid: BEDROCK

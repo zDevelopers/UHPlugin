@@ -54,8 +54,8 @@ public class Config extends ConfigurationInstance
 
     static public class DisplaySection extends ConfigurationSection
     {
-        public final ConfigurationItem<Boolean> ON_JOIN = item("onJoin", false);
-        public final ConfigurationItem<Boolean> ON_START = item("onStart", true);
+        public final ConfigurationItem<Boolean> ON_JOIN = item("on-join", false);
+        public final ConfigurationItem<Boolean> ON_START = item("on-start", true);
     }
 
     public static final ConfigurationList<String> RULES = list("rules", String.class);

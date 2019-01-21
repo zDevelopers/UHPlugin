@@ -1,0 +1,5 @@
+# Disables Witches' natural spawn (e.g. in caves/dark, or in their huts).
+disable-natural-spawn: true
+
+# Disables Witches' lightning spawn (villagers hit by a lightning bolt will not turn into a witch).
+disable-lightning-spawn: true

@@ -1,0 +1,8 @@
+# When a rabbit spawn, it'll have this probability of becoming a Killer Rabbit.
+# If 0, no killer rabbit will spawn (but you can also disable the module for the same
+# effect).
+spawn-probability: 0.05
+
+# The Killer Rabbit's name. You can use color codes with § in this.
+# If empty, the rabbit won't have any special name (we'll rely on Minecraft default).
+name: "The Killer Rabbit of Cærbannog"

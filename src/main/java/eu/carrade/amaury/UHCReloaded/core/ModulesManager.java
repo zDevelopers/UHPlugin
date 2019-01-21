@@ -38,6 +38,7 @@ import eu.carrade.amaury.UHCReloaded.core.events.AllModulesLoadedEvent;
 import eu.carrade.amaury.UHCReloaded.core.events.ModuleLoadedEvent;
 import eu.carrade.amaury.UHCReloaded.core.events.ModuleUnloadedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.ingame.kick.KickModule;
+import eu.carrade.amaury.UHCReloaded.modules.other.pomf.PomfModule;
 import eu.carrade.amaury.UHCReloaded.modules.scenarii.alliances.AlliancesModule;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.ModulesUtils;
@@ -73,6 +74,7 @@ public class ModulesManager extends ZLibComponent implements Listener
      */
     private final static List<Class<? extends UHModule>> DISABLED_BY_DEFAULT = Arrays.asList(
             KickModule.class,
+            PomfModule.class,
             AlliancesModule.class
     );
 
@@ -95,12 +97,12 @@ public class ModulesManager extends ZLibComponent implements Listener
      */
     public void registerBuiltInModules()
     {
-        long t = System.currentTimeMillis();
+        final long t = System.currentTimeMillis();
         int i = 0;
 
         try
         {
-            for (ClassPath.ClassInfo classInfo : ClassPath.from(getClass().getClassLoader()).getTopLevelClassesRecursive(MODULES_PACKAGE))
+            for (final ClassPath.ClassInfo classInfo : ClassPath.from(getClass().getClassLoader()).getTopLevelClassesRecursive(MODULES_PACKAGE))
             {
                 final Class<?> potentialModuleClass = classInfo.load();
 

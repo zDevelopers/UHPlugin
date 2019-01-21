@@ -31,72 +31,55 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.border.warning;
+package eu.carrade.amaury.UHCReloaded.modules.cosmetics.playerListHeaderFooter;
 
-import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.CommandException;
 import fr.zcraft.zlib.components.commands.CommandInfo;
+import fr.zcraft.zlib.components.commands.WithFlags;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.tools.commands.PaginatedTextView;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 
-import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
-@CommandInfo (
-        name = "border-warning",
-        usageParameters = "<future border size | cancel> [time delta (minutes or mm:ss or hh:mm:ss) until border reduction]",
-        aliases = {"borderwarning", "borderwarn", "bw"}
-)
-public class WarningCommand extends Command
+@CommandInfo (name = "list-hf-placeholders")
+@WithFlags("page")
+public class ListPlaceholdersCommand extends Command
 {
     @Override
     protected void run() throws CommandException
     {
-        final WarningModule warnings = UR.module(WarningModule.class);
+        final Map<String, Supplier<String>> placeholders = UR.module(PlayerListHeaderFooterModule.class).getPlaceholderSuppliers();
+        final int page = args.length > 0 ? getIntegerParameter(0) : 1;
 
-        // /uh border warning
-        if (args.length == 0)
-        {
-            throwInvalidArgument(I.t("Missing future border size."));
-        }
-
-        // /uh border warning cancel
-        else if (args[0].equalsIgnoreCase("cancel"))
-        {
-            warnings.cancelWarning();
-            success(I.t("{cs}Warning canceled."));
-        }
-
-        // /uh border warning <?>
-        // or
-        // /uh border warning <?> <?>
-        else
-        {
-            try
-            {
-                final int warnDiameter = Integer.parseInt(args[0]);
-                TimeDelta warnTime = null;
-
-                // /uh border warning <?> <?>
-                if (args.length >= 2)
-                {
-                    warnTime = new TimeDelta(args[1]);
-                }
-
-                warnings.setWarningSize(warnDiameter, warnTime, sender);
-                success(I.tn("{cs}Future size saved. All players outside this future border will be warned every {0} second.", "{cs}Future size saved. All players outside this future border will be warned every {0} seconds.", (int) Config.WARNING_INTERVAL.get().getSeconds()));
-
-            }
-            catch (NumberFormatException e)
-            {
-                error(I.t("{ce}“{0}” is not a number...", args[0]));
-            }
-        }
+        new PlaceholdersList()
+            .setData(placeholders.entrySet().toArray(new Map.Entry[placeholders.entrySet().size()]))
+            .setCurrentPage(page)
+            .display(sender);
     }
 
-    @Override
-    protected List<String> complete() throws CommandException
+    private final class PlaceholdersList extends PaginatedTextView<Map.Entry<String, Supplier<String>>>
     {
-        return args.length == 1 ? getMatchingSubset(args[0], "cancel") : null;
+        @Override
+        protected void displayHeader(final CommandSender receiver)
+        {
+            receiver.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + I.tn("{0} registered placeholder", "{0} registered placeholders", data().length));
+        }
+
+        @Override
+        protected void displayItem(final CommandSender receiver, final Map.Entry<String, Supplier<String>> item)
+        {
+            receiver.sendMessage(String.format("%s{%s}%s\t« %s%s »", ChatColor.WHITE, item.getKey(), ChatColor.GRAY, item.getValue().get(), ChatColor.GRAY));
+        }
+
+        @Override
+        protected String getCommandToPage(final int page)
+        {
+            return build(String.valueOf(page));
+        }
     }
 }

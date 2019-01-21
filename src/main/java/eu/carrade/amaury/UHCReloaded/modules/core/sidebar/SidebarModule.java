@@ -46,7 +46,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
         description = "Manages the sidebar and allows hooks for all modules into it.",
         category = ModuleCategory.CORE,
         icon = Material.BOOK_AND_QUILL,
-        settings = Config.class,
         internal = true,
         can_be_unloaded = false
 )

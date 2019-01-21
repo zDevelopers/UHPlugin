@@ -1,0 +1,25 @@
+# The special recipe is with an ingredient in the center, and then,
+# from the top, clockwise: iron, spider eye, iron, rotten flesh, iron, bone, iron, gunpowder.
+# This field change the central ingredient.
+# "easy": redstone (like the normal compass).
+# "medium": ender pearl.
+# "hard": eye of ender.
+recipe: "medium"
+
+# This item will be required to be able to use the compass, and for each use
+# of it.
+compass-fee-item: ROTTEN_FLESH
+
+# This amount of the previous item will be required and consumed for each
+# use of the compass.
+compass-fee-amount: 1
+
+# If true, the compass will only target players from other teams.
+never-target-teammates: true
+
+# The behavior of the compass.
+# GIVE_DIRECTION: gives the target's direction by updating the compass.
+# GIVE_DISTANCE: Gives the target's distance from the player.
+# GIVE_BOTH: gives both the direction and the distance.
+# GIVE_EITHER_RANDOMLY: gives either the direction or the distance, randomly, with a small chance of getting both.
+compass-behavior: GIVE_DIRECTION

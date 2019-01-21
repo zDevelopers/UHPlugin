@@ -1,0 +1,11 @@
+# Potions won't be able to be increased to the second level.
+disable-level-II: true
+
+# Potions won't be able to be extended in time.
+disable-extended: false
+
+# Players won't be able to make splashes potions.
+disable-splash: false
+
+# Players won't be able to make lingering potions.
+disable-lingering: false

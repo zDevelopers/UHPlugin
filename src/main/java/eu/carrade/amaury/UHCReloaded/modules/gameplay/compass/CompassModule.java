@@ -47,6 +47,7 @@ import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.RawMessage;
 import fr.zcraft.zteams.ZTeams;
+import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -186,23 +187,41 @@ public class CompassModule extends UHModule
                 return;
             }
 
-            final CompassBehavior behavior = Config.COMPASS_BEHAVIOR.get();
+            CompassBehavior behavior = Config.COMPASS_BEHAVIOR.get();
 
-            if (behavior == CompassBehavior.GIVE_DIRECTION || behavior == CompassBehavior.GIVE_BOTH)
+            if (behavior == CompassBehavior.GIVE_EITHER_RANDOMLY)
             {
+                final double r = RandomUtils.nextDouble();
+
+                if (r < .45) behavior = CompassBehavior.GIVE_DIRECTION;
+                else if (r < .9) behavior = CompassBehavior.GIVE_DISTANCE;
+                else behavior = CompassBehavior.GIVE_BOTH;
+            }
+
+            if (behavior == CompassBehavior.GIVE_BOTH)
+            {
+                compassUser.setCompassTarget(nearest.getLocation());
+                compassUser.sendMessage(UHUtils.prefixedMessage(
+                    I.t("Compass"),
+                    ChatColor.YELLOW + I.tn(
+                            "The compass now points to the closest player, {gold}{0} block {yellow}from you.",
+                            "The compass now points to the closest player, {gold}{0} blocks {yellow}from you.",
+                            (int) nearest.getLocation().distanceSquared(compassUser.getLocation())
+                    )
+                ));
+            }
+
+            else if (behavior == CompassBehavior.GIVE_DIRECTION)
+            {
+                compassUser.setCompassTarget(nearest.getLocation());
+
                 /// Success message when a player uses his pointing compass.
                 compassUser.sendMessage(UHUtils.prefixedMessage(I.t("Compass"), ChatColor.YELLOW + I.t("The compass now points to the closest player.")));  // TODO update language files
-                compassUser.setCompassTarget(nearest.getLocation());
             }
 
-            if (behavior == CompassBehavior.GIVE_DISTANCE || behavior == CompassBehavior.GIVE_BOTH)
+            else
             {
                 compassUser.sendMessage(UHUtils.prefixedMessage(I.t("Compass"), I.tn("{yellow}There is {gold}{0} block {yellow}between the nearest player and yourself.", "{yellow}There are {gold}{0} blocks {yellow}between the nearest player and yourself.", (int) nearest.getLocation().distance(compassUser.getLocation()))));
-            }
-
-            else if (behavior == CompassBehavior.GIVE_EITHER_RANDOMLY)
-            {
-                // TODO
             }
 
             new UHSound(1F, 1F, "ENTITY_ENDERMEN_TELEPORT", "ENDERMAN_TELEPORT").play(compassUser);

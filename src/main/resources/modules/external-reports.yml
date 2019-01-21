@@ -1,0 +1,102 @@
+
+# The Hawk reports API base website URL. If empty, defaults
+# to the Hawk instance managed by DamagesLogger's authors.
+# Change this if you want to use your own instance.
+reports-api-base-url: ""
+
+# If false, the report will not be published at the end of the game.
+# It will still be saved in the plugin directory (under plugins/UHPlugin/reports).
+publish-report: true
+
+# If published, the URL can be automatically broadcasted to:
+# - ALL: all players in the server (plus the console);
+# - ADMINISTRATORS: only administrators (currently operators)
+# - CONSOLE: only the console (absolutely nothing in-game).
+broadcast-report-to: ALL
+
+
+# The settings below configure the Hawk reports web page.
+# TODO add documentation for each.
+
+date: true
+players-count: true
+winners: true
+
+summary:
+  enabled: true
+  history: true
+  players: true
+  teams: true
+
+damages:
+  enabled: true
+  damages-per-players: true
+  damages-per-teams: true
+  damages-from-environment: true
+  display-killer: true
+
+players:
+  enabled: true
+  play-time: true
+
+  global-statistics: true
+  statistics-whitelist: []
+  statistics-highlight:
+    - DAMAGE_DEALT
+    - CRAFT_ITEM
+    - ITEM_ENCHANTED
+    - BREWINGSTAND_INTERACTION
+    - SPRINT_ONE_CM
+
+  used: false
+  used-whitelist: []
+  used-highlight:
+    - DIAMOND_SWORD
+    - DIAMOND_AXE
+    - DIAMOND_PICKAXE
+    - DIAMOND_HOE
+    - IRON_SWORD
+    - IRON_AXE
+    - IRON_PICKAXE
+    - IRON_HOE
+    - CAKE
+    - SADDLE
+    - GOLDEN_APPLE
+    - POTION
+    - GOLD_RECORD
+    - GREEN_RECORD
+    - RECORD_3
+    - RECORD_4
+    - RECORD_5
+    - RECORD_6
+    - RECORD_7
+    - RECORD_8
+    - RECORD_9
+    - RECORD_10
+    - RECORD_11
+    - RECORD_12
+
+  mined: true
+  mined-whitelist: []
+  mined-highlight:
+    - DIAMOND
+    - DIAMOND_ORE
+    - GOLD_INGOT
+    - GOLD_ORE
+    - IRON_INGOT
+    - IRON_ORE
+    - EMERALD
+    - EMERALD_ORE
+    - OBSIDIAN
+    - NETHER_WARTS
+    - MOB_SPAWNER
+    - STONE
+
+  picked-up: true
+  picked-up-whitelist: []
+  picked-up-highlight:
+    - APPLE
+    - BOW
+    - ENDER_PEARL
+    - GOLD_INGOT
+    - SKULL_ITEM

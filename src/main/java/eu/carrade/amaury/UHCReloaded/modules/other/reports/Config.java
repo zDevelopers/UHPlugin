@@ -151,7 +151,7 @@ public class Config extends ConfigurationInstance
         );
     }
 
-    static public enum ReportBroadcastedTo
+    public enum ReportBroadcastedTo
     {
         ALL,
         ADMINISTRATORS,

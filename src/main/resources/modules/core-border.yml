@@ -1,0 +1,52 @@
+# The diameter of the map (not the radius!), in blocks
+size: 2000
+
+# "squared" or "circular". Affects the WorldBorder pre-configuration, and the
+# wall generator used.
+shape: "squared"
+
+# The world border manager. Can be:
+# - "vanilla", to use the vanilla world border; or
+# - "brettflan", to use the WorldBorder Bukkit plugin by Brettflan
+#   (http://dev.bukkit.org/bukkit-plugins/worldborder/).
+#
+# If the shape is "circular", fallbacks to "brettflan" as the vanilla world border don't
+# support circular borders. And if the WorldBorder plugin is not installed, fallbacks to
+# no border.
+motor: "vanilla"
+
+# The amount of blocks a player may safely be outside the border before taking damage.
+# Only for the vanilla world border. Ignored else.
+damages-buffer: 5
+
+# The amount of damage a player takes when outside the border plus the border buffer.
+# The damages delt is calculated by multiplying this amount by the number of blocks behind the buffer.
+# Only for the vanilla world border. Ignored else.
+damages-amount: 0.2
+
+# The warning distance that causes the screen to be tinted red when the player is within the specified
+# number of blocks from the border.
+# Only for the vanilla world border. Ignored else.
+warning-distance: 5
+
+
+# Automatic and progressive border shrinking.
+# Notice: if the border is circular, the WorldBorder Bukkit plugin by Brettflan (see above)
+# is REQUIRED. Without, the border shrinking will not work.
+shrinking:
+  enabled: false
+
+  # Formats: "mm", "mm:ss" or "hh:mm:ss".
+  # With the default values, the border eats one block every 8 seconds on each side.
+  starts-after: "1:30:00"
+  shrinks-during: "2:00:00"
+  diameter-after-shrink: 200
+
+
+# Do you want the border current size to be displayed into the sidebar?
+sidebar:
+  displayed: true
+
+  # If true, displays the border diameter (ex. "2000 blocks wide"). Else, the min/max
+  # coordinates (ex. "-1000 +1000"). Ignored if the border is circular.
+  display-diameter: false

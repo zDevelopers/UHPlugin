@@ -54,5 +54,5 @@ public class Config extends ConfigurationInstance
 
     public static final ConfigurationItem<Boolean> LIGHTNING_STRIKE = item("lightning-strike", false);
     public static final ConfigurationItem<Boolean> PLAY_SOUND = item("play-sound", true);
-    public static final ConfigurationItem<UHSound> SOUND = item("sound", new UHSound("WITHER_SPAWN"));
+    public static final ConfigurationItem<UHSound> SOUND = item("sound", new UHSound("ENTITY_WITHER_SPAWN"));
 }

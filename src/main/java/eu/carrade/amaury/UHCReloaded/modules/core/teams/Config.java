@@ -52,7 +52,6 @@ public class Config extends ConfigurationInstance
     static public final ConfigurationItem<Boolean> CAN_SEE_FRIENDLY_INVISIBLES = item("can-see-friendly-invisibles", true);
     static public final ConfigurationItem<Boolean> ALLOW_FRIENDLY_FIRE = item("allow-friendly-fire", true);
     static public final ConfigurationItem<Integer> MAX_PLAYERS_PER_TEAM = item("max-players-per-team", 0);
-    static public final ConfigurationItem<Boolean> RANDOM_COLORS = item("random-colors", true);
 
     static public final ConfigurationItem<Boolean> COLORIZE_CHAT = item("colorize-chat", true);
 

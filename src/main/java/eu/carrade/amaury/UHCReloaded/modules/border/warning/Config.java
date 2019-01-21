@@ -33,6 +33,7 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.border.warning;
 
+import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;
 
@@ -47,5 +48,5 @@ public class Config extends ConfigurationInstance
         super(file);
     }
 
-    public static final ConfigurationItem<Integer> WARNING_INTERVAL = item("warningInterval", 90);
+    public static final ConfigurationItem<TimeDelta> WARNING_INTERVAL = item("warning-interval", new TimeDelta(0, 1, 30));
 }

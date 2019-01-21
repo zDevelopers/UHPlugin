@@ -1,0 +1,25 @@
+# The cage type. Can be:
+# - team_color_transparent (stained glass using the team color, or white without color/for solo);
+# - team_color_solid (the same with stained hardened clay);
+# - custom (a custom block, configure the one to use after).
+type: TEAM_COLOR_TRANSPARENT
+
+# If you selected “custom” before, write here the block you want to use. It can be any valid Material.
+# You can use safely any falling block here, they will never fall.
+custom-block:
+
+# If true, the cages will be built completely, including the ceiling. Else, they will be open to the sky.
+build-ceiling: false
+
+# If true, the walls will be built using the block above. Else, using barrier blocks.
+visible-walls: true
+
+# The internal square radius of the cage.
+# With 0, you'll have a cage with one block to walk.
+# With 1, you'll have a 3×3 cage.
+# With 2, a 5×5 cage. Etc.
+radius: 2
+
+# The internal height of the cages, i.e. the height of the space available to the players inside the cage.
+# It is kinda useless to set a too high height here, as players won't be able to fly.
+height: 3
