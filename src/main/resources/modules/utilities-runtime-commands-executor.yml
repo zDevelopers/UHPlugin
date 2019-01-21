@@ -1,0 +1,35 @@
+# This module allows you to schedule commands at any moment during the game. They will be executed by the console
+# automatically.
+# For each game phase, you'll be able to configure a list of commands to run, with a delay for each of them. The
+# commands will be executed when the phase is reached, after the given delay. As example, a command configured into
+# the `in-game` list with a 3-minutes delay will be executed three minutes after the game's start.
+# The delay's formats are "mm" (minutes), "mm:ss" or "hh:mm:ss".
+# Empty commands are ignored.
+
+
+# Commands executed from the server startup.
+wait:
+  - exec: ""
+    delay: "00:12:00"
+
+
+# Commands executed from the moment the game is launched (when the /uh start is first executed, or the corresponding
+# GUI button). Beware that this phase can be cancelled, e.g. if the game cannot be started. If so, all non-executed
+# commands will not be executed, but some (especially with a zero delay) may have been executed and could be executed
+# twice.
+starting:
+  - exec: ""
+    delay: "00:24:00"
+
+
+# Commands executed from the moment the game starts for real, when players falls from their spawn point into the world.
+in-game:
+  - exec: ""
+    delay: "00:48:00"
+
+
+# Commands executed from the game's end. Beware that this phase can be cancelled, e.g. if someone is resurrected. If so,
+# all non-executed commands will not be executed, but some ay have been executed and could be executed twice.
+end:
+  - exec: ""
+    delay: "01:36:00"

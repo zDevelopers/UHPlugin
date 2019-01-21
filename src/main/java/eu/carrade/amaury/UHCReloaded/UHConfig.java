@@ -27,27 +27,6 @@ public class UHConfig extends Configuration
 
     }
 
-    static public final PlayersListSection PLAYERS_LIST = section("playersList", PlayersListSection.class);
-
-    static public class PlayersListSection extends ConfigurationSection
-    {
-        public final WaitingTimeSection WAITING_TIME = section("waitingTime", WaitingTimeSection.class);
-
-        static public class WaitingTimeSection extends ConfigurationSection
-        {
-            public final ConfigurationItem<String> HEADER = item("header", "{title}");
-            public final ConfigurationItem<String> FOOTER = item("footer", "");
-        }
-
-        public final InGameTimeSection IN_GAME_TIME = section("inGameTime", InGameTimeSection.class);
-
-        static public class InGameTimeSection extends ConfigurationSection
-        {
-            public final ConfigurationItem<String> HEADER = item("header", "{title}");
-            public final ConfigurationItem<String> FOOTER = item("footer", "§a{episodeText} §7- §a{playersText} §7- §a{teamsText}");
-        }
-    }
-
     static public final FinishSection FINISH = section("finish", FinishSection.class);
 
     static public class FinishSection extends ConfigurationSection

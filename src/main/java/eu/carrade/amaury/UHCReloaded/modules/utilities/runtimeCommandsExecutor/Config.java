@@ -31,16 +31,15 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.starting.cages;
+package eu.carrade.amaury.UHCReloaded.modules.utilities.runtimeCommandsExecutor;
 
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.zlib.components.configuration.ConfigurationItem;
-import org.bukkit.Material;
+import fr.zcraft.zlib.components.configuration.ConfigurationList;
 
 import java.io.File;
+import java.util.Map;
 
-import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
-
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.list;
 
 public class Config extends ConfigurationInstance
 {
@@ -49,10 +48,8 @@ public class Config extends ConfigurationInstance
         super(file);
     }
 
-    public static final ConfigurationItem<Cage.CageType> TYPE = item("type", Cage.CageType.TEAM_COLOR_TRANSPARENT);
-    public static final ConfigurationItem<Material> CUSTOM_BLOCK = item("custom-block", Material.BARRIER);
-    public static final ConfigurationItem<Boolean> BUILD_CEILING = item("build-ceiling", false);
-    public static final ConfigurationItem<Boolean> VISIBLE_WALLS = item("visible-walls", true);
-    public static final ConfigurationItem<Integer> RADIUS = item("radius", 2);
-    public static final ConfigurationItem<Integer> HEIGHT = item("height", 3);
+    public final static ConfigurationList<Map> WAIT = list("wait", Map.class);
+    public final static ConfigurationList<Map> STARTING = list("starting", Map.class);
+    public final static ConfigurationList<Map> IN_GAME = list("in-game", Map.class);
+    public final static ConfigurationList<Map> END = list("end", Map.class);
 }

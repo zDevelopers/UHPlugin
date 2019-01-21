@@ -92,7 +92,7 @@ public class GamePhaseChangedEvent extends Event
      */
     public boolean isRunningForward()
     {
-        return newPhase.ordinal() > oldPhase.ordinal();
+        return oldPhase == null || newPhase.ordinal() > oldPhase.ordinal();
     }
 
     @Override
