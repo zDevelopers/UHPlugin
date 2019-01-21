@@ -35,8 +35,8 @@ package eu.carrade.amaury.UHCReloaded.modules.core.modules.gui;
 
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.core.ModuleWrapper;
-import eu.carrade.amaury.UHCReloaded.modules.beginning.wait.Config;
-import eu.carrade.amaury.UHCReloaded.modules.beginning.wait.WaitModule;
+import eu.carrade.amaury.UHCReloaded.modules.waitingPhase.wait.Config;
+import eu.carrade.amaury.UHCReloaded.modules.waitingPhase.wait.WaitModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.modules.gui.modules.ModulesListGUI;
 import eu.carrade.amaury.UHCReloaded.modules.core.modules.gui.start.StartGameGUI;
