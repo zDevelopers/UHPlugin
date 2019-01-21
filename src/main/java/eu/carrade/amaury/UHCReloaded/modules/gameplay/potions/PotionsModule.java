@@ -51,7 +51,7 @@ import org.bukkit.inventory.BrewerInventory;
                 "splash or lingering potions.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.GAMEPLAY,
-        icon = Material.POTION,
+        icon = Material.BREWING_STAND_ITEM,
         settings = Config.class
 )
 public class PotionsModule extends UHModule

@@ -14,7 +14,7 @@ public class UHConfig extends Configuration
 
     static public final ConfigurationItem<String> TITLE = item("title", ChatColor.GREEN + "" + ChatColor.BOLD + "UHC Reloaded");
 
-    static public final ConfigurationItem<Boolean> BULT_IN_MODULES = item("built-in-modules", true);
+    static public final ConfigurationItem<Boolean> BUILT_IN_MODULES = item("built-in-modules", true);
     static public final ConfigurationMap<String, Boolean> MODULES = map("modules", String.class, Boolean.class);
 
     static public final WorldsSection WORLDS = section("worlds", WorldsSection.class);
@@ -50,14 +50,5 @@ public class UHConfig extends Configuration
             public final ConfigurationItem<Long> DURATION = item("duration", 10l);
             public final ConfigurationItem<Double> AREA_SIZE = item("areaSize", 6d);
         }
-    }
-
-    static public final CommandsSection COMMANDS = section("commands", CommandsSection.class);
-
-    static public class CommandsSection extends ConfigurationSection
-    {
-        public final ConfigurationList<String> EXECUTE_SERVER_START = list("execute-server-start", String.class);
-        public final ConfigurationList<String> EXECUTE_START = list("execute-start", String.class);
-        public final ConfigurationList<String> EXECUTE_END = list("execute-end", String.class);
     }
 }

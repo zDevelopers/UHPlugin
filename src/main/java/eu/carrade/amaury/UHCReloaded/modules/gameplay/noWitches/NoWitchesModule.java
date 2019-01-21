@@ -48,7 +48,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
         description = "Prevents witches from spawning, either naturally, from lightning strike on a villager, or both.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.GAMEPLAY,
-        icon = Material.GLASS_BOTTLE,
+        icon = Material.POTION,
         settings = Config.class
 )
 public class NoWitchesModule extends UHModule

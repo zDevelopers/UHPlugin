@@ -74,7 +74,7 @@ public enum ModuleCategory
 
     END (
             I.t("Game End"),
-            I.t("These modules alter the game end  (either player deaths or whole game end)."),
+            I.t("These modules alter the game end (either player deaths or whole game end)."),
             Material.SKULL_ITEM,
             ChatColor.RED
     ),

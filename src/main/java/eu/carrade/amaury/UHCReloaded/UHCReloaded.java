@@ -136,7 +136,7 @@ public class UHCReloaded extends ZPlugin implements Listener
 
         /* *** Built-in modules *** */
 
-        if (UHConfig.BULT_IN_MODULES.get())
+        if (UHConfig.BUILT_IN_MODULES.get())
         {
             modulesManager.registerBuiltInModules();
         }
