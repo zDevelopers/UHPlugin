@@ -168,6 +168,7 @@ public class AllianceRequest
             (requestedTeam.size() > 1 ? requestedTeam : requesterTeam)
                     .getPlayers().stream()
                     .map(OfflinePlayer::getUniqueId)
+                    .filter(uuid -> !uuid.equals(requesterID))
                     .forEach(player -> approvalsIDs.put(player, false));
         }
 

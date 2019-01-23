@@ -58,7 +58,7 @@ public class AllianceRequestCommand extends Command
     {
         if (UR.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME))
         {
-            error("The game is not started.");
+            error(I.t("The game is not started."));
         }
         else if (args.length == 0)
         {
@@ -80,7 +80,7 @@ public class AllianceRequestCommand extends Command
 
         final AllianceRequest request = new AllianceRequest(playerSender().getUniqueId(), requested.getUniqueId());
 
-        UR.log(AlliancesModule.class).info("New request: {0} - {1}", request, request.getError());
+        UR.log().info("New request: {0} - {1}", request, request.getError());
 
         // The rule to send error messages is: no answer should not be distinguishable from
         // errors linked to existing alliances, because the alliances are secret.
@@ -142,7 +142,6 @@ public class AllianceRequestCommand extends Command
 
             case OK:
                 yourRequestHasBeenSent(requested);
-
                 request.sendApprovalRequests();
 
                 break;

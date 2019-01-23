@@ -63,7 +63,6 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.BiConsumer;
 
 
@@ -98,10 +97,9 @@ public class UHCReloaded extends ZPlugin implements Listener
 
         /* *** Internationalization *** */
 
-        if (UHConfig.LANG.get() == null) I18n.useDefaultPrimaryLocale();
-        else I18n.setPrimaryLocale(UHConfig.LANG.get());
+        if (UHConfig.LANG.isDefined()) I18n.setPrimaryLocale(UHConfig.LANG.get());
 
-        I18n.setFallbackLocale(Locale.US);
+        PluginLogger.info("Using locale {0} (fallback on {1})", I18n.getPrimaryLocale(), I18n.getFallbackLocale());
 
 
         /* *** Core events *** */

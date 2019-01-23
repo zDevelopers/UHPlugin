@@ -994,7 +994,7 @@ msgid ""
 "to accept."
 msgstr ""
 "{gray}Cette requête a été envoyée à {0}, mais l'ensemble des membres de "
-"l'alliance doivent également l'accepter."
+"l'alliance doit également l'accepter."
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/modules/scenarii/alliances/AllianceRequest.java:208
 msgid "{darkgreen}{bold}»  {green}{bold}Accept  {darkgreen}{bold}«"

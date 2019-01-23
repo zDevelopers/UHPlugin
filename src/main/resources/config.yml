@@ -1,19 +1,15 @@
 # 
 # ## Welcome in the UltraHardcore Reloaded configuration file ##
-# 
-# 
-# About the "sound" configuration, the format is always the same:
-# sound:
-#     name:   The name of the sound. Names: see http://l.carrade.eu/bukkit-sounds . Set to "NONE" to disable.
-#     volume: The volume of the sound. 1 is the normal volume. You can use a decimal value.
-#     pitch:  The pitch of the sound.  1 is the normal pitch.  You can use a decimal value.
-# 
-# Warning: NEVER USE TABS in this file, always spaces, to indent.
+#
+# Configuration for modules is available in the `modules/` sub-folder. You should take a look, as this
+# file only contains basic configuration. There's a lot mode available there.
+#
+# Warning: NEVER USE TABS in these files, always spaces, to indent.
 
 
-# Available languages: en_US, fr_FR, pt_PT, pt_BR, cs_CZ, zh_CN.
+# Available languages: en-US, fr-FR, pt-PT, pt-BR, cs-CZ, zh-CN.
 # Empty value: system language.
-lang: fr
+lang:
 
 # If set to false, no built-in modules (except core ones) will be loaded (except if
 # re-specified in the `modules` configuration below).
@@ -36,82 +32,3 @@ worlds:
     overworld: world
     nether: world_nether
     the_end: world_the_end
-
-
-# Controls what is displayed in the tab list headers and footers.
-# Tags:
-# - {title}: contains the scoreboard title (key scoreboard.title).
-# - {episodeText}: contains the localized “Episode x” text.
-# - {playersText}: contains the localized “x players left” text.
-# - {teamsText}: contains the localized “x teams left” text.
-# - {episodeNumber}: contains the raw episode number (e.g. “2”).
-# - {playersCount}: contains the raw alive players count (e.g. “18”).
-# - {teamsCount}: contains the raw alive teams count (e.g. “6”).
-# You can use color & formatting codes with either & or §.
-# If you want, you can use "\n" to create a new line.
-playersList:
-    waitingTime:
-        header: "{title}"
-        footer: ""
-    inGameTime:
-        header: "{title}"
-        footer: "§a{episodeText} §7- §a{playersText} §7- §a{teamsText}"
-
-
-achievements:
-    # When a player joins the game before the beginning of the game, his achievements are reset?
-    resetAchievementsAtStartup: true
-    
-    # A player cannot award an achievement if the game is not started?
-    disableAchievementsBeforeStart: true
-
-
-# Controls the behavior of the /uh finish command
-finish:
-    auto:
-        do: true  # Execute /uh finish automatically a few seconds after the final death?
-        timeAfterLastDeath: 3  # The command will be executed this amount of seconds after the last death.
-    
-    message: true  # If true, the name of the winner(s) will be broadcasted.
-    title: true    # If true, a title will display the winner(s) of the game.
-
-    fireworks:
-        enabled: true  # If true, some fireworks will be launched at the location of the winners.
-        duration: 10   # In seconds.
-        areaSize: 6    # The size of the square, centered on each player, where the fireworks will be launched.
-
-
-# Rules are a way to display rules & other informations to the players.
-# The content is completly up to you, formatting included (using standard
-# formatting codes with either § or &). It will be displayed as a list to
-# the players (one bullet per line in the `rules.rules` entry).
-# Empty entries (« - "" ») are replaced by a completly blank line, if you
-# need a separator.
-rules:
-    display:
-        onJoin: false
-        onStart: true
-    rules:
-        -
-
-
-# Execute commands during the game or after the end of it, and after a configurable delay?
-# Format explained below.
-# Respect the spaces before the keywords ("exec" and "delay" need to be aligned).
-commands:
-    # Commands executed when the server starts.
-    # These commands are also executed when the server is reloaded.
-    execute-server-start:
-       #- exec: command args
-       #  delay: "40:00" (format: "mm", "mm:ss" or "hh:mm:ss". If invalid or not present, 0 seconds.)
-       - 
-    
-    # Commands executed after the beginning of the game.
-    # (The moment when /uh start or /uh start slow go is executed.)
-    execute-start:
-       - 
-    
-    # Commands executed after the end of the game.
-    # (After the last kill, when only one team is left.)
-    execute-end:
-       - 
