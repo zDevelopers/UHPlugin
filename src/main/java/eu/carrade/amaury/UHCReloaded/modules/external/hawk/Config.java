@@ -31,7 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.external.reports;
+package eu.carrade.amaury.UHCReloaded.modules.external.hawk;
 
 import fr.zcraft.zlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;

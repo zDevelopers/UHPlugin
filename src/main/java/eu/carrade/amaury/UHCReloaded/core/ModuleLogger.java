@@ -122,11 +122,7 @@ public class ModuleLogger extends Logger
     public void broadcastAdministrative(final RawText message)
     {
         // TODO use permissions
-        Bukkit.getOnlinePlayers().stream().filter(Player::isOp).forEach(player -> {
-            player.sendMessage("");
-            RawMessage.send(player, message);
-        });
-
+        Bukkit.getOnlinePlayers().stream().filter(Player::isOp).forEach(player -> RawMessage.send(player, message));
         info(ChatColor.stripColor(message.toPlainText()));
     }
 

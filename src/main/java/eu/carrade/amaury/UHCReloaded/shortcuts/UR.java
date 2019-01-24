@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 
 /**
@@ -108,6 +109,35 @@ public final class UR
     public static GameModule game()
     {
         return module(GameModule.class);
+    }
+
+    /**
+     * Checks if a module is loaded. If this test is positive, the
+     * {@link #module(Class)} method called with the same class will be
+     * non-null and available.
+     *
+     * @param moduleClass The module's class.
+     * @param <M> The module's type.
+     *
+     * @return {@code true} if the given module is loaded.
+     */
+    public static <M extends UHModule> boolean loaded(Class<M> moduleClass)
+    {
+        return get().getModulesManager().isLoaded(moduleClass);
+    }
+
+    /**
+     * Checks if a module is loaded; if so, executes the consumer with the module's
+     * instance as argument.
+     *
+     * @param moduleClass The module's class.
+     * @param consumer The module's instance consumer.
+     * @param <M> The module's type.
+     */
+    public static <M extends UHModule> void ifLoaded(final Class<M> moduleClass, Consumer<M> consumer)
+    {
+        final M module = module(moduleClass);
+        if (module != null) consumer.accept(module);
     }
 
     /**

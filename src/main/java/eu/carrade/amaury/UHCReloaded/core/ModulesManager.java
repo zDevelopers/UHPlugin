@@ -263,6 +263,19 @@ public class ModulesManager extends ZLibComponent implements Listener
     }
 
     /**
+     * Checks if the given module is loaded.
+     *
+     * @param module The module's class.
+     * @return {@code true} if loaded.
+     */
+    public boolean isLoaded(final Class<? extends UHModule> module)
+    {
+        final ModuleWrapper wrapper = modules.get(module);
+
+        return wrapper != null && wrapper.isLoaded();
+    }
+
+    /**
      * Gets a module's instance. This may return null if the module is not currently
      * enabled.
      *
@@ -275,7 +288,7 @@ public class ModulesManager extends ZLibComponent implements Listener
     {
         final ModuleWrapper module = UR.get().getModulesManager().modules.get(moduleClass);
 
-        if (module == null) return null;
+        if (module == null || !module.isLoaded()) return null;
         else return (M) module.get();
     }
 

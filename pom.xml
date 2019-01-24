@@ -100,7 +100,7 @@
                         <includes>
                             <include>fr.zcraft:zlib</include>
                             <include>fr.zcraft:zteams</include>
-                            <include>me.cassayre.florian:DamagesLogger</include>
+                            <include>me.cassayre.florian:Hawk</include>
                         </includes>
                     </artifactSet>
                     <relocations>
@@ -113,8 +113,8 @@
                             <shadedPattern>eu.carrade.amaury.UHCReloaded.zteams</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>me.cassayre.florian.damageslogger</pattern>
-                            <shadedPattern>eu.carrade.amaury.UHCReloaded.damageslogger</shadedPattern>
+                            <pattern>me.cassayre.florian.hawk</pattern>
+                            <shadedPattern>eu.carrade.amaury.UHCReloaded.hawk</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -176,7 +176,7 @@
         </dependency>
         <dependency>
             <groupId>me.cassayre.florian</groupId>
-            <artifactId>DamagesLogger</artifactId>
+            <artifactId>Hawk</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

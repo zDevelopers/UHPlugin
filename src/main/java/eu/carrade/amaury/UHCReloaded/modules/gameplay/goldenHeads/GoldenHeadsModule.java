@@ -156,7 +156,17 @@ public class GoldenHeadsModule extends UHModule
         }
     }
 
-    private SkullType readHeadType(final ItemStack stack)
+    /**
+     * From a golden apple, reads the head type written in it, so you can know
+     * if it's a regular golden apple, a Wither golden head or a Player golden
+     * head.
+     *
+     * @param stack The ItemStack to analyze.
+     * @return Either {@link SkullType#PLAYER} (Player golden head),
+     * {@link SkullType#WITHER} (Wither golden head) or {@code null} (regular
+     * golden apple).
+     */
+    public SkullType readHeadType(final ItemStack stack)
     {
         try
         {

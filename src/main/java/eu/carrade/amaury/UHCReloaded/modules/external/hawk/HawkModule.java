@@ -31,7 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.external.reports;
+package eu.carrade.amaury.UHCReloaded.modules.external.hawk;
 
 import eu.carrade.amaury.UHCReloaded.UHConfig;
 import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
@@ -44,6 +44,7 @@ import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChan
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
+import eu.carrade.amaury.UHCReloaded.modules.gameplay.goldenHeads.GoldenHeadsModule;
 import eu.carrade.amaury.UHCReloaded.utils.CommandUtils;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import fr.zcraft.zlib.components.events.FutureEventHandler;
@@ -58,11 +59,11 @@ import fr.zcraft.zlib.tools.text.RawMessage;
 import fr.zcraft.zteams.ZTeam;
 import fr.zcraft.zteams.ZTeams;
 import fr.zcraft.zteams.events.*;
-import me.cassayre.florian.damageslogger.ReportsManager;
-import me.cassayre.florian.damageslogger.report.InvalidReportException;
-import me.cassayre.florian.damageslogger.report.Report;
-import me.cassayre.florian.damageslogger.report.ReportEvent;
-import me.cassayre.florian.damageslogger.report.ReportTeam;
+import me.cassayre.florian.hawk.ReportsManager;
+import me.cassayre.florian.hawk.report.InvalidReportException;
+import me.cassayre.florian.hawk.report.Report;
+import me.cassayre.florian.hawk.report.ReportEvent;
+import me.cassayre.florian.hawk.report.ReportTeam;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -86,22 +87,18 @@ import java.util.UUID;
 
 
 @ModuleInfo (
-        name = "Reports",
-        short_description = "Generates reports of the game, including history, damages, " +
-                "heals, statistics, etc., displayed on a web page, and gives the URL " +
-                "when the match ends.",
+        name = "Hawk Reports",
         description = "Generates reports of the game, including history, damages, " +
                 "heals, statistics, etc., displayed on a web page, and gives the URL " +
-                "when the match ends.\n\n" +
-                "Using DamagesLogger by Florian Cassayre & Amaury Carrade.",
-        authors = "Florian Cassayre & Amaury Carrade",
+                "when the match ends.",
+        authors = "Florian Cassayre & Amaury Carrade through the Hawk Project",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.EXTERNAL,
         icon = Material.BOOK_AND_QUILL,
         settings = Config.class,
         can_be_unloaded = false
 )
-public class ReportsModule extends UHModule
+public class HawkModule extends UHModule
 {
     private GameModule game;
 
@@ -118,7 +115,7 @@ public class ReportsModule extends UHModule
     private boolean firstNether = false;
     private boolean firstEnd = false;
     private boolean firstGoldenApple = false;
-    private boolean firstGoldenHead = false;  // FIXME not implemented
+    private boolean firstGoldenHead = false;
 
     /*
      * Used to know who used the brewing stands last to know to who the “first
@@ -132,7 +129,7 @@ public class ReportsModule extends UHModule
      */
     private BukkitTask waitAfterEndTask = null;
     private TimeDelta waitAfterEndDelay = new TimeDelta(30);
-    private boolean waitingfterEnd = false;
+    private boolean waitingAfterEnd = false;
 
 
     @Override
@@ -235,7 +232,7 @@ public class ReportsModule extends UHModule
         if (game.isTeamsGame())
         {
             ZTeams.get().getTeams().stream()
-                    .map(team -> new ReportTeam(team.getName(), team.getColorOrWhite().toChatColor(), team.getPlayers()))
+                    .map(team -> new ReportTeam(team.getName(), team.getColor() != null ? team.getColor().toChatColor() : null, team.getPlayers()))
                     .forEach(report::registerTeam);
         }
     }
@@ -248,11 +245,11 @@ public class ReportsModule extends UHModule
             final ZTeam winner = game.getWinner();
             if (winner != null) report.setWinners(winner.getPlayers());
 
-            waitingfterEnd = true;
+            waitingAfterEnd = true;
 
             waitAfterEndTask = RunTask.later(() ->
             {
-                waitingfterEnd = false;
+                waitingAfterEnd = false;
 
                 report.autoTrack(false);
 
@@ -301,13 +298,14 @@ public class ReportsModule extends UHModule
                                 log().broadcastAdministrative(I.t("{darkaqua}You can share it using the following URL. It was not broadcast to other players."));
                                 log().broadcastAdministrative("");
 
-                                RawMessage.broadcast(
+                                log().broadcastAdministrative(
                                     new RawText().uri(uri).hover(I.t("Open {aqua}{0}", uri.toString()))
                                         .then("»  ").style(ChatColor.DARK_AQUA, ChatColor.BOLD)
                                         .then(uri.toString()).style(ChatColor.AQUA)
                                         .build()
                                 );
 
+                                log().broadcastAdministrative("");
                                 break;
 
                             case CONSOLE:
@@ -342,7 +340,7 @@ public class ReportsModule extends UHModule
             report.resetWinners();
             report.autoTrack(true);
 
-            waitingfterEnd = false;
+            waitingAfterEnd = false;
 
             if (waitAfterEndTask != null)
             {
@@ -356,7 +354,7 @@ public class ReportsModule extends UHModule
     public void onPlayerDeath(final AlivePlayerDeathEvent ev)
     {
         report
-            .untrackPlayer(ev.getPlayer())
+            .untrack(ev.getPlayer())
             .record(ReportEvent.withPlayer(
                     ReportEvent.EventType.GOLD,
                     /// Title of the death event on the game report's timeline.
@@ -373,13 +371,13 @@ public class ReportsModule extends UHModule
     @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDeath(final PlayerDeathEvent ev)
     {
-        // Recording cross-kills and other deaths after the game end (i.e. from fire)
+        // Recording cross-kills and other deaths after the game end (e.g. from fire)
         // during a 30-seconds period.
 
-        if (!waitingfterEnd) return;
+        if (!waitingAfterEnd) return;
 
         report
-                .untrackPlayer(ev.getEntity())
+                .untrack(ev.getEntity())
                 .record(ReportEvent.withPlayer(
                         ReportEvent.EventType.GOLD,
                         /// Title of the death event on the game report's timeline.
@@ -393,7 +391,7 @@ public class ReportsModule extends UHModule
     public void onPlayerResurrected(final PlayerResurrectedEvent ev)
     {
         report
-            .trackPlayer(ev.getPlayer())
+            .track(ev.getPlayer())
             .record(ReportEvent.withPlayer(
                     ReportEvent.EventType.GREEN,
                     /// Title of the resurrection event on the game report's timeline.
@@ -567,14 +565,29 @@ public class ReportsModule extends UHModule
     @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemConsumed(final PlayerItemConsumeEvent ev)
     {
-        if (firstGoldenApple || !game.isAlive(ev.getPlayer()) || ev.getItem().getType() != Material.GOLDEN_APPLE)
+        if (!game.isAlive(ev.getPlayer()) || ev.getItem().getType() != Material.GOLDEN_APPLE)
             return;
 
-        report.record(ReportEvent.withIcon(
-                I.t("{0} used the first golden apple", ev.getPlayer().getName()),
-                "item-apple-golden"
-        ));
+        final SkullType headType = UR.loaded(GoldenHeadsModule.class) ? UR.module(GoldenHeadsModule.class).readHeadType(ev.getItem()) : null;
 
-        firstGoldenApple = true;
+        if (headType == SkullType.PLAYER && !firstGoldenHead)
+        {
+            report.record(ReportEvent.withIcon(
+                    I.t("{0} ate the first golden head", ev.getPlayer().getName()),
+                    "item-apple-golden"
+            ));
+
+            firstGoldenHead = true;
+        }
+
+        else if (!firstGoldenApple)
+        {
+            report.record(ReportEvent.withIcon(
+                    I.t("{0} ate the first golden apple", ev.getPlayer().getName()),
+                    "item-apple-golden"
+            ));
+
+            firstGoldenApple = true;
+        }
     }
 }

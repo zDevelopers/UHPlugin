@@ -76,7 +76,6 @@ public class EpisodesModule extends UHModule
 {
     private final GameModule game = UR.game();
     private final TimersModule timers = UR.module(TimersModule.class);
-    private final PlayerListHeaderFooterModule headFoot = UR.module(PlayerListHeaderFooterModule.class);
 
     private Timer episodesTimer;
     private int episode = 1;
@@ -95,11 +94,10 @@ public class EpisodesModule extends UHModule
 
         episodesTimer.start();
 
-        if (headFoot != null)
-        {
+        UR.ifLoaded(PlayerListHeaderFooterModule.class, headFoot -> {
             headFoot.registerPlaceholder("episodeText", () -> I.t("Episode {0}", episode));
             headFoot.registerPlaceholder("episodeNumber", () -> String.valueOf(episode));
-        }
+        });
     }
 
     @Override
@@ -158,18 +156,15 @@ public class EpisodesModule extends UHModule
         {
             Titles.broadcastTitle(
                     5, 32, 8,
+                    "",
                     /// The title displayed when the episode change. {0} = new episode number; {1} = old.
-                    I.t("{darkaqua}Episode {aqua}{0}", ev.getNewEpisode(), ev.getOldEpisode()),
-                    ""
+                    I.t("{darkaqua}Episode {aqua}{0}", ev.getNewEpisode(), ev.getOldEpisode())
             );
         }
 
 
         // Update headers & footers
-        if (headFoot != null)
-        {
-            headFoot.update();
-        }
+        UR.ifLoaded(PlayerListHeaderFooterModule.class, PlayerListHeaderFooterModule::update);
     }
 
     public int getEpisode()
