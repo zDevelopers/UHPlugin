@@ -234,7 +234,7 @@ public class AlliancesModule extends UHModule
      * everyone in solo.
      */
     @EventHandler (priority = EventPriority.LOWEST)
-    public void onPreSpawnSelection(final BeforeTeleportationPhaseEvent ev)
+    private void onPreSpawnSelection(final BeforeTeleportationPhaseEvent ev)
     {
         final SpectatorsModule spectators = UR.module(SpectatorsModule.class);
 

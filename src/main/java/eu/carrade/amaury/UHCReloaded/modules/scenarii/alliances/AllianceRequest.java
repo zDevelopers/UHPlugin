@@ -34,6 +34,7 @@
 package eu.carrade.amaury.UHCReloaded.modules.scenarii.alliances;
 
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
+import eu.carrade.amaury.UHCReloaded.modules.external.hawk.HawkModule;
 import eu.carrade.amaury.UHCReloaded.modules.scenarii.alliances.commands.RequestAnswerCommand;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
@@ -44,6 +45,7 @@ import fr.zcraft.zlib.tools.text.RawMessage;
 import fr.zcraft.zteams.ZTeam;
 import fr.zcraft.zteams.ZTeams;
 import fr.zcraft.zteams.colors.TeamColor;
+import me.cassayre.florian.hawk.report.ReportEvent;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -437,6 +439,58 @@ public class AllianceRequest
                         .collect(Collectors.toSet())
                 )
         );
+
+
+        // Also in the timeline
+
+        UR.ifLoaded(HawkModule.class, hawk -> {
+            if (allianceTeam.size() == 2)
+            {
+                final Iterator<OfflinePlayer> players = allianceTeam.getPlayers().iterator();
+
+                hawk.getReport().record(ReportEvent.withIcon(
+                        I.t("A new alliance is founded!"),
+                        I.t("Between {0} and {1}", players.next().getName(), players.next().getName()),
+                        "block-structure-block-data"
+                ));
+            }
+            else
+            {
+                @SuppressWarnings("OptionalGetWithoutIsPresent")
+                final OfflinePlayer joiningPlayer = requestedTeam.size() == 1 ? requestedTeam.getPlayers().stream().findFirst().get() : requesterTeam.getPlayers().stream().findFirst().get();
+
+                final List<String> playersNames = allianceTeam.getPlayers().stream().filter(player -> !player.equals(joiningPlayer)).map(OfflinePlayer::getName).collect(Collectors.toList());
+                final int size = playersNames.size();
+
+                final StringBuilder sentence = new StringBuilder(size * 16);
+
+                for (int i = 0; i < size; i++)
+                {
+                    sentence.append(playersNames.get(i));
+
+                    if (i == size - 2)
+                    {
+                        sentence.append(" ").append(I.t("and")).append(" ");
+                    }
+                    else if (i != size - 1)
+                    {
+                        sentence.append(", ");
+                    }
+                }
+
+                hawk.getReport().record(ReportEvent.withIcon(
+                        I.t("The alliance is growing!"),
+                        I.t("{0} joins {1}", joiningPlayer.getName(), sentence),
+                        "block-structure-block"
+                ));
+            }
+
+            allianceTeam.getPlayers().forEach(player -> hawk.getReport().getPlayer(player).setTagLine(
+                    I.t("Allied"),
+                    null,
+                    I.t("Players in the (latest) alliance: {0}", String.join(", ", allianceTeam.getPlayers().stream().map(OfflinePlayer::getName).collect(Collectors.toSet())))
+            ));
+        });
     }
 
     /**
