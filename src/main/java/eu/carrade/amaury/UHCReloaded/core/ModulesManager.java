@@ -40,6 +40,7 @@ import eu.carrade.amaury.UHCReloaded.core.events.ModuleUnloadedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.end.kick.KickModule;
 import eu.carrade.amaury.UHCReloaded.modules.other.PomfModule;
 import eu.carrade.amaury.UHCReloaded.modules.scenarii.alliances.AlliancesModule;
+import eu.carrade.amaury.UHCReloaded.modules.worldgen.creatures.CreaturesModule;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.ModulesUtils;
 import fr.zcraft.zlib.components.commands.Command;
@@ -69,13 +70,18 @@ public class ModulesManager extends ZLibComponent implements Listener
     private final static String MODULES_PACKAGE = "eu.carrade.amaury.UHCReloaded.modules";
 
     /**
-     * These built-in modules will not be enabled by default. It includes all scenarii, so the default game
-     * is a standard one, and the kick module, as spectators are better for most admins.
+     * These built-in modules will not be enabled by default. It includes all scenarii and world generation modules,
+     * so the default game is a standard one, and the kick module, as spectators are better for most admins.
      */
     private final static List<Class<? extends UHModule>> DISABLED_BY_DEFAULT = Arrays.asList(
             KickModule.class,
             PomfModule.class,
-            AlliancesModule.class
+
+            // Scenarii
+            AlliancesModule.class,
+
+            // World generation
+            CreaturesModule.class
     );
 
     /**

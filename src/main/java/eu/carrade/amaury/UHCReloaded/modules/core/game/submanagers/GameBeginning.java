@@ -34,7 +34,6 @@
 package eu.carrade.amaury.UHCReloaded.modules.core.game.submanagers;
 
 import eu.carrade.amaury.UHCReloaded.modules.core.game.Config;
-import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GamePhase;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.game.GamePhaseChangedEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.timers.TimeDelta;
@@ -68,7 +67,7 @@ public class GameBeginning extends ZLibComponent implements Listener
 
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onGameStarts(GamePhaseChangedEvent ev)
+    private void onGameStarts(GamePhaseChangedEvent ev)
     {
         if (ev.getNewPhase() != GamePhase.IN_GAME || !ev.isRunningForward()) return;
 
@@ -89,7 +88,7 @@ public class GameBeginning extends ZLibComponent implements Listener
             I.t("{green}All damages are disabled"),
             second -> I.tn("{yellow}{bold}Ends in {gold}{bold}{0}{yellow}{bold} second", "{yellow}{bold}Ends in {gold}{bold}{0}{yellow}{bold} second", (int) second),
             I.t("{yellow}{bold}Ended! {yellow}You are now vulnerable..."),
-            () -> UR.module(GameModule.class).getAliveConnectedPlayers(),
+            () -> UR.game().getAliveConnectedPlayers(),
             () -> {
                 inGracePeriod = false;
 
@@ -114,7 +113,7 @@ public class GameBeginning extends ZLibComponent implements Listener
                 second -> I.tn("{yellow}{bold}Allowed in {gold}{bold}{0}{yellow}{bold} second", "{yellow}{bold}Allowed in {gold}{bold}{0}{yellow}{bold} second", (int) second),
                 I.t("{yellow}{bold}Now allowed! {yellow}Beware..."),
                 (short) 10,
-                () -> UR.module(GameModule.class).getAliveConnectedPlayers(),
+                () -> UR.game().getAliveConnectedPlayers(),
                 () -> {
                     setPVP(true);
                     Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} PvP is now enabled."));
@@ -140,7 +139,7 @@ public class GameBeginning extends ZLibComponent implements Listener
      * Used to disable all damages if the game is not started.
      */
     @EventHandler
-    public void onEntityDamage(final EntityDamageEvent ev)
+    private void onEntityDamage(final EntityDamageEvent ev)
     {
         if (ev.getEntity() instanceof Player && inGracePeriod)
         {
@@ -152,7 +151,7 @@ public class GameBeginning extends ZLibComponent implements Listener
      * Used to cancel the spawn of hostile entities on the surface only, at the beginning of the game.
      */
     @EventHandler
-    public void onSurfaceCreatureSpawn(final CreatureSpawnEvent ev)
+    private void onSurfaceCreatureSpawn(final CreatureSpawnEvent ev)
     {
         if (inMobsFreePeriod && EntitiesUtils.isNaturalSpawn(ev.getSpawnReason()) && EntitiesUtils.isHostile(ev.getEntityType()))
         {

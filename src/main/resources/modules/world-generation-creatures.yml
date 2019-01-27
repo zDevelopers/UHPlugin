@@ -1,0 +1,115 @@
+#
+# This module tweaks the creatures spawn in the worlds (any creature; any biome).
+# You can increase, decrease or even remove completely an entity to/from a specific or all biomes.
+#
+# This mainly act on **chunk generation** (it is also effective for natural spawns to refill the world
+# with new creatures, but way less). It works by patching the Minecraft Biomes registry to update the
+# spawning rules. So, you should generate (using WorldBorder and its fill command, for example) the world with this
+# plugin running and this module enabled, for best results.
+#
+# To enable ths module at startup, add it into the main `config.yml` file, like so:
+#
+#  modules:
+#   "worldgen.creatures": true
+#
+#
+#
+# Each spawning rule have these properties. Except if specified, unset properties will be left as-is.
+#
+# - The entity, obviously.
+#   The list is available here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
+#
+# - The weight of the entity in the biome.
+#   The higher the weight is, the likelier the mob is to be selected when the server looks for a mob to spawn (in all
+#   cases). If set to 0, the entity will not spawn at all.
+#
+# - The minimal pack size.
+#   While generating the chunks (and only while generating the chunks), the server will spawn entities in groups; this
+#   is the minimal size of such groups.
+#
+# - The maximal pack size.
+#   Same, but it's the max.
+#
+# - The biomes where this rule is active.
+#   If you precise nothing at all about the biomes (only the previous properties), the rule will be updated for
+#   all biomes already having a rule for the given entity (so the entity will not spawn in *new* biomes).
+#
+#   If you want the rule to be applied to *all* biomes, add `biomes: ALL`. This will tell Minecraft to spawn the
+#   entity in all biomes, including these where the entity does not spawn in vanilla. This includes the Nether and the
+#   End. In this example, Mushroom Cows will rarely spawn in all biomes (not only Mushroom Islands).
+#
+#   spawn_rules:
+#     - entity: MUSHROOM_COW
+#       weight: 1
+#       biomes: ALL
+#
+#   If you want to apply this rule to some specific biomes (leaving rules for this entity in other biomes untouched,
+#   list the biomes in a `biomes` key, like in the following example. This example will tell Minecraft to spawn
+#   blazes with a very, very high weight in deserts & savannas (including plateaux).
+#
+#   spawn_rules:
+#     - entity: BLAZE
+#       weight: 250   # This would basically mean “blazes everywhere” (in the biomes below, at least)
+#       biomes:
+#         - DESERT
+#         - SAVANNA
+#         - SAVANNA_PLATEAU
+#
+#   The biomes' list is available here: https://gist.github.com/AmauryCarrade/667ada6cbba41b3c3475217247ab9715
+#
+#
+#
+# The default spawn rules below are a bit heavier for passive useful creature in typical survival games. Feel free to
+# alter them to your preferences, of course.
+#
+# This module alters the spawning rules when enabled **for the whole server lifetime**. Even if disabled, the rules will
+# still be there. If the server is rebooted without this module, the rules will be reset to Minecraft default.
+#
+# If you remove all spawn rules, the behavior will be vanilla.
+#
+# In case of conflicts (i.e. multiples rules for the same entity and the same biome), the last rule in the list wins.
+#
+# As a finale note, please remember that entities will still spawn according to their environmental rules. As example,
+# cows spawn on grass. This imply that some rules may not work as you intended. As example, if you configure rabbits
+# to spawn in the Nether, the rule will be saved into the Minecraft server, but you'll never see any rabbit in there,
+# because there is no grass or sand in the Nether.
+#
+
+spawn_rules:
+  - entity: SHEEP
+    weight: 15
+    minimal_pack_size: 3
+    maximal_pack_size: 8
+
+  - entity: RABBIT
+    weight: 4
+    minimal_pack_size: 2
+    maximal_pack_size: 5
+
+  - entity: PIG
+    weight: 15
+    minimal_pack_size: 6
+    maximal_pack_size: 14
+
+  - entity: CHICKEN
+    weight: 18
+    minimal_pack_size: 8
+    maximal_pack_size: 16
+
+  - entity: COW
+    weight: 18
+    minimal_pack_size: 5
+    maximal_pack_size: 12
+
+  - entity: WOLF
+    weight: 5
+    minimal_pack_size: 1
+    maximal_pack_size: 6
+
+  - entity: HORSE
+    weight: 5
+    minimal_pack_size: 2
+    maximal_pack_size: 8
+
+  - entity: OCELOT
+    weight: 5
