@@ -239,6 +239,8 @@ public class AboutModule extends UHModule
                     stability = Stability.STABLE;
             }
         }
+
+        else stability = Stability.STABLE;
     }
 
     public enum Stability

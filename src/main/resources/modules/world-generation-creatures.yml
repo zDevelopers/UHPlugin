@@ -21,7 +21,7 @@
 #
 # - The weight of the entity in the biome.
 #   The higher the weight is, the likelier the mob is to be selected when the server looks for a mob to spawn (in all
-#   cases). If set to 0, the entity will not spawn at all.
+#   cases). If set to 0, the entity will not spawn at all from natural spawning.
 #
 # - The minimal pack size.
 #   While generating the chunks (and only while generating the chunks), the server will spawn entities in groups; this
