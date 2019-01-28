@@ -31,80 +31,60 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
-package eu.carrade.amaury.UHCReloaded.modules.cosmetics.listHealth;
+package eu.carrade.amaury.UHCReloaded.modules.cosmetics;
 
 import eu.carrade.amaury.UHCReloaded.core.ModuleCategory;
 import eu.carrade.amaury.UHCReloaded.core.ModuleInfo;
 import eu.carrade.amaury.UHCReloaded.core.ModuleLoadTime;
 import eu.carrade.amaury.UHCReloaded.core.UHModule;
-import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
-import fr.zcraft.zlib.tools.runners.RunTask;
-import org.bukkit.Bukkit;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.AlivePlayerDeathEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.game.events.players.PlayerResurrectedEvent;
+import eu.carrade.amaury.UHCReloaded.modules.core.sidebar.SidebarInjector;
+import fr.zcraft.zlib.components.i18n.I;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Criterias;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
+import org.bukkit.event.EventHandler;
 
-import java.util.UUID;
+import java.util.*;
 
 
 @ModuleInfo (
-        name = "Health in Players List",
-        description = "Displays the health of players in the overlay list displayed with <TAB>.",
-        when = ModuleLoadTime.ON_GAME_STARTING,
+        name = "Kills Count",
+        description = "Displays the player's kills count in the sidebar.",
+        when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.COSMETICS,
-        icon = Material.DETECTOR_RAIL
+        icon = Material.DIAMOND_SWORD
 )
-public class ListHealthModule extends UHModule
+public class KillsCountModule extends UHModule
 {
-    private String objectiveID = UUID.randomUUID().toString().substring(0, 16);
+    private final Map<UUID, Set<UUID>> kills = new HashMap<>();
 
     @Override
-    protected void onEnable()
+    public void injectIntoSidebar(final Player player, final SidebarInjector injector)
     {
-        // Initialization of the scoreboard (health in players' list)
-        final Objective healthObjective = UR.get().getScoreboard().registerNewObjective(objectiveID, Criterias.HEALTH);
-        healthObjective.setDisplayName("Health");
-        healthObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-
-        // Sometimes, the health is initialized to 0. This is used to fix this.
-        updateHealthScore();
+        injector.injectLines(
+                SidebarInjector.SidebarPriority.BOTTOM, true,
+                I.tn("{white}{0}{gray} player killed", "{white}{0}{gray} players killed", getKillsFor(player.getUniqueId()).size())
+        );
     }
 
-    @Override
-    protected void onDisable()
+    private Set<UUID> getKillsFor(final UUID playerID)
     {
-        UR.get().getScoreboard().clearSlot(DisplaySlot.PLAYER_LIST);
-        UR.get().getScoreboard().getObjective(objectiveID).unregister();
+        return kills.computeIfAbsent(playerID, uuid -> new HashSet<>());
     }
 
-    /**
-     * Updates the health score for all players.
-     */
-    public void updateHealthScore()
+    @EventHandler
+    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
     {
-        Bukkit.getOnlinePlayers().forEach(this::updateHealthScore);
-    }
-
-    /**
-     * Updates the health score for the given player.
-     *
-     * @param player The player to update.
-     */
-    public void updateHealthScore(final Player player)
-    {
-        if (player.getHealth() != 1d) // Prevents killing the player
+        if (ev.getPlayer().isOnline() && ev.getPlayer().getPlayer().getKiller() != null)
         {
-            player.setHealth(player.getHealth() - 1d);
-
-            RunTask.later(() ->
-            {
-                if (player.getHealth() <= player.getMaxHealth() - 1d) // Avoids an IllegalArgumentException
-                {
-                    player.setHealth(player.getHealth() + 1d);
-                }
-            }, 3L);
+            getKillsFor(ev.getPlayer().getPlayer().getKiller().getUniqueId()).add(ev.getPlayer().getUniqueId());
         }
+    }
+
+    @EventHandler
+    public void onPlayerResurrect(final PlayerResurrectedEvent ev)
+    {
+        kills.values().forEach(playerKills -> playerKills.remove(ev.getPlayer().getUniqueId()));
     }
 }

@@ -318,9 +318,19 @@ public class SidebarInjector
         TOP,
 
         /**
+         * Places the lines somewhere between the top and the middle.
+         */
+        MIDDLE_TOP,
+
+        /**
          * Places the lines at the middle, without any strong preferences on placement.
          */
         MIDDLE,
+
+        /**
+         * Places the lines somewhere between the middle and the bottom.
+         */
+        MIDDLE_BOTTOM,
 
         /**
          * Places the lines on the bottom part of the scoreboard.
