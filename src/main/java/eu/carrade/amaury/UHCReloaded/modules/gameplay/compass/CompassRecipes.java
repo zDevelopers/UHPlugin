@@ -246,7 +246,7 @@ public class CompassRecipes extends ZLibComponent implements Listener
     @EventHandler
     private void onPreCraft(final PrepareItemCraftEvent ev)
     {
-        if (Config.RECIPE.get() != CompassRecipe.DEFAULT && ev.getRecipe() != null && RecipesUtils.areSimilar(ev.getRecipe(), VANILLA_RECIPE))
+        if (Config.RECIPE.get() != CompassRecipe.DEFAULT && RecipesUtils.areSimilar(ev.getRecipe(), VANILLA_RECIPE))
         {
             ev.getInventory().setResult(new ItemStack(Material.AIR));
         }
