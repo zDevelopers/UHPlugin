@@ -42,17 +42,20 @@ import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
 import eu.carrade.amaury.UHCReloaded.utils.UHSound;
 import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.i18n.I;
+import fr.zcraft.zlib.components.i18n.I18n;
 import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.tools.runners.RunTask;
-import fr.zcraft.zlib.tools.text.RawMessage;
+import fr.zcraft.zlib.tools.text.MessageSender;
 import fr.zcraft.zteams.ZTeams;
 import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -94,138 +97,158 @@ public class CompassModule extends UHModule
     /**
      * Used to update the compass.
      */
-    @EventHandler (ignoreCancelled = true)
+    @EventHandler (priority = EventPriority.LOWEST)
     public void onPlayerInteract(final PlayerInteractEvent ev)
     {
-        if (compassLocked.contains(ev.getPlayer().getUniqueId())) return;
-        else
+        if (ev.getAction() != Action.PHYSICAL)
         {
-            compassLocked.add(ev.getPlayer().getUniqueId());
-            RunTask.later(() -> compassLocked.remove(ev.getPlayer().getUniqueId()), 20L);
+            ev.setCancelled(activateCompass(ev.getPlayer()));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerInteractAtEntity(final PlayerInteractAtEntityEvent ev)
+    {
+        ev.setCancelled(activateCompass(ev.getPlayer()));
+    }
+
+    /**
+     * Activates the compass for the player.
+     *
+     * @param compassUser The player.
+     * @return {@code true} if the compass was activated.
+     */
+    private boolean activateCompass(final Player compassUser)
+    {
+        if (!UR.game().isAlive(compassUser) || compassUser.getItemInHand().getType() != Material.COMPASS) return false;
+        if (compassLocked.contains(compassUser.getUniqueId())) return false;
+
+        compassLocked.add(compassUser.getUniqueId());
+        RunTask.later(() -> compassLocked.remove(compassUser.getUniqueId()), 10L);
+
+        final Locale locale = I18n.getPlayerLocale(compassUser);
+
+        // We check if the player have what needed
+
+        int feeAvailable = Arrays.stream(compassUser.getInventory().getContents())
+                .filter(item -> item != null && item.getType() == Config.COMPASS_FEE_ITEM.get())
+                .mapToInt(ItemStack::getAmount)
+                .sum();
+
+        if (feeAvailable < Config.COMPASS_FEE_AMOUNT.get())
+        {
+            MessageSender.sendActionBarMessage(compassUser, new RawText()
+                    /// The singular is in the sentence « To use the compass, you must have one rotten flesh ». The plural: « […] you must have Rotten Flesh × 2 »?
+                    .then(I.tln(locale, "To use the compass, you must have one ", "To use the compass, you must have ", Config.COMPASS_FEE_AMOUNT.get())).color(ChatColor.RED)
+                    .then().translate(new ItemStack(Config.COMPASS_FEE_ITEM.get(), Config.COMPASS_FEE_AMOUNT.get())).color(ChatColor.RED)
+                    .then(Config.COMPASS_FEE_AMOUNT.get() > 1 ? " × " + Config.COMPASS_FEE_AMOUNT.get() : "").color(ChatColor.RED)
+                    .then(".").color(ChatColor.RED)
+                    .build()
+            );
+            new UHSound(1F, 1F, "BLOCK_WOOD_STEP", "STEP_WOOD").play(compassUser);
+            return false;
         }
 
-        if ((ev.getAction() == Action.RIGHT_CLICK_AIR || ev.getAction() == Action.RIGHT_CLICK_BLOCK)
-                && ev.getPlayer().getItemInHand().getType() == Material.COMPASS
-                && UR.module(GameModule.class).isAlive(ev.getPlayer()))
+        // We consume the fee
+
+        int feeLeft = Config.COMPASS_FEE_AMOUNT.get();
+
+        for (final ItemStack item : compassUser.getInventory().getContents())
         {
-            final Player compassUser = ev.getPlayer();
-
-            // We check if the player have what needed
-
-            int feeAvailable = Arrays.stream(compassUser.getInventory().getContents())
-                    .filter(item -> item != null && item.getType() == Config.COMPASS_FEE_ITEM.get())
-                    .mapToInt(ItemStack::getAmount)
-                    .sum();
-
-            if (feeAvailable < Config.COMPASS_FEE_AMOUNT.get())
+            if (item != null && item.getType() == Config.COMPASS_FEE_ITEM.get())
             {
-                RawMessage.send(compassUser, new RawText(I.t("To use the compass, you must have the following: "))
-                        .then().translate(new ItemStack(Config.COMPASS_FEE_ITEM.get(), Config.COMPASS_FEE_AMOUNT.get()))
-                        .then(Config.COMPASS_FEE_AMOUNT.get() > 1 ? " × " + Config.COMPASS_FEE_AMOUNT.get() + "." : ".")
-                        .build()
-                );
-                new UHSound(1F, 1F, "BLOCK_WOOD_STEP", "STEP_WOOD").play(compassUser);
-                return;
-            }
+                final int consumed = item.getAmount() - feeLeft;
 
-            // We consume the fee
-
-            int feeLeft = Config.COMPASS_FEE_AMOUNT.get();
-
-            for (final ItemStack item : compassUser.getInventory().getContents())
-            {
-                if (item != null && item.getType() == Config.COMPASS_FEE_ITEM.get())
+                if (consumed <= 0)
                 {
-                    final int consumed = item.getAmount() - feeLeft;
+                    feeLeft -= item.getAmount();
+                    item.setAmount(0);
+                    item.setType(Material.AIR);
+                }
+                else
+                {
+                    feeLeft = 0;
+                    item.setAmount(consumed);
+                }
 
-                    if (consumed <= 0)
-                    {
-                        feeLeft -= item.getAmount();
-                        item.setAmount(0);
-                        item.setType(Material.AIR);
-                    }
-                    else
-                    {
-                        feeLeft = 0;
-                        item.setAmount(consumed);
-                    }
+                if (feeLeft == 0) break;
+            }
+        }
 
-                    if (feeLeft == 0) break;
+        // We lookup for the nearest player
+
+        Player nearest = null;
+        Double distance = Double.MAX_VALUE;
+
+        for (final Player otherPlayer : UR.module(GameModule.class).getAliveConnectedPlayers())
+        {
+            try
+            {
+                Double calc = compassUser.getLocation().distanceSquared(otherPlayer.getLocation());
+
+                if (calc > 1 && calc < distance)
+                {
+                    distance = calc;
+
+                    if (!otherPlayer.getUniqueId().equals(compassUser.getUniqueId()) && (!Config.NEVER_TARGET_TEAMMATES.get() || !Objects.equals(ZTeams.get().getTeamForPlayer(compassUser), ZTeams.get().getTeamForPlayer(otherPlayer))))
+                    {
+                        nearest = otherPlayer.getPlayer();
+                    }
                 }
             }
+            catch (Exception ignored) {}  // Different worlds
+        }
 
-            // We lookup for the nearest player
+        if (nearest == null)
+        {
+            /// Error message if a player tries to use his pointing compass without a player nearby.
+            MessageSender.sendActionBarMessage(compassUser, UHUtils.prefixedMessage(ChatColor.BOLD + I.tl(locale, "Compass"), ChatColor.YELLOW + "" + ChatColor.BOLD + I.tl(locale, "Only silence answers your request.")));  // TODO update language files
 
-            Player nearest = null;
-            Double distance = Double.MAX_VALUE;
+            new UHSound(1F, 1F, "BLOCK_WOOD_STEP", "STEP_WOOD").play(compassUser);
+            return false;
+        }
 
-            for (Player otherPlayer : UR.module(GameModule.class).getAliveConnectedPlayers())
-            {
-                try
-                {
-                    Double calc = compassUser.getLocation().distanceSquared(otherPlayer.getLocation());
+        CompassBehavior behavior = Config.COMPASS_BEHAVIOR.get();
 
-                    if (calc > 1 && calc < distance)
-                    {
-                        distance = calc;
+        if (behavior == CompassBehavior.GIVE_EITHER_RANDOMLY)
+        {
+            final double r = RandomUtils.nextDouble();
 
-                        if (!otherPlayer.getUniqueId().equals(compassUser.getUniqueId()) && (!Config.NEVER_TARGET_TEAMMATES.get() || !Objects.equals(ZTeams.get().getTeamForPlayer(compassUser), ZTeams.get().getTeamForPlayer(otherPlayer))))
-                        {
-                            nearest = otherPlayer.getPlayer();
-                        }
-                    }
-                }
-                catch (Exception ignored) {}  // Different worlds
-            }
+            if (r < .45) behavior = CompassBehavior.GIVE_DIRECTION;
+            else if (r < .9) behavior = CompassBehavior.GIVE_DISTANCE;
+            else behavior = CompassBehavior.GIVE_BOTH;
+        }
 
-            if (nearest == null)
-            {
-                /// Error message if a player tries to use his pointing compass without a player nearby.
-                compassUser.sendMessage(UHUtils.prefixedMessage(I.t("Compass"), ChatColor.YELLOW + I.t("Only silence answers your request.")));  // TODO update language files
-
-                new UHSound(1F, 1F, "BLOCK_WOOD_STEP", "STEP_WOOD").play(compassUser);
-                return;
-            }
-
-            CompassBehavior behavior = Config.COMPASS_BEHAVIOR.get();
-
-            if (behavior == CompassBehavior.GIVE_EITHER_RANDOMLY)
-            {
-                final double r = RandomUtils.nextDouble();
-
-                if (r < .45) behavior = CompassBehavior.GIVE_DIRECTION;
-                else if (r < .9) behavior = CompassBehavior.GIVE_DISTANCE;
-                else behavior = CompassBehavior.GIVE_BOTH;
-            }
-
-            if (behavior == CompassBehavior.GIVE_BOTH)
-            {
-                compassUser.setCompassTarget(nearest.getLocation());
-                compassUser.sendMessage(UHUtils.prefixedMessage(
-                    I.t("Compass"),
-                    ChatColor.YELLOW + I.tn(
+        if (behavior == CompassBehavior.GIVE_BOTH)
+        {
+            compassUser.setCompassTarget(nearest.getLocation());
+            compassUser.sendMessage(UHUtils.prefixedMessage(
+                    I.tl(locale, "Compass"),
+                    ChatColor.YELLOW + I.tln(
+                            locale,
                             "The compass now points to the closest player, {gold}{0} block {yellow}from you.",
                             "The compass now points to the closest player, {gold}{0} blocks {yellow}from you.",
                             (int) nearest.getLocation().distanceSquared(compassUser.getLocation())
                     )
-                ));
-            }
-
-            else if (behavior == CompassBehavior.GIVE_DIRECTION)
-            {
-                compassUser.setCompassTarget(nearest.getLocation());
-
-                /// Success message when a player uses his pointing compass.
-                compassUser.sendMessage(UHUtils.prefixedMessage(I.t("Compass"), ChatColor.YELLOW + I.t("The compass now points to the closest player.")));  // TODO update language files
-            }
-
-            else
-            {
-                compassUser.sendMessage(UHUtils.prefixedMessage(I.t("Compass"), I.tn("{yellow}There is {gold}{0} block {yellow}between the nearest player and yourself.", "{yellow}There are {gold}{0} blocks {yellow}between the nearest player and yourself.", (int) nearest.getLocation().distance(compassUser.getLocation()))));
-            }
-
-            new UHSound(1F, 1F, "ENTITY_ENDERMEN_TELEPORT", "ENDERMAN_TELEPORT").play(compassUser);
+            ));
         }
+
+        else if (behavior == CompassBehavior.GIVE_DIRECTION)
+        {
+            compassUser.setCompassTarget(nearest.getLocation());
+
+            /// Success message when a player uses his pointing compass.
+            MessageSender.sendActionBarMessage(compassUser, ChatColor.YELLOW + "" + ChatColor.BOLD + I.tl(locale, "The compass now points to the closest player."));  // TODO update language files
+        }
+
+        else
+        {
+            compassUser.sendMessage(UHUtils.prefixedMessage(I.tl(locale, "Compass"), I.tln(locale, "{yellow}There is {gold}{0} block {yellow}between the nearest player and yourself.", "{yellow}There are {gold}{0} blocks {yellow}between the nearest player and yourself.", (int) nearest.getLocation().distance(compassUser.getLocation()))));
+        }
+
+        new UHSound(1F, 1F, "ENTITY_ENDERMEN_TELEPORT", "ENDERMAN_TELEPORT").play(compassUser);
+
+        return true;
     }
 
     public enum CompassBehavior

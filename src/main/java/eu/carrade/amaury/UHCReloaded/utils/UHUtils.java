@@ -32,6 +32,8 @@
 
 package eu.carrade.amaury.UHCReloaded.utils;
 
+import fr.zcraft.zlib.components.rawtext.RawText;
+import fr.zcraft.zlib.components.rawtext.RawTextPart;
 import fr.zcraft.zlib.tools.Callback;
 import fr.zcraft.zlib.tools.PluginLogger;
 import org.apache.commons.lang.Validate;
@@ -461,5 +463,19 @@ public class UHUtils
     public static String prefixedMessage(final String prefix, final String message)
     {
         return ChatColor.GREEN + prefix + ChatColor.GRAY + "  \u2758  " + ChatColor.RESET + message;
+    }
+
+    /**
+     * Generates a RawText containing the prefix of a message plus the separator. Just like {@link #prefixedMessage(String, String)},
+     * but compatible with RawTexts.
+     *
+     * @param prefix The prefix.
+     * @return The RawText, ready to be extended.
+     */
+    public static RawTextPart prefixedRaxText(final String prefix)
+    {
+        return new RawText()
+                .then(prefix).color(ChatColor.GREEN)
+                .then("  \u2758  ").color(ChatColor.GRAY);
     }
 }

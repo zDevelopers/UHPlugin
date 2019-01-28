@@ -33,7 +33,9 @@
  */
 package eu.carrade.amaury.UHCReloaded.modules.gameplay.compass;
 
+import eu.carrade.amaury.UHCReloaded.utils.RecipesUtils;
 import fr.zcraft.zlib.core.ZLibComponent;
+import fr.zcraft.zlib.tools.items.CraftingRecipes;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -43,14 +45,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 
 import java.util.ArrayList;
 
 public class CompassRecipes extends ZLibComponent implements Listener
 {
+    private final Recipe VANILLA_RECIPE = CraftingRecipes.shaped(
+            new ItemStack(Material.COMPASS),
+            " A ",
+            "ABA",
+            " A ",
+            Material.IRON_INGOT, Material.REDSTONE
+    );
+
     /**
      * Checks if the recipe is a valid compass recipe.
      * <p>
@@ -228,6 +240,15 @@ public class CompassRecipes extends ZLibComponent implements Listener
                     ((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
                 }
             }, 1L);
+        }
+    }
+
+    @EventHandler
+    private void onPreCraft(final PrepareItemCraftEvent ev)
+    {
+        if (Config.RECIPE.get() != CompassRecipe.DEFAULT && ev.getRecipe() != null && RecipesUtils.areSimilar(ev.getRecipe(), VANILLA_RECIPE))
+        {
+            ev.getInventory().setResult(new ItemStack(Material.AIR));
         }
     }
 
