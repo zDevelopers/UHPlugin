@@ -95,7 +95,7 @@ msgstr "{ce}Veuillez patienter, les équipes sont en train d'être téléportée
 #: src/main/java/eu/carrade/amaury/UHCReloaded/game/UHGameManager.java:591
 #: src/main/java/eu/carrade/amaury/UHCReloaded/modules/core/game/submanagers/GameBeginning.java:100
 msgid ""
-"{red}{bold}Warning!{white} The grace period ended, you are now vulnerable."
+"{red}{bold}Warning!{white} The grace period is over, you are now vulnerable."
 msgstr ""
 "{red}{bold}Attention !{white} La période de grâce est terminée ; vous êtes "
 "désormais vulnérable."
@@ -420,27 +420,8 @@ msgstr "Fabriquée depuis la tête tranchée de {0}"
 
 #. / Item name of a golden head (from a player)
 #: src/main/java/eu/carrade/amaury/UHCReloaded/old/recipes/RecipesManager.java:388
-msgctxt "player_head"
-msgid "{aqua}Golden head"
-msgstr "{aqua}Tête d'or"
-
-#. / Item name of an enchanted golden head (from a player)
-#: src/main/java/eu/carrade/amaury/UHCReloaded/old/recipes/RecipesManager.java:394
-msgctxt "player_head"
-msgid "{lightpurple}Golden head"
-msgstr "{lightpurple}Tête d'or"
-
-#. / Item name of a golden head (from a monster)
-#: src/main/java/eu/carrade/amaury/UHCReloaded/old/recipes/RecipesManager.java:421
-msgctxt "monster_head"
-msgid "{aqua}Golden head"
-msgstr "{aqua}Tête d'or"
-
-#. / Item name of an enchanted golden head (from a monster)
-#: src/main/java/eu/carrade/amaury/UHCReloaded/old/recipes/RecipesManager.java:427
-msgctxt "monster_head"
-msgid "{lightpurple}Golden head"
-msgstr "{lightpurple}Tête d'or"
+msgid "Golden head"
+msgstr "Tête d'or"
 
 #: src/main/java/eu/carrade/amaury/UHCReloaded/old/protips/ProTips.java:42
 msgctxt "protip"
@@ -570,16 +551,6 @@ msgstr "{darkgreen}C'est parti !"
 msgid "{green}Good luck, and have fun"
 msgstr "{green}Bonne chance et bon jeu à tous"
 
-#: src/main/java/eu/carrade/amaury/UHCReloaded/old/listeners/GameplayListener.java:205
-#: src/main/java/eu/carrade/amaury/UHCReloaded/old/listeners/CraftingListener.java:259
-msgid "{aqua}Golden head"
-msgstr "{aqua}Tête d'or"
-
-#: src/main/java/eu/carrade/amaury/UHCReloaded/old/listeners/GameplayListener.java:206
-#: src/main/java/eu/carrade/amaury/UHCReloaded/old/listeners/CraftingListener.java:260
-msgid "{lightpurple}Golden head"
-msgstr "{lightpurple}Tête d'or"
-
 #. / Error message if a player tries to use his pointing compass without rotten flesh.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/old/listeners/GameplayListener.java:311
 msgid "{gray}{italic}You do not have rotten flesh."
@@ -587,17 +558,13 @@ msgstr "{gray}{italic}Vous n'avez pas de chair de zombie."
 
 #. / Error message if a player tries to use his pointing compass without a player nearby.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/old/listeners/GameplayListener.java:342
-msgid "{gray}{italic}Only silence answers your request."
-msgstr "{gray}{italic}Seul le silence comble votre requête."
+msgid "Only silence answers your request."
+msgstr "Seul le silence comble votre requête."
 
 #. / Success message when a player uses his pointing compass.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/old/listeners/GameplayListener.java:349
-msgid "{gray}The compass now points to the closest player."
-msgstr "{gray}Le compas pointe désormais vers le joueur le plus proche."
-
-#: src/main/java/eu/carrade/amaury/UHCReloaded/old/listeners/CraftingListener.java:258
-msgid "Golden head"
-msgstr "Tête d'or"
+msgid "The compass now points to the closest player."
+msgstr "La boussole cible désormais le joueur le plus proche."
 
 #. / Dynmap marker label of a death point
 #: src/main/java/eu/carrade/amaury/UHCReloaded/old/integration/UHDynmapIntegration.java:151

@@ -32,6 +32,7 @@
 package eu.carrade.amaury.UHCReloaded.modules.utilities.freezer;
 
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
+import eu.carrade.amaury.UHCReloaded.utils.UHUtils;
 import fr.zcraft.zlib.components.commands.Command;
 import fr.zcraft.zlib.components.commands.CommandException;
 import fr.zcraft.zlib.components.commands.CommandInfo;
@@ -105,12 +106,12 @@ public class FreezeCommand extends Command
 
                     if (on)
                     {
-                        player.sendMessage(I.t("{cst}You where frozen by {0}.", sender.getName()));
+                        player.sendMessage(UHUtils.prefixedMessage(I.t("Freezer"), I.t("{cst}You where frozen by {0}.", sender.getName())));
                         success(I.t("{cs}{0} is now frozen.", player.getName()));
                     }
                     else
                     {
-                        player.sendMessage(I.t("{cst}You where unfrozen by {0}.", sender.getName()));
+                        player.sendMessage(UHUtils.prefixedMessage(I.t("Freezer"), I.t("{cst}You where unfrozen by {0}.", sender.getName())));
                         success(I.t("{cs}{0} is now unfrozen.", player.getName()));
                     }
                 }
@@ -126,11 +127,11 @@ public class FreezeCommand extends Command
             Bukkit.broadcastMessage("");
             if (on)
             {
-                Bukkit.broadcastMessage(I.t("{darkaqua}The entire game is now frozen."));
+                Bukkit.broadcastMessage(UHUtils.prefixedMessage(I.t("Freezer"), I.t("{darkaqua}The entire game is now frozen.")));
             }
             else
             {
-                Bukkit.broadcastMessage(I.t("{darkaqua}The game is now unfrozen."));
+                Bukkit.broadcastMessage(UHUtils.prefixedMessage(I.t("Freezer"), I.t("{darkaqua}The game is now unfrozen.")));
             }
             Bukkit.broadcastMessage("");
         }

@@ -80,11 +80,10 @@ public class BorderCommand extends Command
                         sender.sendMessage(I.t("{ce}Some players are outside the future border, so this operation was cancelled."));
                         sender.sendMessage(I.t("{ci}Use {cc}/uh border set {0} force{ci} to resize the border regardless to this point.", args[0]));
 
-//                      TODO WorldBorder plugin
-//                      if (!p.getWorldBorderIntegration().isWBIntegrationEnabled())
-//                      {
-//                          sender.sendMessage(I.t("{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will not be teleported!"));
-//                      }
+                      if (!UR.module(BorderModule.class).getWorldBorderDependency().isEnabled())
+                      {
+                          sender.sendMessage(I.t("{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will not be teleported!"));
+                      }
 
                         border.sendCheckMessage(sender, newDiameter);
                     }

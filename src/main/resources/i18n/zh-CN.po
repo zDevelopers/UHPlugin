@@ -684,13 +684,13 @@ msgstr "{gray}{italic}你没有腐肉."
 #. Error message if a player tries to use his pointing compass without a
 #. player nearby.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/listeners/GameplayListener.java:335
-msgid "{gray}{italic}Only silence answers your request."
-msgstr "{gray}{italic}指南针没找到任何特殊事物."
+msgid "Only silence answers your request."
+msgstr "指南针没找到任何特殊事物."
 
 #. Success message when a player uses his pointing compass.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/listeners/GameplayListener.java:342
-msgid "{gray}The compass now points to the closest player."
-msgstr "{gray}指南针正指向离你最近的玩家."
+msgid "The compass now points to the closest player."
+msgstr "指南针正指向离你最近的玩家."
 
 #. Dynmap marker label of a death point
 #: src/main/java/eu/carrade/amaury/UHCReloaded/integration/UHDynmapIntegration.java:152
@@ -726,27 +726,8 @@ msgstr "用玩家 {0} 掉落的头颅制作"
 
 #. Item name of a golden head (from a player)
 #: src/main/java/eu/carrade/amaury/UHCReloaded/recipes/RecipesManager.java:393
-msgctxt "player_head"
-msgid "{aqua}Golden head"
-msgstr "{aqua}金苹果(金头颅)"
-
-#. Item name of an enchanted golden head (from a player)
-#: src/main/java/eu/carrade/amaury/UHCReloaded/recipes/RecipesManager.java:399
-msgctxt "player_head"
-msgid "{lightpurple}Golden head"
-msgstr "{lightpurple}金苹果(金头颅)"
-
-#. Item name of a golden head (from a monster)
-#: src/main/java/eu/carrade/amaury/UHCReloaded/recipes/RecipesManager.java:426
-msgctxt "monster_head"
-msgid "{aqua}Golden head"
-msgstr "{aqua}金苹果(金头颅)"
-
-#. Item name of an enchanted golden head (from a monster)
-#: src/main/java/eu/carrade/amaury/UHCReloaded/recipes/RecipesManager.java:432
-msgctxt "monster_head"
-msgid "{lightpurple}Golden head"
-msgstr "{lightpurple}金苹果(金头颅)"
+msgid "Golden head"
+msgstr "金苹果(金头颅)"
 
 #. Current episode in the sidebar
 #: src/main/java/eu/carrade/amaury/UHCReloaded/scoreboard/GameSidebar.java:141

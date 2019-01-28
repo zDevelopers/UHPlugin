@@ -86,15 +86,15 @@ public class GameBeginning extends ZLibComponent implements Listener
         Run.withCountdown(
             I.t("{green}{bold}Grace period"),
             I.t("{green}All damages are disabled"),
-            second -> I.tn("{yellow}{bold}Ends in {gold}{bold}{0}{yellow}{bold} second", "{yellow}{bold}Ends in {gold}{bold}{0}{yellow}{bold} second", (int) second),
-            I.t("{yellow}{bold}Ended! {yellow}You are now vulnerable..."),
+            second -> I.tn("{yellow}{bold}Over in {gold}{bold}{0}{yellow}{bold} second", "{yellow}{bold}Over in {gold}{bold}{0}{yellow}{bold} second", (int) second),
+            I.t("{yellow}{bold}Over! {yellow}You are now vulnerable..."),
             () -> UR.game().getAliveConnectedPlayers(),
             () -> {
                 inGracePeriod = false;
 
                 if (Config.BEGINNING.BROADCAST_GRACE_END.get())
                 {
-                    Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} The grace period ended, you are now vulnerable."));
+                    Bukkit.broadcastMessage(I.t("{red}{bold}Warning!{white} The grace period is over, you are now vulnerable."));
                 }
             },
             grace

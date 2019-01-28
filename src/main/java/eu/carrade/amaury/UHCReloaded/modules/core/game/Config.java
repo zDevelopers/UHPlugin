@@ -49,7 +49,7 @@ public class Config extends ConfigurationInstance
         super(file);
     }
 
-    public static final ConfigurationItem<Integer> COUNTDOWN = item("countdown", 1);  // TODO 12 Recommended: 7 or 12
+    public static final ConfigurationItem<Integer> COUNTDOWN = item("countdown", 7);
     public static final ConfigurationItem<Boolean> STARTUP_TITLE = item("startup-title", true);
 
     public static final ConfigurationItem<Boolean> RANDOM_COLORS_IN_SOLO_GAMES = item("random-color-in-solo-games", true);

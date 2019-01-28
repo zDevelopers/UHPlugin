@@ -202,7 +202,7 @@ public class CompassModule extends UHModule
         if (nearest == null)
         {
             /// Error message if a player tries to use his pointing compass without a player nearby.
-            MessageSender.sendActionBarMessage(compassUser, UHUtils.prefixedMessage(ChatColor.BOLD + I.tl(locale, "Compass"), ChatColor.YELLOW + "" + ChatColor.BOLD + I.tl(locale, "Only silence answers your request.")));  // TODO update language files
+            MessageSender.sendActionBarMessage(compassUser, UHUtils.prefixedMessage(ChatColor.BOLD + I.tl(locale, "Compass"), ChatColor.YELLOW + "" + ChatColor.BOLD + I.tl(locale, "Only silence answers your request.")));
 
             new UHSound(1F, 1F, "BLOCK_WOOD_STEP", "STEP_WOOD").play(compassUser);
             return false;
@@ -238,7 +238,7 @@ public class CompassModule extends UHModule
             compassUser.setCompassTarget(nearest.getLocation());
 
             /// Success message when a player uses his pointing compass.
-            MessageSender.sendActionBarMessage(compassUser, ChatColor.YELLOW + "" + ChatColor.BOLD + I.tl(locale, "The compass now points to the closest player."));  // TODO update language files
+            MessageSender.sendActionBarMessage(compassUser, ChatColor.YELLOW + "" + ChatColor.BOLD + I.tl(locale, "The compass now points to the closest player."));
         }
 
         else

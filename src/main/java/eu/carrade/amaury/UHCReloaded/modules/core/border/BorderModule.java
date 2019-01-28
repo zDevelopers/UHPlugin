@@ -50,10 +50,7 @@ import fr.zcraft.zlib.components.i18n.I;
 import fr.zcraft.zlib.core.ZLib;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.Titles;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -336,8 +333,8 @@ public class BorderModule extends UHModule
 
                 Titles.broadcastTitle(5, 30, 8, I.t("{red}Warning!"), I.t("{white}The border begins to shrink..."));
 
-                Bukkit.broadcastMessage(I.t("{red}{bold}The border begins to shrink..."));
-                Bukkit.broadcastMessage(I.t("{gray}It will shrink by one block every {0} second(s) until {1} blocks in diameter.", secondsPerBlock, Config.SHRINKING.DIAMETER_AFTER_SHRINK.get()));
+                Bukkit.broadcastMessage(UHUtils.prefixedMessage(I.t("Border"), I.t("{red}{bold}The border begins to shrink...")));
+                Bukkit.broadcastMessage(UHUtils.prefixedMessage(I.t("Border"), I.t("{gray}It will shrink by one block every {0} second(s) until {1} blocks in diameter.", secondsPerBlock, Config.SHRINKING.DIAMETER_AFTER_SHRINK.get())));
             }, Config.SHRINKING.STARTS_AFTER.get().getSeconds() * 20L);
 
             scheduleBorderReductionWarning(new TimeDelta(1, 0, 0));
@@ -354,7 +351,7 @@ public class BorderModule extends UHModule
                 if (UR.module(GameModule.class).getPhase() != GamePhase.IN_GAME) return;
 
                 Bukkit.broadcastMessage("");
-                Bukkit.broadcastMessage(I.tn("{red}The border will start to shrink in {0} minute...", "{red}The border will start to shrink in {0} minutes...", (int) (warnBefore.getSeconds() / 60)));
+                Bukkit.broadcastMessage(UHUtils.prefixedMessage(I.t("Border"), I.tn("{red}The border will start to shrink in {0} minute...", "{red}The border will start to shrink in {0} minutes...", (int) (warnBefore.getSeconds() / 60))));
                 Bukkit.broadcastMessage("");
             }, Config.SHRINKING.STARTS_AFTER.get().subtract(warnBefore).getSeconds() * 20L);
         }

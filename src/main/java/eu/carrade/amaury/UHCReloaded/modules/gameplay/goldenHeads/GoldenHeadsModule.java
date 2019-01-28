@@ -94,16 +94,16 @@ public class GoldenHeadsModule extends UHModule
             Bukkit.addRecipe(getOldEnchantedGoldenAppleRecipe());
 
         if (Config.PLAYER_GOLDEN_HEAD.ENABLE.get())
-            Bukkit.addRecipe(getGoldenHeadRecipe(true, false, Config.PLAYER_GOLDEN_HEAD.AMOUNT_CRAFTED.get(), ChatColor.AQUA + I.t("Golden head"))); // FIXME Translation
+            Bukkit.addRecipe(getGoldenHeadRecipe(true, false, Config.PLAYER_GOLDEN_HEAD.AMOUNT_CRAFTED.get(), ChatColor.AQUA + I.t("Golden head")));
 
         if (Config.PLAYER_ENCHANTED_GOLDEN_HEAD.ENABLE.get())
-            Bukkit.addRecipe(getGoldenHeadRecipe(true, true, Config.PLAYER_ENCHANTED_GOLDEN_HEAD.AMOUNT_CRAFTED.get(), ChatColor.LIGHT_PURPLE + I.t("Golden head"))); // FIXME Translation
+            Bukkit.addRecipe(getGoldenHeadRecipe(true, true, Config.PLAYER_ENCHANTED_GOLDEN_HEAD.AMOUNT_CRAFTED.get(), ChatColor.LIGHT_PURPLE + I.t("Golden head")));
 
         if (Config.WITHER_GOLDEN_HEAD.ENABLE.get())
-            Bukkit.addRecipe(getGoldenHeadRecipe(false, false, Config.WITHER_GOLDEN_HEAD.AMOUNT_CRAFTED.get(), ChatColor.AQUA + I.t("Golden head"))); // FIXME Translation
+            Bukkit.addRecipe(getGoldenHeadRecipe(false, false, Config.WITHER_GOLDEN_HEAD.AMOUNT_CRAFTED.get(), ChatColor.AQUA + I.t("Golden head")));
 
         if (Config.WITHER_ENCHANTED_GOLDEN_HEAD.ENABLE.get())
-            Bukkit.addRecipe(getGoldenHeadRecipe(false, true, Config.WITHER_ENCHANTED_GOLDEN_HEAD.AMOUNT_CRAFTED.get(), ChatColor.LIGHT_PURPLE + I.t("Golden head"))); // FIXME Translation
+            Bukkit.addRecipe(getGoldenHeadRecipe(false, true, Config.WITHER_ENCHANTED_GOLDEN_HEAD.AMOUNT_CRAFTED.get(), ChatColor.LIGHT_PURPLE + I.t("Golden head")));
     }
 
     private Recipe getGoldenHeadRecipe(final boolean player, final boolean enchanted, final int amount, final String resultDisplayName)

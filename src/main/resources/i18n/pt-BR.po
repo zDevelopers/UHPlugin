@@ -713,13 +713,13 @@ msgstr "{gray}{italic}Para a bússola é necessária carne podre."
 #. Error message if a player tries to use his pointing compass without a
 #. player nearby.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/listeners/GameplayListener.java:335
-msgid "{gray}{italic}Only silence answers your request."
-msgstr "{gray}{italic}Nenhum jogador encontrado nas proximidades."
+msgid "Only silence answers your request."
+msgstr "Nenhum jogador encontrado nas proximidades."
 
 #. Success message when a player uses his pointing compass.
 #: src/main/java/eu/carrade/amaury/UHCReloaded/listeners/GameplayListener.java:342
-msgid "{gray}The compass now points to the closest player."
-msgstr "{gray}A bússola está apotando para o jogador mais próximo de você."
+msgid "The compass now points to the closest player."
+msgstr "A bússola está apotando para o jogador mais próximo de você."
 
 #. Dynmap marker label of a death point
 #: src/main/java/eu/carrade/amaury/UHCReloaded/integration/UHDynmapIntegration.java:152
@@ -755,27 +755,8 @@ msgstr "Feita da cabeça de {0}"
 
 #. Item name of a golden head (from a player)
 #: src/main/java/eu/carrade/amaury/UHCReloaded/recipes/RecipesManager.java:393
-msgctxt "player_head"
-msgid "{aqua}Golden head"
-msgstr "{aqua}Maçã Dourada"
-
-#. Item name of an enchanted golden head (from a player)
-#: src/main/java/eu/carrade/amaury/UHCReloaded/recipes/RecipesManager.java:399
-msgctxt "player_head"
-msgid "{lightpurple}Golden head"
-msgstr "{lightpurple}Maçã Dourada"
-
-#. Item name of a golden head (from a monster)
-#: src/main/java/eu/carrade/amaury/UHCReloaded/recipes/RecipesManager.java:426
-msgctxt "monster_head"
-msgid "{aqua}Golden head"
-msgstr "{aqua}Maçã Dourada"
-
-#. Item name of an enchanted golden head (from a monster)
-#: src/main/java/eu/carrade/amaury/UHCReloaded/recipes/RecipesManager.java:432
-msgctxt "monster_head"
-msgid "{lightpurple}Golden head"
-msgstr "{lightpurple}Maçã Dourada"
+msgid "Golden head"
+msgstr "Maçã Dourada"
 
 #. Current episode in the sidebar
 #: src/main/java/eu/carrade/amaury/UHCReloaded/scoreboard/GameSidebar.java:141

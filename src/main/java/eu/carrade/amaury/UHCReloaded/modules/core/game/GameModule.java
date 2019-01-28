@@ -602,8 +602,6 @@ public class GameModule extends UHModule implements Listener
         {
             if (teleportationMode == TeleportationMode.NORMAL && teamsGame)
             {
-                // TODO re-add dynmap integration in dedicated module using events.
-
                 final Location teamSpawn = unusedSpawnPoints.poll();
 
                 // Should never happen
@@ -631,8 +629,6 @@ public class GameModule extends UHModule implements Listener
             {
                 team.getPlayersUUID().forEach(player ->
                 {
-                    // TODO re-add dynmap integration in dedicated module using events.
-
                     final Location playerSpawn = unusedSpawnPoints.poll();
                     final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
 
