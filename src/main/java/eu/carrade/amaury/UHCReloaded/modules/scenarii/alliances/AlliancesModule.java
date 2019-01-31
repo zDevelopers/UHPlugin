@@ -41,6 +41,7 @@ import eu.carrade.amaury.UHCReloaded.core.UHModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.GameModule;
 import eu.carrade.amaury.UHCReloaded.modules.core.game.events.start.BeforeTeleportationPhaseEvent;
 import eu.carrade.amaury.UHCReloaded.modules.core.spectators.SpectatorsModule;
+import eu.carrade.amaury.UHCReloaded.modules.external.hawk.HawkModule;
 import eu.carrade.amaury.UHCReloaded.modules.scenarii.alliances.commands.AllianceRequestCommand;
 import eu.carrade.amaury.UHCReloaded.modules.scenarii.alliances.commands.RequestAnswerCommand;
 import eu.carrade.amaury.UHCReloaded.shortcuts.UR;
@@ -95,7 +96,7 @@ public class AlliancesModule extends UHModule
     {
         game = UR.module(GameModule.class);
 
-        // We update some teams settings
+        // We update some settings
 
         eu.carrade.amaury.UHCReloaded.modules.core.game.Config.SIDEBAR.TEAMS.set(false);
         eu.carrade.amaury.UHCReloaded.modules.core.teams.Config.SIDEBAR.TITLE.USE_TEAM_NAME.set(true);
@@ -109,6 +110,7 @@ public class AlliancesModule extends UHModule
             )
             .setMaxPlayersPerTeam(Config.MAX_PLAYERS_PER_ALLIANCE.get());
 
+        UR.ifLoaded(HawkModule.class, hawk -> hawk.getReport().settings().enableSummary(true, true, false));
 
         // ...And permissions
 

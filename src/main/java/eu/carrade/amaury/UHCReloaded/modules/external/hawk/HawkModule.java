@@ -251,7 +251,7 @@ public class HawkModule extends UHModule
             {
                 waitingAfterEnd = false;
 
-                report.autoTrack(false);
+                report.autoTrack(false).title(UHConfig.TITLE.get());
 
                 report.save(
                     saved ->
@@ -482,7 +482,7 @@ public class HawkModule extends UHModule
         {
             report.record(ReportEvent.withIcon(
                     I.t("{0} harvested the first apple", player.getName()),
-                    ""
+                    "item-apple"
             ));
 
             firstApple = true;
