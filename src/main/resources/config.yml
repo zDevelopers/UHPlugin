@@ -22,7 +22,7 @@ episodes:
     
     # Format: "mm", "mm:ss" or "hh:mm:ss". If invalid, 20 minutes.
     # Don't remove the "quotes" (because of the commas)!
-    length: "20:00"
+    length: "15.00"
 
     # A title is displayed when the episode changes.
     title: true
@@ -42,7 +42,7 @@ map:
         block:
             # The replaceAir block will be placed where there where some transparent blocks or trees before.
             # The replaceSolid one, where there was an other kind of block.
-            replaceAir: GLASS
+            replaceAir: SAND
             replaceSolid: BEDROCK
 
     border:
@@ -78,12 +78,12 @@ map:
         # Notice: if the border is circular, the WorldBorder Bukkit plugin by Brettflan (see above)
         # is REQUIRED. Without, the border shrinking will not work.
         shrinking:
-            enabled: false
+            enabled: TRUE
 
             # Formats: "mm", "mm:ss" or "hh:mm:ss".
             # With the default values, the border eats one block every 8 seconds on each side.
             startsAfter: "30:00"
-            shrinksDuring: "2:00:00"
+            shrinksDuring: "1.45.00"
             diameterAfterShrink: 200
 
 
@@ -104,7 +104,7 @@ daylightCycle:
 
 
 scoreboard:
-    title: Kill the Patrick
+    title: Penguins UHC 
     
     # Scoreboard displayed on the left of the screen
     enabled: true
