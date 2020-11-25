@@ -32,10 +32,10 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.carrade.amaury</groupId>
-    <artifactId>UHCReloaded</artifactId>
+    <artifactId>quartz-survival-games</artifactId>
     <version>2.0-SNAPSHOT</version>
-    <name>UHCReloaded</name>
-    <description>Ultra Hardcore plugin</description>
+    <name>Quartz Survival Games</name>
+    <description>Survival games plugin, able to handle most Minecraft survival games (like UHC) through combined modules</description>
     <url>https://github.com/zDevelopers/UHPlugin/</url>
 
     <issueManagement>
@@ -105,16 +105,16 @@
                     </artifactSet>
                     <relocations>
                         <relocation>
-                            <pattern>fr.zcraft.zlib</pattern>
-                            <shadedPattern>eu.carrade.amaury.UHCReloaded.zlib</shadedPattern>
+                            <pattern>fr.zcraft.quartzlib</pattern>
+                            <shadedPattern>eu.carrade.amaury.quartzsurvivalgames.quartzlib</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>fr.zcraft.zteams</pattern>
-                            <shadedPattern>eu.carrade.amaury.UHCReloaded.zteams</shadedPattern>
+                            <pattern>fr.zcraft.quartzteams</pattern>
+                            <shadedPattern>eu.carrade.amaury.quartzsurvivalgames.quartzteams</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>me.cassayre.florian.hawk</pattern>
-                            <shadedPattern>eu.carrade.amaury.UHCReloaded.hawk</shadedPattern>
+                            <shadedPattern>eu.carrade.amaury.quartzsurvivalgames.hawk</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -153,25 +153,29 @@
             <url>http://raw.carrade.eu/maven2/</url>
         </repository>
         <repository>
-            <id>zDevelopers</id>
-            <url>http://maven.carrade.eu/artifactory/snapshots</url>
+            <id>zdevelpers-quartzlib</id>
+            <url>https://maven.zcraft.fr/QuartzLib</url>
+        </repository>
+        <repository>
+            <id>zdevelpers-quartzteams</id>
+            <url>https://maven.zcraft.fr/QuartzTeams</url>
         </repository>
     </repositories>
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.8.3-R0.1-SNAPSHOT</version>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>fr.zcraft</groupId>
-            <artifactId>zlib</artifactId>
-            <version>0.99-SNAPSHOT</version>
+            <artifactId>quartzlib</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>fr.zcraft</groupId>
-            <artifactId>zteams</artifactId>
+            <artifactId>quartzteams</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

@@ -1,13 +1,13 @@
-name: UHPlugin
-description: UltraHardcore Reloaded
-main: eu.carrade.amaury.UHCReloaded.UHCReloaded
+name: QuartzSurvivalGames
+description: Survival games plugin, able to handle most Minecraft survival games (like UHC) through combined modules
+main: eu.carrade.amaury.quartzsurvivalgames.QuartzSurvivalGames
 load: STARTUP
 version: 2.0-beta
 author: "Amaury Carrade"
-authors: [azenet, "João Roda"]
+authors: ["azenet", "João Roda"]
 
 awareness:
-  - !@UTF8
+  - "!@UTF8"
 
 softdepend:
   - WorldBorder
@@ -211,11 +211,10 @@ permissions:
 
 
     uh.player.renameTeam:
-        default: Allows a player to rename his own team.
+        description: Allows a player to rename his own team.
         default: op
 
 
     uh.team.gui:
         description: Allows a player to use the teams GUI (/uh team gui)
         default: true
-
