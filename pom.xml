@@ -99,7 +99,7 @@
                     <artifactSet>
                         <includes>
                             <include>fr.zcraft:zlib</include>
-                            <include>fr.zcraft:zteams</include>
+                            <include>fr.zcraft:QuartzTeams</include>
                             <include>me.cassayre.florian:Hawk</include>
                         </includes>
                     </artifactSet>
@@ -110,7 +110,7 @@
                         </relocation>
                         <relocation>
                             <pattern>fr.zcraft.quartzteams</pattern>
-                            <shadedPattern>eu.carrade.amaury.quartzsurvivalgames.quartzteams</shadedPattern>
+                            <shadedPattern>eu.carrade.amaury.quartzsurvivalgames.quartQuartzTeams</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>me.cassayre.florian.hawk</pattern>
@@ -157,8 +157,8 @@
             <url>https://maven.zcraft.fr/QuartzLib</url>
         </repository>
         <repository>
-            <id>zdevelpers-quartzteams</id>
-            <url>https://maven.zcraft.fr/QuartzTeams</url>
+            <id>zdevelpers-quartQuartzTeams</id>
+            <url>https://maven.zcraft.fr/QuartQuartzTeams</url>
         </repository>
     </repositories>
     <dependencies>
@@ -171,7 +171,7 @@
         <dependency>
             <groupId>fr.zcraft</groupId>
             <artifactId>quartzlib</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency>
         <dependency>
             <groupId>fr.zcraft</groupId>

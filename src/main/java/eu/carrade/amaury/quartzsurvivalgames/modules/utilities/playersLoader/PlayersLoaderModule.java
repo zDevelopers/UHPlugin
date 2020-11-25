@@ -47,7 +47,7 @@ import java.util.List;
         description = "Loads player into the server even if they never came before, so you can add them to teams and such. " +
                 "An interface to the built-in players loader.",
         category = ModuleCategory.UTILITIES,
-        icon = Material.SKULL_ITEM  // FIXME 1.13
+        icon = Material.PLAYER_HEAD
 )
 public class PlayersLoaderModule extends QSGModule
 {

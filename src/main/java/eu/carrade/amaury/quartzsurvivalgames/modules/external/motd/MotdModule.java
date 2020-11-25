@@ -40,7 +40,7 @@ import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.zteams.ZTeam;
+import fr.zcraft.quartzteams.QuartzTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -51,7 +51,7 @@ import org.bukkit.event.server.ServerListPingEvent;
         name = "MOTD",
         description = "Updates the MOTD according to the current game state.",
         category = ModuleCategory.EXTERNAL,
-        icon = Material.SIGN,
+        icon = Material.DARK_OAK_SIGN,
         settings = Config.class
 )
 public class MotdModule extends QSGModule
@@ -95,7 +95,7 @@ public class MotdModule extends QSGModule
 
             case END:
             default:
-                final ZTeam winner = game.getWinner();
+                final QuartzTeam winner = game.getWinner();
 
                 if (game.isTeamsGame())
                 {

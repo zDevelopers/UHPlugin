@@ -41,10 +41,17 @@ import eu.carrade.amaury.quartzsurvivalgames.core.events.ModuleUnloadedEvent;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.quartzlib.core.ZLib;
+import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.tools.PluginLogger;
 import fr.zcraft.quartzlib.tools.items.ItemStackBuilder;
 import fr.zcraft.quartzlib.tools.reflection.Reflection;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.util.stream.Stream;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -52,10 +59,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.util.stream.Stream;
 
 
 public class ModuleWrapper {
@@ -68,20 +71,15 @@ public class ModuleWrapper {
 
     private final ModuleCategory category;
     private final Material icon;
-
-    private boolean enabled;
-
     private final Class<? extends QSGModule> moduleClass;
-
     private final Class<? extends ConfigurationInstance> moduleConfiguration;
     private final String settingsFileName;
     private final String settingsDefaultFileName;
-    private String[] dependencies;
-
     private final boolean internal;
     private final boolean canBeUnloaded;
     private final boolean canBeLoadedLate;
-
+    private boolean enabled;
+    private final String[] dependencies;
     private QSGModule instance = null;
 
     public ModuleWrapper(final Class<? extends QSGModule> moduleClass) {
@@ -130,6 +128,17 @@ public class ModuleWrapper {
         loadConfiguration();
     }
 
+    static String computeModuleName(Class<? extends QSGModule> moduleClass) {
+        final ModuleInfo info = moduleClass.getAnnotation(ModuleInfo.class);
+
+        if (info == null || info.name().isEmpty()) {
+            return StringUtils.capitalize(
+                    String.join(" ", StringUtils.splitByCharacterTypeCamelCase(moduleClass.getSimpleName())));
+        } else {
+            return info.name();
+        }
+    }
+
     /**
      * Enables this module.
      *
@@ -160,7 +169,7 @@ public class ModuleWrapper {
             }
         }
 
-        instance = ZLib.loadComponent(moduleClass);
+        instance = QuartzLib.loadComponent(moduleClass);
 
         Bukkit.getPluginManager().callEvent(new ModuleLoadedEvent(this, late));
 
@@ -180,7 +189,7 @@ public class ModuleWrapper {
         }
 
         instance.setEnabled(false);
-        ZLib.unregisterEvents(instance);
+        QuartzLib.unregisterEvents(instance);
 
         Bukkit.getPluginManager().callEvent(new ModuleUnloadedEvent(this));
 
@@ -363,7 +372,7 @@ public class ModuleWrapper {
     private File getConfigurationFile() {
         final String settingsFileName =
                 this.settingsFileName != null ? this.settingsFileName + ".yml" : getDefaultSettingsFileName() + ".yml";
-        return new File(ZLib.getPlugin().getDataFolder(), "modules" + File.separator + settingsFileName);
+        return new File(QuartzLib.getPlugin().getDataFolder(), "modules" + File.separator + settingsFileName);
     }
 
     /**
@@ -488,16 +497,5 @@ public class ModuleWrapper {
      */
     public QSGModule get() {
         return instance;
-    }
-
-    static String computeModuleName(Class<? extends QSGModule> moduleClass) {
-        final ModuleInfo info = moduleClass.getAnnotation(ModuleInfo.class);
-
-        if (info == null || info.name().isEmpty()) {
-            return StringUtils.capitalize(
-                    String.join(" ", StringUtils.splitByCharacterTypeCamelCase(moduleClass.getSimpleName())));
-        } else {
-            return info.name();
-        }
     }
 }

@@ -29,26 +29,24 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.border.shapes;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 
 
-public class SquaredMapShape implements MapShapeDescriptor
-{
+public class SquaredMapShape implements MapShapeDescriptor {
     /**
      * Returns true if the given location is inside the map.
      *
      * @param location The location to check.
      * @param diameter The diameter of the map.
      * @param center   The center of the map.
-     *
      * @return {@code true} if the given location is inside the map.
      */
     @Override
-    public boolean isInsideBorder(final Location location, final Double diameter, final Location center)
-    {
+    public boolean isInsideBorder(final Location location, final Double diameter, final Location center) {
         final Integer halfMapSize = (int) Math.floor(diameter / 2);
         final Integer x = location.getBlockX();
         final Integer z = location.getBlockZ();
@@ -67,21 +65,17 @@ public class SquaredMapShape implements MapShapeDescriptor
      * @param location The distance will be calculated between this location and the closest point of the border.
      * @param diameter The diameter of the border.
      * @param center   The center of the border.
-     *
      * @return The distance between the given {@code location} and the closest point of the border.<br />
      * {@code -1} if the location is inside the border.
      */
     @Override
-    public double getDistanceToBorder(final Location location, final Double diameter, final Location center)
-    {
+    public double getDistanceToBorder(final Location location, final Double diameter, final Location center) {
         // The nether/end are not limited.
-        if (!location.getWorld().getEnvironment().equals(World.Environment.NORMAL))
-        {
+        if (!location.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
             return -1;
         }
 
-        if (isInsideBorder(location, diameter, center))
-        {
+        if (isInsideBorder(location, diameter, center)) {
             return -1;
         }
 
@@ -97,37 +91,32 @@ public class SquaredMapShape implements MapShapeDescriptor
         if (x > limitXSup && z < limitZSup && z > limitZInf)       // East of the border
         {
             return Math.abs(x - limitXSup);
-        }
-        else if (x < limitXInf && z < limitZSup && z > limitZInf)  // West of the border
+        } else if (x < limitXInf && z < limitZSup && z > limitZInf)  // West of the border
         {
             return Math.abs(x - limitXInf);
-        }
-        else if (z > limitZSup && x < limitXSup && x > limitXInf)  // South of the border
+        } else if (z > limitZSup && x < limitXSup && x > limitXInf)  // South of the border
         {
             return Math.abs(z - limitZSup);
-        }
-        else if (z < limitZInf && x < limitXSup && x > limitXInf)  // North of the border
+        } else if (z < limitZInf && x < limitXSup && x > limitXInf)  // North of the border
         {
             return Math.abs(z - limitZInf);
-        }
-        else if (x > limitXSup && z < limitZInf)  // North-East
+        } else if (x > limitXSup && z < limitZInf)  // North-East
         {
-            return (int) location.distance(new Location(location.getWorld(), limitXSup, location.getBlockY(), limitZInf));
-        }
-        else if (x > limitXSup && z > limitZSup)  // South-East
+            return (int) location
+                    .distance(new Location(location.getWorld(), limitXSup, location.getBlockY(), limitZInf));
+        } else if (x > limitXSup && z > limitZSup)  // South-East
         {
-            return (int) location.distance(new Location(location.getWorld(), limitXSup, location.getBlockY(), limitZSup));
-        }
-        else if (x < limitXInf && z > limitZSup)  // South-West
+            return (int) location
+                    .distance(new Location(location.getWorld(), limitXSup, location.getBlockY(), limitZSup));
+        } else if (x < limitXInf && z > limitZSup)  // South-West
         {
-            return (int) location.distance(new Location(location.getWorld(), limitXInf, location.getBlockY(), limitZSup));
-        }
-        else if (x < limitXInf && z < limitZInf)  // North-West
+            return (int) location
+                    .distance(new Location(location.getWorld(), limitXInf, location.getBlockY(), limitZSup));
+        } else if (x < limitXInf && z < limitZInf)  // North-West
         {
-            return (int) location.distance(new Location(location.getWorld(), limitXInf, location.getBlockY(), limitZInf));
-        }
-        else
-        {
+            return (int) location
+                    .distance(new Location(location.getWorld(), limitXInf, location.getBlockY(), limitZInf));
+        } else {
             return -1; // Should never happen.
         }
     }

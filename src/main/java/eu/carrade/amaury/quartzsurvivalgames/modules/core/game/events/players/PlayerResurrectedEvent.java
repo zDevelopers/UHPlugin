@@ -40,13 +40,16 @@ import org.bukkit.event.HandlerList;
 /**
  * Called when a player is resurrected.
  */
-public class PlayerResurrectedEvent extends Event
-{
+public class PlayerResurrectedEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
     private final OfflinePlayer resurrectedPlayer;
 
-    public PlayerResurrectedEvent(final OfflinePlayer player)
-    {
+    public PlayerResurrectedEvent(final OfflinePlayer player) {
         this.resurrectedPlayer = player;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -54,23 +57,12 @@ public class PlayerResurrectedEvent extends Event
      *
      * @return The player.
      */
-    public OfflinePlayer getPlayer()
-    {
+    public OfflinePlayer getPlayer() {
         return resurrectedPlayer;
     }
 
-
-
-    private static final HandlerList handlers = new HandlerList();
-
     @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

@@ -40,7 +40,7 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.TimersModule;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.quartzlib.core.ZLib;
+import fr.zcraft.quartzlib.core.QuartzLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -85,7 +85,7 @@ public class FreezerModule extends QSGModule
     @Override
     protected void onDisable()
     {
-        ZLib.unregisterEvents(freezerListener);
+        QuartzLib.unregisterEvents(freezerListener);
         freezerListener = null;
     }
 
@@ -284,7 +284,7 @@ public class FreezerModule extends QSGModule
         {
             if (!this.frozenPlayers.isEmpty() || this.getGlobalFreezeState())
             {
-                ZLib.registerEvents(freezerListener);
+                QuartzLib.registerEvents(freezerListener);
                 this.isListenerRegistered = true;
             }
         }
@@ -294,7 +294,7 @@ public class FreezerModule extends QSGModule
         {
             if (this.frozenPlayers.isEmpty() && !this.getGlobalFreezeState())
             {
-                ZLib.unregisterEvents(freezerListener);
+                QuartzLib.unregisterEvents(freezerListener);
                 this.isListenerRegistered = false;
             }
         }

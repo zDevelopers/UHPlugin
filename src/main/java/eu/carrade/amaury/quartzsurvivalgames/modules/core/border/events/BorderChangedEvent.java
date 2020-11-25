@@ -31,35 +31,31 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.border.events;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class BorderChangedEvent extends Event
-{
+public class BorderChangedEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final int newDiameter;
 
-    public BorderChangedEvent(final int newDiameter)
-    {
+    public BorderChangedEvent(final int newDiameter) {
         this.newDiameter = newDiameter;
     }
 
-    public int getNewDiameter()
-    {
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    public int getNewDiameter() {
         return newDiameter;
     }
 
     @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

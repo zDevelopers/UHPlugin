@@ -58,7 +58,7 @@ import java.util.List;
         description = "Warns players about the future border size.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.UTILITIES,
-        icon = Material.FENCE_GATE,
+        icon = Material.NETHER_BRICK_FENCE,
         settings = Config.class
 )
 public class WarningModule extends QSGModule

@@ -31,15 +31,15 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.core;
 
 import fr.zcraft.quartzlib.components.i18n.I;
 
-public enum ModuleLoadTime
-{
+public enum ModuleLoadTime {
     /**
      * Loads the module at startup, before the worlds are loaded.
-     *
+     * <p>
      * Please note that most core modules (and localization) are not loaded at this point. Use that
      * for modules altering the world generation.
      */
@@ -66,21 +66,17 @@ public enum ModuleLoadTime
     /**
      * Loads the module when the game ends.
      */
-    ON_GAME_END(I.t("When the game ends"))
-
-    ;
+    ON_GAME_END(I.t("When the game ends"));
 
 
     private final String description;
 
-    ModuleLoadTime(String description)
-    {
+    ModuleLoadTime(String description) {
 
         this.description = description;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 }

@@ -60,7 +60,7 @@ import java.util.stream.Collectors;
                 "For best results, enable before generating the worlds.",
         when = ModuleLoadTime.STARTUP,
         category = ModuleCategory.WORLD_GENERATION,
-        icon = Material.MOB_SPAWNER,
+        icon = Material.SPAWNER,
         settings = Config.class
 )
 public class CreaturesModule extends QSGModule

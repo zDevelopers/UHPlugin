@@ -29,14 +29,14 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game;
 
 
 /**
  * Represents the current phase of the game.
  */
-public enum GamePhase
-{
+public enum GamePhase {
     /**
      * Before the game, when the players are waiting for the game to start.
      */

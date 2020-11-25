@@ -36,9 +36,9 @@ package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.teleportation.co
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.ZTeams;
-import fr.zcraft.zteams.texts.TextUtils;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.QuartzTeams;
+import fr.zcraft.quartzteams.texts.TextUtils;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -57,7 +57,7 @@ public class TPTeamCommand extends WorldBasedCommand
         // possibly /uh tp-team <x> <y> <z> "<team ...>"
         if (qargs.length == 4)
         {
-            final ZTeam team = ZTeams.get().getTeamByName(qargs[3]);
+            final QuartzTeam team = QuartzTeams.get().getTeamByName(qargs[3]);
 
             // ok, the team exists.
             if (team != null)
@@ -92,7 +92,7 @@ public class TPTeamCommand extends WorldBasedCommand
         // /uh tp team <target> "<team ...>"
         if (qargs.length == 2)
         {
-            final ZTeam team = ZTeams.get().getTeamByName(qargs[1]);
+            final QuartzTeam team = QuartzTeams.get().getTeamByName(qargs[1]);
 
             if (team == null)
             {

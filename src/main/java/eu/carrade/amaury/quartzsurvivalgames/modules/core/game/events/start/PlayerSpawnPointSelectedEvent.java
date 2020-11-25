@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start;
 
 import org.bukkit.Location;
@@ -40,42 +41,35 @@ import org.bukkit.event.HandlerList;
 /**
  * Fired when a spawn point is selected for a given player.
  */
-public class PlayerSpawnPointSelectedEvent extends Event
-{
+public class PlayerSpawnPointSelectedEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final OfflinePlayer player;
     private Location spawnPoint;
 
-    public PlayerSpawnPointSelectedEvent(final OfflinePlayer player, final Location spawnPoint)
-    {
+    public PlayerSpawnPointSelectedEvent(final OfflinePlayer player, final Location spawnPoint) {
         this.player = player;
         this.spawnPoint = spawnPoint;
     }
 
-    public OfflinePlayer getPlayer()
-    {
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    public OfflinePlayer getPlayer() {
         return player;
     }
 
-    public Location getSpawnPoint()
-    {
+    public Location getSpawnPoint() {
         return spawnPoint;
     }
 
-    public void setSpawnPoint(Location spawnPoint)
-    {
+    public void setSpawnPoint(Location spawnPoint) {
         this.spawnPoint = spawnPoint;
     }
 
     @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

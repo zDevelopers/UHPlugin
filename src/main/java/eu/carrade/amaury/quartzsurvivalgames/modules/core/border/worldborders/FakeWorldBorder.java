@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.border.worldborders;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.MapShape;
@@ -41,100 +42,100 @@ import org.bukkit.World;
  *
  * <p>Used when a circular world border is requested without the WorldBorder plugin.</p>
  */
-public class FakeWorldBorder extends WorldBorder
-{
+public class FakeWorldBorder extends WorldBorder {
     private final World world;
 
     private Location center;
     private Double diameter;
     private MapShape shape;
 
-    public FakeWorldBorder(final World world)
-    {
+    public FakeWorldBorder(final World world) {
         this.world = world;
     }
 
     @Override
-    public World getWorld()
-    {
+    public World getWorld() {
         return world;
     }
 
     @Override
-    public double getDiameter()
-    {
+    public double getDiameter() {
         return diameter;
     }
 
     @Override
-    public void setDiameter(final double diameter)
-    {
+    public void setDiameter(final double diameter) {
         this.diameter = diameter;
     }
 
     @Override
-    public void setDiameter(final double diameter, final long time)
-    {
+    public void setDiameter(final double diameter, final long time) {
         this.diameter = diameter;
     }
 
     @Override
-    public Location getCenter()
-    {
+    public Location getCenter() {
         return center;
     }
 
     @Override
-    public void setCenter(final double x, final double z)
-    {
-        this.center = new Location(world, x, 0, z);
-    }
-
-    @Override
-    public void setCenter(final Location center)
-    {
+    public void setCenter(final Location center) {
         setCenter(center.getX(), center.getZ());
     }
 
     @Override
-    public double getDamageBuffer() { return 0; }
+    public void setCenter(final double x, final double z) {
+        this.center = new Location(world, x, 0, z);
+    }
 
     @Override
-    public void setDamageBuffer(final double distance) {}
+    public double getDamageBuffer() {
+        return 0;
+    }
 
     @Override
-    public double getDamageAmount() { return 0; }
+    public void setDamageBuffer(final double distance) {
+    }
 
     @Override
-    public void setDamageAmount(final double damageAmount) {}
+    public double getDamageAmount() {
+        return 0;
+    }
 
     @Override
-    public int getWarningTime() { return 0; }
+    public void setDamageAmount(final double damageAmount) {
+    }
 
     @Override
-    public void setWarningTime(final int seconds) {}
+    public int getWarningTime() {
+        return 0;
+    }
 
     @Override
-    public int getWarningDistance() { return 0; }
+    public void setWarningTime(final int seconds) {
+    }
 
     @Override
-    public void setWarningDistance(final int blocks) {}
+    public int getWarningDistance() {
+        return 0;
+    }
 
     @Override
-    public MapShape getShape()
-    {
+    public void setWarningDistance(final int blocks) {
+    }
+
+    @Override
+    public MapShape getShape() {
         return shape;
     }
 
     @Override
-    public void setShape(final MapShape shape)
-    {
+    public void setShape(final MapShape shape) {
         this.shape = shape;
     }
 
     @Override
-    public boolean supportsProgressiveResize()
-    {
+    public boolean supportsProgressiveResize() {
         return false;
     }
 }

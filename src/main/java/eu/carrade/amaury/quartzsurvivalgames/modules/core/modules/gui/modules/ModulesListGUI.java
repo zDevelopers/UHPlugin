@@ -43,7 +43,7 @@ import fr.zcraft.quartzlib.components.gui.GuiAction;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.items.ItemStackBuilder;
 import fr.zcraft.quartzlib.tools.mojang.MojangHead;
-import fr.zcraft.zteams.colors.ColorsUtils;
+import fr.zcraft.quartzteams.colors.ColorsUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -128,8 +128,7 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper>
 
         // Displays the bottom bar of color
 
-        final ItemStackBuilder bottomColorStripe = new ItemStackBuilder(Material.STAINED_GLASS_PANE)
-                .data(ColorsUtils.chat2Dye(filterCategory != null ? filterCategory.getColor() : ChatColor.WHITE).getWoolData())  // FIXME 1.13
+        final ItemStackBuilder bottomColorStripe = new ItemStackBuilder(ColorsUtils.chat2Block(filterCategory != null ? filterCategory.getColor() : ChatColor.WHITE, "STAINED_GLASS_PANE"))
                 .title(filterCategory != null ? filterCategory.getColor() + "" + ChatColor.BOLD + filterCategory.getDisplayName() : "");
         if (filterCategory != null) bottomColorStripe.longLore(ChatColor.GRAY, filterCategory.getDescription(), 38);
 
@@ -162,8 +161,7 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper>
 
         // Displays the state filter button
 
-        final ItemStackBuilder stateFilter = new ItemStackBuilder(Material.INK_SACK)  // FIXME 1.13
-                .data(filterState.color.getDyeData())
+        final ItemStackBuilder stateFilter = new ItemStackBuilder(ColorsUtils.dye2Block(filterState.color, "DYE"))
                 .title(ChatColor.YELLOW, ChatColor.BOLD + I.tl(getPlayerLocale(), "Filter modules state"))
                 .loreSeparator();
 

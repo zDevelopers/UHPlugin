@@ -33,8 +33,8 @@
  */
 package eu.carrade.amaury.quartzsurvivalgames.modules.scenarii.alliances;
 
-import fr.zcraft.zteams.ZTeamsPermission;
-import fr.zcraft.zteams.permissions.PermissionsChecker;
+import fr.zcraft.quartzteams.QuartzTeamsPermission;
+import fr.zcraft.quartzteams.permissions.PermissionsChecker;
 import org.bukkit.permissions.Permissible;
 
 public class TeamsPermissionsChecker implements PermissionsChecker
@@ -47,7 +47,7 @@ public class TeamsPermissionsChecker implements PermissionsChecker
     }
 
     @Override
-    public boolean hasPermission(Permissible permissible, ZTeamsPermission permission)
+    public boolean hasPermission(Permissible permissible, QuartzTeamsPermission permission)
     {
         switch (permission)
         {

@@ -43,7 +43,7 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.zteams.ZTeams;
+import fr.zcraft.quartzteams.QuartzTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -113,7 +113,7 @@ public class AllianceRequestCommand extends Command
                 {
                     yourRequestHasBeenSent(requested);
 
-                    ZTeams.get().getTeamForPlayer(requested).getOnlinePlayers().forEach(teammate -> {
+                    QuartzTeams.get().getTeamForPlayer(requested).getOnlinePlayers().forEach(teammate -> {
                         teammate.sendMessage("");
                         teammate.sendMessage(I.t("{gray}{bold}{0} just sent you an alliance request, but you cannot accept it because your alliance is already at full capacity.", sender.getName()));
                         teammate.sendMessage(I.t("{gray}{0} is not aware of this, but I preferred to warn you so that you would not be caught off guard if he or she mentions it.", sender.getName()));

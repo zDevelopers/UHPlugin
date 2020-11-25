@@ -58,7 +58,7 @@ import java.util.Map;
         description = "Offers to the users a way to manage modules.",
         when = ModuleLoadTime.STARTUP,
         category = ModuleCategory.CORE,
-        icon = Material.COMMAND,
+        icon = Material.COMMAND_BLOCK,
         can_be_unloaded = false
 )
 public class ModulesModule extends QSGModule

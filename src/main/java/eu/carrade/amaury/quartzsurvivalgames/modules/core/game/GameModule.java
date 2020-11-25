@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -41,7 +42,11 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.game.GameP
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.players.AlivePlayerDeathEvent;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.players.TeamDeathEvent;
-import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.*;
+import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.AfterTeleportationPhaseEvent;
+import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.BeforeTeleportationPhaseEvent;
+import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.PlayerAboutToBeTeleportedToSpawnPointEvent;
+import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.PlayerSpawnPointSelectedEvent;
+import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.PlayerTeleportedToSpawnPointEvent;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.submanagers.GameBeginning;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.teleporter.TeleportationMode;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.teleporter.Teleporter;
@@ -53,14 +58,32 @@ import eu.carrade.amaury.quartzsurvivalgames.utils.QSGSound;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.components.rawtext.RawText;
-import fr.zcraft.quartzlib.core.ZLib;
+import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.ActionBar;
 import fr.zcraft.quartzlib.tools.text.Titles;
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.ZTeams;
-import fr.zcraft.zteams.colors.TeamColor;
-import org.bukkit.*;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.QuartzTeams;
+import fr.zcraft.quartzteams.colors.TeamColor;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -69,12 +92,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Game",
         description = "Manages the game execution and phases.",
         category = ModuleCategory.CORE,
@@ -83,29 +102,25 @@ import java.util.stream.Collectors;
         internal = true,
         can_be_unloaded = false
 )
-public class GameModule extends QSGModule implements Listener
-{
+public class GameModule extends QSGModule implements Listener {
+    /**
+     * A list containing the currently alive players.
+     */
+    private final Set<UUID> alivePlayers = new HashSet<>();
+    /**
+     * A list containing the currently (cached) alive teams.
+     * Refreshed using the {@link #updateAliveTeams()} method.
+     */
+    private final Set<QuartzTeam> aliveTeams = new HashSet<>();
     /**
      * The current game phase (initialized to {@link GamePhase#WAIT} in the
      * {@link #onEnable()} method).
      */
     private GamePhase phase = null;
-
-    /**
-     * A list containing the currently alive players.
-     */
-    private final Set<UUID> alivePlayers = new HashSet<>();
-
-    /**
-     * A list containing the currently (cached) alive teams.
-     * Refreshed using the {@link #updateAliveTeams()} method.
-     */
-    private final Set<ZTeam> aliveTeams = new HashSet<>();
-
     /**
      * When the game ends, stores the last standing team.
      */
-    private ZTeam winner = null;
+    private QuartzTeam winner = null;
 
     /**
      * {@code true} if there is teams in this game.
@@ -146,17 +161,15 @@ public class GameModule extends QSGModule implements Listener
 
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         setPhase(GamePhase.WAIT);
         Bukkit.getOnlinePlayers().forEach(this::updatePlayerFlightOptions);
 
-        ZLib.loadComponent(GameBeginning.class);
+        QuartzLib.loadComponent(GameBeginning.class);
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Arrays.asList(
                 StartCommand.class,
                 KillCommand.class,
@@ -165,27 +178,23 @@ public class GameModule extends QSGModule implements Listener
     }
 
     @Override
-    public void injectIntoSidebar(Player player, SidebarInjector injector)
-    {
+    public void injectIntoSidebar(Player player, SidebarInjector injector) {
         final List<String> topSidebar = new ArrayList<>();
 
-        if (Config.SIDEBAR.PLAYERS.get())
-        {
+        if (Config.SIDEBAR.PLAYERS.get()) {
             topSidebar.add(I.tn(
                     "{white}{0}{gray} player", "{white}{0}{gray} players",
                     phase == GamePhase.WAIT ? Bukkit.getOnlinePlayers().size() : alivePlayers.size()
             ));
         }
 
-        if (Config.SIDEBAR.TEAMS.get() && teamsGame && phase != GamePhase.WAIT)
-        {
+        if (Config.SIDEBAR.TEAMS.get() && teamsGame && phase != GamePhase.WAIT) {
             topSidebar.add(I.tn("{white}{0}{gray} team", "{white}{0}{gray} teams", aliveTeams.size()));
         }
 
         injector.injectLines(SidebarInjector.SidebarPriority.TOP, true, topSidebar);
 
-        switch (phase)
-        {
+        switch (phase) {
             case WAIT:
                 injector.injectLines(
                         SidebarInjector.SidebarPriority.TOP, true,
@@ -203,112 +212,95 @@ public class GameModule extends QSGModule implements Listener
         }
     }
 
-    public boolean isTeamsGame()
-    {
+    public boolean isTeamsGame() {
         return teamsGame;
     }
 
-    public Set<UUID> getAlivePlayersUUIDs()
-    {
+    public Set<UUID> getAlivePlayersUUIDs() {
         return Collections.unmodifiableSet(alivePlayers);
     }
 
-    public Set<OfflinePlayer> getAlivePlayers()
-    {
+    public Set<OfflinePlayer> getAlivePlayers() {
         return alivePlayers.stream().map(Bukkit::getOfflinePlayer).collect(Collectors.toSet());
     }
 
-    public int countAlivePlayers()
-    {
+    public int countAlivePlayers() {
         return alivePlayers.size();
     }
 
-    public Set<Player> getAliveConnectedPlayers()
-    {
-        return alivePlayers.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).filter(Player::isOnline).collect(Collectors.toSet());
+    public Set<Player> getAliveConnectedPlayers() {
+        return alivePlayers.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).filter(Player::isOnline)
+                .collect(Collectors.toSet());
     }
 
-    public Set<ZTeam> getAliveTeams()
-    {
+    public Set<QuartzTeam> getAliveTeams() {
         return Collections.unmodifiableSet(aliveTeams);
     }
 
-    public int countAliveTeams()
-    {
+    public int countAliveTeams() {
         return aliveTeams.size();
     }
 
     /**
      * @return The game's winner, if any; null else.
      */
-    public ZTeam getWinner()
-    {
+    public QuartzTeam getWinner() {
         return winner;
     }
 
-    public boolean isAlive(final OfflinePlayer player)
-    {
+    public boolean isAlive(final OfflinePlayer player) {
         return alivePlayers.contains(player.getUniqueId());
     }
 
-    public boolean isAlive(final UUID playerID)
-    {
+    public boolean isAlive(final UUID playerID) {
         return alivePlayers.contains(playerID);
     }
 
-    public boolean isAlive(final ZTeam team)
-    {
+    public boolean isAlive(final QuartzTeam team) {
         return team.getPlayersUUID().stream().anyMatch(alivePlayers::contains);
     }
 
     /**
      * Kills a player.
-     *
+     * <p>
      * This method calls an event. If the event is cancelled, the player is not
      * killed.
      *
      * @param player The player to kill.
      * @return {@code true} if the player was effectively killed (event not cancelled).
      */
-    public boolean kill(final OfflinePlayer player)
-    {
+    public boolean kill(final OfflinePlayer player) {
         return kill(player, null);
     }
 
     /**
      * Kills a player. Internal use for natural deaths.
-     *
+     * <p>
      * This method calls an event. If the event is cancelled, the player is not
      * killed.
      *
      * @param player The player to kill.
-     * @param ev The underlying death event.
-     *
+     * @param ev     The underlying death event.
      * @return {@code true} if the player was effectively killed (event not cancelled).
      */
-    private boolean kill(final OfflinePlayer player, final PlayerDeathEvent ev)
-    {
+    private boolean kill(final OfflinePlayer player, final PlayerDeathEvent ev) {
         final AlivePlayerDeathEvent event = new AlivePlayerDeathEvent(player, ev);
         Bukkit.getPluginManager().callEvent(event);
 
-        if (!event.isCancelled())
-        {
+        if (!event.isCancelled()) {
             alivePlayers.remove(player.getUniqueId());
 
             updateAliveTeams();
 
             // We check the player's team to see if there is players left inside.
-            if (teamsGame)
-            {
-                final ZTeam team = ZTeams.get().getTeamForPlayer(player);
-                if (team != null && !aliveTeams.contains(team))
-                {
+            if (teamsGame) {
+                final QuartzTeam team = QuartzTeams.get().getTeamForPlayer(player);
+                if (team != null && !aliveTeams.contains(team)) {
                     Bukkit.getPluginManager().callEvent(new TeamDeathEvent(team));
                 }
             }
 
-            if (aliveTeams.size() <= 1)
-            {
+            if (aliveTeams.size() <= 1) {
                 setPhase(GamePhase.END);
             }
 
@@ -325,19 +317,20 @@ public class GameModule extends QSGModule implements Listener
      * @param player The player to resurrect.
      * @return {@code true} if the player was effectively resurrected (i.e. not already alive).
      */
-    public boolean resurrect(final OfflinePlayer player)
-    {
-        if (isAlive(player)) return false;
+    public boolean resurrect(final OfflinePlayer player) {
+        if (isAlive(player)) {
+            return false;
+        }
 
         log().info("Resurrecting player {0}", player.getName());
 
         alivePlayers.add(player.getUniqueId());
         updateAliveTeams();
 
-        log().info("Resurrected. Alive players: {0}. Teams: {1}. Phase: {2}.", alivePlayers.size(), aliveTeams.size(), phase);
+        log().info("Resurrected. Alive players: {0}. Teams: {1}. Phase: {2}.", alivePlayers.size(), aliveTeams.size(),
+                phase);
 
-        if (aliveTeams.size() > 1 && phase == GamePhase.END)
-        {
+        if (aliveTeams.size() > 1 && phase == GamePhase.END) {
             setPhase(GamePhase.IN_GAME);
             log().info("Going back to IN_GAME phase. Phase is now {0}.", phase);
         }
@@ -350,9 +343,33 @@ public class GameModule extends QSGModule implements Listener
     /**
      * @return the current phase of the game.
      */
-    public GamePhase getPhase()
-    {
+    public GamePhase getPhase() {
         return phase;
+    }
+
+    /**
+     * Changes the phase of the game.
+     * <p>
+     * The phase must be a phase after the current one, with two exceptions:
+     * the phase order can be STARTING → WAIT or END → IN_GAME.
+     *
+     * @param phase The new phase.
+     */
+    public void setPhase(final GamePhase phase) {
+        if (this.phase == null
+                || (this.phase != phase && phase.ordinal() > this.phase.ordinal())
+                || (this.phase == GamePhase.STARTING && phase == GamePhase.WAIT)
+                || (this.phase == GamePhase.END && phase == GamePhase.IN_GAME)
+        ) {
+            final GamePhase oldPhase = this.phase;
+
+            this.phase = phase;
+
+            log().info("Game phase changed to {0}.", phase);
+
+            RunTask.nextTick(
+                    () -> Bukkit.getServer().getPluginManager().callEvent(new GamePhaseChangedEvent(oldPhase, phase)));
+        }
     }
 
     /**
@@ -361,8 +378,7 @@ public class GameModule extends QSGModule implements Listener
      * @param phase The compared phase.
      * @return {@code true} if the current phase is strictly before this one.
      */
-    public boolean currentPhaseBefore(final GamePhase phase)
-    {
+    public boolean currentPhaseBefore(final GamePhase phase) {
         return this.phase.ordinal() < phase.ordinal();
     }
 
@@ -372,121 +388,86 @@ public class GameModule extends QSGModule implements Listener
      * @param phase The compared phase.
      * @return {@code true} if the current phase is strictly after this one.
      */
-    public boolean currentPhaseAfter(final GamePhase phase)
-    {
+    public boolean currentPhaseAfter(final GamePhase phase) {
         return this.phase.ordinal() > phase.ordinal();
     }
 
-    /**
-     * Changes the phase of the game.
-     *
-     * The phase must be a phase after the current one, with two exceptions:
-     * the phase order can be STARTING → WAIT or END → IN_GAME.
-     *
-     * @param phase The new phase.
-     */
-    public void setPhase(final GamePhase phase)
-    {
-        if (this.phase == null
-                || (this.phase != phase && phase.ordinal() > this.phase.ordinal())
-                || (this.phase == GamePhase.STARTING && phase == GamePhase.WAIT)
-                || (this.phase == GamePhase.END && phase == GamePhase.IN_GAME)
-        )
-        {
-            final GamePhase oldPhase = this.phase;
-
-            this.phase = phase;
-
-            log().info("Game phase changed to {0}.", phase);
-
-            RunTask.nextTick(() -> Bukkit.getServer().getPluginManager().callEvent(new GamePhaseChangedEvent(oldPhase, phase)));
-        }
-    }
-
-    public void setSlowMode(boolean slowMode)
-    {
-        this.slowMode = slowMode;
-    }
-
-    public boolean isSlowMode()
-    {
+    public boolean isSlowMode() {
         return slowMode;
     }
 
-    public void setTeleportationMode(TeleportationMode teleportationMode)
-    {
-        this.teleportationMode = teleportationMode;
+    public void setSlowMode(boolean slowMode) {
+        this.slowMode = slowMode;
     }
 
-    public TeleportationMode getTeleportationMode()
-    {
+    public TeleportationMode getTeleportationMode() {
         return teleportationMode;
     }
 
-    public Teleporter getTeleporter()
-    {
+    public void setTeleportationMode(TeleportationMode teleportationMode) {
+        this.teleportationMode = teleportationMode;
+    }
+
+    public Teleporter getTeleporter() {
         return teleporter;
     }
 
     /**
      * Sets the phase to {@link GamePhase#IN_GAME} after a countdown.
      */
-    public void start()
-    {
-        if (startingCountdownLock) return;
-        if (phase != GamePhase.STARTING) throw new IllegalStateException("Cannot start the game if not in “starting” phase.");
-        if (teleportationProcessLock) throw new IllegalStateException("Cannot start the game: the teleportation phase is still running.");
+    public void start() {
+        if (startingCountdownLock) {
+            return;
+        }
+        if (phase != GamePhase.STARTING) {
+            throw new IllegalStateException("Cannot start the game if not in “starting” phase.");
+        }
+        if (teleportationProcessLock) {
+            throw new IllegalStateException("Cannot start the game: the teleportation phase is still running.");
+        }
 
         startingCountdownLock = true;
 
         final AtomicInteger countdown = new AtomicInteger(Config.COUNTDOWN.get() + 1);
-        final float[] countdownNotes = new float[] { .75f, .86f, .66f, 1, .5f, .5f, .5f };
+        final float[] countdownNotes = new float[] {.75f, .86f, .66f, 1, .5f, .5f, .5f};
         final AtomicInteger countdownIndex = new AtomicInteger(-1);
 
-        RunTask.timer(new BukkitRunnable()
-        {
+        RunTask.timer(new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 countdown.getAndDecrement();
 
-                if (countdown.get() != 0 || !Config.STARTUP_TITLE.get())
-                {
+                if (countdown.get() != 0 || !Config.STARTUP_TITLE.get()) {
                     Titles.broadcastTitle(
                             countdown.get() == 10 ? 8 : 0,
                             countdown.get() == 0 ? 40 : 20,
                             countdown.get() == 0 ? 20 : 0,
-                            (countdown.get() > 5 ? ChatColor.GREEN : (countdown.get() > 3 ? ChatColor.YELLOW : ChatColor.RED)) + countdown.toString(),
+                            (countdown.get() > 5 ? ChatColor.GREEN :
+                                    (countdown.get() > 3 ? ChatColor.YELLOW : ChatColor.RED)) + countdown.toString(),
                             ""
                     );
-                }
-                else
-                {
+                } else {
                     Titles.broadcastTitle(
-                        0, 84, 8,
-                        /// Title of title displayed when the game starts.
-                        I.t("{darkgreen}Let's go!"),
-                        /// Subtitle of title displayed when the game starts.
-                        I.t("{green}Good luck, and have fun")
+                            0, 84, 8,
+                            /// Title of title displayed when the game starts.
+                            I.t("{darkgreen}Let's go!"),
+                            /// Subtitle of title displayed when the game starts.
+                            I.t("{green}Good luck, and have fun")
                     );
                 }
 
-                if (countdown.get() != 0)
-                {
-                    if (countdownIndex.incrementAndGet() == countdownNotes.length)
-                    {
+                if (countdown.get() != 0) {
+                    if (countdownIndex.incrementAndGet() == countdownNotes.length) {
                         countdownIndex.set(0);
                     }
 
-                    new QSGSound(1f, countdownNotes[countdownIndex.get()], "ARROW_HIT_PLAYER", "SUCCESSFUL_HIT").broadcast();
-                }
-                else
-                {
+                    new QSGSound(1f, countdownNotes[countdownIndex.get()], "ARROW_HIT_PLAYER", "SUCCESSFUL_HIT")
+                            .broadcast();
+                } else {
                     new QSGSound("WITHER_DEATH").broadcast();
                 }
 
-                if (countdown.get() == 0)
-                {
+                if (countdown.get() == 0) {
                     setPhase(GamePhase.IN_GAME);
                     cancel();
                 }
@@ -500,9 +481,10 @@ public class GameModule extends QSGModule implements Listener
 
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onGameStarting(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() != GamePhase.STARTING) return;
+    public void onGameStarting(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() != GamePhase.STARTING) {
+            return;
+        }
 
         teleportationProcessLock = true;
 
@@ -511,7 +493,7 @@ public class GameModule extends QSGModule implements Listener
         Bukkit.getPluginManager().callEvent(new BeforeTeleportationPhaseEvent());
 
         // We determine if the game is or not with teams by counting the teams.
-        teamsGame = ZTeams.get().countTeams() > 0;
+        teamsGame = QuartzTeams.get().countTeams() > 0;
 
         alivePlayers.clear();
         aliveTeams.clear();
@@ -520,22 +502,21 @@ public class GameModule extends QSGModule implements Listener
         // In case of a teams game, we create a “wrapping” team for each alone player. Else, a team for each player.
         // These teams created on the fly are saved in case of startup fail.
 
-        final Set<ZTeam> onTheFlyTeams = new HashSet<>();
+        final Set<QuartzTeam> onTheFlyTeams = new HashSet<>();
         final Random random = new Random();
 
         Bukkit.getOnlinePlayers().stream()
-                .filter(player -> ZTeams.get().getTeamForPlayer(player) == null)
+                .filter(player -> QuartzTeams.get().getTeamForPlayer(player) == null)
                 .filter(player -> !QSG.module(SpectatorsModule.class).isSpectator(player))
                 .forEach(player ->
                 {
                     // We need an unique name for the team.
                     String teamName = player.getName();
-                    while (ZTeams.get().isTeamRegistered(teamName))
-                    {
+                    while (QuartzTeams.get().isTeamRegistered(teamName)) {
                         teamName = player.getName() + " " + random.nextInt(1000000);
                     }
 
-                    final ZTeam team = ZTeams.get().createTeam(
+                    final QuartzTeam team = QuartzTeams.get().createTeam(
                             teamName,
                             Config.RANDOM_COLORS_IN_SOLO_GAMES.get() ? TeamColor.RANDOM : TeamColor.WHITE,
                             player
@@ -547,7 +528,7 @@ public class GameModule extends QSGModule implements Listener
 
         // Loading alive players from teams, now that they are constructed and complete.
 
-        ZTeams.get().getTeams().stream()
+        QuartzTeams.get().getTeams().stream()
                 .flatMap(team -> team.getPlayers().stream())
                 .map(OfflinePlayer::getUniqueId)
                 .filter(player -> !QSG.module(SpectatorsModule.class).isSpectator(player))
@@ -558,12 +539,13 @@ public class GameModule extends QSGModule implements Listener
 
         // We have to check if there is enough spawn points.
 
-        int spawnsNeeded = teleportationMode == TeleportationMode.IGNORE_TEAMS ? alivePlayers.size() : aliveTeams.size();
+        int spawnsNeeded =
+                teleportationMode == TeleportationMode.IGNORE_TEAMS ? alivePlayers.size() : aliveTeams.size();
 
-        if (QSG.module(SpawnsModule.class).getSpawnPoints().size() < spawnsNeeded)
-        {
+        if (QSG.module(SpawnsModule.class).getSpawnPoints().size() < spawnsNeeded) {
             log().broadcastAdministrative(I.t("{ce}Unable to start the game: not enough teleportation spots."));
-            log().broadcastAdministrative(I.t("{ci}You can use {cc}/uh spawns generate <random|circular|grid>{ci} to generate the missing spawns automatically."));
+            log().broadcastAdministrative(
+                    I.t("{ci}You can use {cc}/uh spawns generate <random|circular|grid>{ci} to generate the missing spawns automatically."));
 
             /// In the sentence: "Or click here to generate the spawns randomly."
             log().broadcastAdministrative(new RawText(I.t("Or"))
@@ -580,7 +562,7 @@ public class GameModule extends QSGModule implements Listener
             );
 
             // We clears the teams created on-the-fly
-            onTheFlyTeams.forEach(ZTeam::deleteTeam);
+            onTheFlyTeams.forEach(QuartzTeam::deleteTeam);
 
             // We set the phase back to WAIT.
             setPhase(GamePhase.WAIT);
@@ -598,15 +580,13 @@ public class GameModule extends QSGModule implements Listener
 
         teleporter = new Teleporter();
 
-        ZTeams.get().getTeams().stream().filter(team -> !team.isEmpty()).forEach(team ->
+        QuartzTeams.get().getTeams().stream().filter(team -> !team.isEmpty()).forEach(team ->
         {
-            if (teleportationMode == TeleportationMode.NORMAL && teamsGame)
-            {
+            if (teleportationMode == TeleportationMode.NORMAL && teamsGame) {
                 final Location teamSpawn = unusedSpawnPoints.poll();
 
                 // Should never happen
-                if (teamSpawn == null)
-                {
+                if (teamSpawn == null) {
                     log().error(
                             "A fatal error occurred while starting the game: cannot set spawn point for team {0}: not enough spawn points",
                             team.getName()
@@ -624,17 +604,14 @@ public class GameModule extends QSGModule implements Listener
 
                     teleporter.setSpawnForPlayer(player, event.getSpawnPoint());
                 });
-            }
-            else
-            {
+            } else {
                 team.getPlayersUUID().forEach(player ->
                 {
                     final Location playerSpawn = unusedSpawnPoints.poll();
                     final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
 
                     // Should never happen
-                    if (playerSpawn == null)
-                    {
+                    if (playerSpawn == null) {
                         log().error(
                                 "A fatal error occurred while starting the game: cannot set spawn point for player {0}: not enough spawn points",
                                 offlinePlayer.getName()
@@ -657,79 +634,77 @@ public class GameModule extends QSGModule implements Listener
         // Effective teleportation.
 
         teleporter
-            .whenTeleportationOccurs(uuid -> Bukkit.getPluginManager().callEvent(
-                    new PlayerAboutToBeTeleportedToSpawnPointEvent(Bukkit.getPlayer(uuid), teleporter.getSpawnForPlayer(uuid))))
+                .whenTeleportationOccurs(uuid -> Bukkit.getPluginManager().callEvent(
+                        new PlayerAboutToBeTeleportedToSpawnPointEvent(Bukkit.getPlayer(uuid),
+                                teleporter.getSpawnForPlayer(uuid))))
 
-            .whenTeleportationSuccesses(uuid -> {
-                final Player player = Bukkit.getPlayer(uuid);
+                .whenTeleportationSuccesses(uuid -> {
+                    final Player player = Bukkit.getPlayer(uuid);
 
-                log().info("Player {0} - {1} teleported to its spawn point.", uuid, player.getName());
+                    log().info("Player {0} - {1} teleported to its spawn point.", uuid, player.getName());
 
-                Bukkit.getPluginManager().callEvent(
-                        new PlayerTeleportedToSpawnPointEvent(player, teleporter.getSpawnForPlayer(uuid)));
-            })
+                    Bukkit.getPluginManager().callEvent(
+                            new PlayerTeleportedToSpawnPointEvent(player, teleporter.getSpawnForPlayer(uuid)));
+                })
 
-            .whenTeleportationFails(uuid -> log().error("Unable to teleport player {0} - {1}", uuid, Bukkit.getOfflinePlayer(uuid).getName()))
+                .whenTeleportationFails(uuid -> log()
+                        .error("Unable to teleport player {0} - {1}", uuid, Bukkit.getOfflinePlayer(uuid).getName()))
 
-            .whenTeleportationEnds(uuids -> {
-                teleportationProcessLock = false;
-                Bukkit.getPluginManager().callEvent(new AfterTeleportationPhaseEvent());
-            })
+                .whenTeleportationEnds(uuids -> {
+                    teleportationProcessLock = false;
+                    Bukkit.getPluginManager().callEvent(new AfterTeleportationPhaseEvent());
+                })
 
-            .startTeleportationProcess(slowMode);
+                .startTeleportationProcess(slowMode);
     }
 
-    @EventHandler (priority = EventPriority.LOWEST)
-    public void onPlayerTeleportedToSpawnPoint(final PlayerTeleportedToSpawnPointEvent ev)
-    {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerTeleportedToSpawnPoint(final PlayerTeleportedToSpawnPointEvent ev) {
         Player player = Bukkit.getPlayer(ev.getPlayer().getUniqueId());
 
-        if (player != null)
-        {
+        if (player != null) {
             player.setGameMode(GameMode.ADVENTURE);
             player.setAllowFlight(true);
             player.setFlying(true);
             player.setFlySpeed(0f);
         }
 
-        if (Config.BROADCAST_PROGRESS.get())
-        {
+        if (Config.BROADCAST_PROGRESS.get()) {
             teleportationProgress++;
 
             /// Displayed in the action bar while the slow teleportation occurs.
-            final String message = I.t("{lightpurple}Teleporting... {gray}({0}/{1})", teleportationProgress, alivePlayers.size());
+            final String message =
+                    I.t("{lightpurple}Teleporting... {gray}({0}/{1})", teleportationProgress, alivePlayers.size());
             Bukkit.getOnlinePlayers().forEach(onlinePlayer -> ActionBar.sendPermanentMessage(onlinePlayer, message));
         }
     }
 
-    @EventHandler (priority = EventPriority.LOWEST)
-    public void onTeleportationProcessComplete(final AfterTeleportationPhaseEvent ev)
-    {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onTeleportationProcessComplete(final AfterTeleportationPhaseEvent ev) {
         log().broadcastAdministrative(I.t("{cs}All teams are teleported."));
 
-        if (slowMode)
-        {
-            log().broadcastAdministrative(new RawText(I.t("{gray}Use {cc}/uh start{gray} or click here to start the game."))
-                    .hover(new RawText(I.t("Click here to start the game")))
-                    .command(StartCommand.class)
+        if (slowMode) {
+            log().broadcastAdministrative(
+                    new RawText(I.t("{gray}Use {cc}/uh start{gray} or click here to start the game."))
+                            .hover(new RawText(I.t("Click here to start the game")))
+                            .command(StartCommand.class)
             );
-        }
-        else
-        {
+        } else {
             start();
         }
 
-        if (Config.BROADCAST_PROGRESS.get())
-        {
+        if (Config.BROADCAST_PROGRESS.get()) {
             /// Displayed in the action bar when the slow teleportation is finished but the game not started.
-            Bukkit.getOnlinePlayers().forEach(player -> ActionBar.sendPermanentMessage(player, I.tl(player, "{lightpurple}Teleportation complete. {gray}The game will start soon...")));
+            Bukkit.getOnlinePlayers().forEach(player -> ActionBar.sendPermanentMessage(player,
+                    I.tl(player, "{lightpurple}Teleportation complete. {gray}The game will start soon...")));
         }
     }
 
-    @EventHandler (priority = EventPriority.LOWEST)
-    public void onGameStarts(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() != GamePhase.IN_GAME || !ev.isRunningForward()) return;
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onGameStarts(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() != GamePhase.IN_GAME || !ev.isRunningForward()) {
+            return;
+        }
 
         Bukkit.getOnlinePlayers().forEach(ActionBar::removeMessage);
 
@@ -765,23 +740,24 @@ public class GameModule extends QSGModule implements Listener
 
 
     @EventHandler
-    public void onPlayerDeath(final PlayerDeathEvent ev)
-    {
-        if (phase != GamePhase.IN_GAME) return;
-        if (!isAlive(ev.getEntity())) return;
+    public void onPlayerDeath(final PlayerDeathEvent ev) {
+        if (phase != GamePhase.IN_GAME) {
+            return;
+        }
+        if (!isAlive(ev.getEntity())) {
+            return;
+        }
 
         kill(ev.getEntity(), ev);
     }
 
     @EventHandler
-    public void onPlayerKilled(final AlivePlayerDeathEvent ev)
-    {
+    public void onPlayerKilled(final AlivePlayerDeathEvent ev) {
         log().info("{0} killed", ev.getPlayer().getName());
     }
 
     @EventHandler
-    public void onPlayerResurrected(final PlayerResurrectedEvent ev)
-    {
+    public void onPlayerResurrected(final PlayerResurrectedEvent ev) {
         log().info("{0} resurrected", ev.getPlayer().getName());
 
         /// Resurrection notification. {0} = raw resurrected player name.
@@ -789,14 +765,10 @@ public class GameModule extends QSGModule implements Listener
     }
 
     @EventHandler
-    public void onGameEndsOrEndsCancelled(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() == GamePhase.END)
-        {
+    public void onGameEndsOrEndsCancelled(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() == GamePhase.END) {
             winner = aliveTeams.stream().findAny().orElse(null); // There will be one alive team left here.
-        }
-        else if (ev.getNewPhase() == GamePhase.IN_GAME && !ev.isRunningForward())
-        {
+        } else if (ev.getNewPhase() == GamePhase.IN_GAME && !ev.isRunningForward()) {
             winner = null; // Win cancelled because a team was resurrected.
         }
     }
@@ -806,32 +778,27 @@ public class GameModule extends QSGModule implements Listener
     /* *** OTHER PLAYERS MANAGEMENT *** */
 
     @EventHandler
-    public void onPlayerJoin(final PlayerJoinEvent ev)
-    {
+    public void onPlayerJoin(final PlayerJoinEvent ev) {
         updatePlayerFlightOptions(ev.getPlayer());
     }
 
 
     /**
      * Sets the flight options for the player according to the current game phase.
+     *
      * @param player The player.
      */
-    private void updatePlayerFlightOptions(final Player player)
-    {
-        switch (phase)
-        {
+    private void updatePlayerFlightOptions(final Player player) {
+        switch (phase) {
             case WAIT:
                 player.setFlySpeed(.1f);
                 break;
 
             case STARTING:
-                if (alivePlayers.contains(player.getUniqueId()))
-                {
+                if (alivePlayers.contains(player.getUniqueId())) {
                     player.setAllowFlight(true);
                     player.setFlySpeed(0f);
-                }
-                else
-                {
+                } else {
                     player.setFlySpeed(.1f);
                 }
 
@@ -843,11 +810,11 @@ public class GameModule extends QSGModule implements Listener
         }
     }
 
-    private void updateAliveTeams()
-    {
+    private void updateAliveTeams() {
         aliveTeams.clear();
 
-        ZTeams.get().getTeams()
-            .forEach(t -> t.getPlayersUUID().stream().filter(alivePlayers::contains).map(pid -> t).forEach(aliveTeams::add));
+        QuartzTeams.get().getTeams()
+                .forEach(t -> t.getPlayersUUID().stream().filter(alivePlayers::contains).map(pid -> t)
+                        .forEach(aliveTeams::add));
     }
 }

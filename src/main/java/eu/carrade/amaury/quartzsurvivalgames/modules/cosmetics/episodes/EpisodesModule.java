@@ -68,7 +68,7 @@ import java.util.List;
         description = "Displays time marks every 20 minutes (by default), e.g. to divide a recording for diffusion.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.COSMETICS,
-        icon = Material.SIGN,
+        icon = Material.BIRCH_SIGN,
         settings = Config.class,
         can_be_loaded_late = false
 )

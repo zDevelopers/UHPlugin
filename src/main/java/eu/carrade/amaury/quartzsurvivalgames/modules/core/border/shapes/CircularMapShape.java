@@ -29,26 +29,24 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.border.shapes;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 
 
-public class CircularMapShape implements MapShapeDescriptor
-{
+public class CircularMapShape implements MapShapeDescriptor {
     /**
      * Returns true if the given location is inside the map.
      *
      * @param location The location to check.
      * @param diameter The diameter of the map.
      * @param center   The center of the map.
-     *
      * @return {@code true} if the given location is inside the map.
      */
     @Override
-    public boolean isInsideBorder(final Location location, final Double diameter, final Location center)
-    {
+    public boolean isInsideBorder(final Location location, final Double diameter, final Location center) {
         final Location centerRef = center.clone();
         centerRef.setY(location.getY());
 
@@ -61,21 +59,17 @@ public class CircularMapShape implements MapShapeDescriptor
      * @param location The distance will be calculated between this location and the closest point of the border.
      * @param diameter The diameter of the border.
      * @param center   The center of the border.
-     *
      * @return The distance between the given {@code location} and the closest point of the border.<br />
      * {@code -1} if the location is inside the border.
      */
     @Override
-    public double getDistanceToBorder(final Location location, final Double diameter, final Location center)
-    {
+    public double getDistanceToBorder(final Location location, final Double diameter, final Location center) {
         // The nether/end are not limited.
-        if (!location.getWorld().getEnvironment().equals(World.Environment.NORMAL))
-        {
+        if (!location.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
             return -1;
         }
 
-        if (isInsideBorder(location, diameter, center))
-        {
+        if (isInsideBorder(location, diameter, center)) {
             return -1;
         }
 

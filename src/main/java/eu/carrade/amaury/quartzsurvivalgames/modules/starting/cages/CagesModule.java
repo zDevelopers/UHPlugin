@@ -42,7 +42,7 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.game.GameP
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.PlayerAboutToBeTeleportedToSpawnPointEvent;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.PlayerSpawnPointSelectedEvent;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.PlayerTeleportedToSpawnPointEvent;
-import fr.zcraft.zteams.ZTeams;
+import fr.zcraft.quartzteams.QuartzTeams;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -70,7 +70,7 @@ public class CagesModule extends QSGModule
     public void onPlayerSpawnSelected(PlayerSpawnPointSelectedEvent ev)
     {
         final Location spawn = cloneAndNormalize(ev.getSpawnPoint());
-        cages.putIfAbsent(spawn, Cage.createInstanceForTeam(ZTeams.get().getTeamForPlayer(ev.getPlayer()), spawn));
+        cages.putIfAbsent(spawn, Cage.createInstanceForTeam(QuartzTeams.get().getTeamForPlayer(ev.getPlayer()), spawn));
     }
 
     @EventHandler

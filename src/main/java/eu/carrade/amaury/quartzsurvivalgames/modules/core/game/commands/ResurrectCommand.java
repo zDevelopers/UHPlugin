@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
@@ -39,56 +40,46 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 
-@CommandInfo (name = "resurrect", usageParameters = "<player>", aliases = {"revive", "undead"})
-public class ResurrectCommand extends Command
-{
+@CommandInfo(name = "resurrect", usageParameters = "<player>", aliases = {"revive", "undead"})
+public class ResurrectCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
-        if (args.length != 1)
-        {
+    protected void run() throws CommandException {
+        if (args.length != 1) {
             throwInvalidArgument(I.t("You must specify the player to resurrect."));
         }
 
         final OfflinePlayer player = Arrays.stream(Bukkit.getOfflinePlayers())
-            .filter(pl -> pl.getName().equalsIgnoreCase(args[0]))
-            .findAny().orElse(null);
+                .filter(pl -> pl.getName().equalsIgnoreCase(args[0]))
+                .findAny().orElse(null);
 
-        if (player == null)
-        {
+        if (player == null) {
             error(I.t("{ce}This player was never seen on this server."));
-        }
-        else if (QSG.module(GameModule.class).resurrect(player))
-        {
+        } else if (QSG.module(GameModule.class).resurrect(player)) {
             success(I.t("{0} was resurrected.", player.getName()));
-        }
-        else
-        {
+        } else {
             error(I.t("{ce}This player is not playing or dead!"));
         }
     }
 
     @Override
-    protected List<String> complete()
-    {
+    protected List<String> complete() {
         final GameModule game = QSG.module(GameModule.class);
 
-        if (args.length == 1)
-        {
+        if (args.length == 1) {
             return getMatchingPlayerNames(
-                    Bukkit.getOnlinePlayers().stream().filter(player -> !game.isAlive(player)).collect(Collectors.toList()),
+                    Bukkit.getOnlinePlayers().stream().filter(player -> !game.isAlive(player))
+                            .collect(Collectors.toList()),
                     args[0]
             );
+        } else {
+            return null;
         }
-
-        else return null;
     }
 }

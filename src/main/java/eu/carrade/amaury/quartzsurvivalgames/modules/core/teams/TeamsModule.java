@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.teams;
 
 import com.google.common.collect.ImmutableMap;
@@ -46,11 +47,24 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.teams.sidebar.SidebarP
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.quartzlib.core.ZLib;
+import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.ZTeams;
-import fr.zcraft.zteams.commands.*;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.QuartzTeams;
+import fr.zcraft.quartzteams.commands.GlobalChatCommand;
+import fr.zcraft.quartzteams.commands.MyTeamCommand;
+import fr.zcraft.quartzteams.commands.TeamChatCommand;
+import fr.zcraft.quartzteams.commands.TeamsCommand;
+import fr.zcraft.quartzteams.commands.TeamsGuiCommand;
+import fr.zcraft.quartzteams.commands.ToggleChatCommand;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -65,17 +79,8 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.UUID;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Teams",
         description = "Manages the teams and related commands.",
         category = ModuleCategory.CORE,
@@ -84,22 +89,17 @@ import java.util.UUID;
         internal = true,
         can_be_unloaded = false
 )
-public class TeamsModule extends QSGModule
-{
+public class TeamsModule extends QSGModule {
     private final String HEART = "\u2764";
+    private final Map<UUID, SidebarPlayerCache> sidebarCache = new HashMap<>();
     private double TEAMMATES_DISTANCE_SQUARED;
-
     private GameModule game = null;
 
-    private final Map<UUID, SidebarPlayerCache> sidebarCache = new HashMap<>();
-
-
     @Override
-    protected void onEnable()
-    {
-        ZLib.loadComponent(ZTeams.class);
+    protected void onEnable() {
+        QuartzLib.loadComponent(QuartzTeams.class);
 
-        ZTeams.settings()
+        QuartzTeams.settings()
                 .setScoreboard(QuartzSurvivalGames.get().getScoreboard())
                 .setTeamsOptions(
                         Config.CAN_SEE_FRIENDLY_INVISIBLES.get(),
@@ -120,19 +120,20 @@ public class TeamsModule extends QSGModule
                 )
                 .setMaxPlayersPerTeam(Config.MAX_PLAYERS_PER_TEAM.get());
 
-        TEAMMATES_DISTANCE_SQUARED = Math.pow(Config.SIDEBAR.CONTENT.DISPLAY_MET_PLAYERS_ONLY.DISPLAYED_WHEN_CLOSER_THAN.get(), 2d);
+        TEAMMATES_DISTANCE_SQUARED =
+                Math.pow(Config.SIDEBAR.CONTENT.DISPLAY_MET_PLAYERS_ONLY.DISPLAYED_WHEN_CLOSER_THAN.get(), 2d);
     }
 
     @EventHandler
-    public void onGameStarting(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() != GamePhase.STARTING) return;
-        ZLib.registerEvents(new SidebarCacheListener());
+    public void onGameStarting(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() != GamePhase.STARTING) {
+            return;
+        }
+        QuartzLib.registerEvents(new SidebarCacheListener());
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Arrays.asList(
                 TeamsCommand.class,
                 TeamChatCommand.class,
@@ -144,8 +145,7 @@ public class TeamsModule extends QSGModule
     }
 
     @Override
-    public Map<String, Class<? extends Command>> getCommandsAliases()
-    {
+    public Map<String, Class<? extends Command>> getCommandsAliases() {
         return ImmutableMap.of(
                 "t", TeamChatCommand.class,
                 "g", GlobalChatCommand.class,
@@ -156,45 +156,57 @@ public class TeamsModule extends QSGModule
     }
 
     @Override
-    public void injectIntoSidebar(final Player player, final SidebarInjector injector)
-    {
-        if (game == null) game = QSG.module(GameModule.class);
-        if (game == null) return; // Module not ready
+    public void injectIntoSidebar(final Player player, final SidebarInjector injector) {
+        if (game == null) {
+            game = QSG.module(GameModule.class);
+        }
+        if (game == null) {
+            return; // Module not ready
+        }
 
-        if (!game.isTeamsGame() || !Config.SIDEBAR.ENABLED.get() || game.getPhase().ordinal() < GamePhase.IN_GAME.ordinal())
+        if (!game.isTeamsGame() || !Config.SIDEBAR.ENABLED.get() ||
+                game.getPhase().ordinal() < GamePhase.IN_GAME.ordinal()) {
             return;
+        }
 
-        final ZTeam team = ZTeams.get().getTeamForPlayer(player);
+        final QuartzTeam team = QuartzTeams.get().getTeamForPlayer(player);
 
-        if (team == null) return;
+        if (team == null) {
+            return;
+        }
 
 
         /* *** TEAM NAME *** */
 
         injector.injectLines(
-            true, false,
-            (Config.SIDEBAR.TITLE.COLOR.get().isEmpty() ? team.getColorOrWhite().toChatColor() : Config.SIDEBAR.TITLE.COLOR.get())
-                + (Config.SIDEBAR.TITLE.USE_TEAM_NAME.get() ? ChatColor.BOLD + team.getName() : I.t("{bold}Your team"))
+                true, false,
+                (Config.SIDEBAR.TITLE.COLOR.get().isEmpty() ? team.getColorOrWhite().toChatColor() :
+                        Config.SIDEBAR.TITLE.COLOR.get())
+                        + (Config.SIDEBAR.TITLE.USE_TEAM_NAME.get() ? ChatColor.BOLD + team.getName() :
+                        I.t("{bold}Your team"))
         );
 
 
         /* *** TEAM PLAYERS: WHICH ONES *** */
 
         final Set<OfflinePlayer> displayedPlayers = new TreeSet<>((player1, player2) -> {
-            if (player1.equals(player2)) return 0;
-            if (game.isAlive(player1) != game.isAlive(player2)) return game.isAlive(player1) ? -1 : 1;
+            if (player1.equals(player2)) {
+                return 0;
+            }
+            if (game.isAlive(player1) != game.isAlive(player2)) {
+                return game.isAlive(player1) ? -1 : 1;
+            }
             return player1.getName().toLowerCase().compareTo(player2.getName().toLowerCase());
         });
 
         final SidebarPlayerCache playerCache = getSidebarPlayerCache(player.getUniqueId());
 
-        if (Config.SIDEBAR.CONTENT.DISPLAY_MET_PLAYERS_ONLY.ENABLED.get())
-        {
+        if (Config.SIDEBAR.CONTENT.DISPLAY_MET_PLAYERS_ONLY.ENABLED.get()) {
             playerCache.updateTeammatesDisplayed(TEAMMATES_DISTANCE_SQUARED, player.getLocation(), team);
             displayedPlayers.addAll(playerCache.getMetTeammates());
+        } else {
+            displayedPlayers.addAll(team.getPlayers());
         }
-
-        else displayedPlayers.addAll(team.getPlayers());
 
 
         /* *** TEAM PLAYERS: DISPLAY *** */
@@ -205,15 +217,20 @@ public class TeamsModule extends QSGModule
             final SidebarPlayerCache cache = getSidebarPlayerCache(displayedPlayer.getUniqueId());
             final boolean alive = game.isAlive(displayedPlayer);
 
-            final String strike = Config.SIDEBAR.CONTENT.STRIKE_DEAD_PLAYERS.get() && !alive ? ChatColor.STRIKETHROUGH.toString() : "";
+            final String strike =
+                    Config.SIDEBAR.CONTENT.STRIKE_DEAD_PLAYERS.get() && !alive ? ChatColor.STRIKETHROUGH.toString() :
+                            "";
             final ChatColor aliveColor = alive ? ChatColor.WHITE : ChatColor.GRAY;
 
-            final String heart = Config.SIDEBAR.CONTENT.DISPLAY_HEARTS.get() ? cache.getHealthColor() + strike + HEART + " " : "";
+            final String heart =
+                    Config.SIDEBAR.CONTENT.DISPLAY_HEARTS.get() ? cache.getHealthColor() + strike + HEART + " " : "";
             final String name = (Config.SIDEBAR.CONTENT.COLOR_NAME.get() ? cache.getHealthColor() : aliveColor)
                     + strike
                     + (Config.SIDEBAR.CONTENT.LOGIN_STATE.ITALIC.get() && !cache.isOnline() ? ChatColor.ITALIC : "")
                     + cache.getPlayerName()
-                    + (!cache.isOnline() ? ChatColor.RESET + "" + (Config.SIDEBAR.CONTENT.COLOR_NAME.get() ? cache.getHealthColor() : aliveColor) + " " + Config.SIDEBAR.CONTENT.LOGIN_STATE.SUFFIX.get() : "");
+                    + (!cache.isOnline() ? ChatColor.RESET + "" +
+                    (Config.SIDEBAR.CONTENT.COLOR_NAME.get() ? cache.getHealthColor() : aliveColor) + " " +
+                    Config.SIDEBAR.CONTENT.LOGIN_STATE.SUFFIX.get() : "");
 
             playersSidebar.add(heart + name);
         });
@@ -227,98 +244,104 @@ public class TeamsModule extends QSGModule
      * @param id The player's UUID.
      * @return The cached data, created on the fly if needed.
      */
-    public SidebarPlayerCache getSidebarPlayerCache(final UUID id)
-    {
+    public SidebarPlayerCache getSidebarPlayerCache(final UUID id) {
         return sidebarCache.computeIfAbsent(id, SidebarPlayerCache::new);
     }
 
     @EventHandler
-    public void onGameStart(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() != GamePhase.IN_GAME || !ev.isRunningForward()) return;
+    public void onGameStart(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() != GamePhase.IN_GAME || !ev.isRunningForward()) {
+            return;
+        }
 
-        if (Config.BANNER.GIVE.GIVE_IN_HOTBAR.get() || Config.BANNER.GIVE.GIVE_ON_HEAD.get() || Config.BANNER.GIVE.PLACE_ON_SPAWN.get())
-        {
+        if (Config.BANNER.GIVE.GIVE_IN_HOTBAR.get() || Config.BANNER.GIVE.GIVE_ON_HEAD.get() ||
+                Config.BANNER.GIVE.PLACE_ON_SPAWN.get()) {
             RunTask.later(() ->
-                ZTeams.get().getTeams().stream().filter(team -> !team.isEmpty()).forEach(team ->
-                {
-                    final ItemStack banner = team.getBanner();
-
-                    team.getOnlinePlayers().forEach(player ->
+                    QuartzTeams.get().getTeams().stream().filter(team -> !team.isEmpty()).forEach(team ->
                     {
-                        if (Config.BANNER.GIVE.GIVE_IN_HOTBAR.get())
+                        final ItemStack banner = team.getBanner();
+
+                        team.getOnlinePlayers().forEach(player ->
                         {
-                            player.getInventory().setItem(8, banner.clone());
-                        }
-
-                        if (Config.BANNER.GIVE.GIVE_ON_HEAD.get())
-                        {
-                            player.getInventory().setHelmet(banner.clone());
-                        }
-
-                        if (Config.BANNER.GIVE.PLACE_ON_SPAWN.get())
-                        {
-                            final Block place = player.getWorld().getHighestBlockAt(player.getLocation());
-                            final Block under = place.getRelative(BlockFace.DOWN);
-
-                            // We don't want a stack of banners
-                            if (under.getType() != Material.STANDING_BANNER)
-                            {
-                                if (!under.getType().isSolid())
-                                    under.setType(Material.WOOD);
-
-                                place.setType(Material.STANDING_BANNER);
-
-                                Banner bannerBlock = (Banner) place.getState();
-                                BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
-
-                                bannerBlock.setBaseColor(bannerMeta.getBaseColor());
-                                bannerBlock.setPatterns(bannerMeta.getPatterns());
-
-                                bannerBlock.update();
+                            if (Config.BANNER.GIVE.GIVE_IN_HOTBAR.get()) {
+                                player.getInventory().setItem(8, banner.clone());
                             }
-                        }
-                    });
-                }), 5L);
+
+                            if (Config.BANNER.GIVE.GIVE_ON_HEAD.get()) {
+                                player.getInventory().setHelmet(banner.clone());
+                            }
+
+                            if (Config.BANNER.GIVE.PLACE_ON_SPAWN.get()) {
+                                final Block place = player.getWorld().getHighestBlockAt(player.getLocation());
+                                final Block under = place.getRelative(BlockFace.DOWN);
+
+                                // We don't want a stack of banners
+                                if (!under.getType().name().endsWith("_BANNER")) {
+                                    if (!under.getType().isSolid()) {
+                                        under.setType(Material.STRIPPED_OAK_WOOD);
+                                    }
+
+                                    place.setType(banner.getType());
+
+                                    Banner bannerBlock = (Banner) place.getState();
+                                    BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
+
+                                    bannerBlock.setPatterns(bannerMeta.getPatterns());
+
+                                    bannerBlock.update();
+                                }
+                            }
+                        });
+                    }), 5L);
         }
     }
 
     /**
      * Adds the team banner on crafted shields.
-     *
+     * <p>
      * Done indirectly because the plugin must be able to run
      * on Minecraft 1.8.
      */
-    @EventHandler (ignoreCancelled = true)
-    public void onShieldPreCraft(final PrepareItemCraftEvent ev)
-    {
-        if (!Config.BANNER.SHIELDS.ADD_ON_SHIELDS.get()) return;
+    @EventHandler(ignoreCancelled = true)
+    public void onShieldPreCraft(final PrepareItemCraftEvent ev) {
+        if (!Config.BANNER.SHIELDS.ADD_ON_SHIELDS.get()) {
+            return;
+        }
 
         // The viewers list is empty for crafts from the small crafting
         // grid in the inventory. In this case we use another data source.
-        final Player player = !ev.getViewers().isEmpty() ? (Player) ev.getViewers().get(0) : (Player) ev.getView().getPlayer();
-        if (player == null) return;
+        final Player player =
+                !ev.getViewers().isEmpty() ? (Player) ev.getViewers().get(0) : (Player) ev.getView().getPlayer();
+        if (player == null) {
+            return;
+        }
 
-        final ZTeam team = ZTeams.get().getTeamForPlayer(player);
-        if (team == null || team.getBanner() == null) return;
+        final QuartzTeam team = QuartzTeams.get().getTeamForPlayer(player);
+        if (team == null || team.getBanner() == null) {
+            return;
+        }
 
         final Recipe recipe = ev.getRecipe();
-        if (recipe == null) return;
+        if (recipe == null) {
+            return;
+        }
 
         final ItemStack result = recipe.getResult();
-        if (result == null) return;
+        if (result == null) {
+            return;
+        }
 
         final Material MATERIAL_SHIELD = Material.getMaterial("SHIELD");
-        if (MATERIAL_SHIELD == null) return; // MC 1.8
+        if (MATERIAL_SHIELD == null) {
+            return; // MC 1.8
+        }
 
-        if (result.getType() == MATERIAL_SHIELD)
-        {
-            try
-            {
+        if (result.getType() == MATERIAL_SHIELD) {
+            try {
                 final BannerMeta banner = (BannerMeta) team.getBanner().getItemMeta();
 
                 final BlockStateMeta bsMeta = (BlockStateMeta) result.getItemMeta();
-                final Banner shieldBanner   = (Banner) bsMeta.getBlockState();
+                final Banner shieldBanner = (Banner) bsMeta.getBlockState();
 
                 shieldBanner.setBaseColor(banner.getBaseColor());
                 shieldBanner.setPatterns(banner.getPatterns());
@@ -330,22 +353,18 @@ public class TeamsModule extends QSGModule
 
                 ev.getInventory().setResult(result);
             }
-            catch (ClassCastException | NullPointerException ignored)
-            {
+            catch (ClassCastException | NullPointerException ignored) {
                 // Bad Minecraft version (1.8)
             }
         }
     }
 
     @EventHandler
-    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
-    {
+    public void onPlayerDeath(final AlivePlayerDeathEvent ev) {
         // Disables the team-chat-lock if needed
-        if (Config.TEAM_CHAT.DISABLE_LOCK_ON_DEATH.get())
-        {
-            if (ZTeams.chatManager().isTeamChatEnabled(ev.getPlayer().getUniqueId()))
-            {
-                ZTeams.chatManager().toggleChatForPlayer(ev.getPlayer().getUniqueId());
+        if (Config.TEAM_CHAT.DISABLE_LOCK_ON_DEATH.get()) {
+            if (QuartzTeams.chatManager().isTeamChatEnabled(ev.getPlayer().getUniqueId())) {
+                QuartzTeams.chatManager().toggleChatForPlayer(ev.getPlayer().getUniqueId());
             }
         }
     }

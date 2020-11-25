@@ -171,7 +171,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
             // Not above the water?
             if (avoidWater)
             {
-                if (surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.STATIONARY_WATER)
+                if (surfaceBlock.getType() == Material.WATER)
                 {
                     pointsAboveWater++;
                     continue;

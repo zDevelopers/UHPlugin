@@ -54,7 +54,7 @@ import org.bukkit.event.player.PlayerStatisticIncrementEvent;
                 "to keep old statistics!",
         when = ModuleLoadTime.POST_WORLD,
         category = ModuleCategory.OTHER,
-        icon = Material.WORKBENCH
+        icon = Material.CRAFTING_TABLE
 )
 public class StatisticsModule extends QSGModule
 {

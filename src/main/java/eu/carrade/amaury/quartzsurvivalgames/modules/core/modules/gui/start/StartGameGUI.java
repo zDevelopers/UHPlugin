@@ -44,7 +44,7 @@ import fr.zcraft.quartzlib.components.gui.GuiAction;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.items.ItemStackBuilder;
 import fr.zcraft.quartzlib.tools.mojang.MojangHead;
-import fr.zcraft.zteams.ZTeams;
+import fr.zcraft.quartzteams.QuartzTeams;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
@@ -73,7 +73,7 @@ public class StartGameGUI extends ActionGui
                 .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "If your server is a little bit small, use this option to teleport players slowly, loading the chunks one player at a time. You'll have to confirm the game start using a link in the chat."), 52)
         );
 
-        if (ZTeams.get().countTeams() > 0)
+        if (QuartzTeams.get().countTeams() > 0)
         {
             action("teleportation_mode", 13, new ItemStackBuilder()
                     .material(mode == TeleportationMode.NORMAL ? Material.SUGAR : Material.GLOWSTONE_DUST)

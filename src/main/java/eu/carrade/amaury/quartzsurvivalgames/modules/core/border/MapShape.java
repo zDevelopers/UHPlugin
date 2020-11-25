@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.border;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.shapes.CircularMapShape;
@@ -36,21 +37,19 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.shapes.MapShape
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.shapes.SquaredMapShape;
 
 
-public enum MapShape
-{
+public enum MapShape {
     CIRCULAR(new CircularMapShape()),
     SQUARED(new SquaredMapShape()),
 
     ;
 
 
-    private MapShapeDescriptor shape;
+    private final MapShapeDescriptor shape;
 
     /**
      * @param shape The shape descriptor to use for border-checks.
      */
-    MapShape(MapShapeDescriptor shape)
-    {
+    MapShape(MapShapeDescriptor shape) {
         this.shape = shape;
     }
 
@@ -59,8 +58,7 @@ public enum MapShape
      *
      * @return The shape.
      */
-    public MapShapeDescriptor getShape()
-    {
+    public MapShapeDescriptor getShape() {
         return shape;
     }
 }

@@ -31,44 +31,43 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.utils;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.TimeDelta;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.ActionBar;
 import fr.zcraft.quartzlib.tools.text.MessageSender;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-public class Run
-{
+public class Run {
     private final static String ACTION_BAR_SEPARATOR = "   " + ChatColor.GRAY + "\u2758" + ChatColor.RESET + "   ";
 
     /**
      * Executes a task after a delay, displaying a countdown in the players'
      * action bar at the end.
      *
-     * @param title A title displayed in the left of the action bar.
-     * @param subtitle A subtitle displayed during the whole countdown in
-     *                 the right of the action bar. If {@code null}, the
-     *                 action bar will only display something when the
-     *                 countdown will be about to end.
+     * @param title                   A title displayed in the left of the action bar.
+     * @param subtitle                A subtitle displayed during the whole countdown in
+     *                                the right of the action bar. If {@code null}, the
+     *                                action bar will only display something when the
+     *                                countdown will be about to end.
      * @param subtitleDuringCountdown A subtitle displayed during the last
      *                                seconds of the cooldown. Receives the
      *                                current second (will be decreasing) and
      *                                returns a subtitle.
-     * @param subtitleAfter A subtitle displayed a few seconds after the task
-     *                      has been run, e.g. to display a message stating that
-     *                      the task is done. If {@code null}, the last countdown
-     *                      message wil simply fade out.
-     * @param receivers The players who will receive the countdown in their
-     *                  action bar.
-     * @param task The task to execute after the delay.
-     * @param delay The delay.
+     * @param subtitleAfter           A subtitle displayed a few seconds after the task
+     *                                has been run, e.g. to display a message stating that
+     *                                the task is done. If {@code null}, the last countdown
+     *                                message wil simply fade out.
+     * @param receivers               The players who will receive the countdown in their
+     *                                action bar.
+     * @param task                    The task to execute after the delay.
+     * @param delay                   The delay.
      */
     public static void withCountdown(
             final String title,
@@ -77,8 +76,7 @@ public class Run
             final String subtitleAfter,
             final Supplier<Iterable<Player>> receivers,
             final Runnable task,
-            final TimeDelta delay)
-    {
+            final TimeDelta delay) {
         withCountdown(title, subtitle, subtitleDuringCountdown, subtitleAfter, (short) 5, receivers, task, delay);
     }
 
@@ -86,23 +84,23 @@ public class Run
      * Executes a task after a delay, displaying a countdown in the players'
      * action bar at the end.
      *
-     * @param title A title displayed in the left of the action bar.
-     * @param subtitle A subtitle displayed during the whole countdown in
-     *                 the right of the action bar. If {@code null}, the
-     *                 action bar will only display something when the
-     *                 countdown will be about to end.
+     * @param title                   A title displayed in the left of the action bar.
+     * @param subtitle                A subtitle displayed during the whole countdown in
+     *                                the right of the action bar. If {@code null}, the
+     *                                action bar will only display something when the
+     *                                countdown will be about to end.
      * @param subtitleDuringCountdown A subtitle displayed during the last
      *                                seconds of the cooldown. Receives the
      *                                current second (will be decreasing) and
      *                                returns a subtitle.
-     * @param visibleCountdownBefore When there will be less than this number of
-     *                               seconds before the end of the countdown,
-     *                               the subtitle will switch from the defined
-     *                               static subtitle to the visible countdown.
-     * @param receivers The players who will receive the countdown in their
-     *                  action bar.
-     * @param task The task to execute after the delay.
-     * @param delay The delay.
+     * @param visibleCountdownBefore  When there will be less than this number of
+     *                                seconds before the end of the countdown,
+     *                                the subtitle will switch from the defined
+     *                                static subtitle to the visible countdown.
+     * @param receivers               The players who will receive the countdown in their
+     *                                action bar.
+     * @param task                    The task to execute after the delay.
+     * @param delay                   The delay.
      */
     public static void withCountdown(
             final String title,
@@ -112,20 +110,19 @@ public class Run
             final short visibleCountdownBefore,
             final Supplier<Iterable<Player>> receivers,
             final Runnable task,
-            final TimeDelta delay)
-    {
+            final TimeDelta delay) {
         // The countdown is not visible at the beginning
-        if (visibleCountdownBefore < delay.getSeconds())
-        {
-            if (subtitle != null)
-            {
+        if (visibleCountdownBefore < delay.getSeconds()) {
+            if (subtitle != null) {
                 final Iterable<Player> initialReceivers = receivers.get();
-                initialReceivers.forEach(receiver -> ActionBar.sendPermanentMessage(receiver, title + ACTION_BAR_SEPARATOR + subtitle));
+                initialReceivers.forEach(
+                        receiver -> ActionBar.sendPermanentMessage(receiver, title + ACTION_BAR_SEPARATOR + subtitle));
 
                 // As the receivers list is recalculated each time (to allow for new players), this ensures
                 // players who received the initial message will not have it kept during the whole game
                 // if they were disconnected at the end.
-                RunTask.later(() -> initialReceivers.forEach(ActionBar::removeMessage), (delay.getSeconds() - visibleCountdownBefore) * 20L);
+                RunTask.later(() -> initialReceivers.forEach(ActionBar::removeMessage),
+                        (delay.getSeconds() - visibleCountdownBefore) * 20L);
             }
 
             RunTask.timer(
@@ -141,8 +138,7 @@ public class Run
         }
 
         // The countdown is immediately visible.
-        else
-        {
+        else {
             RunTask.timer(
                     new CountdownRunnable(
                             title,
@@ -156,14 +152,13 @@ public class Run
         }
     }
 
-    private static class CountdownRunnable extends BukkitRunnable
-    {
+    private static class CountdownRunnable extends BukkitRunnable {
         private final String title;
         private final Function<Short, String> subtitleDuringCountdown;
         private final String subtitleAfter;
         private final Supplier<Iterable<Player>> receivers;
-        private short secondsLeft;
         private final Runnable task;
+        private short secondsLeft;
 
         private CountdownRunnable(
                 final String title,
@@ -171,8 +166,7 @@ public class Run
                 final String subtitleAfter,
                 final Supplier<Iterable<Player>> receivers,
                 final short secondsLeft,
-                final Runnable task)
-        {
+                final Runnable task) {
             this.title = title;
             this.subtitleDuringCountdown = subtitleDuringCountdown;
             this.subtitleAfter = subtitleAfter;
@@ -182,36 +176,30 @@ public class Run
         }
 
         @Override
-        public void run()
-        {
-            if (secondsLeft == 0)
-            {
-                if (subtitleAfter != null)
-                {
+        public void run() {
+            if (secondsLeft == 0) {
+                if (subtitleAfter != null) {
                     final Iterable<Player> finalReceivers = receivers.get();
-                    finalReceivers.forEach(receiver -> ActionBar.sendPermanentMessage(receiver, title + ACTION_BAR_SEPARATOR + subtitleAfter));
+                    finalReceivers.forEach(receiver -> ActionBar
+                            .sendPermanentMessage(receiver, title + ACTION_BAR_SEPARATOR + subtitleAfter));
 
                     RunTask.later(() -> finalReceivers.forEach(ActionBar::removeMessage), 60L);
-                }
-                else
-                {
+                } else {
                     receivers.get()
-                        .forEach(receiver -> MessageSender.sendActionBarMessage(
-                            receiver,
-                            title + ACTION_BAR_SEPARATOR + subtitleDuringCountdown.apply(secondsLeft)
-                        ));
+                            .forEach(receiver -> MessageSender.sendActionBarMessage(
+                                    receiver,
+                                    title + ACTION_BAR_SEPARATOR + subtitleDuringCountdown.apply(secondsLeft)
+                            ));
                 }
 
                 task.run();
                 cancel();
-            }
-            else
-            {
+            } else {
                 receivers.get()
-                    .forEach(receiver -> MessageSender.sendActionBarMessage(
-                        receiver,
-                        title + ACTION_BAR_SEPARATOR + subtitleDuringCountdown.apply(secondsLeft)
-                    ));
+                        .forEach(receiver -> MessageSender.sendActionBarMessage(
+                                receiver,
+                                title + ACTION_BAR_SEPARATOR + subtitleDuringCountdown.apply(secondsLeft)
+                        ));
 
                 secondsLeft--;
             }

@@ -31,24 +31,21 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.end.kick;
+
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.TimeDelta;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
 import fr.zcraft.quartzlib.components.i18n.I;
-
 import java.io.File;
 
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
-
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
-
+public class Config extends ConfigurationInstance {
     static public final ConfigurationItem<TimeDelta> DELAY = item("delay", new TimeDelta(30));
     static public final ConfigurationItem<String> MESSAGE = item("message", I.t("jayjay"));
+    public Config(File file) {
+        super(file);
+    }
 }

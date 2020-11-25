@@ -29,29 +29,28 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.utils;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 
 /**
  * Utility class to compare Bukkit recipes.<br>
  * Useful for identifying your recipes in events, where recipes are re-generated in a different manner.
  *
- * @version R1.3
  * @author Digi
+ * @version R1.3
  */
-public class RecipesUtils
-{
+public class RecipesUtils {
     /**
      * Checks if both recipes are equal.<br>
      * Compares both ingredients and results.<br>
@@ -61,12 +60,12 @@ public class RecipesUtils
      * @param recipe1 the first recipe
      * @param recipe2 the second recipe
      * @return true if ingredients and results match, false otherwise.
-     * @throws IllegalArgumentException
-     *             if recipe is other than ShapedRecipe, ShapelessRecipe or FurnaceRecipe.
+     * @throws IllegalArgumentException if recipe is other than ShapedRecipe, ShapelessRecipe or FurnaceRecipe.
      */
-    public static boolean areEqual(Recipe recipe1, Recipe recipe2)
-    {
-        return recipe1 == recipe2 || !(recipe1 == null || recipe2 == null) && recipe1.getResult().equals(recipe2.getResult()) && match(recipe1, recipe2);
+    public static boolean areEqual(Recipe recipe1, Recipe recipe2) {
+        return recipe1 == recipe2 ||
+                !(recipe1 == null || recipe2 == null) && recipe1.getResult().equals(recipe2.getResult()) &&
+                        match(recipe1, recipe2);
 
     }
 
@@ -79,20 +78,15 @@ public class RecipesUtils
      * @param recipe1 the first recipe
      * @param recipe2 the second recipe
      * @return true if ingredients match, false otherwise.
-     * @throws IllegalArgumentException
-     *             if recipe is other than ShapedRecipe, ShapelessRecipe or FurnaceRecipe.
+     * @throws IllegalArgumentException if recipe is other than ShapedRecipe, ShapelessRecipe or FurnaceRecipe.
      */
-    public static boolean areSimilar(Recipe recipe1, Recipe recipe2)
-    {
+    public static boolean areSimilar(Recipe recipe1, Recipe recipe2) {
         return recipe1 == recipe2 || !(recipe1 == null || recipe2 == null) && match(recipe1, recipe2);
     }
 
-    private static boolean match(Recipe recipe1, Recipe recipe2)
-    {
-        if (recipe1 instanceof ShapedRecipe)
-        {
-            if (!(recipe2 instanceof ShapedRecipe))
-            {
+    private static boolean match(Recipe recipe1, Recipe recipe2) {
+        if (recipe1 instanceof ShapedRecipe) {
+            if (!(recipe2 instanceof ShapedRecipe)) {
                 return false; // if other recipe is not the same type then they're not equal.
             }
 
@@ -103,7 +97,8 @@ public class RecipesUtils
             final ItemStack[] matrix1 = shapeToMatrix(r1.getShape(), r1.getIngredientMap());
             final ItemStack[] matrix2 = shapeToMatrix(r2.getShape(), r2.getIngredientMap());
 
-            if (!Arrays.equals(matrix1, matrix2)) // compare arrays and if they don't match run another check with one shape mirrored.
+            if (!Arrays.equals(matrix1,
+                    matrix2)) // compare arrays and if they don't match run another check with one shape mirrored.
             {
                 mirrorMatrix(matrix1);
 
@@ -111,11 +106,8 @@ public class RecipesUtils
             }
 
             return true; // ingredients match.
-        }
-        else if (recipe1 instanceof ShapelessRecipe)
-        {
-            if (!(recipe2 instanceof ShapelessRecipe))
-            {
+        } else if (recipe1 instanceof ShapelessRecipe) {
+            if (!(recipe2 instanceof ShapelessRecipe)) {
                 return false; // if other recipe is not the same type then they're not equal.
             }
 
@@ -126,25 +118,19 @@ public class RecipesUtils
             final List<ItemStack> find = r1.getIngredientList();
             final List<ItemStack> compare = r2.getIngredientList();
 
-            if (find.size() != compare.size())
-            {
+            if (find.size() != compare.size()) {
                 return false; // if they don't have the same amount of ingredients they're not equal.
             }
 
-            for (ItemStack item : compare)
-            {
-                if (!find.remove(item))
-                {
+            for (ItemStack item : compare) {
+                if (!find.remove(item)) {
                     return false; // if ingredient wasn't removed (not found) then they're not equal.
                 }
             }
 
             return find.isEmpty(); // if there are any ingredients not removed then they're not equal.
-        }
-        else if (recipe1 instanceof FurnaceRecipe)
-        {
-            if (!(recipe2 instanceof FurnaceRecipe))
-            {
+        } else if (recipe1 instanceof FurnaceRecipe) {
+            if (!(recipe2 instanceof FurnaceRecipe)) {
                 return false; // if other recipe is not the same type then they're not equal.
             }
 
@@ -152,22 +138,17 @@ public class RecipesUtils
             final FurnaceRecipe r2 = (FurnaceRecipe) recipe2;
 
             return r1.getInput().getType() == r2.getInput().getType();
-        }
-        else
-        {
+        } else {
             throw new IllegalArgumentException("Unsupported recipe type: '" + recipe1 + "', update this class!");
         }
     }
 
-    private static ItemStack[] shapeToMatrix(String[] shape, Map<Character, ItemStack> map)
-    {
+    private static ItemStack[] shapeToMatrix(String[] shape, Map<Character, ItemStack> map) {
         final ItemStack[] matrix = new ItemStack[9];
         int slot = 0;
 
-        for (int r = 0; r < shape.length; r++)
-        {
-            for (char col : shape[r].toCharArray())
-            {
+        for (int r = 0; r < shape.length; r++) {
+            for (char col : shape[r].toCharArray()) {
                 matrix[slot] = map.get(col);
                 slot++;
             }
@@ -178,12 +159,10 @@ public class RecipesUtils
         return matrix;
     }
 
-    private static void mirrorMatrix(ItemStack[] matrix)
-    {
+    private static void mirrorMatrix(ItemStack[] matrix) {
         ItemStack tmp;
 
-        for (int r = 0; r < 3; r++)
-        {
+        for (int r = 0; r < 3; r++) {
             tmp = matrix[(r * 3)];
             matrix[(r * 3)] = matrix[(r * 3) + 2];
             matrix[(r * 3) + 2] = tmp;
@@ -194,22 +173,16 @@ public class RecipesUtils
     /**
      * Returns the list of the ingredients of the given recipe.
      *
-     * @author Amaury Carrade
-     *
      * @param recipe The recipe to analyze.
      * @return A list of the ingredients.
+     * @author Amaury Carrade
      */
-    public static List<ItemStack> getListOfIngredients(Recipe recipe)
-    {
+    public static List<ItemStack> getListOfIngredients(Recipe recipe) {
         List<ItemStack> listOfItems;
-        if (recipe instanceof ShapelessRecipe)
-        {
+        if (recipe instanceof ShapelessRecipe) {
             listOfItems = ((ShapelessRecipe) recipe).getIngredientList();
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 listOfItems = new LinkedList<>(((ShapedRecipe) recipe).getIngredientMap().values());
             }
             catch (NullPointerException e)  // If the list of items is null

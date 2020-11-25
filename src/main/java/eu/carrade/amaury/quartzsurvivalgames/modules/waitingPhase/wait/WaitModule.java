@@ -47,19 +47,19 @@ import fr.zcraft.quartzlib.components.attributes.Attribute;
 import fr.zcraft.quartzlib.components.attributes.Attributes;
 import fr.zcraft.quartzlib.components.gui.Gui;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.quartzlib.core.ZLib;
+import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.tools.PluginLogger;
 import fr.zcraft.quartzlib.tools.items.ItemStackBuilder;
 import fr.zcraft.quartzlib.tools.reflection.NMSException;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.ActionBar;
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.ZTeams;
-import fr.zcraft.zteams.events.PlayerJoinedTeamEvent;
-import fr.zcraft.zteams.events.PlayerLeftTeamEvent;
-import fr.zcraft.zteams.events.TeamUnregisteredEvent;
-import fr.zcraft.zteams.events.TeamUpdatedEvent;
-import fr.zcraft.zteams.guis.TeamsSelectorGUI;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.QuartzTeams;
+import fr.zcraft.quartzteams.events.PlayerJoinedTeamEvent;
+import fr.zcraft.quartzteams.events.PlayerLeftTeamEvent;
+import fr.zcraft.quartzteams.events.TeamUnregisteredEvent;
+import fr.zcraft.quartzteams.events.TeamUpdatedEvent;
+import fr.zcraft.quartzteams.guis.TeamsSelectorGUI;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -84,7 +84,7 @@ import java.util.UUID;
         name = "Waiting phase",
         description = "Manages the waiting phase: inventory, effects, modes, teleportation, etc.",
         category = ModuleCategory.WAITING_PHASE,
-        icon = Material.WATCH,
+        icon = Material.CLOCK,
         settings = Config.class,
         can_be_loaded_late = false
 )
@@ -318,7 +318,7 @@ public class WaitModule extends QSGModule
 
         if (onlinePlayer == null) return;
 
-        final ZTeam team = ZTeams.get().getTeamForPlayer(player);
+        final QuartzTeam team = QuartzTeams.get().getTeamForPlayer(player);
 
         if (team != null)
             ActionBar.sendPermanentMessage(onlinePlayer, I.t("{gold}Your team: {0}", team.getDisplayName()));
@@ -511,7 +511,7 @@ public class WaitModule extends QSGModule
                 break;
 
             case IN_GAME:
-                ZLib.unregisterEvents(this);
+                QuartzLib.unregisterEvents(this);
                 if (inventoriesUpdateTask != null)
                 {
                     inventoriesUpdateTask.cancel();

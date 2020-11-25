@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.border;
 
 import eu.carrade.amaury.quartzsurvivalgames.QuartzSurvivalGames;
@@ -47,7 +48,7 @@ import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import eu.carrade.amaury.quartzsurvivalgames.utils.QSGUtils;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.quartzlib.core.ZLib;
+import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.Titles;
 import org.bukkit.*;
@@ -62,17 +63,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Border",
         description = "Manages the border size and reduction.",
         category = ModuleCategory.CORE,
-        icon = Material.FENCE,
+        icon = Material.BIRCH_FENCE,
         settings = Config.class,
         can_be_unloaded = false,
         internal = true
 )
-public class BorderModule extends QSGModule
-{
+public class BorderModule extends QSGModule {
     private MapShape mapShape = null;
     private WorldBorder border = null;
 
@@ -84,9 +84,8 @@ public class BorderModule extends QSGModule
     private final List<String> sidebar = new ArrayList<>();
 
     @Override
-    public void onEnable()
-    {
-        worldBorderDependency = ZLib.loadComponent(WorldBorderDependency.class);
+    public void onEnable() {
+        worldBorderDependency = QuartzLib.loadComponent(WorldBorderDependency.class);
 
         mapShape = Config.SHAPE.get();
 
@@ -104,36 +103,36 @@ public class BorderModule extends QSGModule
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(BorderCommand.class);
     }
 
     @Override
-    public void prepareInjectionIntoSidebar()
-    {
-        if (QSG.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME)) return;
+    public void prepareInjectionIntoSidebar() {
+        if (QSG.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME)) {
+            return;
+        }
 
         sidebar.clear();
 
-        if (Config.SIDEBAR.DISPLAYED.get())
-        {
+        if (Config.SIDEBAR.DISPLAYED.get()) {
             /// Title of the border section in the sidebar
             sidebar.add(I.t("{blue}{bold}Border"));
 
             int diameter = (int) Math.ceil(border.getDiameter());
 
-            if (Config.SIDEBAR.DISPLAY_DIAMETER.get() || border.getShape() == MapShape.CIRCULAR)
-            {
+            if (Config.SIDEBAR.DISPLAY_DIAMETER.get() || border.getShape() == MapShape.CIRCULAR) {
                 if (border.getShape() == MapShape.SQUARED)
-                    /// Border diameter for a squared map in the sidebar
+                /// Border diameter for a squared map in the sidebar
+                {
                     sidebar.add(I.tn("{white}{0} block wide", "{white}{0} blocks wide", diameter, diameter));
-                else
-                    /// Border diameter for a circular map in the sidebar
-                    sidebar.add(I.tn("{gray}Diameter: {white}{0} block", "{gray}Diameter: {white}{0} blocks", diameter, diameter));
-            }
-            else
-            {
+                } else
+                /// Border diameter for a circular map in the sidebar
+                {
+                    sidebar.add(I.tn("{gray}Diameter: {white}{0} block", "{gray}Diameter: {white}{0} blocks", diameter,
+                            diameter));
+                }
+            } else {
                 Location center = border.getCenter();
                 int radius = (int) Math.ceil(diameter / 2d);
 
@@ -143,26 +142,27 @@ public class BorderModule extends QSGModule
                 int maxZ = center.getBlockZ() + radius;
 
                 // Same min & max, we can display both at once
-                if (minX == minZ && maxX == maxZ)
-                {
+                if (minX == minZ && maxX == maxZ) {
                     /// Min & max coordinates in the sidebar, to locate the border. Ex: "-500 +500". {0} = minimal coord, {1} = maximal coord.
-                    sidebar.add(I.t("{white}{0} {1}", QSGUtils.integerToStringWithSign(minX), QSGUtils.integerToStringWithSign(maxZ)));
-                }
-                else
-                {
+                    sidebar.add(I.t("{white}{0} {1}", QSGUtils.integerToStringWithSign(minX),
+                            QSGUtils.integerToStringWithSign(maxZ)));
+                } else {
                     /// Min & max X coordinates in the sidebar, to locate the border. Ex: "X: -500 +500". {0} = minimal coord, {1} = maximal coord.
-                    sidebar.add(I.t("{gray}X: {white}{0} {1}", QSGUtils.integerToStringWithSign(minX), QSGUtils.integerToStringWithSign(maxX)));
+                    sidebar.add(I.t("{gray}X: {white}{0} {1}", QSGUtils.integerToStringWithSign(minX),
+                            QSGUtils.integerToStringWithSign(maxX)));
                     /// Min & max Z coordinates in the sidebar, to locate the border. Ex: "Z: -500 +500". {0} = minimal coord, {1} = maximal coord.
-                    sidebar.add(I.t("{gray}Z: {white}{0} {1}", QSGUtils.integerToStringWithSign(minZ), QSGUtils.integerToStringWithSign(maxZ)));
+                    sidebar.add(I.t("{gray}Z: {white}{0} {1}", QSGUtils.integerToStringWithSign(minZ),
+                            QSGUtils.integerToStringWithSign(maxZ)));
                 }
             }
         }
     }
 
     @Override
-    public void injectIntoSidebar(Player player, SidebarInjector injector)
-    {
-        if (QSG.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME) || sidebar.isEmpty()) return;
+    public void injectIntoSidebar(Player player, SidebarInjector injector) {
+        if (QSG.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME) || sidebar.isEmpty()) {
+            return;
+        }
         injector.injectLines(SidebarInjector.SidebarPriority.MIDDLE_BOTTOM, true, sidebar);
     }
 
@@ -171,8 +171,7 @@ public class BorderModule extends QSGModule
      *
      * @param shape The shape.
      */
-    public void setMapShape(MapShape shape)
-    {
+    public void setMapShape(MapShape shape) {
         this.mapShape = shape;
         border.setShape(shape);
     }
@@ -182,21 +181,18 @@ public class BorderModule extends QSGModule
      *
      * @return The shape.
      */
-    public MapShape getMapShape()
-    {
+    public MapShape getMapShape() {
         return mapShape;
     }
 
     /**
      * @return The WorldBorder proxy to set the border in-game.
      */
-    public WorldBorder getBorderProxy()
-    {
+    public WorldBorder getBorderProxy() {
         return border;
     }
 
-    public WorldBorderDependency getWorldBorderDependency()
-    {
+    public WorldBorderDependency getWorldBorderDependency() {
         return worldBorderDependency;
     }
 
@@ -206,13 +202,12 @@ public class BorderModule extends QSGModule
      *
      * @param location The location to check.
      * @param diameter The diameter of the checked border.
-     *
      * @return {@code true} if inside.
      */
-    public boolean isInsideBorder(Location location, double diameter)
-    {
+    public boolean isInsideBorder(Location location, double diameter) {
         // The nether/end are not limited.
-        return !location.getWorld().getEnvironment().equals(World.Environment.NORMAL) || mapShape.getShape().isInsideBorder(location, diameter, location.getWorld().getSpawnLocation());
+        return !location.getWorld().getEnvironment().equals(World.Environment.NORMAL) ||
+                mapShape.getShape().isInsideBorder(location, diameter, location.getWorld().getSpawnLocation());
     }
 
     /**
@@ -222,8 +217,7 @@ public class BorderModule extends QSGModule
      * @param location The location to check.
      * @return {@code true} if inside.
      */
-    public boolean isInsideBorder(Location location)
-    {
+    public boolean isInsideBorder(Location location) {
         return this.isInsideBorder(location, getCurrentBorderDiameter());
     }
 
@@ -233,11 +227,9 @@ public class BorderModule extends QSGModule
      *
      * @param location The location to check.
      * @param diameter The diameter of the checked border.
-     *
      * @return The distance, or 0 if the player is either inside the border or not in the world.
      */
-    public double getDistanceToBorder(Location location, double diameter)
-    {
+    public double getDistanceToBorder(Location location, double diameter) {
         return mapShape.getShape().getDistanceToBorder(location, diameter, location.getWorld().getSpawnLocation());
     }
 
@@ -249,8 +241,7 @@ public class BorderModule extends QSGModule
      * @param diameter The diameter of the checked border.
      * @return A list of players out of the given diameter.
      */
-    public Set<Player> getPlayersOutside(int diameter)
-    {
+    public Set<Player> getPlayersOutside(int diameter) {
         return QSG.module(GameModule.class)
                 .getAliveConnectedPlayers().stream()
                 .filter(player -> !isInsideBorder(player.getLocation(), diameter))
@@ -260,22 +251,20 @@ public class BorderModule extends QSGModule
     /**
      * @return the current border diameter.
      */
-    public int getCurrentBorderDiameter()
-    {
+    public int getCurrentBorderDiameter() {
         return (int) border.getDiameter();
     }
 
     /**
      * Changes the current border diameter.
      * This also reconfigures the used world border.
-     *
+     * <p>
      * If WorldBorder is installed, all players out of this new border will be teleported inside the new one.
      * Else, nothing will happens.
      *
      * @param diameter the new diameter.
      */
-    public void setCurrentBorderDiameter(int diameter)
-    {
+    public void setCurrentBorderDiameter(int diameter) {
         border.setDiameter(diameter);
         Bukkit.getPluginManager().callEvent(new BorderChangedEvent(diameter));
     }
@@ -283,34 +272,25 @@ public class BorderModule extends QSGModule
     /**
      * Sends a list of the players outside the given border to the specified sender.
      *
-     * @param to The player/console to send the check.
+     * @param to       The player/console to send the check.
      * @param diameter The diameter of the border to be checked.
      */
-    public void sendCheckMessage(final CommandSender to, final int diameter)
-    {
+    public void sendCheckMessage(final CommandSender to, final int diameter) {
         final BorderModule borderModule = QSG.module(BorderModule.class);
         final Set<Player> playersOutside = borderModule.getPlayersOutside(diameter);
 
-        if (playersOutside.size() == 0)
-        {
+        if (playersOutside.size() == 0) {
             to.sendMessage(I.t("{cs}All players are inside the given border."));
-        }
-        else
-        {
-            to.sendMessage(I.t("{ci}There are {0} players outside the given border.", String.valueOf(playersOutside.size())));
-            for (Player player : borderModule.getPlayersOutside(diameter))
-            {
+        } else {
+            to.sendMessage(
+                    I.t("{ci}There are {0} players outside the given border.", String.valueOf(playersOutside.size())));
+            for (Player player : borderModule.getPlayersOutside(diameter)) {
                 double distance = borderModule.getDistanceToBorder(player.getLocation(), diameter);
-                if (distance > 150)
-                {
+                if (distance > 150) {
                     to.sendMessage(I.t("{lightpurple} - {red}{0}{ci} (far away from the border)", player.getName()));
-                }
-                else if (distance > 25)
-                {
+                } else if (distance > 25) {
                     to.sendMessage(I.t("{lightpurple} - {yellow}{0}{ci} (close to the border)", player.getName()));
-                }
-                else
-                {
+                } else {
                     to.sendMessage(I.t("{lightpurple} - {green}{0}{ci} (very close to the border)", player.getName()));
                 }
             }
@@ -320,21 +300,25 @@ public class BorderModule extends QSGModule
     /**
      * Schedules the automatic border reduction, if enabled in the configuration.
      */
-    private void scheduleBorderReduction()
-    {
-        if (Config.SHRINKING.ENABLED.get())
-        {
+    private void scheduleBorderReduction() {
+        if (Config.SHRINKING.ENABLED.get()) {
             RunTask.later(() -> {
-                if (QSG.module(GameModule.class).getPhase() != GamePhase.IN_GAME) return;
+                if (QSG.module(GameModule.class).getPhase() != GamePhase.IN_GAME) {
+                    return;
+                }
 
-                final int secondsPerBlock = (int) Math.rint(Config.SHRINKING.SHRINKS_DURING.get().getSeconds() / (border.getDiameter() - Config.SHRINKING.DIAMETER_AFTER_SHRINK.get())) * 2;
+                final int secondsPerBlock = (int) Math.rint(Config.SHRINKING.SHRINKS_DURING.get().getSeconds() /
+                        (border.getDiameter() - Config.SHRINKING.DIAMETER_AFTER_SHRINK.get())) * 2;
 
                 border.setDiameter(Config.SHRINKING.DIAMETER_AFTER_SHRINK.get(), Config.SHRINKING.SHRINKS_DURING.get());
 
                 Titles.broadcastTitle(5, 30, 8, I.t("{red}Warning!"), I.t("{white}The border begins to shrink..."));
 
-                Bukkit.broadcastMessage(QSGUtils.prefixedMessage(I.t("Border"), I.t("{red}{bold}The border begins to shrink...")));
-                Bukkit.broadcastMessage(QSGUtils.prefixedMessage(I.t("Border"), I.t("{gray}It will shrink by one block every {0} second(s) until {1} blocks in diameter.", secondsPerBlock, Config.SHRINKING.DIAMETER_AFTER_SHRINK.get())));
+                Bukkit.broadcastMessage(
+                        QSGUtils.prefixedMessage(I.t("Border"), I.t("{red}{bold}The border begins to shrink...")));
+                Bukkit.broadcastMessage(QSGUtils.prefixedMessage(I.t("Border"),
+                        I.t("{gray}It will shrink by one block every {0} second(s) until {1} blocks in diameter.",
+                                secondsPerBlock, Config.SHRINKING.DIAMETER_AFTER_SHRINK.get())));
             }, Config.SHRINKING.STARTS_AFTER.get().getSeconds() * 20L);
 
             scheduleBorderReductionWarning(new TimeDelta(1, 0, 0));
@@ -343,24 +327,28 @@ public class BorderModule extends QSGModule
         }
     }
 
-    private void scheduleBorderReductionWarning(final TimeDelta warnBefore)
-    {
-        if (Config.SHRINKING.STARTS_AFTER.get().greaterThan(warnBefore.add(new TimeDelta(0, 5, 0))))
-        {
+    private void scheduleBorderReductionWarning(final TimeDelta warnBefore) {
+        if (Config.SHRINKING.STARTS_AFTER.get().greaterThan(warnBefore.add(new TimeDelta(0, 5, 0)))) {
             RunTask.later(() -> {
-                if (QSG.module(GameModule.class).getPhase() != GamePhase.IN_GAME) return;
+                if (QSG.module(GameModule.class).getPhase() != GamePhase.IN_GAME) {
+                    return;
+                }
 
                 Bukkit.broadcastMessage("");
-                Bukkit.broadcastMessage(QSGUtils.prefixedMessage(I.t("Border"), I.tn("{red}The border will start to shrink in {0} minute...", "{red}The border will start to shrink in {0} minutes...", (int) (warnBefore.getSeconds() / 60))));
+                Bukkit.broadcastMessage(QSGUtils.prefixedMessage(I.t("Border"),
+                        I.tn("{red}The border will start to shrink in {0} minute...",
+                                "{red}The border will start to shrink in {0} minutes...",
+                                (int) (warnBefore.getSeconds() / 60))));
                 Bukkit.broadcastMessage("");
             }, Config.SHRINKING.STARTS_AFTER.get().subtract(warnBefore).getSeconds() * 20L);
         }
     }
 
     @EventHandler
-    public void onGameStarts(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() != GamePhase.IN_GAME) return;
+    public void onGameStarts(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() != GamePhase.IN_GAME) {
+            return;
+        }
         scheduleBorderReduction();
     }
 }

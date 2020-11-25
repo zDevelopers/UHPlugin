@@ -54,7 +54,7 @@ import java.util.concurrent.atomic.AtomicLong;
         name = "Daylight Cycle",
         description = "Configures the daylight cycle (disabled, slowed down, normal, accelerated) and the initial time.",
         category = ModuleCategory.GAMEPLAY,
-        icon = Material.WATCH,
+        icon = Material.CLOCK,
         settings = Config.class
 )
 public class DaylightCycleModule extends QSGModule

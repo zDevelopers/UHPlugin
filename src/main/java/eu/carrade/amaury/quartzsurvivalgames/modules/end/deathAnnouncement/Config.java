@@ -31,28 +31,24 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.end.deathAnnouncement;
+
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
 import eu.carrade.amaury.quartzsurvivalgames.utils.QSGSound;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-
 import java.io.File;
 
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
-
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
-
+public class Config extends ConfigurationInstance {
     public static final ConfigurationItem<Boolean> NOTIFY_IF_TEAM_HAS_FALLEN = item("notify-if-team-has-fallen", true);
     public static final ConfigurationItem<String> DEATH_MESSAGES_FORMAT = item("death-messages-format", "§6");
     public static final ConfigurationItem<String> TEAM_DEATH_MESSAGES_FORMAT = item("team-death-messages-format", "§6");
-
     public static final ConfigurationItem<Boolean> LIGHTNING_STRIKE = item("lightning-strike", false);
     public static final ConfigurationItem<Boolean> PLAY_SOUND = item("play-sound", true);
     public static final ConfigurationItem<QSGSound> SOUND = item("sound", new QSGSound("ENTITY_WITHER_SPAWN"));
+    public Config(File file) {
+        super(file);
+    }
 }

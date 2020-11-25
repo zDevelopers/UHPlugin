@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
@@ -39,21 +40,17 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
-@CommandInfo (name = "kill", usageParameters = "<player>")
-public class KillCommand extends Command
-{
+@CommandInfo(name = "kill", usageParameters = "<player>")
+public class KillCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
-        if (args.length < 1)
-        {
+    protected void run() throws CommandException {
+        if (args.length < 1) {
             throwInvalidArgument(I.t("You must specify the player to kill."));
         }
 
@@ -61,40 +58,31 @@ public class KillCommand extends Command
                 .filter(pl -> pl.getName().equalsIgnoreCase(args[0]))
                 .findAny().orElse(null);
 
-        if (player == null)
-        {
+        if (player == null) {
             error(I.t("{ce}This player was never seen on this server."));
             return;
         }
 
-        if (QSG.module(GameModule.class).isAlive(player))
-        {
-            if (player.isOnline())
-            {
+        if (QSG.module(GameModule.class).isAlive(player)) {
+            if (player.isOnline()) {
                 // If the player is online, we kill it.
                 // It will be cached by normal alive players's death listeners,
                 // plus the inventory will drop, effects will be complete, etc.
                 player.getPlayer().setHealth(0d);
-            }
-            else
-            {
+            } else {
                 // We only kill the player this way if he is offline.
                 QSG.module(GameModule.class).kill(player);
             }
 
             success(I.t("{cs}The player {0} is now marked as dead.", player.getName()));
-        }
-        else
-        {
+        } else {
             error(I.t("{ce}{0} is not an alive player.", player.getName()));
         }
     }
 
     @Override
-    protected List<String> complete()
-    {
-        if (args.length == 1)
-        {
+    protected List<String> complete() {
+        if (args.length == 1) {
             return getMatchingSubset(
                     QSG.module(GameModule.class)
                             .getAlivePlayers().stream()
@@ -102,7 +90,8 @@ public class KillCommand extends Command
                             .collect(Collectors.toList()),
                     args[0]
             );
+        } else {
+            return null;
         }
-        else return null;
     }
 }

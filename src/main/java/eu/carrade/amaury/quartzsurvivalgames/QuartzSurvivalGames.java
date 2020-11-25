@@ -48,8 +48,8 @@ import fr.zcraft.quartzlib.components.gui.Gui;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.components.i18n.I18n;
 import fr.zcraft.quartzlib.components.scoreboard.SidebarScoreboard;
-import fr.zcraft.quartzlib.core.ZLib;
-import fr.zcraft.quartzlib.core.ZPlugin;
+import fr.zcraft.quartzlib.core.QuartzLib;
+import fr.zcraft.quartzlib.core.QuartzPlugin;
 import fr.zcraft.quartzlib.tools.PluginLogger;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import org.bukkit.Bukkit;
@@ -66,7 +66,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 
-public class QuartzSurvivalGames extends ZPlugin implements Listener
+public class QuartzSurvivalGames extends QuartzPlugin implements Listener
 {
     private static QuartzSurvivalGames instance;
 
@@ -104,7 +104,7 @@ public class QuartzSurvivalGames extends ZPlugin implements Listener
 
         /* *** Core events *** */
 
-        ZLib.registerEvents(this);
+        QuartzLib.registerEvents(this);
 
 
         /* *** Core modules *** */

@@ -41,33 +41,35 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 /**
  * Fired when a player playing an UHC match is dead.
- *
+ * <p>
  * When this event is called, the player is not yet removed from the alive
  * players (i.e. {@code UR.module(GameModule.class).isAlive(ev.getPlayer())}
  * will return {@code true}).
- *
+ * <p>
  * If the event is cancelled, the player will die but will not be removed
  * from the alive players.
  */
-public class AlivePlayerDeathEvent extends Event implements Cancellable
-{
+public class AlivePlayerDeathEvent extends Event implements Cancellable {
+    private static final HandlerList handlers = new HandlerList();
     private final OfflinePlayer player;
     private final PlayerDeathEvent playerDeathEvent;
-
     private boolean cancelled = false;
 
-    public AlivePlayerDeathEvent(final OfflinePlayer player, final PlayerDeathEvent playerDeathEvent)
-    {
+    public AlivePlayerDeathEvent(final OfflinePlayer player, final PlayerDeathEvent playerDeathEvent) {
         this.player = player;
         this.playerDeathEvent = playerDeathEvent;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * Returns the dead player.
+     *
      * @return The player.
      */
-    public OfflinePlayer getPlayer()
-    {
+    public OfflinePlayer getPlayer() {
         return player;
     }
 
@@ -77,35 +79,22 @@ public class AlivePlayerDeathEvent extends Event implements Cancellable
      *
      * @return The {@link PlayerDeathEvent}.
      */
-    public PlayerDeathEvent getPlayerDeathEvent()
-    {
+    public PlayerDeathEvent getPlayerDeathEvent() {
         return playerDeathEvent;
     }
 
-
     @Override
-    public boolean isCancelled()
-    {
+    public boolean isCancelled() {
         return cancelled;
     }
 
     @Override
-    public void setCancelled(boolean cancelled)
-    {
+    public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }
 
-
-    private static final HandlerList handlers = new HandlerList();
-
     @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

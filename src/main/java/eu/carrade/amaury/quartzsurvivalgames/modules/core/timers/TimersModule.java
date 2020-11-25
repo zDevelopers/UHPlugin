@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
         name = "Timers",
         description = "The timekeeper of the whole UHCReloaded plugin & companions.",
         category = ModuleCategory.CORE,
-        icon = Material.WATCH,
+        icon = Material.CLOCK,
         internal = true,
         can_be_unloaded = false
 )

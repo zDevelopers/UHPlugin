@@ -54,7 +54,7 @@ import java.util.*;
         name = "Teleportation Commands",
         description = "Provides commands to teleport to spawn, death location, or groups of players.",
         category = ModuleCategory.UTILITIES,
-        icon = Material.COMMAND_MINECART
+        icon = Material.COMMAND_BLOCK_MINECART
 )
 public class TeleportationModule extends QSGModule
 {

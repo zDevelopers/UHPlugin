@@ -112,42 +112,31 @@ public abstract class WallGenerator
 
         switch (blockType)
         {
+            // TODO re-add stained glass, stained glass pane, logs, leaves, beds, signs, fences
+            //  Low priority as this is mostly unused anyway, with vanilla world border.
             case GLASS: // The glass isn't a transparent block for the `isTransparent` method.
-            case STAINED_GLASS:
-            case THIN_GLASS:
-            case STAINED_GLASS_PANE:
-            case LEAVES:
-            case LEAVES_2:
-            case LOG:
-            case LOG_2:
             case CHEST: // Avoid a cube of the solid block where there where a chest.
             case TRAPPED_CHEST:
             case ENDER_CHEST:
             case WATER:
-            case STATIONARY_WATER:
-            case BED_BLOCK:
-            case PISTON_STICKY_BASE: // Same idea (in jungle temples).
-            case PISTON_BASE:
+            case STICKY_PISTON: // Same idea (in jungle temples).
+            case PISTON:
+            case PISTON_HEAD:
             case BOOKSHELF: // Same idea (in villages & fortresses).
-            case MOB_SPAWNER: // Same idea (in dungeons).
-            case SIGN_POST:
-            case WALL_SIGN:
+            case SPAWNER: // Same idea (in dungeons).
             case ICE: // Same idea (in cold biomes).
             case PACKED_ICE:
             case CACTUS: // Same idea (in deserts)
-            case FENCE:
-            case FENCE_GATE:
-            case IRON_FENCE:
-            case NETHER_FENCE:
             case PUMPKIN:
-            case MELON_BLOCK: // Same idea (in jungles)
+            case MELON: // Same idea (in jungles)
             case GLOWSTONE: // Same idea (in the Nether - why not?)
             case JACK_O_LANTERN:
-            case HUGE_MUSHROOM_1: // Same idea (in dark forests).
-            case HUGE_MUSHROOM_2:
-            case CAKE_BLOCK: // It may be a lie, but hey, why not.
+            case BROWN_MUSHROOM_BLOCK: // Same idea (in dark forests).
+            case RED_MUSHROOM_BLOCK:
+            case MUSHROOM_STEM:
+            case CAKE: // It may be a lie, but hey, why not.
             case BEACON:
-            case COBBLE_WALL:
+            case COBBLESTONE_WALL:
             case ANVIL:
                 return true;
             default:

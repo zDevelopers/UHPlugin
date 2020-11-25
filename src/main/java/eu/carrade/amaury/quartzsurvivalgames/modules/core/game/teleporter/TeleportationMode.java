@@ -31,10 +31,10 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game.teleporter;
 
-public enum TeleportationMode
-{
+public enum TeleportationMode {
     /**
      * Teams are teleported together.
      */

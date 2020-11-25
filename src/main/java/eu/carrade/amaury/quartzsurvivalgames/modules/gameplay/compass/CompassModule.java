@@ -44,10 +44,10 @@ import eu.carrade.amaury.quartzsurvivalgames.utils.QSGUtils;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.components.i18n.I18n;
 import fr.zcraft.quartzlib.components.rawtext.RawText;
-import fr.zcraft.quartzlib.core.ZLib;
+import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.MessageSender;
-import fr.zcraft.zteams.ZTeams;
+import fr.zcraft.quartzteams.QuartzTeams;
 import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -81,7 +81,7 @@ public class CompassModule extends QSGModule
     @Override
     public void onEnable()
     {
-        recipes = ZLib.loadComponent(CompassRecipes.class);
+        recipes = QuartzLib.loadComponent(CompassRecipes.class);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class CompassModule extends QSGModule
     {
         if (recipes != null)
         {
-            ZLib.unregisterEvents(recipes);
+            QuartzLib.unregisterEvents(recipes);
             recipes = null;
         }
     }
@@ -190,7 +190,7 @@ public class CompassModule extends QSGModule
                 {
                     distance = calc;
 
-                    if (!otherPlayer.getUniqueId().equals(compassUser.getUniqueId()) && (!Config.NEVER_TARGET_TEAMMATES.get() || !Objects.equals(ZTeams.get().getTeamForPlayer(compassUser), ZTeams.get().getTeamForPlayer(otherPlayer))))
+                    if (!otherPlayer.getUniqueId().equals(compassUser.getUniqueId()) && (!Config.NEVER_TARGET_TEAMMATES.get() || !Objects.equals(QuartzTeams.get().getTeamForPlayer(compassUser), QuartzTeams.get().getTeamForPlayer(otherPlayer))))
                     {
                         nearest = otherPlayer.getPlayer();
                     }

@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.core;
 
 import com.google.common.reflect.ClassPath;
@@ -45,10 +46,22 @@ import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import eu.carrade.amaury.quartzsurvivalgames.utils.ModulesUtils;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.Commands;
-import fr.zcraft.quartzlib.core.ZLib;
-import fr.zcraft.quartzlib.core.ZLibComponent;
+import fr.zcraft.quartzlib.core.QuartzLib;
+import fr.zcraft.quartzlib.core.QuartzComponent;
 import fr.zcraft.quartzlib.tools.PluginLogger;
 import fr.zcraft.quartzlib.tools.reflection.Reflection;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
@@ -56,14 +69,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.stream.Collectors;
-
-public class ModulesManager extends ZLibComponent implements Listener
-{
+public class ModulesManager extends QuartzComponent implements Listener {
     /**
      * The package were all built-in modules are stored.
      */
@@ -87,52 +93,64 @@ public class ModulesManager extends ZLibComponent implements Listener
     /**
      * All the registered modules.
      */
-    private Map<Class<? extends QSGModule>, ModuleWrapper> modules = new HashMap<>();
+    private final Map<Class<? extends QSGModule>, ModuleWrapper> modules = new HashMap<>();
 
     /**
      * These loads times were loaded using {@link #loadModules(ModuleLoadTime)} and are stored to not
      * be loaded again (e.g. in case of cancelled start, modules with {@link ModuleLoadTime#ON_GAME_STARTING}
      * will not be loaded twice).
      */
-    private Set<ModuleLoadTime> loadedPriorities = new HashSet<>();
+    private final Set<ModuleLoadTime> loadedPriorities = new HashSet<>();
 
+    /**
+     * Gets a module's instance. This may return null if the module is not currently
+     * enabled.
+     *
+     * @param moduleClass The module's class.
+     * @param <M>         The module's type.
+     * @return The module's instance.
+     */
+    public static <M extends QSGModule> M getModule(final Class<M> moduleClass) {
+        final ModuleWrapper module = QSG.get().getModulesManager().modules.get(moduleClass);
+
+        if (module == null || !module.isLoaded()) {
+            return null;
+        } else {
+            return (M) module.get();
+        }
+    }
 
     /**
      * Lookup and loads all built-in modules. They will be enabled by default, except if in
      * the {@link #DISABLED_BY_DEFAULT disabled-by-default list}.
      */
-    public void registerBuiltInModules()
-    {
+    public void registerBuiltInModules() {
         final long t = System.currentTimeMillis();
         int i = 0;
 
-        try
-        {
-            for (final ClassPath.ClassInfo classInfo : ClassPath.from(getClass().getClassLoader()).getTopLevelClassesRecursive(MODULES_PACKAGE))
-            {
+        try {
+            for (final ClassPath.ClassInfo classInfo : ClassPath.from(getClass().getClassLoader())
+                    .getTopLevelClassesRecursive(MODULES_PACKAGE)) {
                 final Class<?> potentialModuleClass = classInfo.load();
 
-                if (QSGModule.class.isAssignableFrom(potentialModuleClass))
-                {
-                    registerModule((Class<? extends QSGModule>) potentialModuleClass, !DISABLED_BY_DEFAULT.contains(potentialModuleClass));
+                if (QSGModule.class.isAssignableFrom(potentialModuleClass)) {
+                    registerModule((Class<? extends QSGModule>) potentialModuleClass,
+                            !DISABLED_BY_DEFAULT.contains(potentialModuleClass));
                     i++;
                 }
             }
         }
-        catch (final IOException e)
-        {
+        catch (final IOException e) {
             PluginLogger.error("Unable to load built-in modules.", e);
         }
 
         PluginLogger.info("Registered {0} built-in modules in {1}ms", i, System.currentTimeMillis() - t);
     }
 
-
     /**
      * @return A view on all registered modules.
      */
-    public Collection<ModuleWrapper> getModules()
-    {
+    public Collection<ModuleWrapper> getModules() {
         return modules.values();
     }
 
@@ -142,30 +160,27 @@ public class ModulesManager extends ZLibComponent implements Listener
      * @param modules the module's class, that must accept a zero-arguments constructor.
      */
     @SafeVarargs
-    public final void registerModules(final Class<? extends QSGModule>... modules)
-    {
+    public final void registerModules(final Class<? extends QSGModule>... modules) {
         Arrays.stream(modules).forEach(module -> registerModule(module, true));
     }
 
     /**
      * Registers an UHCReloaded module. It is not loaded by this method.
      *
-     * @param module the module's class, that must accept a zero-arguments constructor.
+     * @param module           the module's class, that must accept a zero-arguments constructor.
      * @param initiallyEnabled {@code true} if this module, according to the configuration file, should be enabled at startup.
      */
-    public void registerModule(final Class<? extends QSGModule> module, final boolean initiallyEnabled)
-    {
-        if (!modules.containsKey(module))
-        {
+    public void registerModule(final Class<? extends QSGModule> module, final boolean initiallyEnabled) {
+        if (!modules.containsKey(module)) {
             this.modules.put(module, new ModuleWrapper(module, initiallyEnabled));
         }
     }
 
     /**
      * Registers an UHCReloaded module. It is not loaded by this method.
-     *
+     * <p>
      * It tries to load the following classes (in this order, taking the first existing):
-     *
+     * <p>
      * - eu.carrade.amaury.UHCReloaded.modules.[name]
      * - eu.carrade.amaury.UHCReloaded.modules.[name]Module
      * - eu.carrade.amaury.UHCReloaded.modules.[capitalizedName]
@@ -179,16 +194,15 @@ public class ModulesManager extends ZLibComponent implements Listener
      *
      * @param module the module's class name; the class must accept a zero-arguments constructor.
      */
-    public void registerModule(final String module)
-    {
+    public void registerModule(final String module) {
         registerModule(module, true);
     }
 
     /**
      * Registers an UHCReloaded module. It is not loaded by this method.
-     *
+     * <p>
      * It tries to load the following classes (in this order, taking the first existing):
-     *
+     * <p>
      * - eu.carrade.amaury.UHCReloaded.modules.[name]
      * - eu.carrade.amaury.UHCReloaded.modules.[name]Module
      * - eu.carrade.amaury.UHCReloaded.modules.[capitalizedName]
@@ -200,12 +214,11 @@ public class ModulesManager extends ZLibComponent implements Listener
      * - eu.carrade.amaury.UHCReloaded.modules.[firstLowercasedName].Module
      * - [name]
      *
-     * @param module the module's class name; the class must accept a zero-arguments constructor.
+     * @param module           the module's class name; the class must accept a zero-arguments constructor.
      * @param initiallyEnabled {@code true} if this module, according to the configuration file,
      *                         should be enabled at startup.
      */
-    public void registerModule(final String module, boolean initiallyEnabled)
-    {
+    public void registerModule(final String module, boolean initiallyEnabled) {
         final Class<? extends QSGModule> moduleClass = ModulesUtils.getClassFromName(
                 module.replace('-', '.'),
                 MODULES_PACKAGE,
@@ -213,26 +226,24 @@ public class ModulesManager extends ZLibComponent implements Listener
                 QSGModule.class
         );
 
-        if (moduleClass != null)
-        {
+        if (moduleClass != null) {
             registerModule(moduleClass, initiallyEnabled);
-        }
-        else
-        {
-            PluginLogger.error("Error registering a module: unable to find a module named {0} in the class path. Maybe you spelled it wrong?", module);
+        } else {
+            PluginLogger
+                    .error("Error registering a module: unable to find a module named {0} in the class path. Maybe you spelled it wrong?",
+                            module);
         }
     }
-
-
 
     /**
      * Loads registered modules. Internal modules will always be loaded first.
      *
      * @param loadTime Loads the modules registered to be loaded at that given time.
      */
-    public void loadModules(final ModuleLoadTime loadTime)
-    {
-        if (loadedPriorities.contains(loadTime)) return;
+    public void loadModules(final ModuleLoadTime loadTime) {
+        if (loadedPriorities.contains(loadTime)) {
+            return;
+        }
 
         // Loads all internal modules first
         modules.values().stream()
@@ -263,8 +274,7 @@ public class ModulesManager extends ZLibComponent implements Listener
      * @param loadTime The load time.
      * @return {@code true} if loaded.
      */
-    public boolean isLoaded(final ModuleLoadTime loadTime)
-    {
+    public boolean isLoaded(final ModuleLoadTime loadTime) {
         return loadedPriorities.contains(loadTime);
     }
 
@@ -274,34 +284,14 @@ public class ModulesManager extends ZLibComponent implements Listener
      * @param module The module's class.
      * @return {@code true} if loaded.
      */
-    public boolean isLoaded(final Class<? extends QSGModule> module)
-    {
+    public boolean isLoaded(final Class<? extends QSGModule> module) {
         final ModuleWrapper wrapper = modules.get(module);
 
         return wrapper != null && wrapper.isLoaded();
     }
 
-    /**
-     * Gets a module's instance. This may return null if the module is not currently
-     * enabled.
-     *
-     * @param moduleClass The module's class.
-     * @param <M> The module's type.
-     *
-     * @return The module's instance.
-     */
-    public static <M extends QSGModule> M getModule(final Class<M> moduleClass)
-    {
-        final ModuleWrapper module = QSG.get().getModulesManager().modules.get(moduleClass);
-
-        if (module == null || !module.isLoaded()) return null;
-        else return (M) module.get();
-    }
-
-
-    @SuppressWarnings ("unchecked")
-    private void collectCommandsFromModules()
-    {
+    @SuppressWarnings("unchecked")
+    private void collectCommandsFromModules() {
         Commands.register("uh", modules.values().stream()
                 .filter(ModuleWrapper::isLoaded)
                 .map(module -> module.get().getCommands())
@@ -322,37 +312,37 @@ public class ModulesManager extends ZLibComponent implements Listener
         final Map<org.bukkit.command.Command, Class<? extends Command>> pluginCommands = new HashMap<>();
         final Set<String> registered = new HashSet<>();
 
-        try
-        {
-            final Constructor<PluginCommand> pluginCommandConstructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+        try {
+            final Constructor<PluginCommand> pluginCommandConstructor =
+                    PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
             pluginCommandConstructor.setAccessible(true);
 
-            for (final Map.Entry<String, Class<? extends Command>> commandAlias : commandAliases.entrySet())
-            {
-                try
-                {
-                    pluginCommands.put(pluginCommandConstructor.newInstance(commandAlias.getKey(), ZLib.getPlugin()), commandAlias.getValue());
+            for (final Map.Entry<String, Class<? extends Command>> commandAlias : commandAliases.entrySet()) {
+                try {
+                    pluginCommands.put(pluginCommandConstructor.newInstance(commandAlias.getKey(), QuartzLib.getPlugin()),
+                            commandAlias.getValue());
                     registered.add(commandAlias.getKey());
                 }
-                catch (InstantiationException | InvocationTargetException | IllegalAccessException e)
-                {
-                    PluginLogger.error("Unable to register plugin command for {0}, is this version supported by UHCReloaded?", e, commandAlias);
+                catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
+                    PluginLogger
+                            .error("Unable to register plugin command for {0}, is this version supported by UHCReloaded?",
+                                    e, commandAlias);
                 }
             }
 
-            try
-            {
+            try {
                 final CommandMap commandMap = (CommandMap) Reflection.getFieldValue(Bukkit.getServer(), "commandMap");
 
                 String mutPrefix = QSG.get().getDescription().getPrefix();
-                if (mutPrefix == null) mutPrefix = QSG.get().getDescription().getName().toLowerCase();
+                if (mutPrefix == null) {
+                    mutPrefix = QSG.get().getDescription().getName().toLowerCase();
+                }
 
                 final String prefix = mutPrefix;
 
                 pluginCommands.forEach((pluginCommand, commandClass) ->
                 {
-                    if (commandMap.register(prefix, pluginCommand))
-                    {
+                    if (commandMap.register(prefix, pluginCommand)) {
                         PluginLogger.info(
                                 "Hot-registered new command /{0} for class “{1}”.",
                                 pluginCommand.getName(),
@@ -361,14 +351,15 @@ public class ModulesManager extends ZLibComponent implements Listener
                     }
                 });
             }
-            catch (NoSuchFieldException | IllegalAccessException e)
-            {
-                PluginLogger.error("Unable to retrieve Bukkit's command map, is this version supported by UHCReloaded?", e);
+            catch (NoSuchFieldException | IllegalAccessException e) {
+                PluginLogger
+                        .error("Unable to retrieve Bukkit's command map, is this version supported by UHCReloaded?", e);
             }
         }
-        catch (NoSuchMethodException | SecurityException e)
-        {
-            PluginLogger.error("Unable to register plugin commands: unable to retrieve PluginCommand's constructor. Is this version supported by UHCReloaded?", e);
+        catch (NoSuchMethodException | SecurityException e) {
+            PluginLogger
+                    .error("Unable to register plugin commands: unable to retrieve PluginCommand's constructor. Is this version supported by UHCReloaded?",
+                            e);
         }
 
         // Now that all commands are registered into Bukkit, we can register them into zLib.
@@ -376,29 +367,27 @@ public class ModulesManager extends ZLibComponent implements Listener
         commandAliases.forEach((name, klass) ->
         {
             // Bukkit registration failed?
-            if (!registered.contains(name)) return;
+            if (!registered.contains(name)) {
+                return;
+            }
 
             Commands.registerShortcut("uh", klass, name);
         });
     }
 
 
-
     @EventHandler
-    public void onModuleLoaded(final ModuleLoadedEvent ev)
-    {
+    public void onModuleLoaded(final ModuleLoadedEvent ev) {
         PluginLogger.info("Module {0} loaded.", ev.getModule().getName());
 
-        if (ev.isLoadedLate())
-        {
+        if (ev.isLoadedLate()) {
             // If loaded late, we may have to re-register the module's commands.
             collectCommandsFromModules();
         }
     }
 
     @EventHandler
-    public void onModuleUnloaded(final ModuleUnloadedEvent ev)
-    {
+    public void onModuleUnloaded(final ModuleUnloadedEvent ev) {
         PluginLogger.info("Module {0} unloaded.", ev.getModule().getName());
 
         // We remove commands if needed when a module is unloaded,

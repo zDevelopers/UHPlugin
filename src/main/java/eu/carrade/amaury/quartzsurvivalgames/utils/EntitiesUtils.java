@@ -31,13 +31,17 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.utils;
 
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Ghast;
+import org.bukkit.entity.Monster;
+import org.bukkit.entity.Slime;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
-public class EntitiesUtils
-{
+public class EntitiesUtils {
     /**
      * Checks if a spawn is natural.
      *
@@ -45,10 +49,8 @@ public class EntitiesUtils
      * @return {@code true} if it's a natural spawn (not from a player or an interaction
      * with another entity, as example).
      */
-    public static boolean isNaturalSpawn(final CreatureSpawnEvent.SpawnReason reason)
-    {
-        switch (reason)
-        {
+    public static boolean isNaturalSpawn(final CreatureSpawnEvent.SpawnReason reason) {
+        switch (reason) {
             case NATURAL:
             case NETHER_PORTAL:
             case LIGHTNING:
@@ -62,11 +64,11 @@ public class EntitiesUtils
 
     /**
      * Checks if the given mod is hostile.
+     *
      * @param entity The entity.
      * @return {@code true} if hostile.
      */
-    public static boolean isHostile(final EntityType entity)
-    {
+    public static boolean isHostile(final EntityType entity) {
         final Class<? extends Entity> entityClass = entity.getEntityClass();
 
         return Monster.class.isAssignableFrom(entityClass)

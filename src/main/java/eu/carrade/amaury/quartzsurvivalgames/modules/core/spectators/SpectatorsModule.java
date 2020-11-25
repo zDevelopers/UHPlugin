@@ -66,7 +66,7 @@ import java.util.*;
         description = "Handles non-playing players.",
         when = ModuleLoadTime.POST_WORLD,
         category = ModuleCategory.CORE,
-        icon = Material.EYE_OF_ENDER,
+        icon = Material.ENDER_EYE,
         settings = Config.class,
         can_be_unloaded = false
 )

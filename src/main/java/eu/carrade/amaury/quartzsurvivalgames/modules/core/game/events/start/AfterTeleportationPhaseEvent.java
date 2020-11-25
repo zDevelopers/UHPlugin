@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start;
 
 import org.bukkit.event.Event;
@@ -38,18 +39,15 @@ import org.bukkit.event.HandlerList;
 /**
  * Fired while starting the game, when the teleportation phase is finished.
  */
-public class AfterTeleportationPhaseEvent extends Event
-{
+public class AfterTeleportationPhaseEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    @Override
-    public HandlerList getHandlers()
-    {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList()
-    {
+    @Override
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

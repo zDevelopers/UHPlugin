@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.utils;
 
 import fr.zcraft.quartzlib.components.worker.Worker;
@@ -39,10 +40,6 @@ import fr.zcraft.quartzlib.tools.Callback;
 import fr.zcraft.quartzlib.tools.PluginLogger;
 import fr.zcraft.quartzlib.tools.mojang.UUIDFetcher;
 import fr.zcraft.quartzlib.tools.reflection.Reflection;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,12 +51,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 
-@WorkerAttributes (name = "Offline Players Loader")
-public class OfflinePlayersLoader extends Worker
-{
-    private static Map<UUID, OfflinePlayer> offlinePlayers = new HashMap<>();
+@WorkerAttributes(name = "Offline Players Loader")
+public class OfflinePlayersLoader extends Worker {
+    private static final Map<UUID, OfflinePlayer> offlinePlayers = new HashMap<>();
 
     /**
      * Returns a list of offline players, including the players who logged in the server and the explicitly
@@ -67,8 +66,7 @@ public class OfflinePlayersLoader extends Worker
      *
      * @return A list of OfflinePlayers.
      */
-    public static Set<OfflinePlayer> getOfflinePlayers()
-    {
+    public static Set<OfflinePlayer> getOfflinePlayers() {
         final Set<OfflinePlayer> players = new HashSet<>(offlinePlayers.values());
         Collections.addAll(players, Bukkit.getOfflinePlayers());
 
@@ -77,7 +75,7 @@ public class OfflinePlayersLoader extends Worker
 
     /**
      * Retrieves an OfflinePlayer by ID.
-     *
+     * <p>
      * Tries to load a logged-in player, then an explicitly loaded player, then
      * a server-wide OfflinePlayer.
      *
@@ -86,39 +84,39 @@ public class OfflinePlayersLoader extends Worker
      * be loaded with a name and other data if the player never came to the server and
      * was not explicitly loaded.
      */
-    public static OfflinePlayer getOfflinePlayer(UUID id)
-    {
+    public static OfflinePlayer getOfflinePlayer(UUID id) {
         OfflinePlayer player = Bukkit.getPlayer(id);
-        if (player == null) player = offlinePlayers.get(id);
-        if (player == null) player = Bukkit.getOfflinePlayer(id);
+        if (player == null) {
+            player = offlinePlayers.get(id);
+        }
+        if (player == null) {
+            player = Bukkit.getOfflinePlayer(id);
+        }
 
         return player;
     }
 
     /**
      * Retrieves an OfflinePlayer by name.
-     *
+     * <p>
      * Tries to load a logged-in player, then an explicitly loaded player, then
      * a server-wide OfflinePlayer.
      *
      * @param name The player's name.
      * @return An OfflinePlayer. {@code null} if no player was found with this name.
      */
-    public static OfflinePlayer getOfflinePlayer(String name)
-    {
+    public static OfflinePlayer getOfflinePlayer(String name) {
         OfflinePlayer player = Bukkit.getOnlinePlayers().stream()
                 .filter(onlinePlayer -> onlinePlayer.getName().equalsIgnoreCase(name))
                 .findFirst().orElse(null);
 
-        if (player == null)
-        {
+        if (player == null) {
             player = Arrays.stream(Bukkit.getOfflinePlayers())
                     .filter(offlinePlayer -> offlinePlayer.getName().equalsIgnoreCase(name))
                     .findFirst().orElse(null);
         }
 
-        if (player == null)
-        {
+        if (player == null) {
             player = offlinePlayers.values().stream()
                     .filter(offlinePlayer -> offlinePlayer.getName().equalsIgnoreCase(name))
                     .findFirst().orElse(null);
@@ -130,19 +128,18 @@ public class OfflinePlayersLoader extends Worker
     /**
      * Loads the given players list in the system, making it available in the players list and to be added in teams.
      *
-     * @param pseudonym A pseudonym.
+     * @param pseudonym       A pseudonym.
      * @param successCallback A callback called when the process ended. Called with {@code null} if no player was found.
      */
-    public static void loadPlayer(final String pseudonym, final Callback<OfflinePlayer> successCallback)
-    {
+    public static void loadPlayer(final String pseudonym, final Callback<OfflinePlayer> successCallback) {
         loadPlayers(Collections.singletonList(pseudonym), retrieved ->
         {
-            if (successCallback != null)
-            {
-                if (retrieved.size() == 1)
+            if (successCallback != null) {
+                if (retrieved.size() == 1) {
                     successCallback.call(retrieved.values().iterator().next());
-                else
+                } else {
                     successCallback.call(null);
+                }
             }
         });
     }
@@ -150,128 +147,125 @@ public class OfflinePlayersLoader extends Worker
     /**
      * Loads the given players list in the system, making it available in the players list and to be added in teams.
      *
-     * @param pseudonyms A list of pseudonyms.
+     * @param pseudonyms      A list of pseudonyms.
      * @param callbackSuccess A callback called when the process ended.
      */
-    public static void loadPlayers(final List<String> pseudonyms, final Callback<Map<UUID, OfflinePlayer>> callbackSuccess)
-    {
+    public static void loadPlayers(final List<String> pseudonyms,
+                                   final Callback<Map<UUID, OfflinePlayer>> callbackSuccess) {
         loadPlayers(
                 pseudonyms,
                 callbackSuccess,
-                errors -> PluginLogger.error("Unable to retrieve the following names: {0}", StringUtils.join(errors, ", "))
+                errors -> PluginLogger
+                        .error("Unable to retrieve the following names: {0}", StringUtils.join(errors, ", "))
         );
     }
 
     /**
      * Loads the given players list in the system, making it available in the players list
      * and to be added in teams.
-     *
+     * <p>
      * Only works in online mode. In offline mode, the already known players will be sent
      * to the success callback and the others to the errors one. Use {@link UUIDFetcher}
      * directly if needed.
      *
-     * @param pseudonyms A list of pseudonyms.
+     * @param pseudonyms      A list of pseudonyms.
      * @param callbackSuccess A callback called when the process ended.
      */
-    public static void loadPlayers(final List<String> pseudonyms, final Callback<Map<UUID, OfflinePlayer>> callbackSuccess, final Callback<List<String>> callbackErrors)
-    {
+    public static void loadPlayers(final List<String> pseudonyms,
+                                   final Callback<Map<UUID, OfflinePlayer>> callbackSuccess,
+                                   final Callback<List<String>> callbackErrors) {
         final List<String> toRetrieve = new ArrayList<>(pseudonyms);
         final Map<UUID, OfflinePlayer> alreadyKnown = new HashMap<>();
 
-        for (String pseudonym : pseudonyms)
-        {
+        for (String pseudonym : pseudonyms) {
             OfflinePlayer player = getOfflinePlayer(pseudonym);
-            if (player != null)
-            {
+            if (player != null) {
                 alreadyKnown.put(player.getUniqueId(), player);
                 toRetrieve.remove(pseudonym);
             }
         }
 
-        if (toRetrieve.size() == 0)
-        {
-            if (callbackSuccess != null) callbackSuccess.call(alreadyKnown);
+        if (toRetrieve.size() == 0) {
+            if (callbackSuccess != null) {
+                callbackSuccess.call(alreadyKnown);
+            }
             return;
         }
 
         // If the server is in offline mode, we don't even try to load the players, as they will
         // not be valid and be unusable.
-        if (!Bukkit.getOnlineMode())
-        {
-            if (callbackSuccess != null) callbackSuccess.call(alreadyKnown);
-            if (callbackErrors != null && toRetrieve.size() > 0) callbackErrors.call(toRetrieve);
+        if (!Bukkit.getOnlineMode()) {
+            if (callbackSuccess != null) {
+                callbackSuccess.call(alreadyKnown);
+            }
+            if (callbackErrors != null && toRetrieve.size() > 0) {
+                callbackErrors.call(toRetrieve);
+            }
 
             return;
         }
 
-        submitQuery(new WorkerRunnable<Map<String, UUID>>()
-        {
+        submitQuery(new WorkerRunnable<Map<String, UUID>>() {
             @Override
-            public Map<String, UUID> run() throws Throwable
-            {
+            public Map<String, UUID> run() throws Throwable {
                 final Map<String, UUID> uuids = UUIDFetcher.fetch(toRetrieve);
                 UUIDFetcher.fetchRemaining(toRetrieve, uuids);
 
                 return uuids;
             }
-        }, new WorkerCallback<Map<String, UUID>>()
-        {
+        }, new WorkerCallback<Map<String, UUID>>() {
             @Override
-            public void finished(final Map<String, UUID> result)
-            {
+            public void finished(final Map<String, UUID> result) {
                 final Map<UUID, OfflinePlayer> added = new HashMap<>(alreadyKnown);
                 final Class<?> gameProfileClass;
 
-                try
-                {
+                try {
                     gameProfileClass = Class.forName("com.mojang.authlib.GameProfile");
                 }
-                catch (ClassNotFoundException e)
-                {
+                catch (ClassNotFoundException e) {
                     PluginLogger.error("Cannot load GameProfile class required to load OfflinePlayers.", e);
                     return;
                 }
 
-                for (Map.Entry<String, UUID> playerProfile : result.entrySet())
-                {
+                for (Map.Entry<String, UUID> playerProfile : result.entrySet()) {
                     final String name = playerProfile.getKey();
                     final UUID uuid = playerProfile.getValue();
 
-                    if (uuid == null)
-                    {
+                    if (uuid == null) {
                         PluginLogger.error("Unable to load the player {0}, skipping.", name);
                         continue;
                     }
 
-                    try
-                    {
+                    try {
                         final Object profile = Reflection.instantiate(gameProfileClass, uuid, name);
-                        final OfflinePlayer player = (OfflinePlayer) Reflection.call(Bukkit.getServer(), "getOfflinePlayer", profile);
+                        final OfflinePlayer player =
+                                (OfflinePlayer) Reflection.call(Bukkit.getServer(), "getOfflinePlayer", profile);
 
                         offlinePlayers.put(uuid, player);
                         added.put(uuid, player);
                     }
-                    catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)
-                    {
+                    catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
                         PluginLogger.error("Unable to load the player {0}, skipping.", e, playerProfile.getKey());
                     }
                 }
 
-                if (callbackSuccess != null) callbackSuccess.call(added);
+                if (callbackSuccess != null) {
+                    callbackSuccess.call(added);
+                }
 
-                if (callbackErrors != null)
-                {
+                if (callbackErrors != null) {
                     final List<String> notRetrieved = toRetrieve.stream()
-                            .filter(pseudonym -> !result.keySet().contains(pseudonym))
+                            .filter(pseudonym -> !result.containsKey(pseudonym))
                             .collect(Collectors.toList());
 
-                    if (notRetrieved.size() > 0) callbackErrors.call(notRetrieved);
+                    if (notRetrieved.size() > 0) {
+                        callbackErrors.call(notRetrieved);
+                    }
                 }
             }
 
             @Override
-            public void errored(Throwable exception)
-            {
+            public void errored(Throwable exception) {
                 PluginLogger.error("Unable to load players", exception);
             }
         });

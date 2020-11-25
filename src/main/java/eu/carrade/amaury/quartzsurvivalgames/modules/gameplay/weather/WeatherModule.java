@@ -55,7 +55,7 @@ import java.util.Set;
         description = "Manages the in-game weather.",
         settings = Config.class,
         category = ModuleCategory.GAMEPLAY,
-        icon = Material.DOUBLE_PLANT  // Sunflower  -  FIXME 1.13
+        icon = Material.SUNFLOWER
 )
 public class WeatherModule extends QSGModule
 {

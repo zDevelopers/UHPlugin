@@ -37,7 +37,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleInfo;
 import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
-import fr.zcraft.quartzlib.core.ZLib;
+import fr.zcraft.quartzlib.core.QuartzLib;
 import org.bukkit.Material;
 
 
@@ -46,7 +46,7 @@ import org.bukkit.Material;
         description = "Replaces hearts with hardcore hearts.",
         depends = "ProtocolLib",
         category = ModuleCategory.COSMETICS,
-        icon = Material.RED_ROSE,  // FIXME 1.13
+        icon = Material.WITHER_ROSE,
         settings = Config.class
 )
 public class HardcoreHeartsModule extends QSGModule
@@ -63,7 +63,7 @@ public class HardcoreHeartsModule extends QSGModule
 
         if (Config.AUTO_RESPAWN.DO.get())
         {
-            ZLib.registerEvents(packetsListener);
+            QuartzLib.registerEvents(packetsListener);
         }
 
         log().info("Successfully hooked into ProtocolLib.");

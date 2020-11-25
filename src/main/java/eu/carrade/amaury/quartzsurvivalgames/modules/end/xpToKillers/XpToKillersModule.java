@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.end.xpToKillers;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -38,37 +39,35 @@ import eu.carrade.amaury.quartzsurvivalgames.core.ModuleInfo;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleLoadTime;
 import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.players.AlivePlayerDeathEvent;
-import fr.zcraft.zteams.ZTeams;
+import fr.zcraft.quartzteams.QuartzTeams;
+import java.util.Objects;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-import java.util.Objects;
-
-@ModuleInfo (
+@ModuleInfo(
         name = "XP to Killers",
         description = "Gives a configurable amount of XP levels on player kill " +
                 "(optionally only for different team).",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.END,
-        icon = Material.EXP_BOTTLE,
+        icon = Material.EXPERIENCE_BOTTLE,
         settings = Config.class
 )
-public class XpToKillersModule extends QSGModule
-{
+public class XpToKillersModule extends QSGModule {
     @EventHandler
-    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
-    {
-        if (!ev.getPlayer().isOnline()) return;
+    public void onPlayerDeath(final AlivePlayerDeathEvent ev) {
+        if (!ev.getPlayer().isOnline()) {
+            return;
+        }
 
         final Player killer = ev.getPlayer().getPlayer().getKiller();
-        if (killer != null)
-        {
-            boolean inSameTeam = Objects.equals(ZTeams.get().getTeamForPlayer(ev.getPlayer()), ZTeams.get().getTeamForPlayer(killer));
+        if (killer != null) {
+            boolean inSameTeam = Objects.equals(QuartzTeams.get().getTeamForPlayer(ev.getPlayer()),
+                    QuartzTeams.get().getTeamForPlayer(killer));
             boolean onlyOtherTeam = Config.ONLY_OTHER_TEAM.get();
 
-            if (!onlyOtherTeam || !inSameTeam)
-            {
+            if (!onlyOtherTeam || !inSameTeam) {
                 killer.giveExpLevels(Config.LEVELS.get());
             }
         }

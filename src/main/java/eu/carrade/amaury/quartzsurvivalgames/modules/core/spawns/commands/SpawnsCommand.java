@@ -43,8 +43,8 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.ZTeams;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.QuartzTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -375,7 +375,7 @@ public class SpawnsCommand extends Command
         double zCenter = world.getSpawnLocation().getZ();
 
         int spawnsCount = 0;
-        for (final ZTeam team : ZTeams.get().getTeams())
+        for (final QuartzTeam team : QuartzTeams.get().getTeams())
         {
             if (!team.isEmpty()) spawnsCount++;
         }
@@ -412,7 +412,7 @@ public class SpawnsCommand extends Command
                 int playersWithoutTeam = 0;
                 for (Player player : Bukkit.getServer().getOnlinePlayers())
                 {
-                    if (ZTeams.get().getTeamForPlayer(player) == null)
+                    if (QuartzTeams.get().getTeamForPlayer(player) == null)
                     {
                         playersWithoutTeam++;
                     }

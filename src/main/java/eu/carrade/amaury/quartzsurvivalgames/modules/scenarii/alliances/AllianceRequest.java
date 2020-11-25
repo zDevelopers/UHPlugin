@@ -42,9 +42,9 @@ import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.components.rawtext.RawText;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.RawMessage;
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.ZTeams;
-import fr.zcraft.zteams.colors.TeamColor;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.QuartzTeams;
+import fr.zcraft.quartzteams.colors.TeamColor;
 import me.cassayre.florian.hawk.report.ReportEvent;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
@@ -66,8 +66,8 @@ public class AllianceRequest
     private final UUID requestedID;
     private final Map<UUID, Boolean> approvalsIDs = new HashMap<>();
 
-    private final ZTeam requesterTeam;
-    private final ZTeam requestedTeam;
+    private final QuartzTeam requesterTeam;
+    private final QuartzTeam requestedTeam;
 
     private final RequestError requestError;
 
@@ -82,8 +82,8 @@ public class AllianceRequest
         this.requesterID = requesterID;
         this.requestedID = requestedTo;
 
-        this.requesterTeam = ZTeams.get().getTeamForPlayer(requesterID);
-        this.requestedTeam = ZTeams.get().getTeamForPlayer(requestedTo);
+        this.requesterTeam = QuartzTeams.get().getTeamForPlayer(requesterID);
+        this.requestedTeam = QuartzTeams.get().getTeamForPlayer(requestedTo);
 
         final Player requesterPlayer = Bukkit.getPlayer(requesterID);
         final Player requestedPlayer = Bukkit.getPlayer(requestedID);
@@ -268,7 +268,7 @@ public class AllianceRequest
 
             // If one of the sides is an existing alliance, we notify the players in that
             // alliance.
-            final ZTeam notifiedTeam;
+            final QuartzTeam notifiedTeam;
             final UUID allianceWith;
 
             if (alliances.allianceSize(requesterTeam) > 1)
@@ -314,7 +314,7 @@ public class AllianceRequest
 
         alliances.unregisterRequest(this);
 
-        final ZTeam notifiedTeam;
+        final QuartzTeam notifiedTeam;
         final OfflinePlayer allianceWith;
         final OfflinePlayer closer = Bukkit.getOfflinePlayer(closedBy);
 
@@ -376,7 +376,7 @@ public class AllianceRequest
 
         // We create a new team for this new alliance. Old teams are dropped.
 
-        final ZTeam allianceTeam = ZTeams.get().createTeam(I.t("Your alliance"), TeamColor.WHITE);
+        final QuartzTeam allianceTeam = QuartzTeams.get().createTeam(I.t("Your alliance"), TeamColor.WHITE);
 
         final Set<UUID> alliancePlayers = Stream.of(requesterTeam, requestedTeam)
                 .flatMap(team -> team.getPlayersUUID().stream())

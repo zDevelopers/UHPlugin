@@ -29,55 +29,47 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game;
+
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.section;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.TimeDelta;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
-
 import java.io.File;
 
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.section;
 
+public class Config extends ConfigurationInstance {
+    public static final ConfigurationItem<Integer> COUNTDOWN = item("countdown", 7);
+    public static final ConfigurationItem<Boolean> STARTUP_TITLE = item("startup-title", true);
+    public static final ConfigurationItem<Boolean> RANDOM_COLORS_IN_SOLO_GAMES =
+            item("random-color-in-solo-games", true);
+    public static final ConfigurationItem<Boolean> BROADCAST_PROGRESS = item("broadcast-progress", true);
+    public static final SlowSection SLOW = section("slow", SlowSection.class);
+    public static final BeginningSection BEGINNING = section("beginning", BeginningSection.class);
+    public static final SidebarSection SIDEBAR = section("sidebar", SidebarSection.class);
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
+    public Config(File file) {
         super(file);
     }
 
-    public static final ConfigurationItem<Integer> COUNTDOWN = item("countdown", 7);
-    public static final ConfigurationItem<Boolean> STARTUP_TITLE = item("startup-title", true);
-
-    public static final ConfigurationItem<Boolean> RANDOM_COLORS_IN_SOLO_GAMES = item("random-color-in-solo-games", true);
-
-    public static final ConfigurationItem<Boolean> BROADCAST_PROGRESS = item("broadcast-progress", true);
-
-    public static final SlowSection SLOW = section("slow", SlowSection.class);
-
-    public static final class SlowSection extends ConfigurationSection
-    {
+    public static final class SlowSection extends ConfigurationSection {
         public final ConfigurationItem<Long> DELAY_BETWEEN_TP = item("delay-between-teleportations", 3L);
     }
 
-    public static final BeginningSection BEGINNING = section("beginning", BeginningSection.class);
-
-    public static final class BeginningSection extends ConfigurationSection
-    {
+    public static final class BeginningSection extends ConfigurationSection {
         public final ConfigurationItem<TimeDelta> GRACE_PERIOD = item("grace-period", new TimeDelta(0, 0, 30));
         public final ConfigurationItem<Boolean> BROADCAST_GRACE_END = item("broadcast-grace-end", true);
 
         public final ConfigurationItem<TimeDelta> PEACE_PERIOD = item("peace-period", new TimeDelta(0, 1, 0));
-        public final ConfigurationItem<TimeDelta> SURFACE_MOBS_FREE_PERIOD = item("surface-mobs-free-period", new TimeDelta(0, 20, 0));
+        public final ConfigurationItem<TimeDelta> SURFACE_MOBS_FREE_PERIOD =
+                item("surface-mobs-free-period", new TimeDelta(0, 20, 0));
     }
 
-    public static final SidebarSection SIDEBAR = section("sidebar", SidebarSection.class);
-
-    public static final class SidebarSection extends ConfigurationSection
-    {
+    public static final class SidebarSection extends ConfigurationSection {
         public final ConfigurationItem<Boolean> PLAYERS = item("players", true);
         public final ConfigurationItem<Boolean> TEAMS = item("teams", true);
     }

@@ -32,7 +32,7 @@
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators.managers;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators.SpectatorPlusDependency;
-import fr.zcraft.quartzlib.core.ZLib;
+import fr.zcraft.quartzlib.core.QuartzLib;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -48,7 +48,7 @@ public abstract class SpectatorsManager
 
     static
     {
-        spectatorPlusDependency = ZLib.loadComponent(SpectatorPlusDependency.class);
+        spectatorPlusDependency = QuartzLib.loadComponent(SpectatorPlusDependency.class);
     }
 
     /**

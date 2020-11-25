@@ -36,8 +36,7 @@ package eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.gui.modules;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleWrapper;
 import fr.zcraft.quartzlib.components.gui.ActionGui;
 import fr.zcraft.quartzlib.tools.items.ItemStackBuilder;
-import fr.zcraft.zteams.colors.ColorsUtils;
-import org.bukkit.Material;
+import fr.zcraft.quartzteams.colors.ColorsUtils;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class FramedModuleGUI extends ActionGui
@@ -52,9 +51,8 @@ public abstract class FramedModuleGUI extends ActionGui
     @Override
     protected void onAfterUpdate()
     {
-        final ItemStack framePart = new ItemStackBuilder(Material.STAINED_GLASS_PANE)
+        final ItemStack framePart = new ItemStackBuilder(ColorsUtils.chat2Block(module.getCategory().getColor(), "STAINED_GLASS_PANE"))
                 .title("")
-                .data(ColorsUtils.chat2Dye(module.getCategory().getColor()).getWoolData())  // FIXME 1.13
                 .item();
 
         // Top and bottom

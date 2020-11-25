@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start;
 
 import org.bukkit.Location;
@@ -39,42 +40,36 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Fired just before a player's teleportation to its spawn point.
- *
+ * <p>
  * The spawn point cannot be modified here.
  *
  * @see PlayerSpawnPointSelectedEvent
  */
-public class PlayerAboutToBeTeleportedToSpawnPointEvent extends Event
-{
+public class PlayerAboutToBeTeleportedToSpawnPointEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Player player;
     private final Location spawnPoint;
 
-    public PlayerAboutToBeTeleportedToSpawnPointEvent(final Player player, final Location spawnPoint)
-    {
+    public PlayerAboutToBeTeleportedToSpawnPointEvent(final Player player, final Location spawnPoint) {
         this.player = player;
         this.spawnPoint = spawnPoint;
     }
 
-    public Player getPlayer()
-    {
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    public Player getPlayer() {
         return player;
     }
 
-    public Location getSpawnPoint()
-    {
+    public Location getSpawnPoint() {
         return spawnPoint;
     }
 
     @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

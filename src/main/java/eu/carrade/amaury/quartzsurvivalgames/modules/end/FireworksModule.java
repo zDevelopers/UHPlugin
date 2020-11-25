@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.end;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -48,32 +49,33 @@ import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Fireworks",
         description = "When the game ends, this module sends some fireworks from the winners o/",
         when = ModuleLoadTime.ON_GAME_END,
         category = ModuleCategory.END,
-        icon = Material.FIREWORK
+        icon = Material.FIREWORK_ROCKET
 )
-public class FireworksModule extends QSGModule
-{
+public class FireworksModule extends QSGModule {
     private final int area = 6;  // Fireworks launched on a 6×6 area around the winners
     private final TimeDelta duration = new TimeDelta(10);
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         RunTask.later(() ->
         {
-            if (QSG.game().getPhase() != GamePhase.END) return;
+            if (QSG.game().getPhase() != GamePhase.END) {
+                return;
+            }
 
             final long start = System.currentTimeMillis();
 
             RunTask.timer(new BukkitRunnable() {
                 @Override
-                public void run()
-                {
-                    if (QSG.game().getWinner() == null) return;
+                public void run() {
+                    if (QSG.game().getWinner() == null) {
+                        return;
+                    }
 
                     QSG.game().getWinner().getOnlinePlayers().forEach(winner ->
                     {
@@ -94,8 +96,7 @@ public class FireworksModule extends QSGModule
                         QSGUtils.generateRandomFirework(fireworkLocation.add(4, 0, 4), 5, 15);
                     });
 
-                    if ((System.currentTimeMillis() - start) / 1000 > duration.getSeconds())
-                    {
+                    if ((System.currentTimeMillis() - start) / 1000 > duration.getSeconds()) {
                         cancel();
                     }
                 }

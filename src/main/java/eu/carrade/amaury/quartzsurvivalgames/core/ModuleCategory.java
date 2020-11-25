@@ -31,103 +31,101 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.core;
 
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.items.ItemStackBuilder;
+import java.util.function.Supplier;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.function.Supplier;
-
-public enum ModuleCategory
-{
-    CORE (
+public enum ModuleCategory {
+    CORE(
             I.t("Core Modules"),
             I.t("These modules are the core of UHCReloaded, required by other modules."),
             Material.BEDROCK,
             ChatColor.DARK_RED
     ),
 
-    WORLD_GENERATION (
+    WORLD_GENERATION(
             I.t("World Generation"),
             I.t("These modules alter the world generation. To use them, the server must be started without world."),
-            Material.REDSTONE_COMPARATOR,
+            Material.COMPARATOR,
             ChatColor.DARK_GREEN
     ),
 
-    WAITING_PHASE (
+    WAITING_PHASE(
             I.t("Waiting Phase"),
             I.t("These modules manage the waiting phase, when the game is not yet started."),
-            Material.WATCH,
+            Material.CLOCK,
             ChatColor.YELLOW
     ),
 
-    STARTING (
+    STARTING(
             I.t("Game Beginning"),
             I.t("These modules enhance the starting phase of the game."),
             Material.FEATHER,
             ChatColor.GOLD
     ),
 
-    END (
+    END(
             I.t("Game End"),
             I.t("These modules alter the game end (either player deaths or whole game end)."),
-            Material.SKULL_ITEM,
+            Material.SKELETON_SKULL,
             ChatColor.RED
     ),
 
-    GAMEPLAY (
+    GAMEPLAY(
             I.t("Gameplay"),
             I.t("These modules alter the world or gameplay during the game, e.g. adding or nerfing creatures, effects... This category does not contains scenarii, which are in a dedicated one."),
             Material.SADDLE,
             ChatColor.DARK_AQUA
     ),
 
-    SCENARII (
+    SCENARII(
             I.t("Scenarii"),
             I.t("These modules adds scenarii to the game, i.e. global set of changes that changes the gameplay in a deeper way, and possibly the whole game experience."),
-            Material.BEACON,
+            Material.KNOWLEDGE_BOOK,
             ChatColor.AQUA
     ),
 
-    UTILITIES (
+    UTILITIES(
             I.t("Utilities"),
             I.t("These modules provides tools and utilities to manage the game and offer useful commands."),
-            Material.COMMAND,
+            Material.REPEATING_COMMAND_BLOCK,
             ChatColor.DARK_PURPLE
     ),
 
-    COSMETICS (
+    COSMETICS(
             I.t("Cosmetics"),
             I.t("These modules adds cosmetics things to the game, like effects or visual enhancements that can be useful but does not change the gameplay."),
-            new ItemStackBuilder(Material.RED_ROSE).data((short) 1),  // FIXME 1.13
+            Material.ROSE_BUSH,
             ChatColor.LIGHT_PURPLE
     ),
 
-    EXTERNAL (
+    EXTERNAL(
             I.t("External"),
             I.t("These modules adds features alongside the game, like web maps, external summaries..."),
             Material.ENDER_CHEST,
             ChatColor.DARK_GREEN
     ),
 
-    OTHER (
+    OTHER(
             I.t("Others"),
             I.t("All uncategorized modules goes there."),
             () -> {
-                final ItemStack icon = new ItemStackBuilder(Material.SKULL_ITEM).data((short) 3).item();
+                // TODO use updated ISB in QuartzLib 0.1
+                final ItemStack icon = new ItemStackBuilder(Material.PLAYER_HEAD).item();
                 final SkullMeta meta = (SkullMeta) icon.getItemMeta();
                 meta.setOwner("MHF_Question");
                 icon.setItemMeta(meta);
                 return icon;
             },
             ChatColor.WHITE
-    )
-
-    ;
+    );
 
 
     private final String displayName;
@@ -135,8 +133,7 @@ public enum ModuleCategory
     private final ItemStack icon;
     private final ChatColor color;
 
-    ModuleCategory(final String displayName, final String description, final ItemStack icon, ChatColor color)
-    {
+    ModuleCategory(final String displayName, final String description, final ItemStack icon, ChatColor color) {
 
         this.displayName = displayName;
         this.description = description;
@@ -144,38 +141,32 @@ public enum ModuleCategory
         this.color = color;
     }
 
-    ModuleCategory(final String displayName, final String description, final ItemStackBuilder icon, ChatColor color)
-    {
+    ModuleCategory(final String displayName, final String description, final ItemStackBuilder icon, ChatColor color) {
         this(displayName, description, icon.item(), color);
     }
 
-    ModuleCategory(final String displayName, final String description, final Supplier<ItemStack> icon, ChatColor color)
-    {
+    ModuleCategory(final String displayName, final String description, final Supplier<ItemStack> icon,
+                   ChatColor color) {
         this(displayName, description, icon.get(), color);
     }
 
-    ModuleCategory(final String displayName, final String description, final Material icon, ChatColor color)
-    {
+    ModuleCategory(final String displayName, final String description, final Material icon, ChatColor color) {
         this(displayName, description, new ItemStack(icon), color);
     }
 
-    public String getDisplayName()
-    {
+    public String getDisplayName() {
         return displayName;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return icon.clone();
     }
 
-    public ChatColor getColor()
-    {
+    public ChatColor getColor() {
         return color;
     }
 }

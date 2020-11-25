@@ -29,25 +29,24 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game.teleporter;
 
 import eu.carrade.amaury.quartzsurvivalgames.utils.QSGUtils;
 import fr.zcraft.quartzlib.tools.Callback;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
+import org.bukkit.scheduler.BukkitRunnable;
 
 
 /**
  * @see Teleporter
  */
-class TeleportationRunnable extends BukkitRunnable
-{
+class TeleportationRunnable extends BukkitRunnable {
     private final Teleporter teleporter;
     private final Queue<UUID> teleportationQueue;
 
@@ -58,8 +57,9 @@ class TeleportationRunnable extends BukkitRunnable
 
     private final Set<UUID> failed = new HashSet<>();
 
-    public TeleportationRunnable(Teleporter teleporter, Set<UUID> playersToTeleport, Callback<UUID> onTeleportation, Callback<UUID> onTeleportationSuccessful, Callback<UUID> onTeleportationFailed, Callback<Set<UUID>> onTeleportationProcessFinished)
-    {
+    public TeleportationRunnable(Teleporter teleporter, Set<UUID> playersToTeleport, Callback<UUID> onTeleportation,
+                                 Callback<UUID> onTeleportationSuccessful, Callback<UUID> onTeleportationFailed,
+                                 Callback<Set<UUID>> onTeleportationProcessFinished) {
         this.teleporter = teleporter;
         this.onTeleportation = onTeleportation;
         this.onTeleportationSuccessful = onTeleportationSuccessful;
@@ -70,20 +70,15 @@ class TeleportationRunnable extends BukkitRunnable
     }
 
     @Override
-    public void run()
-    {
-        try
-        {
+    public void run() {
+        try {
             UUID player = teleportationQueue.remove();
 
             QSGUtils.callIfDefined(onTeleportation, player);
 
-            if (teleporter.teleportPlayer(player, false))
-            {
+            if (teleporter.teleportPlayer(player, false)) {
                 QSGUtils.callIfDefined(onTeleportationSuccessful, player);
-            }
-            else
-            {
+            } else {
                 QSGUtils.callIfDefined(onTeleportationFailed, player);
                 failed.add(player);
             }

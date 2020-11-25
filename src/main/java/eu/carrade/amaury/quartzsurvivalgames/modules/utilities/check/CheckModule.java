@@ -47,7 +47,7 @@ import java.util.List;
         name = "Border Check",
         description = "Offers a command to check how far players are from a given border size.",
         category = ModuleCategory.UTILITIES,
-        icon = Material.FENCE,
+        icon = Material.JUNGLE_FENCE,
         when = ModuleLoadTime.ON_GAME_START
 )
 public class CheckModule extends QSGModule

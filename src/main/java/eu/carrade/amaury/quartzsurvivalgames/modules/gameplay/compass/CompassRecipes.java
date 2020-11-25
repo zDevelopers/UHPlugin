@@ -34,7 +34,7 @@
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.compass;
 
 import eu.carrade.amaury.quartzsurvivalgames.utils.RecipesUtils;
-import fr.zcraft.quartzlib.core.ZLibComponent;
+import fr.zcraft.quartzlib.core.QuartzComponent;
 import fr.zcraft.quartzlib.tools.items.CraftingRecipes;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import org.bukkit.Material;
@@ -53,7 +53,7 @@ import org.bukkit.inventory.Recipe;
 
 import java.util.ArrayList;
 
-public class CompassRecipes extends ZLibComponent implements Listener
+public class CompassRecipes extends QuartzComponent implements Listener
 {
     private final Recipe VANILLA_RECIPE = CraftingRecipes.shaped(
             new ItemStack(Material.COMPASS),
@@ -132,7 +132,7 @@ public class CompassRecipes extends ZLibComponent implements Listener
         return corners.contains(Material.BONE)
                 && corners.contains(Material.ROTTEN_FLESH)
                 && corners.contains(Material.SPIDER_EYE)
-                && corners.contains(Material.SULPHUR);
+                && corners.contains(Material.GUNPOWDER);
     }
 
     private Material getCentralIngredient()
@@ -143,7 +143,7 @@ public class CompassRecipes extends ZLibComponent implements Listener
                 return Material.ENDER_PEARL;
 
             case HARD:
-                return Material.EYE_OF_ENDER;
+                return Material.ENDER_EYE;
 
             default:
                 return Material.REDSTONE;

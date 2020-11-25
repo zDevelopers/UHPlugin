@@ -36,7 +36,7 @@ package eu.carrade.amaury.quartzsurvivalgames.core;
 
 import eu.carrade.amaury.quartzsurvivalgames.utils.QSGUtils;
 import fr.zcraft.quartzlib.components.rawtext.RawText;
-import fr.zcraft.quartzlib.core.ZLib;
+import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.tools.text.RawMessage;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -50,13 +50,13 @@ public class ModuleLogger extends Logger {
     private final String loggerName;
 
     public ModuleLogger(Class<? extends QSGModule> module) {
-        super(ZLib.getPlugin().getClass().getCanonicalName(), null);
+        super(QuartzLib.getPlugin().getClass().getCanonicalName(), null);
 
-        setParent(ZLib.getPlugin().getLogger());
+        setParent(QuartzLib.getPlugin().getLogger());
         setLevel(Level.ALL);
 
         moduleName = ModuleWrapper.computeModuleName(module);
-        loggerName = "[" + ZLib.getPlugin().getName() + "] [" + moduleName + "] ";
+        loggerName = "[" + QuartzLib.getPlugin().getName() + "] [" + moduleName + "] ";
     }
 
     @Override

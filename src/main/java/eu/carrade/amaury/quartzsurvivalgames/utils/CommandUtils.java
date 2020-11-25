@@ -29,33 +29,32 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.quartzsurvivalgames.utils;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+package eu.carrade.amaury.quartzsurvivalgames.utils;
 
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
-public class CommandUtils
-{
-    public final static String CHAT_SEPARATOR = ChatColor.GRAY + "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅";
+public class CommandUtils {
+    public final static String CHAT_SEPARATOR = ChatColor.GRAY +
+            "⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅ ⋅";
 
     /**
      * Returns a list of autocompletion suggestions based on what the user typed and on a list of
      * available commands.
      *
-     * @param typed What the user typed. This string needs to include <em>all</em> the words typed.
-     * @param suggestionsList The list of the suggestions.
+     * @param typed                 What the user typed. This string needs to include <em>all</em> the words typed.
+     * @param suggestionsList       The list of the suggestions.
      * @param numberOfWordsToIgnore If non-zero, this number of words will be ignored at the beginning of the string. This is used to handle multiple-words autocompletion.
-     *
      * @return The list of matching suggestions.
      */
-    public static List<String> getAutocompleteSuggestions(String typed, List<String> suggestionsList, int numberOfWordsToIgnore)
-    {
+    public static List<String> getAutocompleteSuggestions(String typed, List<String> suggestionsList,
+                                                          int numberOfWordsToIgnore) {
         List<String> list = new ArrayList<String>();
 
         // For each suggestion:
@@ -64,22 +63,17 @@ public class CommandUtils
         //    then, if the raw suggestion matches the typed text, we adds to the suggestion list
         //    the filtered suggestion, because the Bukkit's autocompleter works on a “per-word” basis.
 
-        for (String rawSuggestion : suggestionsList)
-        {
+        for (String rawSuggestion : suggestionsList) {
             String suggestion;
 
-            if (numberOfWordsToIgnore == 0)
-            {
+            if (numberOfWordsToIgnore == 0) {
                 suggestion = rawSuggestion;
-            }
-            else
-            {
+            } else {
                 // Not the primary use, but, hey! It works.
                 suggestion = QSGUtils.getStringFromCommandArguments(rawSuggestion.split(" "), numberOfWordsToIgnore);
             }
 
-            if (rawSuggestion.toLowerCase().startsWith(typed.toLowerCase()))
-            {
+            if (rawSuggestion.toLowerCase().startsWith(typed.toLowerCase())) {
                 list.add(suggestion);
             }
         }
@@ -93,13 +87,11 @@ public class CommandUtils
      * Returns a list of autocompletion suggestions based on what the user typed and on a list of
      * available commands.
      *
-     * @param typed What the user typed.
+     * @param typed           What the user typed.
      * @param suggestionsList The list of the suggestions.
-     *
      * @return The list of matching suggestions.
      */
-    public static List<String> getAutocompleteSuggestions(String typed, List<String> suggestionsList)
-    {
+    public static List<String> getAutocompleteSuggestions(String typed, List<String> suggestionsList) {
         return getAutocompleteSuggestions(typed, suggestionsList, 0);
     }
 
@@ -108,15 +100,13 @@ public class CommandUtils
      * Displays a separator around the output of the commands.
      *
      * <p>
-     *    To be called before and after the output (prints a line only).
+     * To be called before and after the output (prints a line only).
      * </p>
      *
      * @param sender The line will be displayed for this sender.
      */
-    public static void displaySeparator(CommandSender sender)
-    {
-        if (!(sender instanceof Player))
-        {
+    public static void displaySeparator(CommandSender sender) {
+        if (!(sender instanceof Player)) {
             return;
         }
 

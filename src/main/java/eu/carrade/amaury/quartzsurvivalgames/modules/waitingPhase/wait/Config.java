@@ -33,15 +33,14 @@
  */
 package eu.carrade.amaury.quartzsurvivalgames.modules.waitingPhase.wait;
 
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.section;
+
 import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
-import org.bukkit.Material;
-
 import java.io.File;
-
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.section;
+import org.bukkit.Material;
 
 public class Config extends ConfigurationInstance
 {
@@ -74,7 +73,7 @@ public class Config extends ConfigurationInstance
     static public class ConfigAccessorSection extends ConfigurationSection
     {
         public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
-        public final ConfigurationItem<Material> ITEM = item("item", Material.REDSTONE_COMPARATOR);
+        public final ConfigurationItem<Material> ITEM = item("item", Material.COMPARATOR);
     }
 
     public static final ConfigurationItem<Boolean> TEAM_IN_ACTION_BAR = item("team-in-action-bar", true);

@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.end;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -42,49 +43,45 @@ import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.Titles;
-import fr.zcraft.zteams.ZTeam;
+import fr.zcraft.quartzteams.QuartzTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 
-@ModuleInfo (
+@ModuleInfo(
         name = "End Announcement",
         description = "Announces the winner's name to the whole server when the game ends.",
         when = ModuleLoadTime.ON_GAME_END,
         category = ModuleCategory.END,
         icon = Material.ITEM_FRAME
 )
-public class EndAnnouncementModule extends QSGModule
-{
+public class EndAnnouncementModule extends QSGModule {
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         RunTask.later(() ->
         {
-            if (QSG.game().getPhase() != GamePhase.END) return;
+            if (QSG.game().getPhase() != GamePhase.END) {
+                return;
+            }
 
-            final ZTeam winnerTeam = QSG.game().getWinner();
+            final QuartzTeam winnerTeam = QSG.game().getWinner();
 
-            if (winnerTeam == null) return;  // No winner
+            if (winnerTeam == null) {
+                return;  // No winner
+            }
 
             Bukkit.broadcastMessage("");
 
-            if (QSG.game().isTeamsGame())
-            {
+            if (QSG.game().isTeamsGame()) {
                 final StringBuilder winners = new StringBuilder();
                 int j = 0;
 
-                for (final OfflinePlayer winner : winnerTeam.getPlayers())
-                {
-                    if (j != 0)
-                    {
-                        if (j == winnerTeam.size() - 1)
-                        {
+                for (final OfflinePlayer winner : winnerTeam.getPlayers()) {
+                    if (j != 0) {
+                        if (j == winnerTeam.size() - 1) {
                             /// The "and" in the winners players list (like "player1, player2 and player3").
                             winners.append(" ").append(I.tc("winners_list", "and")).append(" ");
-                        }
-                        else
-                        {
+                        } else {
                             winners.append(", ");
                         }
                     }
@@ -93,11 +90,13 @@ public class EndAnnouncementModule extends QSGModule
                     j++;
                 }
 
-                Bukkit.broadcastMessage(I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} (team {1}{green}) for their victory! {darkgreen}{obfuscated}--", winners.toString(), winnerTeam.getDisplayName()));
-            }
-            else
-            {
-                Bukkit.broadcastMessage(I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} for his victory! {darkgreen}{obfuscated}--", winnerTeam.getName()));
+                Bukkit.broadcastMessage(
+                        I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} (team {1}{green}) for their victory! {darkgreen}{obfuscated}--",
+                                winners.toString(), winnerTeam.getDisplayName()));
+            } else {
+                Bukkit.broadcastMessage(
+                        I.t("{darkgreen}{obfuscated}--{green} Congratulations to {0} for his victory! {darkgreen}{obfuscated}--",
+                                winnerTeam.getName()));
             }
 
             Bukkit.broadcastMessage("");
@@ -106,15 +105,12 @@ public class EndAnnouncementModule extends QSGModule
             final String title;
             final String subtitle;
 
-            if (QSG.game().isTeamsGame())
-            {
+            if (QSG.game().isTeamsGame()) {
                 /// The main title of the /title displayed when a team wins the game. {0} becomes the team display name (with colors).
                 title = I.t("{darkgreen}{0}", winnerTeam.getDisplayName());
                 /// The subtitle of the /title displayed when a team wins the game. {0} becomes the team display name (with colors).
                 subtitle = I.t("{green}This team wins the game!", winnerTeam.getDisplayName());
-            }
-            else
-            {
+            } else {
                 /// The main title of the /title displayed when a player wins the game (in solo). {0} becomes the player display name (with colors).
                 title = I.t("{darkgreen}{0}", winnerTeam.getDisplayName());
                 /// The subtitle of the /title displayed when a player wins the game (in solo). {0} becomes the player display name (with colors).

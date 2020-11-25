@@ -49,10 +49,11 @@ import fr.zcraft.quartzlib.components.gui.PromptGui;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.items.ItemStackBuilder;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
-import fr.zcraft.zteams.ZTeams;
-import fr.zcraft.zteams.guis.TeamsSelectorGUI;
+import fr.zcraft.quartzteams.QuartzTeams;
+import fr.zcraft.quartzteams.guis.TeamsSelectorGUI;
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Set;
@@ -84,8 +85,7 @@ public class MainConfigGUI extends ActionGui
 
         headCycleNames = Stream.concat(alivePlayers.stream(), spectators.stream()).toArray(String[]::new);
 
-        action("players", 10, new ItemStackBuilder(Material.SKULL_ITEM)
-                .data((short) SkullType.PLAYER.ordinal())
+        action("players", 10, new ItemStackBuilder(Material.PLAYER_HEAD)
                 .amount(Math.max(alivePlayers.size(), 1))
                 .title(ChatColor.GREEN, ChatColor.BOLD + I.tl(getPlayerLocale(), "Players"))
                 .loreLine(
@@ -107,15 +107,15 @@ public class MainConfigGUI extends ActionGui
         action("teams", 12, new ItemStackBuilder(
                 QSG.module(WaitModule.class) != null ? Config.TEAM_SELECTOR.ITEM.get() : Material.NETHER_STAR)
                 .title(ChatColor.AQUA, ChatColor.BOLD + I.tl(getPlayerLocale(), "Teams"))
-                .amount(Math.max(ZTeams.get().countTeams(), 1))
-                .loreLine(ChatColor.DARK_GRAY, I.tln(getPlayerLocale(), "{0} team", "{0} teams", ZTeams.get().countTeams()))
+                .amount(Math.max(QuartzTeams.get().countTeams(), 1))
+                .loreLine(ChatColor.DARK_GRAY, I.tln(getPlayerLocale(), "{0} team", "{0} teams", QuartzTeams.get().countTeams()))
                 .loreSeparator()
                 .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "The game can either be solo or in teams. In the second case, click here to create or update teams."), 38)
                 .loreSeparator()
                 .longLore(ChatColor.DARK_GRAY + " » " + I.tl(getPlayerLocale(), "{white}Click {gray}to manage the teams"))
         );
 
-        action("title", 14, new ItemStackBuilder(Material.BOOK_AND_QUILL)
+        action("title", 14, new ItemStackBuilder(Material.WRITABLE_BOOK)
                 .title(ChatColor.DARK_PURPLE, ChatColor.BOLD + I.tl(getPlayerLocale(), "Game Title"))
                 .loreSeparator()
                 .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "Click to update the game title. It is displayed on the sidebar and may be used by other modules (like the reports one)."), 38)
@@ -130,7 +130,7 @@ public class MainConfigGUI extends ActionGui
         final int modulesEnabled = (int) QSG.get().getModulesManager().getModules().stream().filter(ModuleWrapper::isEnabled).count();
         final int modulesLoaded = (int) QSG.get().getModulesManager().getModules().stream().filter(ModuleWrapper::isLoaded).count();
 
-        action("modules", 16, new ItemStackBuilder(Material.COMMAND)
+        action("modules", 16, new ItemStackBuilder(Material.REPEATING_COMMAND_BLOCK)
                 .title(ChatColor.LIGHT_PURPLE, ChatColor.BOLD + I.tl(getPlayerLocale(), "Modules"))
                 .loreLine(
                         ChatColor.DARK_GRAY,
@@ -148,8 +148,7 @@ public class MainConfigGUI extends ActionGui
 
         if (!QSG.game().currentPhaseAfter(GamePhase.WAIT))
         {
-            action("start", 31, new ItemStackBuilder(Material.INK_SACK)  // FIXME 1.13
-                    .data(DyeColor.LIME.getDyeData())
+            action("start", 31, new ItemStackBuilder(Material.LIME_DYE)
                     .title(ChatColor.GREEN, ChatColor.BOLD + I.tl(getPlayerLocale(), "Start the game"))
                     .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "If you're ready, click here to start the game!"))
             );
@@ -161,7 +160,10 @@ public class MainConfigGUI extends ActionGui
             final ItemStack skull = getInventory().getItem(10);
             if (skull != null)
             {
-                new ItemStackBuilder(getInventory().getItem(10)).head(headCycleNames[headCycleIndex]).item();
+                // TODO replace with QL 0.1 ISB
+                final SkullMeta meta = (SkullMeta) getInventory().getItem(10).getItemMeta();
+                meta.setOwner(headCycleNames[headCycleIndex]);
+                getInventory().getItem(10).setItemMeta(meta);
 
                 headCycleIndex = (headCycleIndex + 1) % headCycleNames.length;
                 if (headCycleIndex < 0) headCycleIndex += headCycleNames.length;

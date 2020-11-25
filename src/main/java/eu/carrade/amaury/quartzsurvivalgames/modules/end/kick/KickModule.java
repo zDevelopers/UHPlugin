@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.end.kick;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -42,7 +43,7 @@ import fr.zcraft.quartzlib.tools.runners.RunTask;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Kick On Death",
         description = "Kicks players on death after a delay.",
         when = ModuleLoadTime.ON_GAME_START,
@@ -50,14 +51,12 @@ import org.bukkit.event.EventHandler;
         icon = Material.BARRIER,
         settings = Config.class
 )
-public class KickModule extends QSGModule
-{
+public class KickModule extends QSGModule {
     @EventHandler
-    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
-    {
-        if (ev.getPlayer().isOnline())
-        {
-            RunTask.later(() -> ev.getPlayer().getPlayer().kickPlayer(Config.MESSAGE.get()), Config.DELAY.get().getSeconds() * 20L);
+    public void onPlayerDeath(final AlivePlayerDeathEvent ev) {
+        if (ev.getPlayer().isOnline()) {
+            RunTask.later(() -> ev.getPlayer().getPlayer().kickPlayer(Config.MESSAGE.get()),
+                    Config.DELAY.get().getSeconds() * 20L);
         }
     }
 }

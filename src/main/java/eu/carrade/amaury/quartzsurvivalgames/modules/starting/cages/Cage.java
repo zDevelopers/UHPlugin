@@ -31,17 +31,16 @@
  */
 package eu.carrade.amaury.quartzsurvivalgames.modules.starting.cages;
 
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.colors.ColorsUtils;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.colors.ColorsUtils;
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.material.MaterialData;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.bukkit.block.data.BlockData;
 
 
 public class Cage
@@ -49,7 +48,6 @@ public class Cage
     private final Location baseLocation;
 
     private Material material = Material.BARRIER;
-    private MaterialData materialData = null;
 
     private final boolean buildCeiling;
     private final boolean visibleWalls;
@@ -58,7 +56,7 @@ public class Cage
     private int internalHeight = 3;
 
     private boolean built = false;
-    private Map<Location, SimpleBlock> blocksBuilt = new HashMap<>();
+    private final Map<Location, SimpleBlock> blocksBuilt = new HashMap<>();
 
 
     /**
@@ -77,33 +75,10 @@ public class Cage
      * Sets the custom material to use.
      *
      * @param customMaterial A material.
-     * @param data           The data value (or {@code null}).
-     */
-    public void setCustomMaterial(Material customMaterial, MaterialData data)
-    {
-        this.material = customMaterial == null ? Material.BARRIER : customMaterial;
-        this.materialData = data;
-    }
-
-    /**
-     * Sets the custom material to use.
-     *
-     * @param customMaterial A material.
-     * @param data           The data value.
-     */
-    public void setCustomMaterial(Material customMaterial, byte data)
-    {
-        setCustomMaterial(customMaterial, new MaterialData(this.material, data));
-    }
-
-    /**
-     * Sets the custom material to use.
-     *
-     * @param customMaterial A material.
      */
     public void setCustomMaterial(Material customMaterial)
     {
-        setCustomMaterial(customMaterial, null);
+        this.material = customMaterial == null ? Material.BARRIER : customMaterial;
     }
 
 
@@ -139,37 +114,12 @@ public class Cage
      */
     private void setBlock(final Location location, final Material material)
     {
-        setBlock(location, material, null);
-    }
-
-    /**
-     * Sets a block (and remembers the old one to clean up things after).
-     *
-     * @param location The location
-     * @param material The block material
-     * @param data     The block data value (as byte)
-     */
-    private void setBlock(final Location location, final Material material, final byte data)
-    {
-        setBlock(location, material, new MaterialData(material, data));
-    }
-
-    /**
-     * Sets a block (and remembers the old one to clean up things after).
-     *
-     * @param location The location
-     * @param material The block material
-     * @param data     The block data value (as {@link MaterialData})
-     */
-    private void setBlock(final Location location, final Material material, final MaterialData data)
-    {
         final Block block = location.getBlock();
 
         if (!blocksBuilt.containsKey(location))
-            blocksBuilt.put(location, new SimpleBlock(block.getType(), block.getState().getData().clone()));
+            blocksBuilt.put(location, new SimpleBlock(block.getType(), block.getState().getBlockData().clone()));
 
         block.setType(material);
-        if (data != null) block.setData(data.getData());
     }
 
 
@@ -201,20 +151,19 @@ public class Cage
 
         for (int x = xMin + 1; x <= xMax - 1; x++)
             for (int z = zMin + 1; z <= zMax - 1; z++)
-                setBlock(new Location(world, x, baseLocation.getBlockY() - 1, z), material, materialData);
+                setBlock(new Location(world, x, baseLocation.getBlockY() - 1, z), material);
 
 
         // Builds the walls
 
         final Material wallsMaterial = visibleWalls ? material : Material.BARRIER;
-        final MaterialData wallsMaterialData = visibleWalls ? materialData : null;
 
         for (int x = xMin; x <= xMax; x++)
         {
             for (int y = baseLocation.getBlockY() - 1; y < baseLocation.getBlockY() + internalHeight; y++)
             {
-                setBlock(new Location(world, x, y, zMin), wallsMaterial, wallsMaterialData);
-                setBlock(new Location(world, x, y, zMax), wallsMaterial, wallsMaterialData);
+                setBlock(new Location(world, x, y, zMin), wallsMaterial);
+                setBlock(new Location(world, x, y, zMax), wallsMaterial);
             }
         }
 
@@ -222,8 +171,8 @@ public class Cage
         {
             for (int y = baseLocation.getBlockY() - 1; y < baseLocation.getBlockY() + internalHeight; y++)
             {
-                setBlock(new Location(world, xMin, y, z), wallsMaterial, wallsMaterialData);
-                setBlock(new Location(world, xMax, y, z), wallsMaterial, wallsMaterialData);
+                setBlock(new Location(world, xMin, y, z), wallsMaterial);
+                setBlock(new Location(world, xMax, y, z), wallsMaterial);
             }
         }
 
@@ -231,7 +180,6 @@ public class Cage
         // Builds the ceiling
 
         final Material ceilingMaterial = buildCeiling ? material : Material.BARRIER;
-        final MaterialData ceilingMaterialData = buildCeiling ? materialData : null;
 
         int xMinCeiling = xMin, xMaxCeiling = xMax, zMinCeiling = zMin, zMaxCeiling = zMax;
 
@@ -245,7 +193,7 @@ public class Cage
 
         for (int x = xMinCeiling; x <= xMaxCeiling; x++)
             for (int z = zMinCeiling; z <= zMaxCeiling; z++)
-                setBlock(new Location(world, x, baseLocation.getBlockY() + internalHeight, z), ceilingMaterial, ceilingMaterialData);
+                setBlock(new Location(world, x, baseLocation.getBlockY() + internalHeight, z), ceilingMaterial);
 
         built = true;
 
@@ -267,7 +215,7 @@ public class Cage
             block.setType(originalBlock.material);
 
             if (originalBlock.data != null)
-                block.getState().setData(originalBlock.data);
+                block.getState().setBlockData(originalBlock.data);
         }
 
         built = false;
@@ -282,39 +230,34 @@ public class Cage
      *
      * @return A Cage
      */
-    static public Cage createInstanceForTeam(final ZTeam team, final Location location)
+    static public Cage createInstanceForTeam(final QuartzTeam team, final Location location)
     {
         final Material cageMaterial;
-        final Byte cageData;
 
         switch (Config.TYPE.get())
         {
             case TEAM_COLOR_TRANSPARENT:
-                cageMaterial = Material.STAINED_GLASS;
-                cageData = ColorsUtils.chat2Dye(team != null ? team.getColorOrWhite().toChatColor() : ChatColor.WHITE).getWoolData();
+                cageMaterial = ColorsUtils.chat2Block(team != null ? team.getColorOrWhite().toChatColor() : ChatColor.WHITE, "STAINED_GLASS");
                 break;
 
             case TEAM_COLOR_SOLID:
-                cageMaterial = Material.STAINED_CLAY;
-                cageData = ColorsUtils.chat2Dye(team != null ? team.getColorOrWhite().toChatColor() : ChatColor.WHITE).getWoolData();
+                cageMaterial = ColorsUtils.chat2Block(team != null ? team.getColorOrWhite().toChatColor() : ChatColor.WHITE, "TERRACOTTA");
                 break;
 
             case CUSTOM:
                 cageMaterial = Config.CUSTOM_BLOCK.get();
-                cageData = null;
                 break;
 
             // Should never happen
             default:
                 cageMaterial = null;
-                cageData = null;
         }
 
         final Cage cage = new Cage(location, Config.BUILD_CEILING.get(), Config.VISIBLE_WALLS.get());
 
         if (cageMaterial != null) // Should always be true
         {
-            cage.setCustomMaterial(cageMaterial, cageData != null ? cageData : 0);
+            cage.setCustomMaterial(cageMaterial);
             cage.setInternalHeight(Config.HEIGHT.get());
             cage.setRadius(Config.RADIUS.get());
         }
@@ -335,10 +278,16 @@ public class Cage
         TEAM_COLOR_TRANSPARENT,
 
         /**
-         * Cages in stained hardened clay, using the team color (or the closest
+         * Cages in stained terracotta clay, using the team color (or the closest
          * color available).
          */
         TEAM_COLOR_SOLID,
+
+        /**
+         * Cages in stained glazed terracotta, using the team color (or the closest
+         * color available).
+         */
+        TEAM_COLOR_FANCY,
 
         /**
          * Cages in a custom provided block.
@@ -353,9 +302,9 @@ public class Cage
     private class SimpleBlock
     {
         public Material material;
-        public MaterialData data;
+        public BlockData data;
 
-        public SimpleBlock(Material material, MaterialData data)
+        public SimpleBlock(Material material, BlockData data)
         {
             this.material = material;
             this.data = data;

@@ -39,12 +39,10 @@ import fr.zcraft.quartzlib.components.gui.GuiUtils;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.items.ItemStackBuilder;
 import fr.zcraft.quartzlib.tools.mojang.MojangHead;
-import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 
 public class ConfirmModuleDisableGUI extends FramedModuleGUI
 {
@@ -72,13 +70,11 @@ public class ConfirmModuleDisableGUI extends FramedModuleGUI
                 .longLore(ChatColor.WHITE, I.t("Are you sure you want to disable {0}?", module.getName()), 38)
                 .item());
 
-        final ItemStackBuilder no = new ItemStackBuilder(Material.STAINED_GLASS_PANE)
-                .data(DyeColor.RED.getWoolData())  // FIXME 1.13
+        final ItemStackBuilder no = new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE)
                 .title(ChatColor.GREEN, ChatColor.BOLD + I.t("I changed my mind"))
                 .longLore(ChatColor.GRAY, I.t("Go back without disabling the module"));
 
-        final ItemStackBuilder yes = new ItemStackBuilder(Material.STAINED_GLASS_PANE)
-                .data(DyeColor.GREEN.getWoolData())  // FIXME 1.13
+        final ItemStackBuilder yes = new ItemStackBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .title(ChatColor.RED, ChatColor.BOLD + I.t("Yes, disable"))
                 .longLore(ChatColor.GRAY, I.t("Disable {0} without any possibility of re-enabling it", module.getName()));
 

@@ -35,14 +35,14 @@ package eu.carrade.amaury.quartzsurvivalgames.core;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.sidebar.SidebarInjector;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.scoreboard.Sidebar;
-import fr.zcraft.quartzlib.core.ZLibComponent;
+import fr.zcraft.quartzlib.core.QuartzComponent;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 
-public abstract class QSGModule extends ZLibComponent implements Listener {
+public abstract class QSGModule extends QuartzComponent implements Listener {
     protected ModuleLogger logger;
 
     public QSGModule() {

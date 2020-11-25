@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.border.worldborders;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.Config;
@@ -43,127 +44,108 @@ import org.bukkit.World;
  * <p>This border is always squared, so {@link #setShape(MapShape)} does nothing and {@link
  * #getShape()} always returns {@link MapShape#SQUARED}.</p>
  */
-public class VanillaWorldBorder extends WorldBorder
-{
+public class VanillaWorldBorder extends WorldBorder {
     private final World world;
     private final org.bukkit.WorldBorder border;
 
-    public VanillaWorldBorder(final World world)
-    {
+    public VanillaWorldBorder(final World world) {
         this.world = world;
         this.border = world.getWorldBorder();
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         setDamageBuffer(Config.DAMAGES_BUFFER.get());
         setDamageAmount(Config.DAMAGES_AMOUNT.get());
         setWarningDistance(Config.WARNING_DISTANCE.get());
     }
 
     @Override
-    public World getWorld()
-    {
+    public World getWorld() {
         return world;
     }
 
     @Override
-    public double getDiameter()
-    {
+    public double getDiameter() {
         return border.getSize();
     }
 
     @Override
-    public void setDiameter(final double diameter)
-    {
+    public void setDiameter(final double diameter) {
         border.setSize(diameter);
     }
 
     @Override
-    public void setDiameter(final double diameter, final long time)
-    {
+    public void setDiameter(final double diameter, final long time) {
         border.setSize(diameter, time);
     }
 
     @Override
-    public Location getCenter()
-    {
+    public Location getCenter() {
         return border.getCenter();
     }
 
     @Override
-    public void setCenter(final double x, final double z)
-    {
-        border.setCenter(x, z);
-    }
-
-    @Override
-    public void setCenter(final Location center)
-    {
+    public void setCenter(final Location center) {
         border.setCenter(center);
     }
 
     @Override
-    public double getDamageBuffer()
-    {
+    public void setCenter(final double x, final double z) {
+        border.setCenter(x, z);
+    }
+
+    @Override
+    public double getDamageBuffer() {
         return border.getDamageBuffer();
     }
 
     @Override
-    public void setDamageBuffer(final double distance)
-    {
+    public void setDamageBuffer(final double distance) {
         border.setDamageBuffer(distance);
     }
 
     @Override
-    public double getDamageAmount()
-    {
+    public double getDamageAmount() {
         return border.getDamageAmount();
     }
 
     @Override
-    public void setDamageAmount(final double damageAmount)
-    {
+    public void setDamageAmount(final double damageAmount) {
         border.setDamageAmount(damageAmount);
     }
 
     @Override
-    public int getWarningTime()
-    {
+    public int getWarningTime() {
         return border.getWarningTime();
     }
 
     @Override
-    public void setWarningTime(final int seconds)
-    {
+    public void setWarningTime(final int seconds) {
         border.setWarningTime(seconds);
     }
 
     @Override
-    public int getWarningDistance()
-    {
+    public int getWarningDistance() {
         return border.getWarningDistance();
     }
 
     @Override
-    public void setWarningDistance(final int blocks)
-    {
+    public void setWarningDistance(final int blocks) {
         border.setWarningDistance(blocks);
     }
 
     @Override
-    public MapShape getShape()
-    {
+    public MapShape getShape() {
         return MapShape.SQUARED;
     }
 
     @Override
-    public void setShape(final MapShape shape) {}
+    public void setShape(final MapShape shape) {
+    }
 
     @Override
-    public boolean supportsProgressiveResize()
-    {
+    public boolean supportsProgressiveResize() {
         return true;
     }
 }

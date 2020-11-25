@@ -29,26 +29,25 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game.teleporter;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.Config;
 import fr.zcraft.quartzlib.tools.Callback;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 
 /**
  * Manages the initial teleportation process, and stores the spawn points of the players.
  */
-public class Teleporter
-{
+public class Teleporter {
     /**
      * The spawn point designed for each player.
      */
@@ -87,8 +86,7 @@ public class Teleporter
      * @param playerUUID The player's UUID.
      * @param spawn      The spawn location.
      */
-    public void setSpawnForPlayer(final UUID playerUUID, final Location spawn)
-    {
+    public void setSpawnForPlayer(final UUID playerUUID, final Location spawn) {
         spawnPoints.put(playerUUID, spawn);
     }
 
@@ -98,8 +96,7 @@ public class Teleporter
      * @param playerUUID The player UUID.
      * @return {@code true} if a spawn point is registered.
      */
-    public boolean hasSpawnForPlayer(final UUID playerUUID)
-    {
+    public boolean hasSpawnForPlayer(final UUID playerUUID) {
         return spawnPoints.containsKey(playerUUID);
     }
 
@@ -107,8 +104,7 @@ public class Teleporter
      * @param playerUUID A player's UUID.
      * @return The registered spawn point for that player, or {@code null} if no-one was ever registered.
      */
-    public Location getSpawnForPlayer(final UUID playerUUID)
-    {
+    public Location getSpawnForPlayer(final UUID playerUUID) {
         return spawnPoints.get(playerUUID).clone();
     }
 
@@ -119,23 +115,22 @@ public class Teleporter
      * @param playerUUID       The player's UUID.
      * @param teleportOnGround if {@code true} the player will be teleported on the ground; else, at
      *                         the location directly.
-     *
      * @return {@code true} if the player was teleported (i.e. was online and with an associated
      * spawn point).
      */
-    public boolean teleportPlayer(UUID playerUUID, Boolean teleportOnGround)
-    {
+    public boolean teleportPlayer(UUID playerUUID, Boolean teleportOnGround) {
         Player player = Bukkit.getPlayer(playerUUID);
-        if (player == null)
+        if (player == null) {
             return false;
+        }
 
         Location spawn = spawnPoints.get(playerUUID);
 
-        if (spawn == null)
+        if (spawn == null) {
             return false;
-
-        else if (teleportOnGround)
+        } else if (teleportOnGround) {
             spawn = spawn.getWorld().getHighestBlockAt(spawn).getLocation().add(0, 2, 0);
+        }
 
         player.teleport(spawn);
         return true;
@@ -146,11 +141,9 @@ public class Teleporter
      * Registers a callback called just before trying to teleport a player.
      *
      * @param callback The callback. Argument: the teleported player's UUID.
-     *
      * @return Same instance for chaining.
      */
-    public Teleporter whenTeleportationOccurs(Callback<UUID> callback)
-    {
+    public Teleporter whenTeleportationOccurs(Callback<UUID> callback) {
         onTeleportation = callback;
         return this;
     }
@@ -159,11 +152,9 @@ public class Teleporter
      * Registers a callback called when a player is teleported successfully.
      *
      * @param callback The callback. Argument: the non-teleported player's UUID.
-     *
      * @return Same instance for chaining.
      */
-    public Teleporter whenTeleportationSuccesses(Callback<UUID> callback)
-    {
+    public Teleporter whenTeleportationSuccesses(Callback<UUID> callback) {
         onTeleportationSuccessful = callback;
         return this;
     }
@@ -172,11 +163,9 @@ public class Teleporter
      * Registers a callback called when a player cannot be teleported.
      *
      * @param callback The callback. Argument: the non-teleported player's UUID.
-     *
      * @return Same instance for chaining.
      */
-    public Teleporter whenTeleportationFails(Callback<UUID> callback)
-    {
+    public Teleporter whenTeleportationFails(Callback<UUID> callback) {
         onTeleportationFailed = callback;
         return this;
     }
@@ -189,11 +178,9 @@ public class Teleporter
      *
      * @param callback The callback. Argument: a set containing the UUID of all non-teleported
      *                 players.
-     *
      * @return Same instance for chaining.
      */
-    public Teleporter whenTeleportationEnds(Callback<Set<UUID>> callback)
-    {
+    public Teleporter whenTeleportationEnds(Callback<Set<UUID>> callback) {
         onTeleportationProcessFinished = callback;
         return this;
     }
@@ -205,19 +192,18 @@ public class Teleporter
      * @param slowMode if {@code true}, the players will be slowly teleported one by one, with a
      *                 delay between them.
      */
-    public void startTeleportationProcess(Boolean slowMode)
-    {
+    public void startTeleportationProcess(Boolean slowMode) {
         RunTask.timer(
-            new TeleportationRunnable(
-                this,
-                spawnPoints.keySet(),
-                onTeleportation,
-                onTeleportationSuccessful,
-                onTeleportationFailed,
-                onTeleportationProcessFinished
-            ),
-            1L,
-            slowMode ? 1L : Config.SLOW.DELAY_BETWEEN_TP.get() * 20L
+                new TeleportationRunnable(
+                        this,
+                        spawnPoints.keySet(),
+                        onTeleportation,
+                        onTeleportationSuccessful,
+                        onTeleportationFailed,
+                        onTeleportationProcessFinished
+                ),
+                1L,
+                slowMode ? 1L : Config.SLOW.DELAY_BETWEEN_TP.get() * 20L
         );
     }
 }

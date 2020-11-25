@@ -29,102 +29,91 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.teams.sidebar;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import eu.carrade.amaury.quartzsurvivalgames.utils.OfflinePlayersLoader;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.ZTeams;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.QuartzTeams;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 
 /**
  * This class stores the data displayed in the sidebar for a player, like the color, the health, the name...
  */
-public class SidebarPlayerCache
-{
-    private UUID playerID;
-
+public class SidebarPlayerCache {
+    private final Set<UUID> metTeammates = new HashSet<>();
+    private final UUID playerID;
     private String playerName;
     private ChatColor healthColor = ChatColor.WHITE;
-
     private boolean isOnline;
 
-    private final Set<UUID> metTeammates = new HashSet<>();
 
-
-    public SidebarPlayerCache(final UUID id)
-    {
+    public SidebarPlayerCache(final UUID id) {
         playerID = id;
 
         final OfflinePlayer player = Bukkit.getOfflinePlayer(id);
 
-        if (player != null)
-        {
+        if (player != null) {
             playerName = player.getName();
             isOnline = player.isOnline();
 
-            if (isOnline)
+            if (isOnline) {
                 updateHealth(player.getPlayer().getHealth());
-        }
-        else
-        {
+            }
+        } else {
             playerName = null;
             isOnline = false;
         }
     }
 
-    public void updateName(String name)
-    {
+    public void updateName(String name) {
         playerName = name;
     }
 
-    public void updateHealth(double health)
-    {
-        if (health <= 0)
+    public void updateHealth(double health) {
+        if (health <= 0) {
             healthColor = ChatColor.GRAY;
-        else if (health <= 4.1)
+        } else if (health <= 4.1) {
             healthColor = ChatColor.DARK_RED;
-        else if (health <= 8.1)
+        } else if (health <= 8.1) {
             healthColor = ChatColor.RED;
-        else if (health <= 12.1)
+        } else if (health <= 12.1) {
             healthColor = ChatColor.YELLOW;
-        else if (health <= 16.1)
+        } else if (health <= 16.1) {
             healthColor = ChatColor.GREEN;
-        else
+        } else {
             healthColor = ChatColor.DARK_GREEN;
+        }
     }
 
-    public void updateOnlineStatus(boolean isOnline)
-    {
+    public void updateOnlineStatus(boolean isOnline) {
         this.isOnline = isOnline;
     }
 
-    public UUID getPlayerID()
-    {
+    public UUID getPlayerID() {
         return playerID;
     }
 
-    public String getPlayerName()
-    {
-        if (playerName != null && !playerName.isEmpty())
+    public String getPlayerName() {
+        if (playerName != null && !playerName.isEmpty()) {
             return playerName;
+        }
 
         final OfflinePlayer player = OfflinePlayersLoader.getOfflinePlayer(playerID);
-        if (player != null && player.getName() != null && !player.getName().isEmpty())
-        {
+        if (player != null && player.getName() != null && !player.getName().isEmpty()) {
             playerName = player.getName();
             return playerName;
         }
@@ -133,52 +122,53 @@ public class SidebarPlayerCache
         return I.t("Unknown");
     }
 
-    public ChatColor getHealthColor()
-    {
+    public ChatColor getHealthColor() {
         return healthColor;
     }
 
-    public boolean isOnline()
-    {
+    public boolean isOnline() {
         return isOnline;
     }
 
-    public Set<OfflinePlayer> getMetTeammates()
-    {
+    public Set<OfflinePlayer> getMetTeammates() {
         return metTeammates.stream()
                 .map(Bukkit::getOfflinePlayer)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
 
-    public void updateTeammatesDisplayed(final double distanceThreshold)
-    {
+    public void updateTeammatesDisplayed(final double distanceThreshold) {
         final Player player = Bukkit.getPlayer(playerID);
-        if (player != null)
-        {
+        if (player != null) {
             updateTeammatesDisplayed(
                     distanceThreshold * distanceThreshold,
                     player.getLocation(),
-                    ZTeams.get().getTeamForPlayer(playerID)
+                    QuartzTeams.get().getTeamForPlayer(playerID)
             );
         }
     }
 
-    public void updateTeammatesDisplayed(final double distanceThresholdSquared, final Location reference, final ZTeam team)
-    {
+    public void updateTeammatesDisplayed(final double distanceThresholdSquared, final Location reference,
+                                         final QuartzTeam team) {
         final GameModule game = QSG.module(GameModule.class);
 
         // For each non-encountered online teammate, we check if they are close
         team.getOnlinePlayers().stream()
-            .filter(p -> !metTeammates.contains(p.getUniqueId()))
-            .filter(game::isAlive)
-            .forEach(p -> {
-                if (p.getWorld() == null) return;
-                if (!p.getWorld().equals(reference.getWorld())) return;
-                if (p.getLocation().distanceSquared(reference) > distanceThresholdSquared) return;
+                .filter(p -> !metTeammates.contains(p.getUniqueId()))
+                .filter(game::isAlive)
+                .forEach(p -> {
+                    if (p.getWorld() == null) {
+                        return;
+                    }
+                    if (!p.getWorld().equals(reference.getWorld())) {
+                        return;
+                    }
+                    if (p.getLocation().distanceSquared(reference) > distanceThresholdSquared) {
+                        return;
+                    }
 
-                // Close enough
-                metTeammates.add(p.getUniqueId());
-            });
+                    // Close enough
+                    metTeammates.add(p.getUniqueId());
+                });
     }
 }

@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.end.deathAnnouncement;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -45,8 +46,8 @@ import fr.zcraft.quartzlib.components.rawtext.RawText;
 import fr.zcraft.quartzlib.components.rawtext.RawTextPart;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.RawMessage;
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.ZTeams;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.QuartzTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -54,7 +55,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Death Announcements",
         description = "Adds announcements for players & teams deaths.",
         when = ModuleLoadTime.ON_GAME_START,
@@ -62,73 +63,67 @@ import org.bukkit.event.entity.PlayerDeathEvent;
         icon = Material.BLAZE_ROD,
         settings = Config.class
 )
-public class DeathAnnouncementModule extends QSGModule
-{
+public class DeathAnnouncementModule extends QSGModule {
     private QSGSound deathSound;
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         deathSound = Config.SOUND.get();
     }
 
     @EventHandler
-    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
-    {
+    public void onPlayerDeath(final AlivePlayerDeathEvent ev) {
         final PlayerDeathEvent pdev = ev.getPlayerDeathEvent();
 
         // Highlights the death message in the console
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "-- Death of " + ev.getPlayer().getName() + (pdev != null ? " (" + pdev.getDeathMessage() + ")" : "") + " --");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "-- Death of " + ev.getPlayer().getName() +
+                (pdev != null ? " (" + pdev.getDeathMessage() + ")" : "") + " --");
 
         // If this is a real death
-        if (pdev != null)
-        {
+        if (pdev != null) {
             // We send a lightning strike.
 
-            if (Config.LIGHTNING_STRIKE.get())
-            {
+            if (Config.LIGHTNING_STRIKE.get()) {
                 pdev.getEntity().getLocation().getWorld().strikeLightningEffect(pdev.getEntity().getLocation());
             }
         }
 
         // If it is a death of an offline player
-        else
-        {
-            Bukkit.broadcastMessage(colorizePlayerInString(I.t("{0} died, following a game master's order.", ev.getPlayer().getName()), ev.getPlayer()));
+        else {
+            Bukkit.broadcastMessage(
+                    colorizePlayerInString(I.t("{0} died, following a game master's order.", ev.getPlayer().getName()),
+                            ev.getPlayer()));
         }
 
 
         // Play sound
-        if (Config.PLAY_SOUND.get())
-        {
+        if (Config.PLAY_SOUND.get()) {
             deathSound.broadcast();
         }
     }
 
     @EventHandler
-    public void onTeamDeath(final TeamDeathEvent ev)
-    {
-        if (Config.NOTIFY_IF_TEAM_HAS_FALLEN.get())
-        {
+    public void onTeamDeath(final TeamDeathEvent ev) {
+        if (Config.NOTIFY_IF_TEAM_HAS_FALLEN.get()) {
             // Used to display this message after the death message.
             RunTask.later(() ->
             {
-                final ZTeam team = ev.getTeam();
-                final String format = ChatColor.translateAlternateColorCodes('&', Config.TEAM_DEATH_MESSAGES_FORMAT.get());
+                final QuartzTeam team = ev.getTeam();
+                final String format =
+                        ChatColor.translateAlternateColorCodes('&', Config.TEAM_DEATH_MESSAGES_FORMAT.get());
 
                 final RawTextPart<?> teamTooltip = new RawText()
                         .then(team.getName()).style(team.getColorOrWhite().toChatColor(), ChatColor.BOLD);
 
-                for (final OfflinePlayer player : team.getPlayers())
-                {
+                for (final OfflinePlayer player : team.getPlayers()) {
                     teamTooltip.then("\n")
                             .then("- ").color(ChatColor.GRAY)
                             .then(player.getName()).color(ChatColor.WHITE);
                 }
 
                 RawMessage.broadcast(
-                    new RawText(I.t("{0}The team {1} has fallen!", format, team.getDisplayName() + format))
-                        .hover(teamTooltip)
+                        new RawText(I.t("{0}The team {1} has fallen!", format, team.getDisplayName() + format))
+                                .hover(teamTooltip)
                 );
             }, 1L);
         }
@@ -138,22 +133,22 @@ public class DeathAnnouncementModule extends QSGModule
      * Colorizes each instance of the given player name in the string with its team color,
      * if the player is in a team.
      *
-     * @param str The string to colorize.
+     * @param str    The string to colorize.
      * @param player The player to look for in the string.
      * @return The colorized string.
      */
-    private String colorizePlayerInString(final String str, final OfflinePlayer player)
-    {
-        final ZTeam team = ZTeams.get().getTeamForPlayer(player);
-        if (team == null) return str;
+    private String colorizePlayerInString(final String str, final OfflinePlayer player) {
+        final QuartzTeam team = QuartzTeams.get().getTeamForPlayer(player);
+        if (team == null) {
+            return str;
+        }
 
         // We split the name to recompose the string with the colored name in each hole
         final String[] strParts = str.split(player.getName());
         final ChatColor color = team.getColorOrWhite().toChatColor();
         final StringBuilder colorizedStr = new StringBuilder();
 
-        for (int i = 0; i < strParts.length; i++)
-        {
+        for (int i = 0; i < strParts.length; i++) {
             colorizedStr.append(strParts[i]);
 
             if (i != strParts.length - 1) // If not the last one

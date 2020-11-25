@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.border.worldborders;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.BorderModule;
@@ -43,14 +44,40 @@ import org.bukkit.World;
  * An abstraction layer to manipulate world borders, typically the vanilla world border or
  * the Brettflan one.
  */
-public abstract class WorldBorder
-{
+public abstract class WorldBorder {
+    /**
+     * Returns a new instance of a WorldBorder proxy using the requested types.
+     *
+     * @param motor The border motor; can be "vanilla" or "brettflan" (from config).
+     * @param shape The border shape.
+     * @return An instance of a WorldBorder proxy.
+     */
+    public static WorldBorder getInstance(final World world, final WorldBorderMotor motor, final MapShape shape) {
+        // For circular shapes, the vanilla motor cannot be used.
+        // Without the WorldBorder plugin, a fake world border is used (i.e., no border control).
+        if (shape == MapShape.CIRCULAR) {
+            if (QSG.module(BorderModule.class).getWorldBorderDependency().isEnabled()) {
+                return new BrettflanWorldBorder(world);
+            } else {
+                return new FakeWorldBorder(world);
+            }
+        } else {
+            if (motor == WorldBorderMotor.VANILLA ||
+                    !QSG.module(BorderModule.class).getWorldBorderDependency().isEnabled()) {
+                return new VanillaWorldBorder(world);
+            } else {
+                return new BrettflanWorldBorder(world);
+            }
+        }
+    }
+
     /**
      * Initializes the world border configuration, if needed.
-     *
+     * <p>
      * This method does not initializes the shape, size, etc.
      */
-    public void init() {}
+    public void init() {
+    }
 
     /**
      * @return The world bordered by this world border.
@@ -77,8 +104,7 @@ public abstract class WorldBorder
      * @param diameter The new diameter of the border.
      * @param time     The seconds used to change the size from the old size to the new one.
      */
-    public void setDiameter(final double diameter, final TimeDelta time)
-    {
+    public void setDiameter(final double diameter, final TimeDelta time) {
         setDiameter(diameter, time.getSeconds());
     }
 
@@ -88,17 +114,17 @@ public abstract class WorldBorder
     public abstract Location getCenter();
 
     /**
+     * @param center The new center of the border.
+     */
+    public abstract void setCenter(final Location center);
+
+    /**
      * Sets the center of the border.
      *
      * @param x The x coordinate of the new center.
      * @param z The z coordinate of the new center.
      */
     public abstract void setCenter(final double x, final double z);
-
-    /**
-     * @param center The new center of the border.
-     */
-    public abstract void setCenter(final Location center);
 
     /**
      * @return the amount of blocks a player may safely be outside the border before taking damage.
@@ -161,45 +187,7 @@ public abstract class WorldBorder
      */
     public abstract boolean supportsProgressiveResize();
 
-
-    /**
-     * Returns a new instance of a WorldBorder proxy using the requested types.
-     *
-     * @param motor The border motor; can be "vanilla" or "brettflan" (from config).
-     * @param shape The border shape.
-     *
-     * @return An instance of a WorldBorder proxy.
-     */
-    public static WorldBorder getInstance(final World world, final WorldBorderMotor motor, final MapShape shape)
-    {
-        // For circular shapes, the vanilla motor cannot be used.
-        // Without the WorldBorder plugin, a fake world border is used (i.e., no border control).
-        if (shape == MapShape.CIRCULAR)
-        {
-            if (QSG.module(BorderModule.class).getWorldBorderDependency().isEnabled())
-            {
-                return new BrettflanWorldBorder(world);
-            }
-            else
-            {
-                return new FakeWorldBorder(world);
-            }
-        }
-        else
-        {
-            if (motor == WorldBorderMotor.VANILLA || !QSG.module(BorderModule.class).getWorldBorderDependency().isEnabled())
-            {
-                return new VanillaWorldBorder(world);
-            }
-            else
-            {
-                return new BrettflanWorldBorder(world);
-            }
-        }
-    }
-
-    public enum WorldBorderMotor
-    {
+    public enum WorldBorderMotor {
         /**
          * Uses the vanilla world border (for squared borders only).
          */
@@ -207,7 +195,7 @@ public abstract class WorldBorder
 
         /**
          * Uses the Brettflan's WorldBorder plugin (for both squared and circular).
-         *
+         * <p>
          * If set for squared world borders and WorldBorder is not installed, fallbacks to vanilla.
          */
         BRETTFLAN

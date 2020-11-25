@@ -122,10 +122,7 @@ public class GoldenHeadsModule extends QSGModule
 
         goldenAppleFromHeadRecipe.shape("GGG", "GHG", "GGG");
         goldenAppleFromHeadRecipe.setIngredient('G', enchanted ? Material.GOLD_BLOCK : Material.GOLD_INGOT);
-
-        // TODO: deprecated, but no alternative found...
-        // FIXME 1.13
-        goldenAppleFromHeadRecipe.setIngredient('H', Material.SKULL_ITEM, player ? SkullType.PLAYER.ordinal() : SkullType.WITHER.ordinal());
+        goldenAppleFromHeadRecipe.setIngredient('H', player ? Material.PLAYER_HEAD : Material.WITHER_SKELETON_SKULL);
 
         return goldenAppleFromHeadRecipe;
     }
@@ -161,6 +158,8 @@ public class GoldenHeadsModule extends QSGModule
      * if it's a regular golden apple, a Wither golden head or a Player golden
      * head.
      *
+     * TODO replace SkullType with Material
+     *
      * @param stack The ItemStack to analyze.
      * @return Either {@link SkullType#PLAYER} (Player golden head),
      * {@link SkullType#WITHER} (Wither golden head) or {@code null} (regular
@@ -190,9 +189,9 @@ public class GoldenHeadsModule extends QSGModule
         /* *** We remove these recipes if disabled *** */
 
         final ItemStack result = ev.getInventory().getResult();
-        if (result == null || (result.getType() != Material.GOLDEN_APPLE /* && result.getType() != Material.ENCHANTED_GOLDEN_APPLE FIXME 1.13 */)) return;
+        if (result == null || (result.getType() != Material.GOLDEN_APPLE && result.getType() != Material.ENCHANTED_GOLDEN_APPLE)) return;
 
-        final boolean isEnchanted = result.getData().getData() == 1;
+        final boolean isEnchanted = result.getType() == Material.ENCHANTED_GOLDEN_APPLE;
 
         if ((!Config.GOLDEN_APPLE.ENABLE.get() && result.getType() == Material.GOLDEN_APPLE && !isEnchanted)
                 || (!Config.ENCHANTED_GOLDEN_APPLE.ENABLE.get() && result.getType() == Material.GOLDEN_APPLE && isEnchanted))
@@ -223,12 +222,12 @@ public class GoldenHeadsModule extends QSGModule
                 for (final ItemStack item : ev.getInventory().getContents())
                 {
                     // An human head
-                    if (item.getType() == Material.SKULL_ITEM && item.getDurability() == (short) SkullType.PLAYER.ordinal())
+                    if (item.getType() == Material.PLAYER_HEAD)
                     {
                         SkullMeta sm = (SkullMeta) item.getItemMeta();
                         if (sm.hasOwner()) // An human head
                         {
-                            name = sm.getOwner();
+                            name = sm.getOwningPlayer() != null ? sm.getOwningPlayer().getName() : null;
                         }
                         break;
                     }
@@ -282,8 +281,7 @@ public class GoldenHeadsModule extends QSGModule
     {
         if (Config.DROP_HEAD_ON_DEATH.get() && ev.getPlayer().isOnline() && (!Config.DROP_HEAD_ON_DEATH_PVP_ONLY.get() || ev.getPlayer().getPlayer().getKiller() != null))
         {
-            final ItemStackBuilder headBuilder = new ItemStackBuilder(Material.SKULL_ITEM)
-                    .data((short) 3)
+            final ItemStackBuilder headBuilder = new ItemStackBuilder(Material.PLAYER_HEAD)
                     .title(ChatColor.AQUA, I.t("{0}'s head", ev.getPlayer().getName()));
 
             if (Config.PLAYER_GOLDEN_HEAD.ENABLE.get() || Config.PLAYER_ENCHANTED_GOLDEN_HEAD.ENABLE.get())
@@ -291,10 +289,11 @@ public class GoldenHeadsModule extends QSGModule
                 headBuilder.longLore(ChatColor.GRAY, ChatColor.ITALIC + I.t("Old legends tell how the heads of the brave fallen warriors can become, through a rich and complex transformation, a precious healing balm..."), 38);
             }
 
+            // TODO update with QLib 0.1's ISB
             final ItemStack head = headBuilder.item();
             final SkullMeta meta = (SkullMeta) head.getItemMeta();
 
-            meta.setOwner(ev.getPlayer().getName());
+            meta.setOwningPlayer(ev.getPlayer());
             head.setItemMeta(meta);
 
             ItemUtils.dropNaturally(ev.getPlayer().getPlayer().getLocation(), head);
@@ -308,13 +307,13 @@ public class GoldenHeadsModule extends QSGModule
     @EventHandler
     public void onPlayerItemConsume(final PlayerItemConsumeEvent ev)
     {
-        if (ev.getItem().getType() == Material.GOLDEN_APPLE)  // FIXME 1.13
+        if (ev.getItem().getType() == Material.GOLDEN_APPLE || ev.getItem().getType() == Material.ENCHANTED_GOLDEN_APPLE)
         {
             final SkullType headType = readHeadType(ev.getItem());
-            final short dataValue = ev.getItem().getDurability();
+            final boolean isEnchanted = ev.getItem().getType() == Material.ENCHANTED_GOLDEN_APPLE;
 
-            final int halfHearts = getRegenerationFor(headType, dataValue == 1);
-            final int level = dataValue == 0 ? REGENERATION_LEVEL_GOLDEN_APPLE : REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE;
+            final int halfHearts = getRegenerationFor(headType, isEnchanted);
+            final int level = isEnchanted ? REGENERATION_LEVEL_NOTCH_GOLDEN_APPLE : REGENERATION_LEVEL_GOLDEN_APPLE;
 
 
             // Technically, a level-I effect is « level 0 ».
@@ -322,15 +321,15 @@ public class GoldenHeadsModule extends QSGModule
 
 
             // What is needed to do?
-            if ((dataValue == 0 && halfHearts == DEFAULT_NUMBER_OF_HEARTS_REGEN)
-                    || (dataValue == 1 && halfHearts == DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH))
+            if ((!isEnchanted && halfHearts == DEFAULT_NUMBER_OF_HEARTS_REGEN)
+                    || (isEnchanted && halfHearts == DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH))
             {
                 // Default behavior, nothing to do.
                 return;
             }
 
-            if ((dataValue == 0 && halfHearts > DEFAULT_NUMBER_OF_HEARTS_REGEN)
-                    || (dataValue == 1 && halfHearts > DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH))
+            if ((!isEnchanted && halfHearts > DEFAULT_NUMBER_OF_HEARTS_REGEN)
+                    || (isEnchanted && halfHearts > DEFAULT_NUMBER_OF_HEARTS_REGEN_NOTCH))
             {
                 // If the heal needs to be increased, the effect can be applied immediately.
 

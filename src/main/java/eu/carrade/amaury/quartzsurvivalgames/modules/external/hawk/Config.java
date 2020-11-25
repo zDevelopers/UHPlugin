@@ -33,20 +33,20 @@
  */
 package eu.carrade.amaury.quartzsurvivalgames.modules.external.hawk;
 
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.section;
+
 import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationList;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
-import org.bukkit.Material;
-import org.bukkit.Statistic;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.Material;
+import org.bukkit.Statistic;
 
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.section;
-
+@SuppressWarnings("CheckStyle")
 public class Config extends ConfigurationInstance
 {
     public Config(File file)
@@ -124,9 +124,9 @@ public class Config extends ConfigurationInstance
                 Material.DIAMOND_SWORD, Material.DIAMOND_AXE, Material.DIAMOND_PICKAXE, Material.DIAMOND_HOE,
                 Material.IRON_SWORD, Material.IRON_AXE, Material.IRON_PICKAXE, Material.IRON_HOE,
                 Material.CAKE, Material.SADDLE, Material.GOLDEN_APPLE, Material.POTION,
-                Material.GOLD_RECORD, Material.GREEN_RECORD, Material.RECORD_3, Material.RECORD_4,
-                Material.RECORD_5, Material.RECORD_6, Material.RECORD_7, Material.RECORD_8,
-                Material.RECORD_9, Material.RECORD_10, Material.RECORD_11, Material.RECORD_12
+                Material.MUSIC_DISC_11, Material.MUSIC_DISC_13, Material.MUSIC_DISC_BLOCKS, Material.MUSIC_DISC_CAT,
+                Material.MUSIC_DISC_CHIRP, Material.MUSIC_DISC_FAR, Material.MUSIC_DISC_MALL, Material.MUSIC_DISC_MELLOHI,
+                Material.MUSIC_DISC_STAL, Material.MUSIC_DISC_STRAD, Material.MUSIC_DISC_WAIT, Material.MUSIC_DISC_WARD
         );
     }
 
@@ -137,8 +137,8 @@ public class Config extends ConfigurationInstance
                 Material.GOLD_INGOT, Material.GOLD_ORE,
                 Material.IRON_INGOT, Material.IRON_ORE,
                 Material.EMERALD, Material.EMERALD_ORE,
-                Material.OBSIDIAN, Material.NETHER_WARTS,
-                Material.MOB_SPAWNER, Material.STONE
+                Material.OBSIDIAN, Material.NETHER_WART,
+                Material.SPAWNER, Material.STONE
         );
     }
 
@@ -147,7 +147,8 @@ public class Config extends ConfigurationInstance
         return Arrays.asList(
                 Material.APPLE,
                 Material.BOW, Material.ENDER_PEARL, Material.GOLD_INGOT,
-                Material.SKULL_ITEM
+                Material.PLAYER_HEAD, Material.CREEPER_HEAD, Material.DRAGON_HEAD,
+                Material.ZOMBIE_HEAD, Material.SKELETON_SKULL, Material.WITHER_SKELETON_SKULL
         );
     }
 

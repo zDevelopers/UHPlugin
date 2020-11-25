@@ -51,7 +51,7 @@ import java.util.List;
         description = "Provides commands to update food level & saturation of some or all players.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.UTILITIES,
-        icon = Material.MUSHROOM_SOUP
+        icon = Material.MUSHROOM_STEW
 )
 public class FoodModule extends QSGModule
 {

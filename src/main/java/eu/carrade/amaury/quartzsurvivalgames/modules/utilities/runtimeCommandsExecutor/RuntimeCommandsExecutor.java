@@ -62,7 +62,7 @@ import java.util.Set;
                 "This is a powerful tool to schedule any command at any time relative to the game progression.",
         when = ModuleLoadTime.STARTUP,
         category = ModuleCategory.UTILITIES,
-        icon = Material.COMMAND,
+        icon = Material.COMMAND_BLOCK,
         settings = Config.class
 )
 public class RuntimeCommandsExecutor extends QSGModule

@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.border.worldborders;
 
 import com.wimbli.WorldBorder.BorderData;
@@ -54,9 +55,8 @@ import org.bukkit.scheduler.BukkitTask;
  *     <li>{@link #setWarningTime(int)}.</li>
  * </ul>
  */
-public class BrettflanWorldBorder extends WorldBorder
-{
-    private World world;
+public class BrettflanWorldBorder extends WorldBorder {
+    private final World world;
     private BorderData border;
 
     private Double diameter = 0d;
@@ -64,16 +64,14 @@ public class BrettflanWorldBorder extends WorldBorder
     private BukkitTask slowReductionTask = null;
 
 
-    public BrettflanWorldBorder(final World world)
-    {
+    public BrettflanWorldBorder(final World world) {
         this.world = world;
 
-        if (QSG.module(BorderModule.class).getWorldBorderDependency().isEnabled())
-        {
-            border = QSG.module(BorderModule.class).getWorldBorderDependency().getWorldBorder().getWorldBorder(world.getName());
+        if (QSG.module(BorderModule.class).getWorldBorderDependency().isEnabled()) {
+            border = QSG.module(BorderModule.class).getWorldBorderDependency().getWorldBorder()
+                    .getWorldBorder(world.getName());
 
-            if (border == null)
-            {
+            if (border == null) {
                 border = new BorderData(world.getSpawnLocation().getX(), world.getSpawnLocation().getZ(), 3000000);
                 Config.setBorder(world.getName(), border);
             }
@@ -81,23 +79,21 @@ public class BrettflanWorldBorder extends WorldBorder
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         Config.setPortalRedirection(true);
     }
 
     @Override
-    public World getWorld()
-    {
+    public World getWorld() {
         return world;
     }
 
     @Override
-    public double getDiameter()
-    {
+    public double getDiameter() {
         // If squared, the size is not changed
-        if (!border.getShape())
+        if (!border.getShape()) {
             return diameter;
+        }
 
 
         Double realDiameter = (double) (border.getRadiusX() * 2);
@@ -105,35 +101,32 @@ public class BrettflanWorldBorder extends WorldBorder
         // Returns the stored diameter, except if it was changed
         // manually with /wb (see #setDiameterInternal(Double) for
         // details).
-        if (realDiameter - diameter >= 8)
+        if (realDiameter - diameter >= 8) {
             diameter = realDiameter;
+        }
 
         return diameter;
     }
 
     @Override
-    public void setDiameter(final double diameter)
-    {
+    public void setDiameter(final double diameter) {
         setDiameterInternal(diameter);
 
-        if (slowReductionTask != null)
-        {
+        if (slowReductionTask != null) {
             slowReductionTask.cancel();
             slowReductionTask = null;
         }
     }
 
     @Override
-    public void setDiameter(final double diameter, final long time)
-    {
+    public void setDiameter(final double diameter, final long time) {
         // The behavior of the vanilla reduction is emulated.
         final double currentDiameter = getDiameter();
 
         final long ticksPerBlockRemoved = (int) Math.rint(time / (currentDiameter - diameter)) * 20L;
         final long movement = (diameter >= currentDiameter) ? 1 : -1;
 
-        if (slowReductionTask != null)
-        {
+        if (slowReductionTask != null) {
             slowReductionTask.cancel();
             slowReductionTask = null;
         }
@@ -143,19 +136,15 @@ public class BrettflanWorldBorder extends WorldBorder
 
             // If the final size is achieved, we set the exact requested size and we stop here.
             // Calling setDiameter cancels this task.
-            if ((movement < 0 && newDiameter <= diameter) || (movement > 0 && newDiameter >= diameter))
-            {
+            if ((movement < 0 && newDiameter <= diameter) || (movement > 0 && newDiameter >= diameter)) {
                 setDiameter(diameter);
-            }
-            else
-            {
+            } else {
                 setDiameterInternal(newDiameter);
             }
         }, ticksPerBlockRemoved, ticksPerBlockRemoved);
     }
 
-    private void setDiameterInternal(final double diameter)
-    {
+    private void setDiameterInternal(final double diameter) {
         this.diameter = diameter;
 
         // If the wall is circular, the diameter used to check must be bigger to avoid false positives
@@ -169,63 +158,69 @@ public class BrettflanWorldBorder extends WorldBorder
     }
 
     @Override
-    public Location getCenter()
-    {
+    public Location getCenter() {
         return new Location(world, border.getX(), 0, border.getZ());
     }
 
     @Override
-    public void setCenter(final double x, final double z)
-    {
+    public void setCenter(final Location center) {
+        setCenter(center.getX(), center.getZ());
+    }
+
+    @Override
+    public void setCenter(final double x, final double z) {
         border.setX(x);
         border.setZ(z);
     }
 
     @Override
-    public void setCenter(final Location center)
-    {
-        setCenter(center.getX(), center.getZ());
+    public double getDamageBuffer() {
+        return 0;
     }
 
     @Override
-    public double getDamageBuffer() { return 0; }
+    public void setDamageBuffer(final double distance) {
+    }
 
     @Override
-    public void setDamageBuffer(final double distance) {}
+    public double getDamageAmount() {
+        return 0;
+    }
 
     @Override
-    public double getDamageAmount() { return 0; }
+    public void setDamageAmount(final double damageAmount) {
+    }
 
     @Override
-    public void setDamageAmount(final double damageAmount) {}
+    public int getWarningTime() {
+        return 0;
+    }
 
     @Override
-    public int getWarningTime() { return 0; }
+    public void setWarningTime(final int seconds) {
+    }
 
     @Override
-    public void setWarningTime(final int seconds) {}
+    public int getWarningDistance() {
+        return 0;
+    }
 
     @Override
-    public int getWarningDistance() { return 0; }
+    public void setWarningDistance(final int blocks) {
+    }
 
     @Override
-    public void setWarningDistance(final int blocks) {}
-
-    @Override
-    public MapShape getShape()
-    {
+    public MapShape getShape() {
         return border.getShape() ? MapShape.CIRCULAR : MapShape.SQUARED;
     }
 
     @Override
-    public void setShape(final MapShape shape)
-    {
+    public void setShape(final MapShape shape) {
         border.setShape(shape == MapShape.CIRCULAR);
     }
 
     @Override
-    public boolean supportsProgressiveResize()
-    {
+    public boolean supportsProgressiveResize() {
         return true;
     }
 }

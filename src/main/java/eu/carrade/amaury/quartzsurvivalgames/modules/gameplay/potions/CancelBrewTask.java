@@ -71,7 +71,7 @@ public class CancelBrewTask extends BukkitRunnable
 
             if (Config.DISABLE_EXTENDED.get()) forbiddenIngredients.add(Material.REDSTONE);
             if (Config.DISABLE_LEVEL_II.get()) forbiddenIngredients.add(Material.GLOWSTONE_DUST);
-            if (Config.DISABLE_SPLASH.get()) forbiddenIngredients.add(Material.SULPHUR);
+            if (Config.DISABLE_SPLASH.get()) forbiddenIngredients.add(Material.GUNPOWDER);
             if (Config.DISABLE_LINGERING.get())
             {
                 // 1.9 - 1.12

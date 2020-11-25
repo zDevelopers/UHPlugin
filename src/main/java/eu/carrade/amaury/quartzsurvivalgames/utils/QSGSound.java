@@ -35,6 +35,10 @@ package eu.carrade.amaury.quartzsurvivalgames.utils;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationParseException;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationValueHandler;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationValueHandlers;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -42,129 +46,131 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-
 
 /**
  * Represents a sound, with volume and pitch.
  *
  * @author Amaury Carrade
  */
-public class QSGSound
-{
-    private Sound sound  = null;
+public class QSGSound {
+    static {
+        ConfigurationValueHandlers.registerHandlers(QSGSound.class);
+    }
+
+    private Sound sound = null;
     private Float volume = 1f;
-    private Float pitch  = 1f;
+    private Float pitch = 1f;
 
     /**
      * Constructs a sound with volume = 1f and pitch = 1f.
      *
      * @param sound The sound.
      */
-    public QSGSound(final Sound sound)
-    {
+    public QSGSound(final Sound sound) {
         Validate.notNull(sound, "The sound cannot be null.");
         this.sound = sound;
     }
 
-    public QSGSound(final Sound sound, final Float volume, final Float pitch)
-    {
+    public QSGSound(final Sound sound, final Float volume, final Float pitch) {
         Validate.notNull(sound, "The sound cannot be null.");
 
-        this.sound  = sound;
+        this.sound = sound;
         this.volume = volume;
-        this.pitch  = pitch;
+        this.pitch = pitch;
     }
 
     /**
      * Constructs a sound from a string name with volume = 1f and pitch = 1f.
-     *
+     * <p>
      * This allows to support automatically all Minecraft versions as sounds names changed in enum
      * after version 1.10.
      *
      * @param sound The sound name to be looked up.
      */
-    public QSGSound(final String sound)
-    {
+    public QSGSound(final String sound) {
         final Sound bukkitSound = string2Sound(sound);
 
-        if (bukkitSound == null) throw new IllegalArgumentException("Cannot find a sound matching " + sound);
+        if (bukkitSound == null) {
+            throw new IllegalArgumentException("Cannot find a sound matching " + sound);
+        }
 
         this.sound = bukkitSound;
     }
 
     /**
      * Constructs a sound from a string name.
-     *
+     * <p>
      * This allows to support automatically all Minecraft versions as sounds names changed in enum
      * after version 1.10.
      *
-     * @param sound The sound name to be looked up.
+     * @param sound  The sound name to be looked up.
      * @param volume The sound volume.
-     * @param pitch The sound pitch.
+     * @param pitch  The sound pitch.
      */
-    public QSGSound(final String sound, final Float volume, final Float pitch)
-    {
+    public QSGSound(final String sound, final Float volume, final Float pitch) {
         final Sound bukkitSound = string2Sound(sound);
 
-        if (bukkitSound == null) throw new IllegalArgumentException("Cannot find a sound matching " + sound);
+        if (bukkitSound == null) {
+            throw new IllegalArgumentException("Cannot find a sound matching " + sound);
+        }
 
-        this.sound  = bukkitSound;
+        this.sound = bukkitSound;
         this.volume = volume;
-        this.pitch  = pitch;
+        this.pitch = pitch;
     }
 
     /**
      * Constructs a sound from string names with volume = 1f and pitch = 1f.
-     *
+     * <p>
      * This allows to support automatically all Minecraft versions as sounds names changed in enum
      * after version 1.10.
      *
      * @param sound A list of sounds to be looked up. The first one found will be used.
      */
-    public QSGSound(final String... sound)
-    {
+    public QSGSound(final String... sound) {
         Sound bukkitSound = null;
 
-        for (String soundCandidate : sound)
-        {
+        for (String soundCandidate : sound) {
             bukkitSound = string2Sound(soundCandidate);
-            if (bukkitSound != null) break;
+            if (bukkitSound != null) {
+                break;
+            }
         }
 
-        if (bukkitSound == null) throw new IllegalArgumentException("Cannot find a sound matching one of these: " + Arrays.toString(sound));
+        if (bukkitSound == null) {
+            throw new IllegalArgumentException("Cannot find a sound matching one of these: " + Arrays.toString(sound));
+        }
 
         this.sound = bukkitSound;
     }
 
     /**
      * Constructs a sound from a string name.
-     *
+     * <p>
      * This allows to support automatically all Minecraft versions as sounds names changed in enum
      * after version 1.10.
      *
      * @param volume The sound volume.
-     * @param pitch The sound pitch.
-     * @param sound A list of sounds to be looked up. The first one found will be used.
+     * @param pitch  The sound pitch.
+     * @param sound  A list of sounds to be looked up. The first one found will be used.
      */
-    public QSGSound(final Float volume, final Float pitch, final String... sound)
-    {
+    public QSGSound(final Float volume, final Float pitch, final String... sound) {
         Sound bukkitSound = null;
 
-        for (String soundCandidate : sound)
-        {
+        for (String soundCandidate : sound) {
             bukkitSound = string2Sound(soundCandidate);
-            if (bukkitSound != null) break;
+            if (bukkitSound != null) {
+                break;
+            }
         }
 
-        if (bukkitSound == null) throw new IllegalArgumentException("Cannot find a sound matching one of these: " + Arrays.toString(sound));
+        if (bukkitSound == null) {
+            throw new IllegalArgumentException("Cannot find a sound matching one of these: " + Arrays.toString(sound));
+        }
 
-        this.sound  = bukkitSound;
+        this.sound = bukkitSound;
         this.volume = volume;
-        this.pitch  = pitch;
+        this.pitch = pitch;
     }
 
     /**
@@ -180,122 +186,15 @@ public class QSGSound
      *
      * @param config The configuration section.
      */
-    public QSGSound(ConfigurationSection config)
-    {
-        if (config == null)
-        {
+    public QSGSound(ConfigurationSection config) {
+        if (config == null) {
             return;
         }
 
-        this.sound  = string2Sound(config.getString("name"));
+        this.sound = string2Sound(config.getString("name"));
         this.volume = (float) config.getDouble("volume");
-        this.pitch  = (float) config.getDouble("pitch");
+        this.pitch = (float) config.getDouble("pitch");
     }
-
-    /**
-     * Plays the sound for the specified player.
-     * <p>
-     * The sound is played at the current location of the player.
-     * <p>
-     * If the sound is null, fails silently.
-     *
-     * @param player The player.
-     */
-    public void play(Player player)
-    {
-        play(player, player.getLocation());
-    }
-
-    /**
-     * Plays the sound for the specified player, at the specified location.
-     * <p>
-     * If the sound is null, fails silently.
-     *
-     * @param player The player.
-     * @param location The location of the sound.
-     */
-    public void play(Player player, Location location)
-    {
-        player.playSound(location, sound, volume, pitch);
-    }
-
-    /**
-     * Plays this sound for all players, at the current location of the players.
-     */
-    public void broadcast()
-    {
-        for (Player player : Bukkit.getServer().getOnlinePlayers())
-        {
-            play(player);
-        }
-    }
-
-    public Sound getSound()
-    {
-        return sound;
-    }
-
-    public void setSound(Sound sound)
-    {
-        this.sound = sound;
-    }
-
-    public Float getVolume()
-    {
-        return volume;
-    }
-
-    public void setVolume(Float volume)
-    {
-        this.volume = volume;
-    }
-
-    public Float getPitch()
-    {
-        return pitch;
-    }
-
-    public void setPitch(Float pitch)
-    {
-        this.pitch = pitch;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "UHSound [sound=" + sound + ", volume=" + volume + ", pitch=" + pitch + "]";
-    }
-
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((pitch == null) ? 0 : pitch.hashCode());
-        result = prime * result + ((sound == null) ? 0 : sound.hashCode());
-        result = prime * result + ((volume == null) ? 0 : volume.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj) return true;
-        if (!(obj instanceof QSGSound)) return false;
-
-        final QSGSound other = (QSGSound) obj;
-        if (pitch == null)
-        {
-            if (other.pitch != null)
-                return false;
-        }
-        else if (!pitch.equals(other.pitch))
-        {
-            return false;
-        }
-        return sound == other.sound && (Objects.equals(volume, other.volume));
-    }
-
 
     /**
      * Converts a string to a Sound.
@@ -309,22 +208,20 @@ public class QSGSound
      * @param soundName The text to be converted.
      * @return The corresponding Sound, or null if there isn't any match.
      */
-    public static Sound string2Sound(String soundName)
-    {
-        if (soundName != null)
-        {
+    public static Sound string2Sound(String soundName) {
+        if (soundName != null) {
             soundName = soundName.trim().toUpperCase().replace(' ', '_').replace('.', '_');
-            try
-            {
+            try {
                 return Sound.valueOf(soundName);
             }
-            catch (IllegalArgumentException e)
-            {
+            catch (IllegalArgumentException e) {
                 String[] prefixes = new String[] {"BLOCK_", "ENTITY_", "ITEM_", "MUSIC_", "WEATHER_"};
-                for (String prefix : prefixes)
-                {
-                    try { return Sound.valueOf(prefix + soundName); }
-                    catch(IllegalArgumentException ignored) {}
+                for (String prefix : prefixes) {
+                    try {
+                        return Sound.valueOf(prefix + soundName);
+                    }
+                    catch (IllegalArgumentException ignored) {
+                    }
                 }
 
                 // Non-existent sound
@@ -336,45 +233,127 @@ public class QSGSound
     }
 
     @ConfigurationValueHandler
-    public static Sound handleSoundValue(final Object object)
-    {
+    public static Sound handleSoundValue(final Object object) {
         return string2Sound(object.toString());
     }
 
     @ConfigurationValueHandler
-    public static QSGSound handleUHSoundValue(final Map<String, Object> section) throws ConfigurationParseException
-    {
-        if (!section.containsKey("name"))
+    public static QSGSound handleUHSoundValue(final Map<String, Object> section) throws ConfigurationParseException {
+        if (!section.containsKey("name")) {
             throw new ConfigurationParseException("Missing key `name` in sound (either string or list)", section);
+        }
 
         final float volume = ConfigurationValueHandlers.handleFloatValue(section.getOrDefault("volume", 1f));
         final float pitch = ConfigurationValueHandlers.handleFloatValue(section.getOrDefault("pitch", 1f));
 
         final Object names = section.get("name");
 
-        if (names == null)
-        {
+        if (names == null) {
             throw new ConfigurationParseException("Missing key `name` in sound (either string or list)", section);
-        }
-        else if (names instanceof Collection)
-        {
+        } else if (names instanceof Collection) {
             final String[] soundNames = new String[((Collection) names).size()];
 
             int i = 0;
-            for (final Object name : (Collection) names)
-            {
+            for (final Object name : (Collection) names) {
                 soundNames[i++] = name.toString();
             }
 
             return new QSGSound(volume, pitch, soundNames);
-        }
-        else
-        {
+        } else {
             return new QSGSound(names.toString(), volume, pitch);
         }
     }
 
-    static {
-        ConfigurationValueHandlers.registerHandlers(QSGSound.class);
+    /**
+     * Plays the sound for the specified player.
+     * <p>
+     * The sound is played at the current location of the player.
+     * <p>
+     * If the sound is null, fails silently.
+     *
+     * @param player The player.
+     */
+    public void play(Player player) {
+        play(player, player.getLocation());
+    }
+
+    /**
+     * Plays the sound for the specified player, at the specified location.
+     * <p>
+     * If the sound is null, fails silently.
+     *
+     * @param player   The player.
+     * @param location The location of the sound.
+     */
+    public void play(Player player, Location location) {
+        player.playSound(location, sound, volume, pitch);
+    }
+
+    /**
+     * Plays this sound for all players, at the current location of the players.
+     */
+    public void broadcast() {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+            play(player);
+        }
+    }
+
+    public Sound getSound() {
+        return sound;
+    }
+
+    public void setSound(Sound sound) {
+        this.sound = sound;
+    }
+
+    public Float getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Float volume) {
+        this.volume = volume;
+    }
+
+    public Float getPitch() {
+        return pitch;
+    }
+
+    public void setPitch(Float pitch) {
+        this.pitch = pitch;
+    }
+
+    @Override
+    public String toString() {
+        return "UHSound [sound=" + sound + ", volume=" + volume + ", pitch=" + pitch + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((pitch == null) ? 0 : pitch.hashCode());
+        result = prime * result + ((sound == null) ? 0 : sound.hashCode());
+        result = prime * result + ((volume == null) ? 0 : volume.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof QSGSound)) {
+            return false;
+        }
+
+        final QSGSound other = (QSGSound) obj;
+        if (pitch == null) {
+            if (other.pitch != null) {
+                return false;
+            }
+        } else if (!pitch.equals(other.pitch)) {
+            return false;
+        }
+        return sound == other.sound && (Objects.equals(volume, other.volume));
     }
 }

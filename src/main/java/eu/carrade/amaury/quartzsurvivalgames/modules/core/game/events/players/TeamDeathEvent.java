@@ -32,7 +32,7 @@
 
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.players;
 
-import fr.zcraft.zteams.ZTeam;
+import fr.zcraft.quartzteams.QuartzTeam;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -40,13 +40,16 @@ import org.bukkit.event.HandlerList;
 /**
  * Event fired when the last member of a team die.
  */
-public class TeamDeathEvent extends Event
-{
-    private final ZTeam team;
+public class TeamDeathEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
+    private final QuartzTeam team;
 
-    public TeamDeathEvent(ZTeam team)
-    {
+    public TeamDeathEvent(QuartzTeam team) {
         this.team = team;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -54,23 +57,12 @@ public class TeamDeathEvent extends Event
      *
      * @return The team.
      */
-    public ZTeam getTeam()
-    {
+    public QuartzTeam getTeam() {
         return team;
     }
 
-
-
-    private static final HandlerList handlers = new HandlerList();
-
     @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

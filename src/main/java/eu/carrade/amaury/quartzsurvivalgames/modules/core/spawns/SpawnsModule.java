@@ -45,7 +45,7 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns.generators.Spaw
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import eu.carrade.amaury.quartzsurvivalgames.utils.QSGUtils;
 import fr.zcraft.quartzlib.components.commands.Command;
-import fr.zcraft.zteams.ZTeams;
+import fr.zcraft.quartzteams.QuartzTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -301,7 +301,7 @@ public class SpawnsModule extends QSGModule
 
         final int regionDiameter = QSG.module(BorderModule.class).getCurrentBorderDiameter();
         final int playersWithoutTeam = (int) Bukkit.getOnlinePlayers().stream()
-                .filter(player -> ZTeams.get().getTeamForPlayer(player) == null)
+                .filter(player -> QuartzTeams.get().getTeamForPlayer(player) == null)
                 .count();
 
         int spawnsNeeded = 0;
@@ -309,11 +309,11 @@ public class SpawnsModule extends QSGModule
         switch (game.getTeleportationMode())
         {
             case NORMAL:
-                spawnsNeeded = ZTeams.get().countTeams() + playersWithoutTeam;
+                spawnsNeeded = QuartzTeams.get().countTeams() + playersWithoutTeam;
                 break;
 
             case IGNORE_TEAMS:
-                spawnsNeeded = ZTeams.get().getTeams().stream().mapToInt(team -> team.getPlayers().size()).sum()
+                spawnsNeeded = QuartzTeams.get().getTeams().stream().mapToInt(team -> team.getPlayers().size()).sum()
                         + playersWithoutTeam;
                 break;
         }

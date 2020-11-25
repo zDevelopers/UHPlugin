@@ -47,9 +47,9 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.scenarii.alliances.commands
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.ZTeams;
-import fr.zcraft.zteams.colors.TeamColor;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.QuartzTeams;
+import fr.zcraft.quartzteams.colors.TeamColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -101,7 +101,7 @@ public class AlliancesModule extends QSGModule
         eu.carrade.amaury.quartzsurvivalgames.modules.core.game.Config.SIDEBAR.TEAMS.set(false);
         eu.carrade.amaury.quartzsurvivalgames.modules.core.teams.Config.SIDEBAR.TITLE.USE_TEAM_NAME.set(true);
 
-        ZTeams.settings()
+        QuartzTeams.settings()
             .setTeamsOptions(
                 eu.carrade.amaury.quartzsurvivalgames.modules.core.teams.Config.CAN_SEE_FRIENDLY_INVISIBLES.get(),
                 false,
@@ -114,7 +114,7 @@ public class AlliancesModule extends QSGModule
 
         // ...And permissions
 
-        ZTeams.setPermissionsChecker(new TeamsPermissionsChecker(ZTeams.get().permissionsChecker()));
+        QuartzTeams.setPermissionsChecker(new TeamsPermissionsChecker(QuartzTeams.get().permissionsChecker()));
     }
 
     @Override
@@ -218,13 +218,13 @@ public class AlliancesModule extends QSGModule
 
     public int allianceSize(UUID playerID)
     {
-        final ZTeam team = ZTeams.get().getTeamForPlayer(playerID);
+        final QuartzTeam team = QuartzTeams.get().getTeamForPlayer(playerID);
 
         if (team != null) return allianceSize(team);
         else return 1;
     }
 
-    public int allianceSize(final ZTeam team)
+    public int allianceSize(final QuartzTeam team)
     {
         return (int) team.getPlayers().stream().filter(game::isAlive).count();
     }
@@ -240,10 +240,10 @@ public class AlliancesModule extends QSGModule
     {
         final SpectatorsModule spectators = QSG.module(SpectatorsModule.class);
 
-        new HashSet<>(ZTeams.get().getTeams()).forEach(ZTeam::deleteTeam);
+        new HashSet<>(QuartzTeams.get().getTeams()).forEach(QuartzTeam::deleteTeam);
 
         Bukkit.getOnlinePlayers().stream()
                 .filter(player -> !spectators.isSpectator(player))
-                .forEach(player -> ZTeams.get().createTeam(I.t("Alone"), TeamColor.WHITE, player));
+                .forEach(player -> QuartzTeams.get().createTeam(I.t("Alone"), TeamColor.WHITE, player));
     }
 }

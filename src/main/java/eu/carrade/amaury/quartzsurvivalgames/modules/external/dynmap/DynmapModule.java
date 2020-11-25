@@ -43,10 +43,10 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.players.Pl
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.PlayerSpawnPointSelectedEvent;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.quartzlib.core.ZLib;
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.ZTeams;
-import fr.zcraft.zteams.colors.TeamColor;
+import fr.zcraft.quartzlib.core.QuartzLib;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.QuartzTeams;
+import fr.zcraft.quartzteams.colors.TeamColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -86,7 +86,7 @@ public class DynmapModule extends QSGModule
         if (markerAPI == null)
         {
             log().warning("Dynmap is available, but the markers API is not. The integration was disabled.");
-            ZLib.unregisterEvents(this);
+            QuartzLib.unregisterEvents(this);
             return;
         }
 
@@ -195,7 +195,7 @@ public class DynmapModule extends QSGModule
         if (!Config.SHOW_SPAWN_LOCATIONS.get()) return;
         if (player == null) return;
 
-        final ZTeam team = ZTeams.get().getTeamForPlayer(player);
+        final QuartzTeam team = QuartzTeams.get().getTeamForPlayer(player);
         if (team == null) return;
 
         final String markerLabel;

@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.teams.sidebar;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
@@ -48,14 +49,12 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 
-public class SidebarCacheListener implements Listener
-{
+public class SidebarCacheListener implements Listener {
     private final static GameModule game = QSG.module(GameModule.class);
     private final static TeamsModule teams = QSG.module(TeamsModule.class);
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoin(PlayerJoinEvent ev)
-    {
+    public void onPlayerJoin(PlayerJoinEvent ev) {
         final SidebarPlayerCache cache = teams.getSidebarPlayerCache(ev.getPlayer().getUniqueId());
 
         cache.updateName(ev.getPlayer().getName());
@@ -66,52 +65,48 @@ public class SidebarCacheListener implements Listener
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerQuit(PlayerQuitEvent ev)
-    {
+    public void onPlayerQuit(PlayerQuitEvent ev) {
         onPlayerQuit(ev.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerQuit(PlayerKickEvent ev)
-    {
+    public void onPlayerQuit(PlayerKickEvent ev) {
         onPlayerQuit(ev.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerRegainHealth(EntityRegainHealthEvent ev)
-    {
-        if (ev.getEntity() instanceof Player)
+    public void onPlayerRegainHealth(EntityRegainHealthEvent ev) {
+        if (ev.getEntity() instanceof Player) {
             onPlayerHealthChange((Player) ev.getEntity());
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerLoseHealth(EntityDamageEvent ev)
-    {
-        if (ev.getEntity() instanceof Player)
+    public void onPlayerLoseHealth(EntityDamageEvent ev) {
+        if (ev.getEntity() instanceof Player) {
             onPlayerHealthChange((Player) ev.getEntity());
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerDeath(AlivePlayerDeathEvent ev)
-    {
-        if (ev.getPlayer().isOnline())
+    public void onPlayerDeath(AlivePlayerDeathEvent ev) {
+        if (ev.getPlayer().isOnline()) {
             onPlayerHealthChange(ev.getPlayer().getPlayer());
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerResurrect(PlayerResurrectedEvent ev)
-    {
-        if (ev.getPlayer().isOnline())
+    public void onPlayerResurrect(PlayerResurrectedEvent ev) {
+        if (ev.getPlayer().isOnline()) {
             onPlayerHealthChange(ev.getPlayer().getPlayer());
+        }
     }
 
-    private void onPlayerQuit(Player player)
-    {
+    private void onPlayerQuit(Player player) {
         teams.getSidebarPlayerCache(player.getUniqueId()).updateOnlineStatus(false);
     }
 
-    private void onPlayerHealthChange(final Player player)
-    {
+    private void onPlayerHealthChange(final Player player) {
         // One tick later to use the updated health value.
         RunTask.nextTick(() -> {
             final SidebarPlayerCache cache = teams.getSidebarPlayerCache(player.getUniqueId());

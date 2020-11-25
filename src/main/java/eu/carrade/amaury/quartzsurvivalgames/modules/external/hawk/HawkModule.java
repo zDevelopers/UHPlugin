@@ -56,9 +56,9 @@ import fr.zcraft.quartzlib.tools.PluginLogger;
 import fr.zcraft.quartzlib.tools.reflection.Reflection;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.RawMessage;
-import fr.zcraft.zteams.ZTeam;
-import fr.zcraft.zteams.ZTeams;
-import fr.zcraft.zteams.events.*;
+import fr.zcraft.quartzteams.QuartzTeam;
+import fr.zcraft.quartzteams.QuartzTeams;
+import fr.zcraft.quartzteams.events.*;
 import me.cassayre.florian.hawk.ReportsManager;
 import me.cassayre.florian.hawk.report.InvalidReportException;
 import me.cassayre.florian.hawk.report.Report;
@@ -94,7 +94,7 @@ import java.util.UUID;
         authors = "Florian Cassayre & Amaury Carrade through the Hawk Project",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.EXTERNAL,
-        icon = Material.BOOK_AND_QUILL,
+        icon = Material.KNOWLEDGE_BOOK,
         settings = Config.class,
         can_be_unloaded = false
 )
@@ -231,7 +231,7 @@ public class HawkModule extends QSGModule
 
         if (game.isTeamsGame())
         {
-            ZTeams.get().getTeams().stream()
+            QuartzTeams.get().getTeams().stream()
                     .map(team -> new ReportTeam(team.getName(), team.getColor() != null ? team.getColor().toChatColor() : null, team.getPlayers()))
                     .forEach(report::registerTeam);
         }
@@ -242,7 +242,7 @@ public class HawkModule extends QSGModule
     {
         if (ev.getNewPhase() == GamePhase.END)
         {
-            final ZTeam winner = game.getWinner();
+            final QuartzTeam winner = game.getWinner();
             if (winner != null) report.setWinners(winner.getPlayers());
 
             waitingAfterEnd = true;

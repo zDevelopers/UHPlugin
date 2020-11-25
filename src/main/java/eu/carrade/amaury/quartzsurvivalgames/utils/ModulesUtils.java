@@ -29,41 +29,37 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
-package eu.carrade.amaury.quartzsurvivalgames.utils;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+package eu.carrade.amaury.quartzsurvivalgames.utils;
 
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 
 
-public class ModulesUtils
-{
+public class ModulesUtils {
     /**
      * Tries to find a class from its name, by combining suffixes, packages, capitalization.
      *
-     * @param name The class base name to search for.
+     * @param name            The class base name to search for.
      * @param optionalPackage An optional package to search in.
-     * @param optionalSuffix An optional suffix to test, appended to the class name.
-     * @param superClass The superclass this class must have.
-     * @param <T> The superclass type this class must have.
-     *
+     * @param optionalSuffix  An optional suffix to test, appended to the class name.
+     * @param superClass      The superclass this class must have.
+     * @param <T>             The superclass type this class must have.
      * @return The {@link Class}, if found; else, {@code null}.
      */
-    public static <T> Class<? extends T> getClassFromName(final String name, final String optionalPackage, final String optionalSuffix, final Class<T> superClass)
-    {
+    public static <T> Class<? extends T> getClassFromName(final String name, final String optionalPackage,
+                                                          final String optionalSuffix, final Class<T> superClass) {
         final String alternateName;
         final String alternativePackage;
 
-        if (name.contains("."))
-        {
+        if (name.contains(".")) {
             final String[] lastClassPathParts = name.split("\\.");
             alternateName = lastClassPathParts[lastClassPathParts.length - 1];
-            alternativePackage = String.join(".", (String[]) ArrayUtils.remove(lastClassPathParts, lastClassPathParts.length - 1));
-        }
-        else
-        {
+            alternativePackage =
+                    String.join(".", (String[]) ArrayUtils.remove(lastClassPathParts, lastClassPathParts.length - 1));
+        } else {
             alternateName = name;
             alternativePackage = "";
         }
@@ -79,11 +75,13 @@ public class ModulesUtils
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + name,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + name + optionalSuffix,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(name),
-                optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(name) + optionalSuffix,
+                optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(name) +
+                        optionalSuffix,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + alternateName,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + alternateName + optionalSuffix,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(alternateName),
-                optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(alternateName) + optionalSuffix,
+                optionalPackage + "." + StringUtils.uncapitalize(name) + "." + StringUtils.capitalize(alternateName) +
+                        optionalSuffix,
                 optionalPackage + "." + StringUtils.uncapitalize(name) + "." + optionalSuffix,
                 optionalPackage + "." + alternativePackage + "." + name,
                 optionalPackage + "." + alternativePackage + "." + name + optionalSuffix,
@@ -92,17 +90,18 @@ public class ModulesUtils
                 optionalPackage + "." + alternativePackage + "." + alternateName,
                 optionalPackage + "." + alternativePackage + "." + alternateName + optionalSuffix,
                 optionalPackage + "." + alternativePackage + "." + StringUtils.capitalize(alternateName),
-                optionalPackage + "." + alternativePackage + "." + StringUtils.capitalize(alternateName) + optionalSuffix,
+                optionalPackage + "." + alternativePackage + "." + StringUtils.capitalize(alternateName) +
+                        optionalSuffix,
                 optionalPackage + "." + alternativePackage + "." + optionalSuffix,
                 name
         );
 
-        for (final String clazzName : possibilities)
-        {
-            try
-            {
+        for (final String clazzName : possibilities) {
+            try {
                 final Class clazz = Class.forName(clazzName);
-                if (superClass.isAssignableFrom(clazz)) return (Class<? extends T>) clazz;
+                if (superClass.isAssignableFrom(clazz)) {
+                    return (Class<? extends T>) clazz;
+                }
             }
             catch (ClassNotFoundException e) { /* The search continues... */ }
         }

@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.game;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GamePhase;
@@ -46,17 +47,19 @@ import org.bukkit.event.HandlerList;
  * a player is resurrected, check the old phase with {@link #getOldPhase()}, or simpler,
  * use the {@link #isRunningForward()} method.</p>
  */
-public class GamePhaseChangedEvent extends Event
-{
+public class GamePhaseChangedEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final GamePhase oldPhase;
     private final GamePhase newPhase;
 
-    public GamePhaseChangedEvent(final GamePhase oldPhase, final GamePhase newPhase)
-    {
+    public GamePhaseChangedEvent(final GamePhase oldPhase, final GamePhase newPhase) {
         this.oldPhase = oldPhase;
         this.newPhase = newPhase;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -64,16 +67,14 @@ public class GamePhaseChangedEvent extends Event
      *
      * @return The old phase.
      */
-    public GamePhase getOldPhase()
-    {
+    public GamePhase getOldPhase() {
         return oldPhase;
     }
 
     /**
      * @return The new phase.
      */
-    public GamePhase getNewPhase()
-    {
+    public GamePhase getNewPhase() {
         return newPhase;
     }
 
@@ -90,19 +91,12 @@ public class GamePhaseChangedEvent extends Event
      *
      * @return {@code true} if the game is running forward.
      */
-    public boolean isRunningForward()
-    {
+    public boolean isRunningForward() {
         return oldPhase == null || newPhase.ordinal() > oldPhase.ordinal();
     }
 
     @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 }
