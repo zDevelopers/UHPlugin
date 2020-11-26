@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.compass;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -48,6 +49,12 @@ import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.MessageSender;
 import fr.zcraft.quartzteams.QuartzTeams;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -59,9 +66,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Compass",
         description = "Compasses in the game can be used to point to the nearest player, " +
                 "and/or give the distance to them, at a configurable fee. The compass' craft " +
@@ -71,24 +76,20 @@ import java.util.*;
         icon = Material.COMPASS,
         settings = Config.class
 )
-public class CompassModule extends QSGModule
-{
+public class CompassModule extends QSGModule {
     private CompassRecipes recipes = null;
 
-    private Set<UUID> compassLocked = new HashSet<>();
+    private final Set<UUID> compassLocked = new HashSet<>();
 
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         recipes = QuartzLib.loadComponent(CompassRecipes.class);
     }
 
     @Override
-    protected void onDisable()
-    {
-        if (recipes != null)
-        {
+    protected void onDisable() {
+        if (recipes != null) {
             QuartzLib.unregisterEvents(recipes);
             recipes = null;
         }
@@ -97,18 +98,15 @@ public class CompassModule extends QSGModule
     /**
      * Used to update the compass.
      */
-    @EventHandler (priority = EventPriority.LOWEST)
-    public void onPlayerInteract(final PlayerInteractEvent ev)
-    {
-        if (ev.getAction() != Action.PHYSICAL)
-        {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerInteract(final PlayerInteractEvent ev) {
+        if (ev.getAction() != Action.PHYSICAL) {
             ev.setCancelled(activateCompass(ev.getPlayer()));
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerInteractAtEntity(final PlayerInteractAtEntityEvent ev)
-    {
+    public void onPlayerInteractAtEntity(final PlayerInteractAtEntityEvent ev) {
         ev.setCancelled(activateCompass(ev.getPlayer()));
     }
 
@@ -118,10 +116,13 @@ public class CompassModule extends QSGModule
      * @param compassUser The player.
      * @return {@code true} if the compass was activated.
      */
-    private boolean activateCompass(final Player compassUser)
-    {
-        if (!QSG.game().isAlive(compassUser) || compassUser.getItemInHand().getType() != Material.COMPASS) return false;
-        if (compassLocked.contains(compassUser.getUniqueId())) return false;
+    private boolean activateCompass(final Player compassUser) {
+        if (!QSG.game().isAlive(compassUser) || compassUser.getItemInHand().getType() != Material.COMPASS) {
+            return false;
+        }
+        if (compassLocked.contains(compassUser.getUniqueId())) {
+            return false;
+        }
 
         compassLocked.add(compassUser.getUniqueId());
         RunTask.later(() -> compassLocked.remove(compassUser.getUniqueId()), 10L);
@@ -135,13 +136,15 @@ public class CompassModule extends QSGModule
                 .mapToInt(ItemStack::getAmount)
                 .sum();
 
-        if (feeAvailable < Config.COMPASS_FEE_AMOUNT.get())
-        {
+        if (feeAvailable < Config.COMPASS_FEE_AMOUNT.get()) {
             MessageSender.sendActionBarMessage(compassUser, new RawText()
                     /// The singular is in the sentence « To use the compass, you must have one rotten flesh ». The plural: « […] you must have Rotten Flesh × 2 »?
-                    .then(I.tln(locale, "To use the compass, you must have one ", "To use the compass, you must have ", Config.COMPASS_FEE_AMOUNT.get())).color(ChatColor.RED)
-                    .then().translate(new ItemStack(Config.COMPASS_FEE_ITEM.get(), Config.COMPASS_FEE_AMOUNT.get())).color(ChatColor.RED)
-                    .then(Config.COMPASS_FEE_AMOUNT.get() > 1 ? " × " + Config.COMPASS_FEE_AMOUNT.get() : "").color(ChatColor.RED)
+                    .then(I.tln(locale, "To use the compass, you must have one ", "To use the compass, you must have ",
+                            Config.COMPASS_FEE_AMOUNT.get())).color(ChatColor.RED)
+                    .then().translate(new ItemStack(Config.COMPASS_FEE_ITEM.get(), Config.COMPASS_FEE_AMOUNT.get()))
+                    .color(ChatColor.RED)
+                    .then(Config.COMPASS_FEE_AMOUNT.get() > 1 ? " × " + Config.COMPASS_FEE_AMOUNT.get() : "")
+                    .color(ChatColor.RED)
                     .then(".").color(ChatColor.RED)
                     .build()
             );
@@ -153,25 +156,22 @@ public class CompassModule extends QSGModule
 
         int feeLeft = Config.COMPASS_FEE_AMOUNT.get();
 
-        for (final ItemStack item : compassUser.getInventory().getContents())
-        {
-            if (item != null && item.getType() == Config.COMPASS_FEE_ITEM.get())
-            {
+        for (final ItemStack item : compassUser.getInventory().getContents()) {
+            if (item != null && item.getType() == Config.COMPASS_FEE_ITEM.get()) {
                 final int consumed = item.getAmount() - feeLeft;
 
-                if (consumed <= 0)
-                {
+                if (consumed <= 0) {
                     feeLeft -= item.getAmount();
                     item.setAmount(0);
                     item.setType(Material.AIR);
-                }
-                else
-                {
+                } else {
                     feeLeft = 0;
                     item.setAmount(consumed);
                 }
 
-                if (feeLeft == 0) break;
+                if (feeLeft == 0) {
+                    break;
+                }
             }
         }
 
@@ -180,30 +180,30 @@ public class CompassModule extends QSGModule
         Player nearest = null;
         Double distance = Double.MAX_VALUE;
 
-        for (final Player otherPlayer : QSG.module(GameModule.class).getAliveConnectedPlayers())
-        {
-            try
-            {
+        for (final Player otherPlayer : QSG.module(GameModule.class).getAliveConnectedPlayers()) {
+            try {
                 Double calc = compassUser.getLocation().distanceSquared(otherPlayer.getLocation());
 
-                if (calc > 1 && calc < distance)
-                {
+                if (calc > 1 && calc < distance) {
                     distance = calc;
 
-                    if (!otherPlayer.getUniqueId().equals(compassUser.getUniqueId()) && (!Config.NEVER_TARGET_TEAMMATES.get() || !Objects.equals(QuartzTeams.get().getTeamForPlayer(compassUser), QuartzTeams.get().getTeamForPlayer(otherPlayer))))
-                    {
+                    if (!otherPlayer.getUniqueId().equals(compassUser.getUniqueId()) &&
+                            (!Config.NEVER_TARGET_TEAMMATES.get() ||
+                                    !Objects.equals(QuartzTeams.get().getTeamForPlayer(compassUser),
+                                            QuartzTeams.get().getTeamForPlayer(otherPlayer)))) {
                         nearest = otherPlayer.getPlayer();
                     }
                 }
             }
-            catch (Exception ignored) {}  // Different worlds
+            catch (Exception ignored) {
+            }  // Different worlds
         }
 
-        if (nearest == null)
-        {
+        if (nearest == null) {
             /// Error message if a player tries to use his pointing compass without a player nearby.
             MessageSender.sendActionBarMessage(compassUser, QSGUtils
-                    .prefixedMessage(ChatColor.BOLD + I.tl(locale, "Compass"), ChatColor.YELLOW + "" + ChatColor.BOLD + I.tl(locale, "Only silence answers your request.")));
+                    .prefixedMessage(ChatColor.BOLD + I.tl(locale, "Compass"), ChatColor.YELLOW + "" + ChatColor.BOLD +
+                            I.tl(locale, "Only silence answers your request.")));
 
             new QSGSound(1F, 1F, "BLOCK_WOOD_STEP", "STEP_WOOD").play(compassUser);
             return false;
@@ -211,17 +211,19 @@ public class CompassModule extends QSGModule
 
         CompassBehavior behavior = Config.COMPASS_BEHAVIOR.get();
 
-        if (behavior == CompassBehavior.GIVE_EITHER_RANDOMLY)
-        {
+        if (behavior == CompassBehavior.GIVE_EITHER_RANDOMLY) {
             final double r = RandomUtils.nextDouble();
 
-            if (r < .45) behavior = CompassBehavior.GIVE_DIRECTION;
-            else if (r < .9) behavior = CompassBehavior.GIVE_DISTANCE;
-            else behavior = CompassBehavior.GIVE_BOTH;
+            if (r < .45) {
+                behavior = CompassBehavior.GIVE_DIRECTION;
+            } else if (r < .9) {
+                behavior = CompassBehavior.GIVE_DISTANCE;
+            } else {
+                behavior = CompassBehavior.GIVE_BOTH;
+            }
         }
 
-        if (behavior == CompassBehavior.GIVE_BOTH)
-        {
+        if (behavior == CompassBehavior.GIVE_BOTH) {
             compassUser.setCompassTarget(nearest.getLocation());
             compassUser.sendMessage(QSGUtils.prefixedMessage(
                     I.tl(locale, "Compass"),
@@ -232,19 +234,17 @@ public class CompassModule extends QSGModule
                             (int) nearest.getLocation().distanceSquared(compassUser.getLocation())
                     )
             ));
-        }
-
-        else if (behavior == CompassBehavior.GIVE_DIRECTION)
-        {
+        } else if (behavior == CompassBehavior.GIVE_DIRECTION) {
             compassUser.setCompassTarget(nearest.getLocation());
 
             /// Success message when a player uses his pointing compass.
-            MessageSender.sendActionBarMessage(compassUser, ChatColor.YELLOW + "" + ChatColor.BOLD + I.tl(locale, "The compass now points to the closest player."));
-        }
-
-        else
-        {
-            compassUser.sendMessage(QSGUtils.prefixedMessage(I.tl(locale, "Compass"), I.tln(locale, "{yellow}There is {gold}{0} block {yellow}between the nearest player and yourself.", "{yellow}There are {gold}{0} blocks {yellow}between the nearest player and yourself.", (int) nearest.getLocation().distance(compassUser.getLocation()))));
+            MessageSender.sendActionBarMessage(compassUser, ChatColor.YELLOW + "" + ChatColor.BOLD +
+                    I.tl(locale, "The compass now points to the closest player."));
+        } else {
+            compassUser.sendMessage(QSGUtils.prefixedMessage(I.tl(locale, "Compass"),
+                    I.tln(locale, "{yellow}There is {gold}{0} block {yellow}between the nearest player and yourself.",
+                            "{yellow}There are {gold}{0} blocks {yellow}between the nearest player and yourself.",
+                            (int) nearest.getLocation().distance(compassUser.getLocation()))));
         }
 
         new QSGSound(1F, 1F, "ENTITY_ENDERMEN_TELEPORT", "ENDERMAN_TELEPORT").play(compassUser);
@@ -252,8 +252,7 @@ public class CompassModule extends QSGModule
         return true;
     }
 
-    public enum CompassBehavior
-    {
+    public enum CompassBehavior {
         GIVE_DIRECTION,
         GIVE_DISTANCE,
         GIVE_BOTH,

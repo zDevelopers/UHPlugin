@@ -37,23 +37,18 @@ import fr.zcraft.quartzlib.external.ExternalPluginComponent;
 import fr.zcraft.quartzlib.tools.PluginLogger;
 
 
-public class WorldBorderDependency extends ExternalPluginComponent<WorldBorder>
-{
-    public WorldBorderDependency()
-    {
+public class WorldBorderDependency extends ExternalPluginComponent<WorldBorder> {
+    public WorldBorderDependency() {
         super("WorldBorder");
     }
 
     @Override
-    protected void onLoad()
-    {
-        try
-        {
+    protected void onLoad() {
+        try {
             Class.forName("com.wimbli.WorldBorder.BorderData");
             Class.forName("com.wimbli.WorldBorder.Config");
         }
-        catch (ClassNotFoundException e)
-        {
+        catch (ClassNotFoundException e) {
             PluginLogger.warning("WorldBorder is available, but the version you are using is too old.");
             PluginLogger.warning("This plugin is tested and works with WorldBorder 1.8.0 or later.");
 
@@ -64,8 +59,7 @@ public class WorldBorderDependency extends ExternalPluginComponent<WorldBorder>
         PluginLogger.info("Successfully hooked into WorldBorder.");
     }
 
-    public WorldBorder getWorldBorder()
-    {
+    public WorldBorder getWorldBorder() {
         return get();
     }
 }

@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.teleportation.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators.SpectatorsModule;
@@ -38,28 +39,24 @@ import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
+import java.util.List;
+import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import java.util.List;
-import java.util.Objects;
-
-@CommandInfo (name = "tp-spectators", usageParameters = "<x> <y> <z> | <target>", aliases = {"tpspectators", "tp-specs", "tpspecs"})
-public class TPSpectatorsCommand extends WorldBasedCommand
-{
+@CommandInfo(name = "tp-spectators", usageParameters = "<x> <y> <z> | <target>", aliases = {"tpspectators", "tp-specs",
+        "tpspecs"})
+public class TPSpectatorsCommand extends WorldBasedCommand {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         final SpectatorsModule spectators = QSG.module(SpectatorsModule.class);
 
         // /uh tp-spectators <x> <y> <z>
-        if (args.length == 3)
-        {
-            try
-            {
+        if (args.length == 3) {
+            try {
                 final World world = getTargetWorld();
 
                 final double x = Integer.parseInt(args[0]) + 0.5;
@@ -73,15 +70,13 @@ public class TPSpectatorsCommand extends WorldBasedCommand
                 /// {0}: world name. {1-3}: x, y, z.
                 success(I.t("All spectators were teleported to ({0} ; {1} ; {2} ; {3}).", world.getName(), x, y, z));
             }
-            catch (final NumberFormatException e)
-            {
+            catch (final NumberFormatException e) {
                 throwInvalidArgument(I.t("{ce}The coordinates must be three valid numbers."));
             }
         }
 
         // /uh tp-spectators <target>
-        else if (args.length == 1)
-        {
+        else if (args.length == 1) {
             final Player target = getPlayerParameter(0);
 
             spectators.getSpectators().stream()
@@ -89,15 +84,17 @@ public class TPSpectatorsCommand extends WorldBasedCommand
                     .forEach(spectator -> spectator.teleport(target, TeleportCause.PLUGIN));
 
             success(I.t("All spectators were teleported to the player {0}.", target.getName()));
+        } else {
+            throwInvalidArgument(I.t("You must specify either three coordinates or a player name."));
         }
-
-        else throwInvalidArgument(I.t("You must specify either three coordinates or a player name."));
     }
 
     @Override
-    protected List<String> complete()
-    {
-        if (args.length == 1) return getMatchingPlayerNames(args[0]);
-        else return null;
+    protected List<String> complete() {
+        if (args.length == 1) {
+            return getMatchingPlayerNames(args[0]);
+        } else {
+            return null;
+        }
     }
 }

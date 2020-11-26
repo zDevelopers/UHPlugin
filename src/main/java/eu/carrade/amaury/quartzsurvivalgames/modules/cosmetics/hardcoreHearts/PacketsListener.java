@@ -42,20 +42,17 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
+import java.lang.reflect.InvocationTargetException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import java.lang.reflect.InvocationTargetException;
 
-
-public class PacketsListener extends PacketAdapter implements Listener
-{
+public class PacketsListener extends PacketAdapter implements Listener {
     private final ProtocolManager pm = ProtocolLibrary.getProtocolManager();
     private final PacketContainer respawnPacket;
 
-    public PacketsListener()
-    {
+    public PacketsListener() {
         // This listener needs to listen on login packets only.
         super(QSG.get(), ListenerPriority.NORMAL, PacketType.Play.Server.LOGIN);
 
@@ -68,11 +65,9 @@ public class PacketsListener extends PacketAdapter implements Listener
      * Used to present the server as an hardcore server, for the clients to display hardcore hearts.
      */
     @Override
-    public void onPacketSending(final PacketEvent ev)
-    {
+    public void onPacketSending(final PacketEvent ev) {
         // If its a login packet, write the hardcore flag (first boolean) to true.
-        if (ev.getPacketType().equals(PacketType.Play.Server.LOGIN))
-        {
+        if (ev.getPacketType().equals(PacketType.Play.Server.LOGIN)) {
             ev.getPacket().getBooleans().write(0, true);
         }
     }
@@ -81,19 +76,16 @@ public class PacketsListener extends PacketAdapter implements Listener
      * Used to automatically respawn the dead players.
      */
     @EventHandler
-    public void onPlayerDeath(final PlayerDeathEvent ev)
-    {
-        if (Config.AUTO_RESPAWN.DO.get())
-        {
+    public void onPlayerDeath(final PlayerDeathEvent ev) {
+        if (Config.AUTO_RESPAWN.DO.get()) {
             RunTask.later(() ->
             {
-                try
-                {
+                try {
                     pm.recieveClientPacket(ev.getEntity(), respawnPacket);
                 }
-                catch (final IllegalAccessException | InvocationTargetException e)
-                {
-                    QSG.log(HardcoreHeartsModule.class).error("Unable to respawn player {0}", e, ev.getEntity().getName());
+                catch (final IllegalAccessException | InvocationTargetException e) {
+                    QSG.log(HardcoreHeartsModule.class)
+                            .error("Unable to respawn player {0}", e, ev.getEntity().getName());
                 }
             }, Config.AUTO_RESPAWN.DELAY.get() * 20L);
         }

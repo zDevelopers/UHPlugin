@@ -31,29 +31,28 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.playersLoader;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleInfo;
 import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
 import fr.zcraft.quartzlib.components.commands.Command;
-import org.bukkit.Material;
-
 import java.util.Collections;
 import java.util.List;
+import org.bukkit.Material;
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Players Loader",
-        description = "Loads player into the server even if they never came before, so you can add them to teams and such. " +
-                "An interface to the built-in players loader.",
+        description =
+                "Loads player into the server even if they never came before, so you can add them to teams and such. " +
+                        "An interface to the built-in players loader.",
         category = ModuleCategory.UTILITIES,
         icon = Material.PLAYER_HEAD
 )
-public class PlayersLoaderModule extends QSGModule
-{
+public class PlayersLoaderModule extends QSGModule {
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(LoadPlayersCommand.class);
     }
 }

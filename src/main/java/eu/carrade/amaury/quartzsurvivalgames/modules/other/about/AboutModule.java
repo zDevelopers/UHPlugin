@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.other.about;
 
 import eu.carrade.amaury.quartzsurvivalgames.QuartzSurvivalGames;
@@ -43,59 +44,52 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.sidebar.SidebarInjecto
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "About",
         description = "Provides information about this plugin.",
         category = ModuleCategory.OTHER,
         icon = Material.BOOK
 )
-public class AboutModule extends QSGModule
-{
-    private String shortName = "Quartz Survival Games";
+public class AboutModule extends QSGModule {
+    private final String shortName = "Quartz Survival Games";
     private String version = null;
     private Stability stability = null;
     private String gitVersion = null;
     private String authors = null;
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         computeVersion();
         computeGitVersion();
         computeFormattedAuthors();
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(AboutCommand.class);
     }
 
     @Override
-    public void injectIntoSidebar(Player player, SidebarInjector injector)
-    {
-        if (QSG.module(GameModule.class).getPhase() == GamePhase.WAIT)
-        {
+    public void injectIntoSidebar(Player player, SidebarInjector injector) {
+        if (QSG.module(GameModule.class).getPhase() == GamePhase.WAIT) {
             injector.injectLines(
                     SidebarInjector.SidebarPriority.VERY_BOTTOM,
                     true, false,
                     ChatColor.GRAY + shortName + " " + version
             );
 
-            if (getVersion() != null)
-            {
+            if (getVersion() != null) {
                 injector.injectLines(
                         SidebarInjector.SidebarPriority.VERY_BOTTOM,
                         false,
@@ -103,10 +97,8 @@ public class AboutModule extends QSGModule
                 );
             }
 
-            if (stability != Stability.STABLE)
-            {
-                switch (stability)
-                {
+            if (stability != Stability.STABLE) {
+                switch (stability) {
                     case BETA:
                         injector.injectLines(
                                 SidebarInjector.SidebarPriority.VERY_BOTTOM,
@@ -127,45 +119,36 @@ public class AboutModule extends QSGModule
         }
     }
 
-    public String getPluginName()
-    {
+    public String getPluginName() {
         return QSG.get().getDescription().getDescription();
     }
 
-    public String getShortPluginName()
-    {
+    public String getShortPluginName() {
         return shortName;
     }
 
-    public String getVersion()
-    {
+    public String getVersion() {
         return version;
     }
 
-    public Stability getStability()
-    {
+    public Stability getStability() {
         return stability;
     }
 
-    public String getGitVersion()
-    {
+    public String getGitVersion() {
         return gitVersion;
     }
 
-    public List<String> getAuthors()
-    {
+    public List<String> getAuthors() {
         return QSG.get().getDescription().getAuthors();
     }
 
-    public String getFormattedAuthors()
-    {
+    public String getFormattedAuthors() {
         return authors;
     }
 
-    private void computeGitVersion()
-    {
-        try
-        {
+    private void computeGitVersion() {
+        try {
             final Class<? extends QuartzSurvivalGames> clazz = QSG.get().getClass();
             final String className = clazz.getSimpleName() + ".class";
             final String classPath = clazz.getResource(className).toString();
@@ -180,28 +163,21 @@ public class AboutModule extends QSGModule
                 gitVersion = attr.getValue("Git-Commit");
             }
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             // Build not available.
         }
     }
 
-    private void computeFormattedAuthors()
-    {
+    private void computeFormattedAuthors() {
         final StringBuilder authors = new StringBuilder();
         final List<String> listAuthors = getAuthors();
 
-        for (final String author : listAuthors)
-        {
-            if (!author.equals(listAuthors.get(0)))
-            {
-                if (author.equals(listAuthors.get(listAuthors.size() - 1)))
-                {
+        for (final String author : listAuthors) {
+            if (!author.equals(listAuthors.get(0))) {
+                if (author.equals(listAuthors.get(listAuthors.size() - 1))) {
                     /// The "and" in the authors list (like "Amaury Carrade, azenet and João Roda")
                     authors.append(" ").append(I.tc("authors_list", "and")).append(" ");
-                }
-                else
-                {
+                } else {
                     authors.append(", ");
                 }
             }
@@ -212,16 +188,13 @@ public class AboutModule extends QSGModule
         this.authors = authors.toString();
     }
 
-    private void computeVersion()
-    {
+    private void computeVersion() {
         final String[] versionParts = QSG.get().getDescription().getVersion().split("-", 2);
 
         version = versionParts[0];
 
-        if (versionParts.length >= 2)
-        {
-            switch (versionParts[1].trim().toLowerCase())
-            {
+        if (versionParts.length >= 2) {
+            switch (versionParts[1].trim().toLowerCase()) {
                 case "dev":
                 case "alpha":
                     stability = Stability.ALPHA;
@@ -238,13 +211,12 @@ public class AboutModule extends QSGModule
                 default:
                     stability = Stability.STABLE;
             }
+        } else {
+            stability = Stability.STABLE;
         }
-
-        else stability = Stability.STABLE;
     }
 
-    public enum Stability
-    {
+    public enum Stability {
         STABLE, BETA, ALPHA
     }
 }

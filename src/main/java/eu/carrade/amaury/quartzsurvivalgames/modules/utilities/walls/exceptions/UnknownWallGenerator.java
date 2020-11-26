@@ -29,12 +29,11 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.walls.exceptions;
 
-public class UnknownWallGenerator extends CannotGenerateWallsException
-{
-    public UnknownWallGenerator(String message)
-    {
+public class UnknownWallGenerator extends CannotGenerateWallsException {
+    public UnknownWallGenerator(String message) {
         super(message);
     }
 }

@@ -33,6 +33,8 @@
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.potions;
 
 import fr.zcraft.quartzlib.tools.items.ItemUtils;
+import java.util.HashSet;
+import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -40,51 +42,53 @@ import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashSet;
-import java.util.Set;
 
-
-public class CancelBrewTask extends BukkitRunnable
-{
+public class CancelBrewTask extends BukkitRunnable {
     private final BrewerInventory inventory;
     private final HumanEntity whoClicked;
 
-    public CancelBrewTask(BrewerInventory inventory, HumanEntity whoClicked)
-    {
+    public CancelBrewTask(BrewerInventory inventory, HumanEntity whoClicked) {
         this.inventory = inventory;
         this.whoClicked = whoClicked;
     }
 
     @Override
-    public void run()
-    {
-        if (inventory.getIngredient() == null)
-        {
+    public void run() {
+        if (inventory.getIngredient() == null) {
             return; // Nothing to do!
         }
 
-        if (whoClicked instanceof Player)
-        {
+        if (whoClicked instanceof Player) {
             final ItemStack ingredient = inventory.getIngredient();
 
             final Set<Material> forbiddenIngredients = new HashSet<>();
 
-            if (Config.DISABLE_EXTENDED.get()) forbiddenIngredients.add(Material.REDSTONE);
-            if (Config.DISABLE_LEVEL_II.get()) forbiddenIngredients.add(Material.GLOWSTONE_DUST);
-            if (Config.DISABLE_SPLASH.get()) forbiddenIngredients.add(Material.GUNPOWDER);
-            if (Config.DISABLE_LINGERING.get())
-            {
+            if (Config.DISABLE_EXTENDED.get()) {
+                forbiddenIngredients.add(Material.REDSTONE);
+            }
+            if (Config.DISABLE_LEVEL_II.get()) {
+                forbiddenIngredients.add(Material.GLOWSTONE_DUST);
+            }
+            if (Config.DISABLE_SPLASH.get()) {
+                forbiddenIngredients.add(Material.GUNPOWDER);
+            }
+            if (Config.DISABLE_LINGERING.get()) {
                 // 1.9 - 1.12
-                try { forbiddenIngredients.add(Material.valueOf("DRAGONS_BREATH")); }
-                catch (IllegalArgumentException ignored) { }
+                try {
+                    forbiddenIngredients.add(Material.valueOf("DRAGONS_BREATH"));
+                }
+                catch (IllegalArgumentException ignored) {
+                }
 
                 // 1.13+
-                try { forbiddenIngredients.add(Material.valueOf("DRAGON_BREATH")); }
-                catch (IllegalArgumentException ignored) { }
+                try {
+                    forbiddenIngredients.add(Material.valueOf("DRAGON_BREATH"));
+                }
+                catch (IllegalArgumentException ignored) {
+                }
             }
 
-            if (ingredient.getType() != null && forbiddenIngredients.contains(ingredient.getType()))
-            {
+            if (ingredient.getType() != null && forbiddenIngredients.contains(ingredient.getType())) {
                 // The element is removed and added back to the player's inventory.
                 inventory.setIngredient(new ItemStack(Material.AIR));
                 ItemUtils.give((Player) whoClicked, ingredient);

@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.episodes;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -44,14 +45,16 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.sidebar.SidebarInjecto
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.Timer;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.TimersModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.events.TimerEndsEvent;
-import eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.playerListHeaderFooter.PlayerListHeaderFooterModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.episodes.commands.ShiftCommand;
 import eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.episodes.events.EpisodeChangedEvent;
 import eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.episodes.events.EpisodeChangedEvent.EpisodeChangedCause;
+import eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.playerListHeaderFooter.PlayerListHeaderFooterModule;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.text.Titles;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -59,11 +62,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-import java.util.Collections;
-import java.util.List;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Episodes",
         description = "Displays time marks every 20 minutes (by default), e.g. to divide a recording for diffusion.",
         when = ModuleLoadTime.ON_GAME_START,
@@ -72,8 +72,7 @@ import java.util.List;
         settings = Config.class,
         can_be_loaded_late = false
 )
-public class EpisodesModule extends QSGModule
-{
+public class EpisodesModule extends QSGModule {
     private final GameModule game = QSG.game();
     private final TimersModule timers = QSG.module(TimersModule.class);
 
@@ -81,8 +80,7 @@ public class EpisodesModule extends QSGModule
     private int episode = 1;
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         episodesTimer = new Timer("Episodes");
         episodesTimer.setDuration(Config.LENGTH.get());
         episodesTimer.setSystem(true);
@@ -101,30 +99,30 @@ public class EpisodesModule extends QSGModule
     }
 
     @Override
-    protected void onDisable()
-    {
+    protected void onDisable() {
         episodesTimer.setDisplayed(false);
         timers.unregisterTimer(episodesTimer);
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(ShiftCommand.class);
     }
 
     @Override
-    public void injectIntoSidebar(Player player, SidebarInjector injector)
-    {
-        if (!Config.DISPLAY_IN_SIDEBAR.get() || game.currentPhaseBefore(GamePhase.IN_GAME)) return;
+    public void injectIntoSidebar(Player player, SidebarInjector injector) {
+        if (!Config.DISPLAY_IN_SIDEBAR.get() || game.currentPhaseBefore(GamePhase.IN_GAME)) {
+            return;
+        }
 
         injector.injectLines(SidebarPriority.VERY_TOP, true, I.t("{gray}Episode {white}{0}", episode));
     }
 
     @EventHandler
-    public void onTimerEnds(final TimerEndsEvent ev)
-    {
-        if (!ev.getTimer().equals(episodesTimer)) return;
+    public void onTimerEnds(final TimerEndsEvent ev) {
+        if (!ev.getTimer().equals(episodesTimer)) {
+            return;
+        }
 
         ev.setRestart(true);
         shift(false, null, episode + 1);
@@ -134,17 +132,15 @@ public class EpisodesModule extends QSGModule
      * Used to broadcast the episode change.
      */
     @EventHandler
-    public void onEpisodeChange(final EpisodeChangedEvent ev)
-    {
+    public void onEpisodeChange(final EpisodeChangedEvent ev) {
         final String message;
 
-        if (ev.getCause() == EpisodeChangedEvent.EpisodeChangedCause.SHIFTED)
-        {
-            final String shifterName = ev.getShifter() instanceof ConsoleCommandSender ? I.t("the console") : ev.getShifter().getName();
-            message = I.t("{aqua}-------- End of episode {0} [forced by {1}] --------", ev.getOldEpisode(), shifterName);
-        }
-        else
-        {
+        if (ev.getCause() == EpisodeChangedEvent.EpisodeChangedCause.SHIFTED) {
+            final String shifterName =
+                    ev.getShifter() instanceof ConsoleCommandSender ? I.t("the console") : ev.getShifter().getName();
+            message =
+                    I.t("{aqua}-------- End of episode {0} [forced by {1}] --------", ev.getOldEpisode(), shifterName);
+        } else {
             message = I.t("{aqua}-------- End of episode {0} --------", String.valueOf(ev.getOldEpisode()));
         }
 
@@ -152,8 +148,7 @@ public class EpisodesModule extends QSGModule
 
 
         // Broadcasts title
-        if (Config.DISPLAY_TITLE.get())
-        {
+        if (Config.DISPLAY_TITLE.get()) {
             Titles.broadcastTitle(
                     5, 32, 8,
                     "",
@@ -167,30 +162,25 @@ public class EpisodesModule extends QSGModule
         QSG.ifLoaded(PlayerListHeaderFooterModule.class, PlayerListHeaderFooterModule::update);
     }
 
-    public int getEpisode()
-    {
+    public int getEpisode() {
         return episode;
     }
 
-    public void shift(final CommandSender shifter, final int newEpisode)
-    {
+    public void shift(final CommandSender shifter, final int newEpisode) {
         shift(true, shifter != null ? shifter : Bukkit.getConsoleSender(), newEpisode);
     }
 
-    public void shift(final CommandSender shifter)
-    {
+    public void shift(final CommandSender shifter) {
         shift(shifter, episode + 1);
     }
 
-    private void shift(final boolean forced, final CommandSender shifter, final int newEpisode)
-    {
+    private void shift(final boolean forced, final CommandSender shifter, final int newEpisode) {
         final int oldEpisode = episode;
         episode = newEpisode;
 
         // If not forced, the timer is restarted in the event, else we have to restart
         // it manually.
-        if (forced)
-        {
+        if (forced) {
             episodesTimer.start();
         }
 

@@ -46,8 +46,8 @@ import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import eu.carrade.amaury.quartzsurvivalgames.utils.ModulesUtils;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.Commands;
-import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.core.QuartzComponent;
+import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.tools.PluginLogger;
 import fr.zcraft.quartzlib.tools.reflection.Reflection;
 import java.io.IOException;
@@ -319,8 +319,9 @@ public class ModulesManager extends QuartzComponent implements Listener {
 
             for (final Map.Entry<String, Class<? extends Command>> commandAlias : commandAliases.entrySet()) {
                 try {
-                    pluginCommands.put(pluginCommandConstructor.newInstance(commandAlias.getKey(), QuartzLib.getPlugin()),
-                            commandAlias.getValue());
+                    pluginCommands
+                            .put(pluginCommandConstructor.newInstance(commandAlias.getKey(), QuartzLib.getPlugin()),
+                                    commandAlias.getValue());
                     registered.add(commandAlias.getKey());
                 }
                 catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {

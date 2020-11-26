@@ -31,22 +31,21 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.warning;
+
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.TimeDelta;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-
 import java.io.File;
 
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
+public class Config extends ConfigurationInstance {
+    public static final ConfigurationItem<TimeDelta> WARNING_INTERVAL =
+            item("warning-interval", new TimeDelta(0, 1, 30));
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
+    public Config(File file) {
         super(file);
     }
-
-    public static final ConfigurationItem<TimeDelta> WARNING_INTERVAL = item("warning-interval", new TimeDelta(0, 1, 30));
 }

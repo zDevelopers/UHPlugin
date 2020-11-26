@@ -31,22 +31,19 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.external.dynmap;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import java.io.File;
 
+public class Config extends ConfigurationInstance {
     static public final ConfigurationItem<Boolean> SHOW_SPAWN_LOCATIONS = item("show-spawn-locations", true);
     static public final ConfigurationItem<Boolean> SHOW_DEATH_LOCATIONS = item("show-death-locations", true);
+    public Config(File file) {
+        super(file);
+    }
 }

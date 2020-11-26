@@ -39,16 +39,20 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.sidebar.SidebarInjecto
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.commands.TimersCommand;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.*;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.stream.Collectors;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Timers",
         description = "The timekeeper of the whole UHCReloaded plugin & companions.",
         category = ModuleCategory.CORE,
@@ -56,9 +60,8 @@ import java.util.stream.Collectors;
         internal = true,
         can_be_unloaded = false
 )
-public class TimersModule extends QSGModule
-{
-    private Set<Timer> timers = new CopyOnWriteArraySet<>();
+public class TimersModule extends QSGModule {
+    private final Set<Timer> timers = new CopyOnWriteArraySet<>();
 
     /**
      * Cached list of the running timers
@@ -70,7 +73,7 @@ public class TimersModule extends QSGModule
      *
      * @see #pauseAllRunning(boolean)
      */
-    private Set<Timer> timersToResume = new CopyOnWriteArraySet<>();
+    private final Set<Timer> timersToResume = new CopyOnWriteArraySet<>();
 
     /**
      * Sidebar cache.
@@ -79,22 +82,19 @@ public class TimersModule extends QSGModule
 
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         RunTask.timer(() -> timers.forEach(Timer::update), 1L, 20L);
     }
 
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(TimersCommand.class);
     }
 
 
     @Override
-    public void prepareInjectionIntoSidebar()
-    {
+    public void prepareInjectionIntoSidebar() {
         sidebarInjection.clear();
         sidebarInjection = timers.stream()
                 .filter(Timer::isDisplayed)
@@ -103,13 +103,15 @@ public class TimersModule extends QSGModule
     }
 
     @Override
-    public void injectIntoSidebar(Player player, SidebarInjector injector)
-    {
+    public void injectIntoSidebar(Player player, SidebarInjector injector) {
         sidebarInjection.forEach(timer -> {
             final List<String> lines;
 
-            if (timer.getLeft() == null) lines = Collections.singletonList(timer.getRight());
-            else lines = Arrays.asList(timer.getLeft(), timer.getRight());
+            if (timer.getLeft() == null) {
+                lines = Collections.singletonList(timer.getRight());
+            } else {
+                lines = Arrays.asList(timer.getLeft(), timer.getRight());
+            }
 
             injector.injectLines(SidebarInjector.SidebarPriority.VERY_BOTTOM, true, lines);
         });
@@ -121,10 +123,8 @@ public class TimersModule extends QSGModule
      * @param timer The timer to register.
      * @throws IllegalArgumentException if a timer with the same name is already registered.
      */
-    public void registerTimer(final Timer timer)
-    {
-        if (timers.contains(timer))
-        {
+    public void registerTimer(final Timer timer) {
+        if (timers.contains(timer)) {
             throw new IllegalArgumentException("The timer " + timer.getName() + " is already registered.");
         }
 
@@ -140,8 +140,7 @@ public class TimersModule extends QSGModule
      *
      * @param timer The timer to unregister.
      */
-    public void unregisterTimer(final Timer timer)
-    {
+    public void unregisterTimer(final Timer timer) {
         timers.remove(timer);
         runningTimers.remove(timer);
 
@@ -151,8 +150,7 @@ public class TimersModule extends QSGModule
     /**
      * Updates the internal list of started timers.
      */
-    public void updateStartedTimersList()
-    {
+    public void updateStartedTimersList() {
         runningTimers = timers.stream().filter(Timer::isRunning).collect(Collectors.toSet());
     }
 
@@ -160,11 +158,9 @@ public class TimersModule extends QSGModule
      * Returns a timer by his name.
      *
      * @param name The name of the timer.
-     *
      * @return The first timer with this name, or null if there isn't any timer with this name.
      */
-    public Timer getTimer(final String name)
-    {
+    public Timer getTimer(final String name) {
         return timers.stream().filter(timer -> timer.getName().equals(name)).findFirst().orElse(null);
     }
 
@@ -173,8 +169,7 @@ public class TimersModule extends QSGModule
      *
      * @return The collection.
      */
-    public Collection<Timer> getTimers()
-    {
+    public Collection<Timer> getTimers() {
         return Collections.unmodifiableSet(timers);
     }
 
@@ -183,8 +178,7 @@ public class TimersModule extends QSGModule
      *
      * @return The collection.
      */
-    public Collection<Timer> getRunningTimers()
-    {
+    public Collection<Timer> getRunningTimers() {
         return Collections.unmodifiableSet(runningTimers);
     }
 
@@ -193,12 +187,10 @@ public class TimersModule extends QSGModule
      *
      * @param paused If true, all the timers will be paused. Else, resumed.
      */
-    public void pauseAll(boolean paused)
-    {
+    public void pauseAll(boolean paused) {
         getRunningTimers().forEach(timer -> timer.setPaused(paused));
 
-        if (!paused)
-        {
+        if (!paused) {
             // If we restart all the timers regardless to their previous state,
             // this data is meaningless.
             timersToResume.clear();
@@ -212,17 +204,13 @@ public class TimersModule extends QSGModule
      *
      * @param paused If true, all the timers will be paused. Else, resumed.
      */
-    public void pauseAllRunning(boolean paused)
-    {
-        if (paused)
-        {
+    public void pauseAllRunning(boolean paused) {
+        if (paused) {
             getRunningTimers().stream().filter(timer -> !timer.isPaused()).forEach(timer -> {
                 timer.setPaused(true);
                 timersToResume.add(timer);
             });
-        }
-        else
-        {
+        } else {
             timersToResume.forEach(timer -> timer.setPaused(false));
             timersToResume.clear();
         }

@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.external.dynmap;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -61,7 +62,7 @@ import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Dynmap",
         description = "Displays the spawn & death points on the dynmap.",
         when = ModuleLoadTime.ON_GAME_STARTING,
@@ -73,18 +74,15 @@ import org.dynmap.markers.MarkerSet;
 /*
  * TODO: add the world border to the map.
  */
-public class DynmapModule extends QSGModule
-{
+public class DynmapModule extends QSGModule {
     private final DynmapAPI dynmapAPI = (DynmapAPI) Bukkit.getPluginManager().getPlugin("dynmap");
     private final MarkerAPI markerAPI = dynmapAPI.getMarkerAPI();
 
     private MarkerSet markerSet = null;
 
     @Override
-    protected void onEnable()
-    {
-        if (markerAPI == null)
-        {
+    protected void onEnable() {
+        if (markerAPI == null) {
             log().warning("Dynmap is available, but the markers API is not. The integration was disabled.");
             QuartzLib.unregisterEvents(this);
             return;
@@ -92,21 +90,16 @@ public class DynmapModule extends QSGModule
 
         markerSet = markerAPI.getMarkerSet("uhplugin.markerset");
 
-        if (markerSet == null)
-        {
+        if (markerSet == null) {
             markerSet = markerAPI.createMarkerSet("uhplugin.markerset", "UHCReloaded", null, false);
-        }
-        else
-        {
+        } else {
             markerSet.setMarkerSetLabel("UHCReloaded");
         }
     }
 
     @Override
-    protected void onDisable()
-    {
-        if (markerSet != null)
-        {
+    protected void onDisable() {
+        if (markerSet != null) {
             markerSet.deleteMarkerSet();
         }
     }
@@ -121,10 +114,8 @@ public class DynmapModule extends QSGModule
      *
      * @param player The player.
      */
-    public void showDeathLocation(final Player player)
-    {
-        if (!Config.SHOW_DEATH_LOCATIONS.get())
-        {
+    public void showDeathLocation(final Player player) {
+        if (!Config.SHOW_DEATH_LOCATIONS.get()) {
             return;
         }
 
@@ -142,8 +133,7 @@ public class DynmapModule extends QSGModule
                 icon, false
         );
 
-        if (marker == null)
-        {
+        if (marker == null) {
             log().warning("Unable to create marker " + markerID);
         }
     }
@@ -153,15 +143,15 @@ public class DynmapModule extends QSGModule
      *
      * @param player The player.
      */
-    public void hideDeathLocation(final OfflinePlayer player)
-    {
-        if (!Config.SHOW_DEATH_LOCATIONS.get())
-        {
+    public void hideDeathLocation(final OfflinePlayer player) {
+        if (!Config.SHOW_DEATH_LOCATIONS.get()) {
             return;
         }
 
         final Marker marker = markerSet.findMarker(getDeathMarkerName(player));
-        if (marker != null) marker.deleteMarker();
+        if (marker != null) {
+            marker.deleteMarker();
+        }
     }
 
     /**
@@ -170,8 +160,7 @@ public class DynmapModule extends QSGModule
      * @param player The player.
      * @return The ID.
      */
-    private String getDeathMarkerName(final OfflinePlayer player)
-    {
+    private String getDeathMarkerName(final OfflinePlayer player) {
         return "uhplugin.death." + player.getName();
     }
 
@@ -184,28 +173,30 @@ public class DynmapModule extends QSGModule
      * Displays the spawn point of the given player.
      *
      * <p>
-     *     Used when the teleportation ignores the teams.
+     * Used when the teleportation ignores the teams.
      * </p>
      *
-     * @param player The player.
+     * @param player     The player.
      * @param spawnPoint The location of the spawn point.
      */
-    public void showSpawnLocation(final OfflinePlayer player, final Location spawnPoint)
-    {
-        if (!Config.SHOW_SPAWN_LOCATIONS.get()) return;
-        if (player == null) return;
+    public void showSpawnLocation(final OfflinePlayer player, final Location spawnPoint) {
+        if (!Config.SHOW_SPAWN_LOCATIONS.get()) {
+            return;
+        }
+        if (player == null) {
+            return;
+        }
 
         final QuartzTeam team = QuartzTeams.get().getTeamForPlayer(player);
-        if (team == null) return;
+        if (team == null) {
+            return;
+        }
 
         final String markerLabel;
-        if (QSG.module(GameModule.class).isTeamsGame() && team.size() > 1)
-        {
+        if (QSG.module(GameModule.class).isTeamsGame() && team.size() > 1) {
             /// Dynmap marker label of a spawn point of a team.
             markerLabel = I.t("Spawn point of the team {0}", team.getName());
-        }
-        else
-        {
+        } else {
             /// Dynmap marker label of a spawn point of a player, in solo.
             markerLabel = I.t("Spawn point of {0}", team.getName());
         }
@@ -222,12 +213,12 @@ public class DynmapModule extends QSGModule
      * Displays a spawn-point marker.
      *
      * @param spawnPoint The location of the spawn.
-     * @param color The color of the team (for the flag).
-     * @param label The label of the marker.
-     * @param markerID The ID of the marker.
+     * @param color      The color of the team (for the flag).
+     * @param label      The label of the marker.
+     * @param markerID   The ID of the marker.
      */
-    private void showSpawnLocation(final Location spawnPoint, final TeamColor color, final String label, final String markerID)
-    {
+    private void showSpawnLocation(final Location spawnPoint, final TeamColor color, final String label,
+                                   final String markerID) {
         /* ***  Icon  *** */
 
         final MarkerIcon icon;
@@ -237,8 +228,7 @@ public class DynmapModule extends QSGModule
         // redflag, orangeflag, yellowflag, greenflag, blueflag, purpleflag, pinkflag, pirateflag (black)
         // Ref. https://github.com/webbukkit/dynmap/wiki/Using-markers
 
-        switch (color)
-        {
+        switch (color) {
             case BLUE:
             case DARK_BLUE:
             case AQUA:
@@ -296,8 +286,7 @@ public class DynmapModule extends QSGModule
                 && similarMarker.getMarkerIcon().equals(icon)
                 && similarMarker.getX() == spawnPoint.getX()
                 && similarMarker.getY() == spawnPoint.getY()
-                && similarMarker.getZ() == spawnPoint.getZ())
-        {
+                && similarMarker.getZ() == spawnPoint.getZ()) {
             return;
         }
 
@@ -314,8 +303,7 @@ public class DynmapModule extends QSGModule
                 false
         );
 
-        if (marker == null)
-        {
+        if (marker == null) {
             log().warning("Unable to create marker {0}", markerID);
         }
     }
@@ -326,8 +314,7 @@ public class DynmapModule extends QSGModule
      * @param player The player.
      * @return The ID.
      */
-    private String getSpawnMarkerName(final OfflinePlayer player)
-    {
+    private String getSpawnMarkerName(final OfflinePlayer player) {
         return "uhplugin.spawn." + player.getName();
     }
 
@@ -336,24 +323,20 @@ public class DynmapModule extends QSGModule
     /* *** EVENTS INTEGRATION *** */
 
 
-    @EventHandler (priority = EventPriority.MONITOR)
-    public void onSpawnPointSelected(final PlayerSpawnPointSelectedEvent ev)
-    {
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onSpawnPointSelected(final PlayerSpawnPointSelectedEvent ev) {
         showSpawnLocation(ev.getPlayer(), ev.getSpawnPoint());
     }
 
     @EventHandler
-    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
-    {
-        if (ev.getPlayer().isOnline())
-        {
+    public void onPlayerDeath(final AlivePlayerDeathEvent ev) {
+        if (ev.getPlayer().isOnline()) {
             showDeathLocation(ev.getPlayer().getPlayer());
         }
     }
 
     @EventHandler
-    public void onPlayerResurrected(final PlayerResurrectedEvent ev)
-    {
+    public void onPlayerResurrected(final PlayerResurrectedEvent ev) {
         hideDeathLocation(ev.getPlayer());
     }
 }

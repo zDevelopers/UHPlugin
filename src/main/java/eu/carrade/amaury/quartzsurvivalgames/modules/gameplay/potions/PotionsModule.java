@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.potions;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -45,7 +46,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.BrewerInventory;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Potions",
         description = "Allows to tweak potions, by disabling level-II, enhanced, " +
                 "splash or lingering potions.",
@@ -54,22 +55,17 @@ import org.bukkit.inventory.BrewerInventory;
         icon = Material.BREWING_STAND,
         settings = Config.class
 )
-public class PotionsModule extends QSGModule
-{
+public class PotionsModule extends QSGModule {
     @EventHandler
-    public void onInventoryDrag(InventoryDragEvent ev)
-    {
-        if (ev.getInventory() instanceof BrewerInventory)
-        {
+    public void onInventoryDrag(InventoryDragEvent ev) {
+        if (ev.getInventory() instanceof BrewerInventory) {
             RunTask.later(new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()), 1L);
         }
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent ev)
-    {
-        if (ev.getInventory() instanceof BrewerInventory)
-        {
+    public void onInventoryClick(InventoryClickEvent ev) {
+        if (ev.getInventory() instanceof BrewerInventory) {
             RunTask.later(new CancelBrewTask((BrewerInventory) ev.getInventory(), ev.getWhoClicked()), 1L);
         }
     }

@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.warning;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.TimeDelta;
@@ -39,30 +40,25 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
-
 import java.util.List;
 
-@CommandInfo (
+@CommandInfo(
         name = "border-warning",
         usageParameters = "<future border size | cancel> [time delta (minutes or mm:ss or hh:mm:ss) until border reduction]",
         aliases = {"borderwarning", "borderwarn", "bw"}
 )
-public class WarningCommand extends Command
-{
+public class WarningCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         final WarningModule warnings = QSG.module(WarningModule.class);
 
         // /uh border warning
-        if (args.length == 0)
-        {
+        if (args.length == 0) {
             throwInvalidArgument(I.t("Missing future border size."));
         }
 
         // /uh border warning cancel
-        else if (args[0].equalsIgnoreCase("cancel"))
-        {
+        else if (args[0].equalsIgnoreCase("cancel")) {
             warnings.cancelWarning();
             success(I.t("{cs}Warning canceled."));
         }
@@ -70,33 +66,31 @@ public class WarningCommand extends Command
         // /uh border warning <?>
         // or
         // /uh border warning <?> <?>
-        else
-        {
-            try
-            {
+        else {
+            try {
                 final int warnDiameter = Integer.parseInt(args[0]);
                 TimeDelta warnTime = null;
 
                 // /uh border warning <?> <?>
-                if (args.length >= 2)
-                {
+                if (args.length >= 2) {
                     warnTime = new TimeDelta(args[1]);
                 }
 
                 warnings.setWarningSize(warnDiameter, warnTime, sender);
-                success(I.tn("{cs}Future size saved. All players outside this future border will be warned every {0} second.", "{cs}Future size saved. All players outside this future border will be warned every {0} seconds.", (int) Config.WARNING_INTERVAL.get().getSeconds()));
+                success(I
+                        .tn("{cs}Future size saved. All players outside this future border will be warned every {0} second.",
+                                "{cs}Future size saved. All players outside this future border will be warned every {0} seconds.",
+                                (int) Config.WARNING_INTERVAL.get().getSeconds()));
 
             }
-            catch (NumberFormatException e)
-            {
+            catch (NumberFormatException e) {
                 error(I.t("{ce}“{0}” is not a number...", args[0]));
             }
         }
     }
 
     @Override
-    protected List<String> complete() throws CommandException
-    {
+    protected List<String> complete() throws CommandException {
         return args.length == 1 ? getMatchingSubset(args[0], "cancel") : null;
     }
 }

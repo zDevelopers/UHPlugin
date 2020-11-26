@@ -31,24 +31,21 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.potions;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import java.io.File;
 
+public class Config extends ConfigurationInstance {
     final static public ConfigurationItem<Boolean> DISABLE_LEVEL_II = item("disable-level-II", true);
     final static public ConfigurationItem<Boolean> DISABLE_EXTENDED = item("disable-extended", false);
     final static public ConfigurationItem<Boolean> DISABLE_SPLASH = item("disable-splash", false);
     final static public ConfigurationItem<Boolean> DISABLE_LINGERING = item("disable-lingering", false);
+    public Config(File file) {
+        super(file);
+    }
 }

@@ -39,19 +39,40 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 
-public abstract class WallGenerator
-{
+public abstract class WallGenerator {
     final private Material wallBlockAir;
     final private Material wallBlockSolid;
 
     private int blocksSet = 0;
 
-    public WallGenerator(Material wallBlockAir, Material wallBlockSolid)
-    {
+    public WallGenerator(Material wallBlockAir, Material wallBlockSolid) {
         this.wallBlockAir = wallBlockAir != null ? wallBlockAir : Material.GLASS;
         this.wallBlockSolid = wallBlockSolid != null ? wallBlockSolid : Material.BEDROCK;
     }
 
+    /**
+     * Returns a new instance of the wall generator for the given shape.
+     *
+     * @param shape          The shape.
+     * @param wallBlockAir   The block to use to replace air.
+     * @param wallBlockSolid The block to use to replace solid blocks.
+     * @return The instance.
+     * @see WallGenerator#WallGenerator(Material, Material)
+     */
+    public static WallGenerator fromShape(final MapShape shape, final Material wallBlockAir,
+                                          final Material wallBlockSolid) {
+        Validate.notNull(shape, "Map shape must not be null.");
+
+        switch (shape) {
+            case CIRCULAR:
+                return new CircularWallGenerator(wallBlockAir, wallBlockSolid);
+
+            case SQUARED:
+                return new SquaredWallGenerator(wallBlockAir, wallBlockSolid);
+        }
+
+        return null;
+    }
 
     /**
      * Builds a wall in the world.
@@ -62,33 +83,26 @@ public abstract class WallGenerator
      */
     public abstract void build(World world, int diameter, int wallHeight);
 
-
     /**
      * Sets a block according to his environment.
      * If the block replaces a "air/tree" block, or if it is next to a transparent block, it needs to be a
      * "wall.block.replaceAir" block.
      * In all other cases, it needs to be a "wall.block.replaceSolid" one.
      *
-     * @param block The block to set.
+     * @param block    The block to set.
      * @param position The position of the current wall in the world
      */
-    protected void setBlock(Block block, WallPosition position)
-    {
+    protected void setBlock(Block block, WallPosition position) {
         // The block is a transparent block or a tree
-        if (isBlockTransparentOrNatural(block.getType()))
-        {
+        if (isBlockTransparentOrNatural(block.getType())) {
             block.setType(wallBlockAir);
         }
         // We set the block according to the block near it inside the border.
-        else
-        {
+        else {
             final Material innerMaterial = getInnerBlock(block, position).getType();
-            if (isBlockTransparentOrNatural(innerMaterial))
-            {
+            if (isBlockTransparentOrNatural(innerMaterial)) {
                 block.setType(wallBlockAir);
-            }
-            else
-            {
+            } else {
                 block.setType(wallBlockSolid);
             }
         }
@@ -103,15 +117,12 @@ public abstract class WallGenerator
      * @return boolean True if the block is transparent, or part of a tree/a giant mushroom/a
      * generated structure/etc.
      */
-    protected Boolean isBlockTransparentOrNatural(Material blockType)
-    {
-        if (blockType.isTransparent())
-        {
+    protected Boolean isBlockTransparentOrNatural(Material blockType) {
+        if (blockType.isTransparent()) {
             return true;
         }
 
-        switch (blockType)
-        {
+        switch (blockType) {
             // TODO re-add stained glass, stained glass pane, logs, leaves, beds, signs, fences
             //  Low priority as this is mostly unused anyway, with vanilla world border.
             case GLASS: // The glass isn't a transparent block for the `isTransparent` method.
@@ -147,19 +158,17 @@ public abstract class WallGenerator
     /**
      * Gets the block left to the given block inside the border.
      *
-     * @param block The reference block.
+     * @param block    The reference block.
      * @param position The position of the wall currently build.
      */
-    protected Block getInnerBlock(Block block, WallPosition position)
-    {
+    protected Block getInnerBlock(Block block, WallPosition position) {
         // Just for readability.
         final World world = block.getWorld();
         final int x = block.getX();
         final int y = block.getY();
         final int z = block.getZ();
 
-        switch (position)
-        {
+        switch (position) {
             case EAST:
                 return world.getBlockAt(x - 1, y, z);
             case NORTH:
@@ -173,34 +182,7 @@ public abstract class WallGenerator
         }
     }
 
-    public int getBlocksSet()
-    {
+    public int getBlocksSet() {
         return blocksSet;
-    }
-
-    /**
-     * Returns a new instance of the wall generator for the given shape.
-     *
-     * @param shape The shape.
-     * @param wallBlockAir The block to use to replace air.
-     * @param wallBlockSolid The block to use to replace solid blocks.
-     *
-     * @return The instance.
-     * @see WallGenerator#WallGenerator(Material, Material)
-     */
-    public static WallGenerator fromShape(final MapShape shape, final Material wallBlockAir, final Material wallBlockSolid)
-    {
-        Validate.notNull(shape, "Map shape must not be null.");
-
-        switch (shape)
-        {
-            case CIRCULAR:
-                return new CircularWallGenerator(wallBlockAir, wallBlockSolid);
-
-            case SQUARED:
-                return new SquaredWallGenerator(wallBlockAir, wallBlockSolid);
-        }
-
-        return null;
     }
 }

@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -46,15 +47,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Onerous Glistering Melon",
         description = "Changes the vanilla recipe for glistering melon, replacing gold nuggets by gold ingots, to make healing potions harder to get.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.GAMEPLAY,
         icon = Material.GLISTERING_MELON_SLICE   // FIXME 1.13
 )
-public class OnerousGlisteringMelon extends QSGModule
-{
+public class OnerousGlisteringMelon extends QSGModule {
     private final Recipe VANILLA_RECIPE = CraftingRecipes.shaped(
             new ItemStack(Material.GLISTERING_MELON_SLICE),
             "AAA",
@@ -72,16 +72,13 @@ public class OnerousGlisteringMelon extends QSGModule
     );
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         CraftingRecipes.add(ONEROUS_RECIPE);
     }
 
     @EventHandler
-    private void onPreCraft(final PrepareItemCraftEvent ev)
-    {
-        if (RecipesUtils.areSimilar(ev.getRecipe(), VANILLA_RECIPE))
-        {
+    private void onPreCraft(final PrepareItemCraftEvent ev) {
+        if (RecipesUtils.areSimilar(ev.getRecipe(), VANILLA_RECIPE)) {
             ev.getInventory().setResult(new ItemStack(Material.AIR));
         }
     }

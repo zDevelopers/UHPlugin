@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.check;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -38,23 +39,20 @@ import eu.carrade.amaury.quartzsurvivalgames.core.ModuleInfo;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleLoadTime;
 import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
 import fr.zcraft.quartzlib.components.commands.Command;
-import org.bukkit.Material;
-
 import java.util.Collections;
 import java.util.List;
+import org.bukkit.Material;
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Border Check",
         description = "Offers a command to check how far players are from a given border size.",
         category = ModuleCategory.UTILITIES,
         icon = Material.JUNGLE_FENCE,
         when = ModuleLoadTime.ON_GAME_START
 )
-public class CheckModule extends QSGModule
-{
+public class CheckModule extends QSGModule {
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(CheckCommand.class);
     }
 }

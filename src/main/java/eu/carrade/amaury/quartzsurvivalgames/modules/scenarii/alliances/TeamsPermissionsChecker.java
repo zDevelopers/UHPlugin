@@ -31,26 +31,23 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.scenarii.alliances;
 
 import fr.zcraft.quartzteams.QuartzTeamsPermission;
 import fr.zcraft.quartzteams.permissions.PermissionsChecker;
 import org.bukkit.permissions.Permissible;
 
-public class TeamsPermissionsChecker implements PermissionsChecker
-{
-    private PermissionsChecker delegate;
+public class TeamsPermissionsChecker implements PermissionsChecker {
+    private final PermissionsChecker delegate;
 
-    public TeamsPermissionsChecker(PermissionsChecker delegate)
-    {
+    public TeamsPermissionsChecker(PermissionsChecker delegate) {
         this.delegate = delegate;
     }
 
     @Override
-    public boolean hasPermission(Permissible permissible, QuartzTeamsPermission permission)
-    {
-        switch (permission)
-        {
+    public boolean hasPermission(Permissible permissible, QuartzTeamsPermission permission) {
+        switch (permission) {
 
             case CREATE_TEAM:
             case DELETE_TEAM:

@@ -29,13 +29,12 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns.exceptions;
 
-public class UnknownGeneratorException extends Exception
-{
+public class UnknownGeneratorException extends Exception {
 
-    public UnknownGeneratorException(String message)
-    {
+    public UnknownGeneratorException(String message) {
         super(message);
     }
 }

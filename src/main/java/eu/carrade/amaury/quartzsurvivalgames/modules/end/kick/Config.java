@@ -45,6 +45,7 @@ import java.io.File;
 public class Config extends ConfigurationInstance {
     static public final ConfigurationItem<TimeDelta> DELAY = item("delay", new TimeDelta(30));
     static public final ConfigurationItem<String> MESSAGE = item("message", I.t("jayjay"));
+
     public Config(File file) {
         super(file);
     }

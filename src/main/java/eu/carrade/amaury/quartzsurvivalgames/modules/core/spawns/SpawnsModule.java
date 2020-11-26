@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns;
 
 import eu.carrade.amaury.quartzsurvivalgames.QuartzSurvivalGames;
@@ -46,17 +47,16 @@ import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import eu.carrade.amaury.quartzsurvivalgames.utils.QSGUtils;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzteams.QuartzTeams;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.util.Vector;
-
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @ModuleInfo(
@@ -68,19 +68,16 @@ import java.util.stream.Collectors;
         internal = true,
         can_be_unloaded = false
 )
-public class SpawnsModule extends QSGModule
-{
-    private List<Location> spawnPoints = new LinkedList<>();
+public class SpawnsModule extends QSGModule {
+    private final List<Location> spawnPoints = new LinkedList<>();
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         spawnPoints.addAll(Config.SPAWN_POINTS);
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(SpawnsCommand.class);
     }
 
@@ -89,8 +86,7 @@ public class SpawnsModule extends QSGModule
      *
      * @param vec The vector representing the X and Z coordinates.
      */
-    public void addSpawnPoint(final Vector vec)
-    {
+    public void addSpawnPoint(final Vector vec) {
         addSpawnPoint(QuartzSurvivalGames.get().getWorld(World.Environment.NORMAL), vec.getX(), vec.getZ());
     }
 
@@ -100,8 +96,7 @@ public class SpawnsModule extends QSGModule
      * @param x The X coordinate.
      * @param z The Z coordinate.
      */
-    public void addSpawnPoint(final Double x, final Double z)
-    {
+    public void addSpawnPoint(final Double x, final Double z) {
         addSpawnPoint(QuartzSurvivalGames.get().getWorld(World.Environment.NORMAL), x, z);
     }
 
@@ -112,8 +107,7 @@ public class SpawnsModule extends QSGModule
      * @param x     The X coordinate.
      * @param z     The Z coordinate.
      */
-    public void addSpawnPoint(final World world, final Double x, final Double z)
-    {
+    public void addSpawnPoint(final World world, final Double x, final Double z) {
         addSpawnPoint(new Location(world, x, 0, z));
     }
 
@@ -126,28 +120,22 @@ public class SpawnsModule extends QSGModule
      *                                  found.
      * @throws IllegalArgumentException If the spawn point is out of the current border.
      */
-    public void addSpawnPoint(final Location location)
-    {
+    public void addSpawnPoint(final Location location) {
         final Location spawnPoint = location.clone();
 
         // Initial fall, except in the nether.
-        if (!(spawnPoint.getWorld().getEnvironment() == World.Environment.NETHER))
-        {
+        if (!(spawnPoint.getWorld().getEnvironment() == World.Environment.NETHER)) {
             spawnPoint.setY(location.getWorld().getHighestBlockYAt(location.getBlockX(), location.getBlockZ()) + 120);
-        }
-        else
-        {
+        } else {
             final Location safeSpot = QSGUtils.searchSafeSpot(location);
-            if (safeSpot == null)
-            {
+            if (safeSpot == null) {
                 throw new RuntimeException("Unable to find a safe spot to set the spawn point " + location.toString());
             }
 
             spawnPoint.setY(safeSpot.getY());
         }
 
-        if (!QSG.module(BorderModule.class).isInsideBorder(spawnPoint))
-        {
+        if (!QSG.module(BorderModule.class).isInsideBorder(spawnPoint)) {
             throw new IllegalArgumentException("The given spawn location is outside the current border");
         }
 
@@ -159,8 +147,7 @@ public class SpawnsModule extends QSGModule
      *
      * @return The spawn points.
      */
-    public List<Location> getSpawnPoints()
-    {
+    public List<Location> getSpawnPoints() {
         return spawnPoints;
     }
 
@@ -173,8 +160,7 @@ public class SpawnsModule extends QSGModule
      *                 Else, the points in the same block.
      * @return true if something were removed.
      */
-    public boolean removeSpawnPoint(final Location location, final boolean precise)
-    {
+    public boolean removeSpawnPoint(final Location location, final boolean precise) {
         final List<Location> toRemove = getSpawnPoints().stream()
                 .filter(spawn -> location.getWorld().equals(spawn.getWorld()))
                 .filter(spawn -> precise
@@ -184,11 +170,10 @@ public class SpawnsModule extends QSGModule
                         && location.getBlockZ() == spawn.getBlockZ())
                 .collect(Collectors.toCollection(LinkedList::new));
 
-        for (Location spawnToRemove : toRemove)
-        {
+        for (Location spawnToRemove : toRemove) {
             // Used to remove all occurrences of the spawn point
-            while (spawnPoints.remove(spawnToRemove))
-                ;
+            while (spawnPoints.remove(spawnToRemove)) {
+            }
         }
 
         return toRemove.size() != 0;
@@ -199,11 +184,9 @@ public class SpawnsModule extends QSGModule
      * <p>
      * CANNOT BE CANCELLED.
      */
-    public void reset()
-    {
+    public void reset() {
         spawnPoints.clear();
     }
-
 
 
     /**
@@ -225,15 +208,15 @@ public class SpawnsModule extends QSGModule
      * @throws CannotGenerateSpawnPointsException In case of fail.
      * @throws UnknownGeneratorException          If no generator was found by the given name.
      */
-    public void generateSpawnPoints(final String generatorName, final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter) throws CannotGenerateSpawnPointsException, UnknownGeneratorException
-    {
+    public void generateSpawnPoints(final String generatorName, final World world, final int spawnCount,
+                                    final int regionDiameter, final int minimalDistanceBetweenTwoPoints,
+                                    final double xCenter, final double zCenter)
+            throws CannotGenerateSpawnPointsException, UnknownGeneratorException {
         Generator generator = Generator.fromString(generatorName);
-        if (generator != null)
-        {
-            generateSpawnPoints(generator, world, spawnCount, regionDiameter, minimalDistanceBetweenTwoPoints, xCenter, zCenter);
-        }
-        else
-        {
+        if (generator != null) {
+            generateSpawnPoints(generator, world, spawnCount, regionDiameter, minimalDistanceBetweenTwoPoints, xCenter,
+                    zCenter);
+        } else {
             throw new UnknownGeneratorException("The generator '" + generatorName + "' does not exists.");
         }
     }
@@ -256,9 +239,12 @@ public class SpawnsModule extends QSGModule
      *                                        region where the points will be generated.
      * @throws CannotGenerateSpawnPointsException In case of fail.
      */
-    public void generateSpawnPoints(final Generator generator, final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter) throws CannotGenerateSpawnPointsException
-    {
-        generateSpawnPoints(generator.getInstance(), world, spawnCount, regionDiameter, minimalDistanceBetweenTwoPoints, xCenter, zCenter);
+    public void generateSpawnPoints(final Generator generator, final World world, final int spawnCount,
+                                    final int regionDiameter, final int minimalDistanceBetweenTwoPoints,
+                                    final double xCenter, final double zCenter)
+            throws CannotGenerateSpawnPointsException {
+        generateSpawnPoints(generator.getInstance(), world, spawnCount, regionDiameter, minimalDistanceBetweenTwoPoints,
+                xCenter, zCenter);
     }
 
     /**
@@ -279,8 +265,10 @@ public class SpawnsModule extends QSGModule
      *                                        region where the points will be generated.
      * @throws CannotGenerateSpawnPointsException In case of fail.
      */
-    public void generateSpawnPoints(final SpawnPointsGenerator generator, final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter) throws CannotGenerateSpawnPointsException
-    {
+    public void generateSpawnPoints(final SpawnPointsGenerator generator, final World world, final int spawnCount,
+                                    final int regionDiameter, final int minimalDistanceBetweenTwoPoints,
+                                    final double xCenter, final double zCenter)
+            throws CannotGenerateSpawnPointsException {
         generator.generate(
                 world, spawnCount,
                 regionDiameter, minimalDistanceBetweenTwoPoints,
@@ -293,8 +281,7 @@ public class SpawnsModule extends QSGModule
      * Generates on the fly missing spawn points when the game starts.
      */
     @EventHandler
-    public void beforeTeleportationPhase(final BeforeTeleportationPhaseEvent ev)
-    {
+    public void beforeTeleportationPhase(final BeforeTeleportationPhaseEvent ev) {
         final GameModule game = QSG.module(GameModule.class);
 
         final World normalWorld = QSG.get().getWorld(World.Environment.NORMAL);
@@ -306,8 +293,7 @@ public class SpawnsModule extends QSGModule
 
         int spawnsNeeded = 0;
 
-        switch (game.getTeleportationMode())
-        {
+        switch (game.getTeleportationMode()) {
             case NORMAL:
                 spawnsNeeded = QuartzTeams.get().countTeams() + playersWithoutTeam;
                 break;
@@ -320,14 +306,14 @@ public class SpawnsModule extends QSGModule
 
         spawnsNeeded -= spawnPoints.size(); // We don't need what we already have.
 
-        if (spawnsNeeded <= 0) return;
+        if (spawnsNeeded <= 0) {
+            return;
+        }
 
         Exception error = null;
 
-        for (int i = 0; i < 6; i++)
-        {
-            try
-            {
+        for (int i = 0; i < 6; i++) {
+            try {
                 generateSpawnPoints(
                         Generator.RANDOM,
                         normalWorld,
@@ -340,8 +326,7 @@ public class SpawnsModule extends QSGModule
 
                 error = null;
             }
-            catch (final CannotGenerateSpawnPointsException e)
-            {
+            catch (final CannotGenerateSpawnPointsException e) {
                 error = e;
                 continue;
             }
@@ -349,13 +334,13 @@ public class SpawnsModule extends QSGModule
             break;
         }
 
-        if (error == null)
-        {
-            log().info("Randomly generated {0} missing spawn points on the fly. See /uh spawn for details.", spawnsNeeded);
-        }
-        else
-        {
-            log().error("There where {0} missing spawn points but we weren''t able to generate them automatically, even after 6 tries. Try to generate them yourself using /uh spawns generate, or to add them manually with /uh spawns add.", error, spawnsNeeded);
+        if (error == null) {
+            log().info("Randomly generated {0} missing spawn points on the fly. See /uh spawn for details.",
+                    spawnsNeeded);
+        } else {
+            log().error(
+                    "There where {0} missing spawn points but we weren''t able to generate them automatically, even after 6 tries. Try to generate them yourself using /uh spawns generate, or to add them manually with /uh spawns add.",
+                    error, spawnsNeeded);
         }
     }
 }

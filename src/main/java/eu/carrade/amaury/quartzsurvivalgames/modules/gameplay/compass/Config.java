@@ -31,29 +31,26 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.compass;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-import org.bukkit.Material;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import java.io.File;
+import org.bukkit.Material;
 
-    public final static ConfigurationItem<CompassRecipes.CompassRecipe> RECIPE = item("recipe", CompassRecipes.CompassRecipe.EASY);
-
+public class Config extends ConfigurationInstance {
+    public final static ConfigurationItem<CompassRecipes.CompassRecipe> RECIPE =
+            item("recipe", CompassRecipes.CompassRecipe.EASY);
     public final static ConfigurationItem<Material> COMPASS_FEE_ITEM = item("compass-fee-item", Material.ROTTEN_FLESH);
     public final static ConfigurationItem<Integer> COMPASS_FEE_AMOUNT = item("compass-fee-amount", 1);
-
     public final static ConfigurationItem<Boolean> NEVER_TARGET_TEAMMATES = item("never-target-teammates", true);
+    public final static ConfigurationItem<CompassModule.CompassBehavior> COMPASS_BEHAVIOR =
+            item("compass-behavior", CompassModule.CompassBehavior.GIVE_DIRECTION);
 
-    public final static ConfigurationItem<CompassModule.CompassBehavior> COMPASS_BEHAVIOR = item("compass-behavior", CompassModule.CompassBehavior.GIVE_DIRECTION);
+    public Config(File file) {
+        super(file);
+    }
 }

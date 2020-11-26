@@ -31,24 +31,22 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.weather;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-import org.bukkit.WeatherType;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import java.io.File;
+import org.bukkit.WeatherType;
 
+public class Config extends ConfigurationInstance {
     static public final ConfigurationItem<Boolean> WEATHER_CYCLE = item("enable-weather-cycle", true);
     static public final ConfigurationItem<WeatherType> INITIAL_WEATHER = item("initial-weather", WeatherType.CLEAR);
-    static public final ConfigurationItem<WeatherType> WAITING_PHASE_WEATHER = item("waiting-phase-weather", WeatherType.CLEAR);
+    static public final ConfigurationItem<WeatherType> WAITING_PHASE_WEATHER =
+            item("waiting-phase-weather", WeatherType.CLEAR);
+    public Config(File file) {
+        super(file);
+    }
 }

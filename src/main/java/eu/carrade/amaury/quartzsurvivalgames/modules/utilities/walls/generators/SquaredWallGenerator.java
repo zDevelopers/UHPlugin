@@ -29,16 +29,15 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.walls.generators;
 
 import org.bukkit.Material;
 import org.bukkit.World;
 
 
-public class SquaredWallGenerator extends WallGenerator
-{
-    public SquaredWallGenerator(Material wallBlockAir, Material wallBlockSolid)
-    {
+public class SquaredWallGenerator extends WallGenerator {
+    public SquaredWallGenerator(Material wallBlockAir, Material wallBlockSolid) {
         super(wallBlockAir, wallBlockSolid);
     }
 
@@ -50,8 +49,7 @@ public class SquaredWallGenerator extends WallGenerator
      * @param wallHeight The height of the wall.
      */
     @Override
-    public void build(World world, int diameter, int wallHeight)
-    {
+    public void build(World world, int diameter, int wallHeight) {
         final int halfDiameter = (int) Math.floor(diameter / 2);
 
         final int limitXInf = world.getSpawnLocation().add(-halfDiameter, 0, 0).getBlockX();
@@ -59,25 +57,21 @@ public class SquaredWallGenerator extends WallGenerator
         final int limitZInf = world.getSpawnLocation().add(0, 0, -halfDiameter).getBlockZ();
         final int limitZSup = world.getSpawnLocation().add(0, 0, halfDiameter).getBlockZ();
 
-        for (int x = limitXInf; x <= limitXSup; x++)
-        {
+        for (int x = limitXInf; x <= limitXSup; x++) {
             world.getBlockAt(x, 1, limitZInf).setType(Material.BEDROCK);
             world.getBlockAt(x, 1, limitZSup).setType(Material.BEDROCK);
 
-            for (int y = 2; y <= wallHeight; y++)
-            {
+            for (int y = 2; y <= wallHeight; y++) {
                 setBlock(world.getBlockAt(x, y, limitZInf), WallPosition.NORTH);
                 setBlock(world.getBlockAt(x, y, limitZSup), WallPosition.SOUTH);
             }
         }
 
-        for (int z = limitZInf + 1; z <= limitZSup - 1; z++)
-        {
+        for (int z = limitZInf + 1; z <= limitZSup - 1; z++) {
             world.getBlockAt(limitXInf, 1, z).setType(Material.BEDROCK);
             world.getBlockAt(limitXSup, 1, z).setType(Material.BEDROCK);
 
-            for (int y = 2; y <= wallHeight; y++)
-            {
+            for (int y = 2; y <= wallHeight; y++) {
                 setBlock(world.getBlockAt(limitXInf, y, z), WallPosition.WEST);
                 setBlock(world.getBlockAt(limitXSup, y, z), WallPosition.EAST);
             }

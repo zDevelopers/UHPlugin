@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.rules;
 
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
@@ -36,50 +37,43 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
+import java.util.List;
+import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.Optional;
-
-@CommandInfo (name = "rules", usageParameters = "[player]")
-public class RulesCommand extends Command
-{
-    public void run() throws CommandException
-    {
-        if (!QSG.module(RulesModule.class).hasRules())
-        {
+@CommandInfo(name = "rules", usageParameters = "[player]")
+public class RulesCommand extends Command {
+    public void run() throws CommandException {
+        if (!QSG.module(RulesModule.class).hasRules()) {
             error(I.t("{ce}No rules are set in the config file."));
         }
 
-        if (args.length >= 1)
-        {
+        if (args.length >= 1) {
             final Optional<? extends Player> player = Bukkit.getOnlinePlayers().stream()
                     .filter(onlinePlayer -> onlinePlayer.getName().equalsIgnoreCase(args[0].trim()))
                     .findAny();
 
-            if (player.isPresent())
-            {
+            if (player.isPresent()) {
                 QSG.module(RulesModule.class).displayRulesTo(player.get());
 
-                if (!sender.equals(player.get()))
+                if (!sender.equals(player.get())) {
                     sender.sendMessage(I.t("{cs}Rules sent to {0}.", player.get().getName()));
-            }
-            else
-            {
+                }
+            } else {
                 sender.sendMessage(I.t("{ce}Cannot display the rules to {0} because he (or she) is offline.", args[0]));
             }
-        }
-        else
-        {
+        } else {
             QSG.module(RulesModule.class).broadcastRules();
         }
     }
 
     @Override
-    public List<String> complete()
-    {
-        if (args.length == 1) return getMatchingPlayerNames(args[0]);
-        else return null;
+    public List<String> complete() {
+        if (args.length == 1) {
+            return getMatchingPlayerNames(args[0]);
+        } else {
+            return null;
+        }
     }
 }

@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.QuartzSurvivalGames;
@@ -40,56 +41,69 @@ import fr.zcraft.quartzlib.components.commands.Commands;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.components.rawtext.RawText;
 import fr.zcraft.quartzlib.components.rawtext.RawTextPart;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Stream;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import java.util.*;
-import java.util.stream.Stream;
 
-
-@CommandInfo (name = "modules")
-public class ModulesCommand extends Command
-{
+@CommandInfo(name = "modules")
+public class ModulesCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         final Set<ModuleWrapper> modules = new TreeSet<>((module1, module2) -> {
-            if (module1.equals(module2)) return 0;
+            if (module1.equals(module2)) {
+                return 0;
+            }
 
-            if (module1.isLoaded() != module2.isLoaded()) return module1.isLoaded() ? -1 : 1;
-            if (module1.isEnabled() != module2.isEnabled()) return module1.isEnabled() ? -1 : 1;
+            if (module1.isLoaded() != module2.isLoaded()) {
+                return module1.isLoaded() ? -1 : 1;
+            }
+            if (module1.isEnabled() != module2.isEnabled()) {
+                return module1.isEnabled() ? -1 : 1;
+            }
 
-            if (module1.getWhen() != module2.getWhen())
+            if (module1.getWhen() != module2.getWhen()) {
                 return Integer.compare(module1.getWhen().ordinal(), module2.getWhen().ordinal());
+            }
 
-            if (module1.isInternal() != module2.isInternal()) return module1.isInternal() ? -1 : 1;
+            if (module1.isInternal() != module2.isInternal()) {
+                return module1.isInternal() ? -1 : 1;
+            }
 
             return module1.getName().compareTo(module2.getName());
         });
 
         modules.addAll(QuartzSurvivalGames.get().getModulesManager().getModules());
 
-        success(I.tn("{0} module registered {gray}(hover for details)", "{0} modules registered {gray}(hover for details)", modules.size()));
+        success(I.tn("{0} module registered {gray}(hover for details)",
+                "{0} modules registered {gray}(hover for details)", modules.size()));
         modules.forEach(module -> {
             final List<String> commands = new ArrayList<>();
 
-            if (module.isLoaded())
-            {
+            if (module.isLoaded()) {
                 final List<Class<? extends Command>> commandsClasses = module.get().getCommands();
-                if (commandsClasses != null)
-                {
+                if (commandsClasses != null) {
                     commandsClasses.forEach(clazz -> {
                         final Command cmd = Commands.getCommandInfo(clazz);
-                        if (cmd != null) commands.add(cmd.getUsageString());
+                        if (cmd != null) {
+                            commands.add(cmd.getUsageString());
+                        }
                     });
                 }
 
                 final Map<String, Class<? extends Command>> commandsAliases = module.get().getCommandsAliases();
-                if (commandsAliases != null)
-                {
+                if (commandsAliases != null) {
                     commandsAliases.forEach((alias, clazz) -> {
                         final Command cmd = Commands.getCommandInfo(clazz);
-                        if (cmd != null) commands.add("/" + alias + " " + cmd.getUsageParameters() + ChatColor.DARK_GRAY + " (alias)");
+                        if (cmd != null) {
+                            commands.add(
+                                    "/" + alias + " " + cmd.getUsageParameters() + ChatColor.DARK_GRAY + " (alias)");
+                        }
                     });
                 }
             }
@@ -97,48 +111,49 @@ public class ModulesCommand extends Command
             final RawTextPart<?> tooltip = new RawText();
 
             tooltip
-                .then(module.getName())
-                    .style(ChatColor.BOLD, module.isLoaded() ? ChatColor.GREEN : (module.isEnabled() ? ChatColor.GOLD : ChatColor.RED))
-                .then("\n")
-                .then(module.isLoaded() ? I.t("Loaded") : I.t("Unloaded"))
+                    .then(module.getName())
+                    .style(ChatColor.BOLD,
+                            module.isLoaded() ? ChatColor.GREEN : (module.isEnabled() ? ChatColor.GOLD : ChatColor.RED))
+                    .then("\n")
+                    .then(module.isLoaded() ? I.t("Loaded") : I.t("Unloaded"))
                     .color(ChatColor.GRAY)
-                .then(" - ")
+                    .then(" - ")
                     .color(ChatColor.DARK_GRAY)
-                .then(module.isEnabled() ? I.t("Enabled") : I.t("Disabled"))
+                    .then(module.isEnabled() ? I.t("Enabled") : I.t("Disabled"))
                     .color(ChatColor.GRAY)
-                .then("\n\n")
-                .then(module.getDescription())
+                    .then("\n\n")
+                    .then(module.getDescription())
                     .color(ChatColor.WHITE)
-                .then("\n\n")
-                .then(I.t("Load time"))
+                    .then("\n\n")
+                    .then(I.t("Load time"))
                     .color(ChatColor.BLUE)
-                .then("\n")
-                .then(module.getWhen().toString())
+                    .then("\n")
+                    .then(module.getWhen().toString())
                     .color(ChatColor.WHITE);
 
-            if (!commands.isEmpty())
-            {
+            if (!commands.isEmpty()) {
                 tooltip.then("\n\n").then(I.t("Provided commands")).style(ChatColor.BLUE);
-                commands.forEach(command -> tooltip.then("\n- ").style(ChatColor.GRAY).then(command).color(ChatColor.WHITE));
+                commands.forEach(
+                        command -> tooltip.then("\n- ").style(ChatColor.GRAY).then(command).color(ChatColor.WHITE));
             }
 
-            if (module.getDependencies().length != 0)
-            {
+            if (module.getDependencies().length != 0) {
                 tooltip.then("\n\n").then(I.t("External dependencies")).style(ChatColor.BLUE);
-                Stream.of(module.getDependencies()).forEach(dep -> tooltip.then("\n- ").style(ChatColor.GRAY).then(dep).color(Bukkit.getPluginManager().getPlugin(dep) != null ? ChatColor.WHITE : ChatColor.RED));
+                Stream.of(module.getDependencies()).forEach(dep -> tooltip.then("\n- ").style(ChatColor.GRAY).then(dep)
+                        .color(Bukkit.getPluginManager().getPlugin(dep) != null ? ChatColor.WHITE : ChatColor.RED));
             }
 
-            if (module.isInternal())
-            {
+            if (module.isInternal()) {
                 tooltip.then("\n\n").then(I.t("Internal module")).style(ChatColor.DARK_GRAY);
             }
-            if (!module.canBeUnloaded())
-            {
-                tooltip.then(module.isInternal() ? " - " : "\n\n").color(ChatColor.DARK_GRAY).then(I.t("Cannot be disabled")).color(ChatColor.DARK_GRAY);
+            if (!module.canBeUnloaded()) {
+                tooltip.then(module.isInternal() ? " - " : "\n\n").color(ChatColor.DARK_GRAY)
+                        .then(I.t("Cannot be disabled")).color(ChatColor.DARK_GRAY);
             }
 
             send(new RawText().hover(tooltip)
-                    .then("• ").color(module.isLoaded() ? ChatColor.GREEN : (module.isEnabled() ? ChatColor.GOLD : ChatColor.RED))
+                    .then("• ")
+                    .color(module.isLoaded() ? ChatColor.GREEN : (module.isEnabled() ? ChatColor.GOLD : ChatColor.RED))
                     .then(module.getName()).color(ChatColor.WHITE)
                     .build()
             );

@@ -42,18 +42,20 @@ import org.bukkit.event.HandlerList;
  * <p>
  * It is fired before all the values of the timer are reset.
  */
-public final class TimerEndsEvent extends Event
-{
-    private Timer timer;
+public final class TimerEndsEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
+    private final Timer timer;
     private Boolean timerWasUp = false;
     private Boolean restart = false;
 
-
-    public TimerEndsEvent(Timer timer, Boolean timerUp)
-    {
+    public TimerEndsEvent(Timer timer, Boolean timerUp) {
         this.timer = timer;
 
         this.timerWasUp = timerUp;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -61,8 +63,7 @@ public final class TimerEndsEvent extends Event
      *
      * @return the timer.
      */
-    public Timer getTimer()
-    {
+    public Timer getTimer() {
         return timer;
     }
 
@@ -71,19 +72,8 @@ public final class TimerEndsEvent extends Event
      *
      * @return true if the timer was stopped because it was up.
      */
-    public boolean wasTimerUp()
-    {
+    public boolean wasTimerUp() {
         return timerWasUp;
-    }
-
-    /**
-     * If true, the timer will be restarted.
-     *
-     * @param restart true if the timer needs to be restarted.
-     */
-    public void setRestart(boolean restart)
-    {
-        this.restart = restart;
     }
 
     /**
@@ -91,23 +81,21 @@ public final class TimerEndsEvent extends Event
      *
      * @return {@code true} if the timer needs to be restarted.
      */
-    public boolean getRestart()
-    {
+    public boolean getRestart() {
         return this.restart;
     }
 
-
-
-    private static final HandlerList handlers = new HandlerList();
-
-    @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
+    /**
+     * If true, the timer will be restarted.
+     *
+     * @param restart true if the timer needs to be restarted.
+     */
+    public void setRestart(boolean restart) {
+        this.restart = restart;
     }
 
-    public static HandlerList getHandlerList()
-    {
+    @Override
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

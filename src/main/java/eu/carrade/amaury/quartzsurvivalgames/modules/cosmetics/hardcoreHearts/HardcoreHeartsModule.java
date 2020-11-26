@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.hardcoreHearts;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -41,7 +42,7 @@ import fr.zcraft.quartzlib.core.QuartzLib;
 import org.bukkit.Material;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Hardcore Hearts",
         description = "Replaces hearts with hardcore hearts.",
         depends = "ProtocolLib",
@@ -49,20 +50,16 @@ import org.bukkit.Material;
         icon = Material.WITHER_ROSE,
         settings = Config.class
 )
-public class HardcoreHeartsModule extends QSGModule
-{
+public class HardcoreHeartsModule extends QSGModule {
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         final PacketsListener packetsListener = new PacketsListener();
 
-        if (Config.HARDCORE_HEARTS.get())
-        {
+        if (Config.HARDCORE_HEARTS.get()) {
             ProtocolLibrary.getProtocolManager().addPacketListener(packetsListener);
         }
 
-        if (Config.AUTO_RESPAWN.DO.get())
-        {
+        if (Config.AUTO_RESPAWN.DO.get()) {
             QuartzLib.registerEvents(packetsListener);
         }
 

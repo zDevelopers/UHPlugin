@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.teleportation.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
@@ -39,20 +40,13 @@ import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.entity.Player;
 
-public abstract class WorldBasedCommand extends Command
-{
-    protected World getTargetWorld()
-    {
-        if (sender instanceof Player)
-        {
+public abstract class WorldBasedCommand extends Command {
+    protected World getTargetWorld() {
+        if (sender instanceof Player) {
             return ((Player) sender).getWorld();
-        }
-        else if (sender instanceof BlockCommandSender)
-        {
+        } else if (sender instanceof BlockCommandSender) {
             return ((BlockCommandSender) sender).getBlock().getWorld();
-        }
-        else
-        {
+        } else {
             return QSG.get().getWorld(World.Environment.NORMAL);
         }
     }

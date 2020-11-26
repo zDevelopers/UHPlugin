@@ -31,22 +31,19 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.noWitches;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import java.io.File;
 
+public class Config extends ConfigurationInstance {
     public static final ConfigurationItem<Boolean> DISABLE_NATURAL_SPAWN = item("disable-natural-spawn", true);
     public static final ConfigurationItem<Boolean> DISABLE_LIGHTNING_SPAWN = item("disable-lightning-spawn", true);
+    public Config(File file) {
+        super(file);
+    }
 }

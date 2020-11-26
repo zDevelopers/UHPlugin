@@ -42,13 +42,16 @@ import org.bukkit.event.HandlerList;
  *
  * @author Amaury Carrade
  */
-public final class TimerStartsEvent extends Event
-{
-    private Timer timer;
+public final class TimerStartsEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
+    private final Timer timer;
 
-    public TimerStartsEvent(Timer timer)
-    {
+    public TimerStartsEvent(Timer timer) {
         this.timer = timer;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -56,22 +59,12 @@ public final class TimerStartsEvent extends Event
      *
      * @return
      */
-    public Timer getTimer()
-    {
+    public Timer getTimer() {
         return timer;
     }
 
-
-    private static final HandlerList handlers = new HandlerList();
-
     @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

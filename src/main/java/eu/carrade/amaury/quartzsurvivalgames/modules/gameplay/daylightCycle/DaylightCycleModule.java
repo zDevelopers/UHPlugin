@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.daylightCycle;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -42,23 +43,21 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.game.GameP
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.TimeDelta;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
+import java.util.concurrent.atomic.AtomicLong;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.concurrent.atomic.AtomicLong;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Daylight Cycle",
         description = "Configures the daylight cycle (disabled, slowed down, normal, accelerated) and the initial time.",
         category = ModuleCategory.GAMEPLAY,
         icon = Material.CLOCK,
         settings = Config.class
 )
-public class DaylightCycleModule extends QSGModule
-{
+public class DaylightCycleModule extends QSGModule {
     // Here are the Magic Values™.
     private final static long TICKS_IN_ONE_DAYLIGHT_CYCLE = 24000L;
     private final static TimeDelta NORMAL_DAYLIGHT_CYCLE_DURATION = new TimeDelta(0, 20, 0);
@@ -67,8 +66,7 @@ public class DaylightCycleModule extends QSGModule
 
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         QSG.get().getWorlds().forEach(world -> {
             world.setFullTime(Config.WAITING_PHASE_HOUR.get());
             world.setGameRuleValue("doDaylightCycle", Boolean.FALSE.toString());
@@ -76,43 +74,35 @@ public class DaylightCycleModule extends QSGModule
     }
 
     @Override
-    public void onLateEnable()
-    {
-        if (QSG.module(GameModule.class).currentPhaseAfter(GamePhase.STARTING))
-        {
+    public void onLateEnable() {
+        if (QSG.module(GameModule.class).currentPhaseAfter(GamePhase.STARTING)) {
             initDayLightCycle(QSG.get().getWorld(World.Environment.NORMAL).getFullTime());
         }
     }
 
     @Override
-    protected void onDisable()
-    {
-        if (daylightCycleTask != null)
-        {
+    protected void onDisable() {
+        if (daylightCycleTask != null) {
             daylightCycleTask.cancel();
             daylightCycleTask = null;
         }
     }
 
     @EventHandler
-    public void onGameStart(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward())
-        {
+    public void onGameStart(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward()) {
             initDayLightCycle(Config.INITIAL_GAME_HOUR.get());
         }
     }
 
-    private void initDayLightCycle(final long initialTime)
-    {
+    private void initDayLightCycle(final long initialTime) {
         final World world = QSG.get().getWorld(World.Environment.NORMAL);
 
         world.setFullTime(Config.INITIAL_GAME_HOUR.get());
         world.setGameRuleValue("doDaylightCycle", Config.ENABLE_DAYLIGHT_CYCLE.get().toString());
 
         // If the day cycle duration needs to be altered
-        if (!Config.DAYLIGHT_CYCLE_DURATION.get().equals(NORMAL_DAYLIGHT_CYCLE_DURATION))
-        {
+        if (!Config.DAYLIGHT_CYCLE_DURATION.get().equals(NORMAL_DAYLIGHT_CYCLE_DURATION)) {
             // We disable the automatic cycle to avoid the sun and the moon to boggle on the clients
             world.setGameRuleValue("doDaylightCycle", Boolean.FALSE.toString());
 
@@ -123,14 +113,19 @@ public class DaylightCycleModule extends QSGModule
             final long updateInterval = (long) Math.max(1L, (ticksPerDay * 1.0f) / TICKS_IN_ONE_DAYLIGHT_CYCLE);
 
             final AtomicLong tick = new AtomicLong(initialTime % TICKS_IN_ONE_DAYLIGHT_CYCLE);
-            if (tick.get() < 0L) tick.addAndGet(TICKS_IN_ONE_DAYLIGHT_CYCLE);
+            if (tick.get() < 0L) {
+                tick.addAndGet(TICKS_IN_ONE_DAYLIGHT_CYCLE);
+            }
 
             daylightCycleTask = RunTask.timer(() -> {
                 // We keep the current tick in one daylight cycle.
-                if (tick.addAndGet(updateInterval) >= ticksPerDay) tick.set(0L);
+                if (tick.addAndGet(updateInterval) >= ticksPerDay) {
+                    tick.set(0L);
+                }
 
                 // On each tick, we calculate the time of day we should be at this point.
-                final long convertedTick = (long) Math.floor((tick.floatValue() / ticksPerDay) * TICKS_IN_ONE_DAYLIGHT_CYCLE);
+                final long convertedTick =
+                        (long) Math.floor((tick.floatValue() / ticksPerDay) * TICKS_IN_ONE_DAYLIGHT_CYCLE);
 
                 // We update the main world.
                 world.setTime(convertedTick);

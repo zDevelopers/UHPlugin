@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.warning;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.BorderModule;
@@ -39,14 +40,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
-public class BorderWarningTask extends BukkitRunnable
-{
+public class BorderWarningTask extends BukkitRunnable {
     private final BorderModule borderModule = QSG.module(BorderModule.class);
     private final WarningModule warningModule = QSG.module(WarningModule.class);
 
     @Override
-    public void run()
-    {
+    public void run() {
 //        final FreezerModule freezer = UR.module(FreezerModule.class);
 //        if (freezer != null && freezer.getGlobalFreezeState())
 //        {
@@ -54,20 +53,20 @@ public class BorderWarningTask extends BukkitRunnable
 //        }
 
         // Message sent to all players outside the border
-        for (Player player : borderModule.getPlayersOutside(warningModule.getWarningSize()))
-        {
+        for (Player player : borderModule.getPlayersOutside(warningModule.getWarningSize())) {
             double distance = borderModule.getDistanceToBorder(player.getLocation(), warningModule.getWarningSize());
 
-            if (borderModule.getMapShape() == MapShape.CIRCULAR)
-            {
-                player.sendMessage(I.tn("{ce}You are currently out of the future border (diameter of {0} block).", "{ce}You are currently out of the future border (diameter of {0} blocks).", warningModule.getWarningSize()));
-            }
-            else
-            {
-                player.sendMessage(I.t("{ce}You are currently out of the future border of {0}×{0} blocks.", warningModule.getWarningSize()));
+            if (borderModule.getMapShape() == MapShape.CIRCULAR) {
+                player.sendMessage(I.tn("{ce}You are currently out of the future border (diameter of {0} block).",
+                        "{ce}You are currently out of the future border (diameter of {0} blocks).",
+                        warningModule.getWarningSize()));
+            } else {
+                player.sendMessage(I.t("{ce}You are currently out of the future border of {0}×{0} blocks.",
+                        warningModule.getWarningSize()));
             }
 
-            player.sendMessage(I.tn("{ci}You have {0} block to go before being inside.", "{ci}You have {0} blocks to go before being inside.", (int) distance));
+            player.sendMessage(I.tn("{ci}You have {0} block to go before being inside.",
+                    "{ci}You have {0} blocks to go before being inside.", (int) distance));
         }
     }
 }

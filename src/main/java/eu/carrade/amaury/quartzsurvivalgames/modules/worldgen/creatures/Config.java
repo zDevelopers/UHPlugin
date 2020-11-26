@@ -31,22 +31,20 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.worldgen.creatures;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationList;
-
-import java.io.File;
-import java.util.Map;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.list;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationList;
+import java.io.File;
+import java.util.Map;
+
+public class Config extends ConfigurationInstance {
+    public static final ConfigurationList<Map> SPAWN_RULES = list("spawn_rules", Map.class);
+
+    public Config(File file) {
         super(file);
     }
-
-    public static final ConfigurationList<Map> SPAWN_RULES = list("spawn_rules", Map.class);
 }

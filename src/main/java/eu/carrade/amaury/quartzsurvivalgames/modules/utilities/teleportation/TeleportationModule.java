@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.teleportation;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -42,27 +43,28 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.utilities.teleportation.com
 import eu.carrade.amaury.quartzsurvivalgames.modules.utilities.teleportation.commands.TPSpectatorsCommand;
 import eu.carrade.amaury.quartzsurvivalgames.modules.utilities.teleportation.commands.TPTeamCommand;
 import fr.zcraft.quartzlib.components.commands.Command;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 
-import java.util.*;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Teleportation Commands",
         description = "Provides commands to teleport to spawn, death location, or groups of players.",
         category = ModuleCategory.UTILITIES,
         icon = Material.COMMAND_BLOCK_MINECART
 )
-public class TeleportationModule extends QSGModule
-{
+public class TeleportationModule extends QSGModule {
     private final Map<UUID, Location> deathLocations = new HashMap<>();
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Arrays.asList(
                 TPDeathCommand.class,
                 TPSpawnCommand.class,
@@ -72,21 +74,17 @@ public class TeleportationModule extends QSGModule
     }
 
     @EventHandler
-    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
-    {
-        if (ev.getPlayer().isOnline())
-        {
+    public void onPlayerDeath(final AlivePlayerDeathEvent ev) {
+        if (ev.getPlayer().isOnline()) {
             deathLocations.put(ev.getPlayer().getUniqueId(), ev.getPlayer().getPlayer().getLocation());
         }
     }
 
-    public boolean hasDeathLocation(final OfflinePlayer player)
-    {
+    public boolean hasDeathLocation(final OfflinePlayer player) {
         return deathLocations.containsKey(player.getUniqueId());
     }
 
-    public Location getDeathLocation(final OfflinePlayer player)
-    {
+    public Location getDeathLocation(final OfflinePlayer player) {
         return deathLocations.get(player.getUniqueId()).clone();
     }
 }

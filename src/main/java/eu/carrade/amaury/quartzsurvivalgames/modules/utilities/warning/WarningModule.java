@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.warning;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -45,15 +46,14 @@ import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Collections;
-import java.util.List;
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Border Warning",
         description = "Warns players about the future border size.",
         when = ModuleLoadTime.ON_GAME_START,
@@ -61,34 +61,30 @@ import java.util.List;
         icon = Material.NETHER_BRICK_FENCE,
         settings = Config.class
 )
-public class WarningModule extends QSGModule
-{
+public class WarningModule extends QSGModule {
 
     private Integer warningSize = 0;
     private BukkitRunnable warningTask = null;
 
-    private Boolean warningFinalTimeEnabled = false;
+    private final Boolean warningFinalTimeEnabled = false;
     private Timer warningTimer = null;
     private String warningTimerName = null;
     private CommandSender warningSender = null;
 
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         /// The name of the warning timer displaying the time left before the next border
         warningTimerName = I.t("Border shrinking");
     }
 
     @Override
-    protected void onDisable()
-    {
+    protected void onDisable() {
         cancelWarning();
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(WarningCommand.class);
     }
 
@@ -98,49 +94,57 @@ public class WarningModule extends QSGModule
      *
      * @return the future border diameter.
      */
-    public int getWarningSize()
-    {
+    public int getWarningSize() {
         return this.warningSize;
+    }
+
+    /**
+     * Sets the size of the future border, used in the warning messages sent to the
+     * players out of this future border.
+     * <p>
+     * This also starts the display of the warning messages, every 90 seconds by default
+     * (configurable, see config.yml, map.border.warningInterval).
+     *
+     * @param diameter The diameter of the future border.
+     */
+    public void setWarningSize(final int diameter) {
+        setWarningSize(diameter, null, null);
     }
 
     /**
      * @return true if there is currently a warning with a time left displayed.
      */
-    public boolean getWarningFinalTimeEnabled()
-    {
+    public boolean getWarningFinalTimeEnabled() {
         return this.warningFinalTimeEnabled;
     }
 
     /**
      * @return the sender of the last warning configured.
      */
-    public CommandSender getWarningSender()
-    {
+    public CommandSender getWarningSender() {
         return this.warningSender;
     }
 
     /**
      * Sets the size of the future border, used in the warning messages sent to the
      * players out of this future border.
-     *
+     * <p>
      * This also starts the display of the warning messages, every 90 seconds by default
      * (configurable, see config.yml, map.border.warningInterval).
-     *
+     * <p>
      * If timeLeft is not null, the time available for the players to go inside the future
      * border is displayed in the warning message.
      *
      * @param diameter The future diameter.
      * @param timeLeft The time available for the players to go inside the future border.
-     * @param sender The user who requested this change.
+     * @param sender   The user who requested this change.
      */
-    public void setWarningSize(final int diameter, final TimeDelta timeLeft, final CommandSender sender)
-    {
+    public void setWarningSize(final int diameter, final TimeDelta timeLeft, final CommandSender sender) {
         cancelWarning();
 
         this.warningSize = diameter;
 
-        if (timeLeft != null)
-        {
+        if (timeLeft != null) {
             warningTimer = new Timer(this.warningTimerName);
             warningTimer.setDuration((int) timeLeft.getSeconds());
 
@@ -149,8 +153,7 @@ public class WarningModule extends QSGModule
             warningTimer.start();
         }
 
-        if (sender != null)
-        {
+        if (sender != null) {
             this.warningSender = sender;
         }
 
@@ -162,35 +165,18 @@ public class WarningModule extends QSGModule
     }
 
     /**
-     * Sets the size of the future border, used in the warning messages sent to the
-     * players out of this future border.
-     *
-     * This also starts the display of the warning messages, every 90 seconds by default
-     * (configurable, see config.yml, map.border.warningInterval).
-     *
-     * @param diameter The diameter of the future border.
-     */
-    public void setWarningSize(final int diameter)
-    {
-        setWarningSize(diameter, null, null);
-    }
-
-    /**
      * Stops the display of the warning messages.
      */
-    public void cancelWarning()
-    {
-        if (warningTask != null)
-        {
-            try
-            {
+    public void cancelWarning() {
+        if (warningTask != null) {
+            try {
                 warningTask.cancel();
             }
-            catch (IllegalStateException ignored) {}
+            catch (IllegalStateException ignored) {
+            }
         }
 
-        if (warningTimer != null)
-        {
+        if (warningTimer != null) {
             warningTimer.stop();
             QSG.module(TimersModule.class).unregisterTimer(warningTimer);
         }
@@ -198,8 +184,7 @@ public class WarningModule extends QSGModule
 
 
     @EventHandler
-    public void onBorderChanged(final BorderChangedEvent ev)
-    {
+    public void onBorderChanged(final BorderChangedEvent ev) {
         cancelWarning();
     }
 }

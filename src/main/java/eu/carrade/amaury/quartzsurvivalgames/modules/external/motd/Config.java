@@ -31,22 +31,19 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.external.motd;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import java.io.File;
 
+public class Config extends ConfigurationInstance {
     static public final ConfigurationItem<Boolean> DISPLAY_MATCH_NAME = item("display-match-name", true);
     static public final ConfigurationItem<String> MATCH_NAME_PREFIX = item("match-name-prefix", "");
+    public Config(File file) {
+        super(file);
+    }
 }

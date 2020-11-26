@@ -31,26 +31,23 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.daylightCycle;
+
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.TimeDelta;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-
 import java.io.File;
 
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
-
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
-
+public class Config extends ConfigurationInstance {
     static public final ConfigurationItem<Boolean> ENABLE_DAYLIGHT_CYCLE = item("enable-daylight-cycle", true);
-    static public final ConfigurationItem<TimeDelta> DAYLIGHT_CYCLE_DURATION = item("daylight-cycle-duration", new TimeDelta(0, 20, 0));
-
+    static public final ConfigurationItem<TimeDelta> DAYLIGHT_CYCLE_DURATION =
+            item("daylight-cycle-duration", new TimeDelta(0, 20, 0));
     static public final ConfigurationItem<Long> WAITING_PHASE_HOUR = item("waiting-phase-hour", 6000L);
     static public final ConfigurationItem<Long> INITIAL_GAME_HOUR = item("initial-game-hour", 0L);
+    public Config(File file) {
+        super(file);
+    }
 }

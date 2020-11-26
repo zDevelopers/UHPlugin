@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.playerListHeaderFooter;
 
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
@@ -40,45 +41,41 @@ import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.commands.WithFlags;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.commands.PaginatedTextView;
+import java.util.Map;
+import java.util.function.Supplier;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.util.Map;
-import java.util.function.Supplier;
-
-@CommandInfo (name = "list-hf-placeholders")
+@CommandInfo(name = "list-hf-placeholders")
 @WithFlags("page")
-public class ListPlaceholdersCommand extends Command
-{
+public class ListPlaceholdersCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
-        final Map<String, Supplier<String>> placeholders = QSG.module(PlayerListHeaderFooterModule.class).getPlaceholderSuppliers();
+    protected void run() throws CommandException {
+        final Map<String, Supplier<String>> placeholders =
+                QSG.module(PlayerListHeaderFooterModule.class).getPlaceholderSuppliers();
         final int page = args.length > 0 ? getIntegerParameter(0) : 1;
 
         new PlaceholdersList()
-            .setData(placeholders.entrySet().toArray(new Map.Entry[placeholders.entrySet().size()]))
-            .setCurrentPage(page)
-            .display(sender);
+                .setData(placeholders.entrySet().toArray(new Map.Entry[placeholders.entrySet().size()]))
+                .setCurrentPage(page)
+                .display(sender);
     }
 
-    private final class PlaceholdersList extends PaginatedTextView<Map.Entry<String, Supplier<String>>>
-    {
+    private final class PlaceholdersList extends PaginatedTextView<Map.Entry<String, Supplier<String>>> {
         @Override
-        protected void displayHeader(final CommandSender receiver)
-        {
-            receiver.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + I.tn("{0} registered placeholder", "{0} registered placeholders", data().length));
+        protected void displayHeader(final CommandSender receiver) {
+            receiver.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD +
+                    I.tn("{0} registered placeholder", "{0} registered placeholders", data().length));
         }
 
         @Override
-        protected void displayItem(final CommandSender receiver, final Map.Entry<String, Supplier<String>> item)
-        {
-            receiver.sendMessage(String.format("%s{%s}%s\t« %s%s »", ChatColor.WHITE, item.getKey(), ChatColor.GRAY, item.getValue().get(), ChatColor.GRAY));
+        protected void displayItem(final CommandSender receiver, final Map.Entry<String, Supplier<String>> item) {
+            receiver.sendMessage(String.format("%s{%s}%s\t« %s%s »", ChatColor.WHITE, item.getKey(), ChatColor.GRAY,
+                    item.getValue().get(), ChatColor.GRAY));
         }
 
         @Override
-        protected String getCommandToPage(final int page)
-        {
+        protected String getCommandToPage(final int page) {
             return build(String.valueOf(page));
         }
     }

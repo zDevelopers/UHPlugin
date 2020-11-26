@@ -31,40 +31,38 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.gui.modules;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleWrapper;
 import fr.zcraft.quartzlib.components.gui.ActionGui;
+import fr.zcraft.quartzlib.tools.items.ColorableMaterial;
 import fr.zcraft.quartzlib.tools.items.ItemStackBuilder;
-import fr.zcraft.quartzteams.colors.ColorsUtils;
+import fr.zcraft.quartzlib.tools.items.ItemUtils;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class FramedModuleGUI extends ActionGui
-{
+public abstract class FramedModuleGUI extends ActionGui {
     protected final ModuleWrapper module;
 
-    public FramedModuleGUI(ModuleWrapper module)
-    {
+    public FramedModuleGUI(ModuleWrapper module) {
         this.module = module;
     }
 
     @Override
-    protected void onAfterUpdate()
-    {
-        final ItemStack framePart = new ItemStackBuilder(ColorsUtils.chat2Block(module.getCategory().getColor(), "STAINED_GLASS_PANE"))
-                .title("")
-                .item();
+    protected void onAfterUpdate() {
+        final ItemStack framePart =
+                new ItemStackBuilder(ItemUtils.colorize(ColorableMaterial.STAINED_GLASS_PANE, module.getCategory().getColor()))
+                        .title("")
+                        .item();
 
         // Top and bottom
-        for (int slot = 0; slot < 9; slot++)
-        {
+        for (int slot = 0; slot < 9; slot++) {
             action("", slot, framePart);
             action("", getSize() - (slot + 1), framePart);
         }
 
         // Sides
-        for (int line = 0; line < getSize() / 9; line++)
-        {
+        for (int line = 0; line < getSize() / 9; line++) {
             action("", line * 9, framePart);
             action("", line * 9 + 8, framePart);
         }

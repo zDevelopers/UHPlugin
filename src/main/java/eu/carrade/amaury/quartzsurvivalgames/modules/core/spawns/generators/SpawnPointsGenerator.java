@@ -29,24 +29,23 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns.generators;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns.exceptions.CannotGenerateSpawnPointsException;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.World;
-
-import java.util.Set;
 
 
 /**
  * Represents a spawn points generator.
  *
  * <p>
- *     A zero-arguments constructor is needed.
+ * A zero-arguments constructor is needed.
  * </p>
  */
-public interface SpawnPointsGenerator
-{
+public interface SpawnPointsGenerator {
     /**
      * Generates the spawn points.
      *
@@ -59,10 +58,10 @@ public interface SpawnPointsGenerator
      * @param xCenter                         The x coordinate of the point in the center of the region where the points will be generated.
      * @param zCenter                         The z coordinate of the point in the center of the region where the points will be generated.
      * @param avoidWater                      True if the generation have to avoid the water.
-     *
      * @return The spawn points generated.
-     *
      * @throws CannotGenerateSpawnPointsException In case of fail.
      */
-    Set<Location> generate(final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter, final boolean avoidWater) throws CannotGenerateSpawnPointsException;
+    Set<Location> generate(final World world, final int spawnCount, final int regionDiameter,
+                           final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter,
+                           final boolean avoidWater) throws CannotGenerateSpawnPointsException;
 }

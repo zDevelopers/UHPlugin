@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.scenarii.alliances;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
@@ -45,18 +46,24 @@ import fr.zcraft.quartzlib.tools.text.RawMessage;
 import fr.zcraft.quartzteams.QuartzTeam;
 import fr.zcraft.quartzteams.QuartzTeams;
 import fr.zcraft.quartzteams.colors.TeamColor;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import me.cassayre.florian.hawk.report.ReportEvent;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-public class AllianceRequest
-{
+public class AllianceRequest {
     private final GameModule game;
     private final AlliancesModule alliances;
 
@@ -71,8 +78,7 @@ public class AllianceRequest
 
     private final RequestError requestError;
 
-    public AllianceRequest(final UUID requesterID, final UUID requestedTo)
-    {
+    public AllianceRequest(final UUID requesterID, final UUID requestedTo) {
         Validate.notNull(requesterID, "The requester must not be null");
         Validate.notNull(requestedTo, "The requested must not be null");
 
@@ -103,48 +109,33 @@ public class AllianceRequest
 
         // We first check for errors
 
-        if (requestedTeam.equals(requesterTeam))
-        {
+        if (requestedTeam.equals(requesterTeam)) {
             requestError = RequestError.BOTH_IN_THE_SAME_ALLIANCE;
-        }
-        else if (requesterPlayer == null || !requesterPlayer.isOnline() || requestedPlayer == null || !requestedPlayer.isOnline())
-        {
+        } else if (requesterPlayer == null || !requesterPlayer.isOnline() || requestedPlayer == null ||
+                !requestedPlayer.isOnline()) {
             requestError = RequestError.TOO_FAR;
-        }
-        else if (!requesterPlayer.getWorld().equals(requestedPlayer.getWorld()))
-        {
+        } else if (!requesterPlayer.getWorld().equals(requestedPlayer.getWorld())) {
             requestError = RequestError.TOO_FAR;
-        }
-        else if (requesterPlayer.getLocation().distanceSquared(requestedPlayer.getLocation()) > Math.pow(Config.MAX_DISTANCE_TO_CREATE_AN_ALLIANCE.get(), 2))
-        {
+        } else if (requesterPlayer.getLocation().distanceSquared(requestedPlayer.getLocation()) >
+                Math.pow(Config.MAX_DISTANCE_TO_CREATE_AN_ALLIANCE.get(), 2)) {
             requestError = RequestError.TOO_FAR;
-        }
-        else if (!checkAlliancesLeft(requesterID))
-        {
+        } else if (!checkAlliancesLeft(requesterID)) {
             requestError = RequestError.REQUESTER_OUT_OF_ALLIANCES;
-        }
-        else if (!checkAlliancesLeft(requestedTo))
-        {
+        } else if (!checkAlliancesLeft(requestedTo)) {
             requestError = RequestError.REQUESTED_OUT_OF_ALLIANCES;
-        }
-        else if (alliances.allianceSize(requestedTeam) > 1 && alliances.allianceSize(requesterTeam) > 1)
-        {
+        } else if (alliances.allianceSize(requestedTeam) > 1 && alliances.allianceSize(requesterTeam) > 1) {
             requestError = RequestError.BOTH_IN_A_DIFFERENT_ALLIANCE;
-        }
-        else if (!checkFutureAllianceSize())
-        {
+        } else if (!checkFutureAllianceSize()) {
             requestError = RequestError.FUTURE_ALLIANCE_TOO_BIG;
-        }
-        else if (!checkGameEnd())
-        {
+        } else if (!checkGameEnd()) {
             requestError = RequestError.WOULD_END_THE_GAME;
-        }
-        else
-        {
+        } else {
             requestError = RequestError.OK;
         }
 
-        if (requestError != RequestError.OK) return;
+        if (requestError != RequestError.OK) {
+            return;
+        }
 
 
         // Okay so here we have a valid request. Yay!
@@ -165,8 +156,7 @@ public class AllianceRequest
 
         approvalsIDs.put(requestedTo, false);
 
-        if (requesterTeam.size() > 1 || requestedTeam.size() > 1)
-        {
+        if (requesterTeam.size() > 1 || requestedTeam.size() > 1) {
             (requestedTeam.size() > 1 ? requestedTeam : requesterTeam)
                     .getPlayers().stream()
                     .map(OfflinePlayer::getUniqueId)
@@ -182,8 +172,7 @@ public class AllianceRequest
     /**
      * Sends an approval request to the players.
      */
-    public void sendApprovalRequests()
-    {
+    public void sendApprovalRequests() {
         checkError();
 
         final QSGSound[] jingle = new QSGSound[] {
@@ -193,76 +182,78 @@ public class AllianceRequest
         };
 
         approvalsIDs.keySet().stream()
-            .map(Bukkit::getPlayer)
-            .filter(Objects::nonNull)
-            .forEach(player -> {
-                player.sendMessage("");
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .forEach(player -> {
+                    player.sendMessage("");
 
-                player.sendMessage(I.t("{green}{bold}{0} would like to join you in an alliance.", getName(requesterID)));
+                    player.sendMessage(
+                            I.t("{green}{bold}{0} would like to join you in an alliance.", getName(requesterID)));
 
-                if (!player.getUniqueId().equals(requestedID))
-                {
-                    player.sendMessage(I.t("{gray}This request was sent to {0}, but everyone in the alliance also need to accept.", getName(requestedID)));
-                }
+                    if (!player.getUniqueId().equals(requestedID)) {
+                        player.sendMessage(
+                                I.t("{gray}This request was sent to {0}, but everyone in the alliance also need to accept.",
+                                        getName(requestedID)));
+                    }
 
-                player.sendMessage("");
+                    player.sendMessage("");
 
-                RawMessage.send(player, new RawText("   ")
-                        .then(I.t("{darkgreen}{bold}»  {green}{bold}Accept  {darkgreen}{bold}«"))
+                    RawMessage.send(player, new RawText("   ")
+                            .then(I.t("{darkgreen}{bold}»  {green}{bold}Accept  {darkgreen}{bold}«"))
                             .command(RequestAnswerCommand.class, allianceRequestUUID.toString(), "yes")
                             .hover(I.t("{green}{bold}Accept {green}this alliance"))
-                        .then("         ")
-                        .then(I.t("{darkred}{bold}»  {red}{bold}Decline  {darkred}{bold}«"))
+                            .then("         ")
+                            .then(I.t("{darkred}{bold}»  {red}{bold}Decline  {darkred}{bold}«"))
                             .command(RequestAnswerCommand.class, allianceRequestUUID.toString(), "no")
                             .hover(I.t("{red}{bold}Decline {red}this alliance"))
-                        .build()
-                );
+                            .build()
+                    );
 
-                player.sendMessage("");
+                    player.sendMessage("");
 
-                for (int i = 0; i < jingle.length; i++)
-                {
-                    final int index = i;
-                    RunTask.later(() -> jingle[index].play(player), i * 5L);
-                }
-            });
+                    for (int i = 0; i < jingle.length; i++) {
+                        final int index = i;
+                        RunTask.later(() -> jingle[index].play(player), i * 5L);
+                    }
+                });
     }
 
-    public void registerApproval(final UUID approver, final boolean approval)
-    {
+    public void registerApproval(final UUID approver, final boolean approval) {
         checkError();
 
-        if (!approvalsIDs.containsKey(approver))
-        {
+        if (!approvalsIDs.containsKey(approver)) {
             throw new IllegalArgumentException("This player was not asked for approval");
         }
 
-        if (!approval)
-        {
+        if (!approval) {
             denyAndClose(approver);
-        }
-        else
-        {
+        } else {
             approvalsIDs.put(approver, true);
 
             // Missing approvers for notifications
             final int missingApproversCount = (int) approvalsIDs.values().stream().filter(answer -> !answer).count();
             final String missingApprovers = missingApproversCount > 0
-                    ? " " + I.tn("{gray}Still waiting for {0}'s answer.", "{gray}Still waiting for answers from: {0}.", missingApproversCount, String.join(", ", approvalsIDs.keySet().stream().filter(id -> !approvalsIDs.get(id)).map(Bukkit::getOfflinePlayer).map(OfflinePlayer::getName).collect(Collectors.toSet())))
+                    ? " " + I.tn("{gray}Still waiting for {0}'s answer.", "{gray}Still waiting for answers from: {0}.",
+                    missingApproversCount, String.join(", ",
+                            approvalsIDs.keySet().stream().filter(id -> !approvalsIDs.get(id))
+                                    .map(Bukkit::getOfflinePlayer).map(OfflinePlayer::getName)
+                                    .collect(Collectors.toSet())))
                     : "";
 
             // We notify the player who just approved the request.
-            if (missingApproversCount > 0)
-            {
+            if (missingApproversCount > 0) {
                 final Player player = Bukkit.getPlayer(approver);
-                if (player != null && player.isOnline())
-                {
+                if (player != null && player.isOnline()) {
                     final UUID allianceWith;
 
-                    if (requesterTeam.containsPlayer(player)) allianceWith = requestedID;
-                    else allianceWith = requesterID;
+                    if (requesterTeam.containsPlayer(player)) {
+                        allianceWith = requestedID;
+                    } else {
+                        allianceWith = requesterID;
+                    }
 
-                    player.sendMessage(I.t("You accepted the request for an alliance with {0}.", getName(allianceWith)));
+                    player.sendMessage(
+                            I.t("You accepted the request for an alliance with {0}.", getName(allianceWith)));
                 }
             }
 
@@ -271,43 +262,34 @@ public class AllianceRequest
             final QuartzTeam notifiedTeam;
             final UUID allianceWith;
 
-            if (alliances.allianceSize(requesterTeam) > 1)
-            {
+            if (alliances.allianceSize(requesterTeam) > 1) {
                 notifiedTeam = requesterTeam;
                 allianceWith = requestedID;
-            }
-            else if (alliances.allianceSize(requestedTeam) > 1)
-            {
+            } else if (alliances.allianceSize(requestedTeam) > 1) {
                 notifiedTeam = requestedTeam;
                 allianceWith = requesterID;
-            }
-            else
-            {
-                 notifiedTeam = null;
-                 allianceWith = null;
+            } else {
+                notifiedTeam = null;
+                allianceWith = null;
             }
 
-            if (notifiedTeam != null)
-            {
-                for (Player player : requesterTeam.getOnlinePlayers())
-                {
-                    if (game.isAlive(player) && !player.getUniqueId().equals(approver))
-                    {
-                        player.sendMessage(I.t("{green}The request for an alliance with {0} was accepted by {1}.", getName(allianceWith), getName(approver)) + missingApprovers);
+            if (notifiedTeam != null) {
+                for (Player player : requesterTeam.getOnlinePlayers()) {
+                    if (game.isAlive(player) && !player.getUniqueId().equals(approver)) {
+                        player.sendMessage(I.t("{green}The request for an alliance with {0} was accepted by {1}.",
+                                getName(allianceWith), getName(approver)) + missingApprovers);
                     }
                 }
             }
 
             // If everyone agree
-            if (approvalsIDs.values().stream().allMatch(answer -> answer))
-            {
+            if (approvalsIDs.values().stream().allMatch(answer -> answer)) {
                 applyApprovedRequest();
             }
         }
     }
 
-    private void denyAndClose(final UUID closedBy)
-    {
+    private void denyAndClose(final UUID closedBy) {
         // If one of the players deny the request, it is closed. All players must agree.
         // If the request was closed by one of the members of an existing alliance, players
         // *of this alliance only* are notified.
@@ -318,28 +300,24 @@ public class AllianceRequest
         final OfflinePlayer allianceWith;
         final OfflinePlayer closer = Bukkit.getOfflinePlayer(closedBy);
 
-        if (alliances.allianceSize(requesterTeam) > 1 && requesterTeam.containsPlayer(closedBy))
-        {
+        if (alliances.allianceSize(requesterTeam) > 1 && requesterTeam.containsPlayer(closedBy)) {
             notifiedTeam = requesterTeam;
             allianceWith = Bukkit.getOfflinePlayer(requestedID);
-        }
-        else if (alliances.allianceSize(requestedTeam) > 1 && requestedTeam.containsPlayer(closedBy))
-        {
+        } else if (alliances.allianceSize(requestedTeam) > 1 && requestedTeam.containsPlayer(closedBy)) {
             notifiedTeam = requestedTeam;
             allianceWith = Bukkit.getOfflinePlayer(requesterID);
-        }
-        else
-        {
+        } else {
             notifiedTeam = null;
             allianceWith = null;
         }
 
-        if (notifiedTeam != null)
-        {
+        if (notifiedTeam != null) {
             notifiedTeam.getOnlinePlayers().stream().filter(player -> !player.getUniqueId().equals(closedBy)).forEach(
                     player -> {
                         player.sendMessage("");
-                        player.sendMessage(I.t("{red}The alliance with {0} was {bold}denied{red} by {1}.", allianceWith.getName(), closer.getName()));
+                        player.sendMessage(
+                                I.t("{red}The alliance with {0} was {bold}denied{red} by {1}.", allianceWith.getName(),
+                                        closer.getName()));
                         player.sendMessage("");
                     }
             );
@@ -351,8 +329,7 @@ public class AllianceRequest
         }
     }
 
-    private void applyApprovedRequest()
-    {
+    private void applyApprovedRequest() {
         // In all cases we unregisters this request.
 
         alliances.unregisterRequest(this);
@@ -363,13 +340,15 @@ public class AllianceRequest
         if (!checkAlliancesLeft(requestedID)
                 || !checkAlliancesLeft(requesterID)
                 || !checkGameEnd()
-                || (alliances.allianceSize(requestedTeam) > 1 && alliances.allianceSize(requesterTeam) > 1))
-        {
-            QSG.log(AlliancesModule.class).warning("The alliance request from {0} to {1} was about to be approved but is now invalid.", getName(requesterID), getName(requestedID));
+                || (alliances.allianceSize(requestedTeam) > 1 && alliances.allianceSize(requesterTeam) > 1)) {
+            QSG.log(AlliancesModule.class)
+                    .warning("The alliance request from {0} to {1} was about to be approved but is now invalid.",
+                            getName(requesterID), getName(requestedID));
 
             Stream.of(requesterID, requestedID)
                     .map(Bukkit::getPlayer).filter(Objects::nonNull)
-                    .forEach(player -> player.sendMessage(I.t("{ce}This alliance request is no longer valid. Please re-send it.")));
+                    .forEach(player -> player
+                            .sendMessage(I.t("{ce}This alliance request is no longer valid. Please re-send it.")));
             return;
         }
 
@@ -408,21 +387,21 @@ public class AllianceRequest
         allianceTeam.getOnlinePlayers().forEach(player -> {
             player.sendMessage("");
 
-            if (allianceTeam.size() == 2)
-            {
-                player.sendMessage(I.t("{green}{bold}You are now allied with {0}!", allianceTeam.getPlayers().stream().filter(p -> !p.getUniqueId().equals(player.getUniqueId())).findAny().map(OfflinePlayer::getName).orElse("<Unknown>")));
-                player.sendMessage(I.t("{green}Your objective is to win together. But chhhh! Other players are not aware of your alliance..."));
-            }
-            else
-            {
+            if (allianceTeam.size() == 2) {
+                player.sendMessage(I.t("{green}{bold}You are now allied with {0}!",
+                        allianceTeam.getPlayers().stream().filter(p -> !p.getUniqueId().equals(player.getUniqueId()))
+                                .findAny().map(OfflinePlayer::getName).orElse("<Unknown>")));
+                player.sendMessage(
+                        I.t("{green}Your objective is to win together. But chhhh! Other players are not aware of your alliance..."));
+            } else {
                 player.sendMessage(I.t("{green}{bold}The alliance expands!"));
-                player.sendMessage(I.t("{gray}Players in the alliance: {0}", String.join(", ", allianceTeam.getPlayers().stream().map(OfflinePlayer::getName).collect(Collectors.toSet()))));
+                player.sendMessage(I.t("{gray}Players in the alliance: {0}", String.join(", ",
+                        allianceTeam.getPlayers().stream().map(OfflinePlayer::getName).collect(Collectors.toSet()))));
             }
 
             player.sendMessage("");
 
-            for (int i = 0; i < jingle.length; i++)
-            {
+            for (int i = 0; i < jingle.length; i++) {
                 final int index = i;
                 RunTask.later(() -> jingle[index].play(player), i * 3L);
             }
@@ -435,7 +414,8 @@ public class AllianceRequest
                 "{0} succeeded! A new alliance was created between these players: {1}.",
                 this,
                 String.join(", ", allianceTeam.getPlayers().stream()
-                        .map(player -> player.getName() + " (a=" + alliances.getAlliancesLeft(player.getUniqueId()) + ")")
+                        .map(player -> player.getName() + " (a=" + alliances.getAlliancesLeft(player.getUniqueId()) +
+                                ")")
                         .collect(Collectors.toSet())
                 )
         );
@@ -444,8 +424,7 @@ public class AllianceRequest
         // Also in the timeline
 
         QSG.ifLoaded(HawkModule.class, hawk -> {
-            if (allianceTeam.size() == 2)
-            {
+            if (allianceTeam.size() == 2) {
                 final Iterator<OfflinePlayer> players = allianceTeam.getPlayers().iterator();
 
                 hawk.getReport().record(ReportEvent.withIcon(
@@ -453,27 +432,24 @@ public class AllianceRequest
                         I.t("Between {0} and {1}", players.next().getName(), players.next().getName()),
                         "block-structure-block-data"
                 ));
-            }
-            else
-            {
-                @SuppressWarnings("OptionalGetWithoutIsPresent")
-                final OfflinePlayer joiningPlayer = requestedTeam.size() == 1 ? requestedTeam.getPlayers().stream().findFirst().get() : requesterTeam.getPlayers().stream().findFirst().get();
+            } else {
+                @SuppressWarnings("OptionalGetWithoutIsPresent") final OfflinePlayer joiningPlayer =
+                        requestedTeam.size() == 1 ? requestedTeam.getPlayers().stream().findFirst().get() :
+                                requesterTeam.getPlayers().stream().findFirst().get();
 
-                final List<String> playersNames = allianceTeam.getPlayers().stream().filter(player -> !player.equals(joiningPlayer)).map(OfflinePlayer::getName).collect(Collectors.toList());
+                final List<String> playersNames =
+                        allianceTeam.getPlayers().stream().filter(player -> !player.equals(joiningPlayer))
+                                .map(OfflinePlayer::getName).collect(Collectors.toList());
                 final int size = playersNames.size();
 
                 final StringBuilder sentence = new StringBuilder(size * 16);
 
-                for (int i = 0; i < size; i++)
-                {
+                for (int i = 0; i < size; i++) {
                     sentence.append(playersNames.get(i));
 
-                    if (i == size - 2)
-                    {
+                    if (i == size - 2) {
                         sentence.append(" ").append(I.t("and")).append(" ");
-                    }
-                    else if (i != size - 1)
-                    {
+                    } else if (i != size - 1) {
                         sentence.append(", ");
                     }
                 }
@@ -488,7 +464,8 @@ public class AllianceRequest
             allianceTeam.getPlayers().forEach(player -> hawk.getReport().getPlayer(player).setTagLine(
                     I.t("Allied"),
                     null,
-                    I.t("Players in the (latest) alliance: {0}", String.join(", ", allianceTeam.getPlayers().stream().map(OfflinePlayer::getName).collect(Collectors.toSet())))
+                    I.t("Players in the (latest) alliance: {0}", String.join(", ",
+                            allianceTeam.getPlayers().stream().map(OfflinePlayer::getName).collect(Collectors.toSet())))
             ));
         });
     }
@@ -496,32 +473,28 @@ public class AllianceRequest
     /**
      * @return The request's UUID, used for request identification in commands.
      */
-    public UUID getUniqueId()
-    {
+    public UUID getUniqueId() {
         return allianceRequestUUID;
     }
 
     /**
      * @return The request sender's UUID.
      */
-    public UUID getRequesterID()
-    {
+    public UUID getRequesterID() {
         return requesterID;
     }
 
     /**
      * @return The request's target UUID.
      */
-    public UUID getRequestedID()
-    {
+    public UUID getRequestedID() {
         return requestedID;
     }
 
     /**
      * @return The error for this request (including « OK »).
      */
-    public RequestError getError()
-    {
+    public RequestError getError() {
         return requestError;
     }
 
@@ -531,8 +504,7 @@ public class AllianceRequest
      * @param playerID A player's UUID.
      * @return The player name as a string.
      */
-    private String getName(final UUID playerID)
-    {
+    private String getName(final UUID playerID) {
         return Optional.of(Bukkit.getOfflinePlayer(playerID)).map(OfflinePlayer::getName).orElse("<Unknown>");
     }
 
@@ -542,9 +514,9 @@ public class AllianceRequest
      *
      * @return {@code true} if the future size is OK.
      */
-    private boolean checkFutureAllianceSize()
-    {
-        return alliances.allianceSize(requestedTeam) + alliances.allianceSize(requesterTeam) <= Config.MAX_PLAYERS_PER_ALLIANCE.get();
+    private boolean checkFutureAllianceSize() {
+        return alliances.allianceSize(requestedTeam) + alliances.allianceSize(requesterTeam) <=
+                Config.MAX_PLAYERS_PER_ALLIANCE.get();
     }
 
     /**
@@ -553,8 +525,7 @@ public class AllianceRequest
      * @param checkedPlayerID The player to check.
      * @return {@code true} if there are enough alliances left.
      */
-    private boolean checkAlliancesLeft(final UUID checkedPlayerID)
-    {
+    private boolean checkAlliancesLeft(final UUID checkedPlayerID) {
         return alliances.getAlliancesLeft(checkedPlayerID) >= 1;
     }
 
@@ -563,8 +534,7 @@ public class AllianceRequest
      *
      * @return {@code true} if this alliance would <strong>not</strong> end the game.
      */
-    private boolean checkGameEnd()
-    {
+    private boolean checkGameEnd() {
         final Set<UUID> playersInFutureAlliance = Stream.of(requestedTeam.getPlayers(), requesterTeam.getPlayers())
                 .flatMap(Collection::stream)
                 .map(OfflinePlayer::getUniqueId)
@@ -575,23 +545,24 @@ public class AllianceRequest
     /**
      * Throws an {@link IllegalStateException} if the request has errored.
      */
-    private void checkError()
-    {
-        if (requestError != RequestError.OK) throw new IllegalStateException("This alliance request errored.");
+    private void checkError() {
+        if (requestError != RequestError.OK) {
+            throw new IllegalStateException("This alliance request errored.");
+        }
     }
 
     @Override
-    public String toString()
-    {
-        return "AllianceRequest [from " + getName(requesterID) + " (n=" + requesterTeam.size() + ", a=" + alliances.getAlliancesLeft(requesterID) + ") to " + getName(requestedID) + " (n=" + requesterTeam.size() + ", a=" + alliances.getAlliancesLeft(requesterID) + ")]";
+    public String toString() {
+        return "AllianceRequest [from " + getName(requesterID) + " (n=" + requesterTeam.size() + ", a=" +
+                alliances.getAlliancesLeft(requesterID) + ") to " + getName(requestedID) + " (n=" +
+                requesterTeam.size() + ", a=" + alliances.getAlliancesLeft(requesterID) + ")]";
     }
 
     /**
      * The request error state. If not OK, all methods except {@link #getError()} will throw
      * an {@link IllegalStateException}.
      */
-    public enum RequestError
-    {
+    public enum RequestError {
         OK,
         TOO_FAR,
         REQUESTER_OUT_OF_ALLIANCES,

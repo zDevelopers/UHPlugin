@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -50,6 +51,11 @@ import fr.zcraft.quartzlib.components.commands.Commands;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.components.rawtext.RawText;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -58,10 +64,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
-import java.util.*;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Spectators Manager",
         description = "Handles non-playing players.",
         when = ModuleLoadTime.POST_WORLD,
@@ -70,58 +74,49 @@ import java.util.*;
         settings = Config.class,
         can_be_unloaded = false
 )
-public class SpectatorsModule extends QSGModule
-{
-    private SpectatorsManager manager;
-    private SpectatorPlusDependency spectatorPlusDependency;
-
+public class SpectatorsModule extends QSGModule {
     /**
      * Lists players allowed to spectate. Also used for initial spectators: players who will
      * never play, only spectate.
      */
     private final Set<UUID> spectators = new HashSet<>();
-
     /**
      * When external spectators are disallowed, a message is sent once to inform administrators
      * how to accept them if they wish to.
      */
     private final Set<UUID> broadcastedUnknownSpectators = new HashSet<>();
+    private SpectatorsManager manager;
+    private SpectatorPlusDependency spectatorPlusDependency;
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         manager = SpectatorsManager.getInstance();
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(SpectatorsCommand.class);
     }
 
     /**
      * @return The manager instance to use to handle spectators.
      */
-    public SpectatorsManager getManager()
-    {
+    public SpectatorsManager getManager() {
         return manager;
     }
 
     /**
      * @return The allowed spectators.
      */
-    public Set<UUID> getSpectators()
-    {
+    public Set<UUID> getSpectators() {
         return spectators;
     }
 
-    public boolean isSpectator(final UUID playerID)
-    {
+    public boolean isSpectator(final UUID playerID) {
         return spectators.contains(playerID);
     }
 
-    public boolean isSpectator(final OfflinePlayer player)
-    {
+    public boolean isSpectator(final OfflinePlayer player) {
         return spectators.contains(player.getUniqueId());
     }
 
@@ -130,12 +125,12 @@ public class SpectatorsModule extends QSGModule
      *
      * @param playerID The spectator's ID.
      */
-    public void addSpectator(final UUID playerID)
-    {
+    public void addSpectator(final UUID playerID) {
         spectators.add(playerID);
 
-        if (QSG.module(GameModule.class).getPhase() != GamePhase.WAIT)
+        if (QSG.module(GameModule.class).getPhase() != GamePhase.WAIT) {
             RunTask.nextTick(() -> manager.setSpectating(playerID, true));
+        }
     }
 
     /**
@@ -143,8 +138,7 @@ public class SpectatorsModule extends QSGModule
      *
      * @param player The spectator.
      */
-    public void addSpectator(final OfflinePlayer player)
-    {
+    public void addSpectator(final OfflinePlayer player) {
         addSpectator(player.getUniqueId());
     }
 
@@ -153,12 +147,12 @@ public class SpectatorsModule extends QSGModule
      *
      * @param playerID The spectator's ID.
      */
-    public void removeSpectator(final UUID playerID)
-    {
+    public void removeSpectator(final UUID playerID) {
         spectators.remove(playerID);
 
-        if (QSG.module(GameModule.class).getPhase() != GamePhase.WAIT)
+        if (QSG.module(GameModule.class).getPhase() != GamePhase.WAIT) {
             RunTask.nextTick(() -> manager.setSpectating(playerID, false));
+        }
     }
 
     /**
@@ -166,8 +160,7 @@ public class SpectatorsModule extends QSGModule
      *
      * @param player The spectator.
      */
-    public void removeSpectator(final OfflinePlayer player)
-    {
+    public void removeSpectator(final OfflinePlayer player) {
         removeSpectator(player.getUniqueId());
     }
 
@@ -177,69 +170,65 @@ public class SpectatorsModule extends QSGModule
      * @param strict If true, all spectating players not in our list are removed from the spectator mode.
      *               Else, only players in our list are placed into spectator mode.
      */
-    private void ensureSpectatorMode(final boolean strict)
-    {
-        if (strict)
-        {
+    private void ensureSpectatorMode(final boolean strict) {
+        if (strict) {
             Bukkit.getOnlinePlayers().forEach(player -> manager.setSpectating(player, isSpectator(player)));
-        }
-        else
-        {
+        } else {
             spectators.forEach(spectator -> manager.setSpectating(spectator, true));
         }
     }
 
     @EventHandler
-    public void onGameStart(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() != GamePhase.IN_GAME) return;
+    public void onGameStart(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() != GamePhase.IN_GAME) {
+            return;
+        }
 
         ensureSpectatorMode(true);
     }
 
-    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
-    {
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerDeath(final AlivePlayerDeathEvent ev) {
         addSpectator(ev.getPlayer());
     }
 
 
-    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onPlayerResurrects(final PlayerResurrectedEvent ev)
-    {
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerResurrects(final PlayerResurrectedEvent ev) {
         removeSpectator(ev.getPlayer());
     }
 
     @EventHandler
-    public void onPlayerLogin(final PlayerLoginEvent ev)
-    {
+    public void onPlayerLogin(final PlayerLoginEvent ev) {
         final GameModule game = QSG.module(GameModule.class);
 
-        if (game.currentPhaseBefore(GamePhase.IN_GAME)) return;
+        if (game.currentPhaseBefore(GamePhase.IN_GAME)) {
+            return;
+        }
 
         // TODO Permissions
-        if (ev.getPlayer().isOp())
-        {
+        if (ev.getPlayer().isOp()) {
             ev.allow();
             return;
         }
 
-        if (!Config.SPECTATORS_CAN_JOIN.get() && !game.isAlive(ev.getPlayer()))
-        {
+        if (!Config.SPECTATORS_CAN_JOIN.get() && !game.isAlive(ev.getPlayer())) {
             ev.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, I.t("Spectators are not allowed for this game."));
             return;
-        }
+        } else if (!Config.UNKNOWN_SPECTATORS_CAN_JOIN.get() &&
+                !(game.isAlive(ev.getPlayer()) || isSpectator(ev.getPlayer()))) {
+            ev.disallow(PlayerLoginEvent.Result.KICK_WHITELIST,
+                    I.t("External spectators are not allowed for this game."));
 
-        else if (!Config.UNKNOWN_SPECTATORS_CAN_JOIN.get() && !(game.isAlive(ev.getPlayer()) || isSpectator(ev.getPlayer())))
-        {
-            ev.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, I.t("External spectators are not allowed for this game."));
-
-            if (Config.NOTIFY_ON_UNKNOWN_SPECTATORS_TRYING_TO_JOIN.get() && broadcastedUnknownSpectators.add(ev.getPlayer().getUniqueId()))
-            {
-                final String command = Commands.getCommandInfo(SpectatorsCommand.class).build("add", ev.getPlayer().getName());
+            if (Config.NOTIFY_ON_UNKNOWN_SPECTATORS_TRYING_TO_JOIN.get() &&
+                    broadcastedUnknownSpectators.add(ev.getPlayer().getUniqueId())) {
+                final String command =
+                        Commands.getCommandInfo(SpectatorsCommand.class).build("add", ev.getPlayer().getName());
 
                 log().broadcastAdministrative(
-                        new RawText(I.t("{gray}The unknown player {0} just tried to join. To allow him to spectate, execute {cc}{1} or click here.", ev.getPlayer().getName(), command))
+                        new RawText(
+                                I.t("{gray}The unknown player {0} just tried to join. To allow him to spectate, execute {cc}{1} or click here.",
+                                        ev.getPlayer().getName(), command))
                                 .hover(I.t("Click here to execute\n{0}", command))
                                 .command(command)
                 );
@@ -249,17 +238,14 @@ public class SpectatorsModule extends QSGModule
         }
 
         // Here the spectator is allowed. If it's new, we add it to the list.
-        if (!game.isAlive(ev.getPlayer()) && !isSpectator(ev.getPlayer()))
-        {
+        if (!game.isAlive(ev.getPlayer()) && !isSpectator(ev.getPlayer())) {
             addSpectator(ev.getPlayer());
         }
     }
 
     @EventHandler
-    public void onPlayerJoin(final PlayerJoinEvent ev)
-    {
-        if (QSG.module(GameModule.class).getPhase().ordinal() >= GamePhase.IN_GAME.ordinal())
-        {
+    public void onPlayerJoin(final PlayerJoinEvent ev) {
+        if (QSG.module(GameModule.class).getPhase().ordinal() >= GamePhase.IN_GAME.ordinal()) {
             manager.setSpectating(ev.getPlayer(), isSpectator(ev.getPlayer()));
         }
     }

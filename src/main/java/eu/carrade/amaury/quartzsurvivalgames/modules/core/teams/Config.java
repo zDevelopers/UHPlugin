@@ -38,7 +38,7 @@ import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.sec
 import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
-import fr.zcraft.quartzteams.guis.TeamsGUIItemType;
+import fr.zcraft.quartzlib.tools.items.ColorableMaterial;
 import java.io.File;
 
 
@@ -82,7 +82,7 @@ public class Config extends ConfigurationInstance {
         public final DisplaySection DISPLAY = section("display", DisplaySection.class);
 
         static public class DisplaySection extends ConfigurationSection {
-            public final ConfigurationItem<TeamsGUIItemType> TEAM_ITEM = item("team-item", TeamsGUIItemType.BANNER);
+            public final ConfigurationItem<ColorableMaterial> TEAM_ITEM = item("team-item", ColorableMaterial.BANNER);
             public final ConfigurationItem<Boolean> GLOW_ON_SELECTED_TEAM = item("glow-on-selected-team", true);
         }
     }

@@ -31,30 +31,26 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.hardcoreHearts;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.section;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
+import java.io.File;
+
+public class Config extends ConfigurationInstance {
+    static public final ConfigurationItem<Boolean> HARDCORE_HEARTS = item("hardcore-hearts", true);
+    static public final AutoRespawnSection AUTO_RESPAWN = section("auto-respawn", AutoRespawnSection.class);
+
+    public Config(File file) {
         super(file);
     }
 
-    static public final ConfigurationItem<Boolean> HARDCORE_HEARTS = item("hardcore-hearts", true);
-
-    static public final AutoRespawnSection AUTO_RESPAWN = section("auto-respawn", AutoRespawnSection.class);
-
-    static public class AutoRespawnSection extends ConfigurationSection
-    {
+    static public class AutoRespawnSection extends ConfigurationSection {
         public final ConfigurationItem<Boolean> DO = item("do", true);
         public final ConfigurationItem<Integer> DELAY = item("delay", 6);
     }

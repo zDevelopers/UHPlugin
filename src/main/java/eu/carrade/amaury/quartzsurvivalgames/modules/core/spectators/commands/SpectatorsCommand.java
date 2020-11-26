@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators.SpectatorsModule;
@@ -40,68 +41,57 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 
 
-@CommandInfo (name = "spectators", usageParameters = "[add <player>] [remove <player>]", aliases = {"spec", "sp"})
-public class SpectatorsCommand extends Command
-{
+@CommandInfo(name = "spectators", usageParameters = "[add <player>] [remove <player>]", aliases = {"spec", "sp"})
+public class SpectatorsCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         // /uh spec
-        if (args.length == 0)
-        {
+        if (args.length == 0) {
             final Set<String> spectators = QSG.module(SpectatorsModule.class)
                     .getSpectators().stream()
                     .map(uuid -> Bukkit.getOfflinePlayer(uuid).getName())
                     .collect(Collectors.toSet());
 
-            if (spectators.size() == 0)
-            {
+            if (spectators.size() == 0) {
                 error(I.t("{ce}There isn't any spectator to list."));
-            }
-            else
-            {
+            } else {
                 info("");
                 info(I.tn("{ci}{0} registered spectator.", "{ci}{0} registered spectators.", spectators.size()));
 
                 /// A list item in the startup spectators list
-                spectators.stream().map(spectator -> I.tc("startup_specs", "{lightpurple} - {0}", spectator)).forEach(this::info);
+                spectators.stream().map(spectator -> I.tc("startup_specs", "{lightpurple} - {0}", spectator))
+                        .forEach(this::info);
             }
-        }
-
-        else
-        {
-            switch (args[0].toLowerCase())
-            {
+        } else {
+            switch (args[0].toLowerCase()) {
                 case "add":
                 case "a":
                     // /uh spec add
-                    if (args.length == 1)
-                    {
+                    if (args.length == 1) {
                         throwInvalidArgument(I.t("Please add the player you want to register as spectator."));
                     }
 
                     // /uh spec add <player>
-                    else
-                    {
+                    else {
                         final CommandSender finalSender = sender;
 
                         OfflinePlayersLoader.loadPlayer(args[1], player -> {
-                            if (player == null)
-                            {
+                            if (player == null) {
                                 finalSender.sendMessage(I.t("{ce}Unable to retrieve the player {0}."));
 
-                                if (!Bukkit.getOnlineMode())
-                                    finalSender.sendMessage(I.t("{ce}In offline mode, you cannot add players if they never came to this server."));
+                                if (!Bukkit.getOnlineMode()) {
+                                    finalSender.sendMessage(
+                                            I.t("{ce}In offline mode, you cannot add players if they never came to this server."));
+                                }
 
                                 return;
                             }
@@ -116,21 +106,16 @@ public class SpectatorsCommand extends Command
                 case "remove":
                 case "r":
                     // /uh spec remove
-                    if (args.length == 1)
-                    {
+                    if (args.length == 1) {
                         throwInvalidArgument(I.t("Please add the player you want to unregister from spectators."));
                     }
 
                     // /uh spec remove <player>
-                    else
-                    {
+                    else {
                         final OfflinePlayer oldSpectator = OfflinePlayersLoader.getOfflinePlayer(args[1]);
-                        if (oldSpectator == null)
-                        {
+                        if (oldSpectator == null) {
                             error(I.t("{ce}The player {0} was not found.", args[1]));
-                        }
-                        else
-                        {
+                        } else {
                             QSG.module(SpectatorsModule.class).removeSpectator(oldSpectator);
                             success(I.t("{cs}The player {0} is now a player.", args[1]));
                         }
@@ -142,13 +127,11 @@ public class SpectatorsCommand extends Command
     }
 
     @Override
-    protected List<String> complete()
-    {
-        if (args.length == 1) return getMatchingSubset(args[0], "add", "remove");
-        else if (args.length == 2)
-        {
-            switch (args[0].toLowerCase())
-            {
+    protected List<String> complete() {
+        if (args.length == 1) {
+            return getMatchingSubset(args[0], "add", "remove");
+        } else if (args.length == 2) {
+            switch (args[0].toLowerCase()) {
                 case "add":
                 case "a":
                     return getMatchingSubset(
@@ -172,7 +155,8 @@ public class SpectatorsCommand extends Command
                 default:
                     return null;
             }
+        } else {
+            return null;
         }
-        else return null;
     }
 }

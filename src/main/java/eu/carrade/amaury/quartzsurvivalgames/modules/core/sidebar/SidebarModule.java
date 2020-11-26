@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.sidebar;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -41,7 +42,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Sidebar",
         description = "Manages the sidebar and allows hooks for all modules into it.",
         category = ModuleCategory.CORE,
@@ -49,22 +50,19 @@ import org.bukkit.event.player.PlayerJoinEvent;
         internal = true,
         can_be_unloaded = false
 )
-public class SidebarModule extends QSGModule
-{
+public class SidebarModule extends QSGModule {
     private GameSidebar sidebar;
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         sidebar = new GameSidebar();
         sidebar.runAutoRefresh(true);
 
         Bukkit.getOnlinePlayers().forEach(player -> sidebar.addRecipient(player));
     }
 
-    @EventHandler (priority = EventPriority.LOWEST)
-    public void onPlayerJoin(final PlayerJoinEvent ev)
-    {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerJoin(final PlayerJoinEvent ev) {
         sidebar.addRecipient(ev.getPlayer());
     }
 }

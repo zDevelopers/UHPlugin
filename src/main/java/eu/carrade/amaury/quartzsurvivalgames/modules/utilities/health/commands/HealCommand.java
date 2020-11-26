@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.health.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.teams.TeamsModule;
@@ -39,19 +40,16 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
+import java.util.List;
 import org.bukkit.entity.Player;
 
-import java.util.List;
 
-
-@CommandInfo (name = "heal", usageParameters = "<player> [half-hearts=20|±diff]", aliases = {"life", "set-health", "sethealth"})
-public class HealCommand extends Command
-{
+@CommandInfo(name = "heal", usageParameters = "<player> [half-hearts=20|±diff]", aliases = {"life", "set-health",
+        "sethealth"})
+public class HealCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
-        if (args.length == 0)
-        {
+    protected void run() throws CommandException {
+        if (args.length == 0) {
             throwInvalidArgument(I.t("A player is required"));
         }
 
@@ -61,39 +59,31 @@ public class HealCommand extends Command
         boolean add = false; // "add" (±, true) or "raw" (exact health, false) mode
 
         // /uh heal <player> : full life for player.
-        if (args.length == 1)
-        {
+        if (args.length == 1) {
             health = 20D;
         }
 
         // /uh heal <player> <hearts>
-        else
-        {
+        else {
             double diffHealth;
 
-            try
-            {
-                if (args[1].startsWith("+") || args[1].startsWith("-"))
-                {
+            try {
+                if (args[1].startsWith("+") || args[1].startsWith("-")) {
                     add = true;
                 }
 
                 diffHealth = Double.parseDouble(args[1]);
             }
-            catch (final NumberFormatException e)
-            {
+            catch (final NumberFormatException e) {
                 throwInvalidArgument(I.t("{ce}Hey, this is not a number of half-hearts. It's a text. Pfff."));
                 return;
             }
 
             health = !add ? diffHealth : target.getHealth() + diffHealth;
 
-            if (health <= 0D)
-            {
+            if (health <= 0D) {
                 error(I.t("{ce}You can't kill a player with this command, to avoid typo fails."));
-            }
-            else if (health > 20D)
-            {
+            } else if (health > 20D) {
                 health = 20D;
             }
         }
@@ -107,9 +97,11 @@ public class HealCommand extends Command
     }
 
     @Override
-    protected List<String> complete()
-    {
-        if (args.length == 1) return getMatchingPlayerNames(args[0]);
-        else return null;
+    protected List<String> complete() {
+        if (args.length == 1) {
+            return getMatchingPlayerNames(args[0]);
+        } else {
+            return null;
+        }
     }
 }

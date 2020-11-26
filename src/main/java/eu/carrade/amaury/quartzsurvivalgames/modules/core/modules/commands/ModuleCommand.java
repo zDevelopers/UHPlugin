@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleWrapper;
@@ -39,100 +40,17 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
-import org.bukkit.ChatColor;
-
 import java.text.Normalizer;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.bukkit.ChatColor;
 
-@CommandInfo (name = "module", usageParameters = "enable|disable <module>")
-public class ModuleCommand extends Command
-{
+@CommandInfo(name = "module", usageParameters = "enable|disable <module>")
+public class ModuleCommand extends Command {
     private static final Pattern NON_LATIN = Pattern.compile("[^\\w-]");
     private static final Pattern WHITESPACE = Pattern.compile("[\\s]");
-
-
-    @Override
-    protected void run() throws CommandException
-    {
-        if (args.length < 2 || (!args[0].equalsIgnoreCase("enable") && !args[0].equalsIgnoreCase("disable")))
-        {
-            throwInvalidArgument(I.t("Invalid command usage."));
-        }
-
-        ModuleWrapper module = null;
-
-        for (final ModuleWrapper m : QSG.get().getModulesManager().getModules())
-        {
-            if (getModuleKey(m).equalsIgnoreCase(args[1]))
-            {
-                module = m; break;
-            }
-        }
-
-        if (module == null)
-        {
-            throwInvalidArgument(I.t("No module with key {0}. Use autocompletion to get a list of keys.", args[1]));
-            return;
-        }
-
-        if (args[0].equalsIgnoreCase("enable"))
-        {
-            if (module.isEnabled())
-            {
-                error(I.t("{red}The module {darkred}{0}{red} is already enabled.", module.getName()));
-            }
-            else if (module.setEnabled(true))
-            {
-                success(I.t("{green}The module {darkgreen}{0}{green} was successfully enabled.", module.getName()));
-
-                if (module.isLoaded())
-                {
-                    info(I.t("It was also loaded and is now running."));
-                }
-                else
-                {
-                    info(I.t("It will be loaded when needed."));
-                }
-            }
-            else
-            {
-                warning(I.t("{red}Unable to load the module {darkred}{0}{red}.", module.getName()));
-                info("It is probably too late to enable this module.");
-            }
-        }
-        else
-        {
-            if (!module.isEnabled())
-            {
-                error(I.t("{red}he module {darkred}{0}{red} is already disabled.", module.getName()));
-            }
-            else if (module.setEnabled(false))
-            {
-                success(I.t("{green}The module {darkred}{0}{green} was successfully disabled.", module.getName()));
-            }
-            else
-            {
-                error(I.t("{red}Unable to disable the module {darkred}{0}{red}. It is probably protected.", module.getName()));
-            }
-        }
-    }
-
-    @Override
-    protected List<String> complete()
-    {
-        if (args.length == 1) return getMatchingSubset(args[0], "enable", "disable");
-        else if (args.length == 2) return getMatchingSubset(
-                QSG.get().getModulesManager().getModules().stream().filter(module -> args[0].equalsIgnoreCase("enable") != module.isEnabled()).map(this::getModuleKey).collect(Collectors.toSet()), args[1]);
-        else return null;
-    }
-
-    private String getModuleKey(final ModuleWrapper module)
-    {
-        return slug(module.getName());
-    }
 
     /**
      * Generates a slug from the (potentially Minecraft-formatted) given string.
@@ -141,12 +59,76 @@ public class ModuleCommand extends Command
      *              formatting codes: they will be striped.
      * @return The slug.
      */
-    private static String slug(final String input)
-    {
+    private static String slug(final String input) {
         final String nowhitespace = WHITESPACE.matcher(ChatColor.stripColor(input)).replaceAll("-");
         final String normalized = Normalizer.normalize(nowhitespace, Normalizer.Form.NFD);
         final String slug = NON_LATIN.matcher(normalized).replaceAll("");
 
         return slug.toLowerCase(Locale.ENGLISH);
+    }
+
+    @Override
+    protected void run() throws CommandException {
+        if (args.length < 2 || (!args[0].equalsIgnoreCase("enable") && !args[0].equalsIgnoreCase("disable"))) {
+            throwInvalidArgument(I.t("Invalid command usage."));
+        }
+
+        ModuleWrapper module = null;
+
+        for (final ModuleWrapper m : QSG.get().getModulesManager().getModules()) {
+            if (getModuleKey(m).equalsIgnoreCase(args[1])) {
+                module = m;
+                break;
+            }
+        }
+
+        if (module == null) {
+            throwInvalidArgument(I.t("No module with key {0}. Use autocompletion to get a list of keys.", args[1]));
+            return;
+        }
+
+        if (args[0].equalsIgnoreCase("enable")) {
+            if (module.isEnabled()) {
+                error(I.t("{red}The module {darkred}{0}{red} is already enabled.", module.getName()));
+            } else if (module.setEnabled(true)) {
+                success(I.t("{green}The module {darkgreen}{0}{green} was successfully enabled.", module.getName()));
+
+                if (module.isLoaded()) {
+                    info(I.t("It was also loaded and is now running."));
+                } else {
+                    info(I.t("It will be loaded when needed."));
+                }
+            } else {
+                warning(I.t("{red}Unable to load the module {darkred}{0}{red}.", module.getName()));
+                info("It is probably too late to enable this module.");
+            }
+        } else {
+            if (!module.isEnabled()) {
+                error(I.t("{red}he module {darkred}{0}{red} is already disabled.", module.getName()));
+            } else if (module.setEnabled(false)) {
+                success(I.t("{green}The module {darkred}{0}{green} was successfully disabled.", module.getName()));
+            } else {
+                error(I.t("{red}Unable to disable the module {darkred}{0}{red}. It is probably protected.",
+                        module.getName()));
+            }
+        }
+    }
+
+    @Override
+    protected List<String> complete() {
+        if (args.length == 1) {
+            return getMatchingSubset(args[0], "enable", "disable");
+        } else if (args.length == 2) {
+            return getMatchingSubset(
+                    QSG.get().getModulesManager().getModules().stream()
+                            .filter(module -> args[0].equalsIgnoreCase("enable") != module.isEnabled())
+                            .map(this::getModuleKey).collect(Collectors.toSet()), args[1]);
+        } else {
+            return null;
+        }
+    }
+
+    private String getModuleKey(final ModuleWrapper module) {
+        return slug(module.getName());
     }
 }

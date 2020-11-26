@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.waitingPhase.wait;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -60,7 +61,15 @@ import fr.zcraft.quartzteams.events.PlayerLeftTeamEvent;
 import fr.zcraft.quartzteams.events.TeamUnregisteredEvent;
 import fr.zcraft.quartzteams.events.TeamUpdatedEvent;
 import fr.zcraft.quartzteams.guis.TeamsSelectorGUI;
-import org.bukkit.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -70,17 +79,17 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Waiting phase",
         description = "Manages the waiting phase: inventory, effects, modes, teleportation, etc.",
         category = ModuleCategory.WAITING_PHASE,
@@ -88,26 +97,22 @@ import java.util.UUID;
         settings = Config.class,
         can_be_loaded_late = false
 )
-public class WaitModule extends QSGModule
-{
+public class WaitModule extends QSGModule {
     private final static UUID ACTIONABLE_ITEM_UUID = UUID.fromString("3f65c4a9-e1ae-437e-b8b4-57d80a831480");
 
     private final Map<UUID, String> playerInventoriesStates = new HashMap<>();
     private BukkitTask inventoriesUpdateTask = null;
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         Bukkit.getOnlinePlayers().forEach(this::handleNewPlayer);
 
         inventoriesUpdateTask = RunTask.timer(() -> Bukkit.getOnlinePlayers().forEach(this::updateInventory), 20L, 20L);
     }
 
     @Override
-    protected void onDisable()
-    {
-        if (inventoriesUpdateTask != null)
-        {
+    protected void onDisable() {
+        if (inventoriesUpdateTask != null) {
             inventoriesUpdateTask.cancel();
             inventoriesUpdateTask = null;
         }
@@ -116,37 +121,34 @@ public class WaitModule extends QSGModule
     /**
      * Writes an action into an Item Stack.
      *
-     * @param item The item. This must be a CraftItemStack.
+     * @param item   The item. This must be a CraftItemStack.
      * @param action The action to store.
      * @see #readAction(ItemStack) to read a previously stored action.
      */
-    private void writeAction(final ItemStack item, final String action)
-    {
+    private void writeAction(final ItemStack item, final String action) {
         final Attribute attribute = new Attribute();
 
         attribute.setUUID(ACTIONABLE_ITEM_UUID);
         attribute.setCustomData(action);
 
-        try
-        {
+        try {
             Attributes.set(item, attribute);
         }
-        catch (final NMSException e)
-        {
-            PluginLogger.error("Unable to store item action into attribute. Inventory tools won't work before the game.");
+        catch (final NMSException e) {
+            PluginLogger
+                    .error("Unable to store item action into attribute. Inventory tools won't work before the game.");
         }
     }
 
     /**
      * Reads an action previously written into this ItemStack.
+     *
      * @param item The item.
      * @return The action, or en empty string if nothing stored.
      * @see #writeAction(ItemStack, String) to write an action.
      */
-    private String readAction(final ItemStack item)
-    {
-        try
-        {
+    private String readAction(final ItemStack item) {
+        try {
             final Attribute attribute = Attributes.get(item, ACTIONABLE_ITEM_UUID);
             return attribute != null && attribute.getCustomData() != null ? attribute.getCustomData() : "";
         }
@@ -159,14 +161,14 @@ public class WaitModule extends QSGModule
      * Opens the teams selector GUI, if needed (enabled, game not started, needed item).
      *
      * @param player The player who right-clicked an item.
-     * @param item The right-clicked item.
+     * @param item   The right-clicked item.
      */
-    private boolean openGUI(Player player, ItemStack item)
-    {
-        if (isGameStarted() || item == null) return false;
+    private boolean openGUI(Player player, ItemStack item) {
+        if (isGameStarted() || item == null) {
+            return false;
+        }
 
-        switch (readAction(item))
-        {
+        switch (readAction(item)) {
             case "teams":
                 Gui.open(player, new TeamsSelectorGUI());
                 return true;
@@ -176,8 +178,9 @@ public class WaitModule extends QSGModule
                 {
                     Gui.open(player, new MainConfigGUI());
                     return true;
+                } else {
+                    return false;
                 }
-                else return false;
         }
 
         return false;
@@ -188,19 +191,15 @@ public class WaitModule extends QSGModule
      *
      * @param player The player to setup.
      */
-    private void handleNewPlayer(final Player player)
-    {
-        if (Config.TELEPORT_TO_SPAWN_IF_NOT_STARTED.get() && QSG.game().getPhase() != GamePhase.STARTING)
-        {
+    private void handleNewPlayer(final Player player) {
+        if (Config.TELEPORT_TO_SPAWN_IF_NOT_STARTED.get() && QSG.game().getPhase() != GamePhase.STARTING) {
             final Location worldSpawn = QSG
                     .get().getWorld(World.Environment.NORMAL).getSpawnLocation().add(0.5, 0.5, 0.5);
-            if (!QSGUtils.safeTP(player, worldSpawn))
-            {
+            if (!QSGUtils.safeTP(player, worldSpawn)) {
                 player.teleport(worldSpawn.add(0, 1, 0));
             }
 
-            if (Config.ENABLE_PVP.get())
-            {
+            if (Config.ENABLE_PVP.get()) {
                 player.setBedSpawnLocation(worldSpawn, true);
             }
         }
@@ -221,16 +220,15 @@ public class WaitModule extends QSGModule
      *
      * @param player The player to update.
      */
-    private void updateInventory(final Player player)
-    {
+    private void updateInventory(final Player player) {
         final boolean builder = isBuilder(player);
         final boolean teamsDisplayed = Config.TEAM_SELECTOR.ENABLED.get();
         final boolean configDisplayed = Config.CONFIG_ACCESSOR.ENABLED.get() && player.isOp();
 
         // Only updates the inventory when the access state change.
         final String state = String.format("%b%b%b", builder, teamsDisplayed, configDisplayed);
-        if (playerInventoriesStates.containsKey(player.getUniqueId()) && playerInventoriesStates.get(player.getUniqueId()).equals(state))
-        {
+        if (playerInventoriesStates.containsKey(player.getUniqueId()) &&
+                playerInventoriesStates.get(player.getUniqueId()).equals(state)) {
             return;
         }
 
@@ -238,26 +236,24 @@ public class WaitModule extends QSGModule
 
         player.setGameMode(builder ? GameMode.CREATIVE : GameMode.ADVENTURE);
 
-        if (!builder && Config.INVENTORY.CLEAR.get())
-        {
+        if (!builder && Config.INVENTORY.CLEAR.get()) {
             player.getInventory().clear();
             player.getInventory().setArmorContents(null);
         }
 
-        if (Config.TEAM_SELECTOR.ENABLED.get() || Config.CONFIG_ACCESSOR.ENABLED.get())
-        {
+        if (Config.TEAM_SELECTOR.ENABLED.get() || Config.CONFIG_ACCESSOR.ENABLED.get()) {
             final ItemStack teamsSelector = new ItemStackBuilder(Config.TEAM_SELECTOR.ITEM.get())
                     /// The title of the item given before the game to select a team
                     .title(I.t("{green}{bold}Select a team {gray}(Right-Click)"))
                     /// The lore of  the item given before the game to select a team
                     .longLore(I.t("{gray}Right-click to select your team for this game"))
-                    .hideAttributes()
+                    .hideAllAttributes()
                     .craftItem();
 
             final ItemStack configAccessor = new ItemStackBuilder(Config.CONFIG_ACCESSOR.ITEM.get())
                     .title(I.t("{red}{bold}Configure the game {gray}(Right-Click)"))
                     .longLore(I.t("{gray}Right-click to open the game configuration GUI"))
-                    .hideAttributes()
+                    .hideAllAttributes()
                     .craftItem();
 
             writeAction(teamsSelector, "teams");
@@ -271,32 +267,26 @@ public class WaitModule extends QSGModule
             clearIfSimilar(player, configAccessor, 4);
             clearIfSimilar(player, configAccessor, 6);
 
-            if (teamsDisplayed)
-            {
+            if (teamsDisplayed) {
                 placeIfPossible(player, teamsSelector, teamsSlot);
             }
 
-            if (configDisplayed)
-            {
+            if (configDisplayed) {
                 placeIfPossible(player, configAccessor, configSlot);
             }
         }
     }
 
-    private void placeIfPossible(final Player player, final ItemStack item, final int slot)
-    {
+    private void placeIfPossible(final Player player, final ItemStack item, final int slot) {
         final ItemStack previousItem = player.getInventory().getItem(slot);
-        if (!isBuilder(player) || previousItem == null || previousItem.getType() == org.bukkit.Material.AIR)
-        {
+        if (!isBuilder(player) || previousItem == null || previousItem.getType() == org.bukkit.Material.AIR) {
             player.getInventory().setItem(slot, item);
         }
     }
 
-    private void clearIfSimilar(final Player player, final ItemStack ifSimilarTo, final int slot)
-    {
+    private void clearIfSimilar(final Player player, final ItemStack ifSimilarTo, final int slot) {
         final ItemStack previousItem = player.getInventory().getItem(slot);
-        if (previousItem != null && previousItem.getType() == ifSimilarTo.getType())
-        {
+        if (previousItem != null && previousItem.getType() == ifSimilarTo.getType()) {
             player.getInventory().setItem(slot, new ItemStack(Material.AIR));
         }
     }
@@ -307,97 +297,113 @@ public class WaitModule extends QSGModule
      *
      * @param player The player.
      */
-    private void displayTeamInActionBar(final OfflinePlayer player)
-    {
-        if (!Config.TEAM_IN_ACTION_BAR.get() || player == null) return;
+    private void displayTeamInActionBar(final OfflinePlayer player) {
+        if (!Config.TEAM_IN_ACTION_BAR.get() || player == null) {
+            return;
+        }
 
         final Player onlinePlayer;
 
-        if (player instanceof Player) onlinePlayer = (Player) player;
-        else onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
+        if (player instanceof Player) {
+            onlinePlayer = (Player) player;
+        } else {
+            onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
+        }
 
-        if (onlinePlayer == null) return;
+        if (onlinePlayer == null) {
+            return;
+        }
 
         final QuartzTeam team = QuartzTeams.get().getTeamForPlayer(player);
 
-        if (team != null)
+        if (team != null) {
             ActionBar.sendPermanentMessage(onlinePlayer, I.t("{gold}Your team: {0}", team.getDisplayName()));
-        else
+        } else {
             ActionBar.removeMessage(onlinePlayer, true);
+        }
     }
 
     @EventHandler
-    public void onPlayerJoin(final PlayerJoinEvent ev)
-    {
-        if (isGameStarted()) return;
+    public void onPlayerJoin(final PlayerJoinEvent ev) {
+        if (isGameStarted()) {
+            return;
+        }
 
         handleNewPlayer(ev.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerInteract(PlayerInteractEvent ev)
-    {
-        if (ev.getAction() != Action.PHYSICAL && openGUI(ev.getPlayer(), ev.getItem()))
-        {
+    public void onPlayerInteract(PlayerInteractEvent ev) {
+        if (ev.getAction() != Action.PHYSICAL && openGUI(ev.getPlayer(), ev.getItem())) {
             ev.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent ev)
-    {
-        if (openGUI(ev.getPlayer(), ev.getPlayer().getItemInHand()))
-        {
+    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent ev) {
+        if (openGUI(ev.getPlayer(), ev.getPlayer().getItemInHand())) {
             ev.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPlayerClick(InventoryClickEvent ev)
-    {
-        if (Config.INVENTORY.PREVENT_USAGE.get())
-        {
-            if (isGameStarted()) return;
-            if (isBuilder(ev.getWhoClicked())) return;
-            if (!ev.getInventory().equals(ev.getWhoClicked().getInventory())) return;
-
-            ev.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onPlayerDrag(InventoryDragEvent ev)
-    {
-        if (Config.INVENTORY.PREVENT_USAGE.get())
-        {
-            if (isGameStarted()) return;
-            if (isBuilder(ev.getWhoClicked())) return;
-            if (!ev.getInventory().equals(ev.getWhoClicked().getInventory())) return;
+    public void onPlayerClick(InventoryClickEvent ev) {
+        if (Config.INVENTORY.PREVENT_USAGE.get()) {
+            if (isGameStarted()) {
+                return;
+            }
+            if (isBuilder(ev.getWhoClicked())) {
+                return;
+            }
+            if (!ev.getInventory().equals(ev.getWhoClicked().getInventory())) {
+                return;
+            }
 
             ev.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPlayerDrop(PlayerDropItemEvent ev)
-    {
-        if (Config.INVENTORY.PREVENT_USAGE.get())
-        {
-            if (isGameStarted()) return;
-            if (isBuilder(ev.getPlayer())) return;
+    public void onPlayerDrag(InventoryDragEvent ev) {
+        if (Config.INVENTORY.PREVENT_USAGE.get()) {
+            if (isGameStarted()) {
+                return;
+            }
+            if (isBuilder(ev.getWhoClicked())) {
+                return;
+            }
+            if (!ev.getInventory().equals(ev.getWhoClicked().getInventory())) {
+                return;
+            }
 
             ev.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPlayerPickup(PlayerPickupItemEvent ev)
-    {
-        if (isGameStarted()) return;
-        if (isBuilder(ev.getPlayer())) return;
+    public void onPlayerDrop(PlayerDropItemEvent ev) {
+        if (Config.INVENTORY.PREVENT_USAGE.get()) {
+            if (isGameStarted()) {
+                return;
+            }
+            if (isBuilder(ev.getPlayer())) {
+                return;
+            }
 
-        if (Config.INVENTORY.PREVENT_USAGE.get())
-        {
+            ev.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerPickup(PlayerPickupItemEvent ev) {
+        if (isGameStarted()) {
+            return;
+        }
+        if (isBuilder(ev.getPlayer())) {
+            return;
+        }
+
+        if (Config.INVENTORY.PREVENT_USAGE.get()) {
             ev.setCancelled(true);
         }
     }
@@ -406,13 +412,10 @@ public class WaitModule extends QSGModule
      * Used to disable all damages if the game is not started.
      */
     @EventHandler
-    public void onEntityDamage(final EntityDamageEvent ev)
-    {
-        if (ev.getEntity() instanceof Player)
-        {
+    public void onEntityDamage(final EntityDamageEvent ev) {
+        if (ev.getEntity() instanceof Player) {
             if (!isGameStarted()
-                    || (QSG.module(GameModule.class).getPhase() == GamePhase.WAIT && !Config.ENABLE_PVP.get()))
-            {
+                    || (QSG.module(GameModule.class).getPhase() == GamePhase.WAIT && !Config.ENABLE_PVP.get())) {
                 ev.setCancelled(true);
             }
         }
@@ -425,12 +428,10 @@ public class WaitModule extends QSGModule
      * (the difficulty is not correctly updated client-side when the game starts).
      */
     @EventHandler
-    public void onCreatureSpawn(CreatureSpawnEvent ev)
-    {
+    public void onCreatureSpawn(CreatureSpawnEvent ev) {
         if (!isGameStarted()
                 && EntitiesUtils.isNaturalSpawn(ev.getSpawnReason())
-                && EntitiesUtils.isHostile(ev.getEntityType()))
-        {
+                && EntitiesUtils.isHostile(ev.getEntityType())) {
             ev.setCancelled(true);
         }
     }
@@ -439,12 +440,12 @@ public class WaitModule extends QSGModule
      * Used to prevent the food level from dropping if the game has not started.
      */
     @EventHandler
-    public void onFoodUpdate(final FoodLevelChangeEvent ev)
-    {
-        if (isGameStarted()) return;
+    public void onFoodUpdate(final FoodLevelChangeEvent ev) {
+        if (isGameStarted()) {
+            return;
+        }
 
-        if (ev.getEntity() instanceof Player)
-        {
+        if (ev.getEntity() instanceof Player) {
             ((Player) ev.getEntity()).setFoodLevel(20);
             ((Player) ev.getEntity()).setSaturation(20f);
         }
@@ -457,8 +458,7 @@ public class WaitModule extends QSGModule
      * Used to display the team in the action bar (if needed).
      */
     @EventHandler
-    public void onTeamJoin(final PlayerJoinedTeamEvent ev)
-    {
+    public void onTeamJoin(final PlayerJoinedTeamEvent ev) {
         displayTeamInActionBar(ev.getPlayer());
     }
 
@@ -466,8 +466,7 @@ public class WaitModule extends QSGModule
      * Used to display the team in the action bar (if needed).
      */
     @EventHandler
-    public void onTeamUpdated(final TeamUpdatedEvent ev)
-    {
+    public void onTeamUpdated(final TeamUpdatedEvent ev) {
         ev.getTeam().getOnlinePlayers().forEach(this::displayTeamInActionBar);
     }
 
@@ -475,8 +474,7 @@ public class WaitModule extends QSGModule
      * Used to display the team in the action bar (if needed).
      */
     @EventHandler
-    public void onTeamDeleted(final TeamUnregisteredEvent ev)
-    {
+    public void onTeamDeleted(final TeamUnregisteredEvent ev) {
         ev.getTeam().getOnlinePlayers().forEach(this::displayTeamInActionBar);
     }
 
@@ -484,8 +482,7 @@ public class WaitModule extends QSGModule
      * Used to display the team in the action bar (if needed).
      */
     @EventHandler
-    public void onTeamLeft(final PlayerLeftTeamEvent ev)
-    {
+    public void onTeamLeft(final PlayerLeftTeamEvent ev) {
         displayTeamInActionBar(ev.getPlayer());
     }
 
@@ -495,10 +492,8 @@ public class WaitModule extends QSGModule
      * This listener will self-disable when the game starts.
      */
     @EventHandler
-    public void onGameStarts(final GamePhaseChangedEvent ev)
-    {
-        switch (ev.getNewPhase())
-        {
+    public void onGameStarts(final GamePhaseChangedEvent ev) {
+        switch (ev.getNewPhase()) {
             case STARTING:
                 Bukkit.getOnlinePlayers().forEach(player -> {
                     ActionBar.removeMessage(player);
@@ -512,8 +507,7 @@ public class WaitModule extends QSGModule
 
             case IN_GAME:
                 QuartzLib.unregisterEvents(this);
-                if (inventoriesUpdateTask != null)
-                {
+                if (inventoriesUpdateTask != null) {
                     inventoriesUpdateTask.cancel();
                     inventoriesUpdateTask = null;
                 }
@@ -526,16 +520,14 @@ public class WaitModule extends QSGModule
      * @param player A player
      * @return True if an inventory action should not be done because he is a builder.
      */
-    private boolean isBuilder(final Permissible player)
-    {
+    private boolean isBuilder(final Permissible player) {
         return Config.INVENTORY.ALLOW_FOR_BUILDERS.get() && player.hasPermission("uh.build");
     }
 
     /**
      * @return If we are in the right game phase (wait).
      */
-    private boolean isGameStarted()
-    {
+    private boolean isGameStarted() {
         final GamePhase phase = QSG.module(GameModule.class).getPhase();
         return phase != GamePhase.WAIT && phase != GamePhase.STARTING;
     }

@@ -31,22 +31,21 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.playerListHeaderFooter;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GamePhase;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationMap;
-
 import java.io.File;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
+public class Config extends ConfigurationInstance {
+    public static final ConfigurationMap<GamePhase, String> HEADERS =
+            ConfigurationItem.map("headers", GamePhase.class, String.class);
+    public static final ConfigurationMap<GamePhase, String> FOOTERS =
+            ConfigurationItem.map("footers", GamePhase.class, String.class);
+    public Config(File file) {
         super(file);
     }
-
-    public static final ConfigurationMap<GamePhase, String> HEADERS = ConfigurationItem.map("headers", GamePhase.class, String.class);
-    public static final ConfigurationMap<GamePhase, String> FOOTERS = ConfigurationItem.map("footers", GamePhase.class, String.class);
 }

@@ -39,20 +39,21 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 
-public class FreezerListener implements Listener
-{
+public class FreezerListener implements Listener {
     /**
      * Used to prevent frozen players to break blocks.
      */
     @EventHandler
-    public void onBlockBreakEvent(final BlockBreakEvent ev)
-    {
-        if (QSG.module(FreezerModule.class).isPlayerFrozen(ev.getPlayer()))
-        {
+    public void onBlockBreakEvent(final BlockBreakEvent ev) {
+        if (QSG.module(FreezerModule.class).isPlayerFrozen(ev.getPlayer())) {
             ev.setCancelled(true);
         }
     }
@@ -61,10 +62,8 @@ public class FreezerListener implements Listener
      * Used to prevent frozen players to place blocks.
      */
     @EventHandler
-    public void onBlockPlaceEvent(final BlockPlaceEvent ev)
-    {
-        if (QSG.module(FreezerModule.class).isPlayerFrozen(ev.getPlayer()))
-        {
+    public void onBlockPlaceEvent(final BlockPlaceEvent ev) {
+        if (QSG.module(FreezerModule.class).isPlayerFrozen(ev.getPlayer())) {
             ev.setCancelled(true);
         }
     }
@@ -73,8 +72,7 @@ public class FreezerListener implements Listener
      * Used to freeze the players.
      */
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent ev)
-    {
+    public void onPlayerMove(PlayerMoveEvent ev) {
         QSG.module(FreezerModule.class).freezePlayerIfNeeded(ev.getPlayer(), ev.getFrom(), ev.getTo());
     }
 
@@ -82,18 +80,16 @@ public class FreezerListener implements Listener
      * Used to prevent the bows to be used while in global freeze mode.
      */
     @EventHandler
-    public void onEntityShoot(EntityShootBowEvent ev)
-    {
-        if ((ev.getEntity() instanceof Player && QSG.module(FreezerModule.class).isPlayerFrozen((Player) ev.getEntity()))
-                || QSG.module(FreezerModule.class).getGlobalFreezeState())
-        {
+    public void onEntityShoot(EntityShootBowEvent ev) {
+        if ((ev.getEntity() instanceof Player &&
+                QSG.module(FreezerModule.class).isPlayerFrozen((Player) ev.getEntity()))
+                || QSG.module(FreezerModule.class).getGlobalFreezeState()) {
             ev.setCancelled(true);
 
             // If a shoot from a player is cancelled, the arrow seems to be
             // consumed in the player' screen.
             // The inventory needs to be updated for the arrow to "come back".
-            if (ev.getEntity() instanceof Player)
-            {
+            if (ev.getEntity() instanceof Player) {
                 ((Player) ev.getEntity()).updateInventory();
             }
         }
@@ -103,10 +99,8 @@ public class FreezerListener implements Listener
      * Used to prevent items from de-spawning if the game is frozen.
      */
     @EventHandler
-    public void onItemDespawn(ItemDespawnEvent ev)
-    {
-        if (QSG.module(FreezerModule.class).getGlobalFreezeState())
-        {
+    public void onItemDespawn(ItemDespawnEvent ev) {
+        if (QSG.module(FreezerModule.class).getGlobalFreezeState()) {
             ev.setCancelled(true);
         }
     }
@@ -115,10 +109,8 @@ public class FreezerListener implements Listener
      * Used to freeze the mobs spawning while the game is frozen.
      */
     @EventHandler
-    public void onEntitySpawn(CreatureSpawnEvent ev)
-    {
-        if (QSG.module(FreezerModule.class).getGlobalFreezeState() && ev.getEntity() instanceof Creature)
-        {
+    public void onEntitySpawn(CreatureSpawnEvent ev) {
+        if (QSG.module(FreezerModule.class).getGlobalFreezeState() && ev.getEntity() instanceof Creature) {
             QSG.module(FreezerModule.class).freezeCreature((Creature) ev.getEntity(), true);
         }
     }
@@ -127,12 +119,9 @@ public class FreezerListener implements Listener
      * Used to disable any damages if the player is frozen.
      */
     @EventHandler
-    public void onEntityDamage(final EntityDamageEvent ev)
-    {
-        if (ev.getEntity() instanceof Player)
-        {
-            if (QSG.module(FreezerModule.class).isPlayerFrozen((Player) ev.getEntity()))
-            {
+    public void onEntityDamage(final EntityDamageEvent ev) {
+        if (ev.getEntity() instanceof Player) {
+            if (QSG.module(FreezerModule.class).isPlayerFrozen((Player) ev.getEntity())) {
                 ev.setCancelled(true);
             }
         }
@@ -142,12 +131,9 @@ public class FreezerListener implements Listener
      * Used to cancel any food loss (but the players can still eat).
      */
     @EventHandler
-    public void onFoodUpdate(FoodLevelChangeEvent ev)
-    {
-        if (QSG.module(FreezerModule.class).isPlayerFrozen((Player) ev.getEntity()))
-        {
-            if (ev.getFoodLevel() < ((Player) ev.getEntity()).getFoodLevel())
-            {
+    public void onFoodUpdate(FoodLevelChangeEvent ev) {
+        if (QSG.module(FreezerModule.class).isPlayerFrozen((Player) ev.getEntity())) {
+            if (ev.getFoodLevel() < ((Player) ev.getEntity()).getFoodLevel()) {
                 ev.setCancelled(true);
             }
         }

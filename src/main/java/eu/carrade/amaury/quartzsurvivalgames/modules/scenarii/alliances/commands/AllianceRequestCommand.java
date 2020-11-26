@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.scenarii.alliances.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
@@ -44,24 +45,18 @@ import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzteams.QuartzTeams;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@CommandInfo (name = "alliance-request", usageParameters = "<player>", aliases = {"alliancerequest", "alliance", "ally"})
-public class AllianceRequestCommand extends Command
-{
+@CommandInfo(name = "alliance-request", usageParameters = "<player>", aliases = {"alliancerequest", "alliance", "ally"})
+public class AllianceRequestCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
-        if (QSG.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME))
-        {
+    protected void run() throws CommandException {
+        if (QSG.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME)) {
             error(I.t("The game is not started."));
-        }
-        else if (args.length == 0)
-        {
+        } else if (args.length == 0) {
             throwInvalidArgument(I.t("You must provide a player name."));
         }
 
@@ -69,13 +64,11 @@ public class AllianceRequestCommand extends Command
 
         final Player requested = getPlayerParameter(0);
 
-        if (requested.getUniqueId().equals(playerSender().getUniqueId()))
-        {
+        if (requested.getUniqueId().equals(playerSender().getUniqueId())) {
             error(I.t("You cannot create an alliance with yourself."));
-        }
-        else if (alliances.getRequestByCouple(playerSender().getUniqueId(), requested.getUniqueId()) != null)
-        {
-            error(I.t("You already have an ongoing alliance request sent to {0}. Please be patient!", requested.getName()));
+        } else if (alliances.getRequestByCouple(playerSender().getUniqueId(), requested.getUniqueId()) != null) {
+            error(I.t("You already have an ongoing alliance request sent to {0}. Please be patient!",
+                    requested.getName()));
         }
 
         final AllianceRequest request = new AllianceRequest(playerSender().getUniqueId(), requested.getUniqueId());
@@ -85,10 +78,10 @@ public class AllianceRequestCommand extends Command
         // The rule to send error messages is: no answer should not be distinguishable from
         // errors linked to existing alliances, because the alliances are secret.
 
-        switch (request.getError())
-        {
+        switch (request.getError()) {
             case TOO_FAR:
-                error(I.t("{0} is too far. You must be within {1} blocks of each other.", requested.getName(), Config.MAX_DISTANCE_TO_CREATE_AN_ALLIANCE.get()));
+                error(I.t("{0} is too far. You must be within {1} blocks of each other.", requested.getName(),
+                        Config.MAX_DISTANCE_TO_CREATE_AN_ALLIANCE.get()));
                 return;
 
             case REQUESTER_OUT_OF_ALLIANCES:
@@ -99,8 +92,12 @@ public class AllianceRequestCommand extends Command
                 yourRequestHasBeenSent(requested);
 
                 requested.sendMessage("");
-                requested.sendMessage(I.t("{gray}{bold}{0} just sent you an alliance request, but you cannot accept it because you have no alliance left.", sender.getName()));
-                requested.sendMessage(I.t("{gray}{0} is not aware of this, but I preferred to warn you so that you would not be caught off guard if he or she mentions it.", sender.getName()));
+                requested.sendMessage(
+                        I.t("{gray}{bold}{0} just sent you an alliance request, but you cannot accept it because you have no alliance left.",
+                                sender.getName()));
+                requested.sendMessage(
+                        I.t("{gray}{0} is not aware of this, but I preferred to warn you so that you would not be caught off guard if he or she mentions it.",
+                                sender.getName()));
                 requested.sendMessage("");
 
                 return;
@@ -109,20 +106,22 @@ public class AllianceRequestCommand extends Command
                 // Here, if the player is solo, we say that the request was sent and we warn the
                 // other alliance members. If the player is in an alliance he know its size and
                 // the other one is solo.
-                if (alliances.allianceSize(playerSender().getUniqueId()) == 1)
-                {
+                if (alliances.allianceSize(playerSender().getUniqueId()) == 1) {
                     yourRequestHasBeenSent(requested);
 
                     QuartzTeams.get().getTeamForPlayer(requested).getOnlinePlayers().forEach(teammate -> {
                         teammate.sendMessage("");
-                        teammate.sendMessage(I.t("{gray}{bold}{0} just sent you an alliance request, but you cannot accept it because your alliance is already at full capacity.", sender.getName()));
-                        teammate.sendMessage(I.t("{gray}{0} is not aware of this, but I preferred to warn you so that you would not be caught off guard if he or she mentions it.", sender.getName()));
+                        teammate.sendMessage(
+                                I.t("{gray}{bold}{0} just sent you an alliance request, but you cannot accept it because your alliance is already at full capacity.",
+                                        sender.getName()));
+                        teammate.sendMessage(
+                                I.t("{gray}{0} is not aware of this, but I preferred to warn you so that you would not be caught off guard if he or she mentions it.",
+                                        sender.getName()));
                         teammate.sendMessage("");
                     });
-                }
-                else
-                {
-                    error(I.t("You cannot send a request alliance as your alliance is already at full capacity. Don't be too greedy!"));
+                } else {
+                    error(I.t(
+                            "You cannot send a request alliance as your alliance is already at full capacity. Don't be too greedy!"));
                 }
 
                 return;
@@ -149,14 +148,18 @@ public class AllianceRequestCommand extends Command
     }
 
     @Override
-    protected List<String> complete()
-    {
-        if (args.length == 1) return getMatchingPlayerNames(Bukkit.getOnlinePlayers().stream().filter(player -> !player.equals(sender)).collect(Collectors.toSet()), args[0]);
-        else return null;
+    protected List<String> complete() {
+        if (args.length == 1) {
+            return getMatchingPlayerNames(
+                    Bukkit.getOnlinePlayers().stream().filter(player -> !player.equals(sender))
+                            .collect(Collectors.toSet()),
+                    args[0]);
+        } else {
+            return null;
+        }
     }
 
-    private void yourRequestHasBeenSent(final Player to)
-    {
+    private void yourRequestHasBeenSent(final Player to) {
         info("");
         success(I.t("{bold}Your request has been sent to {0}.", to.getName()));
         success(I.t("Wait until it is accepted. Let's hope you don't hear only silence..."));

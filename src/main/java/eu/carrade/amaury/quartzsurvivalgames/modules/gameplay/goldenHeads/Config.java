@@ -31,58 +31,52 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.goldenHeads;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.section;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
+import java.io.File;
+
+public class Config extends ConfigurationInstance {
+    public static final ConfigurationItem<Boolean> DROP_HEAD_ON_DEATH = item("drop-head-on-death", true);
+    public static final ConfigurationItem<Boolean> DROP_HEAD_ON_DEATH_PVP_ONLY =
+            item("drop-head-on-death-pvp-only", false);
+    public static final ConfigurationItem<Boolean> DISPLAY_REGEN_AMOUNT_ON_APPLES =
+            item("display-regen-amount-on-apples", true);
+    public static final GoldenAppleSection GOLDEN_APPLE = section("golden-apple", GoldenAppleSection.class);
+    public static final EnchantedGoldenAppleSection ENCHANTED_GOLDEN_APPLE =
+            section("enchanted-golden-apple", EnchantedGoldenAppleSection.class);
+    public static final GoldenHeadSection PLAYER_GOLDEN_HEAD = section("player-golden-head", GoldenHeadSection.class);
+    public static final GoldenHeadSection WITHER_GOLDEN_HEAD = section("wither-golden-head", GoldenHeadSection.class);
+    public static final EnchantedGoldenHeadSection PLAYER_ENCHANTED_GOLDEN_HEAD =
+            section("player-enchanted-golden-head", EnchantedGoldenHeadSection.class);
+    public static final EnchantedGoldenHeadSection WITHER_ENCHANTED_GOLDEN_HEAD =
+            section("wither-enchanted-golden-head", EnchantedGoldenHeadSection.class);
+    public Config(File file) {
         super(file);
     }
 
-    public static final ConfigurationItem<Boolean> DROP_HEAD_ON_DEATH = item("drop-head-on-death", true);
-    public static final ConfigurationItem<Boolean> DROP_HEAD_ON_DEATH_PVP_ONLY = item("drop-head-on-death-pvp-only", false);
-
-    public static final ConfigurationItem<Boolean> DISPLAY_REGEN_AMOUNT_ON_APPLES = item("display-regen-amount-on-apples", true);
-
-    public static final GoldenAppleSection GOLDEN_APPLE = section("golden-apple", GoldenAppleSection.class);
-    public static final EnchantedGoldenAppleSection ENCHANTED_GOLDEN_APPLE = section("enchanted-golden-apple", EnchantedGoldenAppleSection.class);
-
-    public static final GoldenHeadSection PLAYER_GOLDEN_HEAD = section("player-golden-head", GoldenHeadSection.class);
-    public static final GoldenHeadSection WITHER_GOLDEN_HEAD = section("wither-golden-head", GoldenHeadSection.class);
-
-    public static final EnchantedGoldenHeadSection PLAYER_ENCHANTED_GOLDEN_HEAD = section("player-enchanted-golden-head", EnchantedGoldenHeadSection.class);
-    public static final EnchantedGoldenHeadSection WITHER_ENCHANTED_GOLDEN_HEAD = section("wither-enchanted-golden-head", EnchantedGoldenHeadSection.class);
-
-    public static class GoldenAppleSection extends ConfigurationSection
-    {
+    public static class GoldenAppleSection extends ConfigurationSection {
         public final ConfigurationItem<Boolean> ENABLE = item("enable", true);
         public final ConfigurationItem<Integer> REGENERATION = item("regeneration", 4);
     }
 
-    public static class EnchantedGoldenAppleSection extends ConfigurationSection
-    {
+    public static class EnchantedGoldenAppleSection extends ConfigurationSection {
         public final ConfigurationItem<Boolean> ENABLE = item("enable", false);
         public final ConfigurationItem<Integer> REGENERATION = item("regeneration", 180);
     }
 
-    public static class GoldenHeadSection extends GoldenAppleSection
-    {
+    public static class GoldenHeadSection extends GoldenAppleSection {
         public final ConfigurationItem<Integer> AMOUNT_CRAFTED = item("amount-crafted", 1);
         public final ConfigurationItem<Boolean> ADD_LORE = item("add-lore", true);
     }
 
-    public static class EnchantedGoldenHeadSection extends EnchantedGoldenAppleSection
-    {
+    public static class EnchantedGoldenHeadSection extends EnchantedGoldenAppleSection {
         public final ConfigurationItem<Integer> AMOUNT_CRAFTED = item("amount-crafted", 1);
         public final ConfigurationItem<Boolean> ADD_LORE = item("add-lore", true);
     }

@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.waitingPhase.wait;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
@@ -42,41 +43,32 @@ import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
 import java.io.File;
 import org.bukkit.Material;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
+public class Config extends ConfigurationInstance {
+    static public final ConfigurationItem<Boolean> TELEPORT_TO_SPAWN_IF_NOT_STARTED =
+            item("teleport-to-spawn-if-not-started", true);
+    public static final InventorySection INVENTORY = section("inventory", InventorySection.class);
+    public static final TeamSelectorSection TEAM_SELECTOR = section("teams-selector", TeamSelectorSection.class);
+    public static final ConfigAccessorSection CONFIG_ACCESSOR = section("config-accessor", ConfigAccessorSection.class);
+    public static final ConfigurationItem<Boolean> TEAM_IN_ACTION_BAR = item("team-in-action-bar", true);
+    public static final ConfigurationItem<Boolean> ENABLE_PVP = item("enable-pvp", false);
+
+    public Config(File file) {
         super(file);
     }
 
-    static public final ConfigurationItem<Boolean> TELEPORT_TO_SPAWN_IF_NOT_STARTED = item("teleport-to-spawn-if-not-started", true);
-
-    public static final InventorySection INVENTORY = section("inventory", InventorySection.class);
-
-    static public class InventorySection extends ConfigurationSection
-    {
+    static public class InventorySection extends ConfigurationSection {
         public final ConfigurationItem<Boolean> CLEAR = item("clear", true);
         public final ConfigurationItem<Boolean> PREVENT_USAGE = item("prevent-usage", true);
         public final ConfigurationItem<Boolean> ALLOW_FOR_BUILDERS = item("allow-for-builders", true);
     }
 
-    public static final TeamSelectorSection TEAM_SELECTOR = section("teams-selector", TeamSelectorSection.class);
-
-    static public class TeamSelectorSection extends ConfigurationSection
-    {
+    static public class TeamSelectorSection extends ConfigurationSection {
         public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
         public final ConfigurationItem<Material> ITEM = item("item", Material.NETHER_STAR);
     }
 
-    public static final ConfigAccessorSection CONFIG_ACCESSOR = section("config-accessor", ConfigAccessorSection.class);
-
-    static public class ConfigAccessorSection extends ConfigurationSection
-    {
+    static public class ConfigAccessorSection extends ConfigurationSection {
         public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
         public final ConfigurationItem<Material> ITEM = item("item", Material.COMPARATOR);
     }
-
-    public static final ConfigurationItem<Boolean> TEAM_IN_ACTION_BAR = item("team-in-action-bar", true);
-
-    public static final ConfigurationItem<Boolean> ENABLE_PVP = item("enable-pvp", false);
 }

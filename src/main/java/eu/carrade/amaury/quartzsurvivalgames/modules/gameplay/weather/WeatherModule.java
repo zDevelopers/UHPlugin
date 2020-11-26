@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.weather;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -40,53 +41,46 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GamePhase;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.game.GamePhaseChangedEvent;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
+import java.util.HashSet;
+import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.WeatherType;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
-import java.util.HashSet;
-import java.util.Set;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Weather",
         description = "Manages the in-game weather.",
         settings = Config.class,
         category = ModuleCategory.GAMEPLAY,
         icon = Material.SUNFLOWER
 )
-public class WeatherModule extends QSGModule
-{
-    private Set<World> firstWeatherUpdateOccurred = new HashSet<>();
+public class WeatherModule extends QSGModule {
+    private final Set<World> firstWeatherUpdateOccurred = new HashSet<>();
 
     @Override
-    protected void onEnable()
-    {
-        QSG.get().getWorlds().forEach(world -> world.setStorm(Config.WAITING_PHASE_WEATHER.get() == WeatherType.DOWNFALL));
+    protected void onEnable() {
+        QSG.get().getWorlds()
+                .forEach(world -> world.setStorm(Config.WAITING_PHASE_WEATHER.get() == WeatherType.DOWNFALL));
     }
 
     @Override
-    public void onLateEnable()
-    {
+    public void onLateEnable() {
         QSG.get().getWorlds().forEach(world -> world.setStorm(Config.INITIAL_WEATHER.get() == WeatherType.DOWNFALL));
     }
 
     @EventHandler
-    public void onGameStarts(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward())
-        {
+    public void onGameStarts(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward()) {
             onLateEnable();
         }
     }
 
     @EventHandler
-    public void onWeatherChange(final WeatherChangeEvent ev)
-    {
-        switch (QSG.module(GameModule.class).getPhase())
-        {
+    public void onWeatherChange(final WeatherChangeEvent ev) {
+        switch (QSG.module(GameModule.class).getPhase()) {
             case WAIT:
             case STARTING:
                 ev.setCancelled(true);
@@ -94,16 +88,12 @@ public class WeatherModule extends QSGModule
 
             case IN_GAME:
             case END:
-                if (!Config.WEATHER_CYCLE.get())
-                {
+                if (!Config.WEATHER_CYCLE.get()) {
                     // We allow a single weather update, as it will be
                     // the one from the onGameStart event.
-                    if (firstWeatherUpdateOccurred.contains(ev.getWorld()))
-                    {
+                    if (firstWeatherUpdateOccurred.contains(ev.getWorld())) {
                         ev.setCancelled(true);
-                    }
-                    else
-                    {
+                    } else {
                         firstWeatherUpdateOccurred.add(ev.getWorld());
                     }
                 }

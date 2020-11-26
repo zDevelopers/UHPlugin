@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.teleportation.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
@@ -41,23 +42,19 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@CommandInfo (name = "tp-spawn", usageParameters = "<player> [force]", aliases = {"tpspawn"})
-public class TPSpawnCommand extends Command
-{
+@CommandInfo(name = "tp-spawn", usageParameters = "<player> [force]", aliases = {"tpspawn"})
+public class TPSpawnCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         final Teleporter teleporter = QSG.module(GameModule.class).getTeleporter();
 
-        if (teleporter == null)
-        {
+        if (teleporter == null) {
             error(I.t("{ce}The spawn points are not already assigned to the player, because the game is not started."));
             return;
         }
@@ -66,48 +63,41 @@ public class TPSpawnCommand extends Command
         final boolean force = args.length > 1 && args[1].equalsIgnoreCase("force");
         final Location spawnLocation = teleporter.getSpawnForPlayer(player.getUniqueId());
 
-        if (spawnLocation == null)
-        {
+        if (spawnLocation == null) {
             error(I.t("{ce}No spawn location available for the player {0}.", player.getName()));
             return;
         }
 
-        if (force)
-        {
+        if (force) {
             teleporter.teleportPlayer(player.getUniqueId(), true);
             success(I.t("{cs}The player {0} was teleported to his spawn location.", player.getName()));
-        }
-        else if (QSGUtils.safeTP(player, spawnLocation))
-        {
+        } else if (QSGUtils.safeTP(player, spawnLocation)) {
             success(I.t("{cs}The player {0} was teleported to his spawn location.", player.getName()));
-        }
-        else
-        {
-            warning(I.t("{ce}The player {0} was NOT teleported to his spawn because no safe spot was found.", player.getName()));
-            warning(I.t("{ci}Use {cc}/uh tpspawn {0} force{ci} to teleport the player regardless this point.", player.getName()));
+        } else {
+            warning(I.t("{ce}The player {0} was NOT teleported to his spawn because no safe spot was found.",
+                    player.getName()));
+            warning(I.t("{ci}Use {cc}/uh tpspawn {0} force{ci} to teleport the player regardless this point.",
+                    player.getName()));
         }
     }
 
     @Override
-    protected List<String> complete()
-    {
+    protected List<String> complete() {
         final Teleporter teleporter = QSG.module(GameModule.class).getTeleporter();
 
-        if (teleporter == null) return null;
-
-        else if (args.length == 1)
-        {
+        if (teleporter == null) {
+            return null;
+        } else if (args.length == 1) {
             return getMatchingPlayerNames(
-                    Bukkit.getOnlinePlayers().stream().filter(player -> teleporter.hasSpawnForPlayer(player.getUniqueId())).collect(Collectors.toList()),
+                    Bukkit.getOnlinePlayers().stream()
+                            .filter(player -> teleporter.hasSpawnForPlayer(player.getUniqueId()))
+                            .collect(Collectors.toList()),
                     args[0]
             );
-        }
-
-        else if (args.length == 2)
-        {
+        } else if (args.length == 2) {
             return getMatchingSubset(args[1].toLowerCase(), "force");
+        } else {
+            return null;
         }
-
-        else return null;
     }
 }

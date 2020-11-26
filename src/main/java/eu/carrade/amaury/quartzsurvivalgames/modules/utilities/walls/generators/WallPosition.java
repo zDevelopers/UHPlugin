@@ -34,14 +34,13 @@ package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.walls.generators
 
 /**
  * Used to determine in witch wall we are, to get the "inner" block.
- *
+ * <p>
  * North: small Z
  * South: big Z
  * East:  big X
  * West:  small X
  */
-public enum WallPosition
-{
+public enum WallPosition {
     NORTH,
     SOUTH,
     EAST,

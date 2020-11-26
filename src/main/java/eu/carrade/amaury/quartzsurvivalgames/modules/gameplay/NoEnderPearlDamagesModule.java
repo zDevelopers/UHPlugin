@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -43,20 +44,17 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "No Ender Pearl Damages",
         description = "Removes all damages from ender pearls, basically allowing players to use them.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.GAMEPLAY,
         icon = Material.ENDER_PEARL
 )
-public class NoEnderPearlDamagesModule extends QSGModule
-{
+public class NoEnderPearlDamagesModule extends QSGModule {
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerTeleport(final PlayerTeleportEvent ev)
-    {
-        if (ev.getCause() == TeleportCause.ENDER_PEARL)
-        {
+    public void onPlayerTeleport(final PlayerTeleportEvent ev) {
+        if (ev.getCause() == TeleportCause.ENDER_PEARL) {
             ev.setCancelled(true);
 
             // Technically its an ender pearl teleportation, but

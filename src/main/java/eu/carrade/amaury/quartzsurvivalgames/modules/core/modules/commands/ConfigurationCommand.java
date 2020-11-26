@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.gui.MainConfigGUI;
@@ -39,12 +40,10 @@ import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.gui.Gui;
 
-@CommandInfo (name = "config")
-public class ConfigurationCommand extends Command
-{
+@CommandInfo(name = "config")
+public class ConfigurationCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         Gui.open(playerSender(), new MainConfigGUI());
     }
 }

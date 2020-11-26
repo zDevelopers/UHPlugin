@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.external.hawk;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
@@ -47,35 +48,79 @@ import org.bukkit.Material;
 import org.bukkit.Statistic;
 
 @SuppressWarnings("CheckStyle")
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
-
+public class Config extends ConfigurationInstance {
     public static final ConfigurationItem<String> REPORTS_API_BASE_URL = item("reports-api-base-url", "");
-
     public static final ConfigurationItem<Boolean> PUBLISH_REPORT = item("publish-report", true);
-    public static final ConfigurationItem<ReportBroadcastedTo> BROADCAST_REPORT_TO = item("broadcast-report-to", ReportBroadcastedTo.ALL);
-
+    public static final ConfigurationItem<ReportBroadcastedTo> BROADCAST_REPORT_TO =
+            item("broadcast-report-to", ReportBroadcastedTo.ALL);
     static public final ConfigurationItem<Boolean> DATE = item("date", true);
     static public final ConfigurationItem<Boolean> PLAYERS_COUNT = item("players-count", true);
     static public final ConfigurationItem<Boolean> WINNERS = item("winners", true);
-
     static public final SummarySection SUMMARY = section("summary", SummarySection.class);
-    static public class SummarySection extends ConfigurationSection
-    {
+    static public final DamagesSection DAMAGES = section("damages", DamagesSection.class);
+    static public final PlayersSection PLAYERS = section("players", PlayersSection.class);
+
+
+    public Config(File file) {
+        super(file);
+    }
+
+    static public List<Statistic> defaultStatsHighlight() {
+        return Arrays.asList(
+                Statistic.DAMAGE_DEALT,
+                Statistic.CRAFT_ITEM,
+                Statistic.ITEM_ENCHANTED,
+                Statistic.BREWINGSTAND_INTERACTION,
+                Statistic.SPRINT_ONE_CM
+        );
+    }
+
+    static public List<Material> defaultUsedHighlight() {
+        return Arrays.asList(
+                Material.DIAMOND_SWORD, Material.DIAMOND_AXE, Material.DIAMOND_PICKAXE, Material.DIAMOND_HOE,
+                Material.IRON_SWORD, Material.IRON_AXE, Material.IRON_PICKAXE, Material.IRON_HOE,
+                Material.CAKE, Material.SADDLE, Material.GOLDEN_APPLE, Material.POTION,
+                Material.MUSIC_DISC_11, Material.MUSIC_DISC_13, Material.MUSIC_DISC_BLOCKS, Material.MUSIC_DISC_CAT,
+                Material.MUSIC_DISC_CHIRP, Material.MUSIC_DISC_FAR, Material.MUSIC_DISC_MALL,
+                Material.MUSIC_DISC_MELLOHI,
+                Material.MUSIC_DISC_STAL, Material.MUSIC_DISC_STRAD, Material.MUSIC_DISC_WAIT, Material.MUSIC_DISC_WARD
+        );
+    }
+
+    static public List<Material> defaultMinedHighlight() {
+        return Arrays.asList(
+                Material.DIAMOND, Material.DIAMOND_ORE,
+                Material.GOLD_INGOT, Material.GOLD_ORE,
+                Material.IRON_INGOT, Material.IRON_ORE,
+                Material.EMERALD, Material.EMERALD_ORE,
+                Material.OBSIDIAN, Material.NETHER_WART,
+                Material.SPAWNER, Material.STONE
+        );
+    }
+
+    static public List<Material> defaultPickedUpHighlight() {
+        return Arrays.asList(
+                Material.APPLE,
+                Material.BOW, Material.ENDER_PEARL, Material.GOLD_INGOT,
+                Material.PLAYER_HEAD, Material.CREEPER_HEAD, Material.DRAGON_HEAD,
+                Material.ZOMBIE_HEAD, Material.SKELETON_SKULL, Material.WITHER_SKELETON_SKULL
+        );
+    }
+
+    public enum ReportBroadcastedTo {
+        ALL,
+        ADMINISTRATORS,
+        CONSOLE
+    }
+
+    static public class SummarySection extends ConfigurationSection {
         public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
         public final ConfigurationItem<Boolean> HISTORY = item("history", true);
         public final ConfigurationItem<Boolean> PLAYERS = item("players", true);
         public final ConfigurationItem<Boolean> TEAMS = item("teams", true);
     }
 
-
-    static public final DamagesSection DAMAGES = section("damages", DamagesSection.class);
-    static public class DamagesSection extends ConfigurationSection
-    {
+    static public class DamagesSection extends ConfigurationSection {
         public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
         public final ConfigurationItem<Boolean> DAMAGES_PER_PLAYERS = item("damages-per-players", true);
         public final ConfigurationItem<Boolean> DAMAGES_PER_TEAMS = item("damages-per-teams", true);
@@ -83,10 +128,7 @@ public class Config extends ConfigurationInstance
         public final ConfigurationItem<Boolean> DISPLAY_KILLER = item("display-killer", true);
     }
 
-
-    static public final PlayersSection PLAYERS = section("players", PlayersSection.class);
-    static public class PlayersSection extends ConfigurationSection
-    {
+    static public class PlayersSection extends ConfigurationSection {
         public final ConfigurationItem<Boolean> ENABLED = item("enabled", true);
         public final ConfigurationItem<Boolean> PLAY_TIME = item("play-time", true);
 
@@ -105,57 +147,5 @@ public class Config extends ConfigurationInstance
         public final ConfigurationItem<Boolean> PICKED_UP = item("picked-up", true);
         public final ConfigurationList<Material> PICKED_UP_WHITELIST = list("picked-up-whitelist", Material.class);
         public final ConfigurationList<Material> PICKED_UP_HIGHLIGHT = list("picked-up-highlight", Material.class);
-    }
-
-    static public List<Statistic> defaultStatsHighlight()
-    {
-        return Arrays.asList(
-                Statistic.DAMAGE_DEALT,
-                Statistic.CRAFT_ITEM,
-                Statistic.ITEM_ENCHANTED,
-                Statistic.BREWINGSTAND_INTERACTION,
-                Statistic.SPRINT_ONE_CM
-        );
-    }
-
-    static public List<Material> defaultUsedHighlight()
-    {
-        return Arrays.asList(
-                Material.DIAMOND_SWORD, Material.DIAMOND_AXE, Material.DIAMOND_PICKAXE, Material.DIAMOND_HOE,
-                Material.IRON_SWORD, Material.IRON_AXE, Material.IRON_PICKAXE, Material.IRON_HOE,
-                Material.CAKE, Material.SADDLE, Material.GOLDEN_APPLE, Material.POTION,
-                Material.MUSIC_DISC_11, Material.MUSIC_DISC_13, Material.MUSIC_DISC_BLOCKS, Material.MUSIC_DISC_CAT,
-                Material.MUSIC_DISC_CHIRP, Material.MUSIC_DISC_FAR, Material.MUSIC_DISC_MALL, Material.MUSIC_DISC_MELLOHI,
-                Material.MUSIC_DISC_STAL, Material.MUSIC_DISC_STRAD, Material.MUSIC_DISC_WAIT, Material.MUSIC_DISC_WARD
-        );
-    }
-
-    static public List<Material> defaultMinedHighlight()
-    {
-        return Arrays.asList(
-                Material.DIAMOND, Material.DIAMOND_ORE,
-                Material.GOLD_INGOT, Material.GOLD_ORE,
-                Material.IRON_INGOT, Material.IRON_ORE,
-                Material.EMERALD, Material.EMERALD_ORE,
-                Material.OBSIDIAN, Material.NETHER_WART,
-                Material.SPAWNER, Material.STONE
-        );
-    }
-
-    static public List<Material> defaultPickedUpHighlight()
-    {
-        return Arrays.asList(
-                Material.APPLE,
-                Material.BOW, Material.ENDER_PEARL, Material.GOLD_INGOT,
-                Material.PLAYER_HEAD, Material.CREEPER_HEAD, Material.DRAGON_HEAD,
-                Material.ZOMBIE_HEAD, Material.SKELETON_SKULL, Material.WITHER_SKELETON_SKULL
-        );
-    }
-
-    public enum ReportBroadcastedTo
-    {
-        ALL,
-        ADMINISTRATORS,
-        CONSOLE
     }
 }

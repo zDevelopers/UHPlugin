@@ -31,32 +31,28 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.rules;
+
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.list;
+import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.section;
 
 import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationList;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
-
 import java.io.File;
 
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.list;
-import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.section;
+public class Config extends ConfigurationInstance {
+    public static final DisplaySection DISPLAY = section("display", DisplaySection.class);
+    public static final ConfigurationList<String> RULES = list("rules", String.class);
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
+    public Config(File file) {
         super(file);
     }
 
-    public static final DisplaySection DISPLAY = section("display", DisplaySection.class);
-
-    static public class DisplaySection extends ConfigurationSection
-    {
+    static public class DisplaySection extends ConfigurationSection {
         public final ConfigurationItem<Boolean> ON_JOIN = item("on-join", false);
         public final ConfigurationItem<Boolean> ON_START = item("on-start", true);
     }
-
-    public static final ConfigurationList<String> RULES = list("rules", String.class);
 }

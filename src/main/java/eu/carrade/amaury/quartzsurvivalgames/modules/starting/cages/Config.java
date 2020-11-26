@@ -31,28 +31,25 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.starting.cages;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-import org.bukkit.Material;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import java.io.File;
+import org.bukkit.Material;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
 
+public class Config extends ConfigurationInstance {
     public static final ConfigurationItem<Cage.CageType> TYPE = item("type", Cage.CageType.TEAM_COLOR_TRANSPARENT);
     public static final ConfigurationItem<Material> CUSTOM_BLOCK = item("custom-block", Material.BARRIER);
     public static final ConfigurationItem<Boolean> BUILD_CEILING = item("build-ceiling", false);
     public static final ConfigurationItem<Boolean> VISIBLE_WALLS = item("visible-walls", true);
     public static final ConfigurationItem<Integer> RADIUS = item("radius", 2);
     public static final ConfigurationItem<Integer> HEIGHT = item("height", 3);
+    public Config(File file) {
+        super(file);
+    }
 }

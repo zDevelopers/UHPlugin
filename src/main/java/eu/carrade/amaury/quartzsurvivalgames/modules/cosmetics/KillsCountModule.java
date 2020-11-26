@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -41,50 +42,48 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.players.Al
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.players.PlayerResurrectedEvent;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.sidebar.SidebarInjector;
 import fr.zcraft.quartzlib.components.i18n.I;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-import java.util.*;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Kills Count",
         description = "Displays the player's kills count in the sidebar.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.COSMETICS,
         icon = Material.DIAMOND_SWORD
 )
-public class KillsCountModule extends QSGModule
-{
+public class KillsCountModule extends QSGModule {
     private final Map<UUID, Set<UUID>> kills = new HashMap<>();
 
     @Override
-    public void injectIntoSidebar(final Player player, final SidebarInjector injector)
-    {
+    public void injectIntoSidebar(final Player player, final SidebarInjector injector) {
         injector.injectLines(
                 SidebarInjector.SidebarPriority.BOTTOM, true,
-                I.tn("{white}{0}{gray} player killed", "{white}{0}{gray} players killed", getKillsFor(player.getUniqueId()).size())
+                I.tn("{white}{0}{gray} player killed", "{white}{0}{gray} players killed",
+                        getKillsFor(player.getUniqueId()).size())
         );
     }
 
-    private Set<UUID> getKillsFor(final UUID playerID)
-    {
+    private Set<UUID> getKillsFor(final UUID playerID) {
         return kills.computeIfAbsent(playerID, uuid -> new HashSet<>());
     }
 
     @EventHandler
-    public void onPlayerDeath(final AlivePlayerDeathEvent ev)
-    {
-        if (ev.getPlayer().isOnline() && ev.getPlayer().getPlayer().getKiller() != null)
-        {
+    public void onPlayerDeath(final AlivePlayerDeathEvent ev) {
+        if (ev.getPlayer().isOnline() && ev.getPlayer().getPlayer().getKiller() != null) {
             getKillsFor(ev.getPlayer().getPlayer().getKiller().getUniqueId()).add(ev.getPlayer().getUniqueId());
         }
     }
 
     @EventHandler
-    public void onPlayerResurrect(final PlayerResurrectedEvent ev)
-    {
+    public void onPlayerResurrect(final PlayerResurrectedEvent ev) {
         kills.values().forEach(playerKills -> playerKills.remove(ev.getPlayer().getUniqueId()));
     }
 }

@@ -31,12 +31,14 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.compass;
 
 import eu.carrade.amaury.quartzsurvivalgames.utils.RecipesUtils;
 import fr.zcraft.quartzlib.core.QuartzComponent;
 import fr.zcraft.quartzlib.tools.items.CraftingRecipes;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
+import java.util.ArrayList;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -51,10 +53,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
-import java.util.ArrayList;
-
-public class CompassRecipes extends QuartzComponent implements Listener
-{
+public class CompassRecipes extends QuartzComponent implements Listener {
     private final Recipe VANILLA_RECIPE = CraftingRecipes.shaped(
             new ItemStack(Material.COMPASS),
             " A ",
@@ -87,19 +86,18 @@ public class CompassRecipes extends QuartzComponent implements Listener
      * @param matrix The content of the crafting inventory.
      * @return true if the recipe is an alternate recipe for the compass.
      */
-    public boolean isValidCompassRecipe(final ItemStack[] matrix)
-    {
-        if (matrix.length <= 5)
-        {
+    public boolean isValidCompassRecipe(final ItemStack[] matrix) {
+        if (matrix.length <= 5) {
             return false; // Small crafting grid
         }
 
 
         // 0: is it fully filled?
 
-        for (int i = 0; i < 9; i++)
-        {
-            if (matrix[i] == null) return false;
+        for (int i = 0; i < 9; i++) {
+            if (matrix[i] == null) {
+                return false;
+            }
         }
 
 
@@ -115,8 +113,7 @@ public class CompassRecipes extends QuartzComponent implements Listener
                 && iron2.equals(Material.IRON_INGOT)
                 && iron3.equals(Material.IRON_INGOT)
                 && iron4.equals(Material.IRON_INGOT)
-                && centralIngredient.equals(getCentralIngredient())))
-        {
+                && centralIngredient.equals(getCentralIngredient()))) {
             return false;
         }
 
@@ -135,10 +132,8 @@ public class CompassRecipes extends QuartzComponent implements Listener
                 && corners.contains(Material.GUNPOWDER);
     }
 
-    private Material getCentralIngredient()
-    {
-        switch (Config.RECIPE.get())
-        {
+    private Material getCentralIngredient() {
+        switch (Config.RECIPE.get()) {
             case MEDIUM:
                 return Material.ENDER_PEARL;
 
@@ -150,19 +145,18 @@ public class CompassRecipes extends QuartzComponent implements Listener
         }
     }
 
-    @EventHandler (ignoreCancelled = true)
-    public void onInventoryClick(final InventoryClickEvent ev)
-    {
-        if (Config.RECIPE.get() == CompassRecipe.DEFAULT) return;
+    @EventHandler(ignoreCancelled = true)
+    public void onInventoryClick(final InventoryClickEvent ev) {
+        if (Config.RECIPE.get() == CompassRecipe.DEFAULT) {
+            return;
+        }
 
-        if (ev.getWhoClicked() instanceof Player)
-        {
+        if (ev.getWhoClicked() instanceof Player) {
             final Inventory inventory = ev.getInventory();
 
             // Workaround to fix the crafting grid being not updated when the item is taken
             // from the grid.
-            if (inventory instanceof CraftingInventory && ev.getSlotType() == InventoryType.SlotType.RESULT)
-            {
+            if (inventory instanceof CraftingInventory && ev.getSlotType() == InventoryType.SlotType.RESULT) {
                 RunTask.later(
                         () -> ev.getViewers().stream()
                                 .filter(viewer -> viewer instanceof Player)
@@ -174,18 +168,15 @@ public class CompassRecipes extends QuartzComponent implements Listener
 
             /* *** Allows any shape for the loots in the compass recipe. *** */
 
-            if (inventory instanceof CraftingInventory)
-            {
+            if (inventory instanceof CraftingInventory) {
                 // This is ran one tick after the click because when the event is fired, the inventory
                 // object is not updated, and so the result of the isValidCompassResult is invalid.
 
                 RunTask.later(() ->
                 {
-                    if (isValidCompassRecipe(((CraftingInventory) inventory).getMatrix()))
-                    {
+                    if (isValidCompassRecipe(((CraftingInventory) inventory).getMatrix())) {
                         // Puts the compass in the result slot
-                        if (ev.getSlotType() == InventoryType.SlotType.CRAFTING)
-                        {
+                        if (ev.getSlotType() == InventoryType.SlotType.CRAFTING) {
                             ((CraftingInventory) inventory).setResult(new ItemStack(Material.COMPASS));
                             ev.setResult(Event.Result.ALLOW);
 
@@ -194,20 +185,17 @@ public class CompassRecipes extends QuartzComponent implements Listener
 
                         // Consumes the materials in the crafting grid.
                         // Because this is not an "official" recipe, we need to do that manually.
-                        else if (ev.getSlotType() == InventoryType.SlotType.RESULT)
-                        {
+                        else if (ev.getSlotType() == InventoryType.SlotType.RESULT) {
                             int index = 1;
-                            for (ItemStack stack : ((CraftingInventory) inventory).getMatrix())
-                            {
-                                if (stack == null) continue;
+                            for (ItemStack stack : ((CraftingInventory) inventory).getMatrix()) {
+                                if (stack == null) {
+                                    continue;
+                                }
 
-                                if (stack.getAmount() != 1)
-                                {
+                                if (stack.getAmount() != 1) {
                                     stack.setAmount(stack.getAmount() - 1);
                                     inventory.setItem(index, stack);
-                                }
-                                else
-                                {
+                                } else {
                                     inventory.setItem(index, new ItemStack(Material.AIR));
                                 }
 
@@ -225,17 +213,16 @@ public class CompassRecipes extends QuartzComponent implements Listener
         }
     }
 
-    @EventHandler (ignoreCancelled = true)
-    public void onInventoryDrag(final InventoryDragEvent ev)
-    {
-        if (Config.RECIPE.get() == CompassRecipe.DEFAULT) return;
+    @EventHandler(ignoreCancelled = true)
+    public void onInventoryDrag(final InventoryDragEvent ev) {
+        if (Config.RECIPE.get() == CompassRecipe.DEFAULT) {
+            return;
+        }
 
-        if (ev.getInventory() instanceof CraftingInventory)
-        {
+        if (ev.getInventory() instanceof CraftingInventory) {
             RunTask.later(() ->
             {
-                if (isValidCompassRecipe(((CraftingInventory) ev.getInventory()).getMatrix()))
-                {
+                if (isValidCompassRecipe(((CraftingInventory) ev.getInventory()).getMatrix())) {
                     ((CraftingInventory) ev.getInventory()).setResult(new ItemStack(Material.COMPASS));
                     ((Player) ev.getWhoClicked()).updateInventory(); // deprecated but needed
                 }
@@ -244,16 +231,13 @@ public class CompassRecipes extends QuartzComponent implements Listener
     }
 
     @EventHandler
-    private void onPreCraft(final PrepareItemCraftEvent ev)
-    {
-        if (Config.RECIPE.get() != CompassRecipe.DEFAULT && RecipesUtils.areSimilar(ev.getRecipe(), VANILLA_RECIPE))
-        {
+    private void onPreCraft(final PrepareItemCraftEvent ev) {
+        if (Config.RECIPE.get() != CompassRecipe.DEFAULT && RecipesUtils.areSimilar(ev.getRecipe(), VANILLA_RECIPE)) {
             ev.getInventory().setResult(new ItemStack(Material.AIR));
         }
     }
 
-    public enum CompassRecipe
-    {
+    public enum CompassRecipe {
         /**
          * The default recipe with redstone and iron.
          */

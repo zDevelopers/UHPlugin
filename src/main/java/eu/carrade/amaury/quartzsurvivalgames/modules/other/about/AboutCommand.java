@@ -31,35 +31,32 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.other.about;
 
-import eu.carrade.amaury.quartzsurvivalgames.utils.CommandUtils;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
+import eu.carrade.amaury.quartzsurvivalgames.utils.CommandUtils;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.components.i18n.I18n;
 
 
-@CommandInfo (name = "about")
-public class AboutCommand extends Command
-{
+@CommandInfo(name = "about")
+public class AboutCommand extends Command {
     @Override
-    protected void run()
-    {
+    protected void run() {
         final AboutModule about = QSG.module(AboutModule.class);
 
         CommandUtils.displaySeparator(sender);
 
-        info(I.t("{yellow}{0} - version {1}", about.getPluginName(), about.getVersion()) + " - " + about.getStability().toString().toLowerCase());
+        info(I.t("{yellow}{0} - version {1}", about.getPluginName(), about.getVersion()) + " - " +
+                about.getStability().toString().toLowerCase());
         info(I.t("Plugin made with love by {0}.", about.getFormattedAuthors()));
 
-        if (about.getGitVersion() != null)
-        {
+        if (about.getGitVersion() != null) {
             info(I.t("Build number: {0}.", about.getGitVersion()));
-        }
-        else
-        {
+        } else {
             info(I.t("Build number not available."));
         }
 
@@ -67,8 +64,10 @@ public class AboutCommand extends Command
 
         info("");
         info(I.t("{aqua}------ Translations ------"));
-        info(I.t("Current language: {0} (translated by {1}).", I18n.getPrimaryLocale(), I18n.getTranslationTeam(I18n.getPrimaryLocale())));
-        info(I.t("Fallback language: {0} (translated by {1}).", I18n.getFallbackLocale(), I18n.getTranslationTeam(I18n.getFallbackLocale())));
+        info(I.t("Current language: {0} (translated by {1}).", I18n.getPrimaryLocale(),
+                I18n.getTranslationTeam(I18n.getPrimaryLocale())));
+        info(I.t("Fallback language: {0} (translated by {1}).", I18n.getFallbackLocale(),
+                I18n.getTranslationTeam(I18n.getFallbackLocale())));
 
         info("");
         info(I.t("{aqua}------ License ------"));

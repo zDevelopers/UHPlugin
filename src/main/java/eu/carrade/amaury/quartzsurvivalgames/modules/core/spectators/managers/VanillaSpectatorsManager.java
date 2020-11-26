@@ -29,53 +29,47 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators.managers;
 
-
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
 
 
 /**
  * Vanilla spectator mode
  */
-public class VanillaSpectatorsManager extends SpectatorsManager
-{
+public class VanillaSpectatorsManager extends SpectatorsManager {
     /**
      * Stores the previous gamemodes of the players.
      */
-    private Map<UUID, GameMode> oldGameModes = new HashMap<>();
+    private final Map<UUID, GameMode> oldGameModes = new HashMap<>();
 
 
     @Override
-    public void setSpectating(final Player player, final boolean spectating)
-    {
-        if (player == null)
+    public void setSpectating(final Player player, final boolean spectating) {
+        if (player == null) {
             return;
+        }
 
-        if (spectating)
-        {
-            if (player.getGameMode() != GameMode.SPECTATOR)
-            {
+        if (spectating) {
+            if (player.getGameMode() != GameMode.SPECTATOR) {
                 oldGameModes.put(player.getUniqueId(), player.getGameMode());
                 player.setGameMode(GameMode.SPECTATOR);
             }
-        }
-        else
-        {
+        } else {
             player.setGameMode(oldGameModes.getOrDefault(player.getUniqueId(), Bukkit.getDefaultGameMode()));
             oldGameModes.remove(player.getUniqueId());
         }
     }
 
     @Override
-    public boolean isSpectating(Player player)
-    {
+    public boolean isSpectating(Player player) {
         return player != null && player.getGameMode() == GameMode.SPECTATOR;
     }
 }

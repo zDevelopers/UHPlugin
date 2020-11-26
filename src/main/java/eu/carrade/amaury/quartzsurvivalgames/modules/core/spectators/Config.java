@@ -31,23 +31,22 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import java.io.File;
+
+public class Config extends ConfigurationInstance {
+    static public final ConfigurationItem<Boolean> SPECTATORS_CAN_JOIN = item("spectators-can-join", true);
+    static public final ConfigurationItem<Boolean> UNKNOWN_SPECTATORS_CAN_JOIN =
+            item("unknown-spectators-can-join", true);
+    static public final ConfigurationItem<Boolean> NOTIFY_ON_UNKNOWN_SPECTATORS_TRYING_TO_JOIN =
+            item("notify-on-unknown-spectators-trying-to-join", true);
+    public Config(File file) {
         super(file);
     }
-
-    static public final ConfigurationItem<Boolean> SPECTATORS_CAN_JOIN = item("spectators-can-join", true);
-    static public final ConfigurationItem<Boolean> UNKNOWN_SPECTATORS_CAN_JOIN = item("unknown-spectators-can-join", true);
-    static public final ConfigurationItem<Boolean> NOTIFY_ON_UNKNOWN_SPECTATORS_TRYING_TO_JOIN = item("notify-on-unknown-spectators-trying-to-join", true);
 }

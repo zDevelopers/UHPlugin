@@ -29,26 +29,23 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationList;
-import org.bukkit.Location;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.list;
 
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationList;
+import java.io.File;
+import org.bukkit.Location;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
 
+public class Config extends ConfigurationInstance {
     public static final ConfigurationItem<Boolean> AVOID_WATER = item("avoid-water", true);
     public static final ConfigurationList<Location> SPAWN_POINTS = list("spawn-points", Location.class);
+    public Config(File file) {
+        super(file);
+    }
 }

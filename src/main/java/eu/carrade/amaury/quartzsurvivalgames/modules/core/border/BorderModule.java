@@ -51,16 +51,18 @@ import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.Titles;
-import org.bukkit.*;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 
 
 @ModuleInfo(
@@ -73,15 +75,13 @@ import java.util.stream.Collectors;
         internal = true
 )
 public class BorderModule extends QSGModule {
-    private MapShape mapShape = null;
-    private WorldBorder border = null;
-
-    private WorldBorderDependency worldBorderDependency = null;
-
     /**
      * The lines in the sidebar, calculated once for every player. Caching purposes.
      */
     private final List<String> sidebar = new ArrayList<>();
+    private MapShape mapShape = null;
+    private WorldBorder border = null;
+    private WorldBorderDependency worldBorderDependency = null;
 
     @Override
     public void onEnable() {
@@ -167,6 +167,15 @@ public class BorderModule extends QSGModule {
     }
 
     /**
+     * Returns the current shape of the map.
+     *
+     * @return The shape.
+     */
+    public MapShape getMapShape() {
+        return mapShape;
+    }
+
+    /**
      * Sets the shape of the map. Updates the WorldBorder too.
      *
      * @param shape The shape.
@@ -174,15 +183,6 @@ public class BorderModule extends QSGModule {
     public void setMapShape(MapShape shape) {
         this.mapShape = shape;
         border.setShape(shape);
-    }
-
-    /**
-     * Returns the current shape of the map.
-     *
-     * @return The shape.
-     */
-    public MapShape getMapShape() {
-        return mapShape;
     }
 
     /**

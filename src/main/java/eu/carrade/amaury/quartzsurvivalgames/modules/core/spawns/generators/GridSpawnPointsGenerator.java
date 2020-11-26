@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns.generators;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.BorderModule;
@@ -36,18 +37,16 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.MapShape;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns.exceptions.CannotGenerateSpawnPointsException;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import eu.carrade.amaury.quartzsurvivalgames.utils.QSGUtils;
+import java.util.HashSet;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import java.util.HashSet;
-import java.util.Set;
 
-
-public class GridSpawnPointsGenerator implements SpawnPointsGenerator
-{
+public class GridSpawnPointsGenerator implements SpawnPointsGenerator {
     private final BorderModule borderModule = QSG.module(BorderModule.class);
 
     /**
@@ -66,13 +65,13 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
      * @param zCenter                         The z coordinate of the point in the center of the
      *                                        region where the points will be generated.
      * @param avoidWater                      True if the generation have to avoid the water.
-     *
      * @return The spawn points generated.
      * @throws CannotGenerateSpawnPointsException In case of fail.
      */
     @Override
-    public Set<Location> generate(final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter, final boolean avoidWater) throws CannotGenerateSpawnPointsException
-    {
+    public Set<Location> generate(final World world, final int spawnCount, final int regionDiameter,
+                                  final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter,
+                                  final boolean avoidWater) throws CannotGenerateSpawnPointsException {
         // We starts the generation on a smaller grid, to avoid false outside tests if the point is on the edge
         final int usedRegionDiameter = regionDiameter - 1;
 
@@ -82,8 +81,7 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
 
         // The points are on a grid
         int neededColumnsCount = (int) Math.ceil(Math.sqrt(spawnCount));
-        if (borderModule.getMapShape() == MapShape.CIRCULAR)
-        {
+        if (borderModule.getMapShape() == MapShape.CIRCULAR) {
             // If the border is circular, the distance between two points needs to be decreased.
             // The space available is divided by PI/4, so the column count is multiplied by
             // this number.
@@ -91,8 +89,7 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
         }
 
         // IS impossible.
-        if (neededColumnsCount > maxColumnsCount)
-        {
+        if (neededColumnsCount > maxColumnsCount) {
             throw new CannotGenerateSpawnPointsException("Cannot generate spawn points on a grid: not enough space.");
         }
 
@@ -105,8 +102,7 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
         final int distanceBetweenTwoPoints = (int) ((double) usedRegionDiameter / ((double) (neededColumnsCount)));
 
         // Check related to the case the column count was increased.
-        if (distanceBetweenTwoPoints < minimalDistanceBetweenTwoPoints)
-        {
+        if (distanceBetweenTwoPoints < minimalDistanceBetweenTwoPoints) {
             throw new CannotGenerateSpawnPointsException("Cannot generate spawn points on a grid: not enough space.");
         }
 
@@ -130,35 +126,30 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
         // We generates the points until there isn't any point left to place. The loop will be broken.
         // On each step of this loop, a square is generated.
         generationLoop:
-        while (true)
-        {
+        while (true) {
             currentPoint = currentSquareStartPoint.clone();
 
             // First point
-            if (borderModule.isInsideBorder(currentPoint, regionDiameter) && QSGUtils.searchSafeSpot(currentPoint) != null)
-            {
+            if (borderModule.isInsideBorder(currentPoint, regionDiameter)
+                    && QSGUtils.searchSafeSpot(currentPoint) != null) {
                 generatedPoints.add(currentPoint.clone());
                 countGeneratedPoints++;
 
-                if (countGeneratedPoints >= spawnCount)
-                {
+                if (countGeneratedPoints >= spawnCount) {
                     break;
                 }
             }
 
             // A step for each side, j is the side (see addOnSide).
-            for (int j = 0; j < 4; j++)
-            {
+            for (int j = 0; j < 4; j++) {
                 int plottedSize = 0;
 
-                while (plottedSize < currentSquareSize)
-                {
+                while (plottedSize < currentSquareSize) {
                     currentPoint.add(addOnSide[j]);
                     plottedSize += distanceBetweenTwoPoints;
 
                     // Inside the border?
-                    if (!borderModule.isInsideBorder(currentPoint, regionDiameter))
-                    {
+                    if (!borderModule.isInsideBorder(currentPoint, regionDiameter)) {
                         continue;
                     }
 
@@ -166,18 +157,16 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
                     final Block surfaceBlock = surfaceAirBlock.getRelative(BlockFace.DOWN);
 
                     // Safe spot available?
-                    if ((world.getEnvironment() == World.Environment.NORMAL || world.getEnvironment() == World.Environment.THE_END) && !QSGUtils
+                    if ((world.getEnvironment() == World.Environment.NORMAL
+                            || world.getEnvironment() == World.Environment.THE_END) && !QSGUtils
                             .isSafeSpot(surfaceAirBlock.getLocation())
-                            || QSGUtils.searchSafeSpot(currentPoint) == null)
-                    {
+                            || (QSGUtils.searchSafeSpot(currentPoint) == null)) {
                         continue; // not safe: nope
                     }
 
                     // Not above the water?
-                    if (avoidWater)
-                    {
-                        if (surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.WATER)
-                        {
+                    if (avoidWater) {
+                        if (surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.WATER) {
                             continue;
                         }
                     }
@@ -185,8 +174,7 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
                     generatedPoints.add(currentPoint.clone());
                     countGeneratedPoints++;
 
-                    if (countGeneratedPoints >= spawnCount)
-                    {
+                    if (countGeneratedPoints >= spawnCount) {
                         break generationLoop;
                     }
                 }
@@ -196,8 +184,7 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
             currentSquareSize -= 2 * distanceBetweenTwoPoints;
             currentSquareStartPoint.add(new Location(world, -distanceBetweenTwoPoints, 0, distanceBetweenTwoPoints));
 
-            if (currentSquareSize < distanceBetweenTwoPoints)
-            {
+            if (currentSquareSize < distanceBetweenTwoPoints) {
                 // This may happens if we generates the points for a circular world
                 break;
             }
@@ -205,13 +192,10 @@ public class GridSpawnPointsGenerator implements SpawnPointsGenerator
 
         // If the generation was broken (circular world, not enough positions),
         // the generation was incomplete.
-        if (countGeneratedPoints >= spawnCount)
-        {
+        if (countGeneratedPoints >= spawnCount) {
             // Generation OK
             return generatedPoints;
-        }
-        else
-        {
+        } else {
             throw new CannotGenerateSpawnPointsException("Cannot generate the spawn points: not enough space.");
         }
     }

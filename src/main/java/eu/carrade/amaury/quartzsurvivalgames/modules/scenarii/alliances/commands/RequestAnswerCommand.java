@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.scenarii.alliances.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.scenarii.alliances.AllianceRequest;
@@ -40,48 +41,45 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
+import java.util.UUID;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
-@CommandInfo (name = "alliance-request-answer", usageParameters = "<requestUUID> <yes|no> §8(internal)")
-public class RequestAnswerCommand extends Command
-{
+@CommandInfo(name = "alliance-request-answer", usageParameters = "<requestUUID> <yes|no> §8(internal)")
+public class RequestAnswerCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
-        if (args.length < 2)
-        {
-            QSG.log(AlliancesModule.class).info("{0} (badly) used the alliance-request-answer directly.", sender.getName());
-            throwInvalidArgument(I.t("Invalid command usage. But, you shouldn't use this command directly. What are you doing?"));
+    protected void run() throws CommandException {
+        if (args.length < 2) {
+            QSG.log(AlliancesModule.class)
+                    .info("{0} (badly) used the alliance-request-answer directly.", sender.getName());
+            throwInvalidArgument(
+                    I.t("Invalid command usage. But, you shouldn't use this command directly. What are you doing?"));
         }
 
-        try
-        {
+        try {
             final Player player = playerSender();
             final UUID requestID = UUID.fromString(args[0]);
             final boolean answer = getBooleanParameter(1);
 
             final AllianceRequest request = QSG.module(AlliancesModule.class).getRequestByID(requestID);
 
-            if (request != null)
-            {
-                try
-                {
+            if (request != null) {
+                try {
                     QSG.log(AlliancesModule.class).info("{0}: reply from {1}: {2}", request, player.getName(), answer);
                     request.registerApproval(player.getUniqueId(), answer);
                 }
-                catch (IllegalArgumentException e)
-                {
-                    QSG.log(AlliancesModule.class).warning("{0}: {1} tried to reply {2} but was not in the approvers list.", request, player.getName(), answer);
+                catch (IllegalArgumentException e) {
+                    QSG.log(AlliancesModule.class)
+                            .warning("{0}: {1} tried to reply {2} but was not in the approvers list.", request,
+                                    player.getName(), answer);
                     error(I.t("You weren't asked for your opinion regarding this request."));
                 }
+            } else {
+                error(I.t("This request has expired."));
             }
-            else error(I.t("This request has expired."));
         }
-        catch (IllegalArgumentException e)
-        {
-            QSG.log(AlliancesModule.class).info("{0} (badly) used the alliance-request-answer directly.", sender.getName());
+        catch (IllegalArgumentException e) {
+            QSG.log(AlliancesModule.class)
+                    .info("{0} (badly) used the alliance-request-answer directly.", sender.getName());
             throwInvalidArgument("Malformed UUID.");
         }
     }

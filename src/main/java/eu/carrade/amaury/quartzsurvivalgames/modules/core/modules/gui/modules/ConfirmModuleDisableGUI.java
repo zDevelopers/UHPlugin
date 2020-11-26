@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.gui.modules;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleWrapper;
@@ -44,29 +45,30 @@ import java.util.stream.Collectors;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-public class ConfirmModuleDisableGUI extends FramedModuleGUI
-{
-    public ConfirmModuleDisableGUI(final ModuleWrapper module)
-    {
+public class ConfirmModuleDisableGUI extends FramedModuleGUI {
+    public ConfirmModuleDisableGUI(final ModuleWrapper module) {
         super(module);
     }
 
     @Override
-    protected void onUpdate()
-    {
+    protected void onUpdate() {
         setTitle(I.t("{darkgray}{0} » {black}Disable", module.getName()));
         setSize(5 * 9);
 
-        final List<String> title = GuiUtils.generateLore(I.t("If you disable this module, you won't be able to re-enable it."), 38);
+        final List<String> title =
+                GuiUtils.generateLore(I.t("If you disable this module, you won't be able to re-enable it."), 38);
         final String firstTitleLine = title.get(0);
 
         title.remove(0);
 
         action("", 22, MojangHead.QUESTION.asItemBuilder()
                 .title(ChatColor.RED, ChatColor.BOLD + firstTitleLine)
-                .lore(title.stream().map(line -> ChatColor.RED + "" + ChatColor.BOLD + line).collect(Collectors.toList()))
+                .lore(title.stream().map(line -> ChatColor.RED + "" + ChatColor.BOLD + line)
+                        .collect(Collectors.toList()))
                 .loreSeparator()
-                .longLore(ChatColor.GRAY, I.t("This module cannot be re-loaded after its original load period. This means that if you disable this module, you won't be able to re-enable it during this game."), 38)
+                .longLore(ChatColor.GRAY,
+                        I.t("This module cannot be re-loaded after its original load period. This means that if you disable this module, you won't be able to re-enable it during this game."),
+                        38)
                 .longLore(ChatColor.WHITE, I.t("Are you sure you want to disable {0}?", module.getName()), 38)
                 .item());
 
@@ -76,24 +78,22 @@ public class ConfirmModuleDisableGUI extends FramedModuleGUI
 
         final ItemStackBuilder yes = new ItemStackBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .title(ChatColor.RED, ChatColor.BOLD + I.t("Yes, disable"))
-                .longLore(ChatColor.GRAY, I.t("Disable {0} without any possibility of re-enabling it", module.getName()));
+                .longLore(ChatColor.GRAY,
+                        I.t("Disable {0} without any possibility of re-enabling it", module.getName()));
 
-        for (int slot : new int[] {10, 11, 19, 20, 28, 29})
-        {
+        for (int slot : new int[] {10, 11, 19, 20, 28, 29}) {
             action("cancel", slot, no);
             action("disable", slot + 5, yes);
         }
     }
 
     @GuiAction
-    protected void cancel()
-    {
+    protected void cancel() {
         close();
     }
 
     @GuiAction
-    protected void disable()
-    {
+    protected void disable() {
         module.setEnabled(false);
         close();
     }

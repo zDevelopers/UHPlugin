@@ -29,26 +29,36 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators.managers;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators.SpectatorPlusDependency;
 import fr.zcraft.quartzlib.core.QuartzLib;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 
 /**
  * Represents a spectator manager, able to put players in or remove players from spectator mode.
  */
-public abstract class SpectatorsManager
-{
+public abstract class SpectatorsManager {
     private final static SpectatorPlusDependency spectatorPlusDependency;
 
-    static
-    {
+    static {
         spectatorPlusDependency = QuartzLib.loadComponent(SpectatorPlusDependency.class);
+    }
+
+    /**
+     * @return an instance of a {@link SpectatorsManager}: {@link SPlusSpectatorsManager} if the
+     * SpectatorPlus plugin is available; {@link VanillaSpectatorsManager} else.
+     */
+    public static SpectatorsManager getInstance() {
+        if (spectatorPlusDependency.isEnabled()) {
+            return new SPlusSpectatorsManager(spectatorPlusDependency.getSPAPI());
+        } else {
+            return new VanillaSpectatorsManager();
+        }
     }
 
     /**
@@ -63,7 +73,6 @@ public abstract class SpectatorsManager
      * Checks if the given player is currently spectating.
      *
      * @param player The player.
-     *
      * @return {@code true} if spectating.
      */
     public abstract boolean isSpectating(final Player player);
@@ -74,8 +83,7 @@ public abstract class SpectatorsManager
      * @param playerID   The player's UUID.
      * @param spectating {@code true} to enable the spectator mode; {@code false} to disable it.
      */
-    public void setSpectating(final UUID playerID, final boolean spectating)
-    {
+    public void setSpectating(final UUID playerID, final boolean spectating) {
         setSpectating(Bukkit.getPlayer(playerID), spectating);
     }
 
@@ -83,24 +91,9 @@ public abstract class SpectatorsManager
      * Checks if the given player is currently spectating.
      *
      * @param playerID The player's UUID.
-     *
      * @return {@code true} if spectating.
      */
-    public boolean isSpectating(final UUID playerID)
-    {
+    public boolean isSpectating(final UUID playerID) {
         return isSpectating(Bukkit.getPlayer(playerID));
-    }
-
-
-    /**
-     * @return an instance of a {@link SpectatorsManager}: {@link SPlusSpectatorsManager} if the
-     * SpectatorPlus plugin is available; {@link VanillaSpectatorsManager} else.
-     */
-    public static SpectatorsManager getInstance()
-    {
-        if (spectatorPlusDependency.isEnabled())
-            return new SPlusSpectatorsManager(spectatorPlusDependency.getSPAPI());
-        else
-            return new VanillaSpectatorsManager();
     }
 }

@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.health;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -40,24 +41,21 @@ import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.utilities.health.commands.HealAllCommand;
 import eu.carrade.amaury.quartzsurvivalgames.modules.utilities.health.commands.HealCommand;
 import fr.zcraft.quartzlib.components.commands.Command;
-import org.bukkit.Material;
-
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.Material;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Health Commands",
         description = "Provides commands to update health of some or all players.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.UTILITIES,
         icon = Material.GOLDEN_APPLE
 )
-public class HealthModule extends QSGModule
-{
+public class HealthModule extends QSGModule {
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Arrays.asList(HealCommand.class, HealAllCommand.class);
     }
 }

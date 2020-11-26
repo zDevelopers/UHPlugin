@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.scenarii.alliances;
 
 import com.google.common.collect.ImmutableMap;
@@ -50,16 +51,21 @@ import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzteams.QuartzTeam;
 import fr.zcraft.quartzteams.QuartzTeams;
 import fr.zcraft.quartzteams.colors.TeamColor;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import java.util.*;
-import java.util.stream.Collectors;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Alliances Scenario",
         short_description = "Provides an alliances-based game, where players form alliances only " +
                 "by meeting in the game, everyone being alone at the beginning.",
@@ -84,16 +90,13 @@ import java.util.stream.Collectors;
         settings = Config.class,
         can_be_loaded_late = false
 )
-public class AlliancesModule extends QSGModule
-{
-    private GameModule game = null;
-
+public class AlliancesModule extends QSGModule {
     private final Map<UUID, Integer> alliancesLeft = new HashMap<>();
     private final Map<UUID, AllianceRequest> ongoingRequests = new HashMap<>();
+    private GameModule game = null;
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         game = QSG.module(GameModule.class);
 
         // We update some settings
@@ -102,13 +105,14 @@ public class AlliancesModule extends QSGModule
         eu.carrade.amaury.quartzsurvivalgames.modules.core.teams.Config.SIDEBAR.TITLE.USE_TEAM_NAME.set(true);
 
         QuartzTeams.settings()
-            .setTeamsOptions(
-                eu.carrade.amaury.quartzsurvivalgames.modules.core.teams.Config.CAN_SEE_FRIENDLY_INVISIBLES.get(),
-                false,
-                false,
-                true // Important! As we use the same team names for lots of teams, as titles.
-            )
-            .setMaxPlayersPerTeam(Config.MAX_PLAYERS_PER_ALLIANCE.get());
+                .setTeamsOptions(
+                        eu.carrade.amaury.quartzsurvivalgames.modules.core.teams.Config.CAN_SEE_FRIENDLY_INVISIBLES
+                                .get(),
+                        false,
+                        false,
+                        true // Important! As we use the same team names for lots of teams, as titles.
+                )
+                .setMaxPlayersPerTeam(Config.MAX_PLAYERS_PER_ALLIANCE.get());
 
         QSG.ifLoaded(HawkModule.class, hawk -> hawk.getReport().settings().enableSummary(true, true, false));
 
@@ -118,14 +122,12 @@ public class AlliancesModule extends QSGModule
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Arrays.asList(AllianceRequestCommand.class, RequestAnswerCommand.class);
     }
 
     @Override
-    public Map<String, Class<? extends Command>> getCommandsAliases()
-    {
+    public Map<String, Class<? extends Command>> getCommandsAliases() {
         return ImmutableMap.of(
                 "alliance", AllianceRequestCommand.class,
                 "a", AllianceRequestCommand.class
@@ -135,10 +137,10 @@ public class AlliancesModule extends QSGModule
 
     /**
      * Inits the count of left alliances to the configured max if not already stored.
+     *
      * @param playerID The player to initialize the count for.
      */
-    private void initAlliancesCountIfRequired(final UUID playerID)
-    {
+    private void initAlliancesCountIfRequired(final UUID playerID) {
         alliancesLeft.putIfAbsent(playerID, Config.ALLIANCES_PER_PLAYER.get());
     }
 
@@ -146,10 +148,9 @@ public class AlliancesModule extends QSGModule
      * Consumes an amount of alliances for the given player.
      *
      * @param playerID The player's ID.
-     * @param amount The amount to consume.
+     * @param amount   The amount to consume.
      */
-    public void consumeAlliance(final UUID playerID, final int amount)
-    {
+    public void consumeAlliance(final UUID playerID, final int amount) {
         initAlliancesCountIfRequired(playerID);
         alliancesLeft.put(playerID, Math.max(0, alliancesLeft.get(playerID) - amount));
     }
@@ -160,8 +161,7 @@ public class AlliancesModule extends QSGModule
      * @param playerID The player's ID.
      * @return The amount of alliances left.
      */
-    public int getAlliancesLeft(final UUID playerID)
-    {
+    public int getAlliancesLeft(final UUID playerID) {
         initAlliancesCountIfRequired(playerID);
         return alliancesLeft.get(playerID);
     }
@@ -171,61 +171,55 @@ public class AlliancesModule extends QSGModule
      * borrows them and returns {@code true}. Else, returns {@code false}.
      *
      * @param playerID The player's ID.
-     * @param amount The amount of alliances to borrow.
-     *
+     * @param amount   The amount of alliances to borrow.
      * @return {@code true} if they could (and were) borrowed.
      */
-    public boolean consumeAlliancesIfPossible(final UUID playerID, final int amount)
-    {
-        if (getAlliancesLeft(playerID) >= amount)
-        {
+    public boolean consumeAlliancesIfPossible(final UUID playerID, final int amount) {
+        if (getAlliancesLeft(playerID) >= amount) {
             consumeAlliance(playerID, amount);
             return true;
+        } else {
+            return false;
         }
-        else return false;
     }
 
 
-    public void registerRequest(final AllianceRequest request)
-    {
+    public void registerRequest(final AllianceRequest request) {
         ongoingRequests.put(request.getUniqueId(), request);
     }
 
-    public void unregisterRequest(final AllianceRequest request)
-    {
+    public void unregisterRequest(final AllianceRequest request) {
         ongoingRequests.remove(request.getUniqueId());
     }
 
-    public AllianceRequest getRequestByID(final UUID requestID)
-    {
+    public AllianceRequest getRequestByID(final UUID requestID) {
         return ongoingRequests.get(requestID);
     }
 
-    public Set<AllianceRequest> getRequestsBySender(final UUID requestSenderID)
-    {
+    public Set<AllianceRequest> getRequestsBySender(final UUID requestSenderID) {
         return ongoingRequests.values().stream()
                 .filter(request -> request.getRequesterID().equals(requestSenderID))
                 .collect(Collectors.toSet());
     }
 
-    public AllianceRequest getRequestByCouple(final UUID requestSenderID, final UUID requestedID)
-    {
+    public AllianceRequest getRequestByCouple(final UUID requestSenderID, final UUID requestedID) {
         return ongoingRequests.values().stream()
                 .filter(request -> request.getRequesterID().equals(requestSenderID))
                 .filter(request -> request.getRequestedID().equals(requestedID))
                 .findAny().orElse(null);
     }
 
-    public int allianceSize(UUID playerID)
-    {
+    public int allianceSize(UUID playerID) {
         final QuartzTeam team = QuartzTeams.get().getTeamForPlayer(playerID);
 
-        if (team != null) return allianceSize(team);
-        else return 1;
+        if (team != null) {
+            return allianceSize(team);
+        } else {
+            return 1;
+        }
     }
 
-    public int allianceSize(final QuartzTeam team)
-    {
+    public int allianceSize(final QuartzTeam team) {
         return (int) team.getPlayers().stream().filter(game::isAlive).count();
     }
 
@@ -235,9 +229,8 @@ public class AlliancesModule extends QSGModule
      * indistinguishable, and the game will be considered as a teams game, even with
      * everyone in solo.
      */
-    @EventHandler (priority = EventPriority.LOWEST)
-    private void onPreSpawnSelection(final BeforeTeleportationPhaseEvent ev)
-    {
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onPreSpawnSelection(final BeforeTeleportationPhaseEvent ev) {
         final SpectatorsModule spectators = QSG.module(SpectatorsModule.class);
 
         new HashSet<>(QuartzTeams.get().getTeams()).forEach(QuartzTeam::deleteTeam);

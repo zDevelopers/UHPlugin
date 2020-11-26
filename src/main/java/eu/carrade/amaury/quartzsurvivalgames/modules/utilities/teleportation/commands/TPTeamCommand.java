@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.teleportation.commands;
 
 import fr.zcraft.quartzlib.components.commands.CommandException;
@@ -39,31 +40,26 @@ import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzteams.QuartzTeam;
 import fr.zcraft.quartzteams.QuartzTeams;
 import fr.zcraft.quartzteams.texts.TextUtils;
+import java.util.stream.Collectors;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.util.stream.Collectors;
-
-@CommandInfo (name = "tp-team", usageParameters = "<x> <y> <z> \"<team name>\" | <target> \"<team name>\"", aliases = {"tpteam", "tpt"})
-public class TPTeamCommand extends WorldBasedCommand
-{
+@CommandInfo(name = "tp-team", usageParameters = "<x> <y> <z> \"<team name>\" | <target> \"<team name>\"", aliases = {
+        "tpteam", "tpt"})
+public class TPTeamCommand extends WorldBasedCommand {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         final String[] qargs = TextUtils.extractArgsWithQuotes(args, 0);
 
         // possibly /uh tp-team <x> <y> <z> "<team ...>"
-        if (qargs.length == 4)
-        {
+        if (qargs.length == 4) {
             final QuartzTeam team = QuartzTeams.get().getTeamByName(qargs[3]);
 
             // ok, the team exists.
-            if (team != null)
-            {
-                try
-                {
+            if (team != null) {
+                try {
                     final World world = getTargetWorld();
 
                     final double x = Integer.parseInt(args[0]) + 0.5;
@@ -76,30 +72,26 @@ public class TPTeamCommand extends WorldBasedCommand
                     success(I.t(
                             "The players in the team {0} ({1}) were teleported to ({2} ; {3} ; {4} ; {5}).",
                             team.getName(),
-                            String.join(", ", team.getPlayers().stream().map(OfflinePlayer::getName).collect(Collectors.toSet())),
+                            String.join(", ",
+                                    team.getPlayers().stream().map(OfflinePlayer::getName).collect(Collectors.toSet())),
                             world.getName(), x, y, z
                     ));
 
                     return;
                 }
-                catch (NumberFormatException e)
-                {
+                catch (NumberFormatException e) {
                     throwInvalidArgument(I.t("{ce}The coordinates must be three valid numbers."));
                 }
             }
         }
 
         // /uh tp team <target> "<team ...>"
-        if (qargs.length == 2)
-        {
+        if (qargs.length == 2) {
             final QuartzTeam team = QuartzTeams.get().getTeamByName(qargs[1]);
 
-            if (team == null)
-            {
+            if (team == null) {
                 throwInvalidArgument(I.t("{ce}This team is not registered."));
-            }
-            else
-            {
+            } else {
                 final Player player = getPlayerParameter(0);
                 team.teleportTo(player.getLocation());
 
@@ -107,7 +99,8 @@ public class TPTeamCommand extends WorldBasedCommand
                 success(I.t(
                         "The players in the team {0} ({1}) were teleported to the player {2}.",
                         team.getName(),
-                        String.join(", ", team.getPlayers().stream().map(OfflinePlayer::getName).collect(Collectors.toSet())),
+                        String.join(", ",
+                                team.getPlayers().stream().map(OfflinePlayer::getName).collect(Collectors.toSet())),
                         player.getName()
                 ));
             }

@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.other;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -51,13 +52,10 @@ import org.bukkit.event.EventHandler;
         category = ModuleCategory.OTHER,
         icon = Material.SLIME_BLOCK
 )
-public class PomfModule extends QSGModule
-{
+public class PomfModule extends QSGModule {
     @EventHandler
-    public void onEpisodeEnds(final EpisodeChangedEvent ev)
-    {
-        if (ev.getNewEpisode() == 5)
-        {
+    public void onEpisodeEnds(final EpisodeChangedEvent ev) {
+        if (ev.getNewEpisode() == 5) {
             RunTask.later(() -> Bukkit.broadcastMessage("- Pomf -"), Config.LENGTH.get().divide(2).getSeconds() * 20L);
         }
     }

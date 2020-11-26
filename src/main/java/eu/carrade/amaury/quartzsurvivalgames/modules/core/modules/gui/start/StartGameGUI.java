@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.gui.start;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GamePhase;
@@ -48,13 +49,11 @@ import fr.zcraft.quartzteams.QuartzTeams;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-public class StartGameGUI extends ActionGui
-{
+public class StartGameGUI extends ActionGui {
     private TeleportationMode mode = TeleportationMode.NORMAL;
 
     @Override
-    protected void onUpdate()
-    {
+    protected void onUpdate() {
         setHeight(5);
         setTitle(I.tl(getPlayerLocale(), "{black}Ready to start the game?"));
 
@@ -64,59 +63,65 @@ public class StartGameGUI extends ActionGui
         action("fast", 11, new ItemStackBuilder(Material.MAGMA_CREAM)
                 .title(ChatColor.DARK_GREEN, ChatColor.BOLD + I.tl(getPlayerLocale(), "Fast Start"))
                 .loreSeparator()
-                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "Click here to start the game immediately. Players will be teleported at once (thus loading a lot of chunks in a few seconds) and the countdown will begin immediately after."), 52)
+                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(),
+                        "Click here to start the game immediately. Players will be teleported at once (thus loading a lot of chunks in a few seconds) and the countdown will begin immediately after."),
+                        52)
         );
 
         action("slow", 15, new ItemStackBuilder(Material.SLIME_BALL)
                 .title(ChatColor.GREEN, ChatColor.BOLD + I.tl(getPlayerLocale(), "Slow Start"))
                 .loreSeparator()
-                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "If your server is a little bit small, use this option to teleport players slowly, loading the chunks one player at a time. You'll have to confirm the game start using a link in the chat."), 52)
+                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(),
+                        "If your server is a little bit small, use this option to teleport players slowly, loading the chunks one player at a time. You'll have to confirm the game start using a link in the chat."),
+                        52)
         );
 
-        if (QuartzTeams.get().countTeams() > 0)
-        {
+        if (QuartzTeams.get().countTeams() > 0) {
             action("teleportation_mode", 13, new ItemStackBuilder()
                     .material(mode == TeleportationMode.NORMAL ? Material.SUGAR : Material.GLOWSTONE_DUST)
                     .title(ChatColor.YELLOW, ChatColor.BOLD + I.tl(getPlayerLocale(), "Teleportation Mode"))
                     .loreSeparator()
-                    .loreLine(mode == TeleportationMode.NORMAL ? prefixActive : prefixInactive, I.tl(getPlayerLocale(), "Teams together"))
-                    .longLore(mode == TeleportationMode.NORMAL ? ChatColor.GRAY : ChatColor.DARK_GRAY, I.tl(getPlayerLocale(), "Teams are teleported to a shared spawn point. Teammates start together."), 38)
+                    .loreLine(mode == TeleportationMode.NORMAL ? prefixActive : prefixInactive,
+                            I.tl(getPlayerLocale(), "Teams together"))
+                    .longLore(mode == TeleportationMode.NORMAL ? ChatColor.GRAY : ChatColor.DARK_GRAY,
+                            I.tl(getPlayerLocale(),
+                                    "Teams are teleported to a shared spawn point. Teammates start together."), 38)
                     .loreSeparator()
-                    .loreLine(mode == TeleportationMode.IGNORE_TEAMS ? prefixActive : prefixInactive, I.tl(getPlayerLocale(), "Ignoring teams"))
-                    .longLore(mode == TeleportationMode.NORMAL ? ChatColor.GRAY : ChatColor.DARK_GRAY, I.tl(getPlayerLocale(), "Players will be alone at the beginning, even if they are in a team."), 38)
+                    .loreLine(mode == TeleportationMode.IGNORE_TEAMS ? prefixActive : prefixInactive,
+                            I.tl(getPlayerLocale(), "Ignoring teams"))
+                    .longLore(mode == TeleportationMode.NORMAL ? ChatColor.GRAY : ChatColor.DARK_GRAY,
+                            I.tl(getPlayerLocale(),
+                                    "Players will be alone at the beginning, even if they are in a team."), 38)
             );
         }
 
         action("back", 31, MojangHead.ARROW_LEFT.asItemBuilder()
                 .title(ChatColor.RED, ChatColor.BOLD + I.tl(getPlayerLocale(), "Go Back"))
                 .loreSeparator()
-                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "Changed your mind? No problem, click here to go back without starting the game."), 38)
+                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(),
+                        "Changed your mind? No problem, click here to go back without starting the game."), 38)
         );
     }
 
     @GuiAction
-    protected void teleportation_mode()
-    {
+    protected void teleportation_mode() {
         mode = QSGUtils.getNextElement(mode, 1);
         update();
     }
 
     @GuiAction
-    protected void fast()
-    {
+    protected void fast() {
         start(false);
         close();
     }
 
     @GuiAction
-    protected void slow()
-    {
+    protected void slow() {
         start(true);
         close();
     }
 
-    private void start(final boolean slow)
-    {
+    private void start(final boolean slow) {
         QSG.game().setTeleportationMode(mode);
         QSG.game().setSlowMode(slow);
 
@@ -124,8 +129,7 @@ public class StartGameGUI extends ActionGui
     }
 
     @GuiAction
-    protected void back()
-    {
+    protected void back() {
         Gui.open(getPlayer(), new MainConfigGUI());
     }
 }

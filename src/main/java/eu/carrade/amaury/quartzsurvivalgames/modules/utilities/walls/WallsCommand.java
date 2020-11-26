@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.walls;
 
 import eu.carrade.amaury.quartzsurvivalgames.QuartzSurvivalGames;
@@ -45,41 +46,32 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.entity.Player;
 
 @CommandInfo(name = "build-walls", aliases = {"buildwalls", "generate-walls", "generatewalls"})
-public class WallsCommand extends Command
-{
+public class WallsCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         info(I.t("{cst}Generating the walls..."));
 
         final World world;
 
-        if (sender instanceof Player)
-        {
+        if (sender instanceof Player) {
             world = ((Player) sender).getWorld();
-        }
-        else if (sender instanceof BlockCommandSender)
-        {
+        } else if (sender instanceof BlockCommandSender) {
             world = ((BlockCommandSender) sender).getBlock().getWorld();
-        }
-        else
-        {
+        } else {
             world = QuartzSurvivalGames.get().getWorld(World.Environment.NORMAL);
             info(I.t("{ci}From the console, generating the walls of the default world, {0}", world.getName()));
         }
 
-        try
-        {
+        try {
             QSG.module(WallsModule.class).generateWalls(world);
         }
-        catch (CannotGenerateWallsException e)
-        {
-            error(I.t("{ce}Unable to generate the wall: see logs for details. The blocks set in the config are probably invalid."));
+        catch (CannotGenerateWallsException e) {
+            error(I.t(
+                    "{ce}Unable to generate the wall: see logs for details. The blocks set in the config are probably invalid."));
             return;
 
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             error(I.t("{ce}An error occurred, see console for details."));
             e.printStackTrace();
             return;

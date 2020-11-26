@@ -35,13 +35,12 @@ package eu.carrade.amaury.quartzsurvivalgames.modules.core.timers;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.events.TimerEndsEvent;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.events.TimerStartsEvent;
 import fr.zcraft.quartzlib.components.i18n.I;
-import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.UUID;
+import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 
 /**
@@ -49,12 +48,11 @@ import java.util.UUID;
  *
  * @author Amaury Carrade
  */
-public class Timer
-{
+public class Timer {
     private static final NumberFormat formatter = new DecimalFormat("00");
 
-    private UUID id;
-    private String name;
+    private final UUID id;
+    private final String name;
     private Boolean registered = false;
     private Boolean running = false;
     private Boolean displayed = false;
@@ -71,52 +69,50 @@ public class Timer
     private Boolean system = false;
 
 
-    public Timer(String name)
-    {
+    public Timer(String name) {
         Validate.notNull(name, "The name cannot be null");
 
         this.id = UUID.randomUUID(); // only used as a hashCode.
         this.name = name;
     }
 
-    public Timer(final String name, final int seconds)
-    {
+    public Timer(final String name, final int seconds) {
         this(name);
         setDuration(seconds);
     }
 
-    public Timer(final String name, final TimeDelta duration)
-    {
+    public Timer(final String name, final TimeDelta duration) {
         this(name, Math.toIntExact(duration.getSeconds()));
     }
 
     /**
-     * Sets the duration of the timer, in seconds.
+     * Formats a given number of seconds into [hh:]mm:ss.
      *
-     * @param seconds The duration.
+     * @param seconds The number of seconds.
+     * @return The formatted time (includes color codes).
      */
-    public void setDuration(int seconds)
-    {
-        this.duration = seconds;
-    }
+    public static String formatTime(final int seconds) {
+        final int secondsLeft = seconds % 60;
+        final int minutesLeft = (seconds % 3600) / 60;
+        final int hoursLeft = (int) Math.floor(seconds / 3600);
 
-    /**
-     * Sets the duration of the timer.
-     *
-     * @param duration The duration.
-     */
-    public void setDuration(TimeDelta duration)
-    {
-        this.duration = Math.toIntExact(duration.getSeconds());
+        if (hoursLeft != 0) {
+            /// Timer. {0} = hours; {1} = minutes; {2} = seconds.
+            return ChatColor.WHITE + I.t("{0}{gray}:{white}{1}{gray}:{white}{2}", formatter.format(hoursLeft),
+                    formatter.format(minutesLeft), formatter.format(secondsLeft));
+        } else {
+            /// Timer. {0} = minutes; {1} = seconds.
+            return ChatColor.WHITE +
+                    I.t("{white}{0}{gray}:{white}{1}", formatter.format(minutesLeft), formatter.format(secondsLeft));
+        }
     }
 
     /**
      * Starts this timer.
-     *
+     * <p>
      * If this is called while the timer is running, the timer is restarted.
      */
-    public void start()
-    {
+    public void start() {
         this.running = true;
         this.startTime = System.currentTimeMillis();
 
@@ -126,8 +122,7 @@ public class Timer
     /**
      * Stops this timer.
      */
-    public void stop()
-    {
+    public void stop() {
         stop(false);
     }
 
@@ -136,19 +131,14 @@ public class Timer
      *
      * @param wasUp If true, the timer was stopped because the timer was up.
      */
-    private void stop(boolean wasUp)
-    {
+    private void stop(boolean wasUp) {
         final TimerEndsEvent event = new TimerEndsEvent(this, wasUp);
         Bukkit.getServer().getPluginManager().callEvent(event);
 
-        if (isRegistered())
-        {
-            if (event.getRestart())
-            {
+        if (isRegistered()) {
+            if (event.getRestart()) {
                 start();
-            }
-            else
-            {
+            } else {
                 running = false;
                 startTime = 0L;
             }
@@ -158,10 +148,8 @@ public class Timer
     /**
      * Updates the timer to check if it is up and terminate it.
      */
-    public void update()
-    {
-        if (running && !paused && getElapsed() >= getDuration())
-        {
+    public void update() {
+        if (running && !paused && getElapsed() >= getDuration()) {
             stop(true);
         }
     }
@@ -173,23 +161,16 @@ public class Timer
      *
      * @param pause If true the timer will be paused.
      */
-    public void setPaused(boolean pause)
-    {
-        if (running)
-        {
+    public void setPaused(boolean pause) {
+        if (running) {
             // The pause is only set once (as example if the user executes /uh freeze all twice).
-            if (pause != paused)
-            {
-                if (pause)
-                {
+            if (pause != paused) {
+                if (pause) {
                     elapsedWhenPaused = getElapsed();
 
                     paused = true;
                     pauseTime = System.currentTimeMillis();
-                }
-
-                else
-                {
+                } else {
                     // We have to add to the time of the start of the episode the elapsed time
                     // during the pause.
                     startTime += (System.currentTimeMillis() - pauseTime);
@@ -207,8 +188,7 @@ public class Timer
      *
      * @return true if the timer is registered.
      */
-    public Boolean isRegistered()
-    {
+    public Boolean isRegistered() {
         return registered;
     }
 
@@ -217,8 +197,7 @@ public class Timer
      *
      * @param registered true if the timer is now registered.
      */
-    protected void setRegistered(Boolean registered)
-    {
+    protected void setRegistered(Boolean registered) {
         this.registered = registered;
     }
 
@@ -227,8 +206,7 @@ public class Timer
      *
      * @return The name.
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -239,19 +217,16 @@ public class Timer
      *
      * @return The name.
      */
-    public String getDisplayName()
-    {
+    public String getDisplayName() {
         return ChatColor.translateAlternateColorCodes('&', name);
     }
-
 
     /**
      * Checks if the timer is currently running.
      *
      * @return true if the timer is running.
      */
-    public Boolean isRunning()
-    {
+    public Boolean isRunning() {
         return running;
     }
 
@@ -260,8 +235,7 @@ public class Timer
      *
      * @return {@code true} if displayed.
      */
-    public Boolean isDisplayed()
-    {
+    public Boolean isDisplayed() {
         return displayed;
     }
 
@@ -270,8 +244,7 @@ public class Timer
      *
      * @param displayed {@code true} to display, and {@code false} to hide.
      */
-    public void setDisplayed(Boolean displayed)
-    {
+    public void setDisplayed(Boolean displayed) {
         this.displayed = displayed;
     }
 
@@ -280,8 +253,7 @@ public class Timer
      *
      * @return {@code true} if name displayed.
      */
-    public Boolean isNameDisplayed()
-    {
+    public Boolean isNameDisplayed() {
         return nameDisplayed;
     }
 
@@ -290,16 +262,14 @@ public class Timer
      *
      * @param nameDisplayed {@code true} to display, and {@code false} to hide.
      */
-    public void setNameDisplayed(Boolean nameDisplayed)
-    {
+    public void setNameDisplayed(Boolean nameDisplayed) {
         this.nameDisplayed = nameDisplayed;
     }
 
     /**
      * @return {@code true} if this is a system timer that cannot be altered by the user.
      */
-    public Boolean isSystem()
-    {
+    public Boolean isSystem() {
         return system;
     }
 
@@ -308,8 +278,7 @@ public class Timer
      *
      * @param system {@code true} if this timer is an internal system timer.
      */
-    public void setSystem(Boolean system)
-    {
+    public void setSystem(Boolean system) {
         this.system = system;
     }
 
@@ -318,32 +287,47 @@ public class Timer
      *
      * @return The duration.
      */
-    public Integer getDuration()
-    {
+    public Integer getDuration() {
         return duration;
+    }
+
+    /**
+     * Sets the duration of the timer, in seconds.
+     *
+     * @param seconds The duration.
+     */
+    public void setDuration(int seconds) {
+        this.duration = seconds;
+    }
+
+    /**
+     * Sets the duration of the timer.
+     *
+     * @param duration The duration.
+     */
+    public void setDuration(TimeDelta duration) {
+        this.duration = Math.toIntExact(duration.getSeconds());
     }
 
     /**
      * @return The elapsed time since the beginning of the timer (not including pauses), in seconds.
      */
-    public int getElapsed()
-    {
-        if (isRunning())
-        {
-            if (isPaused())
+    public int getElapsed() {
+        if (isRunning()) {
+            if (isPaused()) {
                 return elapsedWhenPaused;
-            else
+            } else {
                 return (int) Math.floor((System.currentTimeMillis() - startTime) / 1000);
+            }
+        } else {
+            return 0;
         }
-
-        else return 0;
     }
 
     /**
      * @return The number of seconds left before this timer is up.
      */
-    public int getTimeLeft()
-    {
+    public int getTimeLeft() {
         return getDuration() - getElapsed();
     }
 
@@ -352,50 +336,22 @@ public class Timer
      *
      * @return true if the timer is paused.
      */
-    public Boolean isPaused()
-    {
+    public Boolean isPaused() {
         return paused;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return formatTime(getTimeLeft());
     }
 
     @Override
-    public boolean equals(Object other)
-    {
+    public boolean equals(Object other) {
         return other instanceof Timer && ((Timer) other).getName().equals(this.getName());
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return id.hashCode();
-    }
-
-    /**
-     * Formats a given number of seconds into [hh:]mm:ss.
-     *
-     * @param seconds The number of seconds.
-     * @return The formatted time (includes color codes).
-     */
-    public static String formatTime(final int seconds)
-    {
-        final int secondsLeft = seconds % 60;
-        final int minutesLeft = (seconds % 3600) / 60;
-        final int hoursLeft = (int) Math.floor(seconds / 3600);
-
-        if (hoursLeft != 0)
-        {
-            /// Timer. {0} = hours; {1} = minutes; {2} = seconds.
-            return ChatColor.WHITE + I.t("{0}{gray}:{white}{1}{gray}:{white}{2}", formatter.format(hoursLeft), formatter.format(minutesLeft), formatter.format(secondsLeft));
-        }
-        else
-        {
-            /// Timer. {0} = minutes; {1} = seconds.
-            return ChatColor.WHITE +I.t("{white}{0}{gray}:{white}{1}", formatter.format(minutesLeft), formatter.format(secondsLeft));
-        }
     }
 }

@@ -39,13 +39,11 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns.generators.Rand
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns.generators.SpawnPointsGenerator;
 import fr.zcraft.quartzlib.tools.PluginLogger;
 import fr.zcraft.quartzlib.tools.reflection.Reflection;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 
 
-public enum Generator
-{
+public enum Generator {
     /**
      * Spawn points generated randomly.
      */
@@ -64,13 +62,12 @@ public enum Generator
     CIRCULAR(CircularSpawnPointsGenerator.class);
 
 
-    private Class<? extends SpawnPointsGenerator> generatorClass;
+    private final Class<? extends SpawnPointsGenerator> generatorClass;
 
     /**
      * @param generatorClass The generator.
      */
-    Generator(Class<? extends SpawnPointsGenerator> generatorClass)
-    {
+    Generator(Class<? extends SpawnPointsGenerator> generatorClass) {
         this.generatorClass = generatorClass;
     }
 
@@ -82,14 +79,11 @@ public enum Generator
      * @param name The name.
      * @return The Generator, or null if not found.
      */
-    public static Generator fromString(String name)
-    {
-        try
-        {
+    public static Generator fromString(String name) {
+        try {
             return Generator.valueOf(name.trim().toUpperCase());
         }
-        catch (IllegalArgumentException e)
-        {
+        catch (IllegalArgumentException e) {
             return null;
         }
     }
@@ -99,20 +93,19 @@ public enum Generator
      *
      * @return The instance.
      */
-    public SpawnPointsGenerator getInstance()
-    {
-        try
-        {
+    public SpawnPointsGenerator getInstance() {
+        try {
             return Reflection.instantiate(generatorClass);
         }
-        catch (NoSuchMethodException | InstantiationException | IllegalAccessException e)
-        {
-            PluginLogger.log(Level.SEVERE, "Cannot instantiate the spawn points generator: invalid class (missing constructor?): " + generatorClass.getName(), e.getCause());
+        catch (NoSuchMethodException | InstantiationException | IllegalAccessException e) {
+            PluginLogger.log(Level.SEVERE,
+                    "Cannot instantiate the spawn points generator: invalid class (missing constructor?): " +
+                            generatorClass.getName(), e.getCause());
             return null;
         }
-        catch (InvocationTargetException e)
-        {
-            PluginLogger.log(Level.SEVERE, "Error during the spawn points generator instantiation: " + generatorClass.getName(), e.getCause());
+        catch (InvocationTargetException e) {
+            PluginLogger.log(Level.SEVERE,
+                    "Error during the spawn points generator instantiation: " + generatorClass.getName(), e.getCause());
             return null;
         }
     }

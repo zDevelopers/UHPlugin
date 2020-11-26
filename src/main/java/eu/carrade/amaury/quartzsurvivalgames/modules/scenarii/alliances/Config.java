@@ -31,24 +31,22 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.scenarii.alliances;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import java.io.File;
 
+public class Config extends ConfigurationInstance {
     static public ConfigurationItem<Integer> ALLIANCES_PER_PLAYER = item("alliances-per-player", 2);
     static public ConfigurationItem<Integer> MAX_PLAYERS_PER_ALLIANCE = item("max-players-per-alliance", 3);
+    static public ConfigurationItem<Integer> MAX_DISTANCE_TO_CREATE_AN_ALLIANCE =
+            item("max-distance-to-create-an-alliance", 60);
 
-    static public ConfigurationItem<Integer> MAX_DISTANCE_TO_CREATE_AN_ALLIANCE = item("max-distance-to-create-an-alliance", 60);
+    public Config(File file) {
+        super(file);
+    }
 }

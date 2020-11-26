@@ -31,31 +31,27 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.walls;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
-import org.bukkit.Material;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.section;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationSection;
+import java.io.File;
+import org.bukkit.Material;
+
+public class Config extends ConfigurationInstance {
+    public static final ConfigurationItem<Integer> HEIGHT = item("height", 128);
+    public static final BlockSection BLOCK = section("block", BlockSection.class);
+
+    public Config(File file) {
         super(file);
     }
 
-    public static final ConfigurationItem<Integer> HEIGHT = item("height", 128);
-
-    public static final BlockSection BLOCK = section("block", BlockSection.class);
-
-    static public class BlockSection extends ConfigurationSection
-    {
+    static public class BlockSection extends ConfigurationSection {
         public final ConfigurationItem<Material> REPLACE_AIR = item("replace-air", Material.GLASS);
         public final ConfigurationItem<Material> REPLACE_SOLID = item("replace-solid", Material.BEDROCK);
     }

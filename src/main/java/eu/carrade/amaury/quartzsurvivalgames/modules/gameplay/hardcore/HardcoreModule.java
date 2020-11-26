@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.hardcore;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -38,14 +39,13 @@ import eu.carrade.amaury.quartzsurvivalgames.core.ModuleInfo;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleLoadTime;
 import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Difficulty;
 import org.bukkit.Material;
 
-import java.util.HashMap;
-import java.util.Map;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Hardcore Mode",
         description = "Disables health natural regeneration and sets correct difficulty in the game's worlds.",
         when = ModuleLoadTime.ON_GAME_START,
@@ -53,14 +53,12 @@ import java.util.Map;
         icon = Material.GOLDEN_APPLE,
         settings = Config.class
 )
-public class HardcoreModule extends QSGModule
-{
-    private Map<String, Difficulty> oldDifficulties = new HashMap<>();
-    private Map<String, String> oldNaturalRegenerations = new HashMap<>();
+public class HardcoreModule extends QSGModule {
+    private final Map<String, Difficulty> oldDifficulties = new HashMap<>();
+    private final Map<String, String> oldNaturalRegenerations = new HashMap<>();
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         QSG.get().getWorlds().forEach(world ->
         {
             oldDifficulties.put(world.getName(), world.getDifficulty());
@@ -72,11 +70,11 @@ public class HardcoreModule extends QSGModule
     }
 
     @Override
-    protected void onDisable()
-    {
+    protected void onDisable() {
         QSG.get().getWorlds().forEach(world -> {
             world.setDifficulty(oldDifficulties.getOrDefault(world.getName(), Difficulty.NORMAL));
-            world.setGameRuleValue("naturalRegeneration", oldNaturalRegenerations.getOrDefault(world.getName(), "true"));
+            world.setGameRuleValue("naturalRegeneration",
+                    oldNaturalRegenerations.getOrDefault(world.getName(), "true"));
         });
     }
 }

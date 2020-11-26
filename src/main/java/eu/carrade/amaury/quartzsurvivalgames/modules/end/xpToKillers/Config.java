@@ -43,6 +43,7 @@ import java.io.File;
 public class Config extends ConfigurationInstance {
     public static final ConfigurationItem<Integer> LEVELS = item("levels", 2);
     public static final ConfigurationItem<Boolean> ONLY_OTHER_TEAM = item("only-other-team", true);
+
     public Config(File file) {
         super(file);
     }

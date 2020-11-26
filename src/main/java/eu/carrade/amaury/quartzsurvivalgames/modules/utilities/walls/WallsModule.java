@@ -31,26 +31,26 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.walls;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleInfo;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleLoadTime;
 import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
+import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.BorderModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.utilities.walls.exceptions.CannotGenerateWallsException;
 import eu.carrade.amaury.quartzsurvivalgames.modules.utilities.walls.exceptions.UnknownWallGenerator;
 import eu.carrade.amaury.quartzsurvivalgames.modules.utilities.walls.generators.WallGenerator;
-import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.BorderModule;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.commands.Command;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.World;
 
-import java.util.Collections;
-import java.util.List;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Walls Generator",
         description = "Provides a command to generate a solid wall around the arena.",
         when = ModuleLoadTime.POST_WORLD,
@@ -58,19 +58,16 @@ import java.util.List;
         icon = Material.BARRIER,
         settings = Config.class
 )
-public class WallsModule extends QSGModule
-{
+public class WallsModule extends QSGModule {
     private BorderModule borderModule;
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         borderModule = QSG.module(BorderModule.class);
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(WallsCommand.class);
     }
 
@@ -80,23 +77,23 @@ public class WallsModule extends QSGModule
      * @param world The world were the walls will be built in.
      * @throws CannotGenerateWallsException If an error occurred while generating the wall.
      */
-    public void generateWalls(final World world) throws CannotGenerateWallsException
-    {
+    public void generateWalls(final World world) throws CannotGenerateWallsException {
         final Integer wallHeight = Config.HEIGHT.get();
 
         final Material wallBlockAir = Config.BLOCK.REPLACE_AIR.get();
         final Material wallBlockSolid = Config.BLOCK.REPLACE_SOLID.get();
 
-        if (wallBlockAir == null || !wallBlockAir.isSolid() || wallBlockSolid == null || !wallBlockSolid.isSolid())
-        {
+        if (wallBlockAir == null || !wallBlockAir.isSolid() || wallBlockSolid == null || !wallBlockSolid.isSolid()) {
             throw new CannotGenerateWallsException("Cannot generate the walls: invalid blocks set in the config");
         }
 
-        final WallGenerator generator = WallGenerator.fromShape(borderModule.getMapShape(), wallBlockAir, wallBlockSolid);
+        final WallGenerator generator =
+                WallGenerator.fromShape(borderModule.getMapShape(), wallBlockAir, wallBlockSolid);
 
-        if (generator != null)
+        if (generator != null) {
             generator.build(world, borderModule.getCurrentBorderDiameter(), wallHeight);
-        else
+        } else {
             throw new UnknownWallGenerator("Unable to load walls generator.");
+        }
     }
 }

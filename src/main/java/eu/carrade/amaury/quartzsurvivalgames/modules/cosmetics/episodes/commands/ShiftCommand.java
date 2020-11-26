@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.episodes.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
@@ -43,23 +44,18 @@ import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
 
 
-@CommandInfo (name = "shift", usageParameters = "[next episode number]", aliases = {"shift-episode"})
-public class ShiftCommand extends Command
-{
+@CommandInfo(name = "shift", usageParameters = "[next episode number]", aliases = {"shift-episode"})
+public class ShiftCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
-        if (QSG.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME))
-        {
+    protected void run() throws CommandException {
+        if (QSG.module(GameModule.class).currentPhaseBefore(GamePhase.IN_GAME)) {
             error(I.t("{ce}You can't shift the current episode because the game is not started."));
         }
 
-        try
-        {
+        try {
             QSG.module(EpisodesModule.class).shift(sender, Integer.parseInt(args[0]));
         }
-        catch (ArrayIndexOutOfBoundsException | NumberFormatException e)
-        {
+        catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
             QSG.module(EpisodesModule.class).shift(sender);
         }
     }

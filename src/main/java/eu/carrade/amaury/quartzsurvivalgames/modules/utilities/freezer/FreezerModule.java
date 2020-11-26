@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.freezer;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -41,6 +42,14 @@ import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.core.QuartzLib;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -51,11 +60,8 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
-import java.util.stream.Collectors;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Freezer",
         description = "Provides a command to freeze some or all players, " +
                 "allowing to “pause” the game.",
@@ -63,50 +69,39 @@ import java.util.stream.Collectors;
         category = ModuleCategory.UTILITIES,
         icon = Material.PACKED_ICE
 )
-public class FreezerModule extends QSGModule
-{
-    private boolean isListenerRegistered = false;
-    private FreezerListener freezerListener;
-
-    private boolean globalFreeze = false;
+public class FreezerModule extends QSGModule {
     private final Set<UUID> frozenPlayers = new HashSet<>();
     private final Map<UUID, Boolean> oldAllowFly = new HashMap<>();
     private final Map<UUID, Boolean> oldFlyMode = new HashMap<>();
-
+    private boolean isListenerRegistered = false;
+    private FreezerListener freezerListener;
+    private boolean globalFreeze = false;
     private boolean hiddenFreeze = false;
 
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         this.freezerListener = new FreezerListener();
     }
 
     @Override
-    protected void onDisable()
-    {
+    protected void onDisable() {
         QuartzLib.unregisterEvents(freezerListener);
         freezerListener = null;
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(FreezeCommand.class);
     }
 
     @Override
-    public void injectIntoSidebar(Player player, SidebarInjector injector)
-    {
-        if (!hiddenFreeze)
-        {
-            if (globalFreeze)
-            {
+    public void injectIntoSidebar(Player player, SidebarInjector injector) {
+        if (!hiddenFreeze) {
+            if (globalFreeze) {
                 /// Notice displayed at the bottom of the sidebar if the game is paused (/uh freeze all).
                 injector.injectLines(SidebarInjector.SidebarPriority.BOTTOM, true, I.t("{darkaqua}Game frozen"));
-            }
-            else if (isPlayerFrozen(player))
-            {
+            } else if (isPlayerFrozen(player)) {
                 injector.injectLines(SidebarInjector.SidebarPriority.BOTTOM, true, I.t("{darkaqua}You are frozen"));
             }
         }
@@ -115,22 +110,22 @@ public class FreezerModule extends QSGModule
     /**
      * Freezes a player, if needed.
      * The player is blocked inside the block he is currently.
-     *
+     * <p>
      * This method is intended to be executed when a player moves.
      *
      * @param player The player to freeze
-     * @param from The old position from the PlayerMoveEvent
-     * @param to The new position from the PlayerMoveEvent
+     * @param from   The old position from the PlayerMoveEvent
+     * @param to     The new position from the PlayerMoveEvent
      */
-    public void freezePlayerIfNeeded(Player player, Location from, Location to)
-    {
-        if (frozenPlayers.contains(player.getUniqueId()))
-        {
+    public void freezePlayerIfNeeded(Player player, Location from, Location to) {
+        if (frozenPlayers.contains(player.getUniqueId())) {
             // If the X, Y or Z coordinate of the player change, he needs to be teleported inside the old block.
             // The yaw and pitch are conserved, to teleport more smoothly.
-            if (from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() || from.getBlockZ() != to.getBlockZ())
-            {
-                player.teleport(new Location(from.getWorld(), from.getBlockX() + 0.5, from.getBlockY(), from.getBlockZ() + 0.5, to.getYaw(), to.getPitch()), TeleportCause.PLUGIN);
+            if (from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() ||
+                    from.getBlockZ() != to.getBlockZ()) {
+                player.teleport(
+                        new Location(from.getWorld(), from.getBlockX() + 0.5, from.getBlockY(), from.getBlockZ() + 0.5,
+                                to.getYaw(), to.getPitch()), TeleportCause.PLUGIN);
             }
         }
     }
@@ -139,16 +134,14 @@ public class FreezerModule extends QSGModule
     /**
      * Enables or disables the global freeze of players, mobs, timer.
      *
-     * @param frozen If true the global freeze will be enabled.
+     * @param frozen                If true the global freeze will be enabled.
      * @param showStateInScoreboard If false, the freeze state will not be displayed in the scoreboard.
      */
-    public void setGlobalFreezeState(Boolean frozen, Boolean showStateInScoreboard)
-    {
+    public void setGlobalFreezeState(Boolean frozen, Boolean showStateInScoreboard) {
         this.globalFreeze = frozen;
         this.hiddenFreeze = !showStateInScoreboard;
 
-        if (frozen)
-        {
+        if (frozen) {
             QSG.game().getAlivePlayers().forEach(player -> setPlayerFreezeState(player, true));
 
             // Freezes the mobs by applying a Slowness effect. There isn't any EntityMoveEvent, so...
@@ -159,10 +152,7 @@ public class FreezerModule extends QSGModule
 
             // Freezes the timers.
             QSG.module(TimersModule.class).pauseAllRunning(true);
-        }
-
-        else
-        {
+        } else {
             // All the online players are listed, not the internal list of frozen players,
             // to avoid a ConcurrentModificationException if the iterated list is being emptied.
             QSG.game().getAlivePlayers().stream()
@@ -183,24 +173,21 @@ public class FreezerModule extends QSGModule
     }
 
     /**
-     * Enables or disables the global freeze of players, mobs, timer.
-     *
-     * @param frozen If true the global freeze will be enabled.
-     */
-    public void setGlobalFreezeState(Boolean frozen)
-    {
-        setGlobalFreezeState(frozen, true);
-    }
-
-
-    /**
      * Returns the current state of the global freeze.
      *
      * @return True if the global freeze is enabled.
      */
-    public boolean getGlobalFreezeState()
-    {
+    public boolean getGlobalFreezeState() {
         return this.globalFreeze;
+    }
+
+    /**
+     * Enables or disables the global freeze of players, mobs, timer.
+     *
+     * @param frozen If true the global freeze will be enabled.
+     */
+    public void setGlobalFreezeState(Boolean frozen) {
+        setGlobalFreezeState(frozen, true);
     }
 
     /**
@@ -209,25 +196,23 @@ public class FreezerModule extends QSGModule
      * @param player The player to freeze.
      * @param frozen If true the player will be frozen. If false, unfrozen.
      */
-    public void setPlayerFreezeState(OfflinePlayer player, Boolean frozen)
-    {
-        if (frozen && !frozenPlayers.contains(player.getUniqueId()))
-        {
+    public void setPlayerFreezeState(OfflinePlayer player, Boolean frozen) {
+        if (frozen && !frozenPlayers.contains(player.getUniqueId())) {
             this.frozenPlayers.add(player.getUniqueId());
             this.oldAllowFly.put(player.getUniqueId(), player.isOnline() && player.getPlayer().getAllowFlight());
             this.oldFlyMode.put(player.getUniqueId(), player.isOnline() && player.getPlayer().isFlying());
 
             // Used to prevent the player to be kicked for fly if he was frozen during a fall.
             // He is blocked inside his current block anyway.
-            if (player.isOnline()) player.getPlayer().setAllowFlight(true);
+            if (player.isOnline()) {
+                player.getPlayer().setAllowFlight(true);
+            }
         }
 
-        if (!frozen && frozenPlayers.contains(player.getUniqueId()))
-        {
+        if (!frozen && frozenPlayers.contains(player.getUniqueId())) {
             this.frozenPlayers.remove(player.getUniqueId());
 
-            if (player.isOnline())
-            {
+            if (player.isOnline()) {
                 player.getPlayer().setFlying(oldFlyMode.get(player.getUniqueId()));
                 player.getPlayer().setAllowFlight(oldAllowFly.get(player.getUniqueId()));
             }
@@ -245,8 +230,7 @@ public class FreezerModule extends QSGModule
      * @param player The player to be checked.
      * @return true if the given player is frozen.
      */
-    public boolean isPlayerFrozen(final OfflinePlayer player)
-    {
+    public boolean isPlayerFrozen(final OfflinePlayer player) {
         return frozenPlayers.contains(player.getUniqueId());
     }
 
@@ -254,17 +238,13 @@ public class FreezerModule extends QSGModule
      * (Un)freezes a creature.
      *
      * @param creature The creature to freeze.
-     * @param frozen If true the creature will be frozen. Else...
+     * @param frozen   If true the creature will be frozen. Else...
      */
-    public void freezeCreature(final Creature creature, final boolean frozen)
-    {
-        if (frozen)
-        {
+    public void freezeCreature(final Creature creature, final boolean frozen) {
+        if (frozen) {
             // Freezes the creature for about 68 years.
             creature.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 100, true));
-        }
-        else
-        {
+        } else {
             creature.removePotionEffect(PotionEffectType.SLOW);
         }
     }
@@ -272,28 +252,23 @@ public class FreezerModule extends QSGModule
     /**
      * Registers the listener if it wasn't registered, and unregisters this listener
      * if there isn't any frozen player.
-     *
+     * <p>
      * Call this AFTER registering the first frozen player, and AFTER unregistering
      * the last one.
      */
-    private void updateListenerRegistration()
-    {
+    private void updateListenerRegistration() {
         // Registers the listener if needed
         // (i.e if there isn't any frozen player, or if the global freeze is enabled).
-        if (!this.isListenerRegistered)
-        {
-            if (!this.frozenPlayers.isEmpty() || this.getGlobalFreezeState())
-            {
+        if (!this.isListenerRegistered) {
+            if (!this.frozenPlayers.isEmpty() || this.getGlobalFreezeState()) {
                 QuartzLib.registerEvents(freezerListener);
                 this.isListenerRegistered = true;
             }
         }
 
         // Unregisters the listener if needed
-        else
-        {
-            if (this.frozenPlayers.isEmpty() && !this.getGlobalFreezeState())
-            {
+        else {
+            if (this.frozenPlayers.isEmpty() && !this.getGlobalFreezeState()) {
                 QuartzLib.unregisterEvents(freezerListener);
                 this.isListenerRegistered = false;
             }
@@ -306,8 +281,7 @@ public class FreezerModule extends QSGModule
      *
      * @return The list.
      */
-    public Set<OfflinePlayer> getFrozenPlayers()
-    {
+    public Set<OfflinePlayer> getFrozenPlayers() {
         return frozenPlayers.stream().map(Bukkit::getOfflinePlayer).collect(Collectors.toSet());
     }
 }

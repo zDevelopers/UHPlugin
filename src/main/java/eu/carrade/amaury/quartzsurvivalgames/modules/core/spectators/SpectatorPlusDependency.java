@@ -38,32 +38,27 @@ import fr.zcraft.quartzlib.external.ExternalPluginComponent;
 import fr.zcraft.quartzlib.tools.PluginLogger;
 
 
-public class SpectatorPlusDependency extends ExternalPluginComponent<SpectatorPlus>
-{
+public class SpectatorPlusDependency extends ExternalPluginComponent<SpectatorPlus> {
     private SpectateAPI spAPI = null;
 
-    public SpectatorPlusDependency()
-    {
+    public SpectatorPlusDependency() {
         super("SpectatorPlus");
     }
 
     @Override
-    public void onLoad()
-    {
-        try
-        {
+    public void onLoad() {
+        try {
             Class.forName("com.pgcraft.spectatorplus.SpectateAPI");
 
-            if (get().getDescription().getVersion().equals("1.9.1"))
-            {
+            if (get().getDescription().getVersion().equals("1.9.1")) {
                 // The API of SpectatorPlus 1.9.1 was not working.
                 throw new ClassNotFoundException();
             }
         }
-        catch (ClassNotFoundException e)
-        {
+        catch (ClassNotFoundException e) {
             PluginLogger.warning("SpectatorPlus is available, but the version you are using is too old.");
-            PluginLogger.warning("This plugin is tested and works with SpectatorPlus 1.9.2 or later. The SpectateAPI is needed.");
+            PluginLogger.warning(
+                    "This plugin is tested and works with SpectatorPlus 1.9.2 or later. The SpectateAPI is needed.");
 
             setEnabled(false);
             return;
@@ -71,8 +66,7 @@ public class SpectatorPlusDependency extends ExternalPluginComponent<SpectatorPl
 
 
         // All is OK, let's integrate.
-        try
-        {
+        try {
             spAPI = get().getAPI();
 
             PluginLogger.info("Successfully hooked into SpectatorPlus.");
@@ -80,20 +74,17 @@ public class SpectatorPlusDependency extends ExternalPluginComponent<SpectatorPl
 
         // Generic catch block to catch any kind of exception (logged, anyway), including e.g.
         // NoSuchMethodError, if the API change, so the plugin is not broken.
-        catch (Throwable e)
-        {
+        catch (Throwable e) {
             PluginLogger.error("Cannot hook into SpectatorPlus, is this version compatible?", e);
             setEnabled(false);
         }
     }
 
-    public SpectatorPlus getSP()
-    {
+    public SpectatorPlus getSP() {
         return get();
     }
 
-    public SpectateAPI getSPAPI()
-    {
+    public SpectateAPI getSPAPI() {
         return this.spAPI;
     }
 }

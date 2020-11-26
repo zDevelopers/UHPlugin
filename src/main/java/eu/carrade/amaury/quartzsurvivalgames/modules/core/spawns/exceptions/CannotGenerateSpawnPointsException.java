@@ -33,11 +33,9 @@
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns.exceptions;
 
 
-public class CannotGenerateSpawnPointsException extends Exception
-{
+public class CannotGenerateSpawnPointsException extends Exception {
 
-    public CannotGenerateSpawnPointsException(String message)
-    {
+    public CannotGenerateSpawnPointsException(String message) {
         super(message);
     }
 }

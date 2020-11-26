@@ -31,23 +31,20 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.hardcore;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
-import org.bukkit.Difficulty;
-
-import java.io.File;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.item;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationItem;
+import java.io.File;
+import org.bukkit.Difficulty;
 
+public class Config extends ConfigurationInstance {
     static public final ConfigurationItem<Boolean> NATURAL_REGENERATION = item("natural-regeneration", false);
     static public final ConfigurationItem<Difficulty> DIFFICULTY = item("difficulty", Difficulty.HARD);
+    public Config(File file) {
+        super(file);
+    }
 }

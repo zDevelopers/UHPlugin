@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.modules;
 
 import com.google.common.collect.ImmutableMap;
@@ -38,22 +39,21 @@ import eu.carrade.amaury.quartzsurvivalgames.core.ModuleLoadTime;
 import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GamePhase;
+import eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.commands.ConfigurationCommand;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.commands.ModuleCommand;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.commands.ModulesCommand;
-import eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.commands.ConfigurationCommand;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.sidebar.SidebarInjector;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Modules",
         description = "Offers to the users a way to manage modules.",
         when = ModuleLoadTime.STARTUP,
@@ -61,11 +61,9 @@ import java.util.Map;
         icon = Material.COMMAND_BLOCK,
         can_be_unloaded = false
 )
-public class ModulesModule extends QSGModule
-{
+public class ModulesModule extends QSGModule {
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Arrays.asList(
                 ModulesCommand.class,
                 ModuleCommand.class,
@@ -74,8 +72,7 @@ public class ModulesModule extends QSGModule
     }
 
     @Override
-    public Map<String, Class<? extends Command>> getCommandsAliases()
-    {
+    public Map<String, Class<? extends Command>> getCommandsAliases() {
         return ImmutableMap.of(
                 "modules", ModulesCommand.class,
                 "config", ConfigurationCommand.class
@@ -83,8 +80,7 @@ public class ModulesModule extends QSGModule
     }
 
     @Override
-    public void injectIntoSidebar(Player player, SidebarInjector injector)
-    {
+    public void injectIntoSidebar(Player player, SidebarInjector injector) {
         if (player.isOp() && QSG.module(GameModule.class).getPhase() == GamePhase.WAIT) // TODO Permissions
         {
             injector.injectLines(

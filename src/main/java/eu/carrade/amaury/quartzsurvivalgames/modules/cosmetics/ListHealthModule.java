@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -39,6 +40,7 @@ import eu.carrade.amaury.quartzsurvivalgames.core.ModuleLoadTime;
 import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -46,23 +48,19 @@ import org.bukkit.scoreboard.Criterias;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 
-import java.util.UUID;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Health in Players List",
         description = "Displays the health of players in the overlay list displayed with <TAB>.",
         when = ModuleLoadTime.ON_GAME_STARTING,
         category = ModuleCategory.COSMETICS,
         icon = Material.DETECTOR_RAIL
 )
-public class ListHealthModule extends QSGModule
-{
-    private String objectiveID = UUID.randomUUID().toString().substring(0, 16);
+public class ListHealthModule extends QSGModule {
+    private final String objectiveID = UUID.randomUUID().toString().substring(0, 16);
 
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         // Initialization of the scoreboard (health in players' list)
         final Objective healthObjective = QSG.get().getScoreboard().registerNewObjective(objectiveID, Criterias.HEALTH);
         healthObjective.setDisplayName("Health");
@@ -73,8 +71,7 @@ public class ListHealthModule extends QSGModule
     }
 
     @Override
-    protected void onDisable()
-    {
+    protected void onDisable() {
         QSG.get().getScoreboard().clearSlot(DisplaySlot.PLAYER_LIST);
         QSG.get().getScoreboard().getObjective(objectiveID).unregister();
     }
@@ -82,8 +79,7 @@ public class ListHealthModule extends QSGModule
     /**
      * Updates the health score for all players.
      */
-    public void updateHealthScore()
-    {
+    public void updateHealthScore() {
         Bukkit.getOnlinePlayers().forEach(this::updateHealthScore);
     }
 
@@ -92,8 +88,7 @@ public class ListHealthModule extends QSGModule
      *
      * @param player The player to update.
      */
-    public void updateHealthScore(final Player player)
-    {
+    public void updateHealthScore(final Player player) {
         if (player.getHealth() != 1d) // Prevents killing the player
         {
             player.setHealth(player.getHealth() - 1d);

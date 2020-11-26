@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.starting.cages;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -43,16 +44,15 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.Play
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.PlayerSpawnPointSelectedEvent;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.events.start.PlayerTeleportedToSpawnPointEvent;
 import fr.zcraft.quartzteams.QuartzTeams;
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import java.util.HashMap;
-import java.util.Map;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Cages",
         description = "Puts players in cages (or platforms) instead of letting them float in the air, during the startup process.",
         when = ModuleLoadTime.ON_GAME_STARTING,
@@ -61,34 +61,31 @@ import java.util.Map;
         settings = Config.class,
         can_be_loaded_late = false
 )
-public class CagesModule extends QSGModule
-{
-    private Map<Location, Cage> cages = new HashMap<>();
+public class CagesModule extends QSGModule {
+    private final Map<Location, Cage> cages = new HashMap<>();
 
 
-    @EventHandler (priority = EventPriority.MONITOR)
-    public void onPlayerSpawnSelected(PlayerSpawnPointSelectedEvent ev)
-    {
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerSpawnSelected(PlayerSpawnPointSelectedEvent ev) {
         final Location spawn = cloneAndNormalize(ev.getSpawnPoint());
         cages.putIfAbsent(spawn, Cage.createInstanceForTeam(QuartzTeams.get().getTeamForPlayer(ev.getPlayer()), spawn));
     }
 
     @EventHandler
-    public void onPlayerAboutToBeTeleportedToSpawn(PlayerAboutToBeTeleportedToSpawnPointEvent ev)
-    {
+    public void onPlayerAboutToBeTeleportedToSpawn(PlayerAboutToBeTeleportedToSpawnPointEvent ev) {
         final Cage cage = cages.get(cloneAndNormalize(ev.getSpawnPoint()));
 
-        if (cage != null) cage.build();
+        if (cage != null) {
+            cage.build();
+        }
     }
 
     @EventHandler
-    public void onPlayerTeleportedToSpawn(PlayerTeleportedToSpawnPointEvent ev)
-    {
+    public void onPlayerTeleportedToSpawn(PlayerTeleportedToSpawnPointEvent ev) {
         final Location normalizedLocation = cloneAndNormalize(ev.getSpawnPoint());
 
         // We only remove the fly if there is a cage for that player.
-        if (cages.containsKey(normalizedLocation))
-        {
+        if (cages.containsKey(normalizedLocation)) {
             ev.getPlayer().setFlying(false);
             ev.getPlayer().setAllowFlight(false);
 
@@ -98,14 +95,15 @@ public class CagesModule extends QSGModule
     }
 
     @EventHandler
-    public void onGameStarts(GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() != GamePhase.IN_GAME) return;
+    public void onGameStarts(GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() != GamePhase.IN_GAME) {
+            return;
+        }
         cages.forEach((location, nicolas) -> nicolas.destroy()); // Not even sorry.
     }
 
-    private Location cloneAndNormalize(final Location location)
-    {
-        return new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ(), 0, 0);
+    private Location cloneAndNormalize(final Location location) {
+        return new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ(), 0,
+                0);
     }
 }

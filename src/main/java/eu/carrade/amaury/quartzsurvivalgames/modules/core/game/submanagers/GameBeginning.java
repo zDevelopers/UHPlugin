@@ -58,16 +58,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class GameBeginning extends QuartzComponent implements Listener {
-    /**
-     * A flag used to disable damages at the beginning of the game to avoid fall damages and early ones.
-     */
-    private boolean inGracePeriod = false;
-
-    /**
-     * A flag used to disable hostile mobs spawn on the surface a few minutes after the beginning of the game.
-     */
-    private boolean inMobsFreePeriod = false;
-    
     private static final Set<String> SURFACE_MATERIAL_ENDS = ImmutableSet.of(
             "LOG",
             "LEAVES",
@@ -77,7 +67,14 @@ public class GameBeginning extends QuartzComponent implements Listener {
             "WALL",
             "FENCE"
     );
-
+    /**
+     * A flag used to disable damages at the beginning of the game to avoid fall damages and early ones.
+     */
+    private boolean inGracePeriod = false;
+    /**
+     * A flag used to disable hostile mobs spawn on the surface a few minutes after the beginning of the game.
+     */
+    private boolean inMobsFreePeriod = false;
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onGameStarts(GamePhaseChangedEvent ev) {
@@ -182,12 +179,12 @@ public class GameBeginning extends QuartzComponent implements Listener {
                 switch (type) {
                     // Air
                     case AIR:
-                        
-                    // Trees
+
+                        // Trees
                     case BROWN_MUSHROOM_BLOCK:
                     case RED_MUSHROOM_BLOCK:
 
-                    // Vegetation
+                        // Vegetation
                     case DEAD_BUSH:
                     case CHORUS_PLANT:
                     case KELP_PLANT:

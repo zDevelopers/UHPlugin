@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.check;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.BorderModule;
@@ -41,22 +42,17 @@ import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
 
 @CommandInfo(name = "border-check", usageParameters = "<radius>", aliases = {"bordercheck", "bcheck", "bc"})
-public class CheckCommand extends Command
-{
+public class CheckCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
-        if (args.length == 0)
-        {
+    protected void run() throws CommandException {
+        if (args.length == 0) {
             throwInvalidArgument(I.t("You must provide a check radius."));
         }
 
-        try
-        {
+        try {
             QSG.module(BorderModule.class).sendCheckMessage(sender, Integer.valueOf(args[0]));
         }
-        catch (NumberFormatException e)
-        {
+        catch (NumberFormatException e) {
             sender.sendMessage(I.t("{ce}“{0}” is not a number...", args[0]));
         }
     }

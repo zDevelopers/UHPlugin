@@ -34,36 +34,29 @@ package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.runtimeCommandsE
 
 import eu.carrade.amaury.quartzsurvivalgames.QuartzSurvivalGames;
 import fr.zcraft.quartzlib.tools.PluginLogger;
-import org.bukkit.command.CommandException;
-
 import java.util.HashSet;
+import org.bukkit.command.CommandException;
 
 
 /**
  * Schedules a stack of commands executed at the same time.
  */
-public class ScheduledCommandsExecutorTask implements Runnable
-{
+public class ScheduledCommandsExecutorTask implements Runnable {
     private final QuartzSurvivalGames p;
     private final HashSet<String> commands;
 
-    public ScheduledCommandsExecutorTask(HashSet<String> commands)
-    {
+    public ScheduledCommandsExecutorTask(HashSet<String> commands) {
         this.p = QuartzSurvivalGames.get();
         this.commands = commands;
     }
 
     @Override
-    public void run()
-    {
-        for (final String command : commands)
-        {
-            try
-            {
+    public void run() {
+        for (final String command : commands) {
+            try {
                 p.getServer().dispatchCommand(p.getServer().getConsoleSender(), command);
             }
-            catch (CommandException e)
-            {
+            catch (CommandException e) {
                 PluginLogger.error("The scheduled command '{0}' failed.", e, command);
             }
         }

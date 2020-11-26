@@ -37,22 +37,20 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.MapShape;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns.exceptions.CannotGenerateSpawnPointsException;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import eu.carrade.amaury.quartzsurvivalgames.utils.QSGUtils;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
 
 /**
  * Generates the spawn points randomly.
  */
-public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
-{
+public class RandomSpawnPointsGenerator implements SpawnPointsGenerator {
     private final Random random = new Random();
     private final BorderModule borderModule = QSG.module(BorderModule.class);
 
@@ -68,14 +66,13 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
      * @param xCenter                         The x coordinate of the point in the center of the region where the points will be generated.
      * @param zCenter                         The z coordinate of the point in the center of the region where the points will be generated.
      * @param avoidWater                      True if the generation have to avoid the water.
-     *
      * @return The spawn points generated.
-     *
      * @throws CannotGenerateSpawnPointsException In case of fail
      */
     @Override
-    public Set<Location> generate(final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter, final boolean avoidWater) throws CannotGenerateSpawnPointsException
-    {
+    public Set<Location> generate(final World world, final int spawnCount, final int regionDiameter,
+                                  final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter,
+                                  final boolean avoidWater) throws CannotGenerateSpawnPointsException {
         final double minimalDistanceBetweenTwoPointsSquared = Math.pow(minimalDistanceBetweenTwoPoints, 2);
 
 
@@ -85,15 +82,13 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
         // around each spawn point (a circle with, as radius, the minimal distance between two spawn
         // points), the generation will fail.
 
-        final double surfacePrivatePartsAroundSpawnPoints = (int) (spawnCount * (Math.PI * minimalDistanceBetweenTwoPointsSquared));
+        final double surfacePrivatePartsAroundSpawnPoints =
+                (int) (spawnCount * (Math.PI * minimalDistanceBetweenTwoPointsSquared));
         final double surfaceRegion;
 
-        if (borderModule.getMapShape() == MapShape.CIRCULAR)
-        {
+        if (borderModule.getMapShape() == MapShape.CIRCULAR) {
             surfaceRegion = (Math.PI * Math.pow(regionDiameter, 2)) / 4;
-        }
-        else
-        {
+        } else {
             surfaceRegion = Math.pow(regionDiameter, 2);
         }
 
@@ -103,9 +98,9 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
         // approximately 0.9069 (with an hexagonal arrangement of the circles).
         // Even with a packaging density very close to this limit, the generation time is correct.
         // So we uses this as a limit.
-        if (packingDensity >= 0.9069)
-        {
-            throw new CannotGenerateSpawnPointsException("Unable to generate spawn points randomly: packing density of " + packingDensity + " too high");
+        if (packingDensity >= 0.9069) {
+            throw new CannotGenerateSpawnPointsException(
+                    "Unable to generate spawn points randomly: packing density of " + packingDensity + " too high");
         }
 
         /* *** Generation *** */
@@ -125,8 +120,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
         int pointsAboveWater = 0;
 
         generationLoop:
-        while (generatedSpawnPoints != spawnCount)
-        {
+        while (generatedSpawnPoints != spawnCount) {
             // "Too many fails" test
             if (currentErrorCount >= 16) // restart
             {
@@ -136,8 +130,7 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
             }
 
             // "Too many points above the water" test
-            if (pointsAboveWater >= 2 * spawnCount)
-            {
+            if (pointsAboveWater >= 2 * spawnCount) {
                 throw new CannotGenerateSpawnPointsException("Too many spawn points above the water.");
             }
 
@@ -147,13 +140,14 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
             // excluded when his presence inside the region will be checked.
 
             Location randomPoint = new Location(world,
-                    random((int) (xCenter - Math.floor(regionDiameter / 2)), (int) (xCenter + (int) Math.floor(regionDiameter / 2))),
+                    random((int) (xCenter - Math.floor(regionDiameter / 2)),
+                            (int) (xCenter + (int) Math.floor(regionDiameter / 2))),
                     0,
-                    random((int) (zCenter - Math.floor(regionDiameter / 2)), (int) (zCenter + (int) Math.floor(regionDiameter / 2))));
+                    random((int) (zCenter - Math.floor(regionDiameter / 2)),
+                            (int) (zCenter + (int) Math.floor(regionDiameter / 2))));
 
             // Inside the region?
-            if (!borderModule.isInsideBorder(randomPoint, regionDiameter))
-            {
+            if (!borderModule.isInsideBorder(randomPoint, regionDiameter)) {
                 continue; // outside: nope
             }
 
@@ -161,28 +155,24 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
             final Block surfaceBlock = surfaceAirBlock.getRelative(BlockFace.DOWN);
 
             // Safe spot available?
-            if ((world.getEnvironment() == World.Environment.NORMAL || world.getEnvironment() == World.Environment.THE_END) && !QSGUtils
+            if ((world.getEnvironment() == World.Environment.NORMAL ||
+                    world.getEnvironment() == World.Environment.THE_END) && !QSGUtils
                     .isSafeSpot(surfaceAirBlock.getLocation())
-                    || QSGUtils.searchSafeSpot(randomPoint) == null)
-            {
+                    || QSGUtils.searchSafeSpot(randomPoint) == null) {
                 continue; // not safe: nope
             }
 
             // Not above the water?
-            if (avoidWater)
-            {
-                if (surfaceBlock.getType() == Material.WATER)
-                {
+            if (avoidWater) {
+                if (surfaceBlock.getType() == Material.WATER) {
                     pointsAboveWater++;
                     continue;
                 }
             }
 
             // Is that point at a correct distance of the other ones?
-            for (Location spawn : randomSpawnPoints)
-            {
-                if (spawn.distanceSquared(randomPoint) < minimalDistanceBetweenTwoPointsSquared)
-                {
+            for (Location spawn : randomSpawnPoints) {
+                if (spawn.distanceSquared(randomPoint) < minimalDistanceBetweenTwoPointsSquared) {
                     currentErrorCount++;
                     continue generationLoop; // too close: nope
                 }
@@ -207,10 +197,8 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
      * @param max The maximum value. May be negative. Inclusive.
      * @return A random number between these two points.
      */
-    public Integer random(int min, int max)
-    {
-        if (min == max)
-        {
+    public Integer random(int min, int max) {
+        if (min == max) {
             return min;
         }
 
@@ -221,15 +209,11 @@ public class RandomSpawnPointsGenerator implements SpawnPointsGenerator
             min = min - max;
         }
 
-        if (min >= 0 && max >= 0)
-        {
+        if (min >= 0 && max >= 0) {
             return random.nextInt(max - min + 1) + min;
-        }
-        else if (min <= 0 && max <= 0)
-        {
+        } else if (min <= 0 && max <= 0) {
             return -1 * (random.nextInt(Math.abs(min - max)) + Math.abs(max));
-        }
-        else // min <= 0 && max >= 0
+        } else // min <= 0 && max >= 0
         {
             return random.nextInt(Math.abs(min) + Math.abs(max)) - Math.abs(min);
         }

@@ -31,51 +31,45 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.food.commands;
 
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
+import java.util.List;
 import org.bukkit.entity.Player;
 
-import java.util.List;
 
-
-@CommandInfo (name = "feed", usageParameters = "<player> [foodPoints=20] [saturation=max]", aliases = {"food"})
-public class FeedCommand extends Command
-{
+@CommandInfo(name = "feed", usageParameters = "<player> [foodPoints=20] [saturation=max]", aliases = {"food"})
+public class FeedCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         final Player target = getPlayerParameter(0);
 
         int foodLevel = 20;
         float saturation = 20f;
 
         // /uh feed <player> <foodLevel>
-        if (args.length > 1)
-        {
-            try
-            {
+        if (args.length > 1) {
+            try {
                 foodLevel = Integer.valueOf(args[1]);
             }
-            catch (final NumberFormatException e)
-            {
-                throwInvalidArgument(I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
+            catch (final NumberFormatException e) {
+                throwInvalidArgument(
+                        I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
             }
 
             // /uh feed <player> <foodLevel> <saturation>
-            if (args.length > 2)
-            {
-                try
-                {
+            if (args.length > 2) {
+                try {
                     // The saturation value cannot be more than the food level.
                     saturation = Math.max(foodLevel, Float.valueOf(args[2]));
                 }
-                catch (final NumberFormatException e)
-                {
-                    throwInvalidArgument(I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
+                catch (final NumberFormatException e) {
+                    throwInvalidArgument(
+                            I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
                 }
             }
         }
@@ -87,9 +81,11 @@ public class FeedCommand extends Command
     }
 
     @Override
-    protected List<String> complete()
-    {
-        if (args.length == 1) return getMatchingPlayerNames(args[0]);
-        else return null;
+    protected List<String> complete() {
+        if (args.length == 1) {
+            return getMatchingPlayerNames(args[0]);
+        } else {
+            return null;
+        }
     }
 }

@@ -31,12 +31,14 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.killerRabbit;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleInfo;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleLoadTime;
 import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
+import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Rabbit;
@@ -44,10 +46,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
-import java.util.Random;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Killer Rabbit",
         description = "Brings back the Killer Rabbit of Cærbannog into the game. Beware, it bites.",
         when = ModuleLoadTime.ON_GAME_START,
@@ -55,24 +55,23 @@ import java.util.Random;
         icon = Material.RABBIT_FOOT,
         settings = Config.class
 )
-public class KillerRabbitModule extends QSGModule
-{
+public class KillerRabbitModule extends QSGModule {
     private final Random random = new Random();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onRabbitSpawn(final CreatureSpawnEvent ev)
-    {
-        if (ev.getEntity().getType() != EntityType.RABBIT)
+    public void onRabbitSpawn(final CreatureSpawnEvent ev) {
+        if (ev.getEntity().getType() != EntityType.RABBIT) {
             return;
+        }
 
-        if (random.nextDouble() >= Config.SPAWN_PROBABILITY.get())
+        if (random.nextDouble() >= Config.SPAWN_PROBABILITY.get()) {
             return;
+        }
 
         final Rabbit rabbit = (Rabbit) ev.getEntity();
         rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
 
-        if (!Config.NAME.get().isEmpty())
-        {
+        if (!Config.NAME.get().isEmpty()) {
             rabbit.setCustomName(Config.NAME.get());
             rabbit.setCustomNameVisible(true);
         }

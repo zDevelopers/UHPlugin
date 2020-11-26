@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators.managers;
 
 import com.pgcraft.spectatorplus.SpectateAPI;
@@ -38,25 +39,23 @@ import org.bukkit.entity.Player;
 /**
  * Spectators managed through the SpectatorsPlus Bukkit plugin by PGMann and AmauryPi.
  */
-public class SPlusSpectatorsManager extends SpectatorsManager
-{
+public class SPlusSpectatorsManager extends SpectatorsManager {
     private final SpectateAPI api;
 
-    public SPlusSpectatorsManager(final SpectateAPI api)
-    {
+    public SPlusSpectatorsManager(final SpectateAPI api) {
 
         this.api = api;
     }
 
     @Override
-    public void setSpectating(final Player player, final boolean spectating)
-    {
-        if (player != null) api.setSpectating(player, spectating);
+    public void setSpectating(final Player player, final boolean spectating) {
+        if (player != null) {
+            api.setSpectating(player, spectating);
+        }
     }
 
     @Override
-    public boolean isSpectating(final Player player)
-    {
+    public boolean isSpectating(final Player player) {
         return player != null && api.isSpectator(player);
     }
 }

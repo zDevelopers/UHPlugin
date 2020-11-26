@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.teleportation.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.utilities.teleportation.TeleportationModule;
@@ -40,63 +41,51 @@ import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandException;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@CommandInfo (name = "tp-death", usageParameters = "[player] [force]",aliases = {"tpback", "tpdeath", "tpd"})
-public class TPDeathCommand extends Command
-{
+@CommandInfo(name = "tp-death", usageParameters = "[player] [force]", aliases = {"tpback", "tpdeath", "tpd"})
+public class TPDeathCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         final Player player = args.length > 0 ? getPlayerParameter(0) : playerSender();
         final boolean force = args.length > 1 && args[1].equalsIgnoreCase("force");
 
-        if (!QSG.module(TeleportationModule.class).hasDeathLocation(player))
-        {
+        if (!QSG.module(TeleportationModule.class).hasDeathLocation(player)) {
             error(I.t("{ce}No death location available for the player {0}.", player.getName()));
         }
 
         final Location deathLocation = QSG.module(TeleportationModule.class).getDeathLocation(player);
 
-        if (force)
-        {
+        if (force) {
             QSGUtils.safeTP(player, deathLocation, true);
             success(I.t("{cs}The player {0} was teleported back.", player.getName()));
-        }
-        else if (QSGUtils.safeTP(player, deathLocation))
-        {
+        } else if (QSGUtils.safeTP(player, deathLocation)) {
             success(I.t("{cs}The player {0} was teleported back.", player.getName()));
-        }
-        else
-        {
-            warning(I.t("{ce}The player {0} was NOT teleported back because no safe spot was found.", player.getName()));
-            warning(I.t("{ci}Use {cc}/uh tpback {0} force{ci} to teleport the player regardless this point.", player.getName()));
+        } else {
+            warning(I
+                    .t("{ce}The player {0} was NOT teleported back because no safe spot was found.", player.getName()));
+            warning(I.t("{ci}Use {cc}/uh tpback {0} force{ci} to teleport the player regardless this point.",
+                    player.getName()));
         }
     }
 
     @Override
-    protected List<String> complete()
-    {
-        if (args.length == 1)
-        {
+    protected List<String> complete() {
+        if (args.length == 1) {
             final TeleportationModule tm = QSG.module(TeleportationModule.class);
 
             return getMatchingPlayerNames(
                     Bukkit.getOnlinePlayers().stream().filter(tm::hasDeathLocation).collect(Collectors.toList()),
                     args[0]
             );
-        }
-
-        else if (args.length == 2)
-        {
+        } else if (args.length == 2) {
             return getMatchingSubset(args[1].toLowerCase(), "force");
+        } else {
+            return null;
         }
-
-        else return null;
     }
 }

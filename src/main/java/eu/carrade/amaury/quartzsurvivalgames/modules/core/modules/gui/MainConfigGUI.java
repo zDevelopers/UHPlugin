@@ -31,16 +31,17 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.gui;
 
 import eu.carrade.amaury.quartzsurvivalgames.QSGConfig;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleWrapper;
-import eu.carrade.amaury.quartzsurvivalgames.modules.waitingPhase.wait.Config;
-import eu.carrade.amaury.quartzsurvivalgames.modules.waitingPhase.wait.WaitModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GamePhase;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.gui.modules.ModulesListGUI;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.modules.gui.start.StartGameGUI;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.spectators.SpectatorsModule;
+import eu.carrade.amaury.quartzsurvivalgames.modules.waitingPhase.wait.Config;
+import eu.carrade.amaury.quartzsurvivalgames.modules.waitingPhase.wait.WaitModule;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.gui.ActionGui;
 import fr.zcraft.quartzlib.components.gui.Gui;
@@ -51,30 +52,31 @@ import fr.zcraft.quartzlib.tools.items.ItemStackBuilder;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzteams.QuartzTeams;
 import fr.zcraft.quartzteams.guis.TeamsSelectorGUI;
-import org.bukkit.*;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-public class MainConfigGUI extends ActionGui
-{
+public class MainConfigGUI extends ActionGui {
     private BukkitTask headsCycleTask = null;
     private String[] headCycleNames = null;
     private int headCycleIndex = 0;
 
     @Override
-    protected void onUpdate()
-    {
+    protected void onUpdate() {
         setTitle(I.tl(getPlayerLocale(), "{black}Game Configuration"));
         setHeight(QSG.game().currentPhaseAfter(GamePhase.WAIT) ? 3 : 5);
 
         final Set<String> alivePlayers = (QSG.game().currentPhaseBefore(GamePhase.IN_GAME)
-                    ? Bukkit.getOnlinePlayers().stream().filter(player -> !QSG.module(SpectatorsModule.class).isSpectator(player))
-                    : QSG.game().getAlivePlayers().stream())
+                ? Bukkit.getOnlinePlayers().stream()
+                .filter(player -> !QSG.module(SpectatorsModule.class).isSpectator(player))
+                : QSG.game().getAlivePlayers().stream())
                 .map(OfflinePlayer::getName)
                 .collect(Collectors.toSet());
 
@@ -92,43 +94,58 @@ public class MainConfigGUI extends ActionGui
                         ChatColor.DARK_GRAY,
                         I.tln(getPlayerLocale(), "{0} player", "{0} players", alivePlayers.size()),
                         " - ",
-                        I.tln(getPlayerLocale(), "{0} spectator", "{0} spectators", QSG.module(SpectatorsModule.class).getSpectators().size())
+                        I.tln(getPlayerLocale(), "{0} spectator", "{0} spectators",
+                                QSG.module(SpectatorsModule.class).getSpectators().size())
                 )
                 .loreSeparator()
                 .longLore(ChatColor.BLUE, I.tl(getPlayerLocale(), "Players"))
-                .longLore(ChatColor.GRAY, alivePlayers.isEmpty() ? ChatColor.DARK_GRAY + I.tl(getPlayerLocale(), "(none)") : String.join(", ", alivePlayers), 38)
+                .longLore(ChatColor.GRAY,
+                        alivePlayers.isEmpty() ? ChatColor.DARK_GRAY + I.tl(getPlayerLocale(), "(none)") :
+                                String.join(", ", alivePlayers), 38)
                 .loreSeparator()
                 .longLore(ChatColor.BLUE, I.tl(getPlayerLocale(), "Spectators"))
-                .longLore(ChatColor.GRAY, spectators.isEmpty() ? ChatColor.DARK_GRAY + I.tl(getPlayerLocale(), "(none)") : String.join(", ", spectators), 38)
+                .longLore(ChatColor.GRAY,
+                        spectators.isEmpty() ? ChatColor.DARK_GRAY + I.tl(getPlayerLocale(), "(none)") :
+                                String.join(", ", spectators), 38)
                 .loreSeparator()
-                .longLore(ChatColor.DARK_GRAY, I.tl(getPlayerLocale(), "Actions on players coming soon: in the mean time, use commands."), 38)
+                .longLore(ChatColor.DARK_GRAY,
+                        I.tl(getPlayerLocale(), "Actions on players coming soon: in the mean time, use commands."), 38)
         );
 
         action("teams", 12, new ItemStackBuilder(
                 QSG.module(WaitModule.class) != null ? Config.TEAM_SELECTOR.ITEM.get() : Material.NETHER_STAR)
                 .title(ChatColor.AQUA, ChatColor.BOLD + I.tl(getPlayerLocale(), "Teams"))
                 .amount(Math.max(QuartzTeams.get().countTeams(), 1))
-                .loreLine(ChatColor.DARK_GRAY, I.tln(getPlayerLocale(), "{0} team", "{0} teams", QuartzTeams.get().countTeams()))
+                .loreLine(ChatColor.DARK_GRAY,
+                        I.tln(getPlayerLocale(), "{0} team", "{0} teams", QuartzTeams.get().countTeams()))
                 .loreSeparator()
-                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "The game can either be solo or in teams. In the second case, click here to create or update teams."), 38)
+                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(),
+                        "The game can either be solo or in teams. In the second case, click here to create or update teams."),
+                        38)
                 .loreSeparator()
-                .longLore(ChatColor.DARK_GRAY + " » " + I.tl(getPlayerLocale(), "{white}Click {gray}to manage the teams"))
+                .longLore(
+                        ChatColor.DARK_GRAY + " » " + I.tl(getPlayerLocale(), "{white}Click {gray}to manage the teams"))
         );
 
         action("title", 14, new ItemStackBuilder(Material.WRITABLE_BOOK)
                 .title(ChatColor.DARK_PURPLE, ChatColor.BOLD + I.tl(getPlayerLocale(), "Game Title"))
                 .loreSeparator()
-                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "Click to update the game title. It is displayed on the sidebar and may be used by other modules (like the reports one)."), 38)
+                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(),
+                        "Click to update the game title. It is displayed on the sidebar and may be used by other modules (like the reports one)."),
+                        38)
                 .loreSeparator()
                 .longLore(ChatColor.BLUE, I.tl(getPlayerLocale(), "Current Title"))
                 .longLore(QSGConfig.TITLE.get())
                 .loreSeparator()
-                .longLore(ChatColor.DARK_GRAY + " » " + I.tl(getPlayerLocale(), "{white}Click {gray}to change the title"))
+                .longLore(
+                        ChatColor.DARK_GRAY + " » " + I.tl(getPlayerLocale(), "{white}Click {gray}to change the title"))
         );
 
         final int modules = QSG.get().getModulesManager().getModules().size();
-        final int modulesEnabled = (int) QSG.get().getModulesManager().getModules().stream().filter(ModuleWrapper::isEnabled).count();
-        final int modulesLoaded = (int) QSG.get().getModulesManager().getModules().stream().filter(ModuleWrapper::isLoaded).count();
+        final int modulesEnabled =
+                (int) QSG.get().getModulesManager().getModules().stream().filter(ModuleWrapper::isEnabled).count();
+        final int modulesLoaded =
+                (int) QSG.get().getModulesManager().getModules().stream().filter(ModuleWrapper::isLoaded).count();
 
         action("modules", 16, new ItemStackBuilder(Material.REPEATING_COMMAND_BLOCK)
                 .title(ChatColor.LIGHT_PURPLE, ChatColor.BOLD + I.tl(getPlayerLocale(), "Modules"))
@@ -141,41 +158,44 @@ public class MainConfigGUI extends ActionGui
                         I.tln(getPlayerLocale(), "{0} loaded", "{0} loaded", modulesLoaded)
                 )
                 .loreSeparator()
-                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "This plugin is divided into modules, each one bringing one small or large piece of the game."), 52)
+                .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(),
+                        "This plugin is divided into modules, each one bringing one small or large piece of the game."),
+                        52)
                 .loreSeparator()
-                .lore(ChatColor.DARK_GRAY + " » " + I.tl(getPlayerLocale(), "{white}Click {gray}to manage modules and their configuration"))
+                .lore(ChatColor.DARK_GRAY + " » " +
+                        I.tl(getPlayerLocale(), "{white}Click {gray}to manage modules and their configuration"))
         );
 
-        if (!QSG.game().currentPhaseAfter(GamePhase.WAIT))
-        {
+        if (!QSG.game().currentPhaseAfter(GamePhase.WAIT)) {
             action("start", 31, new ItemStackBuilder(Material.LIME_DYE)
                     .title(ChatColor.GREEN, ChatColor.BOLD + I.tl(getPlayerLocale(), "Start the game"))
                     .longLore(ChatColor.GRAY, I.tl(getPlayerLocale(), "If you're ready, click here to start the game!"))
             );
         }
 
-        if (headsCycleTask != null) headsCycleTask.cancel();
+        if (headsCycleTask != null) {
+            headsCycleTask.cancel();
+        }
 
         headsCycleTask = RunTask.timer(() -> {
             final ItemStack skull = getInventory().getItem(10);
-            if (skull != null)
-            {
+            if (skull != null) {
                 // TODO replace with QL 0.1 ISB
                 final SkullMeta meta = (SkullMeta) getInventory().getItem(10).getItemMeta();
                 meta.setOwner(headCycleNames[headCycleIndex]);
                 getInventory().getItem(10).setItemMeta(meta);
 
                 headCycleIndex = (headCycleIndex + 1) % headCycleNames.length;
-                if (headCycleIndex < 0) headCycleIndex += headCycleNames.length;
+                if (headCycleIndex < 0) {
+                    headCycleIndex += headCycleNames.length;
+                }
             }
         }, 0L, 40L);
     }
 
     @Override
-    protected void onClose()
-    {
-        if (headsCycleTask != null)
-        {
+    protected void onClose() {
+        if (headsCycleTask != null) {
             headsCycleTask.cancel();
             headsCycleTask = null;
             headCycleIndex = 0;
@@ -191,26 +211,24 @@ public class MainConfigGUI extends ActionGui
 
 
     @GuiAction
-    protected void teams()
-    {
+    protected void teams() {
         Gui.open(getPlayer(), new TeamsSelectorGUI(), this);
     }
 
     @GuiAction
-    protected void title()
-    {
-        PromptGui.prompt(getPlayer(), newTitle -> QSGConfig.TITLE.set(ChatColor.translateAlternateColorCodes('&', newTitle), false), QSGConfig.TITLE.get().replace(ChatColor.COLOR_CHAR, '&'), this);
+    protected void title() {
+        PromptGui.prompt(getPlayer(),
+                newTitle -> QSGConfig.TITLE.set(ChatColor.translateAlternateColorCodes('&', newTitle), false),
+                QSGConfig.TITLE.get().replace(ChatColor.COLOR_CHAR, '&'), this);
     }
 
     @GuiAction
-    protected void modules()
-    {
+    protected void modules() {
         Gui.open(getPlayer(), new ModulesListGUI(), this);
     }
 
     @GuiAction
-    protected void start()
-    {
+    protected void start() {
         Gui.open(getPlayer(), new StartGameGUI());
     }
 }

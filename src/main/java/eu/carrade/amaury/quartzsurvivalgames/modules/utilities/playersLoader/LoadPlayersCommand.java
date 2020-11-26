@@ -31,36 +31,32 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.playersLoader;
 
 import eu.carrade.amaury.quartzsurvivalgames.utils.OfflinePlayersLoader;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.commands.CommandInfo;
 import fr.zcraft.quartzlib.components.i18n.I;
+import java.util.Arrays;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
-
-@CommandInfo (
+@CommandInfo(
         name = "load-players",
         usageParameters = "<player1> [player2] [player3] […]",
         aliases = {"loadplayers", "load-player", "loadplayer"}
 )
-public class LoadPlayersCommand extends Command
-{
+public class LoadPlayersCommand extends Command {
     @Override
-    protected void run()
-    {
-        if (!Bukkit.getOnlineMode())
-        {
+    protected void run() {
+        if (!Bukkit.getOnlineMode()) {
             sender.sendMessage(I.t("{ce}You cannot load unknown players in offline mode, sorry."));
             return;
         }
 
-        if (args.length == 0)
-        {
+        if (args.length == 0) {
             /// Error returned if one calls /uh loadplayers without arguments.
             sender.sendMessage(I.t("{ce}You need to provide at least one player name."));
             return;
@@ -72,12 +68,15 @@ public class LoadPlayersCommand extends Command
         final CommandSender fSender = sender;
 
         OfflinePlayersLoader.loadPlayers(
-            Arrays.asList(args),
-            addedPlayers -> fSender.sendMessage(I.tn("{cs}Loaded {0} player successfully.", "{cs}Loaded {0} players successfully.", addedPlayers.size())),
-            notFound -> {
-                /// Message sent if some players cannot be loaded while /uh loadplayers is used. 0 = amount of players missing; 1 = list of nicknames (format "nick1, nick2, nick3").
-                fSender.sendMessage(I.tn("{ce}{0} player is missing: {1}.", "{ce}{0} players are missing: {1}.", notFound.size(), notFound.size(), StringUtils.join(notFound, ", ")));
-            }
+                Arrays.asList(args),
+                addedPlayers -> fSender.sendMessage(
+                        I.tn("{cs}Loaded {0} player successfully.", "{cs}Loaded {0} players successfully.",
+                                addedPlayers.size())),
+                notFound -> {
+                    /// Message sent if some players cannot be loaded while /uh loadplayers is used. 0 = amount of players missing; 1 = list of nicknames (format "nick1, nick2, nick3").
+                    fSender.sendMessage(I.tn("{ce}{0} player is missing: {1}.", "{ce}{0} players are missing: {1}.",
+                            notFound.size(), notFound.size(), StringUtils.join(notFound, ", ")));
+                }
         );
     }
 }

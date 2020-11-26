@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -39,6 +40,8 @@ import eu.carrade.amaury.quartzsurvivalgames.core.ModuleLoadTime;
 import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.game.GameModule;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.entity.Ghast;
 import org.bukkit.event.EventHandler;
@@ -46,10 +49,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@ModuleInfo (
+@ModuleInfo(
         name = "No Ghast Tears",
         description = "Replaces ghast tears with gold, to disable regeneration " +
                 "potions while keeping a reward for the action.",
@@ -57,27 +57,20 @@ import java.util.List;
         category = ModuleCategory.GAMEPLAY,
         icon = Material.GHAST_TEAR
 )
-public class NoGhastTearsModule extends QSGModule
-{
+public class NoGhastTearsModule extends QSGModule {
     /**
      * Used to replace ghast tears with gold (if needed).
      */
     @EventHandler(ignoreCancelled = true)
-    public void onEntityDeath(EntityDeathEvent ev)
-    {
-        if (ev.getEntity() instanceof Ghast)
-        {
+    public void onEntityDeath(EntityDeathEvent ev) {
+        if (ev.getEntity() instanceof Ghast) {
             final List<ItemStack> drops = new ArrayList<>(ev.getDrops());
             ev.getDrops().clear();
 
-            for (final ItemStack i : drops)
-            {
-                if (i.getType() == Material.GHAST_TEAR)
-                {
+            for (final ItemStack i : drops) {
+                if (i.getType() == Material.GHAST_TEAR) {
                     ev.getDrops().add(new ItemStack(Material.GOLD_INGOT, i.getAmount()));
-                }
-                else
-                {
+                } else {
                     ev.getDrops().add(i);
                 }
             }
@@ -87,11 +80,10 @@ public class NoGhastTearsModule extends QSGModule
     /**
      * Used to prevent the user to get a ghast tear.
      */
-    @EventHandler (ignoreCancelled = true)
-    public void onPlayerPickupItem(PlayerPickupItemEvent ev)
-    {
-        if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR && QSG.module(GameModule.class).isAlive(ev.getPlayer()))
-        {
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerPickupItem(PlayerPickupItemEvent ev) {
+        if (ev.getItem().getItemStack().getType() == Material.GHAST_TEAR &&
+                QSG.module(GameModule.class).isAlive(ev.getPlayer())) {
             ev.setCancelled(true);
         }
     }

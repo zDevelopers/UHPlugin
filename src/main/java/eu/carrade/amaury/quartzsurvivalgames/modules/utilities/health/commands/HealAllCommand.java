@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.health.commands;
 
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.teams.TeamsModule;
@@ -43,56 +44,44 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 
-@CommandInfo (name = "heal-all", usageParameters = "[half-hearts=20|±diff]", aliases = {"healall"})
-public class HealAllCommand extends Command
-{
+@CommandInfo(name = "heal-all", usageParameters = "[half-hearts=20|±diff]", aliases = {"healall"})
+public class HealAllCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         double diffHealth;
         boolean add = false; // "add" (±, true) or "raw" (exact health, false) mode
 
         // /uh heal-all: full life for player.
-        if (args.length == 0)
-        {
+        if (args.length == 0) {
             diffHealth = Integer.MAX_VALUE;
         }
 
         // /uh heal-all <hearts>
-        else
-        {
-            try
-            {
-                if (args[0].startsWith("+") || args[0].startsWith("-"))
-                {
+        else {
+            try {
+                if (args[0].startsWith("+") || args[0].startsWith("-")) {
                     add = true;
                 }
 
                 diffHealth = Double.parseDouble(args[0]);
             }
-            catch (final NumberFormatException e)
-            {
+            catch (final NumberFormatException e) {
                 throwInvalidArgument(I.t("{ce}Hey, this is not a number of half-hearts. It's a text. Pfff."));
                 return;
             }
         }
 
-        if (!add && diffHealth <= 0)
-        {
+        if (!add && diffHealth <= 0) {
             error(I.t("{ce}Serial killer!"));
         }
 
-        for (final Player player : Bukkit.getServer().getOnlinePlayers())
-        {
+        for (final Player player : Bukkit.getServer().getOnlinePlayers()) {
             double health = !add ? diffHealth : player.getHealth() + diffHealth;
 
-            if (health <= 0D)
-            {
+            if (health <= 0D) {
                 warning(I.t("{ce}The health of {0} was not updated to avoid a kill.", player.getName()));
                 continue;
-            }
-            else if (health > player.getMaxHealth())
-            {
+            } else if (health > player.getMaxHealth()) {
                 health = player.getMaxHealth();
             }
 
@@ -100,23 +89,15 @@ public class HealAllCommand extends Command
             QSG.module(TeamsModule.class).getSidebarPlayerCache(player.getUniqueId()).updateHealth(health);
         }
 
-        if (!add)
-        {
-            if (diffHealth == Integer.MAX_VALUE)
-            {
+        if (!add) {
+            if (diffHealth == Integer.MAX_VALUE) {
                 success(I.t("The health of all players was completely filled.", diffHealth));
-            }
-            else
-            {
+            } else {
                 success(I.t("The health of all players was set to {0}.", diffHealth));
             }
-        }
-        else if (diffHealth > 0)
-        {
+        } else if (diffHealth > 0) {
             success(I.t("The health of all players was increased by {0}.", diffHealth));
-        }
-        else
-        {
+        } else {
             success(I.t("The health of all players was decreased by {0}.", -diffHealth));
         }
     }

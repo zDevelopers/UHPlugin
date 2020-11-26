@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.rules;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -42,6 +43,9 @@ import eu.carrade.amaury.quartzsurvivalgames.utils.CommandUtils;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -49,11 +53,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Rules",
         description = "Displays configured game rules when the game start or the " +
                 "players join",
@@ -62,44 +62,43 @@ import java.util.List;
         icon = Material.BOOKSHELF,
         settings = Config.class
 )
-public class RulesModule extends QSGModule
-{
+public class RulesModule extends QSGModule {
     private final List<String> rules = new ArrayList<>();
 
     @Override
-    public void onEnable()
-    {
-        if (Config.RULES.isDefined() && !Config.RULES.isEmpty() )
-        {
+    public void onEnable() {
+        if (Config.RULES.isDefined() && !Config.RULES.isEmpty()) {
             // We check if the list is non-empty, i.e. if there is at least a non-empty rule.
             boolean empty = true;
 
-            for (final String rule : Config.RULES)
-            {
-                if (rule == null) continue;
+            for (final String rule : Config.RULES) {
+                if (rule == null) {
+                    continue;
+                }
 
-                rules.add(ChatColor.translateAlternateColorCodes('&',rule.trim()));
+                rules.add(ChatColor.translateAlternateColorCodes('&', rule.trim()));
 
-                if (!rule.isEmpty())
+                if (!rule.isEmpty()) {
                     empty = false;
+                }
             }
 
             // If the list is empty, no rules are displayed. We reset the list.
-            if (empty) rules.clear();
+            if (empty) {
+                rules.clear();
+            }
         }
     }
 
     @Override
-    public List<Class<? extends Command>> getCommands()
-    {
+    public List<Class<? extends Command>> getCommands() {
         return Collections.singletonList(RulesCommand.class);
     }
 
     /**
      * @return {@code true} if the rules system is enabled
      */
-    public boolean hasRules()
-    {
+    public boolean hasRules() {
         return rules.size() != 0;
     }
 
@@ -109,21 +108,16 @@ public class RulesModule extends QSGModule
      *
      * @param receiver The receiver.
      */
-    public void displayRulesTo(CommandSender receiver)
-    {
+    public void displayRulesTo(CommandSender receiver) {
         CommandUtils.displaySeparator(receiver);
 
         /// Title of the rules box.
         receiver.sendMessage(I.t("{red}{bold}Rules and informations"));
 
-        for (String rule : rules)
-        {
-            if (rule.isEmpty())
-            {
+        for (String rule : rules) {
+            if (rule.isEmpty()) {
                 receiver.sendMessage("");
-            }
-            else
-            {
+            } else {
                 /// Rule item in the rule box.
                 receiver.sendMessage(I.t("{darkgray}- {reset}{0}", rule));
             }
@@ -135,26 +129,26 @@ public class RulesModule extends QSGModule
     /**
      * Broadcasts the rules to the whole server.
      */
-    public void broadcastRules()
-    {
+    public void broadcastRules() {
         Bukkit.getOnlinePlayers().forEach(this::displayRulesTo);
         displayRulesTo(Bukkit.getConsoleSender());
     }
 
     @EventHandler
-    public void onPlayerJoin(final PlayerJoinEvent ev)
-    {
-        if (QSG.game().getPhase() == GamePhase.WAIT && hasRules() && Config.DISPLAY.ON_JOIN.get())
-        {
-            RunTask.later(() -> { if (ev.getPlayer().isOnline()) displayRulesTo(ev.getPlayer()); }, 100L);
+    public void onPlayerJoin(final PlayerJoinEvent ev) {
+        if (QSG.game().getPhase() == GamePhase.WAIT && hasRules() && Config.DISPLAY.ON_JOIN.get()) {
+            RunTask.later(() -> {
+                if (ev.getPlayer().isOnline()) {
+                    displayRulesTo(ev.getPlayer());
+                }
+            }, 100L);
         }
     }
 
     @EventHandler
-    public void onGameStart(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward() && hasRules() && Config.DISPLAY.ON_START.get())
-        {
+    public void onGameStart(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward() && hasRules() &&
+                Config.DISPLAY.ON_START.get()) {
             RunTask.later(this::broadcastRules, 200L);
         }
     }

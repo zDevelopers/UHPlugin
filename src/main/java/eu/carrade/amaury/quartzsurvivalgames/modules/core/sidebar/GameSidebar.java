@@ -29,31 +29,28 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.sidebar;
 
-import eu.carrade.amaury.quartzsurvivalgames.QuartzSurvivalGames;
 import eu.carrade.amaury.quartzsurvivalgames.QSGConfig;
+import eu.carrade.amaury.quartzsurvivalgames.QuartzSurvivalGames;
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleWrapper;
 import eu.carrade.amaury.quartzsurvivalgames.core.QSGModule;
 import fr.zcraft.quartzlib.components.scoreboard.Sidebar;
 import fr.zcraft.quartzlib.components.scoreboard.SidebarMode;
+import java.util.List;
 import org.bukkit.entity.Player;
 
-import java.util.List;
 
-
-public class GameSidebar extends Sidebar
-{
-    public GameSidebar()
-    {
+public class GameSidebar extends Sidebar {
+    public GameSidebar() {
         setAutoRefreshDelay(10);
         setTitleMode(SidebarMode.GLOBAL);
         setContentMode(SidebarMode.PER_PLAYER);
     }
 
     @Override
-    public void preRender()
-    {
+    public void preRender() {
         QuartzSurvivalGames.get().getModulesManager().getModules().stream()
                 .filter(ModuleWrapper::isLoaded)
                 .map(ModuleWrapper::get)
@@ -61,8 +58,7 @@ public class GameSidebar extends Sidebar
     }
 
     @Override
-    public List<String> getContent(Player player)
-    {
+    public List<String> getContent(Player player) {
         final SidebarInjector injector = new SidebarInjector();
 
         QuartzSurvivalGames.get().getModulesManager().getModules().stream()
@@ -74,8 +70,7 @@ public class GameSidebar extends Sidebar
     }
 
     @Override
-    public String getTitle(Player player)
-    {
+    public String getTitle(Player player) {
         return QSGConfig.TITLE.get();
     }
 }

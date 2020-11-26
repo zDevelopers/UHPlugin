@@ -98,8 +98,8 @@
                     <minimizeJar>true</minimizeJar>
                     <artifactSet>
                         <includes>
-                            <include>fr.zcraft:zlib</include>
-                            <include>fr.zcraft:QuartzTeams</include>
+                            <include>fr.zcraft:quartzlib</include>
+                            <include>fr.zcraft:quartzteams</include>
                             <include>me.cassayre.florian:Hawk</include>
                         </includes>
                     </artifactSet>
@@ -110,7 +110,7 @@
                         </relocation>
                         <relocation>
                             <pattern>fr.zcraft.quartzteams</pattern>
-                            <shadedPattern>eu.carrade.amaury.quartzsurvivalgames.quartQuartzTeams</shadedPattern>
+                            <shadedPattern>eu.carrade.amaury.quartzsurvivalgames.quartzteams</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>me.cassayre.florian.hawk</pattern>
@@ -171,12 +171,12 @@
         <dependency>
             <groupId>fr.zcraft</groupId>
             <artifactId>quartzlib</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </dependency>
         <dependency>
             <groupId>fr.zcraft</groupId>
             <artifactId>quartzteams</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.0.2</version>
         </dependency>
         <dependency>
             <groupId>me.cassayre.florian</groupId>

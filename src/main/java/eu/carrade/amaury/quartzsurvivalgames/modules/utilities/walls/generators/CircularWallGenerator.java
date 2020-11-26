@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.walls.generators;
 
 import org.bukkit.Material;
@@ -36,10 +37,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 
-public class CircularWallGenerator extends WallGenerator
-{
-    public CircularWallGenerator(Material wallBlockAir, Material wallBlockSolid)
-    {
+public class CircularWallGenerator extends WallGenerator {
+    public CircularWallGenerator(Material wallBlockAir, Material wallBlockSolid) {
         super(wallBlockAir, wallBlockSolid);
     }
 
@@ -51,8 +50,7 @@ public class CircularWallGenerator extends WallGenerator
      * @param wallHeight The height of the wall.
      */
     @Override
-    public void build(World world, int diameter, int wallHeight)
-    {
+    public void build(World world, int diameter, int wallHeight) {
         // Only one quarter of the circle is explicitly set, the other parts are generated
         // following the first quarter.
         // The quarter chosen to be explicitly generated if the one on the South-East,
@@ -76,16 +74,14 @@ public class CircularWallGenerator extends WallGenerator
         Block candidate3;
 
         // Infinite loop broken when the generation is done.
-        while (true)
-        {
+        while (true) {
 
             // 1) the current point, the symmetries and the opposite point are built.
             this.buildWallPoint(world, currentBlock.getX(), currentBlock.getZ(), wallHeight, diameter);
 
 
             // 2) the two candidates are found, except if the build is finished.
-            if (currentBlock.getX() == xSpawn)
-            {
+            if (currentBlock.getX() == xSpawn) {
                 // END
                 break;
             }
@@ -96,22 +92,23 @@ public class CircularWallGenerator extends WallGenerator
 
 
             // 3) The good block is selected
-            Double distanceCandidate1ToRef = Math.abs((candidate1.getLocation().distance(world.getSpawnLocation()) - radius));
-            Double distanceCandidate2ToRef = Math.abs((candidate2.getLocation().distance(world.getSpawnLocation()) - radius));
-            Double distanceCandidate3ToRef = Math.abs((candidate3.getLocation().distance(world.getSpawnLocation()) - radius));
+            Double distanceCandidate1ToRef =
+                    Math.abs((candidate1.getLocation().distance(world.getSpawnLocation()) - radius));
+            Double distanceCandidate2ToRef =
+                    Math.abs((candidate2.getLocation().distance(world.getSpawnLocation()) - radius));
+            Double distanceCandidate3ToRef =
+                    Math.abs((candidate3.getLocation().distance(world.getSpawnLocation()) - radius));
 
             // The first is better
-            if (distanceCandidate1ToRef < distanceCandidate2ToRef && distanceCandidate1ToRef < distanceCandidate3ToRef)
-            {
+            if (distanceCandidate1ToRef < distanceCandidate2ToRef &&
+                    distanceCandidate1ToRef < distanceCandidate3ToRef) {
                 currentBlock = candidate1;
             }
             // The second is better
-            else if (distanceCandidate2ToRef < distanceCandidate1ToRef && distanceCandidate2ToRef < distanceCandidate3ToRef)
-            {
+            else if (distanceCandidate2ToRef < distanceCandidate1ToRef &&
+                    distanceCandidate2ToRef < distanceCandidate3ToRef) {
                 currentBlock = candidate2;
-            }
-            else
-            {
+            } else {
                 currentBlock = candidate3;
             }
         }
@@ -128,8 +125,7 @@ public class CircularWallGenerator extends WallGenerator
      * @param wallHeight
      * @param diameter
      */
-    private void buildWallPoint(World world, int x, int z, int wallHeight, int diameter)
-    {
+    private void buildWallPoint(World world, int x, int z, int wallHeight, int diameter) {
         WallPosition positionOriginal;
         WallPosition positionSymmetricX;
         WallPosition positionSymmetricZ;
@@ -147,15 +143,12 @@ public class CircularWallGenerator extends WallGenerator
 
         // Following the way the wall is generated, the position of the original
         // "tower" can only be « SOUTH » or « EAST ».
-        if (z > Math.floor(diameter / 2))
-        {
+        if (z > Math.floor(diameter / 2)) {
             positionOriginal = WallPosition.SOUTH;
             positionSymmetricX = WallPosition.SOUTH;
             positionSymmetricZ = WallPosition.NORTH;
             positionOpposite = WallPosition.NORTH;
-        }
-        else
-        {
+        } else {
             positionOriginal = WallPosition.EAST;
             positionSymmetricX = WallPosition.WEST;
             positionSymmetricZ = WallPosition.EAST;
@@ -163,8 +156,7 @@ public class CircularWallGenerator extends WallGenerator
         }
 
         // The 4 towers are built.
-        for (int y = 1; y <= wallHeight; y++)
-        {
+        for (int y = 1; y <= wallHeight; y++) {
             setBlock(world.getBlockAt(x, y, z), positionOriginal);
             setBlock(world.getBlockAt(x - 2 * (x - xSpawn), y, z), positionSymmetricX);
             setBlock(world.getBlockAt(x, y, z + 2 * (zSpawn - z)), positionSymmetricZ);

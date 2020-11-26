@@ -78,8 +78,8 @@ public class ModuleWrapper {
     private final boolean internal;
     private final boolean canBeUnloaded;
     private final boolean canBeLoadedLate;
-    private boolean enabled;
     private final String[] dependencies;
+    private boolean enabled;
     private QSGModule instance = null;
 
     public ModuleWrapper(final Class<? extends QSGModule> moduleClass) {
@@ -337,7 +337,7 @@ public class ModuleWrapper {
                     .longLore(ChatColor.WHITE, authors, 42);
         }
 
-        return icon.hideAttributes();
+        return icon.hideAllAttributes();
     }
 
     /**

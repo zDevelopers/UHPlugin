@@ -29,6 +29,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.runtimeCommandsExecutor;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -41,22 +42,21 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.TimeDelta;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationList;
 import fr.zcraft.quartzlib.tools.PluginLogger;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
-import org.bukkit.Material;
-import org.bukkit.event.EventHandler;
-import org.bukkit.scheduler.BukkitTask;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
+import org.bukkit.scheduler.BukkitTask;
 
 
 /**
  * This will execute the commands to be executed during runtime, as configured in the config file
  * or added through the API.
  */
-@ModuleInfo (
+@ModuleInfo(
         name = "Runtime Commands Executor",
         description = "Executes commands during runtime, at specific times of the game, automatically. " +
                 "This is a powerful tool to schedule any command at any time relative to the game progression.",
@@ -65,8 +65,7 @@ import java.util.Set;
         icon = Material.COMMAND_BLOCK,
         settings = Config.class
 )
-public class RuntimeCommandsExecutor extends QSGModule
-{
+public class RuntimeCommandsExecutor extends QSGModule {
     /**
      * Stores the commands to be executed later.
      * <p>
@@ -90,8 +89,7 @@ public class RuntimeCommandsExecutor extends QSGModule
      *
      * @param key The key to schedule. All commands previously registered under this key will be executed.
      */
-    public void runCommands(final String key)
-    {
+    public void runCommands(final String key) {
         runCommands(key, scheduled.get(key));
     }
 
@@ -102,25 +100,22 @@ public class RuntimeCommandsExecutor extends QSGModule
      *
      * @param phase The phase to schedule. All commands previously registered under this phase will be executed.
      */
-    public void runCommands(final GamePhase phase)
-    {
+    public void runCommands(final GamePhase phase) {
         runCommands(getPhaseKey(phase));
     }
 
     /**
      * Register the given commands in the Bukkit' scheduler.
-     *
+     * <p>
      * Delays are from the execution of this method.
-     * @param key The key to store the tasks under.
+     *
+     * @param key               The key to store the tasks under.
      * @param scheduledCommands The commands to schedule
      */
-    private void runCommands(final String key, final Map<Integer, HashSet<String>> scheduledCommands)
-    {
-        if (scheduledCommands != null)
-        {
+    private void runCommands(final String key, final Map<Integer, HashSet<String>> scheduledCommands) {
+        if (scheduledCommands != null) {
             final Set<BukkitTask> tasks = runningTasks.computeIfAbsent(key, k -> new HashSet<>());
-            for (Entry<Integer, HashSet<String>> scheduledCommandsStack : scheduledCommands.entrySet())
-            {
+            for (Entry<Integer, HashSet<String>> scheduledCommandsStack : scheduledCommands.entrySet()) {
                 tasks.add(RunTask.later(
                         new ScheduledCommandsExecutorTask(scheduledCommandsStack.getValue()),
                         scheduledCommandsStack.getKey() * 20L
@@ -132,12 +127,11 @@ public class RuntimeCommandsExecutor extends QSGModule
 
     /**
      * Cancels all tasks currently running for the given key.
+     *
      * @param key The key.
      */
-    public void cancelTasks(final String key)
-    {
-        if (runningTasks.containsKey(key))
-        {
+    public void cancelTasks(final String key) {
+        if (runningTasks.containsKey(key)) {
             runningTasks.get(key).forEach(BukkitTask::cancel);
             runningTasks.get(key).clear();
         }
@@ -145,26 +139,25 @@ public class RuntimeCommandsExecutor extends QSGModule
 
     /**
      * Cancels all tasks currently running for the given phase.
+     *
      * @param phase The phase.
      */
-    public void cancelTasks(final GamePhase phase)
-    {
+    public void cancelTasks(final GamePhase phase) {
         cancelTasks(getPhaseKey(phase));
     }
 
     /**
      * Schedules a command.
-     *
+     * <p>
      * Commands scheduled with any non-standard key will not be executed automatically. You'll have
      * to call {@link #runCommands(String)} to schedule them.
      *
-     * @param key The command will be stored under this key.
+     * @param key     The command will be stored under this key.
      * @param command The command to add.
-     * @param delay The delay.
+     * @param delay   The delay.
      * @see #scheduleCommand(GamePhase, String, TimeDelta) to schedule a command from one game phase change.
      */
-    public void scheduleCommand(final String key, final String command, final TimeDelta delay)
-    {
+    public void scheduleCommand(final String key, final String command, final TimeDelta delay) {
         final Map<Integer, HashSet<String>> commandsMap = scheduled.computeIfAbsent(key, k -> new HashMap<>());
         scheduleCommand(commandsMap, command, delay);
     }
@@ -172,12 +165,11 @@ public class RuntimeCommandsExecutor extends QSGModule
     /**
      * Schedule a command to be run when the given phase starts.
      *
-     * @param phase The phase
+     * @param phase   The phase
      * @param command The command to execute
-     * @param delay The delay after the phase's beginning.
+     * @param delay   The delay after the phase's beginning.
      */
-    public void scheduleCommand(final GamePhase phase, String command, final TimeDelta delay)
-    {
+    public void scheduleCommand(final GamePhase phase, String command, final TimeDelta delay) {
         scheduleCommand(getPhaseKey(phase), command, delay);
     }
 
@@ -185,11 +177,10 @@ public class RuntimeCommandsExecutor extends QSGModule
      * Schedules a command.
      *
      * @param scheduledCommands A map containing the scheduled commands, sorted by delay.
-     * @param command The command to add.
-     * @param delay The delay (seconds).
+     * @param command           The command to add.
+     * @param delay             The delay (seconds).
      */
-    private void scheduleCommand(Map<Integer, HashSet<String>> scheduledCommands, String command, TimeDelta delay)
-    {
+    private void scheduleCommand(Map<Integer, HashSet<String>> scheduledCommands, String command, TimeDelta delay) {
         final Set<String> list = scheduledCommands.computeIfAbsent((int) delay.getSeconds(), k -> new HashSet<>());
         list.add(clearCommandName(command));
     }
@@ -198,11 +189,10 @@ public class RuntimeCommandsExecutor extends QSGModule
     /**
      * Removes the given command from everywhere.
      *
-     * @param key The command will be stored under this key.
+     * @param key     The command will be stored under this key.
      * @param command The command. Not case-sensitive.
      */
-    public void removeScheduledCommand(String key, String command)
-    {
+    public void removeScheduledCommand(String key, String command) {
         removeScheduledCommand(scheduled.get(key), command);
     }
 
@@ -210,16 +200,12 @@ public class RuntimeCommandsExecutor extends QSGModule
      * Removes the given command from everywhere.
      *
      * @param scheduledCommands A map containing the scheduled commands, sorted by delay.
-     * @param command The command. Not case-sensitive.
+     * @param command           The command. Not case-sensitive.
      */
-    private void removeScheduledCommand(Map<Integer, HashSet<String>> scheduledCommands, String command)
-    {
-        for (HashSet<String> commands : scheduledCommands.values())
-        {
-            for (String scheduledCommand : new HashSet<>(commands))
-            {
-                if (scheduledCommand.equalsIgnoreCase(clearCommandName(command)))
-                {
+    private void removeScheduledCommand(Map<Integer, HashSet<String>> scheduledCommands, String command) {
+        for (HashSet<String> commands : scheduledCommands.values()) {
+            for (String scheduledCommand : new HashSet<>(commands)) {
+                if (scheduledCommand.equalsIgnoreCase(clearCommandName(command))) {
                     commands.remove(scheduledCommand);
                 }
             }
@@ -230,22 +216,20 @@ public class RuntimeCommandsExecutor extends QSGModule
     /**
      * Removes the given command from everywhere.
      *
-     * @param key The key the command was registered under.
+     * @param key     The key the command was registered under.
      * @param command The command. Not case-sensitive.
      */
-    public void removeScheduledCommand(String key, String command, TimeDelta delay)
-    {
+    public void removeScheduledCommand(String key, String command, TimeDelta delay) {
         removeScheduledCommand(scheduled.get(key), command, delay);
     }
 
     /**
      * Removes the given command from everywhere.
      *
-     * @param phase The phase the command was registered under.
+     * @param phase   The phase the command was registered under.
      * @param command The command. Not case-sensitive.
      */
-    public void removeScheduledCommand(GamePhase phase, String command, TimeDelta delay)
-    {
+    public void removeScheduledCommand(GamePhase phase, String command, TimeDelta delay) {
         removeScheduledCommand(getPhaseKey(phase), command, delay);
     }
 
@@ -253,36 +237,32 @@ public class RuntimeCommandsExecutor extends QSGModule
      * Removes the given command from everywhere.
      *
      * @param scheduledCommands A map containing the scheduled commands, sorted by delay.
-     * @param command The command. Not case-sensitive.
+     * @param command           The command. Not case-sensitive.
      */
-    private void removeScheduledCommand(Map<Integer, HashSet<String>> scheduledCommands, String command, TimeDelta delay)
-    {
+    private void removeScheduledCommand(Map<Integer, HashSet<String>> scheduledCommands, String command,
+                                        TimeDelta delay) {
         HashSet<String> commands = scheduledCommands.get(((int) delay.getSeconds()));
 
-        if (commands != null)
-        {
+        if (commands != null) {
             commands.stream()
                     .filter(scheduledCommand -> scheduledCommand.equalsIgnoreCase(clearCommandName(command)))
                     .forEach(commands::remove);
         }
     }
 
-	
-	/* Utilities */
+
+    /* Utilities */
 
 
-    private String clearCommandName(String command)
-    {
-        if (command.startsWith("/"))
-        {
+    private String clearCommandName(String command) {
+        if (command.startsWith("/")) {
             command = command.substring(1);
         }
 
         return command;
     }
 
-    private String getPhaseKey(final GamePhase phase)
-    {
+    private String getPhaseKey(final GamePhase phase) {
         return "internal." + phase.name().toLowerCase().replace('_', '-');
     }
 
@@ -290,10 +270,8 @@ public class RuntimeCommandsExecutor extends QSGModule
     /* Events to launch tasks */
 
     @EventHandler
-    protected void onGamePhaseChanged(final GamePhaseChangedEvent ev)
-    {
-        if (!ev.isRunningForward())
-        {
+    protected void onGamePhaseChanged(final GamePhaseChangedEvent ev) {
+        if (!ev.isRunningForward()) {
             cancelTasks(ev.getNewPhase());
             return;
         }
@@ -301,32 +279,39 @@ public class RuntimeCommandsExecutor extends QSGModule
         // We load the commands to run
         final ConfigurationList<Map> commands;
 
-        switch (ev.getNewPhase())
-        {
-            case WAIT:     commands = Config.WAIT; break;
-            case STARTING: commands = Config.STARTING; break;
-            case IN_GAME:  commands = Config.IN_GAME; break;
-            case END:      commands = Config.END; break;
-            default: return;
+        switch (ev.getNewPhase()) {
+            case WAIT:
+                commands = Config.WAIT;
+                break;
+            case STARTING:
+                commands = Config.STARTING;
+                break;
+            case IN_GAME:
+                commands = Config.IN_GAME;
+                break;
+            case END:
+                commands = Config.END;
+                break;
+            default:
+                return;
         }
 
         commands.stream()
-            .filter(command -> command.containsKey("exec") && !command.get("exec").toString().isEmpty())
-            .forEach(command -> {
-                try
-                {
-                    scheduleCommand(ev.getNewPhase(), command.get("exec").toString(), new TimeDelta(command.get("delay").toString()));
-                }
-                catch (IllegalArgumentException e)
-                {
-                    PluginLogger.error(
-                            "Invalid delay “{0}” in scheduled command “{1}” for phase {2}",
-                            command.get("delay").toString(),
-                            command.get("exec").toString(),
-                            ev.getNewPhase()
-                    );
-                }
-            });
+                .filter(command -> command.containsKey("exec") && !command.get("exec").toString().isEmpty())
+                .forEach(command -> {
+                    try {
+                        scheduleCommand(ev.getNewPhase(), command.get("exec").toString(),
+                                new TimeDelta(command.get("delay").toString()));
+                    }
+                    catch (IllegalArgumentException e) {
+                        PluginLogger.error(
+                                "Invalid delay “{0}” in scheduled command “{1}” for phase {2}",
+                                command.get("delay").toString(),
+                                command.get("exec").toString(),
+                                ev.getNewPhase()
+                        );
+                    }
+                });
 
         // And we schedule all of them.
         runCommands(ev.getNewPhase());

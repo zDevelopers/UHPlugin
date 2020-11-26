@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.other;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -44,17 +45,16 @@ import fr.zcraft.quartzlib.components.events.FutureEventHandler;
 import fr.zcraft.quartzlib.components.events.WrappedEvent;
 import fr.zcraft.quartzlib.tools.PluginLogger;
 import fr.zcraft.quartzlib.tools.reflection.Reflection;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandException;
 import org.bukkit.event.EventHandler;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 
-
-@ModuleInfo (
+@ModuleInfo(
         name = "Advancements",
         description = "Resets the advancements when the game starts. Disable if " +
                 "you want to keep old advancements.\n\n" +
@@ -64,42 +64,39 @@ import java.util.Map;
         category = ModuleCategory.OTHER,
         icon = Material.HAY_BLOCK
 )
-public class AdvancementsModule extends QSGModule
-{
-    @FutureEventHandler (event = "player.PlayerAchievementAwardedEvent", ignoreCancelled = true)
-    public void onAchievementAwarded(final WrappedEvent ev)
-    {
-        if (QSG.game().getPhase() == GamePhase.WAIT)
-        {
+public class AdvancementsModule extends QSGModule {
+    @FutureEventHandler(event = "player.PlayerAchievementAwardedEvent", ignoreCancelled = true)
+    public void onAchievementAwarded(final WrappedEvent ev) {
+        if (QSG.game().getPhase() == GamePhase.WAIT) {
             ev.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onGameStarts(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() != GamePhase.IN_GAME || !ev.isRunningForward()) return;
+    public void onGameStarts(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() != GamePhase.IN_GAME || !ev.isRunningForward()) {
+            return;
+        }
 
 
         // Achievements
 
-        try
-        {
+        try {
             final Object[] achievements = Class.forName("org.bukkit.Achievement").getEnumConstants();
 
             QSG.game().getAliveConnectedPlayers().forEach(player -> {
-                try
-                {
-                    for (final Object achievement : achievements)
-                    {
+                try {
+                    for (final Object achievement : achievements) {
                         PluginLogger.info("Removing achievement {0}", achievement);
                         Reflection.call(player, "removeAchievement", achievement);
                     }
                 }
-                catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+                catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+                }
             });
         }
-        catch (final Exception ignored) {} // Unsupported
+        catch (final Exception ignored) {
+        } // Unsupported
 
 
         // Advancements
@@ -111,15 +108,17 @@ public class AdvancementsModule extends QSGModule
         });
 
         QSG.game().getAliveConnectedPlayers().forEach(player -> {
-            try
-            {
+            try {
                 // ¯\_(ツ)_/¯
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement revoke " + player.getName() + " everything");
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                        "advancement revoke " + player.getName() + " everything");
             }
-            catch (final CommandException ignored) {}
+            catch (final CommandException ignored) {
+            }
         });
 
-        QSG.get().getWorlds().forEach(world -> world.setGameRuleValue("sendCommandFeedback", oldGameRule.get(world.getName())));
+        QSG.get().getWorlds()
+                .forEach(world -> world.setGameRuleValue("sendCommandFeedback", oldGameRule.get(world.getName())));
         oldGameRule.clear();
     }
 }

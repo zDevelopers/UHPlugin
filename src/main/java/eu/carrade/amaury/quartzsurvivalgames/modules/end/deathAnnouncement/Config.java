@@ -48,6 +48,7 @@ public class Config extends ConfigurationInstance {
     public static final ConfigurationItem<Boolean> LIGHTNING_STRIKE = item("lightning-strike", false);
     public static final ConfigurationItem<Boolean> PLAY_SOUND = item("play-sound", true);
     public static final ConfigurationItem<QSGSound> SOUND = item("sound", new QSGSound("ENTITY_WITHER_SPAWN"));
+
     public Config(File file) {
         super(file);
     }

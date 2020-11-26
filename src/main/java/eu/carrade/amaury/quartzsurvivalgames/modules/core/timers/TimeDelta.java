@@ -29,47 +29,43 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.timers;
 
 import fr.zcraft.quartzlib.components.configuration.ConfigurationParseException;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationValueHandler;
 import fr.zcraft.quartzlib.components.configuration.ConfigurationValueHandlers;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Objects;
 
 
-public class TimeDelta
-{
+public class TimeDelta {
     private static final NumberFormat formatter = new DecimalFormat("00");
 
-    private final long seconds;
-
-    static
-    {
+    static {
         ConfigurationValueHandlers.registerHandlers(TimeDelta.class);
     }
+
+    private final long seconds;
 
     /**
      * Constructs a time delta.
      *
      * @param seconds The number of seconds in this delta.
      */
-    public TimeDelta(long seconds)
-    {
+    public TimeDelta(long seconds) {
         this.seconds = seconds;
     }
 
     /**
      * Constructs a time delta.
      *
-     * @param hours The number of hours.
+     * @param hours   The number of hours.
      * @param minutes The number of minutes.
      * @param seconds The number of seconds.
      */
-    public TimeDelta(long hours, long minutes, long seconds)
-    {
+    public TimeDelta(long hours, long minutes, long seconds) {
         this(seconds + minutes * 60 + hours * 3600);
     }
 
@@ -85,39 +81,45 @@ public class TimeDelta
      * </ul>
      *
      * @param rawTime The raw time text.
-     *
      * @throws IllegalArgumentException if the text is not formatted as above.
-     * @throws NumberFormatException if the text between the colons cannot be
-     * converted in integers.
+     * @throws NumberFormatException    if the text between the colons cannot be
+     *                                  converted in integers.
      */
-    public TimeDelta(final String rawTime) throws IllegalArgumentException, NumberFormatException
-    {
+    public TimeDelta(final String rawTime) throws IllegalArgumentException, NumberFormatException {
         final String[] split = rawTime.split(":");
 
-        if (rawTime.isEmpty() || split.length > 3)
-        {
-            throw new IllegalArgumentException("Badly formatted string in TimeDelta(String); formats allowed are mm, mm:ss or hh:mm:ss.");
+        if (rawTime.isEmpty() || split.length > 3) {
+            throw new IllegalArgumentException(
+                    "Badly formatted string in TimeDelta(String); formats allowed are mm, mm:ss or hh:mm:ss.");
         }
 
         if (split.length == 1)  // "mm"
         {
             this.seconds = Integer.valueOf(split[0]) * 60;
-        }
-        else if (split.length == 2)  // "mm:ss"
+        } else if (split.length == 2)  // "mm:ss"
         {
             this.seconds = Integer.valueOf(split[0]) * 60 + Integer.valueOf(split[1]);
-        }
-        else  // "hh:mm:ss"
+        } else  // "hh:mm:ss"
         {
-            this.seconds = Integer.valueOf(split[0]) * 3600 + Integer.valueOf(split[1]) * 60 + Integer.valueOf(split[2]);
+            this.seconds =
+                    Integer.valueOf(split[0]) * 3600 + Integer.valueOf(split[1]) * 60 + Integer.valueOf(split[2]);
+        }
+    }
+
+    @ConfigurationValueHandler
+    public static TimeDelta handleTimeDelta(String rawDelta) throws ConfigurationParseException {
+        try {
+            return new TimeDelta(rawDelta);
+        }
+        catch (IllegalArgumentException e) {
+            throw new ConfigurationParseException("Invalid time delta format", rawDelta);
         }
     }
 
     /**
      * @return The total number of seconds in this time delta.
      */
-    public long getSeconds()
-    {
+    public long getSeconds() {
         return seconds;
     }
 
@@ -126,8 +128,7 @@ public class TimeDelta
      * @return {@code true} if the duration in this {@link TimeDelta} is less than
      * (or equal to) the duration in the other one.
      */
-    public boolean lessThan(final TimeDelta other)
-    {
+    public boolean lessThan(final TimeDelta other) {
         return this.getSeconds() <= other.getSeconds();
     }
 
@@ -136,8 +137,7 @@ public class TimeDelta
      * @return {@code true} if the duration in this {@link TimeDelta} is greater
      * than (or equal to) the duration in the other one.
      */
-    public boolean greaterThan(final TimeDelta other)
-    {
+    public boolean greaterThan(final TimeDelta other) {
         return this.getSeconds() >= other.getSeconds();
     }
 
@@ -146,8 +146,7 @@ public class TimeDelta
      * @return A new {@link TimeDelta} instance representing the sum of the two
      * {@link TimeDelta deltas}.
      */
-    public TimeDelta add(final TimeDelta other)
-    {
+    public TimeDelta add(final TimeDelta other) {
         return new TimeDelta(this.getSeconds() + other.getSeconds());
     }
 
@@ -156,8 +155,7 @@ public class TimeDelta
      * @return A new {@link TimeDelta} instance representing the subtraction of
      * the two {@link TimeDelta deltas}.
      */
-    public TimeDelta subtract(final TimeDelta other)
-    {
+    public TimeDelta subtract(final TimeDelta other) {
         return new TimeDelta(this.getSeconds() - other.getSeconds());
     }
 
@@ -166,8 +164,7 @@ public class TimeDelta
      * @return A new {@link TimeDelta} instance representing the duration of this
      * {@link TimeDelta delta} multiplied by the given factor.
      */
-    public TimeDelta multiply(final long factor)
-    {
+    public TimeDelta multiply(final long factor) {
         return new TimeDelta(this.getSeconds() * factor);
     }
 
@@ -176,8 +173,7 @@ public class TimeDelta
      * @return A new {@link TimeDelta} instance representing the duration of this
      * {@link TimeDelta delta} divided by the given factor.
      */
-    public TimeDelta divide(final long factor)
-    {
+    public TimeDelta divide(final long factor) {
         return new TimeDelta(this.getSeconds() / factor);
     }
 
@@ -186,45 +182,26 @@ public class TimeDelta
      * longer than one hour.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         final long secondsLeft = seconds % 60;
         final long minutesLeft = (seconds % 3600) / 60;
         final long hoursLeft = (long) Math.floor(seconds / 3600.0);
 
-        if (hoursLeft != 0)
-        {
-            return formatter.format(hoursLeft) + ":" + formatter.format(minutesLeft) + ":" + formatter.format(secondsLeft);
-        }
-        else
-        {
+        if (hoursLeft != 0) {
+            return formatter.format(hoursLeft) + ":" + formatter.format(minutesLeft) + ":" +
+                    formatter.format(secondsLeft);
+        } else {
             return formatter.format(minutesLeft) + ":" + formatter.format(secondsLeft);
         }
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() && seconds == ((TimeDelta) o).seconds;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(seconds);
-    }
-
-
-    @ConfigurationValueHandler
-    public static TimeDelta handleTimeDelta(String rawDelta) throws ConfigurationParseException
-    {
-        try
-        {
-            return new TimeDelta(rawDelta);
-        }
-        catch (IllegalArgumentException e)
-        {
-            throw new ConfigurationParseException("Invalid time delta format", rawDelta);
-        }
     }
 }

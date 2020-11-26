@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.external.motd;
 
 import eu.carrade.amaury.quartzsurvivalgames.QSGConfig;
@@ -47,34 +48,28 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.server.ServerListPingEvent;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "MOTD",
         description = "Updates the MOTD according to the current game state.",
         category = ModuleCategory.EXTERNAL,
         icon = Material.DARK_OAK_SIGN,
         settings = Config.class
 )
-public class MotdModule extends QSGModule
-{
+public class MotdModule extends QSGModule {
     private final GameModule game = QSG.module(GameModule.class);
 
-    private String getMOTD()
-    {
+    private String getMOTD() {
         final String matchName;
 
-        if (Config.DISPLAY_MATCH_NAME.get())
-        {
+        if (Config.DISPLAY_MATCH_NAME.get()) {
             matchName = ChatColor.translateAlternateColorCodes('&', Config.MATCH_NAME_PREFIX.get())
-                + QSGConfig.TITLE.get()
-                + ChatColor.RESET + "\n";
-        }
-        else
-        {
+                    + QSGConfig.TITLE.get()
+                    + ChatColor.RESET + "\n";
+        } else {
             matchName = "";
         }
 
-        switch (game.getPhase())
-        {
+        switch (game.getPhase()) {
             case WAIT:
                 return matchName + I.t("Waiting for players...");
 
@@ -82,37 +77,35 @@ public class MotdModule extends QSGModule
                 return matchName + I.t("Starting in progress...");
 
             case IN_GAME:
-                if (game.isTeamsGame())
-                {
+                if (game.isTeamsGame()) {
                     /// Teams game running MOTD. {0} = players alive count. {1} = teams alive count. Plural based on players count.
-                    return matchName + I.tn("Game running! {0} player alive in {1} team.", "Game running! {0} players alive in {1} teams.", game.countAlivePlayers(), game.countAlivePlayers(), game.countAliveTeams());
-                }
-                else
-                {
+                    return matchName + I.tn("Game running! {0} player alive in {1} team.",
+                            "Game running! {0} players alive in {1} teams.", game.countAlivePlayers(),
+                            game.countAlivePlayers(), game.countAliveTeams());
+                } else {
                     /// Solo game running MOTD. {0} = players alive count.
-                    return matchName + I.tn("Game running! {0} player alive.", "Game running! {0} players alive.", game.countAlivePlayers());
+                    return matchName + I.tn("Game running! {0} player alive.", "Game running! {0} players alive.",
+                            game.countAlivePlayers());
                 }
 
             case END:
             default:
                 final QuartzTeam winner = game.getWinner();
 
-                if (game.isTeamsGame())
-                {
+                if (game.isTeamsGame()) {
                     /// Game finished MOTD with team winner ({0} = team display name).
-                    return matchName + I.t("Game finished; the team {0} wins this match!", winner != null ? winner.getDisplayName() : "??");
-                }
-                else
-                {
+                    return matchName + I.t("Game finished; the team {0} wins this match!",
+                            winner != null ? winner.getDisplayName() : "??");
+                } else {
                     /// Game finished MOTD with solo winner ({0} = winner raw name).
-                    return matchName + I.t("Game finished; congratulation to {0} for his victory!", winner != null ? winner.getName() : "??");
+                    return matchName + I.t("Game finished; congratulation to {0} for his victory!",
+                            winner != null ? winner.getName() : "??");
                 }
         }
     }
 
     @EventHandler
-    public void onServerListPing(final ServerListPingEvent ev)
-    {
+    public void onServerListPing(final ServerListPingEvent ev) {
         ev.setMotd(getMOTD());
     }
 }

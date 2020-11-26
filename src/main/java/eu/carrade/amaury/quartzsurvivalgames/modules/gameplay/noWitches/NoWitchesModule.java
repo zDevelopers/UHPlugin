@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.gameplay.noWitches;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -43,7 +44,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
-@ModuleInfo (
+@ModuleInfo(
         name = "No Witches",
         description = "Prevents witches from spawning, either naturally, from lightning strike on a villager, or both.",
         when = ModuleLoadTime.ON_GAME_START,
@@ -51,20 +52,15 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
         icon = Material.POTION,
         settings = Config.class
 )
-public class NoWitchesModule extends QSGModule
-{
+public class NoWitchesModule extends QSGModule {
     @EventHandler
-    public void onCreatureSpawn(CreatureSpawnEvent ev)
-    {
-        if (ev.getEntityType().equals(EntityType.WITCH))
-        {
-            if (Config.DISABLE_NATURAL_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.NATURAL))
-            {
+    public void onCreatureSpawn(CreatureSpawnEvent ev) {
+        if (ev.getEntityType().equals(EntityType.WITCH)) {
+            if (Config.DISABLE_NATURAL_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.NATURAL)) {
                 ev.setCancelled(true);
             }
 
-            if (Config.DISABLE_LIGHTNING_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.LIGHTNING))
-            {
+            if (Config.DISABLE_LIGHTNING_SPAWN.get() && ev.getSpawnReason().equals(SpawnReason.LIGHTNING)) {
                 ev.setCancelled(true);
             }
         }

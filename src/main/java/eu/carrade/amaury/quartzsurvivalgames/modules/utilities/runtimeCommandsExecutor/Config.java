@@ -31,25 +31,22 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.runtimeCommandsExecutor;
-
-import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
-import fr.zcraft.quartzlib.components.configuration.ConfigurationList;
-
-import java.io.File;
-import java.util.Map;
 
 import static fr.zcraft.quartzlib.components.configuration.ConfigurationItem.list;
 
-public class Config extends ConfigurationInstance
-{
-    public Config(File file)
-    {
-        super(file);
-    }
+import fr.zcraft.quartzlib.components.configuration.ConfigurationInstance;
+import fr.zcraft.quartzlib.components.configuration.ConfigurationList;
+import java.io.File;
+import java.util.Map;
 
+public class Config extends ConfigurationInstance {
     public final static ConfigurationList<Map> WAIT = list("wait", Map.class);
     public final static ConfigurationList<Map> STARTING = list("starting", Map.class);
     public final static ConfigurationList<Map> IN_GAME = list("in-game", Map.class);
     public final static ConfigurationList<Map> END = list("end", Map.class);
+    public Config(File file) {
+        super(file);
+    }
 }

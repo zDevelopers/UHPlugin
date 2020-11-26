@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.other;
 
 import eu.carrade.amaury.quartzsurvivalgames.core.ModuleCategory;
@@ -47,7 +48,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 
 
-@ModuleInfo (
+@ModuleInfo(
         name = "Statistics",
         description = "If enabled, statistics will not be collected before the game" +
                 "and will be reset at the beginning of the game. Disable if you want " +
@@ -56,51 +57,42 @@ import org.bukkit.event.player.PlayerStatisticIncrementEvent;
         category = ModuleCategory.OTHER,
         icon = Material.CRAFTING_TABLE
 )
-public class StatisticsModule extends QSGModule
-{
+public class StatisticsModule extends QSGModule {
     @EventHandler
-    public void onPlayerStatisticIncrement(final PlayerStatisticIncrementEvent ev)
-    {
-        if (QSG.game().getPhase() == GamePhase.WAIT)
-        {
+    public void onPlayerStatisticIncrement(final PlayerStatisticIncrementEvent ev) {
+        if (QSG.game().getPhase() == GamePhase.WAIT) {
             ev.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onGameStart(final GamePhaseChangedEvent ev)
-    {
-        if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward())
-        {
+    public void onGameStart(final GamePhaseChangedEvent ev) {
+        if (ev.getNewPhase() == GamePhase.IN_GAME && ev.isRunningForward()) {
             QSG.game().getAliveConnectedPlayers().forEach(player -> {
-                for (final Statistic statistic : Statistic.values())
-                {
-                    switch (statistic.getType())
-                    {
+                for (final Statistic statistic : Statistic.values()) {
+                    switch (statistic.getType()) {
                         case UNTYPED:
                             player.setStatistic(statistic, 0);
                             break;
 
                         case ITEM:
                         case BLOCK:
-                            for (final Material material : Material.values())
-                            {
-                                try
-                                {
+                            for (final Material material : Material.values()) {
+                                try {
                                     player.setStatistic(statistic, material, 0);
                                 }
-                                catch (final IllegalArgumentException ignored) {}
+                                catch (final IllegalArgumentException ignored) {
+                                }
                             }
                             break;
 
                         case ENTITY:
-                            for (final EntityType entityType : EntityType.values())
-                            {
-                                try
-                                {
+                            for (final EntityType entityType : EntityType.values()) {
+                                try {
                                     player.setStatistic(statistic, entityType, 0);
                                 }
-                                catch (final Exception ignored) {}
+                                catch (final Exception ignored) {
+                                }
                             }
                             break;
                     }

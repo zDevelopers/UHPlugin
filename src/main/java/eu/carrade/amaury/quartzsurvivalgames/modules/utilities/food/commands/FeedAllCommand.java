@@ -31,6 +31,7 @@
  * pris connaissance de la licence CeCILL, et que vous en avez accepté les
  * termes.
  */
+
 package eu.carrade.amaury.quartzsurvivalgames.modules.utilities.food.commands;
 
 import fr.zcraft.quartzlib.components.commands.Command;
@@ -41,44 +42,37 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 
-@CommandInfo (name = "feed-all", usageParameters = "[foodPoints=20] [saturation=max]")
-public class FeedAllCommand extends Command
-{
+@CommandInfo(name = "feed-all", usageParameters = "[foodPoints=20] [saturation=max]")
+public class FeedAllCommand extends Command {
     @Override
-    protected void run() throws CommandException
-    {
+    protected void run() throws CommandException {
         int foodLevel = 20;
         float saturation = 20f;
 
         // /uh feed-all <foodLevel>
-        if (args.length > 0)
-        {
-            try
-            {
+        if (args.length > 0) {
+            try {
                 foodLevel = Integer.valueOf(args[0]);
             }
-            catch (NumberFormatException e)
-            {
-                throwInvalidArgument(I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
+            catch (NumberFormatException e) {
+                throwInvalidArgument(
+                        I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
             }
 
             // /uh feed-all <foodLevel> <saturation>
-            if (args.length > 1)
-            {
-                try
-                {
+            if (args.length > 1) {
+                try {
                     // The saturation value cannot be more than the food level.
                     saturation = Math.max(foodLevel, Float.valueOf(args[1]));
                 }
-                catch (NumberFormatException e)
-                {
-                    throwInvalidArgument(I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
+                catch (NumberFormatException e) {
+                    throwInvalidArgument(
+                            I.t("{ce}Food points and saturation must be numbers (floats for the saturation)!"));
                 }
             }
         }
 
-        for (final Player player : Bukkit.getOnlinePlayers())
-        {
+        for (final Player player : Bukkit.getOnlinePlayers()) {
             player.setFoodLevel(foodLevel);
             player.setSaturation(saturation);
         }

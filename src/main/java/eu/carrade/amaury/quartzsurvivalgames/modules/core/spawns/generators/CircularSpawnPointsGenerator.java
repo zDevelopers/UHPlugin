@@ -36,19 +36,17 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.BorderModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.spawns.exceptions.CannotGenerateSpawnPointsException;
 import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import eu.carrade.amaury.quartzsurvivalgames.utils.QSGUtils;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
 
-
-public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
-{
+public class CircularSpawnPointsGenerator implements SpawnPointsGenerator {
     private final BorderModule borderModule = QSG.module(BorderModule.class);
 
     /**
@@ -63,14 +61,13 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
      * @param xCenter                         The x coordinate of the point in the center of the region where the points will be generated.
      * @param zCenter                         The z coordinate of the point in the center of the region where the points will be generated.
      * @param avoidWater                      True if the generation have to avoid the water.
-     *
      * @return The spawn points generated.
-     *
      * @throws CannotGenerateSpawnPointsException In case of fail.
      */
     @Override
-    public Set<Location> generate(final World world, final int spawnCount, final int regionDiameter, final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter, final boolean avoidWater) throws CannotGenerateSpawnPointsException
-    {
+    public Set<Location> generate(final World world, final int spawnCount, final int regionDiameter,
+                                  final int minimalDistanceBetweenTwoPoints, final double xCenter, final double zCenter,
+                                  final boolean avoidWater) throws CannotGenerateSpawnPointsException {
         // We starts the generation on a smaller grid, to avoid false outside tests if the point is on the edge
         final int usedRegionDiameter = regionDiameter - 1;
 
@@ -81,8 +78,7 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
 
         // The generation loop. Each step generates a circle.
         generationLoop:
-        while (currentCircleDiameter >= minimalDistanceBetweenTwoPoints)
-        {
+        while (currentCircleDiameter >= minimalDistanceBetweenTwoPoints) {
             // First step. We want to know if all the points left can be in one circle.
             // We calculates the maximal number of points in a circle, taking into account the
             // minimal distance between two points.
@@ -92,21 +88,20 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
             // a = 2 Arcsin((d/2)/R)
             // (Just draw the situation, you'll see.)
 
-            final double denseCircleAngle = 2 * Math.asin(((double) minimalDistanceBetweenTwoPoints / 2) / ((double) currentCircleDiameter / 2));
+            final double denseCircleAngle = 2 *
+                    Math.asin(((double) minimalDistanceBetweenTwoPoints / 2) / ((double) currentCircleDiameter / 2));
             final int pointsPerDenseCircles = (int) Math.floor(2 * Math.PI / denseCircleAngle);
 
             final double angleBetweenTwoPoints;
 
             // Not all the points can be in this circle. We generate the densest circle.
-            if (pointsPerDenseCircles < spawnCount - countGeneratedPoints)
-            {
+            if (pointsPerDenseCircles < spawnCount - countGeneratedPoints) {
                 angleBetweenTwoPoints = 2 * Math.PI / ((double) pointsPerDenseCircles);
             }
 
             // All the remaining points can be in this circle. We generates the less dense circle with
             // these points.
-            else
-            {
+            else {
                 angleBetweenTwoPoints = 2 * Math.PI / ((double) (spawnCount - countGeneratedPoints));
             }
 
@@ -114,8 +109,7 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
             final double startAngle = (new Random()).nextDouble() * 2 * Math.PI;
             double currentAngle = startAngle;
 
-            while (currentAngle <= 2 * Math.PI - angleBetweenTwoPoints + startAngle)
-            {
+            while (currentAngle <= 2 * Math.PI - angleBetweenTwoPoints + startAngle) {
                 // The coordinates of a point in the circle.
                 // Cf. your trigonometry! ;)
                 Location point = new Location(
@@ -128,8 +122,7 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
                 currentAngle += angleBetweenTwoPoints;
 
                 // Just in case
-                if (!borderModule.isInsideBorder(point, regionDiameter))
-                {
+                if (!borderModule.isInsideBorder(point, regionDiameter)) {
                     continue;
                 }
 
@@ -137,18 +130,16 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
                 final Block surfaceBlock = surfaceAirBlock.getRelative(BlockFace.DOWN);
 
                 // Safe spot available?
-                if ((world.getEnvironment() == World.Environment.NORMAL || world.getEnvironment() == World.Environment.THE_END) && !QSGUtils
+                if ((world.getEnvironment() == World.Environment.NORMAL ||
+                        world.getEnvironment() == World.Environment.THE_END) && !QSGUtils
                         .isSafeSpot(surfaceAirBlock.getLocation())
-                        || QSGUtils.searchSafeSpot(point) == null)
-                {
+                        || QSGUtils.searchSafeSpot(point) == null) {
                     continue; // not safe: nope
                 }
 
                 // Not above the water?
-                if (avoidWater)
-                {
-                    if (surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.WATER)
-                    {
+                if (avoidWater) {
+                    if (surfaceBlock.getType() == Material.WATER || surfaceBlock.getType() == Material.WATER) {
                         continue;
                     }
                 }
@@ -156,8 +147,7 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
                 generatedPoints.add(point);
                 countGeneratedPoints++;
 
-                if (countGeneratedPoints >= spawnCount)
-                {
+                if (countGeneratedPoints >= spawnCount) {
                     break generationLoop;
                 }
             }
@@ -169,13 +159,11 @@ public class CircularSpawnPointsGenerator implements SpawnPointsGenerator
 
 
         // Generation done or failed (not enough space)?
-        if (generatedPoints.size() < spawnCount)
-        {
+        if (generatedPoints.size() < spawnCount) {
             // Failed!
-            throw new CannotGenerateSpawnPointsException("Cannot generate the spawn point in circles: not enough space");
-        }
-        else
-        {
+            throw new CannotGenerateSpawnPointsException(
+                    "Cannot generate the spawn point in circles: not enough space");
+        } else {
             return generatedPoints;
         }
     }

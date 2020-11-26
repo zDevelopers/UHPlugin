@@ -40,15 +40,14 @@ import org.bukkit.event.HandlerList;
 /**
  * Called when an episode changes.
  */
-public class EpisodeChangedEvent extends Event
-{
-    private int newEpisode;
-    private int oldEpisode;
-    private EpisodeChangedCause cause;
-    private CommandSender shifter;
+public class EpisodeChangedEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
+    private final int newEpisode;
+    private final int oldEpisode;
+    private final EpisodeChangedCause cause;
+    private final CommandSender shifter;
 
-    public EpisodeChangedEvent(int newEpisode, int oldEpisode, EpisodeChangedCause cause, CommandSender shifter)
-    {
+    public EpisodeChangedEvent(int newEpisode, int oldEpisode, EpisodeChangedCause cause, CommandSender shifter) {
         this.newEpisode = newEpisode;
         this.oldEpisode = oldEpisode;
 
@@ -56,13 +55,16 @@ public class EpisodeChangedEvent extends Event
         this.shifter = shifter;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * Returns the new episode.
      *
      * @return The new episode.
      */
-    public int getNewEpisode()
-    {
+    public int getNewEpisode() {
         return newEpisode;
     }
 
@@ -71,8 +73,7 @@ public class EpisodeChangedEvent extends Event
      *
      * @return The old episode.
      */
-    public int getOldEpisode()
-    {
+    public int getOldEpisode() {
         return oldEpisode;
     }
 
@@ -80,11 +81,9 @@ public class EpisodeChangedEvent extends Event
      * Why the episode changed?
      *
      * @return The cause.
-     *
      * @see EpisodeChangedCause
      */
-    public EpisodeChangedCause getCause()
-    {
+    public EpisodeChangedCause getCause() {
         return cause;
     }
 
@@ -94,29 +93,17 @@ public class EpisodeChangedEvent extends Event
      *
      * @return The shifter.
      */
-    public CommandSender getShifter()
-    {
+    public CommandSender getShifter() {
         return shifter;
     }
 
-
-
-    private static final HandlerList handlers = new HandlerList();
-
     @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
 
-    public enum EpisodeChangedCause
-    {
+    public enum EpisodeChangedCause {
         /**
          * The episode changed because the previous episode was finished.
          */
