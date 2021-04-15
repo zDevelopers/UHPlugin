@@ -32,10 +32,9 @@
 
 package eu.carrade.amaury.quartzsurvivalgames.modules.core.border.worldborders;
 
-import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.BorderModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.border.MapShape;
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.TimeDelta;
-import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
+import fr.zcraft.quartzlib.tools.PluginLogger;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -56,18 +55,10 @@ public abstract class WorldBorder {
         // For circular shapes, the vanilla motor cannot be used.
         // Without the WorldBorder plugin, a fake world border is used (i.e., no border control).
         if (shape == MapShape.CIRCULAR) {
-            if (QSG.module(BorderModule.class).getWorldBorderDependency().isEnabled()) {
-                return new BrettflanWorldBorder(world);
-            } else {
-                return new FakeWorldBorder(world);
-            }
+            PluginLogger.error("Circular world borders are no longer supported due to Brettflan world border plugin being abandoned.");
+            return new FakeWorldBorder(world);
         } else {
-            if (motor == WorldBorderMotor.VANILLA ||
-                    !QSG.module(BorderModule.class).getWorldBorderDependency().isEnabled()) {
-                return new VanillaWorldBorder(world);
-            } else {
-                return new BrettflanWorldBorder(world);
-            }
+            return new VanillaWorldBorder(world);
         }
     }
 
@@ -191,13 +182,6 @@ public abstract class WorldBorder {
         /**
          * Uses the vanilla world border (for squared borders only).
          */
-        VANILLA,
-
-        /**
-         * Uses the Brettflan's WorldBorder plugin (for both squared and circular).
-         * <p>
-         * If set for squared world borders and WorldBorder is not installed, fallbacks to vanilla.
-         */
-        BRETTFLAN
+        VANILLA
     }
 }

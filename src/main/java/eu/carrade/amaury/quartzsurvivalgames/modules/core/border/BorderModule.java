@@ -48,7 +48,6 @@ import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import eu.carrade.amaury.quartzsurvivalgames.utils.QSGUtils;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
-import fr.zcraft.quartzlib.core.QuartzLib;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
 import fr.zcraft.quartzlib.tools.text.Titles;
 import java.util.ArrayList;
@@ -81,12 +80,9 @@ public class BorderModule extends QSGModule {
     private final List<String> sidebar = new ArrayList<>();
     private MapShape mapShape = null;
     private WorldBorder border = null;
-    private WorldBorderDependency worldBorderDependency = null;
 
     @Override
     public void onEnable() {
-        worldBorderDependency = QuartzLib.loadComponent(WorldBorderDependency.class);
-
         mapShape = Config.SHAPE.get();
 
         final World world = QuartzSurvivalGames.get().getWorld(World.Environment.NORMAL);
@@ -190,10 +186,6 @@ public class BorderModule extends QSGModule {
      */
     public WorldBorder getBorderProxy() {
         return border;
-    }
-
-    public WorldBorderDependency getWorldBorderDependency() {
-        return worldBorderDependency;
     }
 
     /**

@@ -73,10 +73,7 @@ public class BorderCommand extends Command {
                                 I.t("{ci}Use {cc}/uh border set {0} force{ci} to resize the border regardless to this point.",
                                         args[0]));
 
-                        if (!QSG.module(BorderModule.class).getWorldBorderDependency().isEnabled()) {
-                            sender.sendMessage(
-                                    I.t("{ce}WARNING: {ci}because WorldBorder is not installed, players out of the border will not be teleported!"));
-                        }
+                        sender.sendMessage(I.t("{ce}WARNING: {ci}players out of the border will not be teleported!"));
 
                         border.sendCheckMessage(sender, newDiameter);
                     } else {
