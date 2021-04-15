@@ -46,7 +46,6 @@ import eu.carrade.amaury.quartzsurvivalgames.shortcuts.QSG;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
-import fr.zcraft.quartzlib.tools.text.ListHeaderFooter;
 import fr.zcraft.quartzteams.events.PlayerJoinedTeamEvent;
 import fr.zcraft.quartzteams.events.PlayerLeftTeamEvent;
 import fr.zcraft.quartzteams.events.TeamRegisteredEvent;
@@ -153,7 +152,7 @@ public class PlayerListHeaderFooterModule extends QSGModule {
                 receivers = Bukkit.getOnlinePlayers().stream();
             }
 
-            receivers.forEach(player -> ListHeaderFooter.sendListHeaderFooter(player, header, footer));
+            receivers.forEach(player -> player.setPlayerListHeaderFooter(header, footer));
         }
     }
 
