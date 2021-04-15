@@ -56,19 +56,21 @@ import org.bukkit.inventory.Recipe;
 )
 public class OnerousGlisteringMelon extends QSGModule {
     private final Recipe VANILLA_RECIPE = CraftingRecipes.shaped(
+            "glistering_melon_vanilla",
             new ItemStack(Material.GLISTERING_MELON_SLICE),
             "AAA",
             "ABA",
             "AAA",
-            Material.GOLD_NUGGET, Material.MELON  // FIXME 1.13
+            Material.GOLD_NUGGET, Material.MELON
     );
 
     private final Recipe ONEROUS_RECIPE = CraftingRecipes.shaped(
+            "glistering_melon_with_ingots",
             new ItemStack(Material.GLISTERING_MELON_SLICE),
             "AAA",
             "ABA",
             "AAA",
-            Material.GOLD_INGOT, Material.MELON  // FIXME 1.13
+            Material.GOLD_INGOT, Material.MELON
     );
 
     @Override

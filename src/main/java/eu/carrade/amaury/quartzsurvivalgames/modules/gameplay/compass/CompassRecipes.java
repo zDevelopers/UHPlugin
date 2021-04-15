@@ -55,6 +55,7 @@ import org.bukkit.inventory.Recipe;
 
 public class CompassRecipes extends QuartzComponent implements Listener {
     private final Recipe VANILLA_RECIPE = CraftingRecipes.shaped(
+            "compass_vanilla",
             new ItemStack(Material.COMPASS),
             " A ",
             "ABA",

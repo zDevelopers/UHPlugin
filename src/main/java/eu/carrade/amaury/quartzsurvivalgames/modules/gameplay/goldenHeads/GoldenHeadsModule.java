@@ -43,6 +43,7 @@ import fr.zcraft.quartzlib.components.attributes.Attribute;
 import fr.zcraft.quartzlib.components.attributes.Attributes;
 import fr.zcraft.quartzlib.components.i18n.I;
 import fr.zcraft.quartzlib.tools.PluginLogger;
+import fr.zcraft.quartzlib.tools.items.CraftingRecipes;
 import fr.zcraft.quartzlib.tools.items.ItemStackBuilder;
 import fr.zcraft.quartzlib.tools.items.ItemUtils;
 import fr.zcraft.quartzlib.tools.reflection.NMSException;
@@ -58,7 +59,6 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -91,27 +91,28 @@ public class GoldenHeadsModule extends QSGModule {
         }
 
         if (Config.PLAYER_GOLDEN_HEAD.ENABLE.get()) {
-            Bukkit.addRecipe(getGoldenHeadRecipe(true, false, Config.PLAYER_GOLDEN_HEAD.AMOUNT_CRAFTED.get(),
+            Bukkit.addRecipe(getGoldenHeadRecipe("golden_player_head", true, false, Config.PLAYER_GOLDEN_HEAD.AMOUNT_CRAFTED.get(),
                     ChatColor.AQUA + I.t("Golden head")));
         }
 
         if (Config.PLAYER_ENCHANTED_GOLDEN_HEAD.ENABLE.get()) {
-            Bukkit.addRecipe(getGoldenHeadRecipe(true, true, Config.PLAYER_ENCHANTED_GOLDEN_HEAD.AMOUNT_CRAFTED.get(),
+            Bukkit.addRecipe(getGoldenHeadRecipe("enchanted_golden_player_head", true, true, Config.PLAYER_ENCHANTED_GOLDEN_HEAD.AMOUNT_CRAFTED.get(),
                     ChatColor.LIGHT_PURPLE + I.t("Golden head")));
         }
 
         if (Config.WITHER_GOLDEN_HEAD.ENABLE.get()) {
-            Bukkit.addRecipe(getGoldenHeadRecipe(false, false, Config.WITHER_GOLDEN_HEAD.AMOUNT_CRAFTED.get(),
+            Bukkit.addRecipe(getGoldenHeadRecipe("golden_wither_head", false, false, Config.WITHER_GOLDEN_HEAD.AMOUNT_CRAFTED.get(),
                     ChatColor.AQUA + I.t("Golden head")));
         }
 
         if (Config.WITHER_ENCHANTED_GOLDEN_HEAD.ENABLE.get()) {
-            Bukkit.addRecipe(getGoldenHeadRecipe(false, true, Config.WITHER_ENCHANTED_GOLDEN_HEAD.AMOUNT_CRAFTED.get(),
+            Bukkit.addRecipe(getGoldenHeadRecipe("enchanted_golden_wither_head", false, true, Config.WITHER_ENCHANTED_GOLDEN_HEAD.AMOUNT_CRAFTED.get(),
                     ChatColor.LIGHT_PURPLE + I.t("Golden head")));
         }
     }
 
-    private Recipe getGoldenHeadRecipe(final boolean player, final boolean enchanted, final int amount,
+    private Recipe getGoldenHeadRecipe(String recipeName, final boolean player, final boolean enchanted,
+                                       final int amount,
                                        final String resultDisplayName) {
         final ItemStack goldenApple = new ItemStackBuilder(enchanted ? Material.ENCHANTED_GOLDEN_APPLE : Material.GOLDEN_APPLE)
                 .title(ChatColor.RESET + resultDisplayName)
@@ -120,23 +121,21 @@ public class GoldenHeadsModule extends QSGModule {
 
         writeHeadType(goldenApple, player ? SkullType.PLAYER : SkullType.WITHER);
 
-        final ShapedRecipe goldenAppleFromHeadRecipe = new ShapedRecipe(goldenApple);
-
-        goldenAppleFromHeadRecipe.shape("GGG", "GHG", "GGG");
-        goldenAppleFromHeadRecipe.setIngredient('G', enchanted ? Material.GOLD_BLOCK : Material.GOLD_INGOT);
-        goldenAppleFromHeadRecipe.setIngredient('H', player ? Material.PLAYER_HEAD : Material.WITHER_SKELETON_SKULL);
-
-        return goldenAppleFromHeadRecipe;
+        return CraftingRecipes.shaped(
+                recipeName, goldenApple,
+                "AAA", "ABA", "AAA",
+                enchanted ? Material.GOLD_BLOCK : Material.GOLD_INGOT,
+                player ? Material.PLAYER_HEAD : Material.WITHER_SKELETON_SKULL
+        );
     }
 
     private Recipe getOldEnchantedGoldenAppleRecipe() {
-        final ShapedRecipe enchantedGoldenAppleRecipe =
-                new ShapedRecipe(new ItemStack(Material.GOLDEN_APPLE, 1, (short) 1));  // FIXME 1.13
-        enchantedGoldenAppleRecipe.shape("GGG", "GAG", "GGG");
-        enchantedGoldenAppleRecipe.setIngredient('G', Material.GOLD_BLOCK);
-        enchantedGoldenAppleRecipe.setIngredient('A', Material.APPLE);
-
-        return enchantedGoldenAppleRecipe;
+        return CraftingRecipes.shaped(
+                "enchanted_golden_apple_old_vanilla",
+                new ItemStack(Material.ENCHANTED_GOLDEN_APPLE),
+                "AAA", "ABA", "AAA",
+                Material.GOLD_BLOCK, Material.APPLE
+        );
     }
 
     private void writeHeadType(final ItemStack stack, final SkullType type) {
@@ -273,23 +272,17 @@ public class GoldenHeadsModule extends QSGModule {
     public void onPlayerDeath(final AlivePlayerDeathEvent ev) {
         if (Config.DROP_HEAD_ON_DEATH.get() && ev.getPlayer().isOnline() &&
                 (!Config.DROP_HEAD_ON_DEATH_PVP_ONLY.get() || ev.getPlayer().getPlayer().getKiller() != null)) {
-            final ItemStackBuilder headBuilder = new ItemStackBuilder(Material.PLAYER_HEAD)
-                    .title(ChatColor.AQUA, I.t("{0}'s head", ev.getPlayer().getName()));
+            final ItemStackBuilder head = new ItemStackBuilder(Material.PLAYER_HEAD)
+                    .title(ChatColor.AQUA, I.t("{0}'s head", ev.getPlayer().getName()))
+                    .withMeta((SkullMeta meta) -> meta.setOwningPlayer(ev.getPlayer()));
 
             if (Config.PLAYER_GOLDEN_HEAD.ENABLE.get() || Config.PLAYER_ENCHANTED_GOLDEN_HEAD.ENABLE.get()) {
-                headBuilder.longLore(ChatColor.GRAY, ChatColor.ITALIC +
+                head.longLore(ChatColor.GRAY, ChatColor.ITALIC +
                                 I.t("Old legends tell how the heads of the brave fallen warriors can become, through a rich and complex transformation, a precious healing balm..."),
                         38);
             }
 
-            // TODO update with QLib 0.1's ISB
-            final ItemStack head = headBuilder.item();
-            final SkullMeta meta = (SkullMeta) head.getItemMeta();
-
-            meta.setOwningPlayer(ev.getPlayer());
-            head.setItemMeta(meta);
-
-            ItemUtils.dropNaturally(ev.getPlayer().getPlayer().getLocation(), head);
+            ItemUtils.dropNaturally(ev.getPlayer().getPlayer().getLocation(), head.item());
         }
     }
 
