@@ -39,6 +39,7 @@ import eu.carrade.amaury.quartzsurvivalgames.modules.core.sidebar.SidebarInjecto
 import eu.carrade.amaury.quartzsurvivalgames.modules.core.timers.commands.TimersCommand;
 import fr.zcraft.quartzlib.components.commands.Command;
 import fr.zcraft.quartzlib.tools.runners.RunTask;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -47,14 +48,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 
 @ModuleInfo(
         name = "Timers",
-        description = "The timekeeper of the whole UHCReloaded plugin & companions.",
+        description = "The timekeeper of the whole Quartz Survival Games plugin & companions.",
         category = ModuleCategory.CORE,
         icon = Material.CLOCK,
         internal = true,
@@ -78,7 +78,7 @@ public class TimersModule extends QSGModule {
     /**
      * Sidebar cache.
      */
-    private List<Pair<String, String>> sidebarInjection = new LinkedList<>();
+    private List<AbstractMap.SimpleImmutableEntry<String, String>> sidebarInjection = new LinkedList<>();
 
 
     @Override
@@ -98,7 +98,8 @@ public class TimersModule extends QSGModule {
         sidebarInjection.clear();
         sidebarInjection = timers.stream()
                 .filter(Timer::isDisplayed)
-                .map(timer -> Pair.of(timer.isNameDisplayed() ? timer.getDisplayName() : null, timer.toString()))
+                .map(timer -> new AbstractMap.SimpleImmutableEntry<>(
+                        timer.isNameDisplayed() ? timer.getDisplayName() : null, timer.toString()))
                 .collect(Collectors.toList());
     }
 
@@ -107,10 +108,10 @@ public class TimersModule extends QSGModule {
         sidebarInjection.forEach(timer -> {
             final List<String> lines;
 
-            if (timer.getLeft() == null) {
-                lines = Collections.singletonList(timer.getRight());
+            if (timer.getKey() == null) {
+                lines = Collections.singletonList(timer.getValue());
             } else {
-                lines = Arrays.asList(timer.getLeft(), timer.getRight());
+                lines = Arrays.asList(timer.getKey(), timer.getValue());
             }
 
             injector.injectLines(SidebarInjector.SidebarPriority.VERY_BOTTOM, true, lines);

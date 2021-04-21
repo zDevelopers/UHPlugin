@@ -73,7 +73,7 @@ public class ModulesManager extends QuartzComponent implements Listener {
     /**
      * The package were all built-in modules are stored.
      */
-    private final static String MODULES_PACKAGE = "eu.carrade.amaury.UHCReloaded.modules";
+    private final static String MODULES_PACKAGE = "eu.carrade.amaury.quartzsurvivalgames.modules";
 
     /**
      * These built-in modules will not be enabled by default. It includes all scenarii and world generation modules,
@@ -131,16 +131,19 @@ public class ModulesManager extends QuartzComponent implements Listener {
         try {
             for (final ClassPath.ClassInfo classInfo : ClassPath.from(getClass().getClassLoader())
                     .getTopLevelClassesRecursive(MODULES_PACKAGE)) {
-                final Class<?> potentialModuleClass = classInfo.load();
+                try {
+                    final Class<?> potentialModuleClass = classInfo.load();
 
-                if (QSGModule.class.isAssignableFrom(potentialModuleClass)) {
-                    registerModule((Class<? extends QSGModule>) potentialModuleClass,
-                            !DISABLED_BY_DEFAULT.contains(potentialModuleClass));
-                    i++;
+                    if (QSGModule.class.isAssignableFrom(potentialModuleClass)) {
+                        registerModule((Class<? extends QSGModule>) potentialModuleClass,
+                                !DISABLED_BY_DEFAULT.contains(potentialModuleClass));
+                        i++;
+                    }
+                } catch (final Throwable e) {
+                    PluginLogger.error("Unable to load built-in module {0}: {1}", classInfo.getName(), e.getMessage());
                 }
             }
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             PluginLogger.error("Unable to load built-in modules.", e);
         }
 
