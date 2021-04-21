@@ -213,7 +213,7 @@ public class HawkModule extends QSGModule {
                 .withTheseInMinedStatisticsWhitelist(Config.PLAYERS.MINED_WHITELIST)
                 .withTheseInPickedUpStatisticsWhitelist(Config.PLAYERS.PICKED_UP_WHITELIST)
                 .withGenerator(
-                        "UHC Reloaded",
+                        "Quartz Survival Games",
                         "https://www.spigotmc.org/resources/ultrahardcore-reloaded.1622/"
                 )
                 .done();
@@ -230,7 +230,7 @@ public class HawkModule extends QSGModule {
 
         updateReportTeams();
 
-        RunTask.nextTick(() -> log().info("The reports tracker started successfully."));
+        RunTask.nextTick(() -> log().info("Hawk is now recording the game."));
     }
 
     public Report getReport() {

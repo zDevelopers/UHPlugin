@@ -38,6 +38,10 @@
     <description>Survival games plugin, able to handle most Minecraft survival games (like UHC) through combined modules</description>
     <url>https://github.com/zDevelopers/UHPlugin/</url>
 
+    <properties>
+        <shaded.package>eu.carrade.amaury.quartzsurvivalgames.libs</shaded.package>
+    </properties>
+
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/zDevelopers/UHPlugin/issues</url>
@@ -100,21 +104,21 @@
                         <includes>
                             <include>fr.zcraft:quartzlib</include>
                             <include>fr.zcraft:quartzteams</include>
-                            <include>me.cassayre.florian:Hawk</include>
+                            <include>me.cassayre.florian:hawk</include>
                         </includes>
                     </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>fr.zcraft.quartzlib</pattern>
-                            <shadedPattern>eu.carrade.amaury.quartzsurvivalgames.quartzlib</shadedPattern>
+                            <shadedPattern>${shaded.package}.quartzlib</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>fr.zcraft.quartzteams</pattern>
-                            <shadedPattern>eu.carrade.amaury.quartzsurvivalgames.quartzteams</shadedPattern>
+                            <shadedPattern>${shaded.package}.quartzteams</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>me.cassayre.florian.hawk</pattern>
-                            <shadedPattern>eu.carrade.amaury.quartzsurvivalgames.hawk</shadedPattern>
+                            <shadedPattern>${shaded.package}.hawk</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

@@ -68,10 +68,15 @@ public class Config extends ConfigurationInstance {
     static public List<Statistic> defaultStatsHighlight() {
         return Arrays.asList(
                 Statistic.DAMAGE_DEALT,
+                Statistic.DAMAGE_TAKEN,
+                Statistic.DAMAGE_RESISTED,
+                Statistic.DAMAGE_ABSORBED,
                 Statistic.CRAFT_ITEM,
                 Statistic.ITEM_ENCHANTED,
                 Statistic.BREWINGSTAND_INTERACTION,
-                Statistic.SPRINT_ONE_CM
+                Statistic.SPRINT_ONE_CM,
+                Statistic.HORSE_ONE_CM,
+                Statistic.SNEAK_TIME
         );
     }
 
