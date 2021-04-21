@@ -16,7 +16,7 @@ public class QSGConfig extends Configuration {
     static public final ConfigurationItem<Locale> LANG = item("lang", Locale.class);
 
     static public final ConfigurationItem<String> TITLE =
-            item("title", ChatColor.GREEN + "" + ChatColor.BOLD + "UHC Reloaded");
+            item("title", ChatColor.WHITE + "" + ChatColor.BOLD + "Quartz" + ChatColor.RED + "" + ChatColor.BOLD + "SurvivalGames");
 
     static public final ConfigurationItem<Boolean> BUILT_IN_MODULES = item("built-in-modules", true);
     static public final ConfigurationMap<String, Boolean> MODULES = map("modules", String.class, Boolean.class);
