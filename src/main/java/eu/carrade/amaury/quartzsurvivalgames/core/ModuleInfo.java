@@ -123,11 +123,17 @@ public @interface ModuleInfo {
     boolean internal() default false;
 
     /**
+     * @return {@code true} if this module is a technical core module
+     * that should not be displayed in the /config gui.
+     */
+    boolean hidden() default false;
+
+    /**
      * @return {@code true} if the module can be unloaded and re-loaded. This reflects the status change
      * from inside the game, as all modules can always be disabled on the configuration file (or not loaded
      * at all).
      * <p>
-     * If this is {@code true}, when disabled, a module will have its {@link QSGModule#onDisable()} onDisable()}
+     * If this is {@code true}, when disabled, a module will have its {@link QSGModule#onDisable()}
      * method called, and after that, its listener will be unregistered and the module instance removed from the system.
      * <p>
      * When re-loaded, a whole new instance will be created.

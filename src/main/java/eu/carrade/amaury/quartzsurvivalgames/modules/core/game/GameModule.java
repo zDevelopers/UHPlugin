@@ -90,6 +90,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.permissions.ServerOperator;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
@@ -693,10 +694,15 @@ public class GameModule extends QSGModule implements Listener {
             start();
         }
 
+        // TODO Use permissions
         if (Config.BROADCAST_PROGRESS.get()) {
             /// Displayed in the action bar when the slow teleportation is finished but the game not started.
-            Bukkit.getOnlinePlayers().forEach(player -> ActionBar.sendPermanentMessage(player,
+            Bukkit.getOnlinePlayers().stream().filter(p -> !p.isOp()).forEach(player -> ActionBar.sendPermanentMessage(player,
                     I.tl(player, "{lightpurple}Teleportation complete. {gray}The game will start soon...")));
+
+            /// Displayed in the action bar when the slow teleportation is finished but the game not started, for ops.
+            Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).forEach(player -> ActionBar.sendPermanentMessage(player,
+                    I.tl(player, "{lightpurple}Teleportation complete. {gray}Use {cc}/uh start{gray} to start the game.")));
         }
     }
 

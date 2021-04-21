@@ -150,6 +150,9 @@ public class ModulesCommand extends Command {
                 tooltip.then(module.isInternal() ? " - " : "\n\n").color(ChatColor.DARK_GRAY)
                         .then(I.t("Cannot be disabled")).color(ChatColor.DARK_GRAY);
             }
+            if (module.isHidden()) {
+                tooltip.then("\n").then(I.t("Technical module (hidden)")).style(ChatColor.DARK_GRAY);
+            }
 
             send(new RawText().hover(tooltip)
                     .then("• ")

@@ -75,6 +75,7 @@ public class ModulesListGUI extends ExplorerGui<ModuleWrapper> {
         setKeepHorizontalScrollingSpace(true);
 
         final ModuleWrapper[] modules = QSG.get().getModulesManager().getModules().stream()
+                .filter(module -> !module.isHidden())
                 .filter(module -> filterCategory == null || module.getCategory() == filterCategory)
                 .filter(module -> {
                     switch (filterState) {

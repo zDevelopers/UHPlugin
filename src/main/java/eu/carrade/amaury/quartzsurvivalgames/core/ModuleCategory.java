@@ -116,14 +116,7 @@ public enum ModuleCategory {
     OTHER(
             I.t("Others"),
             I.t("All uncategorized modules goes there."),
-            () -> {
-                // TODO use updated ISB in QuartzLib 0.1
-                final ItemStack icon = new ItemStackBuilder(Material.PLAYER_HEAD).item();
-                final SkullMeta meta = (SkullMeta) icon.getItemMeta();
-                meta.setOwner("MHF_Question");
-                icon.setItemMeta(meta);
-                return icon;
-            },
+            new ItemStackBuilder(Material.PLAYER_HEAD).withMeta((SkullMeta meta) -> meta.setOwner("MHF_Question")),
             ChatColor.WHITE
     );
 

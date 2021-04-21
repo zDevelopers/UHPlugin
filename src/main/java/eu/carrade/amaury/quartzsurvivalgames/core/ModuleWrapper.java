@@ -76,6 +76,7 @@ public class ModuleWrapper {
     private final String settingsFileName;
     private final String settingsDefaultFileName;
     private final boolean internal;
+    private final boolean hidden;
     private final boolean canBeUnloaded;
     private final boolean canBeLoadedLate;
     private final String[] dependencies;
@@ -98,6 +99,7 @@ public class ModuleWrapper {
             shortDescription = "";
             authors = "";
             internal = false;
+            hidden = false;
             canBeUnloaded = true;
             canBeLoadedLate = true;
             when = ModuleLoadTime.POST_WORLD;
@@ -112,6 +114,7 @@ public class ModuleWrapper {
             shortDescription = info.short_description();
             authors = info.authors();
             internal = info.internal();
+            hidden = info.hidden();
             canBeUnloaded = info.can_be_unloaded();
             canBeLoadedLate = info.can_be_loaded_late();
             when = info.when();
@@ -468,6 +471,13 @@ public class ModuleWrapper {
      */
     public boolean isInternal() {
         return internal;
+    }
+
+    /**
+     * @return {@code true} if this module is hidden.
+     */
+    public boolean isHidden() {
+        return hidden;
     }
 
     /**
