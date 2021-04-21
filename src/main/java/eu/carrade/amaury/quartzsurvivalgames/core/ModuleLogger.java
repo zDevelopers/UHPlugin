@@ -56,7 +56,7 @@ public class ModuleLogger extends Logger {
         setLevel(Level.ALL);
 
         moduleName = ModuleWrapper.computeModuleName(module);
-        loggerName = "[" + QuartzLib.getPlugin().getName() + "] [" + moduleName + "] ";
+        loggerName = "[" + moduleName + "] ";
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ModuleLogger extends Logger {
 
     public void log(Level level, String message, Throwable ex, Object... args) {
         log(level, message, args);
-        log(level, "Exception : ", ex);
+        log(level, "Exception: ", ex);
     }
 
     public void info(String message, Object... args) {
