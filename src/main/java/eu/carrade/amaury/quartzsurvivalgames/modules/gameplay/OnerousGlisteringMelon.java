@@ -52,7 +52,7 @@ import org.bukkit.inventory.Recipe;
         description = "Changes the vanilla recipe for glistering melon, replacing gold nuggets by gold ingots, to make healing potions harder to get.",
         when = ModuleLoadTime.ON_GAME_START,
         category = ModuleCategory.GAMEPLAY,
-        icon = Material.GLISTERING_MELON_SLICE   // FIXME 1.13
+        icon = Material.GLISTERING_MELON_SLICE
 )
 public class OnerousGlisteringMelon extends QSGModule {
     private final Recipe VANILLA_RECIPE = CraftingRecipes.shaped(
@@ -61,7 +61,7 @@ public class OnerousGlisteringMelon extends QSGModule {
             "AAA",
             "ABA",
             "AAA",
-            Material.GOLD_NUGGET, Material.MELON
+            Material.GOLD_NUGGET, Material.MELON_SLICE
     );
 
     private final Recipe ONEROUS_RECIPE = CraftingRecipes.shaped(
@@ -70,7 +70,7 @@ public class OnerousGlisteringMelon extends QSGModule {
             "AAA",
             "ABA",
             "AAA",
-            Material.GOLD_INGOT, Material.MELON
+            Material.GOLD_INGOT, Material.MELON_SLICE
     );
 
     @Override
