@@ -38,6 +38,7 @@ import com.google.common.reflect.ClassPath;
 import eu.carrade.amaury.quartzsurvivalgames.core.events.AllModulesLoadedEvent;
 import eu.carrade.amaury.quartzsurvivalgames.core.events.ModuleLoadedEvent;
 import eu.carrade.amaury.quartzsurvivalgames.core.events.ModuleUnloadedEvent;
+import eu.carrade.amaury.quartzsurvivalgames.modules.cosmetics.episodes.EpisodesModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.end.kick.KickModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.other.PomfModule;
 import eu.carrade.amaury.quartzsurvivalgames.modules.scenarii.alliances.AlliancesModule;
@@ -77,10 +78,12 @@ public class ModulesManager extends QuartzComponent implements Listener {
 
     /**
      * These built-in modules will not be enabled by default. It includes all scenarii and world generation modules,
-     * so the default game is a standard one, and the kick module, as spectators are better for most admins.
+     * so the default game is a standard one, the kick module, as spectators are better for most admins, and
+     * the episodes modules, as not everyone is a youtuber.
      */
     private final static List<Class<? extends QSGModule>> DISABLED_BY_DEFAULT = Arrays.asList(
             KickModule.class,
+            EpisodesModule.class,
             PomfModule.class,
 
             // Scenarii
