@@ -161,8 +161,12 @@
             <url>https://maven.zcraft.fr/QuartzLib</url>
         </repository>
         <repository>
-            <id>zdevelpers-quartQuartzTeams</id>
-            <url>https://maven.zcraft.fr/QuartQuartzTeams</url>
+            <id>zdevelpers-quartzteams</id>
+            <url>https://maven.zcraft.fr/QuartzTeams</url>
+        </repository>
+        <repository>
+            <id>zdevelpers-hawk</id>
+            <url>https://maven.zcraft.fr/Hawk</url>
         </repository>
     </repositories>
     <dependencies>
