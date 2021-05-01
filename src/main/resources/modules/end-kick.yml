@@ -1,0 +1,5 @@
+# Kick the player after this delay.
+delay: "00:30"
+
+# Kick the player with this message.
+message: "jayjay"

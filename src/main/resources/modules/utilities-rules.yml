@@ -1,0 +1,17 @@
+# You can send the rules automatically.
+# Remainder: you can also send the rules manually using /uh rules [player].
+display:
+  # Automatically displays the rules to players when they join the game (and it is not started).
+  on-join: false
+
+  # Automatically broadcasts the rules when the game starts.
+  on-start: true
+
+# Rules are a way to display rules & other infos to the players.
+# The content is completely up to you, formatting included (using standard
+# formatting codes with either § or &). It will be displayed as a list to
+# the players (one bullet per line in the following list).
+# Empty entries (« - "" ») are replaced by a completely blank line, if you
+# need a separator.
+rules:
+  -

@@ -1,46 +1,46 @@
-name: UHPlugin
-description: UltraHardcore Reloaded
-main: eu.carrade.amaury.UHCReloaded.UHCReloaded
-version: 1.5
+name: QuartzSurvivalGames
+description: Survival games plugin, able to handle most Minecraft survival games (like UHC) through combined modules
+main: eu.carrade.amaury.quartzsurvivalgames.QuartzSurvivalGames
+load: STARTUP
+version: 2.0-beta
 author: "Amaury Carrade"
-authors: [azenet, "João Roda"]
-
-awareness:
-  - !@UTF8
+authors: ["azenet", "João Roda"]
+api-version: "1.13"
 
 softdepend:
   - WorldBorder
   - SpectatorPlus
   - dynmap
   - ProtocolLib
+  - DamagesLogger
 
 commands:
    uh:
       description: UltraHardcore Reloaded base command
       usage: /<command> <subcommand> - see /<command> for available subcommands.
-   t:
-      description: Allows an user to send a message to his team.
-      usage: /<command> <message>
-
-   g:
-      description: Allows an user to send a message to everyone.
-      usage: /<command> <message>
-
-   togglechat:
-       description: Allows an user to toggle the chat between the global chat and a team chat.
-       usage: /<command>
-
-   join:
-       description: Use this to join an UltraHardcore team.
-       usage: /<command> [player] <team>
-
-   leave:
-       description: Use this to quit your current UltraHardcore team.
-       usage: /<command> [player]
-
-   teams:
-       description: Displays a GUI to manage the UHCReloaded teams
-       usage: /<command>
+#   t:
+#      description: Allows an user to send a message to his team.
+#      usage: /<command> <message>
+#
+#   g:
+#      description: Allows an user to send a message to everyone.
+#      usage: /<command> <message>
+#
+#   togglechat:
+#       description: Allows an user to toggle the chat between the global chat and a team chat.
+#       usage: /<command>
+#
+#   join:
+#       description: Use this to join an UltraHardcore team.
+#       usage: /<command> [player] <team>
+#
+#   leave:
+#       description: Use this to quit your current UltraHardcore team.
+#       usage: /<command> [player]
+#
+#   teams:
+#       description: Displays a GUI to manage the UHCReloaded teams
+#       usage: /<command>
 
 permissions:
 
@@ -209,11 +209,10 @@ permissions:
 
 
     uh.player.renameTeam:
-        default: Allows a player to rename his own team.
+        description: Allows a player to rename his own team.
         default: op
 
 
     uh.team.gui:
         description: Allows a player to use the teams GUI (/uh team gui)
         default: true
-

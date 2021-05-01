@@ -1,0 +1,6 @@
+# If false, the natural regeneration will be disabled in playing worlds.
+natural-regeneration: false
+
+# The difficulty of the game worlds.
+# Either PEACEFUL, EASY, NORMAL or HARD.
+difficulty: HARD

@@ -1,0 +1,5 @@
+# Displays the players' spawns in the dynmap.
+show-spawn-locations: true
+
+# Displays the players' death locations in the dynmap.
+show-death-locations: true

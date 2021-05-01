@@ -1,0 +1,15 @@
+# Don't generate the spawn points (with /uh spawns generate) above the water?
+avoid-water: true
+
+# Use this to set the spawn points of the teams (or the players)
+# You can also use the command `/uh spawns add` to add temporary spawn points,
+# and `/uh spawns generate` to automatically generate them. (See `/uh spawns` for documentation.)
+# (The spawn points added through `/uh spawns` are deleted when the server is stopped.)
+#
+# Format:
+#     - x,z
+#     - x,z
+#     - etc.
+
+spawn-points:
+  -

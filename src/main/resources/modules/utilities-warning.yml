@@ -1,0 +1,3 @@
+# The delay between two warning messages sent to the players out of a future border
+# (this warning is set using /uh border-warning <futureDiameter>).
+warning-interval: "00:01:30"

@@ -1,0 +1,20 @@
+# Broadcasts a message if a team has fallen.
+notify-if-team-has-fallen: true
+
+# Use this to increase visibility of death messages.
+eath-messages-format: "§6"
+team-death-messages-format: "§6"
+
+# Sends a lightning strike effect on the death point
+lightning-strike: false
+
+# Broadcasts a sound to the whole server.
+play-sound: true
+
+# The sound to broadcast.
+sound:
+  name:
+    - ENTITY_WITHER_SPAWN
+    - WITHER_SPAWN
+  volume: 1
+  pitch: 1

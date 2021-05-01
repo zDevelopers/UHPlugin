@@ -32,11 +32,15 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.carrade.amaury</groupId>
-    <artifactId>UHCReloaded</artifactId>
-    <version>1.5</version>
-    <name>UHCReloaded</name>
-    <description>Ultra Hardcore plugin</description>
+    <artifactId>quartz-survival-games</artifactId>
+    <version>2.0-SNAPSHOT</version>
+    <name>Quartz Survival Games</name>
+    <description>Survival games plugin, able to handle most Minecraft survival games (like UHC) through combined modules</description>
     <url>https://github.com/zDevelopers/UHPlugin/</url>
+
+    <properties>
+        <shaded.package>eu.carrade.amaury.quartzsurvivalgames.libs</shaded.package>
+    </properties>
 
     <issueManagement>
         <system>GitHub</system>
@@ -93,18 +97,28 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.2.4</version>
                 <configuration>
                     <minimizeJar>true</minimizeJar>
                     <artifactSet>
                         <includes>
-                            <include>fr.zcraft:zlib</include>
+                            <include>fr.zcraft:quartzlib</include>
+                            <include>fr.zcraft:quartzteams</include>
+                            <include>me.cassayre.florian:hawk</include>
                         </includes>
                     </artifactSet>
                     <relocations>
                         <relocation>
-                            <pattern>fr.zcraft.zlib</pattern>
-                            <shadedPattern>eu.carrade.amaury.UHCReloaded.zlib</shadedPattern>
+                            <pattern>fr.zcraft.quartzlib</pattern>
+                            <shadedPattern>${shaded.package}.quartzlib</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>fr.zcraft.quartzteams</pattern>
+                            <shadedPattern>${shaded.package}.quartzteams</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.cassayre.florian.hawk</pattern>
+                            <shadedPattern>${shaded.package}.hawk</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -136,33 +150,46 @@
         <repository>
             <id>pgmann-repo</id>
             <name>PGMann repository (SpectatorPlus)</name>
-            <url>https://mvn.pgmann.cf/</url>
+            <url>https://repo.repsy.io/mvn/pgmann/public/</url>
         </repository>
         <repository>
             <id>carrade-repo</id>
             <url>http://raw.carrade.eu/maven2/</url>
         </repository>
         <repository>
-            <id>zDevelopers</id>
-            <url>http://maven.carrade.eu/artifactory/snapshots</url>
+            <id>zdevelpers-quartzlib</id>
+            <url>https://maven.zcraft.fr/QuartzLib</url>
+        </repository>
+        <repository>
+            <id>zdevelpers-quartzteams</id>
+            <url>https://maven.zcraft.fr/QuartzTeams</url>
+        </repository>
+        <repository>
+            <id>zdevelpers-hawk</id>
+            <url>https://maven.zcraft.fr/Hawk</url>
         </repository>
     </repositories>
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.8.3-R0.1-SNAPSHOT</version>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>fr.zcraft</groupId>
-            <artifactId>zlib</artifactId>
-            <version>0.99-SNAPSHOT</version>
+            <artifactId>quartzlib</artifactId>
+            <version>0.0.4</version>
         </dependency>
         <dependency>
-            <groupId>com.wimbli.WorldBorder</groupId>
-            <artifactId>WorldBorder</artifactId>
-            <version>1.8.0</version>
+            <groupId>fr.zcraft</groupId>
+            <artifactId>quartzteams</artifactId>
+            <version>0.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>me.cassayre.florian</groupId>
+            <artifactId>hawk</artifactId>
+            <version>2.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.pgcraft</groupId>

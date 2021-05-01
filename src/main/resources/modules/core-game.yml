@@ -1,0 +1,44 @@
+# The duration of the countdown before the game (seconds).
+countdown: 7
+
+# Displays a title when the game starts.
+startup-title: true
+
+# If true, in solo games, all players will be colored randomly.
+# Else everyone will be white.
+random-colors-in-solo-games: true
+
+# If true, the initial teleportation progress will be broadcasted
+# in the players' action bars, so they don't wait in the dark.
+broadcast-progress: true
+
+
+# The slow start allow the game to teleports the players slowly, for
+# smaller servers, to avoid too many chunks loaded at once. You can
+# enable the slow mode by using /uh start --slow, or using the GUI:
+# as an operator, right-click the redstone comparator, then “Start the
+# game”, then “Slow Start”.
+slow:
+  # The delay, in seconds, between two teleportations in slow mode.
+  delay-between-teleportations: 3
+
+
+beginning:
+  # During this period, all damages will be disabled.
+  grace-period: "00:01:00"
+
+  # Broadcast the end of the grace period
+  broadcast-grace-end: true
+
+  # During this period, the PVP will be disabled.
+  peace-period: "00:15:00"
+
+  # During this period, there will not be any hostile creature at the surface.
+  # They will still be there in caves.
+  surface-mobs-free-period: "00:20:00"
+
+
+# Displays the players' count and teams' count in the sidebar.
+sidebar:
+  players: true
+  teams: true

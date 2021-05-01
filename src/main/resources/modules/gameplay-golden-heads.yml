@@ -1,0 +1,73 @@
+# Will players drop their head on death?
+drop-head-on-death: true
+
+# Maybe ony in PvP?
+drop-head-on-death-pvp-only: false
+
+# Below, you'll be able to tweak the amount of half-hearts
+# apples regenerate. Should we display this amount, if
+# different from vanilla, in the apples' tooltips?
+display-regen-amount-on-apples: true
+
+
+# Golden apple settings.
+# If disabled, the craft will be impossible.
+# The regeneration is in half-hearts.
+golden-apple:
+  enable: true
+  regeneration: 4
+
+# Enchanted golden apple settings (a.k.a. “Notch Apple”).
+# If disabled, the craft will be impossible.
+# If enabled, the old craft with gold blocks will be registered.
+# The regeneration is in half-hearts.
+enchanted-golden-apple:
+  enable: false
+  regeneration: 180
+
+
+# Player “golden head”, made with a player head and eight gold ingots.
+# You can change the amount of golden heads crafted from one head
+# and eight ingots, and add or not a RP lore to the item.
+# The regeneration is in half-hearts.
+player-golden-apple:
+  enable: true
+  regeneration: 4
+  amount-crafted: 1
+  add-lore: true
+
+
+# Wither “golden head”, made with a Wither Skeleton head and eight
+# gold ingots.
+# You can change the amount of golden heads crafted from one head
+# and eight ingots, and add or not a RP lore to the item.
+# The regeneration is in half-hearts.
+wither-golden-apple:
+  enable: true
+  regeneration: 4
+  amount-crafted: 1
+  add-lore: true
+
+
+# Player “enchanted golden head”, made with a player head and eight
+# gold blocks.
+# You can change the amount of golden heads crafted from one head
+# and eight blocks, and add or not a RP lore to the item.
+# The regeneration is in half-hearts.
+player-enchanted-golden-apple:
+  enable: false
+  regeneration: 180
+  amount-crafted: 1
+  add-lore: true
+
+
+# Player “enchanted golden head”, made with a Wither Skeleton head
+# and eight gold blocks.
+# You can change the amount of golden heads crafted from one head
+# and eight blocks, and add or not a RP lore to the item.
+# The regeneration is in half-hearts.
+wither-enchanted-golden-apple:
+  enable: false
+  regeneration: 180
+  amount-crafted: 1
+  add-lore: true

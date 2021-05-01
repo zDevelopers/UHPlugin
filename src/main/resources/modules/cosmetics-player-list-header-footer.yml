@@ -1,0 +1,33 @@
+# You can here fill the header and footer of the player's list (opened with TAB by default)
+# with custom strings. You can include chat color codes (with either § or &) and special
+# placeholders that will be replaced by special values.
+#
+# You can use `\n` to split the text over multiple lines.
+#
+# By default, the following placeholders are available:
+#
+# {title} -> title of the game
+# {playersText} -> the string « x players », where x is the number of players alive
+# {playersCount} -> the number of alive players
+# {teamsText} -> the string « x teams », where x is the number of teams alive
+# {teamsCount} -> the number of alive teams
+#
+# If the episodes module is loaded, the following are also available:
+#
+# {episodeText} -> the string « Episode x », where x is the current episode number
+# {episodeNumber} -> The current episode's number.
+#
+# Any module can add their own placeholders (including you owns). Use /uh list-hf-placeholders
+# to get a list of all available placeholders for your modules.
+
+headers:
+  WAIT: "{title}"
+  STARTING: "{title}"
+  IN_GAME: "{title}"
+  END: "{title}"
+
+footers:
+  WAIT: "§2Be patient, the game will start soon..."
+  STARTING: "§2The game is starting!"
+  IN_GAME: "§2{playersText} §7- §2{teamsText}"
+  END: "§2§lGame Over!"

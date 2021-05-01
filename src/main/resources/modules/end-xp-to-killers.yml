@@ -1,0 +1,5 @@
+# Give this amount of XP levels when a player kills another player.
+levels: 2
+
+# Only when a player kills a player from another team.
+only-other-team: true

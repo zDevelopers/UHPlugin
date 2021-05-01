@@ -1,0 +1,39 @@
+# Teleport the players to the spawn point on login if the game is not started?
+# Avoids the random spawn point of Minecraft, and teleports them back to
+# there if they log out then in.
+teleport-to-spawn-if-not-started: true
+
+inventory:
+  # True to clear the inventory of the players before the beginning of the game.
+  clear: true
+
+  # True to prevent users from using their inventory when the game is not started.
+  prevent-usage: true
+
+  # True to disable all the inventory points above for players with the uh.build permission.
+  allow-for-builders: true
+
+
+teams-selector:
+  # True to give to the players a team selector, opening the teams inventory GUI (same as /teams).
+  enabled: true
+
+  # The item to use as the team selector. Right-clicking it will open the GUI.
+  item: NETHER_STAR
+
+
+config-accessor:
+  # True to give to the players  with enough permissions a config accessor, opening the
+  # /config GUI.
+  enabled: true
+
+  # The item to use as the config accessor. Right-clicking it will open the GUI.
+  item: REDSTONE_COMPARATOR
+
+# Displays the current team in the action bar before the game. Nothing is displayed if the player is
+# not in a team.
+team-in-action-bar: true
+
+# If set to true, players will be able to PVP while waiting. They will respawn in the world's
+# spawn point every time.
+enable-pvp: false

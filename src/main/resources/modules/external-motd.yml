@@ -1,0 +1,5 @@
+# Display the match name in the MOTD
+display-match-name: true
+
+# This will be displayed before the match name (formatting...)
+match-name-prefix: ""

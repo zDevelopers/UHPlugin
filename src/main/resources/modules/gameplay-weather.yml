@@ -1,0 +1,11 @@
+# If true, the weather will randomly change during the game.
+enable-weather-cycle: true
+
+# The weather when the game starts. If the weather cycle is disabled,
+# this will also be the weather during the whole game.
+# Can be CLEAR or DOWNFALL.
+initial-weather: CLEAR
+
+# The weather during the initial waiting phase.
+# Can be CLEAR or DOWNFALL.
+waiting-phase-weather: CLEAR
